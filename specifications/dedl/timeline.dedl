@@ -1,5 +1,5 @@
 {
-  "$schema": "https://dedl.adp.ubigia.net/schema/0.1/dedl.schema.json#/$defs/Definition",
+  "$schema": "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json#/$defs/Definition",
   "dedl": "0.1",
   "language": {
     "id": "org.example.timeline",
