@@ -2,12 +2,12 @@
 
 **Specification, version 0.1 (Working Draft)**
 
-| | |
-|---|---|
-| Date | 2026-09-25 |
-| Definition schema | `dedl.schema.json` (JSON Schema, draft 2020-12), `$defs/Definition` |
-| Document schema | `dedl.schema.json`, `$defs/Document` |
-| Expression language | CEL — Common Expression Language (https://cel.dev) |
+|                           |                                                                              |
+|---------------------------|------------------------------------------------------------------------------|
+| Date                      | 2026-09-25                                                                   |
+| Definition schema         | `dedl.schema.json` (JSON Schema, draft 2020-12), `$defs/Definition`          |
+| Document schema           | `dedl.schema.json`, `$defs/Document`                                         |
+| Expression language       | CEL — Common Expression Language (https://cel.dev)                           |
 | Media types (provisional) | `application/vnd.dedl.definition+json`, `application/vnd.dedl.document+json` |
 
 ---
@@ -102,12 +102,12 @@ The same definition serves other consumers too:
 
 ### 1.3 Who should read what *(informative)*
 
-| Reader | Most relevant sections |
-|---|---|
-| Language designers | 1–11, 17, Appendix B |
-| Runtime implementers | All, especially 5, 6, 12, 14, 15 |
-| Tool and converter authors | 3, 4, 11, 12, Appendix A |
-| Reviewers and standards bodies | 1, 14–16, Appendix D |
+| Reader                         | Most relevant sections           |
+|--------------------------------|----------------------------------|
+| Language designers             | 1–11, 17, Appendix B             |
+| Runtime implementers           | All, especially 5, 6, 12, 14, 15 |
+| Tool and converter authors     | 3, 4, 11, 12, Appendix A         |
+| Reviewers and standards bodies | 1, 14–16, Appendix D             |
 
 ### 1.4 Design principles
 
@@ -131,19 +131,19 @@ The same definition serves other consumers too:
 
 DEDL deliberately borrows proven ideas:
 
-| Source | Idea adopted |
-|---|---|
-| Eclipse Sirius, GMF | Split into model, graphical, tooling and mapping definitions; viewpoints |
-| MetaEdit+ (GOPPRR) | Small, closed meta-metamodel of objects, relationships, ports and properties |
-| OMG Diagram Definition, BPMN DI | Strict separation of semantic model and diagram interchange data |
-| GLSP, Sprotty | Runtime-agnostic, client/server-friendly editor description |
-| SVG, CSS | Paint, stroke, dash, marker and text vocabulary; cascading styles and states |
-| draw.io / mxGraph | Parameter handles on shapes; jump-overs; rich marker catalogue |
-| Vega-Lite, D3 scales | Axes as scales from domain values (numbers, time, categories) to screen space |
-| ELK | Layout algorithm catalogue and option pass-through |
-| CEL, Kubernetes validation rules | Safe, typed expressions for validation and computed values |
-| JSON Schema | Machine-checkable structure and IDE tooling |
-| Yjs, Automerge | CRDT-based collaboration hooks |
+| Source                           | Idea adopted                                                                  |
+|----------------------------------|-------------------------------------------------------------------------------|
+| Eclipse Sirius, GMF              | Split into model, graphical, tooling and mapping definitions; viewpoints      |
+| MetaEdit+ (GOPPRR)               | Small, closed meta-metamodel of objects, relationships, ports and properties  |
+| OMG Diagram Definition, BPMN DI  | Strict separation of semantic model and diagram interchange data              |
+| GLSP, Sprotty                    | Runtime-agnostic, client/server-friendly editor description                   |
+| SVG, CSS                         | Paint, stroke, dash, marker and text vocabulary; cascading styles and states  |
+| draw.io / mxGraph                | Parameter handles on shapes; jump-overs; rich marker catalogue                |
+| Vega-Lite, D3 scales             | Axes as scales from domain values (numbers, time, categories) to screen space |
+| ELK                              | Layout algorithm catalogue and option pass-through                            |
+| CEL, Kubernetes validation rules | Safe, typed expressions for validation and computed values                    |
+| JSON Schema                      | Machine-checkable structure and IDE tooling                                   |
+| Yjs, Automerge                   | CRDT-based collaboration hooks                                                |
 
 ---
 
@@ -202,19 +202,19 @@ Every object in a definition MAY carry a `doc` property — the language itself,
 
 `doc` is either a LocalizedText (shorthand for `summary`) or a **Doc** object:
 
-| Property | Type | Meaning |
-|---|---|---|
-| `summary` | LocalizedText | One sentence of plain text. Used for tooltips, palette entries and hover cards. |
-| `description` | LocalizedText | Longer explanation in CommonMark. Used in help panels, inspector help and generated reference docs. |
-| `rationale` | LocalizedText | Why this rule or design exists. Particularly useful on constraints and snapping rules. |
-| `examples` | array of `{title, description, value}` | Illustrations; `value` is arbitrary JSON (for example a sample attribute value). |
-| `seeAlso` | array of `{title, href}` | Links. External links are absolute URIs; internal links are JSON Pointer fragments into the definition (`#/metamodel/relations/Transition`). |
-| `tags` | array of strings | Keywords; used by toolbox search and documentation indexes. |
-| `audience` | array of `"user"`, `"author"`, `"developer"` | Intended readers. Absent means all. Runtimes SHOULD show only `user` documentation to end users when an audience is declared. |
-| `since` | string | Language version (SemVer) in which the object appeared. |
-| `deprecated` | boolean or `{since, message, replacedBy}` | Marks the object deprecated. Runtimes SHOULD warn when a deprecated type, attribute or tool is used and MAY offer `replacedBy` as a quick fix. |
-| `image` | string (URI) | An illustration, for example a rendered sample. |
-| `helpUrl` | string (URI) | A page with extended help; runtimes SHOULD render a "Learn more" link. |
+| Property      | Type                                         | Meaning                                                                                                                                        |
+|---------------|----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| `summary`     | LocalizedText                                | One sentence of plain text. Used for tooltips, palette entries and hover cards.                                                                |
+| `description` | LocalizedText                                | Longer explanation in CommonMark. Used in help panels, inspector help and generated reference docs.                                            |
+| `rationale`   | LocalizedText                                | Why this rule or design exists. Particularly useful on constraints and snapping rules.                                                         |
+| `examples`    | array of `{title, description, value}`       | Illustrations; `value` is arbitrary JSON (for example a sample attribute value).                                                               |
+| `seeAlso`     | array of `{title, href}`                     | Links. External links are absolute URIs; internal links are JSON Pointer fragments into the definition (`#/metamodel/relations/Transition`).   |
+| `tags`        | array of strings                             | Keywords; used by toolbox search and documentation indexes.                                                                                    |
+| `audience`    | array of `"user"`, `"author"`, `"developer"` | Intended readers. Absent means all. Runtimes SHOULD show only `user` documentation to end users when an audience is declared.                  |
+| `since`       | string                                       | Language version (SemVer) in which the object appeared.                                                                                        |
+| `deprecated`  | boolean or `{since, message, replacedBy}`    | Marks the object deprecated. Runtimes SHOULD warn when a deprecated type, attribute or tool is used and MAY offer `replacedBy` as a quick fix. |
+| `image`       | string (URI)                                 | An illustration, for example a rendered sample.                                                                                                |
+| `helpUrl`     | string (URI)                                 | A page with extended help; runtimes SHOULD render a "Learn more" link.                                                                         |
 
 ```json
 "doc": {
@@ -251,12 +251,12 @@ If `resultType` is present, validators MUST check that the static type of the ex
 
 **(b) Bindable value.** A property of type *Bindable&lt;T&gt;* accepts a literal of type T or one of these objects:
 
-| Form | Meaning |
-|---|---|
-| `{ "cel": "…" }` | Computed from a CEL expression. |
+| Form                      | Meaning                                                                                                                                                                                                                                         |
+|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `{ "cel": "…" }`          | Computed from a CEL expression.                                                                                                                                                                                                                 |
 | `{ "attribute": "path" }` | The value of an attribute of the current element (dotted path into structs, for example `"address.city"`). When the property is user-editable (a label, a placement coordinate), the binding is **two-way**: edits write back to the attribute. |
-| `{ "token": "name" }` | A theme token (section 6.2), resolved for the current theme mode. |
-| `{ "param": "name" }` | A parameter of the enclosing shape, marker or template. |
+| `{ "token": "name" }`     | A theme token (section 6.2), resolved for the current theme mode.                                                                                                                                                                               |
+| `{ "param": "name" }`     | A parameter of the enclosing shape, marker or template.                                                                                                                                                                                         |
 
 Because literals may be strings, **a bare string in a Bindable position is always a literal**; a CEL expression there MUST use the `{"cel": …}` form.
 
@@ -266,31 +266,31 @@ Because literals may be strings, **a bare string in a Bindable position is alway
 
 **Evaluation guarantees.** Expressions are free of side effects by construction. Runtimes MUST impose a cost limit using CEL's cost estimation, and SHOULD reject at validation time any expression whose worst-case estimated cost exceeds the limit declared in `language.limits.celCost` (default 1 000 000). At run time, an expression that fails (for example division by zero, missing key, cost exceeded) is handled according to its context:
 
-| Context | On evaluation error |
-|---|---|
-| Constraint rule | Reported as a problem with the constraint's severity and the message "could not be evaluated: …"; never silently passes. |
-| Visual property, label, visibility | The property falls back to its default; a diagnostic is logged; rendering continues. |
-| Placement binding | The element is drawn at its last valid position and marked as invalid. |
-| Snapping function | The unsnapped value is used. |
-| Behavior action, hook, operation | The whole transaction is rolled back and the error reported to the user. |
-| Migration | Loading the document fails with a descriptive error; the original file is left untouched. |
+| Context                            | On evaluation error                                                                                                      |
+|------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| Constraint rule                    | Reported as a problem with the constraint's severity and the message "could not be evaluated: …"; never silently passes. |
+| Visual property, label, visibility | The property falls back to its default; a diagnostic is logged; rendering continues.                                     |
+| Placement binding                  | The element is drawn at its last valid position and marked as invalid.                                                   |
+| Snapping function                  | The unsnapped value is used.                                                                                             |
+| Behavior action, hook, operation   | The whole transaction is rolled back and the error reported to the user.                                                 |
+| Migration                          | Loading the document fails with a descriptive error; the original file is left untouched.                                |
 
 **Static checking.** Every expression is evaluated in a well-defined *context* that determines which variables exist and what types they have (section 12.3). Validators MUST type-check every expression in its context, using attribute types from the metamodel. Expressions whose type cannot be determined statically (for example because they use `dyn`) are permitted but SHOULD produce a validator warning.
 
 ### 2.6 Values and units
 
-| Kind | Representation |
-|---|---|
+| Kind          | Representation                                                                                                                                                                                                                                                                              |
+|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Canvas length | A number in canvas units (the unit of the coordinate system's numeric axis, `px` by default), or a string with an explicit unit: `"12px"`, `"4mm"`, `"0.5in"`, `"1.5em"`, `"50%"`. Percentages refer to the containing box's corresponding dimension. `em` refers to the current font size. |
-| Screen length | Quantities that must stay constant on screen regardless of zoom — hit areas, snap tolerances, handle sizes, minimum marker sizes — are always in screen pixels and the property name ends in `ScreenPx`. |
-| Color | A CSS Color Level 4 string: `"#1D9E75"`, `"#1D9E75CC"`, `"rgb(29 158 117 / 80%)"`, `"hsl(160 69% 37%)"`, `"oklch(0.62 0.12 165)"`, named colors, `"transparent"`, `"currentColor"` (the resolved text color of the element). |
-| Angle | A number of degrees, clockwise, 0 pointing in the positive x direction. |
-| Fraction | A number from 0 to 1 inclusive. |
-| Size | `[width, height]`. |
-| Insets | A number (all sides), `[vertical, horizontal]` or `[top, right, bottom, left]`. |
-| Point | `[x, y]` for numeric axes, or `{"x": …, "y": …}` when axis values are timestamps or categories. |
-| Timestamp | An RFC 3339 string (`"2026-10-01T09:00:00Z"`), a full-date string (`"2026-10-01"`) or an epoch number, as declared by the axis (section 5.4). |
-| Duration | An ISO 8601 duration (`"P3D"`, `"PT15M"`, `"P1W"`) or a CEL duration string (`"15m"`, `"36h"`). Calendar durations (`P1M`, `P1Y`) are only allowed where the property explicitly accepts calendar units, such as time snapping. |
+| Screen length | Quantities that must stay constant on screen regardless of zoom — hit areas, snap tolerances, handle sizes, minimum marker sizes — are always in screen pixels and the property name ends in `ScreenPx`.                                                                                    |
+| Color         | A CSS Color Level 4 string: `"#1D9E75"`, `"#1D9E75CC"`, `"rgb(29 158 117 / 80%)"`, `"hsl(160 69% 37%)"`, `"oklch(0.62 0.12 165)"`, named colors, `"transparent"`, `"currentColor"` (the resolved text color of the element).                                                                |
+| Angle         | A number of degrees, clockwise, 0 pointing in the positive x direction.                                                                                                                                                                                                                     |
+| Fraction      | A number from 0 to 1 inclusive.                                                                                                                                                                                                                                                             |
+| Size          | `[width, height]`.                                                                                                                                                                                                                                                                          |
+| Insets        | A number (all sides), `[vertical, horizontal]` or `[top, right, bottom, left]`.                                                                                                                                                                                                             |
+| Point         | `[x, y]` for numeric axes, or `{"x": …, "y": …}` when axis values are timestamps or categories.                                                                                                                                                                                             |
+| Timestamp     | An RFC 3339 string (`"2026-10-01T09:00:00Z"`), a full-date string (`"2026-10-01"`) or an epoch number, as declared by the axis (section 5.4).                                                                                                                                               |
+| Duration      | An ISO 8601 duration (`"P3D"`, `"PT15M"`, `"P1W"`) or a CEL duration string (`"15m"`, `"36h"`). Calendar durations (`P1M`, `P1Y`) are only allowed where the property explicitly accepts calendar units, such as time snapping.                                                             |
 
 ### 2.7 References
 
@@ -316,26 +316,26 @@ Any object in a definition or document MAY contain properties whose names begin 
 
 ### 3.1 Top-level object
 
-| Property | Type | Req. | Layer | Description |
-|---|---|---|---|---|
-| `$schema` | string | – | – | URI of the DEDL JSON Schema. |
-| `dedl` | string | ✓ | – | Targeted specification version, `"0.1"`. |
-| `language` | Language | ✓ | – | Identity, version, locales and limits (3.2). |
-| `imports` | Import[] | – | – | Reused definitions and libraries (3.3). |
-| `functions` | map → Function | – | – | Reusable CEL functions (3.4). |
-| `metamodel` | Metamodel | ✓ | 1 | What can exist (section 4). |
-| `coordinates` | Coordinates | – | 2 | Axes, coordinate systems, snapping (section 5). Default: one free cartesian pixel system without snapping. |
-| `notation` | Notation | – | 3 | How things look (section 6). Default: every node a labelled rectangle, every relation a straight line with an arrow. |
-| `toolbox` | Toolbox | – | 4 | Palette and context tools (7.1–7.4). Default: one tool per concrete type. |
-| `forms` | map → Form | – | 4 | Property and embedded forms (7.5). Default: generated from attributes. |
-| `constraints` | Constraints | – | 5 | Rules (section 8). |
-| `behavior` | Behavior | – | 6 | Hooks, operations, deletion and clipboard policy (section 9). |
-| `layout` | Layout | – | 7 | Automatic layout (section 10). Default: none. |
-| `persistence` | Persistence | – | 8 | Storage (section 11). Default: single JSON file, UUIDv7 ids. |
-| `viewpoints` | map → Viewpoint | – | – | Several diagram kinds over one model (3.5). |
-| `plugins` | map → Plugin | – | – | Declared extensions (section 13). |
-| `doc` | Doc | – | – | Documentation of the language as a whole. |
-| `x-*` | any | – | – | Extensions. |
+| Property      | Type            | Req. | Layer | Description                                                                                                          |
+|---------------|-----------------|------|-------|----------------------------------------------------------------------------------------------------------------------|
+| `$schema`     | string          | –    | –     | URI of the DEDL JSON Schema.                                                                                         |
+| `dedl`        | string          | ✓   | –     | Targeted specification version, `"0.1"`.                                                                             |
+| `language`    | Language        | ✓   | –     | Identity, version, locales and limits (3.2).                                                                         |
+| `imports`     | Import[]        | –    | –     | Reused definitions and libraries (3.3).                                                                              |
+| `functions`   | map → Function  | –    | –     | Reusable CEL functions (3.4).                                                                                        |
+| `metamodel`   | Metamodel       | ✓   | 1     | What can exist (section 4).                                                                                          |
+| `coordinates` | Coordinates     | –    | 2     | Axes, coordinate systems, snapping (section 5). Default: one free cartesian pixel system without snapping.           |
+| `notation`    | Notation        | –    | 3     | How things look (section 6). Default: every node a labelled rectangle, every relation a straight line with an arrow. |
+| `toolbox`     | Toolbox         | –    | 4     | Palette and context tools (7.1–7.4). Default: one tool per concrete type.                                            |
+| `forms`       | map → Form      | –    | 4     | Property and embedded forms (7.5). Default: generated from attributes.                                               |
+| `constraints` | Constraints     | –    | 5     | Rules (section 8).                                                                                                   |
+| `behavior`    | Behavior        | –    | 6     | Hooks, operations, deletion and clipboard policy (section 9).                                                        |
+| `layout`      | Layout          | –    | 7     | Automatic layout (section 10). Default: none.                                                                        |
+| `persistence` | Persistence     | –    | 8     | Storage (section 11). Default: single JSON file, UUIDv7 ids.                                                         |
+| `viewpoints`  | map → Viewpoint | –    | –     | Several diagram kinds over one model (3.5).                                                                          |
+| `plugins`     | map → Plugin    | –    | –     | Declared extensions (section 13).                                                                                    |
+| `doc`         | Doc             | –    | –     | Documentation of the language as a whole.                                                                            |
+| `x-*`         | any             | –    | –     | Extensions.                                                                                                          |
 
 Only `dedl`, `language` and `metamodel` are required. Every other layer has a documented default, so definitions can start tiny and grow.
 
@@ -354,34 +354,34 @@ This five-line language already yields a usable editor: a palette with an *Idea*
 
 ### 3.2 Language
 
-| Property | Type | Req. | Description |
-|---|---|---|---|
-| `id` | qualified identifier | ✓ | Globally unique language id; reverse-DNS style is RECOMMENDED. Recorded in every document. |
-| `version` | SemVer string | ✓ | Version of this language. |
-| `label` | LocalizedText | – | Display name ("State machine"). |
-| `doc` | Doc | – | Language documentation, shown in the editor's help view. |
-| `defaultLocale` | BCP 47 tag | – | Default `"en"`. |
-| `locales` | string[] | – | Locales for which all LocalizedTexts SHOULD provide translations; validators MAY warn about gaps. |
-| `authors` | `{name, email, url}`[] | – | Maintainers. |
-| `license` | SPDX expression | – | License of the definition. |
-| `homepage` | URI | – | Project page. |
-| `icon` | IconRef | – | Icon of the language (file type icon, window title). |
-| `fileExtension` | string | – | Preferred document extension without dot, for example `"sm.json"`. |
-| `limits` | object | – | `celCost` (per-expression cost limit), `maxElements` (soft limit, runtimes SHOULD warn beyond it), `maxDocumentBytes`. |
-| `requires` | object | – | `conformance`: minimum runtime conformance level (`"core"`, `"standard"`, `"full"`); `features`: list of optional feature ids (Appendix B.8) the definition relies on. |
+| Property        | Type                   | Req. | Description                                                                                                                                                            |
+|-----------------|------------------------|------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`            | qualified identifier   | ✓   | Globally unique language id; reverse-DNS style is RECOMMENDED. Recorded in every document.                                                                             |
+| `version`       | SemVer string          | ✓   | Version of this language.                                                                                                                                              |
+| `label`         | LocalizedText          | –    | Display name ("State machine").                                                                                                                                        |
+| `doc`           | Doc                    | –    | Language documentation, shown in the editor's help view.                                                                                                               |
+| `defaultLocale` | BCP 47 tag             | –    | Default `"en"`.                                                                                                                                                        |
+| `locales`       | string[]               | –    | Locales for which all LocalizedTexts SHOULD provide translations; validators MAY warn about gaps.                                                                      |
+| `authors`       | `{name, email, url}`[] | –    | Maintainers.                                                                                                                                                           |
+| `license`       | SPDX expression        | –    | License of the definition.                                                                                                                                             |
+| `homepage`      | URI                    | –    | Project page.                                                                                                                                                          |
+| `icon`          | IconRef                | –    | Icon of the language (file type icon, window title).                                                                                                                   |
+| `fileExtension` | string                 | –    | Preferred document extension without dot, for example `"sm.json"`.                                                                                                     |
+| `limits`        | object                 | –    | `celCost` (per-expression cost limit), `maxElements` (soft limit, runtimes SHOULD warn beyond it), `maxDocumentBytes`.                                                 |
+| `requires`      | object                 | –    | `conformance`: minimum runtime conformance level (`"core"`, `"standard"`, `"full"`); `features`: list of optional feature ids (Appendix B.8) the definition relies on. |
 
 ### 3.3 Imports
 
 Definitions may import other definitions or *libraries* — definitions that contain only notation, forms, functions or data types and whose `metamodel` may be empty.
 
-| Property | Type | Req. | Description |
-|---|---|---|---|
-| `from` | URI or relative path | ✓ | Location of the imported definition. |
-| `as` | simple identifier | ✓ | Alias; imported names are referenced as `alias.Name`. |
-| `version` | SemVer range | – | Acceptable versions of the imported language (for example `"^2.1.0"`). |
-| `integrity` | string | – | Subresource-integrity hash (`"sha256-…"`). Runtimes MUST verify it when present and SHOULD require it for remote URIs. |
-| `include` | string[] | – | Layers to import: any of `"metamodel"`, `"notation"`, `"forms"`, `"functions"`, `"constraints"`, `"toolbox"`. Default: all. |
-| `doc` | Doc | – | Why the import exists. |
+| Property    | Type                 | Req. | Description                                                                                                                 |
+|-------------|----------------------|------|-----------------------------------------------------------------------------------------------------------------------------|
+| `from`      | URI or relative path | ✓   | Location of the imported definition.                                                                                        |
+| `as`        | simple identifier    | ✓   | Alias; imported names are referenced as `alias.Name`.                                                                       |
+| `version`   | SemVer range         | –    | Acceptable versions of the imported language (for example `"^2.1.0"`).                                                      |
+| `integrity` | string               | –    | Subresource-integrity hash (`"sha256-…"`). Runtimes MUST verify it when present and SHOULD require it for remote URIs.      |
+| `include`   | string[]             | –    | Layers to import: any of `"metamodel"`, `"notation"`, `"forms"`, `"functions"`, `"constraints"`, `"toolbox"`. Default: all. |
+| `doc`       | Doc                  | –    | Why the import exists.                                                                                                      |
 
 Imported types may be extended (`"extends": "base.Element"`), imported styles, shapes and markers referenced, and imported constraints are active unless the import lists `include` without `"constraints"`. Import cycles are a definition error. Names are never merged implicitly: a local `State` and `lib.State` are different types.
 
@@ -407,13 +407,13 @@ User-defined functions make repeated CEL logic reusable and documented.
 }
 ```
 
-| Property | Type | Req. | Description |
-|---|---|---|---|
-| `params` | `{name, type, doc}`[] | ✓ | Positional parameters; `type` is a CEL type name or a metamodel type name. |
-| `returns` | string | ✓ | CEL result type. |
-| `cel` | string | ✓ | Body; may reference parameters, globally available variables of the calling context are **not** visible (functions are pure over their parameters, plus `diagram` and `env` when declared in `uses`). |
-| `uses` | string[] | – | Context variables the function may read: `"diagram"`, `"env"`. |
-| `doc` | Doc | – | Documentation. |
+| Property  | Type                  | Req. | Description                                                                                                                                                                                           |
+|-----------|-----------------------|------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `params`  | `{name, type, doc}`[] | ✓   | Positional parameters; `type` is a CEL type name or a metamodel type name.                                                                                                                            |
+| `returns` | string                | ✓   | CEL result type.                                                                                                                                                                                      |
+| `cel`     | string                | ✓   | Body; may reference parameters, globally available variables of the calling context are **not** visible (functions are pure over their parameters, plus `diagram` and `env` when declared in `uses`). |
+| `uses`    | string[]              | –    | Context variables the function may read: `"diagram"`, `"env"`.                                                                                                                                        |
+| `doc`     | Doc                   | –    | Documentation.                                                                                                                                                                                        |
 
 Functions are called as `displayName(self)`. A function MAY call functions declared before it in the definition order; recursion (direct or indirect) is a definition error. This preserves CEL's termination guarantee.
 
@@ -421,17 +421,17 @@ Functions are called as `displayName(self)`. A function MAY call functions decla
 
 A language may offer several diagram kinds over the same model — for example a *structure* diagram and a *timeline* of the same project. Each **viewpoint** selects which types appear, which coordinate system and layout apply, and which toolbox groups are offered. If `viewpoints` is absent, a single implicit viewpoint `main` shows everything.
 
-| Property | Type | Description |
-|---|---|---|
-| `label`, `doc`, `icon` | | Display name, documentation, icon. |
-| `coordinateSystem` | name | Coordinate system of diagrams of this kind (section 5). |
-| `include` | TypeRef[] | Types shown. Default: all. |
-| `exclude` | TypeRef[] | Types hidden. |
-| `toolbox` | string[] | Toolbox group ids offered. Default: all groups. |
-| `layout` | name or LayoutConfig | Layout used (section 10). |
-| `notation` | object | Per-viewpoint notation overrides: `nodes`, `edges`, `styles` maps merged over the global notation. |
-| `canvas` | Canvas | Background, bounds and page settings (6.13). |
-| `default` | boolean | The viewpoint used for new diagrams. Exactly one viewpoint SHOULD be default. |
+| Property               | Type                 | Description                                                                                        |
+|------------------------|----------------------|----------------------------------------------------------------------------------------------------|
+| `label`, `doc`, `icon` |                      | Display name, documentation, icon.                                                                 |
+| `coordinateSystem`     | name                 | Coordinate system of diagrams of this kind (section 5).                                            |
+| `include`              | TypeRef[]            | Types shown. Default: all.                                                                         |
+| `exclude`              | TypeRef[]            | Types hidden.                                                                                      |
+| `toolbox`              | string[]             | Toolbox group ids offered. Default: all groups.                                                    |
+| `layout`               | name or LayoutConfig | Layout used (section 10).                                                                          |
+| `notation`             | object               | Per-viewpoint notation overrides: `nodes`, `edges`, `styles` maps merged over the global notation. |
+| `canvas`               | Canvas               | Background, bounds and page settings (6.13).                                                       |
+| `default`              | boolean              | The viewpoint used for new diagrams. Exactly one viewpoint SHOULD be default.                      |
 
 Elements appear in a view only if their type is included; model elements not shown in any view still exist in the model and are still validated.
 
@@ -479,33 +479,33 @@ The metamodel defines the abstract syntax of the language: the kinds of elements
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `diagram` | `{attributes, doc}` | Attributes of the diagram root element (title, author, version, settings). |
-| `dataTypes` | map → DataType | Named value types with facets, or structs (4.4). |
-| `enums` | map → Enum | Enumerations (4.5). |
-| `types` | map → NodeType | Node types — everything that is drawn as a node, including containers, lanes and annotations (4.6). |
-| `relations` | map → RelationType | Relation types — everything that is drawn as an edge (4.9). |
-| `doc` | Doc | Documentation of the metamodel. |
+| Property    | Type                | Description                                                                                         |
+|-------------|---------------------|-----------------------------------------------------------------------------------------------------|
+| `diagram`   | `{attributes, doc}` | Attributes of the diagram root element (title, author, version, settings).                          |
+| `dataTypes` | map → DataType      | Named value types with facets, or structs (4.4).                                                    |
+| `enums`     | map → Enum          | Enumerations (4.5).                                                                                 |
+| `types`     | map → NodeType      | Node types — everything that is drawn as a node, including containers, lanes and annotations (4.6). |
+| `relations` | map → RelationType  | Relation types — everything that is drawn as an edge (4.9).                                         |
+| `doc`       | Doc                 | Documentation of the metamodel.                                                                     |
 
 ### 4.2 Primitive types
 
-| Type | CEL type | JSON representation | Facets |
-|---|---|---|---|
-| `string` | `string` | string | `minLength`, `maxLength`, `pattern`, `format` |
-| `text` | `string` | string (multi-line) | as `string`, plus `markup: "plain" \| "markdown"` |
-| `int` | `int` | integer | `min`, `max`, `step`, `unit` |
-| `number` | `double` | number | `min`, `max`, `exclusiveMin`, `exclusiveMax`, `step`, `precision`, `unit` |
-| `bool` | `bool` | boolean | – |
-| `date` | `timestamp` | `"YYYY-MM-DD"` | `min`, `max` (as dates) |
-| `datetime` | `timestamp` | RFC 3339 string | `min`, `max`, `timezone` (stored zone policy: `"utc"`, `"preserve"`, IANA name) |
-| `time` | `duration` since midnight | `"HH:MM[:SS]"` | `min`, `max`, `step` |
-| `duration` | `duration` | ISO 8601 duration | `min`, `max`, `calendar` (allow `P1M`/`P1Y`) |
-| `color` | `string` | CSS color string | `palette` (list of allowed colors), `alpha` (bool) |
-| `uri` | `string` | URI string | `schemes` (allowed schemes) |
-| `expression` | `string` | CEL source | `context` (name of the CEL context it will be evaluated in), `resultType` |
-| `json` | `dyn` | any JSON | `schema` (inline JSON Schema) |
-| `binary` | `bytes` | base64 string | `mediaTypes`, `maxBytes` |
+| Type         | CEL type                  | JSON representation | Facets                                                                          |
+|--------------|---------------------------|---------------------|---------------------------------------------------------------------------------|
+| `string`     | `string`                  | string              | `minLength`, `maxLength`, `pattern`, `format`                                   |
+| `text`       | `string`                  | string (multi-line) | as `string`, plus `markup: "plain" \| "markdown"`                               |
+| `int`        | `int`                     | integer             | `min`, `max`, `step`, `unit`                                                    |
+| `number`     | `double`                  | number              | `min`, `max`, `exclusiveMin`, `exclusiveMax`, `step`, `precision`, `unit`       |
+| `bool`       | `bool`                    | boolean             | –                                                                               |
+| `date`       | `timestamp`               | `"YYYY-MM-DD"`      | `min`, `max` (as dates)                                                         |
+| `datetime`   | `timestamp`               | RFC 3339 string     | `min`, `max`, `timezone` (stored zone policy: `"utc"`, `"preserve"`, IANA name) |
+| `time`       | `duration` since midnight | `"HH:MM[:SS]"`      | `min`, `max`, `step`                                                            |
+| `duration`   | `duration`                | ISO 8601 duration   | `min`, `max`, `calendar` (allow `P1M`/`P1Y`)                                    |
+| `color`      | `string`                  | CSS color string    | `palette` (list of allowed colors), `alpha` (bool)                              |
+| `uri`        | `string`                  | URI string          | `schemes` (allowed schemes)                                                     |
+| `expression` | `string`                  | CEL source          | `context` (name of the CEL context it will be evaluated in), `resultType`       |
+| `json`       | `dyn`                     | any JSON            | `schema` (inline JSON Schema)                                                   |
+| `binary`     | `bytes`                   | base64 string       | `mediaTypes`, `maxBytes`                                                        |
 
 Unit facets (`unit`) are informational strings (`"h"`, `"kg"`, `"EUR"`); runtimes SHOULD show them as field suffixes.
 
@@ -513,25 +513,25 @@ Unit facets (`unit`) are informational strings (`"h"`, `"kg"`, `"EUR"`); runtime
 
 An attribute describes one named value on a node, relation, port or the diagram.
 
-| Property | Type | Description |
-|---|---|---|
-| `type` | TypeName | Primitive, enum, data type, or node/relation type (a reference, 4.8). **Required.** |
-| `label` | LocalizedText | Display name. |
-| `doc` | Doc | Shown as field help. |
-| `required` | bool | Must have a non-empty value. Enforced as a built-in constraint with severity `error` (section 8.7). Default `false`. |
-| `default` | literal or `{cel}` | Initial value on creation. A CEL default is evaluated in the `create` context (12.3). |
-| `many` | bool | The attribute holds a list. Default `false`. |
-| `minItems`, `maxItems`, `uniqueItems` | int, int, bool | List facets when `many`. |
-| `readOnly` | bool | Not editable by users (may still be set by behavior). |
-| `derived` | Expression | Computed, never stored; evaluated in the `element` context. Implies `readOnly`. |
-| `transient` | bool | Editable but not persisted (for example UI-only flags). |
-| `unique` | `"diagram"`, `"parent"`, `"type"` | Value must be unique within the scope. Enforced as a built-in constraint. |
-| `key` | bool | Part of the element's natural key (used for `natural` ids, 11.5, and for display). |
-| `secret` | bool | Masked in forms and excluded from exports and logs. |
-| `facets` | object | Primitive facets from 4.2 (`min`, `max`, `pattern`, …); may also be written directly on the attribute. |
-| `group` | string | Default form section when a form is generated. |
-| `order` | int | Default position in generated forms. |
-| `x-*` | any | Extensions. |
+| Property                              | Type                              | Description                                                                                                          |
+|---------------------------------------|-----------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| `type`                                | TypeName                          | Primitive, enum, data type, or node/relation type (a reference, 4.8). **Required.**                                  |
+| `label`                               | LocalizedText                     | Display name.                                                                                                        |
+| `doc`                                 | Doc                               | Shown as field help.                                                                                                 |
+| `required`                            | bool                              | Must have a non-empty value. Enforced as a built-in constraint with severity `error` (section 8.7). Default `false`. |
+| `default`                             | literal or `{cel}`                | Initial value on creation. A CEL default is evaluated in the `create` context (12.3).                                |
+| `many`                                | bool                              | The attribute holds a list. Default `false`.                                                                         |
+| `minItems`, `maxItems`, `uniqueItems` | int, int, bool                    | List facets when `many`.                                                                                             |
+| `readOnly`                            | bool                              | Not editable by users (may still be set by behavior).                                                                |
+| `derived`                             | Expression                        | Computed, never stored; evaluated in the `element` context. Implies `readOnly`.                                      |
+| `transient`                           | bool                              | Editable but not persisted (for example UI-only flags).                                                              |
+| `unique`                              | `"diagram"`, `"parent"`, `"type"` | Value must be unique within the scope. Enforced as a built-in constraint.                                            |
+| `key`                                 | bool                              | Part of the element's natural key (used for `natural` ids, 11.5, and for display).                                   |
+| `secret`                              | bool                              | Masked in forms and excluded from exports and logs.                                                                  |
+| `facets`                              | object                            | Primitive facets from 4.2 (`min`, `max`, `pattern`, …); may also be written directly on the attribute.               |
+| `group`                               | string                            | Default form section when a form is generated.                                                                       |
+| `order`                               | int                               | Default position in generated forms.                                                                                 |
+| `x-*`                                 | any                               | Extensions.                                                                                                          |
 
 ```json
 "attributes": {
@@ -566,13 +566,13 @@ A data type is either a **constrained primitive** or a **struct**.
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `base` | primitive | For constrained primitives. |
-| facets | | Facets of the base primitive. |
-| `fields` | map → Attribute | For structs; fields may themselves be structs, lists or references. |
-| `display` | Bindable&lt;string&gt; | How a value is summarised in labels and list cells (`value` is the struct). |
-| `label`, `doc` | | |
+| Property       | Type                   | Description                                                                 |
+|----------------|------------------------|-----------------------------------------------------------------------------|
+| `base`         | primitive              | For constrained primitives.                                                 |
+| facets         |                        | Facets of the base primitive.                                               |
+| `fields`       | map → Attribute        | For structs; fields may themselves be structs, lists or references.         |
+| `display`      | Bindable&lt;string&gt; | How a value is summarised in labels and list cells (`value` is the struct). |
+| `label`, `doc` |                        |                                                                             |
 
 Struct values are CEL maps; fields are accessed as `self.budget.amount`.
 
@@ -592,12 +592,12 @@ Struct values are CEL maps; fields are accessed as `self.budget.amount`.
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `values` | map → EnumValue (ordered) | Value ids are simple identifiers and are what is stored. Map order is the display order. |
-| `ordered` | bool | Values have a meaningful order; enables `<`, `>` comparison via `ordinal(value, 'Priority')`. |
-| `extensible` | bool | Users may enter values not listed (combobox). |
-| `label`, `doc` | | |
+| Property       | Type                      | Description                                                                                   |
+|----------------|---------------------------|-----------------------------------------------------------------------------------------------|
+| `values`       | map → EnumValue (ordered) | Value ids are simple identifiers and are what is stored. Map order is the display order.      |
+| `ordered`      | bool                      | Values have a meaningful order; enables `<`, `>` comparison via `ordinal(value, 'Priority')`. |
+| `extensible`   | bool                      | Users may enter values not listed (combobox).                                                 |
+| `label`, `doc` |                           |                                                                                               |
 
 EnumValue: `label`, `doc`, `color`, `icon`, `deprecated`. The optional `color` and `icon` are hints that notations may use (`{ "cel": "enumColor('Priority', self.priority)" }`).
 
@@ -605,19 +605,19 @@ EnumValue: `label`, `doc`, `color`, `icon`, `deprecated`. The optional `color` a
 
 A node type describes a kind of element that is drawn as a node.
 
-| Property | Type | Description |
-|---|---|---|
-| `label`, `doc`, `icon` | | Display name, documentation, default icon. |
-| `abstract` | bool | Cannot be instantiated; exists for inheritance and type references. |
-| `extends` | TypeRef or TypeRef[] | Supertypes (4.7). |
-| `attributes` | map → Attribute | Own attributes. |
-| `ports` | map → PortType | Connection points (4.10). |
-| `children` | Containment | What may be nested inside (4.8). |
-| `multiplicity` | `{min, max}` | Number of instances allowed per diagram (for example exactly one `Start`). Enforced as a built-in constraint. |
-| `viewOnly` | bool | The element has no model meaning and lives only in a view: notes, free text, frames, images, annotations. View-only elements are stored in view data (11.6) and are excluded from `diagram.nodes` unless `includeViewOnly` is used (12.4). |
-| `labelAttribute` | attribute name | The attribute used as the element's name in lists, problem messages, reference pickers and default labels. Default: the first `key` attribute, else the first required `string` attribute, else the first `string` attribute. |
-| `tags` | string[] | Free classification, usable in CEL as `self.isTagged('x')`. |
-| `x-*` | | Extensions. |
+| Property               | Type                 | Description                                                                                                                                                                                                                                |
+|------------------------|----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `label`, `doc`, `icon` |                      | Display name, documentation, default icon.                                                                                                                                                                                                 |
+| `abstract`             | bool                 | Cannot be instantiated; exists for inheritance and type references.                                                                                                                                                                        |
+| `extends`              | TypeRef or TypeRef[] | Supertypes (4.7).                                                                                                                                                                                                                          |
+| `attributes`           | map → Attribute      | Own attributes.                                                                                                                                                                                                                            |
+| `ports`                | map → PortType       | Connection points (4.10).                                                                                                                                                                                                                  |
+| `children`             | Containment          | What may be nested inside (4.8).                                                                                                                                                                                                           |
+| `multiplicity`         | `{min, max}`         | Number of instances allowed per diagram (for example exactly one `Start`). Enforced as a built-in constraint.                                                                                                                              |
+| `viewOnly`             | bool                 | The element has no model meaning and lives only in a view: notes, free text, frames, images, annotations. View-only elements are stored in view data (11.6) and are excluded from `diagram.nodes` unless `includeViewOnly` is used (12.4). |
+| `labelAttribute`       | attribute name       | The attribute used as the element's name in lists, problem messages, reference pickers and default labels. Default: the first `key` attribute, else the first required `string` attribute, else the first `string` attribute.              |
+| `tags`                 | string[]             | Free classification, usable in CEL as `self.isTagged('x')`.                                                                                                                                                                                |
+| `x-*`                  |                      | Extensions.                                                                                                                                                                                                                                |
 
 ### 4.7 Inheritance
 
@@ -648,14 +648,14 @@ A type inherits all attributes, ports, containment rules and tags from its super
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `allowed` | TypeRef[] | Types that may be direct children. |
-| `min`, `max` | int / null | Child count bounds (`null` = unbounded). |
-| `perType` | map TypeRef → `{min, max}` | Per-type bounds. |
-| `ordered` | bool | Child order is meaningful and persisted (for example stacked compartments, table columns). |
-| `slots` | map → `{allowed, min, max, doc}` | Named sub-containers when a node has several distinct regions; each child records its slot. Notation maps slots to compartments or regions. |
-| `acrossViews` | bool | Whether a child may be shown outside its parent in other viewpoints. Default `false`. |
+| Property      | Type                             | Description                                                                                                                                 |
+|---------------|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| `allowed`     | TypeRef[]                        | Types that may be direct children.                                                                                                          |
+| `min`, `max`  | int / null                       | Child count bounds (`null` = unbounded).                                                                                                    |
+| `perType`     | map TypeRef → `{min, max}`       | Per-type bounds.                                                                                                                            |
+| `ordered`     | bool                             | Child order is meaningful and persisted (for example stacked compartments, table columns).                                                  |
+| `slots`       | map → `{allowed, min, max, doc}` | Named sub-containers when a node has several distinct regions; each child records its slot. Notation maps slots to compartments or regions. |
+| `acrossViews` | bool                             | Whether a child may be shown outside its parent in other viewpoints. Default `false`.                                                       |
 
 A node type without `children` cannot contain other nodes. Top-level nodes have the diagram as parent (`parent == null` in CEL, `self.owner == diagram`).
 
@@ -682,30 +682,30 @@ A relation type describes a kind of connection, drawn as an edge.
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `label`, `doc`, `icon` | | |
-| `abstract`, `extends` | | As for node types. |
-| `source`, `target` | TypeRef, TypeRef[] or RelationEnd | Allowed endpoints. **Required.** |
-| `directed` | bool | Default `true`. Undirected relations treat `source`/`target` as unordered for `allowParallel` and cycle checks. |
-| `allowSelfLoops` | bool | Source and target may be the same element. Default `false`. |
-| `allowParallel` | bool | More than one relation of this type between the same pair. Default `true`. |
-| `acyclic` | bool | Shorthand for a built-in constraint forbidding cycles over this relation type. |
-| `attributes` | map → Attribute | Relation attributes. |
-| `connectsRelations` | bool | Endpoints may be relations, not only nodes (for example UML association classes, annotations pointing at edges). Default `false`. |
-| `derived` | Expression | Derived relations are computed (list of `{source, target}` maps) and drawn read-only. |
-| `viewOnly` | bool | As for node types — connectors between notes, for instance. |
+| Property               | Type                              | Description                                                                                                                       |
+|------------------------|-----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| `label`, `doc`, `icon` |                                   |                                                                                                                                   |
+| `abstract`, `extends`  |                                   | As for node types.                                                                                                                |
+| `source`, `target`     | TypeRef, TypeRef[] or RelationEnd | Allowed endpoints. **Required.**                                                                                                  |
+| `directed`             | bool                              | Default `true`. Undirected relations treat `source`/`target` as unordered for `allowParallel` and cycle checks.                   |
+| `allowSelfLoops`       | bool                              | Source and target may be the same element. Default `false`.                                                                       |
+| `allowParallel`        | bool                              | More than one relation of this type between the same pair. Default `true`.                                                        |
+| `acyclic`              | bool                              | Shorthand for a built-in constraint forbidding cycles over this relation type.                                                    |
+| `attributes`           | map → Attribute                   | Relation attributes.                                                                                                              |
+| `connectsRelations`    | bool                              | Endpoints may be relations, not only nodes (for example UML association classes, annotations pointing at edges). Default `false`. |
+| `derived`              | Expression                        | Derived relations are computed (list of `{source, target}` maps) and drawn read-only.                                             |
+| `viewOnly`             | bool                              | As for node types — connectors between notes, for instance.                                                                       |
 
 **RelationEnd**
 
-| Property | Type | Description |
-|---|---|---|
-| `types` | TypeRef[] | Allowed element types. |
-| `exclude` | TypeRef[] | Subtypes excluded from `types`. |
-| `ports` | string[] | Port types the end must attach to (4.10). If set, the end MUST be a port of that type. |
+| Property     | Type       | Description                                                                                                     |
+|--------------|------------|-----------------------------------------------------------------------------------------------------------------|
+| `types`      | TypeRef[]  | Allowed element types.                                                                                          |
+| `exclude`    | TypeRef[]  | Subtypes excluded from `types`.                                                                                 |
+| `ports`      | string[]   | Port types the end must attach to (4.10). If set, the end MUST be a port of that type.                          |
 | `min`, `max` | int / null | How many relations of this type an element may have at this end (outgoing for `source`, incoming for `target`). |
-| `role` | string | Role name, usable in CEL and labels (for example `"parent"` / `"child"`). |
-| `doc` | Doc | |
+| `role`       | string     | Role name, usable in CEL and labels (for example `"parent"` / `"child"`).                                       |
+| `doc`        | Doc        |                                                                                                                 |
 
 Connectivity rules that depend on attributes or on the pair of endpoints are written as `connect` constraints (8.4).
 
@@ -714,25 +714,27 @@ Connectivity rules that depend on attributes or on the pair of endpoints are wri
 Ports are named connection points on nodes: pins of a circuit component, input/output handles of a data-flow block, the sockets of a UML component.
 
 ```json
-"Block": {
-  "attributes": { "name": { "type": "string" } },
-  "ports": {
-    "in":  { "direction": "in",  "multiplicity": { "min": 1, "max": 8 }, "dynamic": true,
-             "attributes": { "name": { "type": "string" }, "dataType": { "type": "string" } } },
-    "out": { "direction": "out", "multiplicity": { "min": 1, "max": 1 } }
-  }
+{
+  "Block": {
+    "attributes": { "name": { "type": "string" } },
+    "ports": {
+      "in":  { "direction": "in",  "multiplicity": { "min": 1, "max": 8 }, "dynamic": true,
+               "attributes": { "name": { "type": "string" }, "dataType": { "type": "string" } } },
+      "out": { "direction": "out", "multiplicity": { "min": 1, "max": 1 } }
+    }
+  }  
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `label`, `doc` | | |
-| `direction` | `"in"`, `"out"`, `"inout"` | Allowed edge direction at this port. Default `"inout"`. |
-| `multiplicity` | `{min, max}` | Number of port instances of this type per node. Default `{min: 1, max: 1}` (one fixed port). |
-| `dynamic` | bool | Users may add and remove instances (within `multiplicity`). |
-| `maxConnections` | int / null | Edges per port instance. |
-| `accepts` | TypeRef[] | Relation types that may attach. Default: all whose ends allow this node type. |
-| `attributes` | map → Attribute | Attributes of each port instance. |
+| Property         | Type                       | Description                                                                                  |
+|------------------|----------------------------|----------------------------------------------------------------------------------------------|
+| `label`, `doc`   |                            |                                                                                              |
+| `direction`      | `"in"`, `"out"`, `"inout"` | Allowed edge direction at this port. Default `"inout"`.                                      |
+| `multiplicity`   | `{min, max}`               | Number of port instances of this type per node. Default `{min: 1, max: 1}` (one fixed port). |
+| `dynamic`        | bool                       | Users may add and remove instances (within `multiplicity`).                                  |
+| `maxConnections` | int / null                 | Edges per port instance.                                                                     |
+| `accepts`        | TypeRef[]                  | Relation types that may attach. Default: all whose ends allow this node type.                |
+| `attributes`     | map → Attribute            | Attributes of each port instance.                                                            |
 
 Port instances are elements with `kind == "port"`, an `id`, a `type` of the form `Block.in`, and an `owner` (the node). They are persisted with their owner (11.4).
 
@@ -761,97 +763,103 @@ Most diagram editors assume a single, infinite pixel plane. Many real diagrams d
 ### 5.2 The coordinates object
 
 ```json
-"coordinates": {
-  "axes": { "px": { "kind": "linear", "unit": "px" } },
-  "systems": {
-    "canvas": {
-      "kind": "cartesian",
-      "x": "px", "y": "px",
-      "orientation": "y-down",
-      "grid": { "visible": true, "style": "dots", "spacing": 10, "majorEvery": 5 },
-      "snapping": "grid10"
-    }
-  },
-  "snapProfiles": { "grid10": { "x": { "grid": { "spacing": 10 } }, "y": { "grid": { "spacing": 10 } } } },
-  "default": "canvas"
+{
+  "coordinates": {
+    "axes": { "px": { "kind": "linear", "unit": "px" } },
+    "systems": {
+      "canvas": {
+        "kind": "cartesian",
+        "x": "px", "y": "px",
+        "orientation": "y-down",
+        "grid": { "visible": true, "style": "dots", "spacing": 10, "majorEvery": 5 },
+        "snapping": "grid10"
+      }
+    },
+    "snapProfiles": { "grid10": { "x": { "grid": { "spacing": 10 } }, "y": { "grid": { "spacing": 10 } } } },
+    "default": "canvas"
+  }
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `axes` | map → Axis | Named axes; may also be written inline inside systems. |
-| `systems` | map → CoordinateSystem | Named coordinate systems. |
-| `snapProfiles` | map → Snapping | Reusable snapping definitions. |
-| `default` | name | System used by viewpoints that do not name one. |
-| `doc` | Doc | |
+| Property       | Type                   | Description                                            |
+|----------------|------------------------|--------------------------------------------------------|
+| `axes`         | map → Axis             | Named axes; may also be written inline inside systems. |
+| `systems`      | map → CoordinateSystem | Named coordinate systems.                              |
+| `snapProfiles` | map → Snapping         | Reusable snapping definitions.                         |
+| `default`      | name                   | System used by viewpoints that do not name one.        |
+| `doc`          | Doc                    |                                                        |
 
 If `coordinates` is absent, the default is a single cartesian system `canvas` with two linear pixel axes, y pointing down, unbounded, grid hidden and snapping off.
 
 ### 5.3 Axes: common properties
 
-| Property | Type | Description |
-|---|---|---|
-| `kind` | `"linear"`, `"log"`, `"time"`, `"ordinal"`, `"angular"` | **Required.** |
-| `label` | LocalizedText | Axis title, shown on rulers and headers. |
-| `doc` | Doc | Explains to users what the axis means ("Calendar time in the project's time zone"). |
-| `min`, `max` | domain value | Domain bounds; placements outside are rejected by a built-in placement constraint. |
-| `reversed` | bool | Domain increases towards negative canvas direction (for example values increasing upward in a y-down system). |
-| `origin` | domain value | The domain value mapped to canvas coordinate 0. |
-| `ruler` | Ruler | Ruler or header display (5.13). |
-| `expand` | `"none"`, `"auto"` | Whether the axis domain grows automatically when elements are placed beyond it. Default `"auto"` for unbounded axes. |
+| Property     | Type                                                    | Description                                                                                                          |
+|--------------|---------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| `kind`       | `"linear"`, `"log"`, `"time"`, `"ordinal"`, `"angular"` | **Required.**                                                                                                        |
+| `label`      | LocalizedText                                           | Axis title, shown on rulers and headers.                                                                             |
+| `doc`        | Doc                                                     | Explains to users what the axis means ("Calendar time in the project's time zone").                                  |
+| `min`, `max` | domain value                                            | Domain bounds; placements outside are rejected by a built-in placement constraint.                                   |
+| `reversed`   | bool                                                    | Domain increases towards negative canvas direction (for example values increasing upward in a y-down system).        |
+| `origin`     | domain value                                            | The domain value mapped to canvas coordinate 0.                                                                      |
+| `ruler`      | Ruler                                                   | Ruler or header display (5.13).                                                                                      |
+| `expand`     | `"none"`, `"auto"`                                      | Whether the axis domain grows automatically when elements are placed beyond it. Default `"auto"` for unbounded axes. |
 
 ### 5.4 Numeric axes (`linear`, `log`)
 
-| Property | Type | Description |
-|---|---|---|
-| `unit` | string | `"px"` (default), `"pt"`, `"mm"`, `"cm"`, `"in"`, `"m"`, `"unitless"`, or any custom unit label. |
-| `scale` | number | Canvas units per domain unit at zoom 1. Default: 1 for `px`; 96/25.4 for `mm` (CSS reference pixel); 96 for `in`; 72/… for `pt` etc. |
-| `precision` | int | Decimal places stored (overrides persistence default for this axis). |
-| `base` | number | For `log` axes (default 10). Domain values MUST be > 0. |
-| `format` | string | Number format pattern for rulers (ICU/Unicode LDML, for example `"#,##0.0 'mm'"`). |
+| Property    | Type   | Description                                                                                                                          |
+|-------------|--------|--------------------------------------------------------------------------------------------------------------------------------------|
+| `unit`      | string | `"px"` (default), `"pt"`, `"mm"`, `"cm"`, `"in"`, `"m"`, `"unitless"`, or any custom unit label.                                     |
+| `scale`     | number | Canvas units per domain unit at zoom 1. Default: 1 for `px`; 96/25.4 for `mm` (CSS reference pixel); 96 for `in`; 72/… for `pt` etc. |
+| `precision` | int    | Decimal places stored (overrides persistence default for this axis).                                                                 |
+| `base`      | number | For `log` axes (default 10). Domain values MUST be > 0.                                                                              |
+| `format`    | string | Number format pattern for rulers (ICU/Unicode LDML, for example `"#,##0.0 'mm'"`).                                                   |
 
 ```json
-"mm": { "kind": "linear", "unit": "mm", "precision": 1, "label": "Millimetres",
+{
+  "mm": { "kind": "linear", "unit": "mm", "precision": 1, "label": "Millimetres",
         "doc": "Real-world length on the printed sheet. 1 mm = 3.78 px at 100 %." }
+}
 ```
 
 ### 5.5 Time axes (`time`)
 
 Time axes place elements by date or timestamp. They are used for Gantt charts, roadmaps, timelines, event storms with a real time dimension, and schedules.
 
-| Property | Type | Description |
-|---|---|---|
-| `valueType` | `"date"`, `"datetime"`, `"epoch-ms"`, `"epoch-s"` | Stored representation of positions on this axis. Default `"datetime"`. |
-| `timezone` | IANA name, `"UTC"`, `"floating"` | Zone in which dates are interpreted and calendar snapping is computed. `"floating"` means local wall-clock time without zone. Default `"UTC"`. A bindable form `{ "attribute": "timezone" }` refers to a diagram attribute. |
-| `scale` | `{unit, size}` | How much canvas distance one unit of time occupies at zoom 1, for example `{ "unit": "day", "size": 40 }` (40 canvas units per day). Units: `millisecond`, `second`, `minute`, `hour`, `day`, `week`, `month`, `quarter`, `year`. For `month` and larger units the scale is the average length (a month is 30.436875 days). |
-| `calendar` | Calendar | Working time definition (below). |
-| `collapse` | `"none"`, `"non-working"` | If `"non-working"`, non-working time takes no canvas space (a *compressed* timeline in which weekends vanish). Default `"none"`. |
-| `min`, `max` | timestamp or `{cel}` | Bounds; may be bound to diagram attributes such as project start and end. |
-| `origin` | timestamp or `{cel}` | Timestamp at canvas x = 0. Default: `min` if set, else the Unix epoch. |
-| `zoomLevels` | ZoomLevel[] | Presets that change `scale` and the header (for example *days*, *weeks*, *months*). |
-| `today` | object | `{ "visible": true, "style": StyleRef, "label": "Today" }` — a marker line at `env.now`. |
+| Property     | Type                                              | Description                                                                                                                                                                                                                                                                                                                 |
+|--------------|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `valueType`  | `"date"`, `"datetime"`, `"epoch-ms"`, `"epoch-s"` | Stored representation of positions on this axis. Default `"datetime"`.                                                                                                                                                                                                                                                      |
+| `timezone`   | IANA name, `"UTC"`, `"floating"`                  | Zone in which dates are interpreted and calendar snapping is computed. `"floating"` means local wall-clock time without zone. Default `"UTC"`. A bindable form `{ "attribute": "timezone" }` refers to a diagram attribute.                                                                                                 |
+| `scale`      | `{unit, size}`                                    | How much canvas distance one unit of time occupies at zoom 1, for example `{ "unit": "day", "size": 40 }` (40 canvas units per day). Units: `millisecond`, `second`, `minute`, `hour`, `day`, `week`, `month`, `quarter`, `year`. For `month` and larger units the scale is the average length (a month is 30.436875 days). |
+| `calendar`   | Calendar                                          | Working time definition (below).                                                                                                                                                                                                                                                                                            |
+| `collapse`   | `"none"`, `"non-working"`                         | If `"non-working"`, non-working time takes no canvas space (a *compressed* timeline in which weekends vanish). Default `"none"`.                                                                                                                                                                                            |
+| `min`, `max` | timestamp or `{cel}`                              | Bounds; may be bound to diagram attributes such as project start and end.                                                                                                                                                                                                                                                   |
+| `origin`     | timestamp or `{cel}`                              | Timestamp at canvas x = 0. Default: `min` if set, else the Unix epoch.                                                                                                                                                                                                                                                      |
+| `zoomLevels` | ZoomLevel[]                                       | Presets that change `scale` and the header (for example *days*, *weeks*, *months*).                                                                                                                                                                                                                                         |
+| `today`      | object                                            | `{ "visible": true, "style": StyleRef, "label": "Today" }` — a marker line at `env.now`.                                                                                                                                                                                                                                    |
 
 **Calendar**
 
 ```json
-"calendar": {
-  "id": "project",
-  "workingDays": [1, 2, 3, 4, 5],
-  "workingHours": [["09:00", "12:30"], ["13:30", "17:30"]],
-  "holidays": { "attribute": "holidays" },
-  "firstDayOfWeek": 1,
-  "doc": "Mon–Fri, 8 working hours; holidays come from the diagram's holiday list."
+{
+  "calendar": {
+    "id": "project",
+    "workingDays": [1, 2, 3, 4, 5],
+    "workingHours": [["09:00", "12:30"], ["13:30", "17:30"]],
+    "holidays": { "attribute": "holidays" },
+    "firstDayOfWeek": 1,
+    "doc": "Mon–Fri, 8 working hours; holidays come from the diagram's holiday list."
+  }
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `id` | identifier | Name used by CEL time functions (`workingDays(a, b, 'project')`). |
-| `workingDays` | int[] | ISO weekday numbers (1 = Monday … 7 = Sunday). Default `[1,2,3,4,5]`. |
-| `workingHours` | `[start, end]`[] | Working intervals per working day. Default `[["00:00","24:00"]]`. |
-| `holidays` | date[] or Bindable | Non-working dates. |
-| `exceptions` | `{date, workingHours}`[] | Special days (half days, working Saturdays). |
-| `firstDayOfWeek` | int | For week snapping and headers. Default 1 (ISO). |
+| Property         | Type                     | Description                                                           |
+|------------------|--------------------------|-----------------------------------------------------------------------|
+| `id`             | identifier               | Name used by CEL time functions (`workingDays(a, b, 'project')`).     |
+| `workingDays`    | int[]                    | ISO weekday numbers (1 = Monday … 7 = Sunday). Default `[1,2,3,4,5]`. |
+| `workingHours`   | `[start, end]`[]         | Working intervals per working day. Default `[["00:00","24:00"]]`.     |
+| `holidays`       | date[] or Bindable       | Non-working dates.                                                    |
+| `exceptions`     | `{date, workingHours}`[] | Special days (half days, working Saturdays).                          |
+| `firstDayOfWeek` | int                      | For week snapping and headers. Default 1 (ISO).                       |
 
 The grid and header of time axes show non-working time shaded by default; the style is set in `ruler.nonWorkingStyle`.
 
@@ -859,17 +867,17 @@ The grid and header of time axes show non-working time shaded by default; the st
 
 **Ordinal axes** place elements into discrete **bands** (categories): lanes, rows, resources, lifelines, columns of a Kanban board, days of a timetable.
 
-| Property | Type | Description |
-|---|---|---|
-| `categories` | Category[] or `{cel}` or `{nodes}` | The bands. Static list, a CEL expression returning a list of `{id, label}` maps, or `{ "nodes": "Resource", "orderBy": "self.order" }` — one band per node of a type. With `nodes`, the bands *are* model elements: they can be edited, reordered and deleted, their node notation is used to draw the band header, their placement is determined by the axis (not by `placement`), and attributes bound to this axis store a reference to the band node. |
-| `bandSize` | number or `"auto"` | Canvas size of each band. `"auto"` grows each band to fit its content. |
-| `minBandSize`, `maxBandSize` | number | Limits for auto sizing. |
-| `bandSizes` | `{attribute}` | Per-band size stored on the category element. |
-| `padding` | number | Space before the first and after the last band. |
-| `gap` | number | Space between bands. |
-| `reorderable` | bool | Users may drag bands to reorder them (updates the order attribute or category list). |
-| `allowUnassigned` | bool | Whether elements may lie outside any band. Default `false`. |
-| `header` | object | `{ "size": 120, "label": {cel}, "style": StyleRef }` — band headers (the "lane titles"). |
+| Property                     | Type                               | Description                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+|------------------------------|------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `categories`                 | Category[] or `{cel}` or `{nodes}` | The bands. Static list, a CEL expression returning a list of `{id, label}` maps, or `{ "nodes": "Resource", "orderBy": "self.order" }` — one band per node of a type. With `nodes`, the bands *are* model elements: they can be edited, reordered and deleted, their node notation is used to draw the band header, their placement is determined by the axis (not by `placement`), and attributes bound to this axis store a reference to the band node. |
+| `bandSize`                   | number or `"auto"`                 | Canvas size of each band. `"auto"` grows each band to fit its content.                                                                                                                                                                                                                                                                                                                                                                                    |
+| `minBandSize`, `maxBandSize` | number                             | Limits for auto sizing.                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `bandSizes`                  | `{attribute}`                      | Per-band size stored on the category element.                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `padding`                    | number                             | Space before the first and after the last band.                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `gap`                        | number                             | Space between bands.                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `reorderable`                | bool                               | Users may drag bands to reorder them (updates the order attribute or category list).                                                                                                                                                                                                                                                                                                                                                                      |
+| `allowUnassigned`            | bool                               | Whether elements may lie outside any band. Default `false`.                                                                                                                                                                                                                                                                                                                                                                                               |
+| `header`                     | object                             | `{ "size": 120, "label": {cel}, "style": StyleRef }` — band headers (the "lane titles").                                                                                                                                                                                                                                                                                                                                                                  |
 
 A **Category** is `{ "id": "backlog", "label": "Backlog", "doc": "...", "color": "#…", "size": 200 }`.
 
@@ -879,20 +887,20 @@ Position values on an ordinal axis are **band references**: either the band id a
 
 ### 5.7 Coordinate systems
 
-| Property | Type | Description |
-|---|---|---|
-| `kind` | `"cartesian"`, `"polar"` | **Required.** |
-| `x`, `y` | Axis or name | For cartesian systems. |
-| `angle`, `radius` | Axis or name | For polar systems; `radius` is linear or ordinal (concentric rings). |
-| `center` | `[x, y]` | Canvas point of the polar origin. |
-| `orientation` | `"y-down"`, `"y-up"` | Cartesian direction of the positive y axis on screen. Default `"y-down"` (screen convention); engineering drawings often use `"y-up"`. |
-| `bounds` | `{x: [min,max], y: [min,max]}` | Canvas bounds (in domain values); elements must stay inside. |
-| `infinite` | bool | Canvas extends indefinitely. Default `true` unless `bounds` is set. |
-| `grid` | GridDisplay | Visible grid (5.13). Independent of snapping, but defaults to the snapping grid. |
-| `snapping` | Snapping or profile name | Default snapping in this system (5.9). |
-| `guides` | Guides | Alignment and distribution guides (5.12). |
-| `nested` | map TypeRef → system name | Coordinate systems local to containers of a type (below). |
-| `label`, `doc` | | |
+| Property          | Type                           | Description                                                                                                                            |
+|-------------------|--------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| `kind`            | `"cartesian"`, `"polar"`       | **Required.**                                                                                                                          |
+| `x`, `y`          | Axis or name                   | For cartesian systems.                                                                                                                 |
+| `angle`, `radius` | Axis or name                   | For polar systems; `radius` is linear or ordinal (concentric rings).                                                                   |
+| `center`          | `[x, y]`                       | Canvas point of the polar origin.                                                                                                      |
+| `orientation`     | `"y-down"`, `"y-up"`           | Cartesian direction of the positive y axis on screen. Default `"y-down"` (screen convention); engineering drawings often use `"y-up"`. |
+| `bounds`          | `{x: [min,max], y: [min,max]}` | Canvas bounds (in domain values); elements must stay inside.                                                                           |
+| `infinite`        | bool                           | Canvas extends indefinitely. Default `true` unless `bounds` is set.                                                                    |
+| `grid`            | GridDisplay                    | Visible grid (5.13). Independent of snapping, but defaults to the snapping grid.                                                       |
+| `snapping`        | Snapping or profile name       | Default snapping in this system (5.9).                                                                                                 |
+| `guides`          | Guides                         | Alignment and distribution guides (5.12).                                                                                              |
+| `nested`          | map TypeRef → system name      | Coordinate systems local to containers of a type (below).                                                                              |
+| `label`, `doc`    |                                |                                                                                                                                        |
 
 **Nested coordinate systems.** A container node may establish its own coordinate system for its children. The children's positions are then stored relative to the container in the nested system's units. Examples: a Kanban board node whose x axis is the ordinal *status* column set; a sub-timeline inside a project phase; a pin layout inside a chip outline measured in millimetres.
 
@@ -913,41 +921,41 @@ A position in a nested system is converted to canvas coordinates through the con
 
 Placement tells the runtime, for each node type, where each coordinate of an element comes from. It is declared in the node notation (6.9) under `placement`, because the same model type may be placed differently in different viewpoints.
 
-| Property | Type | Description |
-|---|---|---|
-| `system` | name | Coordinate system. Default: the viewpoint's system, or the nearest container's nested system. |
-| `x`, `y` | PlacementSource | Position of the element's anchor on each axis. |
-| `x2`, `y2` | PlacementSource | Position of the opposite edge; if given, the extent is `x2 − x` in domain units (for example `end − start` on a time axis). |
-| `width`, `height` | PlacementSource | Extent in domain units (a duration on time axes, a number of bands on ordinal axes). Mutually exclusive with `x2`/`y2`. |
-| `angle`, `radius` | PlacementSource | For polar systems. |
-| `anchor` | Anchor | Which point of the node the position refers to: `"top-left"` (default), `"top"`, `"top-right"`, `"left"`, `"center"`, `"right"`, `"bottom-left"`, `"bottom"`, `"bottom-right"`, or `[fx, fy]` fractions. Point-like elements on time axes (milestones) typically use `"center"`. |
-| `movable` | bool or `{x, y}` | Whether users may move the element along each axis. Default `true`. `{ "x": true, "y": false }` constrains dragging to the x direction. |
-| `resizable` | bool or `{x, y}` | Whether users may change the extent along each axis (see also `size` in 6.9). |
-| `stack` | Stack | How elements that share a band are arranged (below). |
-| `clampToParent` | bool | Keep the element within its container's content area. Default `true` for contained nodes. |
-| `doc` | Doc | Explains placement to users ("Drag horizontally to reschedule; drag vertically to reassign"). |
+| Property          | Type             | Description                                                                                                                                                                                                                                                                      |
+|-------------------|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `system`          | name             | Coordinate system. Default: the viewpoint's system, or the nearest container's nested system.                                                                                                                                                                                    |
+| `x`, `y`          | PlacementSource  | Position of the element's anchor on each axis.                                                                                                                                                                                                                                   |
+| `x2`, `y2`        | PlacementSource  | Position of the opposite edge; if given, the extent is `x2 − x` in domain units (for example `end − start` on a time axis).                                                                                                                                                      |
+| `width`, `height` | PlacementSource  | Extent in domain units (a duration on time axes, a number of bands on ordinal axes). Mutually exclusive with `x2`/`y2`.                                                                                                                                                          |
+| `angle`, `radius` | PlacementSource  | For polar systems.                                                                                                                                                                                                                                                               |
+| `anchor`          | Anchor           | Which point of the node the position refers to: `"top-left"` (default), `"top"`, `"top-right"`, `"left"`, `"center"`, `"right"`, `"bottom-left"`, `"bottom"`, `"bottom-right"`, or `[fx, fy]` fractions. Point-like elements on time axes (milestones) typically use `"center"`. |
+| `movable`         | bool or `{x, y}` | Whether users may move the element along each axis. Default `true`. `{ "x": true, "y": false }` constrains dragging to the x direction.                                                                                                                                          |
+| `resizable`       | bool or `{x, y}` | Whether users may change the extent along each axis (see also `size` in 6.9).                                                                                                                                                                                                    |
+| `stack`           | Stack            | How elements that share a band are arranged (below).                                                                                                                                                                                                                             |
+| `clampToParent`   | bool             | Keep the element within its container's content area. Default `true` for contained nodes.                                                                                                                                                                                        |
+| `doc`             | Doc              | Explains placement to users ("Drag horizontally to reschedule; drag vertically to reassign").                                                                                                                                                                                    |
 
 **PlacementSource** is one of:
 
-| Form | Kind | Meaning |
-|---|---|---|
-| `"free"` (or absent) | free | The value is stored in view data (11.6); moving the element updates the view only. |
-| `{ "attribute": "start" }` | bound | The value is read from and written to a model attribute. Moving the element changes the model (and triggers `change` hooks and constraints). |
-| `{ "attribute": "start", "offset": "P1D" }` | bound | Bound with a constant offset in domain units. |
-| `{ "cel": "…" }` | computed | Read-only; the element cannot be moved along this axis. |
+| Form                                                                       | Kind                  | Meaning                                                                                                                                                                                                                                           |
+|----------------------------------------------------------------------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `"free"` (or absent)                                                       | free                  | The value is stored in view data (11.6); moving the element updates the view only.                                                                                                                                                                |
+| `{ "attribute": "start" }`                                                 | bound                 | The value is read from and written to a model attribute. Moving the element changes the model (and triggers `change` hooks and constraints).                                                                                                      |
+| `{ "attribute": "start", "offset": "P1D" }`                                | bound                 | Bound with a constant offset in domain units.                                                                                                                                                                                                     |
+| `{ "cel": "…" }`                                                           | computed              | Read-only; the element cannot be moved along this axis.                                                                                                                                                                                           |
 | `{ "cel": "…", "write": { "set": { "attr": "value - duration('1h')" } } }` | computed with inverse | The expression computes the position; when the user moves the element, the `write` actions (an Action, 9.4) run with `value` bound to the new snapped domain value. This allows bindings such as "x is `start`, width is `durationDays * 1 day`". |
-| `{ "layout": true }` | layout | Determined by the layout algorithm (section 10); not user-movable. |
+| `{ "layout": true }`                                                       | layout                | Determined by the layout algorithm (section 10); not user-movable.                                                                                                                                                                                |
 
 The attribute type MUST be compatible with the axis: `number`/`int` for numeric axes, `date`/`datetime` for time axes, `string`, enum or a reference to a category node type for ordinal axes, `number` for angular axes.
 
 **Stacking** — when several elements fall into the same ordinal band and overlap along the other axis (two tasks of one resource in the same week), `stack` decides what happens:
 
-| Property | Type | Description |
-|---|---|---|
-| `mode` | `"overlap"`, `"stack"`, `"pack"` | `overlap`: draw over each other; `stack`: every element gets its own sub-row in order; `pack`: greedy interval packing into the fewest sub-rows. Default `"overlap"`. |
-| `order` | Expression | Sort key for stacking (for example `"self.start"`). |
-| `rowSize` | number | Sub-row height. |
-| `growBand` | bool | Band grows to fit sub-rows (requires `bandSize: "auto"`). |
+| Property   | Type                             | Description                                                                                                                                                           |
+|------------|----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `mode`     | `"overlap"`, `"stack"`, `"pack"` | `overlap`: draw over each other; `stack`: every element gets its own sub-row in order; `pack`: greedy interval packing into the fewest sub-rows. Default `"overlap"`. |
+| `order`    | Expression                       | Sort key for stacking (for example `"self.start"`).                                                                                                                   |
+| `rowSize`  | number                           | Sub-row height.                                                                                                                                                       |
+| `growBand` | bool                             | Band grows to fit sub-rows (requires `bandSize: "auto"`).                                                                                                             |
 
 #### Example: a Gantt task
 
@@ -991,25 +999,25 @@ Snapping is defined **per axis**. Each axis of a coordinate system can have its 
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `enabled` | bool | Master switch; users MAY toggle it at run time if `userToggle` is true. Default `true` when `snapping` is present. |
-| `userToggle` | bool | Users may switch snapping on and off (toolbar button, shortcut). Default `true`. |
-| `mode` | `"always"`, `"magnetic"` | `always`: the value is always replaced by the nearest allowed value; `magnetic`: only when within `toleranceScreenPx` of an allowed value (free placement otherwise). Default `"always"` for rule snapping, `"magnetic"` for object and guide snapping. |
-| `x`, `y` | SnapRule | Rule for positions along each axis (5.10). Absent or `"none"` = continuous. |
-| `both` | SnapRule | Shorthand applying the same rule to `x` and `y` (numeric axes only). |
-| `angle`, `radius` | SnapRule | For polar systems. |
-| `size` | `{x, y, both}` of SnapRule | Rules for extents (width/height). Default: follows the position rule of the axis for bound extents, none for free ones. |
-| `reference` | `"anchor"`, `"bounds"`, `"center"`, `"edges"` | Which point(s) of the element are snapped: the placement anchor (default), any edge of the bounds (the nearest wins), the center, or leading edges only. |
-| `rotation` | `{step, tolerance}` | Rotation snapping in degrees (for example `{ "step": 15 }`). |
-| `bendpoints` | `"inherit"`, `"none"` or `{x, y}` | Snapping for edge bendpoints and orthogonal segments. |
-| `labels` | `"none"` or LabelSnap | Snapping for draggable labels (for example to the nearest of `start`, `middle`, `end` on an edge). |
-| `targets` | string[] | Which snapping sources participate, in priority order: `"rule"` (the axis rules), `"objects"` (edges and centers of other elements), `"guides"` (user guides), `"ports"`, `"parent"` (container edges and padding). Default `["rule"]`. |
-| `toleranceScreenPx` | number | Attraction distance for magnetic snapping and object snapping. Default 8. |
-| `applyToProgrammatic` | bool | Whether changes made by operations, hooks and templates are snapped too. Default `false`. |
-| `bypassModifier` | `"Alt"`, `"Shift"`, `"Ctrl"`, `"Meta"`, `"none"` | Holding this key temporarily disables snapping. Default `"Alt"`. |
-| `feedback` | object | `showGhost` (preview of snapped position), `showValue` (tooltip with the snapped domain value, formatted by the axis), `highlightBand` (for ordinal axes), `style` (StyleRef for snap indicator lines). |
-| `doc` | Doc | Explains the snapping to users; runtimes SHOULD show `summary` when snapping is toggled or while dragging. |
+| Property              | Type                                             | Description                                                                                                                                                                                                                                             |
+|-----------------------|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `enabled`             | bool                                             | Master switch; users MAY toggle it at run time if `userToggle` is true. Default `true` when `snapping` is present.                                                                                                                                      |
+| `userToggle`          | bool                                             | Users may switch snapping on and off (toolbar button, shortcut). Default `true`.                                                                                                                                                                        |
+| `mode`                | `"always"`, `"magnetic"`                         | `always`: the value is always replaced by the nearest allowed value; `magnetic`: only when within `toleranceScreenPx` of an allowed value (free placement otherwise). Default `"always"` for rule snapping, `"magnetic"` for object and guide snapping. |
+| `x`, `y`              | SnapRule                                         | Rule for positions along each axis (5.10). Absent or `"none"` = continuous.                                                                                                                                                                             |
+| `both`                | SnapRule                                         | Shorthand applying the same rule to `x` and `y` (numeric axes only).                                                                                                                                                                                    |
+| `angle`, `radius`     | SnapRule                                         | For polar systems.                                                                                                                                                                                                                                      |
+| `size`                | `{x, y, both}` of SnapRule                       | Rules for extents (width/height). Default: follows the position rule of the axis for bound extents, none for free ones.                                                                                                                                 |
+| `reference`           | `"anchor"`, `"bounds"`, `"center"`, `"edges"`    | Which point(s) of the element are snapped: the placement anchor (default), any edge of the bounds (the nearest wins), the center, or leading edges only.                                                                                                |
+| `rotation`            | `{step, tolerance}`                              | Rotation snapping in degrees (for example `{ "step": 15 }`).                                                                                                                                                                                            |
+| `bendpoints`          | `"inherit"`, `"none"` or `{x, y}`                | Snapping for edge bendpoints and orthogonal segments.                                                                                                                                                                                                   |
+| `labels`              | `"none"` or LabelSnap                            | Snapping for draggable labels (for example to the nearest of `start`, `middle`, `end` on an edge).                                                                                                                                                      |
+| `targets`             | string[]                                         | Which snapping sources participate, in priority order: `"rule"` (the axis rules), `"objects"` (edges and centers of other elements), `"guides"` (user guides), `"ports"`, `"parent"` (container edges and padding). Default `["rule"]`.                 |
+| `toleranceScreenPx`   | number                                           | Attraction distance for magnetic snapping and object snapping. Default 8.                                                                                                                                                                               |
+| `applyToProgrammatic` | bool                                             | Whether changes made by operations, hooks and templates are snapped too. Default `false`.                                                                                                                                                               |
+| `bypassModifier`      | `"Alt"`, `"Shift"`, `"Ctrl"`, `"Meta"`, `"none"` | Holding this key temporarily disables snapping. Default `"Alt"`.                                                                                                                                                                                        |
+| `feedback`            | object                                           | `showGhost` (preview of snapped position), `showValue` (tooltip with the snapped domain value, formatted by the axis), `highlightBand` (for ordinal axes), `style` (StyleRef for snap indicator lines).                                                 |
+| `doc`                 | Doc                                              | Explains the snapping to users; runtimes SHOULD show `summary` when snapping is toggled or while dragging.                                                                                                                                              |
 
 **Where snapping is declared, and precedence.** Snapping can be declared in a snap profile, on a coordinate system, on a viewpoint's canvas, on a node or edge notation (`snapping` property, 6.9 and 6.10), and on a placement. The most specific declaration wins **per property and per axis**: a node notation that only declares `x` keeps the system's `y` rule. `"inherit"` explicitly refers to the next level.
 
@@ -1017,38 +1025,38 @@ Snapping is defined **per axis**. Each axis of a coordinate system can have its 
 
 A **SnapRule** is `"none"`, a profile name, or an object with exactly one of the rule keys below, plus optional common properties.
 
-| Rule key | Applies to | Description |
-|---|---|---|
-| `grid` | numeric axes | Regular grid: `{ "spacing": 10, "offset": 0, "subdivisions": 2 }`. Positions snap to `offset + k·spacing` (or to subdivisions when zoomed in beyond `subdivideAtZoom`). |
-| `values` | numeric, time, angular | Explicit list of allowed values: `{ "values": [0, 12.5, 25, 50, 100] }`. May be `{cel}` returning a list. |
-| `calendar` | time | Calendar units: `{ "unit": "day", "step": 1, "align": "nearest", "workingTime": true, "calendar": "project", "at": "09:00" }` (details below). |
-| `ticks` | any | Snap to the axis ticks visible at the current zoom level: `{ "ticks": { "level": "minor" } }`. Useful for zoom-adaptive snapping. |
-| `bands` | ordinal | Snap into bands: `{ "align": "start" \| "center" \| "end" \| "keep-offset", "offsetGrid": 8 }`. `keep-offset` preserves the offset within the band but still snaps `offsetGrid` if given. |
-| `divisions` | numeric extents, angular | Divide a range into n equal parts: `{ "count": 12, "of": "parent" }` — positions at twelfths of the container (column layouts). |
-| `ratio` | sizes | Keep the aspect ratio or snap to preferred ratios: `{ "ratios": [1, 1.5, 2] }`. |
-| `cel` | any | Custom function: `{ "cel": "value < 100.0 ? snap(value, 5.0) : snap(value, 25.0)" }`. Receives `value` (domain value), `axis`, `zoom`, `self`, `parent`; returns the snapped domain value. |
-| `byZoom` | any | Zoom-dependent rules: `{ "byZoom": [ { "maxZoom": 0.5, "rule": { "grid": { "spacing": 50 } } }, { "rule": { "grid": { "spacing": 10 } } } ] }` — the first entry whose `maxZoom` ≥ current zoom applies; the last entry without `maxZoom` is the fallback. |
-| `plugin` | any | `{ "plugin": "acme.snap-to-rails", "args": {…} }`. |
+| Rule key    | Applies to               | Description                                                                                                                                                                                                                                                |
+|-------------|--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `grid`      | numeric axes             | Regular grid: `{ "spacing": 10, "offset": 0, "subdivisions": 2 }`. Positions snap to `offset + k·spacing` (or to subdivisions when zoomed in beyond `subdivideAtZoom`).                                                                                    |
+| `values`    | numeric, time, angular   | Explicit list of allowed values: `{ "values": [0, 12.5, 25, 50, 100] }`. May be `{cel}` returning a list.                                                                                                                                                  |
+| `calendar`  | time                     | Calendar units: `{ "unit": "day", "step": 1, "align": "nearest", "workingTime": true, "calendar": "project", "at": "09:00" }` (details below).                                                                                                             |
+| `ticks`     | any                      | Snap to the axis ticks visible at the current zoom level: `{ "ticks": { "level": "minor" } }`. Useful for zoom-adaptive snapping.                                                                                                                          |
+| `bands`     | ordinal                  | Snap into bands: `{ "align": "start" \| "center" \| "end" \| "keep-offset", "offsetGrid": 8 }`. `keep-offset` preserves the offset within the band but still snaps `offsetGrid` if given.                                                                  |
+| `divisions` | numeric extents, angular | Divide a range into n equal parts: `{ "count": 12, "of": "parent" }` — positions at twelfths of the container (column layouts).                                                                                                                            |
+| `ratio`     | sizes                    | Keep the aspect ratio or snap to preferred ratios: `{ "ratios": [1, 1.5, 2] }`.                                                                                                                                                                            |
+| `cel`       | any                      | Custom function: `{ "cel": "value < 100.0 ? snap(value, 5.0) : snap(value, 25.0)" }`. Receives `value` (domain value), `axis`, `zoom`, `self`, `parent`; returns the snapped domain value.                                                                 |
+| `byZoom`    | any                      | Zoom-dependent rules: `{ "byZoom": [ { "maxZoom": 0.5, "rule": { "grid": { "spacing": 50 } } }, { "rule": { "grid": { "spacing": 10 } } } ] }` — the first entry whose `maxZoom` ≥ current zoom applies; the last entry without `maxZoom` is the fallback. |
+| `plugin`    | any                      | `{ "plugin": "acme.snap-to-rails", "args": {…} }`.                                                                                                                                                                                                         |
 
 Common properties of snap rules are written next to the rule key, not inside it (`{ "grid": { "spacing": 10 }, "min": 20 }`):
 
-| Property | Type | Description |
-|---|---|---|
-| `min`, `max` | domain value | Clamp the snapped value (for sizes: minimum and maximum extent). |
-| `direction` | `"nearest"`, `"floor"`, `"ceil"` | Rounding direction. Default `"nearest"`. |
-| `mode` | `"always"`, `"magnetic"` | Overrides the snapping-level mode for this rule. |
-| `doc` | Doc | Explanation for this axis. |
+| Property     | Type                             | Description                                                      |
+|--------------|----------------------------------|------------------------------------------------------------------|
+| `min`, `max` | domain value                     | Clamp the snapped value (for sizes: minimum and maximum extent). |
+| `direction`  | `"nearest"`, `"floor"`, `"ceil"` | Rounding direction. Default `"nearest"`.                         |
+| `mode`       | `"always"`, `"magnetic"`         | Overrides the snapping-level mode for this rule.                 |
+| `doc`        | Doc                              | Explanation for this axis.                                       |
 
 **Calendar rules** snap timestamps using the axis's time zone and calendar:
 
-| Property | Type | Description |
-|---|---|---|
-| `unit` | `millisecond` … `year` | Snapping unit. `week` respects `firstDayOfWeek`; `month`, `quarter`, `year` snap to calendar boundaries (not to fixed durations). |
-| `step` | int | Multiples of the unit (for example 15 minutes: `{ "unit": "minute", "step": 15 }`). Steps are counted from the start of the next larger unit (15-minute steps restart every hour). |
-| `align` | `"start"`, `"end"`, `"nearest"` | Snap to the start of the unit, its end, or whichever boundary is closer. Default `"nearest"`. |
-| `workingTime` | bool | Only working time of `calendar` is allowed; values in non-working time move to the nearest working boundary (in `direction`). |
-| `calendar` | id | Calendar to use; default: the axis calendar. |
-| `at` | time | Time of day for day-level snapping (tasks start at 09:00, not midnight). |
+| Property      | Type                            | Description                                                                                                                                                                        |
+|---------------|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `unit`        | `millisecond` … `year`          | Snapping unit. `week` respects `firstDayOfWeek`; `month`, `quarter`, `year` snap to calendar boundaries (not to fixed durations).                                                  |
+| `step`        | int                             | Multiples of the unit (for example 15 minutes: `{ "unit": "minute", "step": 15 }`). Steps are counted from the start of the next larger unit (15-minute steps restart every hour). |
+| `align`       | `"start"`, `"end"`, `"nearest"` | Snap to the start of the unit, its end, or whichever boundary is closer. Default `"nearest"`.                                                                                      |
+| `workingTime` | bool                            | Only working time of `calendar` is allowed; values in non-working time move to the nearest working boundary (in `direction`).                                                      |
+| `calendar`    | id                              | Calendar to use; default: the axis calendar.                                                                                                                                       |
+| `at`          | time                            | Time of day for day-level snapping (tasks start at 09:00, not midnight).                                                                                                           |
 
 Size snapping on time axes uses durations: `{ "calendar": { "unit": "day" }, "min": "P1D" }` makes every task at least one day long and a whole number of days.
 
@@ -1118,27 +1126,27 @@ Circuit pins on a 2.54 mm pitch with magnetic port snapping:
 
 ### 5.12 Guides
 
-| Property | Type | Description |
-|---|---|---|
-| `smart` | bool | Show alignment guides to edges and centers of nearby elements while dragging. Default `true`. |
-| `distribution` | bool | Show equal-spacing guides. Default `true`. |
-| `user` | bool | Users may drag guides out of rulers; guides are stored in view data. Default `false`. |
-| `style` | StyleRef | Style of guide lines. |
+| Property       | Type     | Description                                                                                   |
+|----------------|----------|-----------------------------------------------------------------------------------------------|
+| `smart`        | bool     | Show alignment guides to edges and centers of nearby elements while dragging. Default `true`. |
+| `distribution` | bool     | Show equal-spacing guides. Default `true`.                                                    |
+| `user`         | bool     | Users may drag guides out of rulers; guides are stored in view data. Default `false`.         |
+| `style`        | StyleRef | Style of guide lines.                                                                         |
 
 ### 5.13 Grid display and rulers
 
 The **visible grid** is separate from snapping (a grid can be displayed without snapping and vice versa) but defaults to mirroring the snapping rules.
 
-| Property | Type | Description |
-|---|---|---|
-| `visible` | bool | Default `false`. |
-| `style` | `"lines"`, `"dots"`, `"crosses"`, `"none"` | Default `"lines"`. |
-| `spacing` | number or `{x, y}` | Canvas spacing; for time axes, a calendar unit `{ "unit": "day" }`. Default: from snapping. |
-| `majorEvery` | int or `{x, y}` | Every n-th line is major. |
-| `minorColor`, `majorColor` | Paint | Colors (tokens recommended). |
-| `minZoomForMinor` | number | Hide minor lines below this zoom. |
-| `bands` | object | For ordinal axes: `{ "alternate": true, "fill": [Paint, Paint], "separator": Stroke }` — zebra striping of lanes. |
-| `nonWorking` | Style | For time axes: fill for non-working time. |
+| Property                   | Type                                       | Description                                                                                                       |
+|----------------------------|--------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| `visible`                  | bool                                       | Default `false`.                                                                                                  |
+| `style`                    | `"lines"`, `"dots"`, `"crosses"`, `"none"` | Default `"lines"`.                                                                                                |
+| `spacing`                  | number or `{x, y}`                         | Canvas spacing; for time axes, a calendar unit `{ "unit": "day" }`. Default: from snapping.                       |
+| `majorEvery`               | int or `{x, y}`                            | Every n-th line is major.                                                                                         |
+| `minorColor`, `majorColor` | Paint                                      | Colors (tokens recommended).                                                                                      |
+| `minZoomForMinor`          | number                                     | Hide minor lines below this zoom.                                                                                 |
+| `bands`                    | object                                     | For ordinal axes: `{ "alternate": true, "fill": [Paint, Paint], "separator": Stroke }` — zebra striping of lanes. |
+| `nonWorking`               | Style                                      | For time axes: fill for non-working time.                                                                         |
 
 A **Ruler** (axis property `ruler`) configures rulers and headers: `visible`, `position` (`"top"`, `"bottom"`, `"left"`, `"right"`), `size`, and `levels` — a list of header rows for multi-level time scales:
 
@@ -1224,13 +1232,13 @@ Tokens give colors, fonts and sizes semantic names so that one definition render
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `tokens` | map qualified id → value | Base token values (colors, font stacks, numbers, strings). |
-| `modes` | map mode → token map | Overrides per mode. Mode names are free; `light`, `dark` and `high-contrast` are recognised by runtimes. |
-| `defaultMode` | string | Initial mode. |
-| `followSystem` | bool | Follow the operating system's light/dark preference. |
-| `extends` | string | Name of an imported theme to extend (`"corp.theme"`). |
+| Property       | Type                     | Description                                                                                              |
+|----------------|--------------------------|----------------------------------------------------------------------------------------------------------|
+| `tokens`       | map qualified id → value | Base token values (colors, font stacks, numbers, strings).                                               |
+| `modes`        | map mode → token map     | Overrides per mode. Mode names are free; `light`, `dark` and `high-contrast` are recognised by runtimes. |
+| `defaultMode`  | string                   | Initial mode.                                                                                            |
+| `followSystem` | bool                     | Follow the operating system's light/dark preference.                                                     |
+| `extends`      | string                   | Name of an imported theme to extend (`"corp.theme"`).                                                    |
 
 Tokens are referenced with `{ "token": "color.accent" }` in any Bindable position, and from CEL with `token('color.accent')`. Runtimes MAY let users switch modes; documents never store resolved token values unless a user explicitly overrides a style.
 
@@ -1238,15 +1246,15 @@ Tokens are referenced with `{ "token": "color.accent" }` in any Bindable positio
 
 A **Paint** fills an area or colors a stroke.
 
-| Form | Example |
-|---|---|
-| Color | `"#EEEDFE"`, `"transparent"`, `"currentColor"` |
-| Token / CEL / attribute | `{ "token": "color.accent" }`, `{ "cel": "self.done ? '#639922' : '#BA7517'" }`, `{ "attribute": "color" }` |
-| `none` | `"none"` — no paint (unlike `transparent`, `none` is not hit-testable). |
-| Linear gradient | `{ "type": "linear", "angle": 90, "stops": [ { "offset": 0, "color": "#FAC775" }, { "offset": 1, "color": "#EF9F27" } ] }` |
-| Radial gradient | `{ "type": "radial", "center": [0.5, 0.5], "radius": 0.7, "stops": [ … ] }` |
-| Pattern | `{ "type": "pattern", "pattern": "hatch", "color": "#888780", "background": "#FFFFFF", "spacing": 6, "angle": 45, "width": 1 }` |
-| Image | `{ "type": "image", "src": "icons/brick.png", "fit": "tile", "opacity": 0.5 }` |
+| Form                    | Example                                                                                                                         |
+|-------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| Color                   | `"#EEEDFE"`, `"transparent"`, `"currentColor"`                                                                                  |
+| Token / CEL / attribute | `{ "token": "color.accent" }`, `{ "cel": "self.done ? '#639922' : '#BA7517'" }`, `{ "attribute": "color" }`                     |
+| `none`                  | `"none"` — no paint (unlike `transparent`, `none` is not hit-testable).                                                         |
+| Linear gradient         | `{ "type": "linear", "angle": 90, "stops": [ { "offset": 0, "color": "#FAC775" }, { "offset": 1, "color": "#EF9F27" } ] }`      |
+| Radial gradient         | `{ "type": "radial", "center": [0.5, 0.5], "radius": 0.7, "stops": [ … ] }`                                                     |
+| Pattern                 | `{ "type": "pattern", "pattern": "hatch", "color": "#888780", "background": "#FFFFFF", "spacing": 6, "angle": 45, "width": 1 }` |
+| Image                   | `{ "type": "image", "src": "icons/brick.png", "fit": "tile", "opacity": 0.5 }`                                                  |
 
 Built-in patterns: `hatch`, `cross-hatch`, `dots`, `grid`, `vertical`, `horizontal`, `zigzag`, `checker`, `bricks`. Patterns are also RECOMMENDED as a secondary visual cue when color distinguishes categories, for accessibility (6.15).
 
@@ -1256,49 +1264,49 @@ Gradient `stops` accept Bindable colors, so gradients can follow tokens. `offset
 
 A **Stroke** describes how an outline or a line is drawn. The same object is used for node outlines, edge lines, separators, grid lines and marker outlines.
 
-| Property | Type | Description |
-|---|---|---|
-| `color` | Paint | Default `{ "token": "color.border" }` or `#5F5E5A`. |
-| `width` | Bindable number | Canvas units. Default 1. |
-| `minWidthScreenPx` | number | Lines never render thinner than this on screen when zoomed out (hairline preservation). |
-| `opacity` | fraction | Default 1. |
-| `dash` | DashStyle | See below. Default `"solid"`. |
-| `dashOffset` | number | Phase of the dash pattern. |
-| `dashScale` | `"absolute"`, `"width"` | Whether dash lengths are canvas units or multiples of `width`. Default `"width"`. |
-| `cap` | `"butt"`, `"round"`, `"square"` | Line cap. Default `"butt"`. |
-| `join` | `"miter"`, `"round"`, `"bevel"` | Line join. Default `"miter"`. |
-| `miterLimit` | number | Default 4. |
-| `align` | `"center"`, `"inside"`, `"outside"` | Stroke alignment on closed outlines. Default `"center"`. |
-| `double` | `{ "gap": 2, "innerColor": Paint }` | Draw two parallel lines (UML composition borders, "is-a" rails, road casings). |
-| `casing` | `{ "color": Paint, "width": 4 }` | Draw a wider line underneath (halo). Makes edges readable where they cross others. |
-| `effect` | LineEffect | Geometric effect along the path (below). |
-| `flow` | `{ "speed": 20, "direction": "forward" }` | Animated dash movement along the path (data flow, active connections). Runtimes MUST honour reduced-motion preferences and MAY disable it. |
-| `sketch` | `{ "roughness": 1.2, "bowing": 1, "seed": {cel} }` | Hand-drawn rendering. The seed SHOULD be derived from the element id so the sketch is stable. |
+| Property           | Type                                               | Description                                                                                                                                |
+|--------------------|----------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| `color`            | Paint                                              | Default `{ "token": "color.border" }` or `#5F5E5A`.                                                                                        |
+| `width`            | Bindable number                                    | Canvas units. Default 1.                                                                                                                   |
+| `minWidthScreenPx` | number                                             | Lines never render thinner than this on screen when zoomed out (hairline preservation).                                                    |
+| `opacity`          | fraction                                           | Default 1.                                                                                                                                 |
+| `dash`             | DashStyle                                          | See below. Default `"solid"`.                                                                                                              |
+| `dashOffset`       | number                                             | Phase of the dash pattern.                                                                                                                 |
+| `dashScale`        | `"absolute"`, `"width"`                            | Whether dash lengths are canvas units or multiples of `width`. Default `"width"`.                                                          |
+| `cap`              | `"butt"`, `"round"`, `"square"`                    | Line cap. Default `"butt"`.                                                                                                                |
+| `join`             | `"miter"`, `"round"`, `"bevel"`                    | Line join. Default `"miter"`.                                                                                                              |
+| `miterLimit`       | number                                             | Default 4.                                                                                                                                 |
+| `align`            | `"center"`, `"inside"`, `"outside"`                | Stroke alignment on closed outlines. Default `"center"`.                                                                                   |
+| `double`           | `{ "gap": 2, "innerColor": Paint }`                | Draw two parallel lines (UML composition borders, "is-a" rails, road casings).                                                             |
+| `casing`           | `{ "color": Paint, "width": 4 }`                   | Draw a wider line underneath (halo). Makes edges readable where they cross others.                                                         |
+| `effect`           | LineEffect                                         | Geometric effect along the path (below).                                                                                                   |
+| `flow`             | `{ "speed": 20, "direction": "forward" }`          | Animated dash movement along the path (data flow, active connections). Runtimes MUST honour reduced-motion preferences and MAY disable it. |
+| `sketch`           | `{ "roughness": 1.2, "bowing": 1, "seed": {cel} }` | Hand-drawn rendering. The seed SHOULD be derived from the element id so the sketch is stable.                                              |
 
 **DashStyle** is one of the named presets or an explicit array of alternating dash and gap lengths:
 
-| Preset | Pattern (in multiples of width) | Typical use |
-|---|---|---|
-| `solid` | – | Default |
-| `dashed` | `[4, 3]` | Optional, dependency, inheritance of interfaces |
-| `long-dash` | `[8, 4]` | Boundaries, planned items |
-| `short-dash` | `[2, 2]` | |
-| `dotted` | `[0.1, 2]` with round cap | Annotations, notes, traces |
-| `dash-dot` | `[6, 3, 0.1, 3]` with round cap | Center lines, axes |
-| `dash-dot-dot` | `[6, 3, 0.1, 3, 0.1, 3]` | Phantom lines |
-| `[n, …]` | explicit | Anything else |
+| Preset         | Pattern (in multiples of width) | Typical use                                     |
+|----------------|---------------------------------|-------------------------------------------------|
+| `solid`        | –                               | Default                                         |
+| `dashed`       | `[4, 3]`                        | Optional, dependency, inheritance of interfaces |
+| `long-dash`    | `[8, 4]`                        | Boundaries, planned items                       |
+| `short-dash`   | `[2, 2]`                        |                                                 |
+| `dotted`       | `[0.1, 2]` with round cap       | Annotations, notes, traces                      |
+| `dash-dot`     | `[6, 3, 0.1, 3]` with round cap | Center lines, axes                              |
+| `dash-dot-dot` | `[6, 3, 0.1, 3, 0.1, 3]`        | Phantom lines                                   |
+| `[n, …]`       | explicit                        | Anything else                                   |
 
 **LineEffect** modifies the geometry of a line or outline:
 
-| `type` | Parameters | Result |
-|---|---|---|
-| `wave` | `amplitude`, `wavelength` | Sine wave along the path (signals, "wireless", uncertain dependencies). |
-| `zigzag` | `amplitude`, `wavelength` | Zigzag (lightning, "breaks" on axes). |
-| `loops` | `radius`, `spacing` | Coil (springs, inductors). |
-| `ticks` | `length`, `spacing`, `side` (`"left"`, `"right"`, `"both"`) | Tick marks along the line (railways, fences, boundaries). |
-| `arrows` | `spacing`, `marker` | Repeated small arrowheads along the line (flow direction on long edges). |
-| `offset` | `distance` | Parallel offset (lane markings). |
-| `plugin` | `name`, `args` | Custom effect. |
+| `type`   | Parameters                                                  | Result                                                                   |
+|----------|-------------------------------------------------------------|--------------------------------------------------------------------------|
+| `wave`   | `amplitude`, `wavelength`                                   | Sine wave along the path (signals, "wireless", uncertain dependencies).  |
+| `zigzag` | `amplitude`, `wavelength`                                   | Zigzag (lightning, "breaks" on axes).                                    |
+| `loops`  | `radius`, `spacing`                                         | Coil (springs, inductors).                                               |
+| `ticks`  | `length`, `spacing`, `side` (`"left"`, `"right"`, `"both"`) | Tick marks along the line (railways, fences, boundaries).                |
+| `arrows` | `spacing`, `marker`                                         | Repeated small arrowheads along the line (flow direction on long edges). |
+| `offset` | `distance`                                                  | Parallel offset (lane markings).                                         |
+| `plugin` | `name`, `args`                                              | Custom effect.                                                           |
 
 Effects apply to the path before dashes, so a dashed wave is possible. Effects never change the hit-test geometry, which follows the base path widened by `hitWidth` (6.10).
 
@@ -1306,20 +1314,20 @@ Effects apply to the path before dashes, so a dashed wave is possible. Effects n
 
 A **Font** object:
 
-| Property | Type | Description |
-|---|---|---|
-| `family` | Bindable string | Font stack. Default `{ "token": "font.body" }` or `"system-ui, sans-serif"`. |
-| `size` | Bindable number | Canvas units. Default 14. |
-| `minSizeScreenPx` | number | Text below this on-screen size is hidden or replaced by a placeholder bar (level of detail). |
-| `weight` | 100–900 or `"normal"`, `"bold"` | Default 400. |
-| `style` | `"normal"`, `"italic"` | |
-| `color` | Paint | Default `{ "token": "color.text" }`. |
-| `lineHeight` | number | Multiple of size. Default 1.3. |
-| `letterSpacing` | number | Canvas units. |
-| `decoration` | `"none"`, `"underline"`, `"line-through"`, `"overline"` | UML static members are underlined, for instance. |
-| `transform` | `"none"`, `"uppercase"`, `"lowercase"`, `"capitalize"` | |
-| `variant` | `"normal"`, `"small-caps"`, `"tabular-nums"` | |
-| `halo` | `{ "color": Paint, "width": 3 }` | Outline around glyphs for legibility over lines and fills. |
+| Property          | Type                                                    | Description                                                                                  |
+|-------------------|---------------------------------------------------------|----------------------------------------------------------------------------------------------|
+| `family`          | Bindable string                                         | Font stack. Default `{ "token": "font.body" }` or `"system-ui, sans-serif"`.                 |
+| `size`            | Bindable number                                         | Canvas units. Default 14.                                                                    |
+| `minSizeScreenPx` | number                                                  | Text below this on-screen size is hidden or replaced by a placeholder bar (level of detail). |
+| `weight`          | 100–900 or `"normal"`, `"bold"`                         | Default 400.                                                                                 |
+| `style`           | `"normal"`, `"italic"`                                  |                                                                                              |
+| `color`           | Paint                                                   | Default `{ "token": "color.text" }`.                                                         |
+| `lineHeight`      | number                                                  | Multiple of size. Default 1.3.                                                               |
+| `letterSpacing`   | number                                                  | Canvas units.                                                                                |
+| `decoration`      | `"none"`, `"underline"`, `"line-through"`, `"overline"` | UML static members are underlined, for instance.                                             |
+| `transform`       | `"none"`, `"uppercase"`, `"lowercase"`, `"capitalize"`  |                                                                                              |
+| `variant`         | `"normal"`, `"small-caps"`, `"tabular-nums"`            |                                                                                              |
+| `halo`            | `{ "color": Paint, "width": 3 }`                        | Outline around glyphs for legibility over lines and fills.                                   |
 
 Font files MAY be declared in `notation.fonts`: `{ "Inter": { "src": ["fonts/Inter.woff2"], "weights": [400, 600] } }`. Runtimes that cannot load a font use the next family in the stack.
 
@@ -1327,23 +1335,23 @@ Font files MAY be declared in `notation.fonts`: `{ "Inter": { "src": ["fonts/Int
 
 A **Style** bundles visual properties. Styles are declared in `notation.styles` and referenced by name, or written inline.
 
-| Property | Type | Description |
-|---|---|---|
-| `extends` | style name or name[] | Inherit from other styles (merged left to right, then own properties). |
-| `fill` | Paint | Area fill. |
-| `fillOpacity` | fraction | |
-| `stroke` | Stroke | Outline or line. |
-| `opacity` | fraction | Whole-element opacity. |
-| `cornerRadius` | number or `[tl, tr, br, bl]` | For shapes that support it. |
-| `shadow` | `{dx, dy, blur, color}` or `"none"` | Drop shadow. Runtimes MAY omit shadows in low-power modes. |
-| `font` | Font | Default font for labels of the element. |
-| `textAlign` | `"left"`, `"center"`, `"right"`, `"justify"` | |
-| `verticalAlign` | `"top"`, `"middle"`, `"bottom"` | |
-| `padding` | Insets | Inner spacing for labels and content. |
-| `cursor` | CSS cursor name | Pointer cursor over the element. |
-| `filter` | `"none"`, `"grayscale"`, `"blur"` | Visual filter (for disabled or ghost elements). |
-| `blend` | CSS blend mode | |
-| `visible` | Bindable bool | |
+| Property        | Type                                         | Description                                                            |
+|-----------------|----------------------------------------------|------------------------------------------------------------------------|
+| `extends`       | style name or name[]                         | Inherit from other styles (merged left to right, then own properties). |
+| `fill`          | Paint                                        | Area fill.                                                             |
+| `fillOpacity`   | fraction                                     |                                                                        |
+| `stroke`        | Stroke                                       | Outline or line.                                                       |
+| `opacity`       | fraction                                     | Whole-element opacity.                                                 |
+| `cornerRadius`  | number or `[tl, tr, br, bl]`                 | For shapes that support it.                                            |
+| `shadow`        | `{dx, dy, blur, color}` or `"none"`          | Drop shadow. Runtimes MAY omit shadows in low-power modes.             |
+| `font`          | Font                                         | Default font for labels of the element.                                |
+| `textAlign`     | `"left"`, `"center"`, `"right"`, `"justify"` |                                                                        |
+| `verticalAlign` | `"top"`, `"middle"`, `"bottom"`              |                                                                        |
+| `padding`       | Insets                                       | Inner spacing for labels and content.                                  |
+| `cursor`        | CSS cursor name                              | Pointer cursor over the element.                                       |
+| `filter`        | `"none"`, `"grayscale"`, `"blur"`            | Visual filter (for disabled or ghost elements).                        |
+| `blend`         | CSS blend mode                               |                                                                        |
+| `visible`       | Bindable bool                                |                                                                        |
 
 ```json
 "styles": {
@@ -1357,19 +1365,19 @@ A **Style** bundles visual properties. Styles are declared in `notation.styles` 
 
 **Interaction states.** Every node, edge, port and label notation MAY declare `states`, a map from state to Style:
 
-| State | Active when |
-|---|---|
-| `hover` | Pointer is over the element. |
-| `selected` | Element is in the selection. |
-| `focused` | Element has keyboard focus. |
-| `dragging` | Element is being moved or resized. |
-| `highlighted` | Highlighted by search, a problem link, a hook action or a related selection. |
-| `dropTarget` | A dragged element can be dropped into this container or connected to this element. |
-| `dropReject` | A dragged element cannot be dropped or connected here (a `connect`/`containment` constraint failed). |
-| `invalid` | The element has at least one problem with severity `error`. |
-| `warning` | The element has at least one problem with severity `warning` (and none with `error`). |
-| `disabled` | The element is read-only (locked, or `enabled` of its notation is false). |
-| `editing` | A label of the element is being edited inline. |
+| State         | Active when                                                                                          |
+|---------------|------------------------------------------------------------------------------------------------------|
+| `hover`       | Pointer is over the element.                                                                         |
+| `selected`    | Element is in the selection.                                                                         |
+| `focused`     | Element has keyboard focus.                                                                          |
+| `dragging`    | Element is being moved or resized.                                                                   |
+| `highlighted` | Highlighted by search, a problem link, a hook action or a related selection.                         |
+| `dropTarget`  | A dragged element can be dropped into this container or connected to this element.                   |
+| `dropReject`  | A dragged element cannot be dropped or connected here (a `connect`/`containment` constraint failed). |
+| `invalid`     | The element has at least one problem with severity `error`.                                          |
+| `warning`     | The element has at least one problem with severity `warning` (and none with `error`).                |
+| `disabled`    | The element is read-only (locked, or `enabled` of its notation is false).                            |
+| `editing`     | A label of the element is being edited inline.                                                       |
 
 Runtimes provide sensible defaults for `hover`, `selected`, `dropTarget`, `dropReject`, `invalid` and `warning` (for example a selection outline and a red problem badge) that apply when the definition declares none.
 
@@ -1396,45 +1404,45 @@ A node's body is a **shape**. A shape reference is either a name (`"ellipse"`), 
 
 The standard library offers these primitives (all parameters optional; defaults in Appendix B.2):
 
-| Shape | Parameters | Notes |
-|---|---|---|
-| `rect` | – | |
-| `roundedRect` | `radius`, `radii` `[tl,tr,br,bl]` | |
-| `pill` | – | Stadium; radius = half the smaller side. |
-| `ellipse` | – | Circle when width = height. |
-| `circle` | – | Always circular; size is min(width, height). |
-| `diamond` | – | Rhombus touching the bounds' midpoints. |
-| `triangle` | `apex` (fraction along top edge), `direction` (`up`, `down`, `left`, `right`) | |
-| `parallelogram` | `skew` (fraction or length), `direction` (`right`, `left`) | Data, I/O. |
-| `trapezoid` | `inset` (fraction), `direction` | Manual operations. |
-| `hexagon` | `inset`, `orientation` (`flat`, `pointy`) | Preparation. |
-| `octagon` | `inset` | |
-| `polygon` | `sides`, `rotation`, `points` (explicit fractional points) | Regular or explicit polygon. |
-| `star` | `points`, `innerRadius` (fraction), `rotation` | |
-| `cross` | `thickness` (fraction) | Plus shape. |
-| `cylinder` | `cap` (height of the ellipse cap), `orientation` (`vertical`, `horizontal`) | Databases, storage. |
-| `document` | `wave` (amplitude fraction) | Wavy bottom. |
-| `multiDocument` | `wave`, `offset`, `count` | Stacked documents. |
-| `note` | `fold` (size of the folded corner) | Comments. |
-| `folder` | `tabWidth`, `tabHeight`, `tabPosition` (`left`, `right`) | Packages. |
-| `frame` | `tabWidth`, `tabHeight` | UML frames with name tab. |
-| `cloud` | `bumps` | External systems. |
-| `process` | `inset` | Predefined process (double side bars). |
-| `delay` | – | D-shape. |
-| `display` | – | Flowchart display. |
-| `manualInput` | `slope` | Sloped top. |
-| `offPage` | `pointer` | Pentagon pointing down. |
-| `callout` | `pointerX`, `pointerY` (fractions, may lie outside 0–1), `pointerWidth`, `radius` | Speech bubble with a tail. |
-| `blockArrow` | `direction`, `headLength`, `shaftThickness`, `doubleHeaded` | Arrow as a node. |
-| `chevron` | `depth`, `direction` | Process steps. |
-| `actor` | – | Stick figure; label below by default. |
-| `component` | – | UML component icon rectangle. |
-| `line` | `orientation` (`horizontal`, `vertical`) | A line node (separators, lifeline bodies). |
-| `bracket` | `side`, `curl` | Braces for annotations. |
-| `text` | – | No visible body; just the label (free text). |
-| `image` | `src` (Bindable URI), `fit` (`contain`, `cover`, `fill`, `none`), `crop` | Image nodes. |
-| `icon` | `icon` (IconRef), `padding` | Icon filling the node. |
-| `none` | – | Invisible body; used for pure containers or label-only elements. |
+| Shape           | Parameters                                                                        | Notes                                                            |
+|-----------------|-----------------------------------------------------------------------------------|------------------------------------------------------------------|
+| `rect`          | –                                                                                 |                                                                  |
+| `roundedRect`   | `radius`, `radii` `[tl,tr,br,bl]`                                                 |                                                                  |
+| `pill`          | –                                                                                 | Stadium; radius = half the smaller side.                         |
+| `ellipse`       | –                                                                                 | Circle when width = height.                                      |
+| `circle`        | –                                                                                 | Always circular; size is min(width, height).                     |
+| `diamond`       | –                                                                                 | Rhombus touching the bounds' midpoints.                          |
+| `triangle`      | `apex` (fraction along top edge), `direction` (`up`, `down`, `left`, `right`)     |                                                                  |
+| `parallelogram` | `skew` (fraction or length), `direction` (`right`, `left`)                        | Data, I/O.                                                       |
+| `trapezoid`     | `inset` (fraction), `direction`                                                   | Manual operations.                                               |
+| `hexagon`       | `inset`, `orientation` (`flat`, `pointy`)                                         | Preparation.                                                     |
+| `octagon`       | `inset`                                                                           |                                                                  |
+| `polygon`       | `sides`, `rotation`, `points` (explicit fractional points)                        | Regular or explicit polygon.                                     |
+| `star`          | `points`, `innerRadius` (fraction), `rotation`                                    |                                                                  |
+| `cross`         | `thickness` (fraction)                                                            | Plus shape.                                                      |
+| `cylinder`      | `cap` (height of the ellipse cap), `orientation` (`vertical`, `horizontal`)       | Databases, storage.                                              |
+| `document`      | `wave` (amplitude fraction)                                                       | Wavy bottom.                                                     |
+| `multiDocument` | `wave`, `offset`, `count`                                                         | Stacked documents.                                               |
+| `note`          | `fold` (size of the folded corner)                                                | Comments.                                                        |
+| `folder`        | `tabWidth`, `tabHeight`, `tabPosition` (`left`, `right`)                          | Packages.                                                        |
+| `frame`         | `tabWidth`, `tabHeight`                                                           | UML frames with name tab.                                        |
+| `cloud`         | `bumps`                                                                           | External systems.                                                |
+| `process`       | `inset`                                                                           | Predefined process (double side bars).                           |
+| `delay`         | –                                                                                 | D-shape.                                                         |
+| `display`       | –                                                                                 | Flowchart display.                                               |
+| `manualInput`   | `slope`                                                                           | Sloped top.                                                      |
+| `offPage`       | `pointer`                                                                         | Pentagon pointing down.                                          |
+| `callout`       | `pointerX`, `pointerY` (fractions, may lie outside 0–1), `pointerWidth`, `radius` | Speech bubble with a tail.                                       |
+| `blockArrow`    | `direction`, `headLength`, `shaftThickness`, `doubleHeaded`                       | Arrow as a node.                                                 |
+| `chevron`       | `depth`, `direction`                                                              | Process steps.                                                   |
+| `actor`         | –                                                                                 | Stick figure; label below by default.                            |
+| `component`     | –                                                                                 | UML component icon rectangle.                                    |
+| `line`          | `orientation` (`horizontal`, `vertical`)                                          | A line node (separators, lifeline bodies).                       |
+| `bracket`       | `side`, `curl`                                                                    | Braces for annotations.                                          |
+| `text`          | –                                                                                 | No visible body; just the label (free text).                     |
+| `image`         | `src` (Bindable URI), `fit` (`contain`, `cover`, `fill`, `none`), `crop`          | Image nodes.                                                     |
+| `icon`          | `icon` (IconRef), `padding`                                                       | Icon filling the node.                                           |
+| `none`          | –                                                                                 | Invisible body; used for pure containers or label-only elements. |
 
 Every built-in shape defines its **outline** (for edge anchoring and hit testing) and its **text area** (where the main label goes). For example, a cylinder's text area excludes its top cap; an actor's text area lies below the figure.
 
@@ -1442,45 +1450,45 @@ Every built-in shape defines its **outline** (for edge anchoring and hit testing
 
 When no primitive fits, a definition declares its own shapes in `notation.shapes`. A custom shape can be as simple as a static SVG path, or a fully parameterised, handle-editable shape whose geometry is computed with CEL.
 
-| Property | Type | Description |
-|---|---|---|
-| `label`, `doc` | | Shown in shape pickers and documentation. |
-| `params` | map → ShapeParam | Parameters (below). |
-| `path` | PathDef | A single path (below). |
-| `parts` | ShapePart[] | A composite of several shapes (below). |
-| `svg` | string | Inline SVG markup scaled into the bounds (static shapes only). MUST be sanitised (section 16). |
-| `plugin` | `{name, args}` | Rendered by a plugin. |
-| `outline` | `"path"`, `"bounds"`, `"ellipse"`, PathDef | Geometry used for edge anchoring and hit testing. Default: the path, or the union of parts marked `outline: true`. |
-| `textArea` | Box | Where the main label is laid out, in shape coordinates. Default: the bounds minus padding. |
-| `handles` | Handle[] | Interactive handles that edit parameters (below). |
-| `defaultSize` | Size | Suggested size when used without an explicit node size. |
-| `aspectRatio` | number | Fixed aspect ratio, if any. |
-| `scaling` | ScaleMode | How static geometry maps into bounds (below). |
+| Property       | Type                                       | Description                                                                                                        |
+|----------------|--------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
+| `label`, `doc` |                                            | Shown in shape pickers and documentation.                                                                          |
+| `params`       | map → ShapeParam                           | Parameters (below).                                                                                                |
+| `path`         | PathDef                                    | A single path (below).                                                                                             |
+| `parts`        | ShapePart[]                                | A composite of several shapes (below).                                                                             |
+| `svg`          | string                                     | Inline SVG markup scaled into the bounds (static shapes only). MUST be sanitised (section 16).                     |
+| `plugin`       | `{name, args}`                             | Rendered by a plugin.                                                                                              |
+| `outline`      | `"path"`, `"bounds"`, `"ellipse"`, PathDef | Geometry used for edge anchoring and hit testing. Default: the path, or the union of parts marked `outline: true`. |
+| `textArea`     | Box                                        | Where the main label is laid out, in shape coordinates. Default: the bounds minus padding.                         |
+| `handles`      | Handle[]                                   | Interactive handles that edit parameters (below).                                                                  |
+| `defaultSize`  | Size                                       | Suggested size when used without an explicit node size.                                                            |
+| `aspectRatio`  | number                                     | Fixed aspect ratio, if any.                                                                                        |
+| `scaling`      | ScaleMode                                  | How static geometry maps into bounds (below).                                                                      |
 
 Exactly one of `path`, `parts`, `svg` or `plugin` MUST be present.
 
 **Shape coordinate context.** Geometry expressions (GeomExpr, 2.5c) are evaluated with these variables:
 
-| Variable | Type | Meaning |
-|---|---|---|
-| `w`, `h` | double | Width and height of the node's bounds in canvas units. |
-| `p` | map | Resolved parameter values (`p.fold`). |
-| `self` | Element | The model element (attributes available, read-only). |
-| `env` | Env | Zoom, theme mode, locale. |
+| Variable | Type    | Meaning                                                |
+|----------|---------|--------------------------------------------------------|
+| `w`, `h` | double  | Width and height of the node's bounds in canvas units. |
+| `p`      | map     | Resolved parameter values (`p.fold`).                  |
+| `self`   | Element | The model element (attributes available, read-only).   |
+| `env`    | Env     | Zoom, theme mode, locale.                              |
 
 Coordinates are relative to the top-left of the bounds; x grows right, y grows down, regardless of the coordinate system orientation.
 
 **ShapeParam**
 
-| Property | Type | Description |
-|---|---|---|
-| `type` | `"number"`, `"int"`, `"bool"`, `"enum"`, `"color"`, `"string"` | **Required.** |
-| `default` | value or `{cel}` | Default value; CEL defaults may depend on `w` and `h` (for example `"min(w, h) * 0.15"`). |
-| `min`, `max` | GeomExpr | Bounds; may depend on `w` and `h`. |
-| `values` | string[] | For `enum`. |
-| `unit` | `"length"`, `"fraction"`, `"angle"`, `"count"` | Semantics for editors and handle behavior. |
-| `label`, `doc` | | Shown in the shape parameter panel. |
-| `persist` | `"view"`, `"none"` | Whether user-adjusted values (via handles or the style panel) are stored per element in view data. Default `"view"`. |
+| Property       | Type                                                           | Description                                                                                                          |
+|----------------|----------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| `type`         | `"number"`, `"int"`, `"bool"`, `"enum"`, `"color"`, `"string"` | **Required.**                                                                                                        |
+| `default`      | value or `{cel}`                                               | Default value; CEL defaults may depend on `w` and `h` (for example `"min(w, h) * 0.15"`).                            |
+| `min`, `max`   | GeomExpr                                                       | Bounds; may depend on `w` and `h`.                                                                                   |
+| `values`       | string[]                                                       | For `enum`.                                                                                                          |
+| `unit`         | `"length"`, `"fraction"`, `"angle"`, `"count"`                 | Semantics for editors and handle behavior.                                                                           |
+| `label`, `doc` |                                                                | Shown in the shape parameter panel.                                                                                  |
+| `persist`      | `"view"`, `"none"`                                             | Whether user-adjusted values (via handles or the style panel) are stored per element in view data. Default `"view"`. |
 
 **PathDef** — a path is either an SVG path string in a declared `viewBox`, scaled into the bounds, or a list of segments whose coordinates are GeomExprs:
 
@@ -1501,17 +1509,17 @@ Coordinates are relative to the top-left of the bounds; x grows right, y grows d
 }
 ```
 
-| `op` | Fields | Meaning |
-|---|---|---|
-| `M` | `x`, `y` | Move to. |
-| `L` | `x`, `y` | Line to. |
-| `H`, `V` | `x` or `y` | Horizontal or vertical line to. |
-| `Q` | `cx`, `cy`, `x`, `y` | Quadratic Bézier. |
-| `C` | `c1x`, `c1y`, `c2x`, `c2y`, `x`, `y` | Cubic Bézier. |
-| `A` | `rx`, `ry`, `rotation`, `largeArc`, `sweep`, `x`, `y` | Elliptical arc (SVG semantics). |
-| `R` | `x`, `y`, `w`, `h`, `r` | Rounded rectangle sub-path. |
-| `E` | `cx`, `cy`, `rx`, `ry` | Ellipse sub-path. |
-| `Z` | – | Close. |
+| `op`     | Fields                                                | Meaning                         |
+|----------|-------------------------------------------------------|---------------------------------|
+| `M`      | `x`, `y`                                              | Move to.                        |
+| `L`      | `x`, `y`                                              | Line to.                        |
+| `H`, `V` | `x` or `y`                                            | Horizontal or vertical line to. |
+| `Q`      | `cx`, `cy`, `x`, `y`                                  | Quadratic Bézier.               |
+| `C`      | `c1x`, `c1y`, `c2x`, `c2y`, `x`, `y`                  | Cubic Bézier.                   |
+| `A`      | `rx`, `ry`, `rotation`, `largeArc`, `sweep`, `x`, `y` | Elliptical arc (SVG semantics). |
+| `R`      | `x`, `y`, `w`, `h`, `r`                               | Rounded rectangle sub-path.     |
+| `E`      | `cx`, `cy`, `rx`, `ry`                                | Ellipse sub-path.               |
+| `Z`      | –                                                     | Close.                          |
 
 A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"evenodd"`). Each segment MAY carry `when` (Expression) to include it conditionally, which enables shapes whose topology depends on parameters (for example an optional double border).
 
@@ -1519,29 +1527,29 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 
 **ShapePart** — composite shapes combine parts, each of which is itself a shape (built-in or custom) with its own box and style. This is how an actor, a database with a label band, or a UML class header is composed.
 
-| Property | Type | Description |
-|---|---|---|
-| `id` | identifier | Name of the part; styles and states can address parts (`partStyles`). |
-| `shape` | ShapeRef | The part's shape. |
-| `box` | `{x, y, w, h}` of GeomExpr | Part bounds in shape coordinates. |
-| `style` | StyleRef | Style of the part, merged over the node style. |
-| `rotate` | GeomExpr | Rotation in degrees around the part's center. |
-| `when` | Expression | Include only when true. |
-| `outline` | bool | Part contributes to the connection outline. |
-| `hit` | bool | Part is hit-testable. Default `true`. |
+| Property  | Type                       | Description                                                           |
+|-----------|----------------------------|-----------------------------------------------------------------------|
+| `id`      | identifier                 | Name of the part; styles and states can address parts (`partStyles`). |
+| `shape`   | ShapeRef                   | The part's shape.                                                     |
+| `box`     | `{x, y, w, h}` of GeomExpr | Part bounds in shape coordinates.                                     |
+| `style`   | StyleRef                   | Style of the part, merged over the node style.                        |
+| `rotate`  | GeomExpr                   | Rotation in degrees around the part's center.                         |
+| `when`    | Expression                 | Include only when true.                                               |
+| `outline` | bool                       | Part contributes to the connection outline.                           |
+| `hit`     | bool                       | Part is hit-testable. Default `true`.                                 |
 
 **Handles** let users fine-tune a shape directly on the canvas — dragging the fold of a note, the tail of a callout, the skew of a parallelogram — like the yellow diamonds of classic drawing tools.
 
-| Property | Type | Description |
-|---|---|---|
-| `param` | param name | The parameter the handle edits. **Required.** |
-| `x`, `y` | GeomExpr | Handle position in shape coordinates, computed from the current parameter values. |
-| `axis` | `"x"`, `"y"`, `"both"`, `"radial"` | Direction the handle moves in. |
-| `value` | Expression | Inverse mapping: computes the new parameter value from the pointer position `px`, `py` (shape coordinates), for example `"w - px"`. Default: the pointer coordinate along `axis`. |
-| `yParam`, `yValue` | param name, Expression | For two-parameter handles (`axis: "both"`). |
-| `snap` | SnapRule | Snapping of the parameter value (for example `{ "grid": { "spacing": 2 } }` or `{ "values": [0, 0.25, 0.5] }`). |
-| `cursor`, `style` | | Handle appearance. |
-| `label`, `doc` | | Tooltip while hovering or dragging ("Fold size: 14 px"). |
+| Property           | Type                               | Description                                                                                                                                                                       |
+|--------------------|------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `param`            | param name                         | The parameter the handle edits. **Required.**                                                                                                                                     |
+| `x`, `y`           | GeomExpr                           | Handle position in shape coordinates, computed from the current parameter values.                                                                                                 |
+| `axis`             | `"x"`, `"y"`, `"both"`, `"radial"` | Direction the handle moves in.                                                                                                                                                    |
+| `value`            | Expression                         | Inverse mapping: computes the new parameter value from the pointer position `px`, `py` (shape coordinates), for example `"w - px"`. Default: the pointer coordinate along `axis`. |
+| `yParam`, `yValue` | param name, Expression             | For two-parameter handles (`axis: "both"`).                                                                                                                                       |
+| `snap`             | SnapRule                           | Snapping of the parameter value (for example `{ "grid": { "spacing": 2 } }` or `{ "values": [0, 0.25, 0.5] }`).                                                                   |
+| `cursor`, `style`  |                                    | Handle appearance.                                                                                                                                                                |
+| `label`, `doc`     |                                    | Tooltip while hovering or dragging ("Fold size: 14 px").                                                                                                                          |
 
 **Example — a callout with a draggable tail and adjustable radius.**
 
@@ -1593,69 +1601,69 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 
 `notation.nodes` maps node type names to **NodeNotation** objects.
 
-| Property | Type | Description |
-|---|---|---|
-| `shape` | ShapeRef | Body shape. Default `"rect"`. |
-| `style` | StyleRef or StyleRef[] | Base style(s). |
-| `partStyles` | map part id → StyleRef | Styles for parts of composite shapes. |
-| `size` | SizeSpec | Default, minimum, maximum size and resize behavior (below). |
-| `placement` | Placement | Coordinate binding (5.8). |
-| `snapping` | Snapping | Per-type snapping override (5.9). |
-| `rotation` | `{allowed, default, step}` | Whether nodes may rotate; rotation is stored in view data. |
-| `labels` | Label[] | Text labels (6.12). If absent, one centered label bound to the type's `labelAttribute`. |
-| `compartments` | Compartment[] | Stacked regions listing items (below). |
-| `form` | EmbeddedForm | Form widgets drawn inside the node (7.6). |
-| `icon` | NodeIcon | Icon placement (below). |
-| `badges` | Badge[] | Small indicators at corners or edges (below). |
-| `ports` | map port name → PortNotation | Port visuals (below). |
-| `anchors` | AnchorSpec | Where edges attach when no port is used (below). |
-| `container` | ContainerSpec | How children are laid out and clipped (below). |
-| `variants` | Variant[] | Conditional alternative notations (below). |
-| `lod` | LodRule[] | Level of detail by zoom (below). |
-| `states` | map state → Style | Interaction states (6.6). |
-| `conditions` | `{when, style, doc}`[] | Conditional styles (6.6). |
-| `tooltip` | LocalizedText or `{cel}` | Hover text. Default: the type's `doc.summary`. |
-| `layer` | `"background"`, `"default"`, `"foreground"`, or int | Rendering layer (6.16). |
-| `selectable`, `deletable`, `copyable`, `connectable` | Bindable bool | Interaction permissions (default `true`). |
-| `hitPaddingScreenPx` | number | Extra hit area around the outline. |
-| `doubleClick` | `"editLabel"`, `"openForm"`, `"drillDown"`, `"none"`, or operation name | Double-click action. Default `"editLabel"`. |
-| `drillDown` | `{viewpoint, filter}` | Open a sub-diagram (for example a sub-process) when drilling down. |
-| `accessibility` | `{role, name, description}` | Accessible name and description (6.15). |
-| `doc` | Doc | Documents the notation itself ("Rounded corners mark states, circles pseudo-states"). |
+| Property                                             | Type                                                                    | Description                                                                             |
+|------------------------------------------------------|-------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| `shape`                                              | ShapeRef                                                                | Body shape. Default `"rect"`.                                                           |
+| `style`                                              | StyleRef or StyleRef[]                                                  | Base style(s).                                                                          |
+| `partStyles`                                         | map part id → StyleRef                                                  | Styles for parts of composite shapes.                                                   |
+| `size`                                               | SizeSpec                                                                | Default, minimum, maximum size and resize behavior (below).                             |
+| `placement`                                          | Placement                                                               | Coordinate binding (5.8).                                                               |
+| `snapping`                                           | Snapping                                                                | Per-type snapping override (5.9).                                                       |
+| `rotation`                                           | `{allowed, default, step}`                                              | Whether nodes may rotate; rotation is stored in view data.                              |
+| `labels`                                             | Label[]                                                                 | Text labels (6.12). If absent, one centered label bound to the type's `labelAttribute`. |
+| `compartments`                                       | Compartment[]                                                           | Stacked regions listing items (below).                                                  |
+| `form`                                               | EmbeddedForm                                                            | Form widgets drawn inside the node (7.6).                                               |
+| `icon`                                               | NodeIcon                                                                | Icon placement (below).                                                                 |
+| `badges`                                             | Badge[]                                                                 | Small indicators at corners or edges (below).                                           |
+| `ports`                                              | map port name → PortNotation                                            | Port visuals (below).                                                                   |
+| `anchors`                                            | AnchorSpec                                                              | Where edges attach when no port is used (below).                                        |
+| `container`                                          | ContainerSpec                                                           | How children are laid out and clipped (below).                                          |
+| `variants`                                           | Variant[]                                                               | Conditional alternative notations (below).                                              |
+| `lod`                                                | LodRule[]                                                               | Level of detail by zoom (below).                                                        |
+| `states`                                             | map state → Style                                                       | Interaction states (6.6).                                                               |
+| `conditions`                                         | `{when, style, doc}`[]                                                  | Conditional styles (6.6).                                                               |
+| `tooltip`                                            | LocalizedText or `{cel}`                                                | Hover text. Default: the type's `doc.summary`.                                          |
+| `layer`                                              | `"background"`, `"default"`, `"foreground"`, or int                     | Rendering layer (6.16).                                                                 |
+| `selectable`, `deletable`, `copyable`, `connectable` | Bindable bool                                                           | Interaction permissions (default `true`).                                               |
+| `hitPaddingScreenPx`                                 | number                                                                  | Extra hit area around the outline.                                                      |
+| `doubleClick`                                        | `"editLabel"`, `"openForm"`, `"drillDown"`, `"none"`, or operation name | Double-click action. Default `"editLabel"`.                                             |
+| `drillDown`                                          | `{viewpoint, filter}`                                                   | Open a sub-diagram (for example a sub-process) when drilling down.                      |
+| `accessibility`                                      | `{role, name, description}`                                             | Accessible name and description (6.15).                                                 |
+| `doc`                                                | Doc                                                                     | Documents the notation itself ("Rounded corners mark states, circles pseudo-states").   |
 
 **SizeSpec**
 
-| Property | Type | Description |
-|---|---|---|
-| `default` | Size | Size on creation. |
-| `min`, `max` | Size | Limits (`null` for unbounded in one dimension). |
-| `fixed` | Size | Shorthand for `default = min = max` and not resizable. |
-| `resizable` | bool, `"horizontal"`, `"vertical"` | Default `true`. |
-| `aspectRatio` | number or `"keep"` | Fixed ratio or keep the ratio of the default size while resizing. |
-| `autoSize` | `"none"`, `"fitContent"`, `"fitWidth"`, `"fitHeight"`, `"grow"` | Size follows content: labels, compartments, children, embedded forms. `grow` fits content but never shrinks below the user's size. |
-| `width`, `height` | Bindable number | Computed or attribute-bound size in canvas units (for example a bar chart node). Placement `width`/`x2` take precedence on bound axes. |
+| Property          | Type                                                            | Description                                                                                                                            |
+|-------------------|-----------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| `default`         | Size                                                            | Size on creation.                                                                                                                      |
+| `min`, `max`      | Size                                                            | Limits (`null` for unbounded in one dimension).                                                                                        |
+| `fixed`           | Size                                                            | Shorthand for `default = min = max` and not resizable.                                                                                 |
+| `resizable`       | bool, `"horizontal"`, `"vertical"`                              | Default `true`.                                                                                                                        |
+| `aspectRatio`     | number or `"keep"`                                              | Fixed ratio or keep the ratio of the default size while resizing.                                                                      |
+| `autoSize`        | `"none"`, `"fitContent"`, `"fitWidth"`, `"fitHeight"`, `"grow"` | Size follows content: labels, compartments, children, embedded forms. `grow` fits content but never shrinks below the user's size.     |
+| `width`, `height` | Bindable number                                                 | Computed or attribute-bound size in canvas units (for example a bar chart node). Placement `width`/`x2` take precedence on bound axes. |
 
 **Compartments** are stacked horizontal regions inside a node that list items — class attributes and operations, table columns, BPMN lanes' contents, checklist items.
 
-| Property | Type | Description |
-|---|---|---|
-| `id` | identifier | **Required.** |
-| `title` | LocalizedText | Optional header text. |
-| `items` | `{attribute}`, `{children}`, or `{cel}` | Source list: a `many` attribute, children of certain types (`{ "children": ["Column"], "slot": "columns" }`), or a CEL list. |
-| `itemText` | Bindable string | Text per item; the context adds `item` and `index`. For child elements, a label binding writes back. |
-| `itemIcon` | Bindable IconRef | Icon per item. |
-| `itemStyle` | StyleRef | Style of every item. |
-| `itemConditions` | `{when, style}`[] | Conditional item styles; `when` sees `item` and `index` (for example primary-key columns underlined). |
-| `layout` | `"vertical"` (default), `"horizontal"`, `"grid"`, `"wrap"` | Arrangement of items. |
-| `separator` | Stroke or `"none"` | Line above the compartment. |
-| `size` | `"auto"` or number or `{min, max}` | Height. |
-| `overflow` | `"grow"`, `"clip"`, `"scroll"`, `"ellipsis"` | When items exceed `max`. `ellipsis` shows "… 3 more". |
-| `maxItems` | int | Items shown before overflow. |
-| `collapsible`, `collapsed` | bool, Bindable bool | Collapse state persisted in view data. |
-| `emptyText` | LocalizedText | Placeholder when empty. |
-| `editable` | `{add, remove, reorder, inline}` of bool | In-place editing of items. |
-| `visible` | Bindable bool | |
-| `padding`, `style` | | |
+| Property                   | Type                                                       | Description                                                                                                                  |
+|----------------------------|------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| `id`                       | identifier                                                 | **Required.**                                                                                                                |
+| `title`                    | LocalizedText                                              | Optional header text.                                                                                                        |
+| `items`                    | `{attribute}`, `{children}`, or `{cel}`                    | Source list: a `many` attribute, children of certain types (`{ "children": ["Column"], "slot": "columns" }`), or a CEL list. |
+| `itemText`                 | Bindable string                                            | Text per item; the context adds `item` and `index`. For child elements, a label binding writes back.                         |
+| `itemIcon`                 | Bindable IconRef                                           | Icon per item.                                                                                                               |
+| `itemStyle`                | StyleRef                                                   | Style of every item.                                                                                                         |
+| `itemConditions`           | `{when, style}`[]                                          | Conditional item styles; `when` sees `item` and `index` (for example primary-key columns underlined).                        |
+| `layout`                   | `"vertical"` (default), `"horizontal"`, `"grid"`, `"wrap"` | Arrangement of items.                                                                                                        |
+| `separator`                | Stroke or `"none"`                                         | Line above the compartment.                                                                                                  |
+| `size`                     | `"auto"` or number or `{min, max}`                         | Height.                                                                                                                      |
+| `overflow`                 | `"grow"`, `"clip"`, `"scroll"`, `"ellipsis"`               | When items exceed `max`. `ellipsis` shows "… 3 more".                                                                        |
+| `maxItems`                 | int                                                        | Items shown before overflow.                                                                                                 |
+| `collapsible`, `collapsed` | bool, Bindable bool                                        | Collapse state persisted in view data.                                                                                       |
+| `emptyText`                | LocalizedText                                              | Placeholder when empty.                                                                                                      |
+| `editable`                 | `{add, remove, reorder, inline}` of bool                   | In-place editing of items.                                                                                                   |
+| `visible`                  | Bindable bool                                              |                                                                                                                              |
+| `padding`, `style`         |                                                            |                                                                                                                              |
 
 **NodeIcon**: `{ "icon": IconRef, "position": Position, "size": 16, "color": Paint, "visible": Bindable }`. **Badge**: `{ "id", "position": Position, "offset": [dx, dy], "shape": ShapeRef, "text": Bindable string, "icon": IconRef, "style": StyleRef, "size", "visible": Bindable bool, "tooltip", "onClick": operation }` — for example a problem counter, a lock, a stereotype glyph, a progress ring.
 
@@ -1663,42 +1671,42 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 
 **Ports notation**
 
-| Property | Type | Description |
-|---|---|---|
-| `shape` | ShapeRef | Port shape. Default `"rect"` 8 × 8. |
-| `size` | Size | |
-| `style`, `states` | | |
-| `side` | `"top"`, `"right"`, `"bottom"`, `"left"`, `"auto"`, Bindable | Side of the node. `auto` chooses by direction (in = left, out = right) in the layout direction. |
-| `position` | Bindable fraction or `"distribute"` | Position along the side; `distribute` spaces all instances evenly. Default `"distribute"`. |
-| `inset` | number | Offset from the outline: negative = outside, 0 = centered on the outline, positive = inside. |
-| `movable` | bool | Users may drag ports along the outline (positions stored in view). |
-| `label` | Label | Port label; default position `"outside"` of the side. |
-| `order` | Expression | Sort key for distributed ports. |
+| Property          | Type                                                         | Description                                                                                     |
+|-------------------|--------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
+| `shape`           | ShapeRef                                                     | Port shape. Default `"rect"` 8 × 8.                                                             |
+| `size`            | Size                                                         |                                                                                                 |
+| `style`, `states` |                                                              |                                                                                                 |
+| `side`            | `"top"`, `"right"`, `"bottom"`, `"left"`, `"auto"`, Bindable | Side of the node. `auto` chooses by direction (in = left, out = right) in the layout direction. |
+| `position`        | Bindable fraction or `"distribute"`                          | Position along the side; `distribute` spaces all instances evenly. Default `"distribute"`.      |
+| `inset`           | number                                                       | Offset from the outline: negative = outside, 0 = centered on the outline, positive = inside.    |
+| `movable`         | bool                                                         | Users may drag ports along the outline (positions stored in view).                              |
+| `label`           | Label                                                        | Port label; default position `"outside"` of the side.                                           |
+| `order`           | Expression                                                   | Sort key for distributed ports.                                                                 |
 
 **AnchorSpec** — when edges attach to the node itself (not a port):
 
-| Property | Type | Description |
-|---|---|---|
-| `mode` | `"outline"`, `"center"`, `"fixed"`, `"sides"` | `outline` (default): intersection of the line towards the center with the outline; `center`: all edges aim at the center; `fixed`: only at listed points; `sides`: at the midpoint of the nearest side (orthogonal diagrams). |
-| `points` | `{id, x, y}`[] | Fixed anchor points as fractions of the bounds. |
-| `gap` | number | Distance between the outline and the edge end. |
-| `spread` | bool | Distribute several edges arriving on the same side instead of converging on one point. |
+| Property | Type                                          | Description                                                                                                                                                                                                                   |
+|----------|-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `mode`   | `"outline"`, `"center"`, `"fixed"`, `"sides"` | `outline` (default): intersection of the line towards the center with the outline; `center`: all edges aim at the center; `fixed`: only at listed points; `sides`: at the midpoint of the nearest side (orthogonal diagrams). |
+| `points` | `{id, x, y}`[]                                | Fixed anchor points as fractions of the bounds.                                                                                                                                                                               |
+| `gap`    | number                                        | Distance between the outline and the edge end.                                                                                                                                                                                |
+| `spread` | bool                                          | Distribute several edges arriving on the same side instead of converging on one point.                                                                                                                                        |
 
 **ContainerSpec** — for nodes whose type has `children`:
 
-| Property | Type | Description |
-|---|---|---|
-| `layout` | `"free"`, `"stack"`, `"grid"`, `"flow"`, `"lanes"`, `"layout:<name>"` | Arrangement of children. `lanes` splits the container into bands (pools with lanes). `layout:<name>` delegates to a named layout (section 10). |
-| `direction` | `"vertical"`, `"horizontal"` | For stack, flow and lanes. |
-| `gap`, `padding` | number, Insets | |
-| `columns` | int | For grid. |
-| `header` | `{size, side, label, style}` | Header band (title bar of a group, vertical name band of a BPMN pool on `side: "left"`). |
-| `contentArea` | Box | Area children are placed in, in node coordinates. |
-| `clip` | bool | Clip children to the content area. |
-| `autoGrow` | bool | Grow when children are moved to the edge. |
-| `collapsible` | bool | Collapsing hides children and optionally switches to a `collapsed` variant. |
-| `dropZones` | `{slot, box, style}`[] | Explicit regions that accept children of a slot (4.8). |
-| `highlightOnDrop` | bool | Apply the `dropTarget` state while a valid child is dragged over. |
+| Property          | Type                                                                  | Description                                                                                                                                    |
+|-------------------|-----------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| `layout`          | `"free"`, `"stack"`, `"grid"`, `"flow"`, `"lanes"`, `"layout:<name>"` | Arrangement of children. `lanes` splits the container into bands (pools with lanes). `layout:<name>` delegates to a named layout (section 10). |
+| `direction`       | `"vertical"`, `"horizontal"`                                          | For stack, flow and lanes.                                                                                                                     |
+| `gap`, `padding`  | number, Insets                                                        |                                                                                                                                                |
+| `columns`         | int                                                                   | For grid.                                                                                                                                      |
+| `header`          | `{size, side, label, style}`                                          | Header band (title bar of a group, vertical name band of a BPMN pool on `side: "left"`).                                                       |
+| `contentArea`     | Box                                                                   | Area children are placed in, in node coordinates.                                                                                              |
+| `clip`            | bool                                                                  | Clip children to the content area.                                                                                                             |
+| `autoGrow`        | bool                                                                  | Grow when children are moved to the edge.                                                                                                      |
+| `collapsible`     | bool                                                                  | Collapsing hides children and optionally switches to a `collapsed` variant.                                                                    |
+| `dropZones`       | `{slot, box, style}`[]                                                | Explicit regions that accept children of a slot (4.8).                                                                                         |
+| `highlightOnDrop` | bool                                                                  | Apply the `dropTarget` state while a valid child is dragged over.                                                                              |
 
 **Variants** switch whole parts of a notation based on model state — for example a collapsed sub-process, an event rendered differently when interrupting, a gateway symbol that depends on its kind:
 
@@ -1720,38 +1728,38 @@ A Variant may contain any NodeNotation property except `placement`; matching var
 
 `notation.edges` maps relation type names — and optionally `Type.attribute` names for reference attributes that should be drawn as edges — to **EdgeNotation** objects.
 
-| Property | Type | Description |
-|---|---|---|
-| `line` | LineSpec | Stroke, routing and geometry (below). |
-| `style` | StyleRef | Style whose `stroke` and `font` apply to line and labels. |
-| `sourceMarker`, `targetMarker` | MarkerRef or Bindable | Arrowheads and end decorations (6.11). Default: `none` at source, `arrowFilled` at target for directed relations. |
-| `midMarkers` | MidMarker[] | Decorations along the edge (below). |
-| `labels` | EdgeLabel[] | Labels at start, middle, end or any fraction (6.12). |
-| `anchoring` | `{source, target}` of EndAnchor | How ends attach (below). |
-| `selfLoop` | SelfLoopSpec | Geometry of self loops. |
-| `parallel` | `{spread, mode}` | How parallel edges between the same nodes are separated: `spread` distance and `mode` (`"offset"`, `"curve"`, `"bundle"`). |
-| `jumps` | JumpSpec | How this edge crosses others. |
-| `snapping` | Snapping | Bendpoint snapping override. |
-| `hitWidthScreenPx` | number | Width of the hit area. Default 8. |
-| `layer` | `"belowNodes"`, `"aboveNodes"`, int | Rendering layer (6.16). Default `"belowNodes"`. |
-| `states`, `conditions`, `variants` | | As for nodes; variants may replace line, markers and labels. |
-| `tooltip`, `selectable`, `deletable`, `reconnectable` | | `reconnectable` controls whether users may drag an end to another element. |
-| `accessibility`, `doc` | | |
+| Property                                              | Type                                | Description                                                                                                                |
+|-------------------------------------------------------|-------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| `line`                                                | LineSpec                            | Stroke, routing and geometry (below).                                                                                      |
+| `style`                                               | StyleRef                            | Style whose `stroke` and `font` apply to line and labels.                                                                  |
+| `sourceMarker`, `targetMarker`                        | MarkerRef or Bindable               | Arrowheads and end decorations (6.11). Default: `none` at source, `arrowFilled` at target for directed relations.          |
+| `midMarkers`                                          | MidMarker[]                         | Decorations along the edge (below).                                                                                        |
+| `labels`                                              | EdgeLabel[]                         | Labels at start, middle, end or any fraction (6.12).                                                                       |
+| `anchoring`                                           | `{source, target}` of EndAnchor     | How ends attach (below).                                                                                                   |
+| `selfLoop`                                            | SelfLoopSpec                        | Geometry of self loops.                                                                                                    |
+| `parallel`                                            | `{spread, mode}`                    | How parallel edges between the same nodes are separated: `spread` distance and `mode` (`"offset"`, `"curve"`, `"bundle"`). |
+| `jumps`                                               | JumpSpec                            | How this edge crosses others.                                                                                              |
+| `snapping`                                            | Snapping                            | Bendpoint snapping override.                                                                                               |
+| `hitWidthScreenPx`                                    | number                              | Width of the hit area. Default 8.                                                                                          |
+| `layer`                                               | `"belowNodes"`, `"aboveNodes"`, int | Rendering layer (6.16). Default `"belowNodes"`.                                                                            |
+| `states`, `conditions`, `variants`                    |                                     | As for nodes; variants may replace line, markers and labels.                                                               |
+| `tooltip`, `selectable`, `deletable`, `reconnectable` |                                     | `reconnectable` controls whether users may drag an end to another element.                                                 |
+| `accessibility`, `doc`                                |                                     |                                                                                                                            |
 
 **LineSpec**
 
-| Property | Type | Description |
-|---|---|---|
-| `stroke` | Stroke | Everything from 6.4: color, width, dash, caps, double, casing, effect, flow, sketch. |
-| `routing` | Routing | `"straight"` (default), `"polyline"` (user bendpoints), `"orthogonal"` (horizontal/vertical segments), `"rounded"` (orthogonal with rounded corners), `"curved"` (smooth curve through bendpoints), `"bezier"` (cubic with editable control points), `"spline"` (Catmull-Rom through points), `"arc"` (single circular arc), `"tree"` (fork from a common trunk), `"metro"` (octilinear: 0°/45°/90°), `"layout"` (from the layout algorithm), or `{ "plugin": … }`. |
-| `cornerRadius` | number | Rounding for `orthogonal`, `metro` and `polyline`. |
-| `curvature` | number | For `arc` and `curved` (0 = straight, 1 = semicircle). |
-| `avoidNodes` | bool | Route around nodes that are not endpoints. |
-| `avoidPadding` | number | Clearance around avoided nodes. |
-| `bendpoints` | `{editable, max, addOnDrag, removeOnStraighten}` | User editing of bendpoints; `removeOnStraighten` merges collinear points. |
-| `segments` | `{editable, keepOrthogonal}` | Dragging whole segments of orthogonal edges. |
-| `minSegmentLength` | number | Minimum length of the first and last segment (so markers do not sit on a corner). |
-| `startDirection`, `endDirection` | `"auto"`, `"up"`, `"down"`, `"left"`, `"right"`, `"normal"` | Direction the line leaves or enters its node; `normal` is perpendicular to the outline. |
+| Property                         | Type                                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+|----------------------------------|-------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `stroke`                         | Stroke                                                      | Everything from 6.4: color, width, dash, caps, double, casing, effect, flow, sketch.                                                                                                                                                                                                                                                                                                                                                                                |
+| `routing`                        | Routing                                                     | `"straight"` (default), `"polyline"` (user bendpoints), `"orthogonal"` (horizontal/vertical segments), `"rounded"` (orthogonal with rounded corners), `"curved"` (smooth curve through bendpoints), `"bezier"` (cubic with editable control points), `"spline"` (Catmull-Rom through points), `"arc"` (single circular arc), `"tree"` (fork from a common trunk), `"metro"` (octilinear: 0°/45°/90°), `"layout"` (from the layout algorithm), or `{ "plugin": … }`. |
+| `cornerRadius`                   | number                                                      | Rounding for `orthogonal`, `metro` and `polyline`.                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `curvature`                      | number                                                      | For `arc` and `curved` (0 = straight, 1 = semicircle).                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `avoidNodes`                     | bool                                                        | Route around nodes that are not endpoints.                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `avoidPadding`                   | number                                                      | Clearance around avoided nodes.                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `bendpoints`                     | `{editable, max, addOnDrag, removeOnStraighten}`            | User editing of bendpoints; `removeOnStraighten` merges collinear points.                                                                                                                                                                                                                                                                                                                                                                                           |
+| `segments`                       | `{editable, keepOrthogonal}`                                | Dragging whole segments of orthogonal edges.                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `minSegmentLength`               | number                                                      | Minimum length of the first and last segment (so markers do not sit on a corner).                                                                                                                                                                                                                                                                                                                                                                                   |
+| `startDirection`, `endDirection` | `"auto"`, `"up"`, `"down"`, `"left"`, `"right"`, `"normal"` | Direction the line leaves or enters its node; `normal` is perpendicular to the outline.                                                                                                                                                                                                                                                                                                                                                                             |
 
 **JumpSpec**: `{ "style": "none" | "arc" | "gap" | "square" | "sharp", "size": 6, "over": "later" | "horizontal" | "all" }` — draws a small bridge where this edge crosses another. `over` decides which of two crossing edges jumps: the later-drawn one (default), always the horizontal one, or both.
 
@@ -1761,13 +1769,13 @@ A Variant may contain any NodeNotation property except `placement`; matching var
 
 **MidMarker** — decorations anywhere along the path:
 
-| Property | Type | Description |
-|---|---|---|
-| `marker` | MarkerRef | The decoration. |
-| `at` | fraction, `"middle"`, `"start"`, `"end"` | Position along the path length. Default `"middle"`. |
-| `repeat` | `{spacing, from, to}` | Repeat every `spacing` canvas units within the range. |
-| `orient` | `"auto"`, `"auto-reverse"`, angle | Rotation relative to the path tangent. |
-| `visible` | Bindable bool | |
+| Property  | Type                                     | Description                                           |
+|-----------|------------------------------------------|-------------------------------------------------------|
+| `marker`  | MarkerRef                                | The decoration.                                       |
+| `at`      | fraction, `"middle"`, `"start"`, `"end"` | Position along the path length. Default `"middle"`.   |
+| `repeat`  | `{spacing, from, to}`                    | Repeat every `spacing` canvas units within the range. |
+| `orient`  | `"auto"`, `"auto-reverse"`, angle        | Rotation relative to the path tangent.                |
+| `visible` | Bindable bool                            |                                                       |
 
 **Example — a richly decorated edge.**
 
@@ -1810,42 +1818,42 @@ A **marker** is drawn at an edge end (or along the edge) and oriented along the 
 
 **Built-in markers** (details and default sizes in Appendix B.3):
 
-| Group | Markers |
-|---|---|
-| Arrows | `arrow` (open V), `arrowFilled` (solid triangle), `arrowHollow` (outlined triangle, UML generalisation), `arrowConcave` (swept-back barbed head), `arrowThin`, `arrowDouble` (two heads), `halfArrowTop`, `halfArrowBottom` (asynchronous messages), `arrowCircle` |
-| Geometric | `diamond`, `diamondFilled`, `circle`, `circleFilled`, `square`, `squareFilled`, `dot`, `triangle`, `triangleFilled` |
-| Lines | `bar` (perpendicular line), `doubleBar`, `cross` (×), `slash` |
-| Crow's foot (ER) | `erOne`, `erOnlyOne`, `erMany`, `erZeroOrOne`, `erOneOrMany`, `erZeroOrMany` |
-| UML and engineering | `ballSocketBall` (provided interface), `socket` (required interface), `containment` (circled plus), `ground`, `fork` |
-| Other | `none` |
+| Group               | Markers                                                                                                                                                                                                                                                            |
+|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Arrows              | `arrow` (open V), `arrowFilled` (solid triangle), `arrowHollow` (outlined triangle, UML generalisation), `arrowConcave` (swept-back barbed head), `arrowThin`, `arrowDouble` (two heads), `halfArrowTop`, `halfArrowBottom` (asynchronous messages), `arrowCircle` |
+| Geometric           | `diamond`, `diamondFilled`, `circle`, `circleFilled`, `square`, `squareFilled`, `dot`, `triangle`, `triangleFilled`                                                                                                                                                |
+| Lines               | `bar` (perpendicular line), `doubleBar`, `cross` (×), `slash`                                                                                                                                                                                                      |
+| Crow's foot (ER)    | `erOne`, `erOnlyOne`, `erMany`, `erZeroOrOne`, `erOneOrMany`, `erZeroOrMany`                                                                                                                                                                                       |
+| UML and engineering | `ballSocketBall` (provided interface), `socket` (required interface), `containment` (circled plus), `ground`, `fork`                                                                                                                                               |
+| Other               | `none`                                                                                                                                                                                                                                                             |
 
 **Marker parameters** (all optional, Bindable):
 
-| Parameter | Description |
-|---|---|
-| `length` | Size along the path (canvas units). |
-| `width` | Size across the path. |
-| `angle` | Half-opening angle of arrows, in degrees. |
-| `scaleWithStroke` | Scale with the line width (default `true`, relative to width 1). |
-| `fill` | Paint, or `"stroke"` (same as line color, default for filled markers) or `"background"` (canvas or token `color.surface`, default for hollow markers so the line does not show through). |
-| `stroke` | Stroke of the marker outline; default inherits the line's color and width, never its dash. |
-| `inset` | Distance from the edge end point (move the marker back). |
-| `shorten` | How far the line is shortened so it ends inside the marker rather than poking through its tip. Default: computed per marker. |
-| `minSizeScreenPx` | Minimum on-screen size when zoomed out. |
+| Parameter         | Description                                                                                                                                                                              |
+|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `length`          | Size along the path (canvas units).                                                                                                                                                      |
+| `width`           | Size across the path.                                                                                                                                                                    |
+| `angle`           | Half-opening angle of arrows, in degrees.                                                                                                                                                |
+| `scaleWithStroke` | Scale with the line width (default `true`, relative to width 1).                                                                                                                         |
+| `fill`            | Paint, or `"stroke"` (same as line color, default for filled markers) or `"background"` (canvas or token `color.surface`, default for hollow markers so the line does not show through). |
+| `stroke`          | Stroke of the marker outline; default inherits the line's color and width, never its dash.                                                                                               |
+| `inset`           | Distance from the edge end point (move the marker back).                                                                                                                                 |
+| `shorten`         | How far the line is shortened so it ends inside the marker rather than poking through its tip. Default: computed per marker.                                                             |
+| `minSizeScreenPx` | Minimum on-screen size when zoomed out.                                                                                                                                                  |
 
 **Custom markers** in `notation.markers`:
 
-| Property | Type | Description |
-|---|---|---|
-| `path` | PathDef | Geometry in marker coordinates: x points along the path tangent towards the end, the tip is at the reference point. |
-| `parts` | ShapePart[] | Composite marker. |
-| `ref` | `[x, y]` | Reference point placed exactly at the edge end. Default `[0, 0]`. |
-| `size` | `[length, width]` | Nominal size (scales `viewBox` geometry). |
-| `params` | map → ShapeParam | Parameters, used in GeomExprs as `p.<name>` (plus `sw` = stroke width). |
-| `orient` | `"auto"`, `"auto-start-reverse"`, angle | Default `"auto"`; source markers are automatically reversed. |
-| `fill`, `stroke` | Paint, Stroke | Defaults as above. |
-| `shorten` | GeomExpr | Line shortening. |
-| `label`, `doc` | | Shown in marker pickers and generated docs. |
+| Property         | Type                                    | Description                                                                                                         |
+|------------------|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------|
+| `path`           | PathDef                                 | Geometry in marker coordinates: x points along the path tangent towards the end, the tip is at the reference point. |
+| `parts`          | ShapePart[]                             | Composite marker.                                                                                                   |
+| `ref`            | `[x, y]`                                | Reference point placed exactly at the edge end. Default `[0, 0]`.                                                   |
+| `size`           | `[length, width]`                       | Nominal size (scales `viewBox` geometry).                                                                           |
+| `params`         | map → ShapeParam                        | Parameters, used in GeomExprs as `p.<name>` (plus `sw` = stroke width).                                             |
+| `orient`         | `"auto"`, `"auto-start-reverse"`, angle | Default `"auto"`; source markers are automatically reversed.                                                        |
+| `fill`, `stroke` | Paint, Stroke                           | Defaults as above.                                                                                                  |
+| `shorten`        | GeomExpr                                | Line shortening.                                                                                                    |
+| `label`, `doc`   |                                         | Shown in marker pickers and generated docs.                                                                         |
 
 ```json
 "markers": {
@@ -1868,40 +1876,40 @@ A **marker** is drawn at an edge end (or along the edge) and oriented along the 
 
 Labels display text on nodes, edges, ports and compartments. The same **Label** object is used everywhere; edges add path-relative positioning.
 
-| Property | Type | Description |
-|---|---|---|
-| `id` | identifier | Unique within the notation; used in view data (label offsets), `lod.hide` and styles. |
-| `text` | Bindable string or `{ "attribute": … }` | Content. Attribute bindings make the label editable. |
-| `format` | `"plain"`, `"markdown"`, `"rich"` | `markdown` renders a safe inline subset (emphasis, code, links); `rich` enables spans from `{ "cel": … }` returning a list of `{text, style}`. |
-| `placeholder` | LocalizedText | Shown (dimmed) when text is empty and the element is selected. |
-| `editable` | `false`, `"inline"`, `"multiline"`, `"form"` | How users edit the text; `form` opens the field in the form. Requires an attribute binding. Default: `"inline"` for attribute bindings, else `false`. |
-| `parse` | `{cel, write}` | Parse edited text into several attributes (for example `"name : Type"` → `name`, `type`), with `value` = entered text and `write` actions (9.4). |
-| `position` | Position | For nodes and ports (6.9). |
-| `style` | StyleRef | Font, color, alignment. |
-| `background` | `{fill, stroke, padding, cornerRadius}` | Box behind the text (tags, pills). |
-| `maxWidth` | number or `"parent"` | Wrap width. |
-| `wrap` | `"none"`, `"word"`, `"char"` | Default `"word"` for node labels, `"none"` for edge labels. |
-| `maxLines` | int | |
-| `overflow` | `"visible"`, `"clip"`, `"ellipsis"`, `"shrink"` | `shrink` reduces font size down to `font.minSizeScreenPx`. |
-| `rotation` | angle or `"vertical"` | Vertical text for lane headers. |
-| `icon` | IconRef | Icon before the text. |
-| `visible` | Bindable bool | |
-| `draggable` | bool | Users may move the label; the offset is stored in view data. Default `true` for edge labels, `false` for node labels. |
-| `link` | Bindable URI | Clickable label. |
-| `layer` | `"top"` | Draw the label above all elements (6.16) so it is never covered. |
-| `tooltip`, `doc` | | |
+| Property         | Type                                            | Description                                                                                                                                           |
+|------------------|-------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`             | identifier                                      | Unique within the notation; used in view data (label offsets), `lod.hide` and styles.                                                                 |
+| `text`           | Bindable string or `{ "attribute": … }`         | Content. Attribute bindings make the label editable.                                                                                                  |
+| `format`         | `"plain"`, `"markdown"`, `"rich"`               | `markdown` renders a safe inline subset (emphasis, code, links); `rich` enables spans from `{ "cel": … }` returning a list of `{text, style}`.        |
+| `placeholder`    | LocalizedText                                   | Shown (dimmed) when text is empty and the element is selected.                                                                                        |
+| `editable`       | `false`, `"inline"`, `"multiline"`, `"form"`    | How users edit the text; `form` opens the field in the form. Requires an attribute binding. Default: `"inline"` for attribute bindings, else `false`. |
+| `parse`          | `{cel, write}`                                  | Parse edited text into several attributes (for example `"name : Type"` → `name`, `type`), with `value` = entered text and `write` actions (9.4).      |
+| `position`       | Position                                        | For nodes and ports (6.9).                                                                                                                            |
+| `style`          | StyleRef                                        | Font, color, alignment.                                                                                                                               |
+| `background`     | `{fill, stroke, padding, cornerRadius}`         | Box behind the text (tags, pills).                                                                                                                    |
+| `maxWidth`       | number or `"parent"`                            | Wrap width.                                                                                                                                           |
+| `wrap`           | `"none"`, `"word"`, `"char"`                    | Default `"word"` for node labels, `"none"` for edge labels.                                                                                           |
+| `maxLines`       | int                                             |                                                                                                                                                       |
+| `overflow`       | `"visible"`, `"clip"`, `"ellipsis"`, `"shrink"` | `shrink` reduces font size down to `font.minSizeScreenPx`.                                                                                            |
+| `rotation`       | angle or `"vertical"`                           | Vertical text for lane headers.                                                                                                                       |
+| `icon`           | IconRef                                         | Icon before the text.                                                                                                                                 |
+| `visible`        | Bindable bool                                   |                                                                                                                                                       |
+| `draggable`      | bool                                            | Users may move the label; the offset is stored in view data. Default `true` for edge labels, `false` for node labels.                                 |
+| `link`           | Bindable URI                                    | Clickable label.                                                                                                                                      |
+| `layer`          | `"top"`                                         | Draw the label above all elements (6.16) so it is never covered.                                                                                      |
+| `tooltip`, `doc` |                                                 |                                                                                                                                                       |
 
 **Edge label positioning** — for labels in `EdgeNotation.labels`:
 
-| Property | Type | Description |
-|---|---|---|
-| `at` | `"start"`, `"middle"`, `"end"`, or fraction | Anchor along the path. `start` and `end` are measured from the visible ends (after markers). Default `"middle"`. |
-| `offset` | number | Distance along the path from the anchor, in canvas units (towards the middle for `start`/`end`). |
-| `side` | `"above"`, `"below"`, `"left"`, `"right"`, `"on"` | Side of the line relative to its direction. `on` centers the label on the line (with a background that interrupts it). |
-| `distance` | number | Perpendicular distance from the line. Default 4 plus half the label height. |
-| `orientation` | `"horizontal"`, `"follow"`, `"upright"` | Keep text horizontal (default), rotate along the path, or rotate but never upside down. |
-| `avoidMarkers` | bool | Push start/end labels clear of markers. Default `true`. |
-| `keepOnSegment` | bool | For orthogonal routes, keep `start`/`end` labels on the first/last segment. |
+| Property        | Type                                              | Description                                                                                                            |
+|-----------------|---------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
+| `at`            | `"start"`, `"middle"`, `"end"`, or fraction       | Anchor along the path. `start` and `end` are measured from the visible ends (after markers). Default `"middle"`.       |
+| `offset`        | number                                            | Distance along the path from the anchor, in canvas units (towards the middle for `start`/`end`).                       |
+| `side`          | `"above"`, `"below"`, `"left"`, `"right"`, `"on"` | Side of the line relative to its direction. `on` centers the label on the line (with a background that interrupts it). |
+| `distance`      | number                                            | Perpendicular distance from the line. Default 4 plus half the label height.                                            |
+| `orientation`   | `"horizontal"`, `"follow"`, `"upright"`           | Keep text horizontal (default), rotate along the path, or rotate but never upside down.                                |
+| `avoidMarkers`  | bool                                              | Push start/end labels clear of markers. Default `true`.                                                                |
+| `keepOnSegment` | bool                                              | For orthogonal routes, keep `start`/`end` labels on the first/last segment.                                            |
 
 Together, `at` and `side` place labels in any of the conventional slots:
 
@@ -1915,28 +1923,28 @@ Together, `at` and `side` place labels in any of the conventional slots:
 
 `notation.canvas` (or a viewpoint's `canvas`) configures the drawing surface:
 
-| Property | Type | Description |
-|---|---|---|
-| `background` | Paint | Canvas background (default token `color.canvas`). |
-| `page` | `{size, orientation, margins, showBreaks}` | Paged canvas for printing: size `"A4"`, `"Letter"`, `[w, h]` in mm. |
-| `bounds` | Box | Fixed drawing area. |
-| `zoom` | `{min, max, default, steps}` | Zoom limits and presets. |
-| `watermark` | Label | Text drawn under everything (for example "DRAFT" when `diagram.status == 'draft'`). |
-| `legend` | `{visible, position, entries}` | Auto-generated legend of types, markers and conditional styles that carry `doc`. |
-| `minimap` | bool | Show an overview map. |
-| `selection` | `{style, handles}` | Selection outline and resize handle appearance. |
+| Property     | Type                                       | Description                                                                         |
+|--------------|--------------------------------------------|-------------------------------------------------------------------------------------|
+| `background` | Paint                                      | Canvas background (default token `color.canvas`).                                   |
+| `page`       | `{size, orientation, margins, showBreaks}` | Paged canvas for printing: size `"A4"`, `"Letter"`, `[w, h]` in mm.                 |
+| `bounds`     | Box                                        | Fixed drawing area.                                                                 |
+| `zoom`       | `{min, max, default, steps}`               | Zoom limits and presets.                                                            |
+| `watermark`  | Label                                      | Text drawn under everything (for example "DRAFT" when `diagram.status == 'draft'`). |
+| `legend`     | `{visible, position, entries}`             | Auto-generated legend of types, markers and conditional styles that carry `doc`.    |
+| `minimap`    | bool                                       | Show an overview map.                                                               |
+| `selection`  | `{style, handles}`                         | Selection outline and resize handle appearance.                                     |
 
 ### 6.14 Icons
 
 `notation.icons` declares icons used by tools, nodes, badges and labels.
 
-| Form | Example |
-|---|---|
-| Inline SVG | `{ "svg": "<svg viewBox='0 0 24 24'>…</svg>" }` (sanitised) |
-| Path | `{ "path": { "viewBox": [0,0,24,24], "d": "M…" }, "stroke": true }` |
-| Image | `{ "src": "icons/db.png", "size": [24, 24] }` |
-| Icon font glyph | `{ "font": "tabler", "glyph": "database" }` |
-| Library | `"std.database"` or `"tabler:database"` |
+| Form            | Example                                                             |
+|-----------------|---------------------------------------------------------------------|
+| Inline SVG      | `{ "svg": "<svg viewBox='0 0 24 24'>…</svg>" }` (sanitised)         |
+| Path            | `{ "path": { "viewBox": [0,0,24,24], "d": "M…" }, "stroke": true }` |
+| Image           | `{ "src": "icons/db.png", "size": [24, 24] }`                       |
+| Icon font glyph | `{ "font": "tabler", "glyph": "database" }`                         |
+| Library         | `"std.database"` or `"tabler:database"`                             |
 
 Icons are monochrome by default and take `currentColor`, so they follow the theme; `colored: true` keeps their own colors.
 
@@ -1982,16 +1990,16 @@ This layer defines how users create and edit elements: the palette (toolbox), to
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `groups` | ToolGroup[] | Ordered groups. |
-| `tools` | map → Tool | Library of tools referenced from groups by id (a group entry may be a string id). |
-| `layout` | `"list"`, `"grid"`, `"icons"`, `"compact"` | Presentation. Default `"list"`. |
-| `position` | `"left"`, `"right"`, `"top"`, `"floating"` | Suggested placement; runtimes MAY ignore it. |
-| `searchable` | bool | Offer a search box (matches labels, `doc.summary`, `doc.tags`). Default `true`. |
-| `showRecent` | int | Show a group with the n most recently used tools. |
-| `generic` | `{select, pan, lasso, text, note, image, freehand}` of bool | Which generic tools are offered. Defaults: select and pan `true`, others `false`. |
-| `doc` | Doc | |
+| Property     | Type                                                        | Description                                                                       |
+|--------------|-------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| `groups`     | ToolGroup[]                                                 | Ordered groups.                                                                   |
+| `tools`      | map → Tool                                                  | Library of tools referenced from groups by id (a group entry may be a string id). |
+| `layout`     | `"list"`, `"grid"`, `"icons"`, `"compact"`                  | Presentation. Default `"list"`.                                                   |
+| `position`   | `"left"`, `"right"`, `"top"`, `"floating"`                  | Suggested placement; runtimes MAY ignore it.                                      |
+| `searchable` | bool                                                        | Offer a search box (matches labels, `doc.summary`, `doc.tags`). Default `true`.   |
+| `showRecent` | int                                                         | Show a group with the n most recently used tools.                                 |
+| `generic`    | `{select, pan, lasso, text, note, image, freehand}` of bool | Which generic tools are offered. Defaults: select and pan `true`, others `false`. |
+| `doc`        | Doc                                                         |                                                                                   |
 
 If `toolbox` is absent, the runtime generates one group per 10 concrete types, alphabetically, with one creation tool per concrete node and relation type.
 
@@ -1999,24 +2007,24 @@ If `toolbox` is absent, the runtime generates one group per 10 concrete types, a
 
 ### 7.2 Tools
 
-| Property | Type | Description |
-|---|---|---|
-| `id` | identifier | **Required**. |
-| `kind` | ToolKind | Default: `"create-node"` or `"create-edge"` depending on `creates`; otherwise required. |
-| `label`, `doc`, `icon` | | Default: from the created type. `doc.summary` is the tooltip. |
-| `creates` | TypeRef | Type to create. |
-| `initial` | map attribute → value or `{cel}` | Initial attribute values, overriding metamodel defaults. CEL values use the `create` context (12.3). |
-| `size` | Size | Initial size overriding the notation default. |
-| `variantOf` | tool id | Presents this tool as a variant (dropdown) of another. |
-| `mode` | see below | Interaction mode. |
-| `sticky` | bool | Tool stays active after use until Escape. Default `false`; shift-click MAY toggle. |
-| `shortcut` | string | Keyboard shortcut (`"S"`, `"Ctrl+Shift+E"`). Conflicts are a validator warning. |
-| `enabled`, `visible` | Expression | Context `diagram`. |
-| `preview` | `{style, shape}` | Ghost appearance while placing. |
-| `after` | `"select"`, `"editLabel"`, `"openForm"`, `"none"` | What happens after creation. Default `"editLabel"` when the type has an editable label. |
-| `template` | template id | For `kind: "template"`. |
-| `operation` | operation id | For `kind: "operation"`. |
-| `plugin` | `{name, args}` | For `kind: "plugin"`. |
+| Property               | Type                                              | Description                                                                                          |
+|------------------------|---------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| `id`                   | identifier                                        | **Required**.                                                                                        |
+| `kind`                 | ToolKind                                          | Default: `"create-node"` or `"create-edge"` depending on `creates`; otherwise required.              |
+| `label`, `doc`, `icon` |                                                   | Default: from the created type. `doc.summary` is the tooltip.                                        |
+| `creates`              | TypeRef                                           | Type to create.                                                                                      |
+| `initial`              | map attribute → value or `{cel}`                  | Initial attribute values, overriding metamodel defaults. CEL values use the `create` context (12.3). |
+| `size`                 | Size                                              | Initial size overriding the notation default.                                                        |
+| `variantOf`            | tool id                                           | Presents this tool as a variant (dropdown) of another.                                               |
+| `mode`                 | see below                                         | Interaction mode.                                                                                    |
+| `sticky`               | bool                                              | Tool stays active after use until Escape. Default `false`; shift-click MAY toggle.                   |
+| `shortcut`             | string                                            | Keyboard shortcut (`"S"`, `"Ctrl+Shift+E"`). Conflicts are a validator warning.                      |
+| `enabled`, `visible`   | Expression                                        | Context `diagram`.                                                                                   |
+| `preview`              | `{style, shape}`                                  | Ghost appearance while placing.                                                                      |
+| `after`                | `"select"`, `"editLabel"`, `"openForm"`, `"none"` | What happens after creation. Default `"editLabel"` when the type has an editable label.              |
+| `template`             | template id                                       | For `kind: "template"`.                                                                              |
+| `operation`            | operation id                                      | For `kind: "operation"`.                                                                             |
+| `plugin`               | `{name, args}`                                    | For `kind: "plugin"`.                                                                                |
 
 **ToolKind**: `create-node`, `create-edge`, `template` (inserts a fragment), `operation` (runs an operation on the selection or diagram), `select`, `pan`, `lasso`, `text`, `note`, `image`, `freehand`, `plugin`.
 
@@ -2042,12 +2050,12 @@ Context tools appear next to the selected element (a "quick bar" or radial menu)
 ]
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `for` | TypeRef[] | Element types the context tools apply to. |
-| `when` | Expression | Additional condition (`element` context). |
-| `placement` | `"around"`, `"toolbar"`, `"menu"`, `"radial"` | Presentation. |
-| `tools` | ContextTool[] | Items. |
+| Property    | Type                                          | Description                               |
+|-------------|-----------------------------------------------|-------------------------------------------|
+| `for`       | TypeRef[]                                     | Element types the context tools apply to. |
+| `when`      | Expression                                    | Additional condition (`element` context). |
+| `placement` | `"around"`, `"toolbar"`, `"menu"`, `"radial"` | Presentation.                             |
+| `tools`     | ContextTool[]                                 | Items.                                    |
 
 ContextTool kinds: `create-connected` (create a node of type `creates` connected via relation `via`, placed at `position` using the layout's spacing; `direction` `outgoing` or `incoming`), `connect` (start an edge of type `via` from this element), `create-child` (create a child of `creates` in `slot`), `operation`, `delete`, `duplicate`, `editLabel`, `openForm`, `plugin`. All kinds accept `label`, `doc`, `icon`, `shortcut`, `enabled`, `position`.
 
@@ -2117,35 +2125,35 @@ If no form is defined for a type, runtimes generate one: one field per non-deriv
 
 **Form**
 
-| Property | Type | Description |
-|---|---|---|
-| `for` | TypeRef or TypeRef[] | Types edited. For relations, the relation type. `"diagram"` edits the diagram root. |
-| `usage` | (`"inspector"`, `"create"`, `"embedded"`, `"popover"`, `"bulk"`)[] | Where the form is used. `create` shows it as a dialog before creation; `bulk` supports editing several selected elements (fields show "mixed" values). Default `["inspector"]`. |
-| `layout` | `"vertical"`, `"horizontal"`, `{columns, labelPosition, density}` | `labelPosition`: `"top"`, `"left"`, `"inline"`, `"none"`; `density`: `"comfortable"`, `"compact"`. |
-| `items` | FormItem[] | Fields and containers. |
-| `commit` | `"immediate"`, `"onBlur"`, `"explicit"` | When edits become model changes (each commit is one undoable transaction). Default `"immediate"` for inspectors, `"explicit"` for create dialogs. |
-| `label`, `doc`, `icon` | | Title and help of the form. |
+| Property               | Type                                                               | Description                                                                                                                                                                     |
+|------------------------|--------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `for`                  | TypeRef or TypeRef[]                                               | Types edited. For relations, the relation type. `"diagram"` edits the diagram root.                                                                                             |
+| `usage`                | (`"inspector"`, `"create"`, `"embedded"`, `"popover"`, `"bulk"`)[] | Where the form is used. `create` shows it as a dialog before creation; `bulk` supports editing several selected elements (fields show "mixed" values). Default `["inspector"]`. |
+| `layout`               | `"vertical"`, `"horizontal"`, `{columns, labelPosition, density}`  | `labelPosition`: `"top"`, `"left"`, `"inline"`, `"none"`; `density`: `"comfortable"`, `"compact"`.                                                                              |
+| `items`                | FormItem[]                                                         | Fields and containers.                                                                                                                                                          |
+| `commit`               | `"immediate"`, `"onBlur"`, `"explicit"`                            | When edits become model changes (each commit is one undoable transaction). Default `"immediate"` for inspectors, `"explicit"` for create dialogs.                               |
+| `label`, `doc`, `icon` |                                                                    | Title and help of the form.                                                                                                                                                     |
 
 **Field** (an item with `attribute`, or `kind: "field"`):
 
-| Property | Type | Description |
-|---|---|---|
-| `attribute` | path | Attribute edited (dotted path into structs). **Required** for fields. |
-| `widget` | Widget | Default by type (Appendix B.7). |
-| `label` | LocalizedText | Default: attribute label. |
-| `doc` | Doc | Field help. Default: attribute `doc`. Shown below the field (`summary`) and via an info icon (`description`, `rationale`). |
-| `placeholder` | LocalizedText | Hint text inside empty inputs. |
-| `visible`, `enabled` | Expression | Context `form` (12.3): `self`, `value`, `diagram`. |
-| `required` | bool | Visual required marker; may tighten but not loosen the attribute. |
-| `validate` | `{rule, message, severity}`[] | Field-local validation shown immediately; does not replace constraints. |
-| `options` | `{cel}` or `{enum}` or literal list | Choices for select-like widgets: values or `{value, label, icon, doc}` maps, or elements for `reference`. |
-| `widgetOptions` | object | Widget-specific settings (below). |
-| `colSpan`, `width` | int, length | Grid layout. |
-| `prefix`, `suffix`, `unit` | LocalizedText | Adornments. |
-| `format` | string | Display format for numbers and dates. |
-| `rows` | int | For multi-line widgets. |
-| `readOnly` | Bindable bool | |
-| `onChange` | Action[] | Actions run after the value is committed (9.4). |
+| Property                   | Type                                | Description                                                                                                                |
+|----------------------------|-------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| `attribute`                | path                                | Attribute edited (dotted path into structs). **Required** for fields.                                                      |
+| `widget`                   | Widget                              | Default by type (Appendix B.7).                                                                                            |
+| `label`                    | LocalizedText                       | Default: attribute label.                                                                                                  |
+| `doc`                      | Doc                                 | Field help. Default: attribute `doc`. Shown below the field (`summary`) and via an info icon (`description`, `rationale`). |
+| `placeholder`              | LocalizedText                       | Hint text inside empty inputs.                                                                                             |
+| `visible`, `enabled`       | Expression                          | Context `form` (12.3): `self`, `value`, `diagram`.                                                                         |
+| `required`                 | bool                                | Visual required marker; may tighten but not loosen the attribute.                                                          |
+| `validate`                 | `{rule, message, severity}`[]       | Field-local validation shown immediately; does not replace constraints.                                                    |
+| `options`                  | `{cel}` or `{enum}` or literal list | Choices for select-like widgets: values or `{value, label, icon, doc}` maps, or elements for `reference`.                  |
+| `widgetOptions`            | object                              | Widget-specific settings (below).                                                                                          |
+| `colSpan`, `width`         | int, length                         | Grid layout.                                                                                                               |
+| `prefix`, `suffix`, `unit` | LocalizedText                       | Adornments.                                                                                                                |
+| `format`                   | string                              | Display format for numbers and dates.                                                                                      |
+| `rows`                     | int                                 | For multi-line widgets.                                                                                                    |
+| `readOnly`                 | Bindable bool                       |                                                                                                                            |
+| `onChange`                 | Action[]                            | Actions run after the value is committed (9.4).                                                                            |
 
 **Widgets**: `text`, `textarea`, `markdown`, `code` (with `widgetOptions.language`: `"cel"`, `"json"`, `"sql"`, …; the `cel` language is type-checked in the attribute's `context`), `number`, `slider` (`min`, `max`, `step`, `marks`), `spinner`, `rating` (`max`, `icon`), `checkbox`, `switch`, `select`, `combobox` (free entry allowed), `radio`, `segmented` (button group), `multiselect`, `tags`, `date`, `datetime`, `time`, `duration`, `daterange` (edits two attributes: `attribute` and `widgetOptions.endAttribute`), `color` (`palette`, `alpha`), `icon` (icon picker), `reference` (element picker, with `widgetOptions.pickOnCanvas: true` to select by clicking), `references` (for `many` references), `list` (editable list of primitives), `table` (list of structs, with `widgetOptions.columns`), `struct` (nested sub-form), `file` (binary or URI, `mediaTypes`), `image`, `link`, `progress` (read-only bar), `readonly` (plain text), `plugin`.
 
@@ -2166,14 +2174,14 @@ Nodes MAY display live form widgets on the canvas — checkboxes in a to-do card
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `form` | form id or inline Form | The form (its `usage` SHOULD include `"embedded"`). |
-| `region` | Box of GeomExpr | Area inside the node, in shape coordinates. Default: the shape's text area. |
-| `interaction` | `"always"`, `"onSelect"`, `"onDoubleClick"`, `"readOnly"` | When the widgets accept input. `readOnly` renders values only. Default `"onSelect"`. |
-| `minZoom` | number | Below this zoom, the form is not rendered; `fallback` decides what is shown instead (`"labels"`, `"none"`, `"summary"`). |
-| `autoSize` | bool | The node grows to fit the form. |
-| `style` | StyleRef | Styling of embedded widgets (font, density). Runtimes SHOULD render embedded widgets in the node's style, not the platform style. |
+| Property      | Type                                                      | Description                                                                                                                       |
+|---------------|-----------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| `form`        | form id or inline Form                                    | The form (its `usage` SHOULD include `"embedded"`).                                                                               |
+| `region`      | Box of GeomExpr                                           | Area inside the node, in shape coordinates. Default: the shape's text area.                                                       |
+| `interaction` | `"always"`, `"onSelect"`, `"onDoubleClick"`, `"readOnly"` | When the widgets accept input. `readOnly` renders values only. Default `"onSelect"`.                                              |
+| `minZoom`     | number                                                    | Below this zoom, the form is not rendered; `fallback` decides what is shown instead (`"labels"`, `"none"`, `"summary"`).          |
+| `autoSize`    | bool                                                      | The node grows to fit the form.                                                                                                   |
+| `style`       | StyleRef                                                  | Styling of embedded widgets (font, density). Runtimes SHOULD render embedded widgets in the node's style, not the platform style. |
 
 Embedded forms MUST NOT capture canvas gestures outside their widgets: dragging on a non-interactive area moves the node. Every widget change is an undoable model transaction, exactly as in the inspector.
 
@@ -2209,37 +2217,37 @@ Constraints state what makes a diagram valid. They are written in CEL, evaluated
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `rules` | Constraint[] | Ordered list of constraints. |
-| `groups` | map → `{label, doc, enabledByDefault, severityOverride}` | Groups users can enable, disable or re-rate as a unit ("rule sets"). |
-| `defaults` | `{severity, timing}` | Defaults for rules. |
-| `blockSaveOn` | `"never"`, `"error"` | Whether saving is prevented while errors exist. Default `"never"` (never lose work); documents are saved with problems and remain loadable. |
-| `builtIn` | map built-in id → `{severity, enabled}` | Tune the built-in constraints (8.7). |
+| Property      | Type                                                     | Description                                                                                                                                 |
+|---------------|----------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| `rules`       | Constraint[]                                             | Ordered list of constraints.                                                                                                                |
+| `groups`      | map → `{label, doc, enabledByDefault, severityOverride}` | Groups users can enable, disable or re-rate as a unit ("rule sets").                                                                        |
+| `defaults`    | `{severity, timing}`                                     | Defaults for rules.                                                                                                                         |
+| `blockSaveOn` | `"never"`, `"error"`                                     | Whether saving is prevented while errors exist. Default `"never"` (never lose work); documents are saved with problems and remain loadable. |
+| `builtIn`     | map built-in id → `{severity, enabled}`                  | Tune the built-in constraints (8.7).                                                                                                        |
 
 ### 8.2 Constraint object
 
-| Property | Type | Description |
-|---|---|---|
-| `id` | identifier | **Required**, unique. Stored with suppressions and reported in problems. |
-| `label` | LocalizedText | Short name ("Single initial state"). |
-| `doc` | Doc | `summary` explains the rule; `rationale` why it exists; `description` how to comply; `examples` valid and invalid snippets. Runtimes show it with every reported problem. |
-| `kind` | ConstraintKind | Default `"invariant"` (8.3, 8.4). |
-| `scope` | `"diagram"`, `"node"`, `"relation"`, `"port"`, `"*"`, TypeRef or TypeRef[] | Which elements the rule is evaluated for; `self` is bound to each. `diagram` evaluates once. Default `"diagram"`. |
-| `when` | Expression | Precondition; the rule is only evaluated where it holds. |
-| `rule` | Expression → bool | The condition that MUST hold. **Required.** |
-| `severity` | `"error"`, `"warning"`, `"info"`, `"hint"`, or `{cel}` | Default `"error"`. |
-| `message` | LocalizedText or `{cel}` | Problem text. CEL messages may interpolate values: `{ "cel": "'State ' + self.name + ' is unreachable'" }`. |
-| `target` | `"self"` or Expression | Element(s) the problem is attached to; an expression returning an element or list (for example all duplicates). Default `self`. |
-| `attribute` | path | Attribute to mark in forms. |
-| `timing` | (`"live"`, `"save"`, `"explicit"`, `"export"`)[] | When evaluated. `live`: after each transaction (debounced); `save`: before saving; `explicit`: on "Validate" command; `export`: before export. Default `["live", "save"]`. |
-| `enforcement` | `"report"`, `"prevent"`, `"prevent-and-report"` | `prevent`: a transaction that would make the rule false (for elements it was true for before) is rejected with the message. Default `"report"` for invariants, `"prevent"` for gesture kinds. |
-| `fixes` | QuickFix[] | Suggested corrections. |
-| `suppressible` | bool | Users may suppress the problem for a specific element; suppressions are stored in the document (11.7). Default `true` for warnings and below, `false` for errors. |
-| `enabled` | bool | Default `true` (subject to group). |
-| `group` | group id | |
-| `tags` | string[] | |
-| `cost` | `"cheap"`, `"expensive"` | Hint: expensive rules (graph traversals) MAY be evaluated with lower frequency or off the main thread. |
+| Property       | Type                                                                       | Description                                                                                                                                                                                   |
+|----------------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`           | identifier                                                                 | **Required**, unique. Stored with suppressions and reported in problems.                                                                                                                      |
+| `label`        | LocalizedText                                                              | Short name ("Single initial state").                                                                                                                                                          |
+| `doc`          | Doc                                                                        | `summary` explains the rule; `rationale` why it exists; `description` how to comply; `examples` valid and invalid snippets. Runtimes show it with every reported problem.                     |
+| `kind`         | ConstraintKind                                                             | Default `"invariant"` (8.3, 8.4).                                                                                                                                                             |
+| `scope`        | `"diagram"`, `"node"`, `"relation"`, `"port"`, `"*"`, TypeRef or TypeRef[] | Which elements the rule is evaluated for; `self` is bound to each. `diagram` evaluates once. Default `"diagram"`.                                                                             |
+| `when`         | Expression                                                                 | Precondition; the rule is only evaluated where it holds.                                                                                                                                      |
+| `rule`         | Expression → bool                                                          | The condition that MUST hold. **Required.**                                                                                                                                                   |
+| `severity`     | `"error"`, `"warning"`, `"info"`, `"hint"`, or `{cel}`                     | Default `"error"`.                                                                                                                                                                            |
+| `message`      | LocalizedText or `{cel}`                                                   | Problem text. CEL messages may interpolate values: `{ "cel": "'State ' + self.name + ' is unreachable'" }`.                                                                                   |
+| `target`       | `"self"` or Expression                                                     | Element(s) the problem is attached to; an expression returning an element or list (for example all duplicates). Default `self`.                                                               |
+| `attribute`    | path                                                                       | Attribute to mark in forms.                                                                                                                                                                   |
+| `timing`       | (`"live"`, `"save"`, `"explicit"`, `"export"`)[]                           | When evaluated. `live`: after each transaction (debounced); `save`: before saving; `explicit`: on "Validate" command; `export`: before export. Default `["live", "save"]`.                    |
+| `enforcement`  | `"report"`, `"prevent"`, `"prevent-and-report"`                            | `prevent`: a transaction that would make the rule false (for elements it was true for before) is rejected with the message. Default `"report"` for invariants, `"prevent"` for gesture kinds. |
+| `fixes`        | QuickFix[]                                                                 | Suggested corrections.                                                                                                                                                                        |
+| `suppressible` | bool                                                                       | Users may suppress the problem for a specific element; suppressions are stored in the document (11.7). Default `true` for warnings and below, `false` for errors.                             |
+| `enabled`      | bool                                                                       | Default `true` (subject to group).                                                                                                                                                            |
+| `group`        | group id                                                                   |                                                                                                                                                                                               |
+| `tags`         | string[]                                                                   |                                                                                                                                                                                               |
+| `cost`         | `"cheap"`, `"expensive"`                                                   | Hint: expensive rules (graph traversals) MAY be evaluated with lower frequency or off the main thread.                                                                                        |
 
 ### 8.3 Invariants
 
@@ -2271,14 +2279,14 @@ Invariants (`kind: "invariant"`) are statements about the current state of the d
 
 Gesture constraints are evaluated **before** a user action is applied, while the user is still dragging, so the editor can show a "not allowed" cursor, apply the `dropReject` state and explain why. Their default enforcement is `prevent`.
 
-| `kind` | Evaluated when | Variables (in addition to `diagram`, `env`) |
-|---|---|---|
-| `connect` | Creating or reconnecting an edge | `relationType` (string), `source`, `target` (elements or ports), `sourcePort`, `targetPort`, `self` (the edge when reconnecting, else `null`) |
-| `containment` | Dropping or creating an element inside a container | `child` (element or `{type}` for new elements), `parent`, `slot` |
-| `create` | Creating an element with a tool or operation | `elementType` (string), `parent`, `position` |
-| `delete` | Deleting elements | `self`, `selection` (all elements being deleted) |
-| `placement` | Moving or resizing | `self`, `oldBounds`, `newBounds` (in domain values: `newBounds.x` is a timestamp on time axes), `newParent` |
-| `change` | Changing an attribute in a form or label | `self`, `attribute`, `oldValue`, `newValue` |
+| `kind`        | Evaluated when                                     | Variables (in addition to `diagram`, `env`)                                                                                                   |
+|---------------|----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| `connect`     | Creating or reconnecting an edge                   | `relationType` (string), `source`, `target` (elements or ports), `sourcePort`, `targetPort`, `self` (the edge when reconnecting, else `null`) |
+| `containment` | Dropping or creating an element inside a container | `child` (element or `{type}` for new elements), `parent`, `slot`                                                                              |
+| `create`      | Creating an element with a tool or operation       | `elementType` (string), `parent`, `position`                                                                                                  |
+| `delete`      | Deleting elements                                  | `self`, `selection` (all elements being deleted)                                                                                              |
+| `placement`   | Moving or resizing                                 | `self`, `oldBounds`, `newBounds` (in domain values: `newBounds.x` is a timestamp on time axes), `newParent`                                   |
+| `change`      | Changing an attribute in a form or label           | `self`, `attribute`, `oldValue`, `newValue`                                                                                                   |
 
 ```json
 { "id": "noEntryIntoInitial", "kind": "connect",
@@ -2299,15 +2307,15 @@ When enforcement is `report` on a gesture kind, the gesture is allowed and a pro
 
 ### 8.5 Quick fixes
 
-| Property | Type | Description |
-|---|---|---|
-| `label` | LocalizedText or `{cel}` | Menu text ("Rename to 'Idle 2'"). |
-| `doc` | Doc | What the fix does. |
-| `when` | Expression | Offer the fix only if true. |
-| `actions` | Action[] | Behavior actions (9.4) executed as one transaction with `self` bound to the problem's element. |
-| `operation` | operation id | Alternatively run a declared operation. |
-| `preferred` | bool | The fix offered by "fix all" and keyboard shortcut. |
-| `applyToAll` | bool | May be applied to all problems of this constraint at once. |
+| Property     | Type                     | Description                                                                                    |
+|--------------|--------------------------|------------------------------------------------------------------------------------------------|
+| `label`      | LocalizedText or `{cel}` | Menu text ("Rename to 'Idle 2'").                                                              |
+| `doc`        | Doc                      | What the fix does.                                                                             |
+| `when`       | Expression               | Offer the fix only if true.                                                                    |
+| `actions`    | Action[]                 | Behavior actions (9.4) executed as one transaction with `self` bound to the problem's element. |
+| `operation`  | operation id             | Alternatively run a declared operation.                                                        |
+| `preferred`  | bool                     | The fix offered by "fix all" and keyboard shortcut.                                            |
+| `applyToAll` | bool                     | May be applied to all problems of this constraint at once.                                     |
 
 ### 8.6 Problems
 
@@ -2317,18 +2325,18 @@ Evaluation produces **problems**: `{ constraint, severity, message, target, attr
 
 Metamodel declarations generate built-in constraints automatically. They behave like declared constraints, can be re-rated in `constraints.builtIn`, and their messages are localised by the runtime.
 
-| Id | Generated from | Default severity / enforcement |
-|---|---|---|
-| `std.required` | `required: true` | error / report |
-| `std.facets` | `min`, `max`, `pattern`, `minLength`, … | error / report (and prevent in forms) |
-| `std.unique` | `unique` | error / report |
+| Id                 | Generated from                                                                             | Default severity / enforcement                                |
+|--------------------|--------------------------------------------------------------------------------------------|---------------------------------------------------------------|
+| `std.required`     | `required: true`                                                                           | error / report                                                |
+| `std.facets`       | `min`, `max`, `pattern`, `minLength`, …                                                    | error / report (and prevent in forms)                         |
+| `std.unique`       | `unique`                                                                                   | error / report                                                |
 | `std.multiplicity` | `multiplicity`, `children.min/max`, `perType`, relation end `min/max`, port `multiplicity` | lower bounds: warning / report; upper bounds: error / prevent |
-| `std.endpoints` | relation `source`/`target`, `ports`, `accepts`, `allowSelfLoops`, `allowParallel` | error / prevent |
-| `std.containment` | `children.allowed`, `slots` | error / prevent |
-| `std.acyclic` | `acyclic: true` | error / prevent |
-| `std.references` | references to missing elements | error / report |
-| `std.axisBounds` | axis `min`/`max`, system `bounds` | error / prevent |
-| `std.typeExists` | unknown types in loaded documents | error / report (element preserved, 14.3) |
+| `std.endpoints`    | relation `source`/`target`, `ports`, `accepts`, `allowSelfLoops`, `allowParallel`          | error / prevent                                               |
+| `std.containment`  | `children.allowed`, `slots`                                                                | error / prevent                                               |
+| `std.acyclic`      | `acyclic: true`                                                                            | error / prevent                                               |
+| `std.references`   | references to missing elements                                                             | error / report                                                |
+| `std.axisBounds`   | axis `min`/`max`, system `bounds`                                                          | error / prevent                                               |
+| `std.typeExists`   | unknown types in loaded documents                                                          | error / report (element preserved, 14.3)                      |
 
 ---
 
@@ -2360,17 +2368,17 @@ Behavior declares what happens in response to user actions, beyond the direct ma
 
 ### 9.2 Hooks
 
-| Property | Type | Description |
-|---|---|---|
-| `id` | identifier | **Required.** |
-| `on` | Event or Event[] | `create`, `delete`, `change`, `connect`, `disconnect`, `reconnect`, `reparent`, `move`, `resize`, `paste`, `duplicate`, `retype`, `load`, `save`, `viewpointOpen`. |
-| `for` | TypeRef or TypeRef[] | Element types; absent for diagram-level events (`load`, `save`). |
-| `attribute` | path or path[] | For `change`: only when these attributes change. |
-| `when` | Expression | Condition (context `hook`, 12.3). |
-| `actions` | Action[] | Executed in order. |
-| `phase` | `"before"`, `"after"` | `before` hooks run inside the gesture transaction before constraints and may `abort`; `after` hooks (default) run after the change and before live constraints, in the same undoable transaction. |
-| `order` | int | Ordering among hooks for the same event. |
-| `doc` | Doc | |
+| Property    | Type                  | Description                                                                                                                                                                                       |
+|-------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`        | identifier            | **Required.**                                                                                                                                                                                     |
+| `on`        | Event or Event[]      | `create`, `delete`, `change`, `connect`, `disconnect`, `reconnect`, `reparent`, `move`, `resize`, `paste`, `duplicate`, `retype`, `load`, `save`, `viewpointOpen`.                                |
+| `for`       | TypeRef or TypeRef[]  | Element types; absent for diagram-level events (`load`, `save`).                                                                                                                                  |
+| `attribute` | path or path[]        | For `change`: only when these attributes change.                                                                                                                                                  |
+| `when`      | Expression            | Condition (context `hook`, 12.3).                                                                                                                                                                 |
+| `actions`   | Action[]              | Executed in order.                                                                                                                                                                                |
+| `phase`     | `"before"`, `"after"` | `before` hooks run inside the gesture transaction before constraints and may `abort`; `after` hooks (default) run after the change and before live constraints, in the same undoable transaction. |
+| `order`     | int                   | Ordering among hooks for the same event.                                                                                                                                                          |
+| `doc`       | Doc                   |                                                                                                                                                                                                   |
 
 Hook context variables: `self` (the element after the change), `old` (a snapshot before the change, or `null` for `create`), `event` (`{kind, attribute, oldValue, newValue, source}` where `source` is `"user"`, `"hook"`, `"operation"`, `"layout"`, `"import"`, `"remote"`).
 
@@ -2382,45 +2390,45 @@ Hook context variables: `self` (the element after the change), `old` (a snapshot
 
 Operations are named, documented commands, invoked from tools, context tools, form buttons, quick fixes, keyboard shortcuts or menus.
 
-| Property | Type | Description |
-|---|---|---|
-| `label`, `doc`, `icon`, `shortcut` | | |
-| `for` | TypeRef[], `"selection"`, `"diagram"` | What the operation applies to. For type lists, `self` is the target element; for `selection`, `selection` is the list. |
-| `params` | map → Attribute | Parameters; if present, the runtime shows a generated dialog (or `paramsForm`). Available as `p` in actions. |
-| `paramsForm` | form id | Custom dialog. |
-| `enabled` | Expression | Whether available. |
-| `confirm` | LocalizedText | Confirmation question before running. |
-| `actions` | Action[] | Body, executed as one transaction. |
-| `plugin` | `{name, args}` | Alternatively implemented by a plugin. |
+| Property                           | Type                                  | Description                                                                                                            |
+|------------------------------------|---------------------------------------|------------------------------------------------------------------------------------------------------------------------|
+| `label`, `doc`, `icon`, `shortcut` |                                       |                                                                                                                        |
+| `for`                              | TypeRef[], `"selection"`, `"diagram"` | What the operation applies to. For type lists, `self` is the target element; for `selection`, `selection` is the list. |
+| `params`                           | map → Attribute                       | Parameters; if present, the runtime shows a generated dialog (or `paramsForm`). Available as `p` in actions.           |
+| `paramsForm`                       | form id                               | Custom dialog.                                                                                                         |
+| `enabled`                          | Expression                            | Whether available.                                                                                                     |
+| `confirm`                          | LocalizedText                         | Confirmation question before running.                                                                                  |
+| `actions`                          | Action[]                              | Body, executed as one transaction.                                                                                     |
+| `plugin`                           | `{name, args}`                        | Alternatively implemented by a plugin.                                                                                 |
 
 ### 9.4 Actions
 
 Actions are a small, closed set of declarative steps. **All values in actions are Expressions** (2.5d).
 
-| Action | Form | Effect |
-|---|---|---|
-| `set` | `{ "set": { "attr": expr, … }, "target": expr }` | Assign attributes of `target` (default `self`). |
-| `unset` | `{ "unset": ["attr"], "target": expr }` | Remove stored values. |
-| `create` | `{ "create": { "type": expr, "attributes": {…}, "parent": expr, "slot": expr, "at": expr, "size": expr }, "as": "name" }` | Create a node; the new element is available as `name` in subsequent actions. |
-| `connect` | `{ "connect": { "type": expr, "source": expr, "target": expr, "attributes": {…} }, "as": "name" }` | Create a relation. |
-| `delete` | `{ "delete": expr }` | Delete an element or list. |
-| `move` | `{ "move": { "target": expr, "x": expr, "y": expr, "parent": expr } }` | Change placement (domain values, snapped if `applyToProgrammatic`). |
-| `resize` | `{ "resize": { "target": expr, "width": expr, "height": expr } }` | |
-| `retype` | `{ "retype": { "to": expr, "target": expr } }` | Change the type, keeping compatible attributes and relations. |
-| `reparent` | `{ "reparent": { "target": expr, "parent": expr, "slot": expr } }` | |
-| `let` | `{ "let": { "name": expr } }` | Bind a variable for later actions. |
-| `if` | `{ "if": expr, "then": [ … ], "else": [ … ] }` | Conditional. |
-| `forEach` | `{ "forEach": expr, "as": "item", "do": [ … ] }` | Iterate a list (bounded: lists are finite). |
-| `select` | `{ "select": expr }` | Change the selection. |
-| `reveal` | `{ "reveal": expr }` | Scroll the canvas to elements. |
-| `highlight` | `{ "highlight": expr, "durationMs": 2000 }` | Apply the `highlighted` state. |
-| `editLabel` | `{ "editLabel": { "target": expr, "label": "id" } }` | Start inline editing. |
-| `openForm` | `{ "openForm": { "target": expr, "form": "id" } }` | |
-| `notify` | `{ "notify": { "message": expr, "severity": "info" } }` | Toast message. |
-| `layout` | `{ "layout": { "scope": expr, "algorithm": "id" } }` | Run a layout (section 10). |
-| `abort` | `{ "abort": { "message": expr } }` | Cancel the transaction (only in `before` hooks and operations). |
-| `call` | `{ "call": "operationId", "args": { … } }` | Run another operation. |
-| `plugin` | `{ "plugin": "name", "args": { … } }` | Delegate to a plugin action. |
+| Action      | Form                                                                                                                      | Effect                                                                       |
+|-------------|---------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
+| `set`       | `{ "set": { "attr": expr, … }, "target": expr }`                                                                          | Assign attributes of `target` (default `self`).                              |
+| `unset`     | `{ "unset": ["attr"], "target": expr }`                                                                                   | Remove stored values.                                                        |
+| `create`    | `{ "create": { "type": expr, "attributes": {…}, "parent": expr, "slot": expr, "at": expr, "size": expr }, "as": "name" }` | Create a node; the new element is available as `name` in subsequent actions. |
+| `connect`   | `{ "connect": { "type": expr, "source": expr, "target": expr, "attributes": {…} }, "as": "name" }`                        | Create a relation.                                                           |
+| `delete`    | `{ "delete": expr }`                                                                                                      | Delete an element or list.                                                   |
+| `move`      | `{ "move": { "target": expr, "x": expr, "y": expr, "parent": expr } }`                                                    | Change placement (domain values, snapped if `applyToProgrammatic`).          |
+| `resize`    | `{ "resize": { "target": expr, "width": expr, "height": expr } }`                                                         |                                                                              |
+| `retype`    | `{ "retype": { "to": expr, "target": expr } }`                                                                            | Change the type, keeping compatible attributes and relations.                |
+| `reparent`  | `{ "reparent": { "target": expr, "parent": expr, "slot": expr } }`                                                        |                                                                              |
+| `let`       | `{ "let": { "name": expr } }`                                                                                             | Bind a variable for later actions.                                           |
+| `if`        | `{ "if": expr, "then": [ … ], "else": [ … ] }`                                                                            | Conditional.                                                                 |
+| `forEach`   | `{ "forEach": expr, "as": "item", "do": [ … ] }`                                                                          | Iterate a list (bounded: lists are finite).                                  |
+| `select`    | `{ "select": expr }`                                                                                                      | Change the selection.                                                        |
+| `reveal`    | `{ "reveal": expr }`                                                                                                      | Scroll the canvas to elements.                                               |
+| `highlight` | `{ "highlight": expr, "durationMs": 2000 }`                                                                               | Apply the `highlighted` state.                                               |
+| `editLabel` | `{ "editLabel": { "target": expr, "label": "id" } }`                                                                      | Start inline editing.                                                        |
+| `openForm`  | `{ "openForm": { "target": expr, "form": "id" } }`                                                                        |                                                                              |
+| `notify`    | `{ "notify": { "message": expr, "severity": "info" } }`                                                                   | Toast message.                                                               |
+| `layout`    | `{ "layout": { "scope": expr, "algorithm": "id" } }`                                                                      | Run a layout (section 10).                                                   |
+| `abort`     | `{ "abort": { "message": expr } }`                                                                                        | Cancel the transaction (only in `before` hooks and operations).              |
+| `call`      | `{ "call": "operationId", "args": { … } }`                                                                                | Run another operation.                                                       |
+| `plugin`    | `{ "plugin": "name", "args": { … } }`                                                                                     | Delegate to a plugin action.                                                 |
 
 Every action MAY carry `when` (skip unless true) and `doc`.
 
@@ -2428,12 +2436,12 @@ Every action MAY carry `when` (skip unless true) and `doc`.
 
 **Deletion** (`behavior.deletion`, per type):
 
-| Property | Values | Description |
-|---|---|---|
-| `children` | `"delete"` (default), `"reparent"`, `"forbid"` | What happens to contained elements. `reparent` moves them to the deleted node's parent. |
-| `relations` | `"delete"` (default), `"forbid"`, `"reconnect"` | Attached edges. `reconnect` bridges incoming to outgoing edges of the same type (removing a step from a chain). |
-| `references` | `"unset"` (default), `"delete-referencing"`, `"forbid"` | Reference attributes pointing at the element. |
-| `confirm` | LocalizedText | Ask before deleting. |
+| Property     | Values                                                  | Description                                                                                                     |
+|--------------|---------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| `children`   | `"delete"` (default), `"reparent"`, `"forbid"`          | What happens to contained elements. `reparent` moves them to the deleted node's parent.                         |
+| `relations`  | `"delete"` (default), `"forbid"`, `"reconnect"`         | Attached edges. `reconnect` bridges incoming to outgoing edges of the same type (removing a step from a chain). |
+| `references` | `"unset"` (default), `"delete-referencing"`, `"forbid"` | Reference attributes pointing at the element.                                                                   |
+| `confirm`    | LocalizedText                                           | Ask before deleting.                                                                                            |
 
 **Clipboard** (`behavior.clipboard`): `relations` (`"internal"` — only edges between copied elements, `"all"`, `"none"`), `ids` (`"regenerate"`), `names` (`"keep"`, `"suffix"` — adds " (copy)" to the label attribute), `offset` (canvas offset on paste; on time axes a duration), `crossDocument` (bool), `formats` (clipboard MIME types offered: `application/vnd.dedl.fragment+json`, `image/svg+xml`, `text/plain`).
 
@@ -2466,30 +2474,30 @@ Automatic layout arranges nodes and routes edges. DEDL does not define layout al
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `algorithms` | map → LayoutConfig | Named configurations. |
-| `default` | name | Used by the "Arrange" command and `trigger`. |
-| `containers` | map TypeRef → name or LayoutConfig | Layout inside containers of a type (in addition to ContainerSpec's simple layouts). |
-| `trigger` | `"manual"`, `"onCreate"`, `"onChange"`, `"onLoadIfMissing"`, `"always"` | When layout runs automatically. `onLoadIfMissing`: when a document lacks view data (for example generated by a tool). `always`: positions are never user-controlled (pure layout-driven diagrams). Default `"manual"`. |
-| `respect` | `"none"`, `"pinned"`, `"all"` | Which user positions survive automatic layout: none, only pinned elements (users can pin), or all existing (incremental layout places new elements only). Default `"pinned"`. |
-| `incremental` | bool | Prefer stability: minimise movement of existing elements. |
-| `animate` | `{durationMs, easing}` or `false` | |
-| `doc` | Doc | |
+| Property      | Type                                                                    | Description                                                                                                                                                                                                            |
+|---------------|-------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `algorithms`  | map → LayoutConfig                                                      | Named configurations.                                                                                                                                                                                                  |
+| `default`     | name                                                                    | Used by the "Arrange" command and `trigger`.                                                                                                                                                                           |
+| `containers`  | map TypeRef → name or LayoutConfig                                      | Layout inside containers of a type (in addition to ContainerSpec's simple layouts).                                                                                                                                    |
+| `trigger`     | `"manual"`, `"onCreate"`, `"onChange"`, `"onLoadIfMissing"`, `"always"` | When layout runs automatically. `onLoadIfMissing`: when a document lacks view data (for example generated by a tool). `always`: positions are never user-controlled (pure layout-driven diagrams). Default `"manual"`. |
+| `respect`     | `"none"`, `"pinned"`, `"all"`                                           | Which user positions survive automatic layout: none, only pinned elements (users can pin), or all existing (incremental layout places new elements only). Default `"pinned"`.                                          |
+| `incremental` | bool                                                                    | Prefer stability: minimise movement of existing elements.                                                                                                                                                              |
+| `animate`     | `{durationMs, easing}` or `false`                                       |                                                                                                                                                                                                                        |
+| `doc`         | Doc                                                                     |                                                                                                                                                                                                                        |
 
 **LayoutConfig**
 
-| Property | Type | Description |
-|---|---|---|
-| `algorithm` | string | `"none"`, `"layered"` (Sugiyama), `"tree"`, `"mrtree"`, `"radial"`, `"force"`, `"stress"`, `"orthogonal"`, `"box"`, `"grid"`, `"circular"`, `"rectpacking"`, `"lanes"` (assign nodes to ordinal bands, then layer within bands), `"sequence"` (sequence diagrams), `"elk:<id>"` (any ELK algorithm id), `"plugin:<name>"`. |
-| `direction` | `"right"`, `"down"`, `"left"`, `"up"` | Main flow direction. |
-| `spacing` | `{node, layer, edge, component, port}` | Canvas units. |
-| `edgeRouting` | Routing | Routing applied to edges with `routing: "layout"` or when `overrideRouting` is true. |
-| `overrideRouting` | bool | Layout replaces user bendpoints. |
-| `options` | map string → JSON | Pass-through options for the algorithm (ELK option ids recommended for interoperability). Unknown options are ignored. |
-| `scope` | `"all"`, `"selection"`, `"component"` | Default scope when invoked. |
-| `includeViewOnly` | bool | Whether notes and annotations take part. |
-| `doc` | Doc | |
+| Property          | Type                                   | Description                                                                                                                                                                                                                                                                                                                |
+|-------------------|----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `algorithm`       | string                                 | `"none"`, `"layered"` (Sugiyama), `"tree"`, `"mrtree"`, `"radial"`, `"force"`, `"stress"`, `"orthogonal"`, `"box"`, `"grid"`, `"circular"`, `"rectpacking"`, `"lanes"` (assign nodes to ordinal bands, then layer within bands), `"sequence"` (sequence diagrams), `"elk:<id>"` (any ELK algorithm id), `"plugin:<name>"`. |
+| `direction`       | `"right"`, `"down"`, `"left"`, `"up"`  | Main flow direction.                                                                                                                                                                                                                                                                                                       |
+| `spacing`         | `{node, layer, edge, component, port}` | Canvas units.                                                                                                                                                                                                                                                                                                              |
+| `edgeRouting`     | Routing                                | Routing applied to edges with `routing: "layout"` or when `overrideRouting` is true.                                                                                                                                                                                                                                       |
+| `overrideRouting` | bool                                   | Layout replaces user bendpoints.                                                                                                                                                                                                                                                                                           |
+| `options`         | map string → JSON                      | Pass-through options for the algorithm (ELK option ids recommended for interoperability). Unknown options are ignored.                                                                                                                                                                                                     |
+| `scope`           | `"all"`, `"selection"`, `"component"`  | Default scope when invoked.                                                                                                                                                                                                                                                                                                |
+| `includeViewOnly` | bool                                   | Whether notes and annotations take part.                                                                                                                                                                                                                                                                                   |
+| `doc`             | Doc                                    |                                                                                                                                                                                                                                                                                                                            |
 
 **Interaction with coordinate systems.** Layout only assigns coordinates whose PlacementSource is `free` or `layout`. Bound coordinates (a task's start date) are never changed by layout; algorithms receive them as fixed constraints. For example, `"lanes"` on a schedule keeps x (time) fixed and only packs y within bands. Layout results are snapped with the rules of the coordinate system unless `options["dedl.snap"]` is `false`.
 
@@ -2522,26 +2530,26 @@ The persistence layer defines exactly how documents — the diagrams users draw 
 
 ### 11.2 Formats and encoding
 
-| Property | Type | Description |
-|---|---|---|
-| `format` | `"json"` (default), `"yaml"`, `"jsonl"`, `"cbor"`, `"plugin:<name>"` | Serialization. All formats encode the same logical document (11.4). `jsonl` writes one element per line, which merges particularly well. `cbor` is for large binary-efficient storage. |
-| `encoding` | `"utf-8"` | Only UTF-8 is allowed. |
-| `indent` | int or `"tab"` | Default 2. `0` writes minified JSON. |
-| `newline` | `"lf"`, `"crlf"` | Default `"lf"`. |
-| `finalNewline` | bool | Default `true`. |
-| `compression` | `"none"`, `"gzip"`, `"zip-bundle"` | `zip-bundle` stores model, views and binary assets (images) in one archive with a manifest. |
-| `mediaType` | string | Media type of documents. |
+| Property       | Type                                                                 | Description                                                                                                                                                                            |
+|----------------|----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `format`       | `"json"` (default), `"yaml"`, `"jsonl"`, `"cbor"`, `"plugin:<name>"` | Serialization. All formats encode the same logical document (11.4). `jsonl` writes one element per line, which merges particularly well. `cbor` is for large binary-efficient storage. |
+| `encoding`     | `"utf-8"`                                                            | Only UTF-8 is allowed.                                                                                                                                                                 |
+| `indent`       | int or `"tab"`                                                       | Default 2. `0` writes minified JSON.                                                                                                                                                   |
+| `newline`      | `"lf"`, `"crlf"`                                                     | Default `"lf"`.                                                                                                                                                                        |
+| `finalNewline` | bool                                                                 | Default `true`.                                                                                                                                                                        |
+| `compression`  | `"none"`, `"gzip"`, `"zip-bundle"`                                   | `zip-bundle` stores model, views and binary assets (images) in one archive with a manifest.                                                                                            |
+| `mediaType`    | string                                                               | Media type of documents.                                                                                                                                                               |
 
 YAML output MUST quote strings that would otherwise be read as other types (the "Norway problem": `no`, `yes`, `on`, `off`, `~`, numeric-looking strings, dates) and MUST NOT use anchors, aliases or tags.
 
 ### 11.3 Files
 
-| Property | Type | Description |
-|---|---|---|
-| `mode` | `"single"` (default), `"split"`, `"per-element"`, `"bundle"` | `single`: one file with model and views. `split`: model and view data in separate files, so layout edits never touch the model file. `per-element`: one file per top-level element in a directory plus an index (for very large models edited by teams). `bundle`: see `compression: "zip-bundle"`. |
-| `model`, `view`, `index` | pattern | File name patterns; `{name}` is the document name, `{id}` and `{type}` the element's id and type for `per-element`. |
-| `assets` | `{mode, dir}` | Binary assets: `"inline"` (base64), `"external"` (files in `dir`, referenced by relative URI), `"bundle"`. |
-| `lock` | bool | Write a lock file while open (for file-based single-user editing). |
+| Property                 | Type                                                         | Description                                                                                                                                                                                                                                                                                         |
+|--------------------------|--------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `mode`                   | `"single"` (default), `"split"`, `"per-element"`, `"bundle"` | `single`: one file with model and views. `split`: model and view data in separate files, so layout edits never touch the model file. `per-element`: one file per top-level element in a directory plus an index (for very large models edited by teams). `bundle`: see `compression: "zip-bundle"`. |
+| `model`, `view`, `index` | pattern                                                      | File name patterns; `{name}` is the document name, `{id}` and `{type}` the element's id and type for `per-element`.                                                                                                                                                                                 |
+| `assets`                 | `{mode, dir}`                                                | Binary assets: `"inline"` (base64), `"external"` (files in `dir`, referenced by relative URI), `"bundle"`.                                                                                                                                                                                          |
+| `lock`                   | bool                                                         | Write a lock file while open (for file-based single-user editing).                                                                                                                                                                                                                                  |
 
 ### 11.4 Logical document structure
 
@@ -2588,16 +2596,16 @@ Independently of format and file split, a document has this logical structure (J
 
 **Element record** (`elements[]`):
 
-| Property | Type | Description |
-|---|---|---|
-| `id` | string | **Required**, unique within the document. |
-| `type` | string | **Required**, a concrete node type (qualified by import alias if imported). |
-| `attributes` | object | Stored attribute values (omitting unset and, if `omitDefaults`, default values). Attribute values follow 4.2 representations; references are ids. |
-| `parent` | id | Containing element (omitted for top-level). |
-| `slot` | string | Slot within the parent (4.8). |
-| `order` | int or string | Position among siblings when `children.ordered` (fractional-index strings are RECOMMENDED for collaboration: `"a0"`, `"a0V"`). |
-| `ports` | `{id, type, attributes}`[] | Port instances. `type` is the port name (`"in"`). |
-| `x-*` | | Extensions. |
+| Property     | Type                       | Description                                                                                                                                       |
+|--------------|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`         | string                     | **Required**, unique within the document.                                                                                                         |
+| `type`       | string                     | **Required**, a concrete node type (qualified by import alias if imported).                                                                       |
+| `attributes` | object                     | Stored attribute values (omitting unset and, if `omitDefaults`, default values). Attribute values follow 4.2 representations; references are ids. |
+| `parent`     | id                         | Containing element (omitted for top-level).                                                                                                       |
+| `slot`       | string                     | Slot within the parent (4.8).                                                                                                                     |
+| `order`      | int or string              | Position among siblings when `children.ordered` (fractional-index strings are RECOMMENDED for collaboration: `"a0"`, `"a0V"`).                    |
+| `ports`      | `{id, type, attributes}`[] | Port instances. `type` is the port name (`"in"`).                                                                                                 |
+| `x-*`        |                            | Extensions.                                                                                                                                       |
 
 Nesting is expressed by `parent`, not by physical nesting, so moving an element between containers changes one line. Runtimes MAY offer a nested pretty-print as an alternative `layout: "nested"`, but the flat form is canonical.
 
@@ -2605,48 +2613,48 @@ Nesting is expressed by `parent`, not by physical nesting, so moving an element 
 
 **View record** (`views[]`): one per diagram (a document can hold several diagrams of the same model, one per viewpoint or several of one viewpoint).
 
-| Property | Type | Description |
-|---|---|---|
-| `id` | string | View id. |
-| `viewpoint` | string | Viewpoint name. |
-| `name` | string | Diagram name shown in tabs. |
-| `viewport` | `{x, y, zoom}` | Last viewport, if `viewport` is in `view.store`. |
-| `nodes` | map id → NodeView | Placement of nodes in this view. Elements not listed are hidden in this view (unless the viewpoint auto-includes them, in which case layout places them). |
-| `edges` | map id → EdgeView | Routing and label data. |
-| `viewOnly` | `{id, type, attributes}`[] | View-only elements (notes, frames, images, free text) that belong to this view only. |
-| `guides` | `{axis, value}`[] | User guides. |
-| `settings` | object | Per-view settings (grid visible, snapping on/off, theme mode). |
+| Property    | Type                       | Description                                                                                                                                               |
+|-------------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`        | string                     | View id.                                                                                                                                                  |
+| `viewpoint` | string                     | Viewpoint name.                                                                                                                                           |
+| `name`      | string                     | Diagram name shown in tabs.                                                                                                                               |
+| `viewport`  | `{x, y, zoom}`             | Last viewport, if `viewport` is in `view.store`.                                                                                                          |
+| `nodes`     | map id → NodeView          | Placement of nodes in this view. Elements not listed are hidden in this view (unless the viewpoint auto-includes them, in which case layout places them). |
+| `edges`     | map id → EdgeView          | Routing and label data.                                                                                                                                   |
+| `viewOnly`  | `{id, type, attributes}`[] | View-only elements (notes, frames, images, free text) that belong to this view only.                                                                      |
+| `guides`    | `{axis, value}`[]          | User guides.                                                                                                                                              |
+| `settings`  | object                     | Per-view settings (grid visible, snapping on/off, theme mode).                                                                                            |
 
 **NodeView**:
 
-| Property | Description |
-|---|---|
-| `x`, `y` | Position in domain values of the placement's system (numbers, timestamps, band references). Omitted for bound or computed coordinates — **bound values live only in the model**, never duplicated in the view. |
-| `w`, `h` | Size in domain units (durations as ISO 8601 on time axes). Omitted when bound, computed or equal to the default (with `omitDefaults`). |
-| `x2`, `y2` | When the placement uses `x2`/`y2` and they are free. |
-| `angle`, `radius` | Polar placements. |
-| `rotation` | Degrees. |
-| `z` | Integer z-order among siblings. |
-| `collapsed` | bool. |
-| `pinned` | bool (layout `respect: "pinned"`). |
-| `params` | Shape parameter values adjusted by handles (6.8). |
-| `labels` | map label id → `{dx, dy}` offsets. |
-| `ports` | map port id → `{side, position}`. |
-| `compartments` | map id → `{collapsed}`. |
-| `style` | Style overrides, restricted to `view.styleOverrides`. |
-| `hidden` | bool — element placed but hidden. |
+| Property          | Description                                                                                                                                                                                                    |
+|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `x`, `y`          | Position in domain values of the placement's system (numbers, timestamps, band references). Omitted for bound or computed coordinates — **bound values live only in the model**, never duplicated in the view. |
+| `w`, `h`          | Size in domain units (durations as ISO 8601 on time axes). Omitted when bound, computed or equal to the default (with `omitDefaults`).                                                                         |
+| `x2`, `y2`        | When the placement uses `x2`/`y2` and they are free.                                                                                                                                                           |
+| `angle`, `radius` | Polar placements.                                                                                                                                                                                              |
+| `rotation`        | Degrees.                                                                                                                                                                                                       |
+| `z`               | Integer z-order among siblings.                                                                                                                                                                                |
+| `collapsed`       | bool.                                                                                                                                                                                                          |
+| `pinned`          | bool (layout `respect: "pinned"`).                                                                                                                                                                             |
+| `params`          | Shape parameter values adjusted by handles (6.8).                                                                                                                                                              |
+| `labels`          | map label id → `{dx, dy}` offsets.                                                                                                                                                                             |
+| `ports`           | map port id → `{side, position}`.                                                                                                                                                                              |
+| `compartments`    | map id → `{collapsed}`.                                                                                                                                                                                        |
+| `style`           | Style overrides, restricted to `view.styleOverrides`.                                                                                                                                                          |
+| `hidden`          | bool — element placed but hidden.                                                                                                                                                                              |
 
 **EdgeView**: `waypoints` (list of Points in domain values), `sourceAnchor`, `targetAnchor` (`[fx, fy]` fixed anchors), `controlPoints` (for bezier), `labels` (map id → `{at, dx, dy}`), `routing` (per-edge override if allowed), `style`, `z`, `hidden`.
 
 ### 11.5 Identifiers
 
-| Property | Type | Description |
-|---|---|---|
-| `strategy` | `"uuid-v4"`, `"uuid-v7"` (default), `"ulid"`, `"nanoid"`, `"sequential"`, `"natural"`, `"cel"` | How new ids are generated. `uuid-v7` and `ulid` are time-ordered, which keeps `id`-sorted files in creation order and helps merges. `sequential` uses per-type counters (`State_1`) and is only suitable for single-user editing. `natural` derives ids from `key` attributes (unique by constraint). `cel` evaluates `expression`. |
-| `prefix` | string or map TypeRef → string | Type prefixes (`"st_"`), making ids self-describing in diffs. |
-| `expression` | Expression | For `cel`: context `create`, must return a string; uniqueness is enforced by appending `-2`, `-3`, … |
-| `stable` | bool | Ids never change once assigned, even if `natural` keys change (the first derived id is kept). Default `true`. |
-| `pattern` | regex | Allowed id syntax; default `^[A-Za-z0-9_.:#-]{1,128}$`. |
+| Property     | Type                                                                                           | Description                                                                                                                                                                                                                                                                                                                         |
+|--------------|------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `strategy`   | `"uuid-v4"`, `"uuid-v7"` (default), `"ulid"`, `"nanoid"`, `"sequential"`, `"natural"`, `"cel"` | How new ids are generated. `uuid-v7` and `ulid` are time-ordered, which keeps `id`-sorted files in creation order and helps merges. `sequential` uses per-type counters (`State_1`) and is only suitable for single-user editing. `natural` derives ids from `key` attributes (unique by constraint). `cel` evaluates `expression`. |
+| `prefix`     | string or map TypeRef → string                                                                 | Type prefixes (`"st_"`), making ids self-describing in diffs.                                                                                                                                                                                                                                                                       |
+| `expression` | Expression                                                                                     | For `cel`: context `create`, must return a string; uniqueness is enforced by appending `-2`, `-3`, …                                                                                                                                                                                                                                |
+| `stable`     | bool                                                                                           | Ids never change once assigned, even if `natural` keys change (the first derived id is kept). Default `true`.                                                                                                                                                                                                                       |
+| `pattern`    | regex                                                                                          | Allowed id syntax; default `^[A-Za-z0-9_.:#-]{1,128}$`.                                                                                                                                                                                                                                                                             |
 
 ### 11.6 View data and style overrides
 
@@ -2656,15 +2664,15 @@ Nesting is expressed by `parent`, not by physical nesting, so moving an element 
 
 ### 11.7 Ordering, precision and canonical form
 
-| Property | Type | Description |
-|---|---|---|
-| `ordering.elements` | `"creation"`, `"id"`, `"type-then-id"`, `"tree"`, `"cel"` | Order of `elements` and `relations`. `tree` writes parents before children (depth-first, siblings by `order`). Default `"id"`. |
-| `ordering.orderBy` | Expression | For `cel`: sort key per element. |
-| `ordering.keys` | `"canonical"`, `"alphabetical"` | Key order within objects. `canonical`: the order of this specification's tables (id, type, parent, slot, order, attributes, ports; then x-); attribute keys in metamodel declaration order. |
-| `omitDefaults` | bool | Do not write attribute values equal to their default, view sizes equal to the notation default, or empty collections. Default `true`. |
-| `precision` | `{canvas, numbers}` | Decimal places for canvas coordinates (default 2) and for `number` attributes without `precision` facet (default: shortest round-trip representation). |
-| `timestamps` | `{format, timezone}` | `format`: `"rfc3339"` (default) or `"epoch-ms"`; `timezone`: `"utc"` (normalise to `Z`) or `"preserve"` (keep the offset entered). |
-| `canonical` | bool | Follow RFC 8785 (JSON Canonicalization Scheme) number and string serialization. Default `true`. |
+| Property            | Type                                                      | Description                                                                                                                                                                                 |
+|---------------------|-----------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ordering.elements` | `"creation"`, `"id"`, `"type-then-id"`, `"tree"`, `"cel"` | Order of `elements` and `relations`. `tree` writes parents before children (depth-first, siblings by `order`). Default `"id"`.                                                              |
+| `ordering.orderBy`  | Expression                                                | For `cel`: sort key per element.                                                                                                                                                            |
+| `ordering.keys`     | `"canonical"`, `"alphabetical"`                           | Key order within objects. `canonical`: the order of this specification's tables (id, type, parent, slot, order, attributes, ports; then x-); attribute keys in metamodel declaration order. |
+| `omitDefaults`      | bool                                                      | Do not write attribute values equal to their default, view sizes equal to the notation default, or empty collections. Default `true`.                                                       |
+| `precision`         | `{canvas, numbers}`                                       | Decimal places for canvas coordinates (default 2) and for `number` attributes without `precision` facet (default: shortest round-trip representation).                                      |
+| `timestamps`        | `{format, timezone}`                                      | `format`: `"rfc3339"` (default) or `"epoch-ms"`; `timezone`: `"utc"` (normalise to `Z`) or `"preserve"` (keep the offset entered).                                                          |
+| `canonical`         | bool                                                      | Follow RFC 8785 (JSON Canonicalization Scheme) number and string serialization. Default `true`.                                                                                             |
 
 **Determinism requirement.** Given the same logical document and definition, a conforming writer MUST produce byte-identical output. In particular: no volatile metadata unless listed in `metadata`; `modifiedAt` only changes when content changes; maps are written in the declared key order; floating-point values are rounded to `precision` then serialized per RFC 8785.
 
@@ -2702,19 +2710,19 @@ Migrations upgrade documents written with older language versions. They run on l
 ]
 ```
 
-| Step | Fields | Effect |
-|---|---|---|
-| `renameType` | `from`, `to` | Changes `type` of elements, relations and references. |
-| `renameAttribute` | `type`, `from`, `to` | Renames stored attribute keys (including in subtypes). |
-| `deleteType` | `type`, `mode` (`"delete"`, `"keep-as-unknown"`) | Removes elements of a type (and attached relations). |
-| `deleteAttribute` | `type`, `attribute` | |
-| `setAttribute` | `type`, `attribute`, `value` (Expression), `when` | Sets a value, for example a default for a new required attribute. |
-| `convertAttribute` | `type`, `attribute`, `cel` | Converts a value; `value` is the old value. |
-| `transform` | `type`, `cel` | Returns a replacement `attributes` map; `element` is the raw element record as a map. |
-| `retype` | `type`, `to`, `when` | Changes the type conditionally. |
-| `convertView` | `system`, `x`, `y`, `w`, `h` | Converts stored view coordinates (unit or origin changes). |
-| `renamePort`, `renameSlot` | | |
-| `plugin` | `name`, `args` | Custom migration. |
+| Step                       | Fields                                            | Effect                                                                                |
+|----------------------------|---------------------------------------------------|---------------------------------------------------------------------------------------|
+| `renameType`               | `from`, `to`                                      | Changes `type` of elements, relations and references.                                 |
+| `renameAttribute`          | `type`, `from`, `to`                              | Renames stored attribute keys (including in subtypes).                                |
+| `deleteType`               | `type`, `mode` (`"delete"`, `"keep-as-unknown"`)  | Removes elements of a type (and attached relations).                                  |
+| `deleteAttribute`          | `type`, `attribute`                               |                                                                                       |
+| `setAttribute`             | `type`, `attribute`, `value` (Expression), `when` | Sets a value, for example a default for a new required attribute.                     |
+| `convertAttribute`         | `type`, `attribute`, `cel`                        | Converts a value; `value` is the old value.                                           |
+| `transform`                | `type`, `cel`                                     | Returns a replacement `attributes` map; `element` is the raw element record as a map. |
+| `retype`                   | `type`, `to`, `when`                              | Changes the type conditionally.                                                       |
+| `convertView`              | `system`, `x`, `y`, `w`, `h`                      | Converts stored view coordinates (unit or origin changes).                            |
+| `renamePort`, `renameSlot` |                                                   |                                                                                       |
+| `plugin`                   | `name`, `args`                                    | Custom migration.                                                                     |
 
 Migration expressions run in the `migration` context (12.3), which sees raw records as maps (`element`, `value`, `document`) rather than typed elements, because the old document does not conform to the new metamodel. A migration that fails aborts loading; the original file is never modified until the user saves. Runtimes SHOULD tell users that a document was migrated and to which version, and MAY keep a backup.
 
@@ -2722,15 +2730,15 @@ Documents with a **newer** minor or patch language version than the loaded defin
 
 ### 11.10 Collaboration
 
-| Property | Type | Description |
-|---|---|---|
-| `mode` | `"none"` (default), `"lock"`, `"ot"`, `"crdt"` | Single user; pessimistic element locks; operational transformation; conflict-free replicated data types. |
-| `engine` | `"yjs"`, `"automerge"`, `"plugin:<name>"` | CRDT or OT engine. |
-| `granularity` | `"element"`, `"attribute"` | Conflict unit. `attribute` merges concurrent edits of different attributes of one element. |
-| `text` | `"replace"`, `"merge"` | Concurrent edits of `text`/`string` attributes: last writer wins or character-level merge. |
-| `ordering` | `"fractional-index"` | Order keys for ordered children and lists that merge without renumbering. |
-| `presence` | bool | Share cursors and selections. |
-| `conflicts` | `"last-writer-wins"`, `"report"` | Whether semantic conflicts (both sides valid, the merge invalid) are reported as constraint problems attributed to the merge. |
+| Property      | Type                                           | Description                                                                                                                   |
+|---------------|------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| `mode`        | `"none"` (default), `"lock"`, `"ot"`, `"crdt"` | Single user; pessimistic element locks; operational transformation; conflict-free replicated data types.                      |
+| `engine`      | `"yjs"`, `"automerge"`, `"plugin:<name>"`      | CRDT or OT engine.                                                                                                            |
+| `granularity` | `"element"`, `"attribute"`                     | Conflict unit. `attribute` merges concurrent edits of different attributes of one element.                                    |
+| `text`        | `"replace"`, `"merge"`                         | Concurrent edits of `text`/`string` attributes: last writer wins or character-level merge.                                    |
+| `ordering`    | `"fractional-index"`                           | Order keys for ordered children and lists that merge without renumbering.                                                     |
+| `presence`    | bool                                           | Share cursors and selections.                                                                                                 |
+| `conflicts`   | `"last-writer-wins"`, `"report"`               | Whether semantic conflicts (both sides valid, the merge invalid) are reported as constraint problems attributed to the merge. |
 
 The CRDT state is a transport concern; the persisted document remains the canonical form of 11.4. Constraints are re-evaluated after merges.
 
@@ -2748,16 +2756,16 @@ DEDL uses CEL as specified at https://github.com/google/cel-spec, with these sta
 
 ### 12.2 DEDL types
 
-| CEL type | Fields and methods |
-|---|---|
-| `Element` (nodes, relations, ports, diagram) | `id` (string), `type` (string), `kind` (`"node"`, `"relation"`, `"port"`, `"diagram"`), every attribute as a field (typed from the metamodel; references resolve to `Element` or `null`), `isA(typeName) → bool`, `isTagged(tag) → bool`, `view → ViewData` (placement of the element in the current view, `null` in headless contexts), `label() → string` (value of `labelAttribute`). |
-| Node-specific | `parent → Element?`, `owner → Element` (parent or diagram), `slot → string`, `children → list(Element)`, `childrenOfType(t)`, `descendants()`, `ancestors()`, `ancestorsOfType(t)`, `depth() → int`, `ports → list(Element)`, `portsOfType(name)`, `incoming → list(Element)`, `outgoing → list(Element)`, `incomingOf(relType)`, `outgoingOf(relType)`, `neighbors()`, `successors(relType)`, `predecessors(relType)`, `reachable(relType) → list(Element)` (transitive successors, excluding self unless on a cycle), `inCycle(relType) → bool`. |
-| Relation-specific | `source → Element`, `target → Element`, `sourcePort`, `targetPort` (`Element?`), `other(e) → Element` (the opposite end). |
-| Port-specific | `owner → Element`, `connections → list(Element)`, `direction → string`. |
-| Diagram | `nodes → list(Element)` (model nodes, not view-only), `relations`, `elements` (both), `nodesOfType(t)`, `relationsOfType(t)`, `elementById(id) → Element?`, `hasCycle(relType) → bool`, `viewOnly → list(Element)` (in the current view), diagram attributes as fields. |
-| `ViewData` | `x`, `y`, `x2`, `y2`, `width`, `height` (domain values, `dyn`: `double`, `timestamp`, `duration` or band id), `bounds → Bounds` (canvas units), `collapsed`, `rotation`, `z`, `pinned`, `params` (map). |
-| `Bounds` | `x`, `y`, `width`, `height`, `x2`, `y2` (canvas or domain units depending on the context, as documented there), `center() → list(double)`, `intersects(Bounds) → bool`, `contains(Bounds) → bool`. |
-| `Env` | `now → timestamp`, `locale → string`, `mode → string` (theme mode), `zoom → double`, `user → map` (`id`, `name`; empty unless the runtime is configured to expose it), `viewpoint → string`, `readOnly → bool`. |
+| CEL type                                     | Fields and methods                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Element` (nodes, relations, ports, diagram) | `id` (string), `type` (string), `kind` (`"node"`, `"relation"`, `"port"`, `"diagram"`), every attribute as a field (typed from the metamodel; references resolve to `Element` or `null`), `isA(typeName) → bool`, `isTagged(tag) → bool`, `view → ViewData` (placement of the element in the current view, `null` in headless contexts), `label() → string` (value of `labelAttribute`).                                                                                                                                                           |
+| Node-specific                                | `parent → Element?`, `owner → Element` (parent or diagram), `slot → string`, `children → list(Element)`, `childrenOfType(t)`, `descendants()`, `ancestors()`, `ancestorsOfType(t)`, `depth() → int`, `ports → list(Element)`, `portsOfType(name)`, `incoming → list(Element)`, `outgoing → list(Element)`, `incomingOf(relType)`, `outgoingOf(relType)`, `neighbors()`, `successors(relType)`, `predecessors(relType)`, `reachable(relType) → list(Element)` (transitive successors, excluding self unless on a cycle), `inCycle(relType) → bool`. |
+| Relation-specific                            | `source → Element`, `target → Element`, `sourcePort`, `targetPort` (`Element?`), `other(e) → Element` (the opposite end).                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Port-specific                                | `owner → Element`, `connections → list(Element)`, `direction → string`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| Diagram                                      | `nodes → list(Element)` (model nodes, not view-only), `relations`, `elements` (both), `nodesOfType(t)`, `relationsOfType(t)`, `elementById(id) → Element?`, `hasCycle(relType) → bool`, `viewOnly → list(Element)` (in the current view), diagram attributes as fields.                                                                                                                                                                                                                                                                            |
+| `ViewData`                                   | `x`, `y`, `x2`, `y2`, `width`, `height` (domain values, `dyn`: `double`, `timestamp`, `duration` or band id), `bounds → Bounds` (canvas units), `collapsed`, `rotation`, `z`, `pinned`, `params` (map).                                                                                                                                                                                                                                                                                                                                            |
+| `Bounds`                                     | `x`, `y`, `width`, `height`, `x2`, `y2` (canvas or domain units depending on the context, as documented there), `center() → list(double)`, `intersects(Bounds) → bool`, `contains(Bounds) → bool`.                                                                                                                                                                                                                                                                                                                                                 |
+| `Env`                                        | `now → timestamp`, `locale → string`, `mode → string` (theme mode), `zoom → double`, `user → map` (`id`, `name`; empty unless the runtime is configured to expose it), `viewpoint → string`, `readOnly → bool`.                                                                                                                                                                                                                                                                                                                                    |
 
 Attribute types map to CEL types per 4.2; enum values are strings; structs are `map(string, dyn)` with statically known fields; `many` attributes are lists.
 
@@ -2765,57 +2773,57 @@ Attribute types map to CEL types per 4.2; enum values are strings; structs are `
 
 The context of an expression determines its variables. Validators type-check each expression in exactly one context.
 
-| Context | Used by | Variables |
-|---|---|---|
-| `element` | derived attributes, labels, styles conditions, variants, visibility, tooltips, markers, notation Bindables, `form.visible` of embedded forms | `self`, `diagram`, `env` |
-| `compartmentItem` | `itemText`, `itemIcon`, `itemStyle` | `self`, `item`, `index`, `diagram`, `env` |
-| `shape` | GeomExpr in shapes, markers, handles, form regions | `w`, `h`, `p`, `self`, `env`; in markers additionally `sw` (stroke width) |
-| `handle` | `Handle.value`, `yValue` | as `shape`, plus `px`, `py` |
-| `placement` | computed placement sources | `self`, `diagram`, `env`, `parent`, `axis` (`{kind, min, max}`) |
-| `placementWrite` | placement `write` actions | as `placement`, plus `value` (snapped domain value) |
-| `snap` | CEL snap rules | `value`, `axis`, `zoom`, `self`, `parent`, `diagram` |
-| `categories` | ordinal `categories` expressions | `diagram`, `env` |
-| `constraint` | invariant `when`, `rule`, `message`, `target`, `severity`, fix `when` | `self`, `diagram`, `env` (`env.now` is fixed at the start of a validation run) |
-| `gesture:<kind>` | gesture constraints | per 8.4 |
-| `create` | attribute CEL defaults, tool `initial`, id `expression` | `diagram`, `env`, `parent`, `elementType`, `position` |
-| `form` | form `visible`, `enabled`, `validate`, `options` | `self`, `value` (current field value), `diagram`, `env` |
-| `hook` | hook `when` and actions | `self`, `old`, `event`, `diagram`, `env`, plus `let`/`as` bindings |
-| `operation` | operation `enabled` and actions | `self` or `selection`, `p`, `diagram`, `env`, plus bindings |
-| `template` | template attribute and position expressions | `p`, `diagram`, `env`, `refs` (map of created elements by ref) |
-| `migration` | migration steps | `element` (raw record map), `value`, `document` (raw map), `from`, `to` (version strings) |
-| `function` | user functions | parameters, plus `diagram`/`env` if declared in `uses` |
+| Context           | Used by                                                                                                                                      | Variables                                                                                 |
+|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| `element`         | derived attributes, labels, styles conditions, variants, visibility, tooltips, markers, notation Bindables, `form.visible` of embedded forms | `self`, `diagram`, `env`                                                                  |
+| `compartmentItem` | `itemText`, `itemIcon`, `itemStyle`                                                                                                          | `self`, `item`, `index`, `diagram`, `env`                                                 |
+| `shape`           | GeomExpr in shapes, markers, handles, form regions                                                                                           | `w`, `h`, `p`, `self`, `env`; in markers additionally `sw` (stroke width)                 |
+| `handle`          | `Handle.value`, `yValue`                                                                                                                     | as `shape`, plus `px`, `py`                                                               |
+| `placement`       | computed placement sources                                                                                                                   | `self`, `diagram`, `env`, `parent`, `axis` (`{kind, min, max}`)                           |
+| `placementWrite`  | placement `write` actions                                                                                                                    | as `placement`, plus `value` (snapped domain value)                                       |
+| `snap`            | CEL snap rules                                                                                                                               | `value`, `axis`, `zoom`, `self`, `parent`, `diagram`                                      |
+| `categories`      | ordinal `categories` expressions                                                                                                             | `diagram`, `env`                                                                          |
+| `constraint`      | invariant `when`, `rule`, `message`, `target`, `severity`, fix `when`                                                                        | `self`, `diagram`, `env` (`env.now` is fixed at the start of a validation run)            |
+| `gesture:<kind>`  | gesture constraints                                                                                                                          | per 8.4                                                                                   |
+| `create`          | attribute CEL defaults, tool `initial`, id `expression`                                                                                      | `diagram`, `env`, `parent`, `elementType`, `position`                                     |
+| `form`            | form `visible`, `enabled`, `validate`, `options`                                                                                             | `self`, `value` (current field value), `diagram`, `env`                                   |
+| `hook`            | hook `when` and actions                                                                                                                      | `self`, `old`, `event`, `diagram`, `env`, plus `let`/`as` bindings                        |
+| `operation`       | operation `enabled` and actions                                                                                                              | `self` or `selection`, `p`, `diagram`, `env`, plus bindings                               |
+| `template`        | template attribute and position expressions                                                                                                  | `p`, `diagram`, `env`, `refs` (map of created elements by ref)                            |
+| `migration`       | migration steps                                                                                                                              | `element` (raw record map), `value`, `document` (raw map), `from`, `to` (version strings) |
+| `function`        | user functions                                                                                                                               | parameters, plus `diagram`/`env` if declared in `uses`                                    |
 
 ### 12.4 DEDL function library
 
 In addition to the members listed in 12.2, these global functions are available in all contexts unless noted:
 
-| Function | Description |
-|---|---|
-| `l.isUnique() → bool` | All elements of the list differ. |
-| `l.sum()`, `l.min()`, `l.max()`, `l.avg()` | Numeric aggregates (`int`/`double`/`duration`). |
-| `l.count(x, pred)` | Macro: number of elements satisfying `pred`. |
-| `l.indexOf(v) → int` | First index or −1. |
-| `l.first()`, `l.last()` | `optional` element. |
-| `snap(v, step) → double` | Round to the nearest multiple. `snapFloor`, `snapCeil`. |
-| `snapTo(v, list) → double` | Nearest value from a list. |
-| `clamp(v, lo, hi)` | Clamp a number. |
-| `min(a, b, …)`, `max(a, b, …)` | Smallest or largest of two to four numbers (aliases of `math.least` / `math.greatest`, convenient in geometry). |
-| `m.with(m2) → map` | A copy of map `m` with the entries of `m2` added or replaced (used in migrations and actions to build attribute maps). |
-| `ordinal(value, enumName) → int` | Position of an enum value. |
-| `enumLabel(enumName, value) → string`, `enumColor(...)`, `enumIcon(...)` | Enum metadata. |
-| `token(name) → string` | Resolved theme token (element, shape contexts). |
-| `color(c).lighten(f)`, `.darken(f)`, `.alpha(f)`, `.mix(c2, f)`, `.contrastText() → string` | Color manipulation; `contrastText` returns a readable text color for a background. |
-| `formatNumber(n, pattern) → string` | ICU number formatting in `env.locale`. |
-| `formatDate(t, pattern) → string`, `formatDate(t, pattern, tz)` | LDML date formatting. |
-| `formatDuration(d, style) → string` | `"short"` (`3d 4h`), `"long"`, `"iso"`. |
-| `date(y, m, d) → timestamp`, `timestamp(string)` (core) | Construction. |
-| `t.startOf(unit[, tz])`, `t.endOf(unit[, tz])`, `t.addUnits(n, unit[, tz])` | Calendar arithmetic (units as in 5.5). |
-| `workingDays(a, b, calendarId) → int`, `addWorkingDays(t, n, calendarId) → timestamp`, `isWorkingTime(t, calendarId) → bool` | Calendar functions using axis calendars. |
-| `daysBetween(a, b) → int` | Calendar days. |
-| `distance(p1, p2) → double` | Euclidean distance of points. |
-| `lower(s)`, `upper(s)` | Aliases of `lowerAscii`/`upperAscii` with Unicode case mapping. |
-| `matchesGlob(s, glob) → bool` | Glob matching (safer than regex for users). |
-| `diagram.nodesOfType(t, includeViewOnly)` | Include view-only elements. |
+| Function                                                                                                                     | Description                                                                                                            |
+|------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
+| `l.isUnique() → bool`                                                                                                        | All elements of the list differ.                                                                                       |
+| `l.sum()`, `l.min()`, `l.max()`, `l.avg()`                                                                                   | Numeric aggregates (`int`/`double`/`duration`).                                                                        |
+| `l.count(x, pred)`                                                                                                           | Macro: number of elements satisfying `pred`.                                                                           |
+| `l.indexOf(v) → int`                                                                                                         | First index or −1.                                                                                                     |
+| `l.first()`, `l.last()`                                                                                                      | `optional` element.                                                                                                    |
+| `snap(v, step) → double`                                                                                                     | Round to the nearest multiple. `snapFloor`, `snapCeil`.                                                                |
+| `snapTo(v, list) → double`                                                                                                   | Nearest value from a list.                                                                                             |
+| `clamp(v, lo, hi)`                                                                                                           | Clamp a number.                                                                                                        |
+| `min(a, b, …)`, `max(a, b, …)`                                                                                               | Smallest or largest of two to four numbers (aliases of `math.least` / `math.greatest`, convenient in geometry).        |
+| `m.with(m2) → map`                                                                                                           | A copy of map `m` with the entries of `m2` added or replaced (used in migrations and actions to build attribute maps). |
+| `ordinal(value, enumName) → int`                                                                                             | Position of an enum value.                                                                                             |
+| `enumLabel(enumName, value) → string`, `enumColor(...)`, `enumIcon(...)`                                                     | Enum metadata.                                                                                                         |
+| `token(name) → string`                                                                                                       | Resolved theme token (element, shape contexts).                                                                        |
+| `color(c).lighten(f)`, `.darken(f)`, `.alpha(f)`, `.mix(c2, f)`, `.contrastText() → string`                                  | Color manipulation; `contrastText` returns a readable text color for a background.                                     |
+| `formatNumber(n, pattern) → string`                                                                                          | ICU number formatting in `env.locale`.                                                                                 |
+| `formatDate(t, pattern) → string`, `formatDate(t, pattern, tz)`                                                              | LDML date formatting.                                                                                                  |
+| `formatDuration(d, style) → string`                                                                                          | `"short"` (`3d 4h`), `"long"`, `"iso"`.                                                                                |
+| `date(y, m, d) → timestamp`, `timestamp(string)` (core)                                                                      | Construction.                                                                                                          |
+| `t.startOf(unit[, tz])`, `t.endOf(unit[, tz])`, `t.addUnits(n, unit[, tz])`                                                  | Calendar arithmetic (units as in 5.5).                                                                                 |
+| `workingDays(a, b, calendarId) → int`, `addWorkingDays(t, n, calendarId) → timestamp`, `isWorkingTime(t, calendarId) → bool` | Calendar functions using axis calendars.                                                                               |
+| `daysBetween(a, b) → int`                                                                                                    | Calendar days.                                                                                                         |
+| `distance(p1, p2) → double`                                                                                                  | Euclidean distance of points.                                                                                          |
+| `lower(s)`, `upper(s)`                                                                                                       | Aliases of `lowerAscii`/`upperAscii` with Unicode case mapping.                                                        |
+| `matchesGlob(s, glob) → bool`                                                                                                | Glob matching (safer than regex for users).                                                                            |
+| `diagram.nodesOfType(t, includeViewOnly)`                                                                                    | Include view-only elements.                                                                                            |
 
 Implementations MUST provide cost estimates for all library functions; graph traversals (`reachable`, `hasCycle`, `inCycle`) have cost proportional to the number of relations of the given type and SHOULD be memoised per validation run.
 
@@ -2845,16 +2853,16 @@ Plugins provide what the declarative core does not: exotic shapes, special route
 }
 ```
 
-| Property | Type | Description |
-|---|---|---|
-| `version` | SemVer range | Accepted plugin versions. |
-| `provides` | string[] | Extension points: `shape`, `marker`, `lineEffect`, `routing`, `layout`, `snap`, `widget`, `action`, `celFunctions`, `import`, `export`, `persistenceFormat`, `collaboration`. |
-| `required` | bool | If `true`, runtimes without the plugin MUST refuse to open documents for editing (read-only viewing MAY still be offered). If `false`, `fallback` is used. |
-| `fallback` | map extension point → built-in name | Declarative fallbacks. |
-| `args` | map → Attribute | Declared arguments with types, so uses of the plugin are validated. |
-| `source` | object | Hints where implementations can be obtained (`npm`, `maven`, `url`, …) with integrity hashes. Runtimes MUST NOT download and execute code automatically without user or administrator approval. |
-| `celFunctions` | `{name, params, returns, cost, doc}`[] | Declarations of CEL functions the plugin adds, so validators can type-check expressions that use them. |
-| `doc` | Doc | |
+| Property       | Type                                   | Description                                                                                                                                                                                     |
+|----------------|----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `version`      | SemVer range                           | Accepted plugin versions.                                                                                                                                                                       |
+| `provides`     | string[]                               | Extension points: `shape`, `marker`, `lineEffect`, `routing`, `layout`, `snap`, `widget`, `action`, `celFunctions`, `import`, `export`, `persistenceFormat`, `collaboration`.                   |
+| `required`     | bool                                   | If `true`, runtimes without the plugin MUST refuse to open documents for editing (read-only viewing MAY still be offered). If `false`, `fallback` is used.                                      |
+| `fallback`     | map extension point → built-in name    | Declarative fallbacks.                                                                                                                                                                          |
+| `args`         | map → Attribute                        | Declared arguments with types, so uses of the plugin are validated.                                                                                                                             |
+| `source`       | object                                 | Hints where implementations can be obtained (`npm`, `maven`, `url`, …) with integrity hashes. Runtimes MUST NOT download and execute code automatically without user or administrator approval. |
+| `celFunctions` | `{name, params, returns, cost, doc}`[] | Declarations of CEL functions the plugin adds, so validators can type-check expressions that use them.                                                                                          |
+| `doc`          | Doc                                    |                                                                                                                                                                                                 |
 
 Every plugin use (`{ "plugin": "acme.bpmnRouter", "args": {…} }`) references a declared plugin; `args` are validated against the declaration.
 
@@ -2919,14 +2927,14 @@ Transactions are atomic: either all effects apply or none. Remote changes from c
 
 ### 15.1 Conformance classes
 
-| Class | Requirements |
-|---|---|
-| **Definition** | A definition is conforming if it validates against the JSON Schema, passes all checks of 14.1 without errors, and uses only declared plugins. |
-| **Document** | A document is conforming to a definition if it validates against `$defs/Document`, its elements conform to the metamodel after migrations, and it is serialised as layer 8 prescribes. Constraint problems do not make a document non-conforming. |
-| **Validator** | Implements 14.1 and 14.2 (without rendering), reports problems with JSON Pointers, and evaluates constraints headlessly. |
-| **Runtime — Core** | Metamodel, persistence (including migrations, determinism), constraints, behavior, CEL environment, one cartesian numeric coordinate system with grid snapping, built-in shapes `rect`, `roundedRect`, `ellipse`, `diamond`, `text`, straight and polyline edges, markers `none`, `arrow`, `arrowFilled`, generated forms and toolbox. |
+| Class                  | Requirements                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Definition**         | A definition is conforming if it validates against the JSON Schema, passes all checks of 14.1 without errors, and uses only declared plugins.                                                                                                                                                                                                                                                                                                                 |
+| **Document**           | A document is conforming to a definition if it validates against `$defs/Document`, its elements conform to the metamodel after migrations, and it is serialised as layer 8 prescribes. Constraint problems do not make a document non-conforming.                                                                                                                                                                                                             |
+| **Validator**          | Implements 14.1 and 14.2 (without rendering), reports problems with JSON Pointers, and evaluates constraints headlessly.                                                                                                                                                                                                                                                                                                                                      |
+| **Runtime — Core**     | Metamodel, persistence (including migrations, determinism), constraints, behavior, CEL environment, one cartesian numeric coordinate system with grid snapping, built-in shapes `rect`, `roundedRect`, `ellipse`, `diamond`, `text`, straight and polyline edges, markers `none`, `arrow`, `arrowFilled`, generated forms and toolbox.                                                                                                                        |
 | **Runtime — Standard** | Core, plus: all built-in shapes and markers, styles with states and conditions, labels at all positions, compartments, ports, containers, custom path shapes, orthogonal and curved routing, all snap rules for numeric axes, per-axis snapping, time axes with calendar snapping, ordinal axes with bands, bound and computed placement, explicit forms and all standard widgets, context tools, templates, documentation surfaces (2.4), themes with modes. |
-| **Runtime — Full** | Standard, plus: composite shapes with handles, nine-slice scaling, line effects, jump-overs, stacked and custom markers, embedded forms, nested coordinate systems, polar systems, level of detail, variants, collaboration, all export formats, plugins. |
+| **Runtime — Full**     | Standard, plus: composite shapes with handles, nine-slice scaling, line effects, jump-overs, stacked and custom markers, embedded forms, nested coordinate systems, polar systems, level of detail, variants, collaboration, all export formats, plugins.                                                                                                                                                                                                     |
 
 A runtime MUST state its conformance class and list unsupported optional features. When a definition `requires` a higher class or unsupported features, the runtime MUST inform the user and MAY open the diagram read-only.
 
@@ -4148,19 +4156,19 @@ Rules that JSON Schema cannot express — name resolution, CEL type checking, in
 
 ### A.2 Definitions by layer
 
-| Layer | `$defs` |
-|---|---|
-| Common | `SimpleId`, `QualifiedId`, `TypeRef`, `TypeRefs`, `SemVer`, `LocalizedText`, `Doc`, `CelSource`, `Expression`, `CelValue`, `AttrBinding`, `TokenRef`, `ParamRef`, `Dynamic`, `BString`, `BNumber`, `BBool`, `GeomExpr`, `Length`, `Color`, `Size`, `Insets`, `Point`, `Box`, `MinMax`, `PluginUse`, `PluginCall`, `Modifier` |
-| Top level | `Definition`, `Language`, `Import`, `Function`, `Viewpoint`, `Plugin` |
-| 1 · Metamodel | `Metamodel`, `Attribute`, `DataType`, `Enum`, `EnumValue`, `NodeType`, `Containment`, `PortType`, `RelationType`, `RelationEnd` |
-| 2 · Coordinates | `Coordinates`, `Axis`, `AxisRef`, `Calendar`, `Category`, `Ruler`, `ZoomLevel`, `CoordinateSystem`, `GridDisplay`, `Guides`, `Placement`, `PlacementSource`, `Anchor`, `Snapping`, `SnappingRef`, `SnapRule`, `SnapRuleObject`, `AxisRules` |
-| 3 · Notation | `Notation`, `Theme`, `Paint`, `Gradient`, `Pattern`, `ImagePaint`, `Stroke`, `DashStyle`, `LineEffect`, `Font`, `Style`, `StyleRef`, `StyleRefs`, `States`, `Conditions`, `IconDef`, `IconRef`, `ShapeRef`, `ShapeInstance`, `ShapeDef`, `ShapeParam`, `PathDef`, `PathSegment`, `ShapePart`, `Handle`, `ScaleMode`, `Position`, `Label`, `Compartment`, `NodeIcon`, `Badge`, `PortNotation`, `AnchorSpec`, `ContainerSpec`, `SizeSpec`, `EmbeddedForm`, `LodRule`, `NodeNotation`, `NodeVariant`, `MarkerDef`, `MarkerInstance`, `MarkerRef`, `MidMarker`, `Routing`, `LineSpec`, `EndAnchor`, `EdgeNotation`, `EdgeVariant`, `Canvas` |
-| 4 · Toolbox and forms | `Toolbox`, `ToolGroup`, `Tool`, `ContextToolSet`, `ContextTool`, `Template`, `FragmentNode`, `FragmentRelation`, `Form`, `FormItem`, `FieldValidation` |
-| 5 · Constraints | `Constraints`, `Constraint`, `QuickFix` |
-| 6 · Behavior | `Behavior`, `Hook`, `Operation`, `Action`, `DeletionPolicy` |
-| 7 · Layout | `Layout`, `LayoutConfig` |
-| 8 · Persistence | `Persistence`, `Migration`, `MigrationStep` |
-| Documents | `Document`, `ElementRecord`, `RelationRecord`, `ViewRecord`, `NodeView`, `EdgeView` |
+| Layer                 | `$defs`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+|-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Common                | `SimpleId`, `QualifiedId`, `TypeRef`, `TypeRefs`, `SemVer`, `LocalizedText`, `Doc`, `CelSource`, `Expression`, `CelValue`, `AttrBinding`, `TokenRef`, `ParamRef`, `Dynamic`, `BString`, `BNumber`, `BBool`, `GeomExpr`, `Length`, `Color`, `Size`, `Insets`, `Point`, `Box`, `MinMax`, `PluginUse`, `PluginCall`, `Modifier`                                                                                                                                                                                                                                                                                                            |
+| Top level             | `Definition`, `Language`, `Import`, `Function`, `Viewpoint`, `Plugin`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| 1 · Metamodel         | `Metamodel`, `Attribute`, `DataType`, `Enum`, `EnumValue`, `NodeType`, `Containment`, `PortType`, `RelationType`, `RelationEnd`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| 2 · Coordinates       | `Coordinates`, `Axis`, `AxisRef`, `Calendar`, `Category`, `Ruler`, `ZoomLevel`, `CoordinateSystem`, `GridDisplay`, `Guides`, `Placement`, `PlacementSource`, `Anchor`, `Snapping`, `SnappingRef`, `SnapRule`, `SnapRuleObject`, `AxisRules`                                                                                                                                                                                                                                                                                                                                                                                             |
+| 3 · Notation          | `Notation`, `Theme`, `Paint`, `Gradient`, `Pattern`, `ImagePaint`, `Stroke`, `DashStyle`, `LineEffect`, `Font`, `Style`, `StyleRef`, `StyleRefs`, `States`, `Conditions`, `IconDef`, `IconRef`, `ShapeRef`, `ShapeInstance`, `ShapeDef`, `ShapeParam`, `PathDef`, `PathSegment`, `ShapePart`, `Handle`, `ScaleMode`, `Position`, `Label`, `Compartment`, `NodeIcon`, `Badge`, `PortNotation`, `AnchorSpec`, `ContainerSpec`, `SizeSpec`, `EmbeddedForm`, `LodRule`, `NodeNotation`, `NodeVariant`, `MarkerDef`, `MarkerInstance`, `MarkerRef`, `MidMarker`, `Routing`, `LineSpec`, `EndAnchor`, `EdgeNotation`, `EdgeVariant`, `Canvas` |
+| 4 · Toolbox and forms | `Toolbox`, `ToolGroup`, `Tool`, `ContextToolSet`, `ContextTool`, `Template`, `FragmentNode`, `FragmentRelation`, `Form`, `FormItem`, `FieldValidation`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| 5 · Constraints       | `Constraints`, `Constraint`, `QuickFix`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| 6 · Behavior          | `Behavior`, `Hook`, `Operation`, `Action`, `DeletionPolicy`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| 7 · Layout            | `Layout`, `LayoutConfig`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| 8 · Persistence       | `Persistence`, `Migration`, `MigrationStep`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Documents             | `Document`, `ElementRecord`, `RelationRecord`, `ViewRecord`, `NodeView`, `EdgeView`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 In total the schema has 141 definitions.
 
@@ -4804,49 +4812,49 @@ The following excerpt shows how per-axis snapping is encoded. A snap rule is eit
 
 ### B.1 Default notation
 
-| Element | Default |
-|---|---|
-| Node | `rect`, 120 × 60, fill token `color.surface` (`#FFFFFF`), stroke token `color.border` (`#5F5E5A`) width 1, one centered label bound to `labelAttribute`, word wrap, font 14 px `system-ui` |
-| View-only node | as node, with dashed stroke |
-| Container node | as node, with a 24 px header band holding the label; children laid out freely |
-| Relation (directed) | straight line, width 1, color token `color.border`, `targetMarker: "arrowFilled"`, no labels, unless the relation has a `name` attribute, which is shown `middle`/`above` |
-| Relation (undirected) | as directed, without markers |
-| Port | 8 × 8 `rect`, fill `color.surface`, sides by direction |
-| Selection | 1.5 px outline in token `color.accent` (`#534AB7`), 8 screen-px square handles |
-| `invalid` state | stroke token `color.danger` (`#E24B4A`), problem badge top-right |
-| `warning` state | stroke token `color.warning` (`#BA7517`), warning badge top-right |
-| `dropTarget` / `dropReject` | fill token `color.accent.soft` / stroke `color.danger` dashed |
+| Element                     | Default                                                                                                                                                                                    |
+|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Node                        | `rect`, 120 × 60, fill token `color.surface` (`#FFFFFF`), stroke token `color.border` (`#5F5E5A`) width 1, one centered label bound to `labelAttribute`, word wrap, font 14 px `system-ui` |
+| View-only node              | as node, with dashed stroke                                                                                                                                                                |
+| Container node              | as node, with a 24 px header band holding the label; children laid out freely                                                                                                              |
+| Relation (directed)         | straight line, width 1, color token `color.border`, `targetMarker: "arrowFilled"`, no labels, unless the relation has a `name` attribute, which is shown `middle`/`above`                  |
+| Relation (undirected)       | as directed, without markers                                                                                                                                                               |
+| Port                        | 8 × 8 `rect`, fill `color.surface`, sides by direction                                                                                                                                     |
+| Selection                   | 1.5 px outline in token `color.accent` (`#534AB7`), 8 screen-px square handles                                                                                                             |
+| `invalid` state             | stroke token `color.danger` (`#E24B4A`), problem badge top-right                                                                                                                           |
+| `warning` state             | stroke token `color.warning` (`#BA7517`), warning badge top-right                                                                                                                          |
+| `dropTarget` / `dropReject` | fill token `color.accent.soft` / stroke `color.danger` dashed                                                                                                                              |
 
 **Standard theme tokens.** Runtimes provide these tokens with light and dark values, and definitions may override them: `color.canvas`, `color.surface`, `color.surface.alt`, `color.text`, `color.text.muted`, `color.border`, `color.border.strong`, `color.accent`, `color.accent.soft`, `color.danger`, `color.warning`, `color.success`, `color.info`, `font.body`, `font.mono`, `size.stroke`, `size.corner`, `size.font`.
 
 ### B.2 Shape parameter defaults
 
-| Shape | Parameter defaults |
-|---|---|
-| `roundedRect` | `radius`: 8 |
-| `triangle` | `apex`: 0.5, `direction`: `up` |
-| `parallelogram` | `skew`: 0.2, `direction`: `right` |
-| `trapezoid` | `inset`: 0.2, `direction`: `up` (narrow side at the top) |
-| `hexagon` | `inset`: 0.25, `orientation`: `flat` |
-| `octagon` | `inset`: 0.29 |
-| `polygon` | `sides`: 5, `rotation`: 0 |
-| `star` | `points`: 5, `innerRadius`: 0.5, `rotation`: 0 |
-| `cross` | `thickness`: 0.33 |
-| `cylinder` | `cap`: 0.15 × height, `orientation`: `vertical` |
-| `document` | `wave`: 0.1 |
-| `multiDocument` | `wave`: 0.1, `offset`: 6, `count`: 3 |
-| `note` | `fold`: 12 |
-| `folder` | `tabWidth`: 0.4, `tabHeight`: 12, `tabPosition`: `left` |
-| `frame` | `tabWidth`: 0.35, `tabHeight`: 20 |
-| `cloud` | `bumps`: 8 |
-| `process` | `inset`: 10 |
-| `manualInput` | `slope`: 0.25 |
-| `offPage` | `pointer`: 0.25 |
-| `callout` | `pointerX`: 0.2, `pointerY`: 1.3, `pointerWidth`: 0.15, `radius`: 6 |
-| `blockArrow` | `direction`: `right`, `headLength`: 0.35, `shaftThickness`: 0.5, `doubleHeaded`: false |
-| `chevron` | `depth`: 0.25, `direction`: `right` |
-| `bracket` | `side`: `left`, `curl`: 0.15 |
-| `image` | `fit`: `contain` |
+| Shape           | Parameter defaults                                                                     |
+|-----------------|----------------------------------------------------------------------------------------|
+| `roundedRect`   | `radius`: 8                                                                            |
+| `triangle`      | `apex`: 0.5, `direction`: `up`                                                         |
+| `parallelogram` | `skew`: 0.2, `direction`: `right`                                                      |
+| `trapezoid`     | `inset`: 0.2, `direction`: `up` (narrow side at the top)                               |
+| `hexagon`       | `inset`: 0.25, `orientation`: `flat`                                                   |
+| `octagon`       | `inset`: 0.29                                                                          |
+| `polygon`       | `sides`: 5, `rotation`: 0                                                              |
+| `star`          | `points`: 5, `innerRadius`: 0.5, `rotation`: 0                                         |
+| `cross`         | `thickness`: 0.33                                                                      |
+| `cylinder`      | `cap`: 0.15 × height, `orientation`: `vertical`                                        |
+| `document`      | `wave`: 0.1                                                                            |
+| `multiDocument` | `wave`: 0.1, `offset`: 6, `count`: 3                                                   |
+| `note`          | `fold`: 12                                                                             |
+| `folder`        | `tabWidth`: 0.4, `tabHeight`: 12, `tabPosition`: `left`                                |
+| `frame`         | `tabWidth`: 0.35, `tabHeight`: 20                                                      |
+| `cloud`         | `bumps`: 8                                                                             |
+| `process`       | `inset`: 10                                                                            |
+| `manualInput`   | `slope`: 0.25                                                                          |
+| `offPage`       | `pointer`: 0.25                                                                        |
+| `callout`       | `pointerX`: 0.2, `pointerY`: 1.3, `pointerWidth`: 0.15, `radius`: 6                    |
+| `blockArrow`    | `direction`: `right`, `headLength`: 0.35, `shaftThickness`: 0.5, `doubleHeaded`: false |
+| `chevron`       | `depth`: 0.25, `direction`: `right`                                                    |
+| `bracket`       | `side`: `left`, `curl`: 0.15                                                           |
+| `image`         | `fit`: `contain`                                                                       |
 
 Fractions refer to the bounds' width (horizontal parameters) or height (vertical parameters).
 
@@ -4854,51 +4862,51 @@ Fractions refer to the bounds' width (horizontal parameters) or height (vertical
 
 Sizes are for a line width of 1 and scale with the stroke unless `scaleWithStroke` is false. "Hollow" markers are filled with `background` by default, and "filled" markers with `stroke`.
 
-| Marker | Default length × width | Geometry |
-|---|---|---|
-| `arrow` | 10 × 8 | Open V, 2 strokes, angle 30° |
-| `arrowFilled` | 10 × 8 | Filled triangle |
-| `arrowHollow` | 12 × 10 | Hollow triangle (generalisation) |
-| `arrowConcave` | 12 × 10 | Filled, swept-back base |
-| `arrowThin` | 8 × 6 | Open V, angle 20° |
-| `arrowDouble` | 16 × 8 | Two filled triangles in sequence |
-| `halfArrowTop`, `halfArrowBottom` | 10 × 5 | One barb only |
-| `arrowCircle` | 14 × 8 | Filled triangle followed by a hollow circle |
-| `diamond` / `diamondFilled` | 14 × 8 | Rhombus |
-| `circle` / `circleFilled` | 8 × 8 | Circle, tangent to the end point |
-| `square` / `squareFilled` | 8 × 8 | Square |
-| `dot` | 4 × 4 | Filled circle centered on the end point |
-| `triangle` / `triangleFilled` | 10 × 10 | Equilateral |
-| `bar` | 0 × 10 | Perpendicular line |
-| `doubleBar` | 4 × 10 | Two perpendicular lines |
-| `cross` | 8 × 8 | × |
-| `slash` | 6 × 10 | Oblique line |
-| `erOne` | 8 × 12 | One perpendicular bar |
-| `erOnlyOne` | 12 × 12 | Two perpendicular bars |
-| `erMany` | 12 × 12 | Crow's foot |
-| `erZeroOrOne` | 18 × 12 | Bar and hollow circle |
-| `erOneOrMany` | 16 × 12 | Crow's foot and bar |
-| `erZeroOrMany` | 20 × 12 | Crow's foot and hollow circle |
-| `ballSocketBall` | 10 × 10 | Hollow circle on a short stem |
-| `socket` | 10 × 12 | Half circle open towards the end |
-| `containment` | 10 × 10 | Circle with a plus |
-| `ground` | 6 × 14 | Three bars of decreasing length |
-| `fork` | 10 × 10 | Two short diverging lines |
+| Marker                            | Default length × width | Geometry                                    |
+|-----------------------------------|------------------------|---------------------------------------------|
+| `arrow`                           | 10 × 8                 | Open V, 2 strokes, angle 30°                |
+| `arrowFilled`                     | 10 × 8                 | Filled triangle                             |
+| `arrowHollow`                     | 12 × 10                | Hollow triangle (generalisation)            |
+| `arrowConcave`                    | 12 × 10                | Filled, swept-back base                     |
+| `arrowThin`                       | 8 × 6                  | Open V, angle 20°                           |
+| `arrowDouble`                     | 16 × 8                 | Two filled triangles in sequence            |
+| `halfArrowTop`, `halfArrowBottom` | 10 × 5                 | One barb only                               |
+| `arrowCircle`                     | 14 × 8                 | Filled triangle followed by a hollow circle |
+| `diamond` / `diamondFilled`       | 14 × 8                 | Rhombus                                     |
+| `circle` / `circleFilled`         | 8 × 8                  | Circle, tangent to the end point            |
+| `square` / `squareFilled`         | 8 × 8                  | Square                                      |
+| `dot`                             | 4 × 4                  | Filled circle centered on the end point     |
+| `triangle` / `triangleFilled`     | 10 × 10                | Equilateral                                 |
+| `bar`                             | 0 × 10                 | Perpendicular line                          |
+| `doubleBar`                       | 4 × 10                 | Two perpendicular lines                     |
+| `cross`                           | 8 × 8                  | ×                                           |
+| `slash`                           | 6 × 10                 | Oblique line                                |
+| `erOne`                           | 8 × 12                 | One perpendicular bar                       |
+| `erOnlyOne`                       | 12 × 12                | Two perpendicular bars                      |
+| `erMany`                          | 12 × 12                | Crow's foot                                 |
+| `erZeroOrOne`                     | 18 × 12                | Bar and hollow circle                       |
+| `erOneOrMany`                     | 16 × 12                | Crow's foot and bar                         |
+| `erZeroOrMany`                    | 20 × 12                | Crow's foot and hollow circle               |
+| `ballSocketBall`                  | 10 × 10                | Hollow circle on a short stem               |
+| `socket`                          | 10 × 12                | Half circle open towards the end            |
+| `containment`                     | 10 × 10                | Circle with a plus                          |
+| `ground`                          | 6 × 14                 | Three bars of decreasing length             |
+| `fork`                            | 10 × 10                | Two short diverging lines                   |
 
 ### B.4 Snap rule summary
 
-| Rule | Numeric | Time | Ordinal | Angular | Sizes |
-|---|---|---|---|---|---|
-| `grid` | ✓ | – | – | ✓ | ✓ |
-| `values` | ✓ | ✓ | – | ✓ | ✓ |
-| `calendar` | – | ✓ | – | – | ✓ (durations) |
-| `ticks` | ✓ | ✓ | ✓ | ✓ | – |
-| `bands` | – | – | ✓ | – | ✓ (number of bands) |
-| `divisions` | ✓ | – | – | ✓ | ✓ |
-| `ratio` | – | – | – | – | ✓ |
-| `cel` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `byZoom` | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `plugin` | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Rule        | Numeric | Time | Ordinal | Angular | Sizes                |
+|-------------|---------|------|---------|---------|----------------------|
+| `grid`      | ✓      | –    | –       | ✓      | ✓                   |
+| `values`    | ✓      | ✓   | –       | ✓      | ✓                   |
+| `calendar`  | –       | ✓   | –       | –       | ✓ (durations)       |
+| `ticks`     | ✓      | ✓   | ✓      | ✓      | –                    |
+| `bands`     | –       | –    | ✓      | –       | ✓ (number of bands) |
+| `divisions` | ✓      | –    | –       | ✓      | ✓                   |
+| `ratio`     | –       | –    | –       | –       | ✓                   |
+| `cel`       | ✓      | ✓   | ✓      | ✓      | ✓                   |
+| `byZoom`    | ✓      | ✓   | ✓      | ✓      | ✓                   |
+| `plugin`    | ✓      | ✓   | ✓      | ✓      | ✓                   |
 
 ### B.5 Time units and formats
 
@@ -4910,25 +4918,25 @@ Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`,
 
 ### B.7 Default widgets by attribute type
 
-| Attribute type | Widget |
-|---|---|
-| `string` | `text` (`combobox` if `extensible` enum) |
-| `text` | `textarea` (`markdown` if `markup: "markdown"`) |
-| `int`, `number` | `number` (`slider` if both `min` and `max` are set and the range is at most 100 steps) |
-| `bool` | `checkbox` |
-| `date`, `datetime`, `time`, `duration` | `date`, `datetime`, `time`, `duration` |
-| `color` | `color` |
-| `uri` | `link` |
-| `expression` | `code` with `language: "cel"` |
-| `json` | `code` with `language: "json"` |
-| `binary` | `file` |
-| enum (≤ 4 values) | `segmented` |
-| enum (> 4 values) | `select` |
-| data type (struct) | `struct` |
-| reference | `reference` |
-| `many` primitive | `tags` for strings, `list` otherwise |
-| `many` struct | `table` |
-| `many` reference | `references` |
+| Attribute type                         | Widget                                                                                 |
+|----------------------------------------|----------------------------------------------------------------------------------------|
+| `string`                               | `text` (`combobox` if `extensible` enum)                                               |
+| `text`                                 | `textarea` (`markdown` if `markup: "markdown"`)                                        |
+| `int`, `number`                        | `number` (`slider` if both `min` and `max` are set and the range is at most 100 steps) |
+| `bool`                                 | `checkbox`                                                                             |
+| `date`, `datetime`, `time`, `duration` | `date`, `datetime`, `time`, `duration`                                                 |
+| `color`                                | `color`                                                                                |
+| `uri`                                  | `link`                                                                                 |
+| `expression`                           | `code` with `language: "cel"`                                                          |
+| `json`                                 | `code` with `language: "json"`                                                         |
+| `binary`                               | `file`                                                                                 |
+| enum (≤ 4 values)                      | `segmented`                                                                            |
+| enum (> 4 values)                      | `select`                                                                               |
+| data type (struct)                     | `struct`                                                                               |
+| reference                              | `reference`                                                                            |
+| `many` primitive                       | `tags` for strings, `list` otherwise                                                   |
+| `many` struct                          | `table`                                                                                |
+| `many` reference                       | `references`                                                                           |
 
 ### B.8 Feature identifiers
 
@@ -4938,35 +4946,35 @@ Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`,
 
 ## Appendix C — Glossary
 
-| Term | Meaning |
-|---|---|
-| **Axis** | A scale from domain values (numbers, timestamps, categories, angles) to canvas distance along one direction. |
-| **Band** | One category of an ordinal axis, drawn as a lane, row or column. |
-| **Bindable** | A property that accepts a literal or a dynamic value (`cel`, `attribute`, `token`, `param`). |
-| **Bound placement** | A coordinate read from and written to a model attribute. |
-| **Canvas units** | Rendering units at zoom 1; pixels for the default axis. |
-| **CEL** | Common Expression Language, the only expression language of DEDL. |
-| **Compartment** | A stacked region inside a node listing items. |
-| **Context (CEL)** | The set of variables available to an expression, determined by where it appears. |
-| **Definition** | A DEDL file describing a diagram language and its editor. |
-| **Document** | A diagram created with a definition. |
-| **Domain value** | A position in the units of its axis: a number, a timestamp or a band reference. |
-| **Gesture constraint** | A constraint evaluated before a user action is applied (connect, contain, create, delete, place, change). |
-| **Handle** | An interactive point on a shape that edits a shape parameter. |
-| **Invariant** | A constraint on the current state of the diagram. |
-| **Marker** | A decoration at an edge end or along an edge, such as an arrowhead. |
-| **Metamodel** | The abstract syntax: types, attributes, relations, containment and ports. |
-| **Notation** | The concrete syntax: shapes, styles, labels and markers. |
-| **Plugin** | Named, declared, versioned code that extends a runtime. |
-| **Port** | A named connection point on a node. |
-| **Runtime** | Software that loads a definition and provides an editor. |
-| **Snap rule** | A function mapping a raw domain value to an allowed value on one axis. |
-| **Token** | A named theme value (a color, font or size), resolved per theme mode. |
-| **Transaction** | An atomic, undoable unit of change. |
-| **Variant** | An alternative notation applied when a condition holds. |
-| **View data** | Per-diagram placement and presentation data stored separately from the model. |
-| **View-only element** | An element that exists only in a view (a note or frame) and has no model meaning. |
-| **Viewpoint** | A kind of diagram over the model, with its own types, coordinates, toolbox and layout. |
+| Term                   | Meaning                                                                                                      |
+|------------------------|--------------------------------------------------------------------------------------------------------------|
+| **Axis**               | A scale from domain values (numbers, timestamps, categories, angles) to canvas distance along one direction. |
+| **Band**               | One category of an ordinal axis, drawn as a lane, row or column.                                             |
+| **Bindable**           | A property that accepts a literal or a dynamic value (`cel`, `attribute`, `token`, `param`).                 |
+| **Bound placement**    | A coordinate read from and written to a model attribute.                                                     |
+| **Canvas units**       | Rendering units at zoom 1; pixels for the default axis.                                                      |
+| **CEL**                | Common Expression Language, the only expression language of DEDL.                                            |
+| **Compartment**        | A stacked region inside a node listing items.                                                                |
+| **Context (CEL)**      | The set of variables available to an expression, determined by where it appears.                             |
+| **Definition**         | A DEDL file describing a diagram language and its editor.                                                    |
+| **Document**           | A diagram created with a definition.                                                                         |
+| **Domain value**       | A position in the units of its axis: a number, a timestamp or a band reference.                              |
+| **Gesture constraint** | A constraint evaluated before a user action is applied (connect, contain, create, delete, place, change).    |
+| **Handle**             | An interactive point on a shape that edits a shape parameter.                                                |
+| **Invariant**          | A constraint on the current state of the diagram.                                                            |
+| **Marker**             | A decoration at an edge end or along an edge, such as an arrowhead.                                          |
+| **Metamodel**          | The abstract syntax: types, attributes, relations, containment and ports.                                    |
+| **Notation**           | The concrete syntax: shapes, styles, labels and markers.                                                     |
+| **Plugin**             | Named, declared, versioned code that extends a runtime.                                                      |
+| **Port**               | A named connection point on a node.                                                                          |
+| **Runtime**            | Software that loads a definition and provides an editor.                                                     |
+| **Snap rule**          | A function mapping a raw domain value to an allowed value on one axis.                                       |
+| **Token**              | A named theme value (a color, font or size), resolved per theme mode.                                        |
+| **Transaction**        | An atomic, undoable unit of change.                                                                          |
+| **Variant**            | An alternative notation applied when a condition holds.                                                      |
+| **View data**          | Per-diagram placement and presentation data stored separately from the model.                                |
+| **View-only element**  | An element that exists only in a view (a note or frame) and has no model meaning.                            |
+| **Viewpoint**          | A kind of diagram over the model, with its own types, coordinates, toolbox and layout.                       |
 
 ---
 
