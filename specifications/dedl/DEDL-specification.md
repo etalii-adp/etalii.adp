@@ -70,7 +70,7 @@ DEDL sits between the people who design a visual language and the software that 
 ```
  ┌────────────────────────┐        ┌─────────────────────────┐        ┌────────────────────────┐
  │ Language designer      │ writes │ DEDL definition         │ loads  │ Editor runtime         │
- │ (domain expert, tool   │───────▶│ my-lang.dedl.json       │───────▶│ (web, desktop, IDE,    │
+ │ (domain expert, tool   │───────▶│ my-lang.dedl       │───────▶│ (web, desktop, IDE,    │
  │  builder, standards    │        │ checked by JSON Schema  │        │  headless)             │
  │  body, AI assistant)   │        │ + CEL type checker      │        │ toolbox, canvas, forms │
  └────────────────────────┘        └────────────┬────────────┘        │ snapping, rules, save  │
@@ -86,7 +86,7 @@ DEDL sits between the people who design a visual language and the software that 
 
 A typical workflow:
 
-1. **Author a definition.** A language designer writes `my-lang.dedl.json` by hand with IDE support from the JSON Schema (validation, completion, hover help), or generates it from an existing source such as a class model, an ontology or an older editor configuration. Definitions can import shared libraries of shapes, markers, styles and types (section 3.3).
+1. **Author a definition.** A language designer writes `my-lang.dedl` by hand with IDE support from the JSON Schema (validation, completion, hover help), or generates it from an existing source such as a class model, an ontology or an older editor configuration. Definitions can import shared libraries of shapes, markers, styles and types (section 3.3).
 2. **Validate it.** A validator checks the definition against the JSON Schema, resolves names and imports, flattens inheritance, and type-checks every CEL expression in the context in which it will be evaluated (section 12). Problems are reported with the JSON Pointer of the offending node.
 3. **Load it into a runtime.** A conforming runtime needs no language-specific code: palette, canvas, rendering, snapping, property forms, validation and saving all come from the definition. Whatever the declarative core cannot express is delegated to named, versioned plugins (section 13) rather than to embedded scripts.
 4. **Draw.** End users create **documents** — the actual diagrams — that conform to the definition. The runtime surfaces the definition's documentation as tooltips, field help, problem explanations and a help view, so users learn the language while using it.
@@ -151,7 +151,7 @@ DEDL deliberately borrows proven ideas:
 
 ### 2.1 Serialization
 
-A DEDL definition is a JSON text (RFC 8259) encoded in UTF-8 without a byte-order mark. Its top-level value MUST be an object. The file extension **SHOULD** be `.dedl.json`.
+A DEDL definition is a JSON text (RFC 8259) encoded in UTF-8 without a byte-order mark. Its top-level value MUST be an object. The file extension **SHOULD** be `.dedl`.
 
 A definition **SHOULD** declare the schema it conforms to, and MUST declare the specification version it targets:
 
@@ -2770,7 +2770,7 @@ Nesting is expressed by `parent`, not by physical nesting, so moving an element 
 
 `metadata` lists document-level metadata written in `meta`: `languageVersion` (always written in `language.version`), `createdAt`, `modifiedAt`, `generator`, `authors` (from `env.user` if the user consents), `title` (mirrors a diagram attribute), `checksum`.
 
-`definition` controls how documents refer to their definition: `{ "embed": "none" | "reference" | "inline", "uri": "https://…/statemachine-1.2.0.dedl.json" }`. `reference` writes `language.definition` with the URI and integrity hash; `inline` embeds the whole definition (self-contained archives).
+`definition` controls how documents refer to their definition: `{ "embed": "none" | "reference" | "inline", "uri": "https://…/statemachine-1.2.0.dedl" }`. `reference` writes `language.definition` with the URI and integrity hash; `inline` embeds the whole definition (self-contained archives).
 
 ### 11.9 Migrations
 
@@ -3065,7 +3065,7 @@ This example shows a classic node-and-edge editor:
 - **Behavior:** automatic naming, an operation that groups the selection into a composite state, and deletion and clipboard policies.
 - **Persistence:** split model and view files, prefixed UUIDv7 ids, tree ordering and a chain of migrations.
 
-File `examples/statemachine.dedl.json`:
+File `examples/statemachine.dedl`:
 
 ```json
 {
@@ -3587,7 +3587,7 @@ This example shows the coordinate layer in action. The x axis is a **time axis**
 
 Snapping is **different per axis**. On x, tasks snap to whole working days using calendar rules. On y, they snap to the centre of a lane. Sizes snap to whole days with a minimum of one day. The task bar is a composite `progressBar` shape whose progress handle snaps to quarters. Dependencies anchor at the finish and start of bars; variants move the anchors for start-to-start and finish-to-finish links. The link type is shown at the edge start and the lag in the middle, and conditional styles turn a violated dependency red.
 
-File `examples/timeline.dedl.json`:
+File `examples/timeline.dedl`:
 
 ```json
 {
@@ -3940,7 +3940,7 @@ File `examples/timeline.dedl.json`:
 
 This example shows notation driven by the model. Columns are child elements listed in a compartment, with conditional item styles and icons. Relationship markers are **computed** from the cardinality attributes (`erZeroOrMany`, `erOne`, …). The line is dashed for non-identifying relationships. Cardinality labels sit at both ends and only appear when zoomed in. Tables align to a 20 px grid while bendpoints use a 10 px grid. Ids are **natural** (derived from table and column names), persistence is YAML, and a plugin provides SQL export.
 
-File `examples/erd.dedl.json`:
+File `examples/erd.dedl`:
 
 ```json
 {
