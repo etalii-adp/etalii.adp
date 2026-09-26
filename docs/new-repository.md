@@ -26,7 +26,8 @@ The rules every repository in the `etalii-adp` GitHub organization follows. Work
 
 ## Files the repository starts with
 
-- **`CLAUDE.md`** stating the branch and delivery rules above, so every agent reads them. `etalii.adp.ide.eclipse/CLAUDE.md` is the smallest complete example to copy.
+- **`CLAUDE.md`** stating the branch and delivery rules above, so every agent reads them. `etalii.adp.ide.eclipse/CLAUDE.md` is the smallest complete example to copy, Spec Kit section included.
+- **GitHub Spec Kit with the SpecKit Companion extension**, copied from `etalii.adp.ide.intellij`: `.specify/` and the `speckit-*` skills under `.claude/skills/`, with `branch_prefix: "features"` in `.specify/extensions/git/git-config.yml` so Spec Kit's branches are `features/<number>-<name>`. Start `.specify/memory/constitution.md` from the template and ratify it with `/speckit-constitution`. Add a `.gitattributes` that keeps `*.sh` LF, and ignore `__pycache__/`, `*.pyc`, `.claude/settings.local.json` and `.trace.jsonl`. The one repository without it is `etalii.adp.ide.standalone`, which plans with spec-workflow.
 - **A CI workflow** once there is something to build or test, running on pull requests into `develop`, so a pull request shows whether it is green before it is merged.
 
 ## Access for Claude
