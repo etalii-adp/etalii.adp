@@ -188,8 +188,10 @@ Identifiers name types, attributes, styles, shapes, tools, constraints and all o
 Any human-facing string (labels, messages, descriptions, placeholders) is a **LocalizedText**: either a plain string or an object mapping BCP 47 language tags to strings.
 
 ```json
-"label": "State"
-"label": { "en": "State", "de": "Zustand", "nl": "Toestand" }
+{
+  "label": "State",
+  "label": { "en": "State", "de": "Zustand", "nl": "Toestand" }
+}
 ```
 
 When a map is given, it **SHOULD** include the locale declared in `language.defaultLocale` (default `"en"`). Runtimes select the best match for the user's locale (RFC 4647 lookup) and fall back to the default locale, then to the first entry in the map.
@@ -217,11 +219,13 @@ Every object in a definition MAY carry a `doc` property — the language itself,
 | `helpUrl`     | string (URI)                                 | A page with extended help; runtimes SHOULD render a "Learn more" link.                                                                         |
 
 ```json
-"doc": {
-  "summary": "A condition the system can be in.",
-  "description": "A **state** is a stable situation in which the system waits for a trigger.\n\nStates may declare an *entry action* that runs each time the state is entered.",
-  "tags": ["behavior", "core"],
-  "seeAlso": [{ "title": "Transitions", "href": "#/metamodel/relations/Transition" }]
+{
+  "doc": {
+    "summary": "A condition the system can be in.",
+    "description": "A **state** is a stable situation in which the system waits for a trigger.\n\nStates may declare an *entry action* that runs each time the state is entered.",
+    "tags": ["behavior", "core"],
+    "seeAlso": [{ "title": "Transitions", "href": "#/metamodel/relations/Transition" }]
+  }
 }
 ```
 
@@ -243,8 +247,10 @@ All dynamic values are written in CEL. DEDL uses four embeddings, and the specif
 **(a) Expression.** A property of type *Expression* always contains CEL. It is written either as a bare string or as an object that adds documentation and an expected result type:
 
 ```json
-"rule": "self.name != ''"
-"rule": { "cel": "self.name != ''", "resultType": "bool", "doc": "Every state needs a name." }
+{
+  "rule": "self.name != ''",
+  "rule": { "cel": "self.name != ''", "resultType": "bool", "doc": "Every state needs a name." }
+}
 ```
 
 If `resultType` is present, validators MUST check that the static type of the expression is assignable to it.
@@ -392,17 +398,19 @@ The DEDL standard library is always available under the reserved alias `std` wit
 User-defined functions make repeated CEL logic reusable and documented.
 
 ```json
-"functions": {
-  "displayName": {
-    "params": [{ "name": "e", "type": "Element" }],
-    "returns": "string",
-    "cel": "has(e.name) && e.name != '' ? e.name : e.type + ' ' + e.id.substring(0, 4)",
-    "doc": "The human-readable name of an element, falling back to type and short id."
-  },
-  "workingDaysBetween": {
-    "params": [{ "name": "a", "type": "timestamp" }, { "name": "b", "type": "timestamp" }],
-    "returns": "int",
-    "cel": "workingDays(a, b, 'project')"
+{
+  "functions": {
+    "displayName": {
+      "params": [{ "name": "e", "type": "Element" }],
+      "returns": "string",
+      "cel": "has(e.name) && e.name != '' ? e.name : e.type + ' ' + e.id.substring(0, 4)",
+      "doc": "The human-readable name of an element, falling back to type and short id."
+    },
+    "workingDaysBetween": {
+      "params": [{ "name": "a", "type": "timestamp" }, { "name": "b", "type": "timestamp" }],
+      "returns": "int",
+      "cel": "workingDays(a, b, 'project')"
+    }
   }
 }
 ```
@@ -470,12 +478,14 @@ The metamodel defines the abstract syntax of the language: the kinds of elements
 ### 4.1 Overview
 
 ```json
-"metamodel": {
-  "diagram": { "attributes": { "title": { "type": "string" } } },
-  "dataTypes": { "Email": { "base": "string", "format": "email" } },
-  "enums": { "Priority": { "values": { "low": {}, "normal": {}, "high": {} }, "ordered": true } },
-  "types": { "Task": { "attributes": { "title": { "type": "string", "required": true } } } },
-  "relations": { "DependsOn": { "source": "Task", "target": "Task" } }
+{
+  "metamodel": {
+    "diagram": { "attributes": { "title": { "type": "string" } } },
+    "dataTypes": { "Email": { "base": "string", "format": "email" } },
+    "enums": { "Priority": { "values": { "low": {}, "normal": {}, "high": {} }, "ordered": true } },
+    "types": { "Task": { "attributes": { "title": { "type": "string", "required": true } } } },
+    "relations": { "DependsOn": { "source": "Task", "target": "Task" } }
+  }
 }
 ```
 
@@ -534,15 +544,17 @@ An attribute describes one named value on a node, relation, port or the diagram.
 | `x-*`                                 | any                               | Extensions.                                                                                                          |
 
 ```json
-"attributes": {
-  "name":      { "type": "string", "required": true, "maxLength": 80, "unique": "parent",
-                 "doc": "Unique within the enclosing region." },
-  "priority":  { "type": "Priority", "default": "normal" },
-  "effort":    { "type": "number", "min": 0, "step": 0.5, "unit": "h" },
-  "tags":      { "type": "string", "many": true, "uniqueItems": true },
-  "slug":      { "type": "string", "derived": "self.name.lowerAscii().replace(' ', '-')" },
-  "owner":     { "type": "Person", "doc": "Reference to a person node in the same diagram." },
-  "createdAt": { "type": "datetime", "readOnly": true, "default": { "cel": "env.now" } }
+{
+  "attributes": {
+    "name":      { "type": "string", "required": true, "maxLength": 80, "unique": "parent",
+                   "doc": "Unique within the enclosing region." },
+    "priority":  { "type": "Priority", "default": "normal" },
+    "effort":    { "type": "number", "min": 0, "step": 0.5, "unit": "h" },
+    "tags":      { "type": "string", "many": true, "uniqueItems": true },
+    "slug":      { "type": "string", "derived": "self.name.lowerAscii().replace(' ', '-')" },
+    "owner":     { "type": "Person", "doc": "Reference to a person node in the same diagram." },
+    "createdAt": { "type": "datetime", "readOnly": true, "default": { "cel": "env.now" } }
+  }
 }
 ```
 
@@ -553,15 +565,17 @@ An attribute describes one named value on a node, relation, port or the diagram.
 A data type is either a **constrained primitive** or a **struct**.
 
 ```json
-"dataTypes": {
-  "Percentage": { "base": "number", "min": 0, "max": 100, "unit": "%", "doc": "0–100 %" },
-  "Iso4217":    { "base": "string", "pattern": "^[A-Z]{3}$", "doc": "Currency code" },
-  "Money": {
-    "fields": {
-      "amount":   { "type": "number", "required": true },
-      "currency": { "type": "Iso4217", "default": "EUR" }
-    },
-    "display": { "cel": "string(value.amount) + ' ' + value.currency" }
+{
+  "dataTypes": {
+    "Percentage": { "base": "number", "min": 0, "max": 100, "unit": "%", "doc": "0–100 %" },
+    "Iso4217":    { "base": "string", "pattern": "^[A-Z]{3}$", "doc": "Currency code" },
+    "Money": {
+      "fields": {
+        "amount":   { "type": "number", "required": true },
+        "currency": { "type": "Iso4217", "default": "EUR" }
+      },
+      "display": { "cel": "string(value.amount) + ' ' + value.currency" }
+    }
   }
 }
 ```
@@ -579,14 +593,16 @@ Struct values are CEL maps; fields are accessed as `self.budget.amount`.
 ### 4.5 Enumerations
 
 ```json
-"enums": {
-  "Priority": {
-    "ordered": true,
-    "values": {
-      "low":    { "label": "Low",    "color": "#639922", "icon": "arrow-down" },
-      "normal": { "label": "Normal" },
-      "high":   { "label": "High",   "color": "#E24B4A", "icon": "arrow-up",
-                  "doc": "Must be scheduled in the current iteration." }
+{
+  "enums": {
+    "Priority": {
+      "ordered": true,
+      "values": {
+        "low":    { "label": "Low",    "color": "#639922", "icon": "arrow-down" },
+        "normal": { "label": "Normal" },
+        "high":   { "label": "High",   "color": "#E24B4A", "icon": "arrow-up",
+                    "doc": "Must be scheduled in the current iteration." }
+      }
     }
   }
 }
@@ -633,16 +649,18 @@ A type inherits all attributes, ports, containment rules and tags from its super
 **Containment** makes nodes nest: a pool contains lanes, a lane contains tasks, a table contains columns. A contained node has exactly one `parent`; deleting the parent deletes its contents (unless behavior says otherwise, 9.5).
 
 ```json
-"Lane": {
-  "attributes": { "name": { "type": "string" } },
-  "children": {
-    "allowed": ["Task", "Event", "Gateway"],
-    "min": 0,
-    "max": null,
-    "ordered": true,
-    "slots": {
-      "header":  { "allowed": ["LaneHeader"], "max": 1 },
-      "content": { "allowed": ["Task", "Event", "Gateway"] }
+{
+  "Lane": {
+    "attributes": { "name": { "type": "string" } },
+    "children": {
+      "allowed": ["Task", "Event", "Gateway"],
+      "min": 0,
+      "max": null,
+      "ordered": true,
+      "slots": {
+        "header":  { "allowed": ["LaneHeader"], "max": 1 },
+        "content": { "allowed": ["Task", "Event", "Gateway"] }
+      }
     }
   }
 }
@@ -666,17 +684,19 @@ A node type without `children` cannot contain other nodes. Top-level nodes have 
 A relation type describes a kind of connection, drawn as an edge.
 
 ```json
-"relations": {
-  "Transition": {
-    "doc": "A change from one state to another, fired by a trigger.",
-    "source": { "types": ["State"], "max": null },
-    "target": { "types": ["State"], "exclude": ["InitialState"] },
-    "directed": true,
-    "allowSelfLoops": true,
-    "allowParallel": true,
-    "attributes": {
-      "trigger": { "type": "string" },
-      "guard":   { "type": "expression", "context": "x-guard" }
+{
+  "relations": {
+    "Transition": {
+      "doc": "A change from one state to another, fired by a trigger.",
+      "source": { "types": ["State"], "max": null },
+      "target": { "types": ["State"], "exclude": ["InitialState"] },
+      "directed": true,
+      "allowSelfLoops": true,
+      "allowParallel": true,
+      "attributes": {
+        "trigger": { "type": "string" },
+        "guard":   { "type": "expression", "context": "x-guard" }
+      }
     }
   }
 }
@@ -905,12 +925,14 @@ Position values on an ordinal axis are **band references**: either the band id a
 **Nested coordinate systems.** A container node may establish its own coordinate system for its children. The children's positions are then stored relative to the container in the nested system's units. Examples: a Kanban board node whose x axis is the ordinal *status* column set; a sub-timeline inside a project phase; a pin layout inside a chip outline measured in millimetres.
 
 ```json
-"systems": {
-  "board": {
-    "kind": "cartesian",
-    "x": { "kind": "ordinal", "categories": { "nodes": "Column", "orderBy": "self.position" }, "bandSize": 260, "gap": 16 },
-    "y": { "kind": "linear", "unit": "px" },
-    "nested": { "Swimlane": "laneLocal" }
+{
+  "systems": {
+    "board": {
+      "kind": "cartesian",
+      "x": { "kind": "ordinal", "categories": { "nodes": "Column", "orderBy": "self.position" }, "bandSize": 260, "gap": 16 },
+      "y": { "kind": "linear", "unit": "px" },
+      "nested": { "Swimlane": "laneLocal" }
+    }
   }
 }
 ```
@@ -960,15 +982,17 @@ The attribute type MUST be compatible with the axis: `number`/`int` for numeric 
 #### Example: a Gantt task
 
 ```json
-"placement": {
-  "system": "schedule",
-  "x":  { "attribute": "start" },
-  "x2": { "attribute": "end" },
-  "y":  { "attribute": "assignee" },
-  "movable": { "x": true, "y": true },
-  "resizable": { "x": true, "y": false },
-  "stack": { "mode": "pack", "order": "self.start", "rowSize": 28, "growBand": true },
-  "doc": "Drag to reschedule or reassign. Drag the right edge to change the end date."
+{
+  "placement": {
+    "system": "schedule",
+    "x":  { "attribute": "start" },
+    "x2": { "attribute": "end" },
+    "y":  { "attribute": "assignee" },
+    "movable": { "x": true, "y": true },
+    "resizable": { "x": true, "y": false },
+    "stack": { "mode": "pack", "order": "self.start", "rowSize": 28, "growBand": true },
+    "doc": "Drag to reschedule or reassign. Drag the right edge to change the end date."
+  }
 }
 ```
 
@@ -981,20 +1005,22 @@ Snapping restricts where elements can be placed and how they can be sized, so th
 Snapping is defined **per axis**. Each axis of a coordinate system can have its own rule, so an editor may snap only horizontally, only vertically, or both, with different rules on each. The same rule model applies to positions, sizes, edge bendpoints, label offsets and rotation.
 
 ```json
-"snapping": {
-  "enabled": true,
-  "mode": "always",
-  "x": { "calendar": { "unit": "day", "align": "nearest" } },
-  "y": { "bands": { "align": "center" } },
-  "size": { "x": { "calendar": { "unit": "day" }, "min": "P1D" } },
-  "bendpoints": "inherit",
-  "targets": ["rule", "objects", "guides"],
-  "toleranceScreenPx": 8,
-  "bypassModifier": "Alt",
-  "feedback": { "showGhost": true, "showValue": true },
-  "doc": {
-    "summary": "Tasks snap to whole days and into resource lanes.",
-    "rationale": "Plans are made in days; sub-day precision would suggest accuracy the plan does not have."
+{
+  "snapping": {
+    "enabled": true,
+    "mode": "always",
+    "x": { "calendar": { "unit": "day", "align": "nearest" } },
+    "y": { "bands": { "align": "center" } },
+    "size": { "x": { "calendar": { "unit": "day" }, "min": "P1D" } },
+    "bendpoints": "inherit",
+    "targets": ["rule", "objects", "guides"],
+    "toleranceScreenPx": 8,
+    "bypassModifier": "Alt",
+    "feedback": { "showGhost": true, "showValue": true },
+    "doc": {
+      "summary": "Tasks snap to whole days and into resource lanes.",
+      "rationale": "Plans are made in days; sub-day precision would suggest accuracy the plan does not have."
+    }
   }
 }
 ```
@@ -1076,11 +1102,13 @@ The rule result MUST be idempotent: snapping an already snapped value returns th
 Grid in both directions (classic diagram editor):
 
 ```json
-"snapProfiles": {
-  "grid10": {
-    "both": { "grid": { "spacing": 10 } },
-    "size": { "both": { "grid": { "spacing": 10 }, "min": 20 } },
-    "doc": "Everything aligns to a 10 px grid."
+{
+  "snapProfiles": {
+    "grid10": {
+      "both": { "grid": { "spacing": 10 } },
+      "size": { "both": { "grid": { "spacing": 10 }, "min": 20 } },
+      "doc": "Everything aligns to a 10 px grid."
+    }
   }
 }
 ```
@@ -1088,25 +1116,31 @@ Grid in both directions (classic diagram editor):
 Horizontal only (a timeline of freely stacked cards):
 
 ```json
-"snapping": { "x": { "calendar": { "unit": "week", "align": "start" } }, "y": "none" }
+{
+  "snapping": { "x": { "calendar": { "unit": "week", "align": "start" } }, "y": "none" }
+}
 ```
 
 Vertical only (a sequence diagram: lifelines are placed by layout on an ordinal x axis, messages snap to 20 px rows):
 
 ```json
-"snapping": { "x": { "bands": { "align": "center" } }, "y": { "grid": { "spacing": 20, "offset": 60 } } }
+{
+  "snapping": { "x": { "bands": { "align": "center" } }, "y": { "grid": { "spacing": 20, "offset": 60 } } }
+}
 ```
 
 Different rules per axis and zoom (a floor plan in millimetres):
 
 ```json
-"snapping": {
-  "x": { "byZoom": [ { "maxZoom": 0.25, "rule": { "grid": { "spacing": 500 } } },
-                     { "maxZoom": 1.0,  "rule": { "grid": { "spacing": 100 } } },
-                     { "rule": { "grid": { "spacing": 10 } } } ] },
-  "y": "inherit-x",
-  "rotation": { "step": 90 },
-  "doc": "Walls snap to 10 cm, 50 cm or 1 cm depending on zoom; rotation in right angles."
+{
+  "snapping": {
+    "x": { "byZoom": [ { "maxZoom": 0.25, "rule": { "grid": { "spacing": 500 } } },
+                       { "maxZoom": 1.0,  "rule": { "grid": { "spacing": 100 } } },
+                       { "rule": { "grid": { "spacing": 10 } } } ] },
+    "y": "inherit-x",
+    "rotation": { "step": 90 },
+    "doc": "Walls snap to 10 cm, 50 cm or 1 cm depending on zoom; rotation in right angles."
+  }
 }
 ```
 
@@ -1115,13 +1149,17 @@ Different rules per axis and zoom (a floor plan in millimetres):
 Working-time snapping (15-minute slots during office hours):
 
 ```json
-"x": { "calendar": { "unit": "minute", "step": 15, "workingTime": true, "calendar": "office" } }
+{
+  "x": { "calendar": { "unit": "minute", "step": 15, "workingTime": true, "calendar": "office" } }
+}
 ```
 
 Circuit pins on a 2.54 mm pitch with magnetic port snapping:
 
 ```json
-"snapping": { "both": { "grid": { "spacing": 2.54 } }, "targets": ["ports", "rule"], "toleranceScreenPx": 10 }
+{
+  "snapping": { "both": { "grid": { "spacing": 2.54 } }, "targets": ["ports", "rule"], "toleranceScreenPx": 10 }
+}
 ```
 
 ### 5.12 Guides
@@ -1151,13 +1189,15 @@ The **visible grid** is separate from snapping (a grid can be displayed without 
 A **Ruler** (axis property `ruler`) configures rulers and headers: `visible`, `position` (`"top"`, `"bottom"`, `"left"`, `"right"`), `size`, and `levels` — a list of header rows for multi-level time scales:
 
 ```json
-"ruler": {
-  "position": "top",
-  "levels": [
-    { "unit": "month", "format": "MMMM yyyy" },
-    { "unit": "week",  "format": "'W'w",  "minZoom": 0.5 },
-    { "unit": "day",   "format": "EEE d", "minZoom": 1.0 }
-  ]
+{
+  "ruler": {
+    "position": "top",
+    "levels": [
+      { "unit": "month", "format": "MMMM yyyy" },
+      { "unit": "week",  "format": "'W'w",  "minZoom": 0.5 },
+      { "unit": "day",   "format": "EEE d", "minZoom": 1.0 }
+    ]
+  }
 }
 ```
 
@@ -1173,17 +1213,19 @@ The notation layer defines the concrete syntax: how every node, edge, port and l
 ### 6.1 Overview and resolution
 
 ```json
-"notation": {
-  "theme":   { "tokens": { … }, "modes": { "dark": { … } } },
-  "styles":  { "base": { … }, "state": { "extends": "base", … } },
-  "shapes":  { "folder": { … } },
-  "markers": { "openDiamond": { … } },
-  "icons":   { "bolt": { "svg": "…" } },
-  "nodes":   { "State": { … } },
-  "edges":   { "Transition": { … } },
-  "ports":   { "Block.in": { … } },
-  "canvas":  { … },
-  "doc":     "…"
+{
+  "notation": {
+    "theme":   { "tokens": {}, "modes": { "dark": {} } },
+    "styles":  { "base": {}, "state": { "extends": "base" } },
+    "shapes":  { "folder": {} },
+    "markers": { "openDiamond": {} },
+    "icons":   { "bolt": { "svg": "…" } },
+    "nodes":   { "State": {} },
+    "edges":   { "Transition": {} },
+    "ports":   { "Block.in": {} },
+    "canvas":  {},
+    "doc":     "…"
+  }
 }
 ```
 
@@ -1205,30 +1247,32 @@ Properties merge per key: a state style that only sets `stroke.color` keeps the 
 Tokens give colors, fonts and sizes semantic names so that one definition renders correctly in light mode, dark mode, high contrast and the brand palette of an organisation.
 
 ```json
-"theme": {
-  "tokens": {
-    "color.surface":      "#FFFFFF",
-    "color.text":         "#1F1E1C",
-    "color.border":       "#8A8880",
-    "color.accent":       "#534AB7",
-    "color.accent.soft":  "#EEEDFE",
-    "color.danger":       "#E24B4A",
-    "font.body":          "Inter, system-ui, sans-serif",
-    "font.mono":          "JetBrains Mono, monospace",
-    "size.corner":        8,
-    "size.stroke":        1.25
-  },
-  "modes": {
-    "dark": {
-      "color.surface":     "#1F1E1C",
-      "color.text":        "#F1EFE8",
-      "color.border":      "#B4B2A9",
-      "color.accent.soft": "#3C3489"
+{
+  "theme": {
+    "tokens": {
+      "color.surface":      "#FFFFFF",
+      "color.text":         "#1F1E1C",
+      "color.border":       "#8A8880",
+      "color.accent":       "#534AB7",
+      "color.accent.soft":  "#EEEDFE",
+      "color.danger":       "#E24B4A",
+      "font.body":          "Inter, system-ui, sans-serif",
+      "font.mono":          "JetBrains Mono, monospace",
+      "size.corner":        8,
+      "size.stroke":        1.25
     },
-    "high-contrast": { "color.border": "#000000", "size.stroke": 2 }
-  },
-  "defaultMode": "light",
-  "followSystem": true
+    "modes": {
+      "dark": {
+        "color.surface":     "#1F1E1C",
+        "color.text":        "#F1EFE8",
+        "color.border":      "#B4B2A9",
+        "color.accent.soft": "#3C3489"
+      },
+      "high-contrast": { "color.border": "#000000", "size.stroke": 2 }
+    },
+    "defaultMode": "light",
+    "followSystem": true
+  }
 }
 ```
 
@@ -1354,12 +1398,14 @@ A **Style** bundles visual properties. Styles are declared in `notation.styles` 
 | `visible`       | Bindable bool                                |                                                                        |
 
 ```json
-"styles": {
-  "base":     { "fill": { "token": "color.surface" },
-                "stroke": { "color": { "token": "color.border" }, "width": { "token": "size.stroke" } },
-                "font": { "size": 13 } },
-  "emphasis": { "extends": "base", "stroke": { "width": 2 }, "font": { "weight": 600 } },
-  "ghost":    { "extends": "base", "opacity": 0.5, "stroke": { "dash": "dashed" } }
+{
+  "styles": {
+    "base":     { "fill": { "token": "color.surface" },
+                  "stroke": { "color": { "token": "color.border" }, "width": { "token": "size.stroke" } },
+                  "font": { "size": 13 } },
+    "emphasis": { "extends": "base", "stroke": { "width": 2 }, "font": { "weight": 600 } },
+    "ghost":    { "extends": "base", "opacity": 0.5, "stroke": { "dash": "dashed" } }
+  }
 }
 ```
 
@@ -1384,11 +1430,13 @@ Runtimes provide sensible defaults for `hover`, `selected`, `dropTarget`, `dropR
 **Conditional styles** apply when an expression holds:
 
 ```json
-"conditions": [
-  { "when": "self.priority == 'high'", "style": { "stroke": { "color": { "token": "color.danger" }, "width": 2 } },
-    "doc": "High-priority tasks have a red border." },
-  { "when": "self.done", "style": "ghost" }
-]
+{
+  "conditions": [
+    { "when": "self.priority == 'high'", "style": { "stroke": { "color": { "token": "color.danger" }, "width": 2 } },
+      "doc": "High-priority tasks have a red border." },
+    { "when": "self.done", "style": "ghost" }
+  ]
+}
 ```
 
 ### 6.7 Shapes: built-in primitives
@@ -1396,10 +1444,12 @@ Runtimes provide sensible defaults for `hover`, `selected`, `dropTarget`, `dropR
 A node's body is a **shape**. A shape reference is either a name (`"ellipse"`), or an object with a `type` and parameters, where every parameter is Bindable:
 
 ```json
-"shape": "roundedRect"
-"shape": { "type": "roundedRect", "params": { "radius": 12 } }
-"shape": { "type": "polygon", "params": { "sides": { "cel": "self.corners" }, "rotation": 0 } }
-"shape": { "type": "note", "params": { "fold": 14 }, "doc": "Folded corner signals a comment." }
+{
+  "shape": "roundedRect",
+  "shape": { "type": "roundedRect", "params": { "radius": 12 } },
+  "shape": { "type": "polygon", "params": { "sides": { "cel": "self.corners" }, "rotation": 0 } },
+  "shape": { "type": "note", "params": { "fold": 14 }, "doc": "Folded corner signals a comment." }
+}
 ```
 
 The standard library offers these primitives (all parameters optional; defaults in Appendix B.2):
@@ -1493,19 +1543,23 @@ Coordinates are relative to the top-left of the bounds; x grows right, y grows d
 **PathDef** — a path is either an SVG path string in a declared `viewBox`, scaled into the bounds, or a list of segments whose coordinates are GeomExprs:
 
 ```json
-"path": { "viewBox": [0, 0, 100, 60], "d": "M0 10 Q50 -10 100 10 L100 50 Q50 70 0 50 Z" }
+{
+  "path": { "viewBox": [0, 0, 100, 60], "d": "M0 10 Q50 -10 100 10 L100 50 Q50 70 0 50 Z" }
+}
 ```
 
 ```json
-"path": {
-  "segments": [
-    { "op": "M", "x": 0,            "y": 0 },
-    { "op": "L", "x": "w - p.fold", "y": 0 },
-    { "op": "L", "x": "w",          "y": "p.fold" },
-    { "op": "L", "x": "w",          "y": "h" },
-    { "op": "L", "x": 0,            "y": "h" },
-    { "op": "Z" }
-  ]
+{
+  "path": {
+    "segments": [
+      { "op": "M", "x": 0,            "y": 0 },
+      { "op": "L", "x": "w - p.fold", "y": 0 },
+      { "op": "L", "x": "w",          "y": "p.fold" },
+      { "op": "L", "x": "w",          "y": "h" },
+      { "op": "L", "x": 0,            "y": "h" },
+      { "op": "Z" }
+    ]
+  }
 }
 ```
 
@@ -1554,35 +1608,37 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 **Example — a callout with a draggable tail and adjustable radius.**
 
 ```json
-"shapes": {
-  "speech": {
-    "label": "Speech bubble",
-    "doc": "Drag the round handle to point the tail, the square handle to change the corner radius.",
-    "params": {
-      "tipX":   { "type": "number", "unit": "fraction", "default": 0.2, "min": -0.5, "max": 1.5 },
-      "tipY":   { "type": "number", "unit": "fraction", "default": 1.4, "min": -0.8, "max": 1.8 },
-      "base":   { "type": "number", "unit": "fraction", "default": 0.3, "min": 0.1, "max": 0.8 },
-      "radius": { "type": "number", "unit": "length", "default": 8, "min": 0, "max": "min(w, h) / 2" }
-    },
-    "parts": [
-      { "id": "body", "shape": { "type": "roundedRect", "params": { "radius": { "param": "radius" } } },
-        "box": { "x": 0, "y": 0, "w": "w", "h": "h" }, "outline": true },
-      { "id": "tail",
-        "shape": { "path": { "segments": [
-          { "op": "M", "x": "w * p.base",        "y": "h - 1" },
-          { "op": "L", "x": "w * p.tipX",        "y": "h * p.tipY" },
-          { "op": "L", "x": "w * (p.base + 0.15)", "y": "h - 1" },
-          { "op": "Z" } ] } },
-        "box": { "x": 0, "y": 0, "w": "w", "h": "h" } }
-    ],
-    "textArea": { "x": 10, "y": 8, "w": "w - 20", "h": "h - 16" },
-    "handles": [
-      { "param": "tipX", "yParam": "tipY", "axis": "both",
-        "x": "w * p.tipX", "y": "h * p.tipY",
-        "value": "px / w", "yValue": "py / h", "label": "Tail tip" },
-      { "param": "radius", "axis": "x", "x": "p.radius", "y": 0, "value": "px",
-        "snap": { "grid": { "spacing": 2 } }, "label": "Corner radius" }
-    ]
+{
+  "shapes": {
+    "speech": {
+      "label": "Speech bubble",
+      "doc": "Drag the round handle to point the tail, the square handle to change the corner radius.",
+      "params": {
+        "tipX":   { "type": "number", "unit": "fraction", "default": 0.2, "min": -0.5, "max": 1.5 },
+        "tipY":   { "type": "number", "unit": "fraction", "default": 1.4, "min": -0.8, "max": 1.8 },
+        "base":   { "type": "number", "unit": "fraction", "default": 0.3, "min": 0.1, "max": 0.8 },
+        "radius": { "type": "number", "unit": "length", "default": 8, "min": 0, "max": "min(w, h) / 2" }
+      },
+      "parts": [
+        { "id": "body", "shape": { "type": "roundedRect", "params": { "radius": { "param": "radius" } } },
+          "box": { "x": 0, "y": 0, "w": "w", "h": "h" }, "outline": true },
+        { "id": "tail",
+          "shape": { "path": { "segments": [
+            { "op": "M", "x": "w * p.base",        "y": "h - 1" },
+            { "op": "L", "x": "w * p.tipX",        "y": "h * p.tipY" },
+            { "op": "L", "x": "w * (p.base + 0.15)", "y": "h - 1" },
+            { "op": "Z" } ] } },
+          "box": { "x": 0, "y": 0, "w": "w", "h": "h" } }
+      ],
+      "textArea": { "x": 10, "y": 8, "w": "w - 20", "h": "h - 16" },
+      "handles": [
+        { "param": "tipX", "yParam": "tipY", "axis": "both",
+          "x": "w * p.tipX", "y": "h * p.tipY",
+          "value": "px / w", "yValue": "py / h", "label": "Tail tip" },
+        { "param": "radius", "axis": "x", "x": "p.radius", "y": 0, "value": "px",
+          "snap": { "grid": { "spacing": 2 } }, "label": "Corner radius" }
+      ]
+    }
   }
 }
 ```
@@ -1590,10 +1646,12 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 **Example — a static path from a viewBox with nine-slice scaling.**
 
 ```json
-"ticket": {
-  "path": { "viewBox": [0, 0, 120, 60],
-            "d": "M8 0 H112 A8 8 0 0 0 120 8 V52 A8 8 0 0 0 112 60 H8 A8 8 0 0 0 0 52 V8 A8 8 0 0 0 8 0 Z" },
-  "scaling": { "nineSlice": [8, 8, 8, 8] }
+{
+  "ticket": {
+    "path": { "viewBox": [0, 0, 120, 60],
+              "d": "M8 0 H112 A8 8 0 0 0 120 8 V52 A8 8 0 0 0 112 60 H8 A8 8 0 0 0 0 52 V8 A8 8 0 0 0 8 0 Z" },
+    "scaling": { "nineSlice": [8, 8, 8, 8] }
+  }
 }
 ```
 
@@ -1711,13 +1769,15 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 **Variants** switch whole parts of a notation based on model state — for example a collapsed sub-process, an event rendered differently when interrupting, a gateway symbol that depends on its kind:
 
 ```json
-"variants": [
-  { "when": "self.kind == 'exclusive'", "doc": "XOR gateway shows an ×.",
-    "icon": { "icon": "std.x", "position": "center", "size": 18 } },
-  { "when": "self.kind == 'parallel'",
-    "icon": { "icon": "std.plus", "position": "center", "size": 18 } },
-  { "when": "self.view.collapsed", "shape": "roundedRect", "size": { "fixed": [120, 60] }, "compartments": [] }
-]
+{
+  "variants": [
+    { "when": "self.kind == 'exclusive'", "doc": "XOR gateway shows an ×.",
+      "icon": { "icon": "std.x", "position": "center", "size": 18 } },
+    { "when": "self.kind == 'parallel'",
+      "icon": { "icon": "std.plus", "position": "center", "size": 18 } },
+    { "when": "self.view.collapsed", "shape": "roundedRect", "size": { "fixed": [120, 60] }, "compartments": [] }
+  ]
+}
 ```
 
 A Variant may contain any NodeNotation property except `placement`; matching variants are applied in order over the base notation.
@@ -1780,27 +1840,29 @@ A Variant may contain any NodeNotation property except `placement`; matching var
 **Example — a richly decorated edge.**
 
 ```json
-"edges": {
-  "Association": {
-    "line": {
-      "stroke": { "color": { "token": "color.border" }, "width": 1.25,
-                  "dash": { "cel": "self.derived ? 'dashed' : 'solid'" },
-                  "casing": { "color": { "token": "color.surface" }, "width": 5 } },
-      "routing": "rounded", "cornerRadius": 6, "avoidNodes": true,
-      "bendpoints": { "editable": true, "removeOnStraighten": true },
-      "minSegmentLength": 16
-    },
-    "jumps": { "style": "arc", "size": 5 },
-    "sourceMarker": { "cel": "self.sourceAggregation == 'composite' ? 'diamondFilled' : (self.sourceAggregation == 'shared' ? 'diamond' : 'none')" },
-    "targetMarker": { "cel": "self.navigable ? 'arrow' : 'none'" },
-    "labels": [
-      { "id": "name",   "text": { "attribute": "name" }, "at": "middle", "side": "above", "editable": "inline" },
-      { "id": "srcRole","text": { "attribute": "sourceRole" }, "at": "start", "offset": 12, "side": "above", "editable": "inline" },
-      { "id": "srcMul", "text": { "attribute": "sourceMultiplicity" }, "at": "start", "offset": 12, "side": "below" },
-      { "id": "tgtRole","text": { "attribute": "targetRole" }, "at": "end", "offset": 12, "side": "above", "editable": "inline" },
-      { "id": "tgtMul", "text": { "attribute": "targetMultiplicity" }, "at": "end", "offset": 12, "side": "below" }
-    ],
-    "states": { "selected": { "stroke": { "color": { "token": "color.accent" }, "width": 2 } } }
+{
+  "edges": {
+    "Association": {
+      "line": {
+        "stroke": { "color": { "token": "color.border" }, "width": 1.25,
+                    "dash": { "cel": "self.derived ? 'dashed' : 'solid'" },
+                    "casing": { "color": { "token": "color.surface" }, "width": 5 } },
+        "routing": "rounded", "cornerRadius": 6, "avoidNodes": true,
+        "bendpoints": { "editable": true, "removeOnStraighten": true },
+        "minSegmentLength": 16
+      },
+      "jumps": { "style": "arc", "size": 5 },
+      "sourceMarker": { "cel": "self.sourceAggregation == 'composite' ? 'diamondFilled' : (self.sourceAggregation == 'shared' ? 'diamond' : 'none')" },
+      "targetMarker": { "cel": "self.navigable ? 'arrow' : 'none'" },
+      "labels": [
+        { "id": "name",   "text": { "attribute": "name" }, "at": "middle", "side": "above", "editable": "inline" },
+        { "id": "srcRole","text": { "attribute": "sourceRole" }, "at": "start", "offset": 12, "side": "above", "editable": "inline" },
+        { "id": "srcMul", "text": { "attribute": "sourceMultiplicity" }, "at": "start", "offset": 12, "side": "below" },
+        { "id": "tgtRole","text": { "attribute": "targetRole" }, "at": "end", "offset": 12, "side": "above", "editable": "inline" },
+        { "id": "tgtMul", "text": { "attribute": "targetMultiplicity" }, "at": "end", "offset": 12, "side": "below" }
+      ],
+      "states": { "selected": { "stroke": { "color": { "token": "color.accent" }, "width": 2 } } }
+    }
   }
 }
 ```
@@ -1810,10 +1872,12 @@ A Variant may contain any NodeNotation property except `placement`; matching var
 A **marker** is drawn at an edge end (or along the edge) and oriented along the path tangent. References are a name, a name with parameters, or an inline definition:
 
 ```json
-"targetMarker": "arrowFilled"
-"targetMarker": { "type": "arrow", "params": { "length": 12, "width": 10, "angle": 30 } }
-"targetMarker": { "type": "stack", "markers": ["bar", "erMany"], "spacing": 3 }
-"targetMarker": { "cel": "self.optional ? 'erZeroOrMany' : 'erOneOrMany'" }
+{
+  "targetMarker": "arrowFilled",
+  "targetMarker": { "type": "arrow", "params": { "length": 12, "width": 10, "angle": 30 } },
+  "targetMarker": { "type": "stack", "markers": ["bar", "erMany"], "spacing": 3 },
+  "targetMarker": { "cel": "self.optional ? 'erZeroOrMany' : 'erOneOrMany'" }
+}
 ```
 
 **Built-in markers** (details and default sizes in Appendix B.3):
@@ -1856,16 +1920,18 @@ A **marker** is drawn at an edge end (or along the edge) and oriented along the 
 | `label`, `doc`   |                                         | Shown in marker pickers and generated docs.                                                                         |
 
 ```json
-"markers": {
-  "chevronPair": {
-    "label": "Double chevron",
-    "doc": "Signals a streamed (continuous) flow.",
-    "params": { "gap": { "type": "number", "default": 4 } },
-    "path": { "segments": [
-      { "op": "M", "x": -10, "y": -5 }, { "op": "L", "x": 0,           "y": 0 }, { "op": "L", "x": -10,          "y": 5 },
-      { "op": "M", "x": "-10 - p.gap", "y": -5 }, { "op": "L", "x": "-p.gap", "y": 0 }, { "op": "L", "x": "-10 - p.gap", "y": 5 } ] },
-    "fill": "none",
-    "shorten": 0
+{
+  "markers": {
+    "chevronPair": {
+      "label": "Double chevron",
+      "doc": "Signals a streamed (continuous) flow.",
+      "params": { "gap": { "type": "number", "default": 4 } },
+      "path": { "segments": [
+        { "op": "M", "x": -10, "y": -5 }, { "op": "L", "x": 0,           "y": 0 }, { "op": "L", "x": -10,          "y": 5 },
+        { "op": "M", "x": "-10 - p.gap", "y": -5 }, { "op": "L", "x": "-p.gap", "y": 0 }, { "op": "L", "x": "-10 - p.gap", "y": 5 } ] },
+      "fill": "none",
+      "shorten": 0
+    }
   }
 }
 ```
@@ -1972,21 +2038,23 @@ This layer defines how users create and edit elements: the palette (toolbox), to
 ### 7.1 Toolbox
 
 ```json
-"toolbox": {
-  "layout": "list",
-  "searchable": true,
-  "showRecent": 5,
-  "groups": [
-    { "id": "states", "label": "States", "icon": "square-rounded",
-      "doc": "Elements that describe where the system can be.",
-      "tools": [
-        { "id": "state",   "creates": "State",        "shortcut": "S" },
-        { "id": "initial", "creates": "InitialState", "shortcut": "I" },
-        { "id": "final",   "creates": "FinalState" }
-      ] },
-    { "id": "connections", "label": "Connections",
-      "tools": [ { "id": "transition", "creates": "Transition", "mode": "drag", "shortcut": "T" } ] }
-  ]
+{
+  "toolbox": {
+    "layout": "list",
+    "searchable": true,
+    "showRecent": 5,
+    "groups": [
+      { "id": "states", "label": "States", "icon": "square-rounded",
+        "doc": "Elements that describe where the system can be.",
+        "tools": [
+          { "id": "state",   "creates": "State",        "shortcut": "S" },
+          { "id": "initial", "creates": "InitialState", "shortcut": "I" },
+          { "id": "final",   "creates": "FinalState" }
+        ] },
+      { "id": "connections", "label": "Connections",
+        "tools": [ { "id": "transition", "creates": "Transition", "mode": "drag", "shortcut": "T" } ] }
+    ]
+  }
 }
 ```
 
@@ -2035,19 +2103,21 @@ If `toolbox` is absent, the runtime generates one group per 10 concrete types, a
 Context tools appear next to the selected element (a "quick bar" or radial menu) and are the fastest way to grow a diagram. They are declared in `toolbox.contextTools`.
 
 ```json
-"contextTools": [
-  {
-    "for": ["State"],
-    "placement": "around",
-    "tools": [
-      { "kind": "create-connected", "creates": "State", "via": "Transition", "direction": "outgoing",
-        "label": "Add next state", "icon": "arrow-right", "position": "right" },
-      { "kind": "connect", "via": "Transition", "icon": "link", "position": "bottom" },
-      { "kind": "operation", "operation": "makeFinal", "icon": "flag", "position": "top-right" },
-      { "kind": "delete", "position": "top-right" }
-    ]
-  }
-]
+{
+  "contextTools": [
+    {
+      "for": ["State"],
+      "placement": "around",
+      "tools": [
+        { "kind": "create-connected", "creates": "State", "via": "Transition", "direction": "outgoing",
+          "label": "Add next state", "icon": "arrow-right", "position": "right" },
+        { "kind": "connect", "via": "Transition", "icon": "link", "position": "bottom" },
+        { "kind": "operation", "operation": "makeFinal", "icon": "flag", "position": "top-right" },
+        { "kind": "delete", "position": "top-right" }
+      ]
+    }
+  ]
+}
 ```
 
 | Property    | Type                                          | Description                               |
@@ -2066,22 +2136,24 @@ Right-click **context menus** are defined the same way under `toolbox.contextMen
 Templates insert pre-built fragments — patterns, starter structures, snippets. They are declared in `toolbox.templates`:
 
 ```json
-"templates": {
-  "retryLoop": {
-    "label": "Retry loop",
-    "doc": "A state that retries up to three times before failing.",
-    "params": { "attempts": { "type": "int", "default": 3, "label": "Attempts" } },
-    "fragment": {
-      "nodes": [
-        { "ref": "try",  "type": "State", "attributes": { "name": "'Trying'" }, "at": [0, 0] },
-        { "ref": "fail", "type": "FinalState", "attributes": { "name": "'Failed'" }, "at": [200, 0] }
-      ],
-      "relations": [
-        { "type": "Transition", "source": "try", "target": "try",  "attributes": { "guard": "'retries < ' + string(p.attempts)" } },
-        { "type": "Transition", "source": "try", "target": "fail", "attributes": { "guard": "'retries >= ' + string(p.attempts)" } }
-      ]
-    },
-    "preview": "templates/retry.svg"
+{
+  "templates": {
+    "retryLoop": {
+      "label": "Retry loop",
+      "doc": "A state that retries up to three times before failing.",
+      "params": { "attempts": { "type": "int", "default": 3, "label": "Attempts" } },
+      "fragment": {
+        "nodes": [
+          { "ref": "try",  "type": "State", "attributes": { "name": "'Trying'" }, "at": [0, 0] },
+          { "ref": "fail", "type": "FinalState", "attributes": { "name": "'Failed'" }, "at": [200, 0] }
+        ],
+        "relations": [
+          { "type": "Transition", "source": "try", "target": "try",  "attributes": { "guard": "'retries < ' + string(p.attempts)" } },
+          { "type": "Transition", "source": "try", "target": "fail", "attributes": { "guard": "'retries >= ' + string(p.attempts)" } }
+        ]
+      },
+      "preview": "templates/retry.svg"
+    }
   }
 }
 ```
@@ -2095,30 +2167,32 @@ A **form** is a declarative description of editable fields for one element type.
 If no form is defined for a type, runtimes generate one: one field per non-derived attribute, grouped by the attribute `group`, ordered by `order` then declaration order, with widgets chosen by type (Appendix B.7).
 
 ```json
-"forms": {
-  "taskInspector": {
-    "for": "Task",
-    "usage": ["inspector", "create"],
-    "layout": { "columns": 2 },
-    "items": [
-      { "kind": "section", "title": "General", "items": [
-        { "attribute": "title", "colSpan": 2, "widget": "text" },
-        { "attribute": "assignee", "widget": "reference",
-          "options": { "cel": "diagram.nodesOfType('Resource')" } },
-        { "attribute": "priority", "widget": "segmented" }
-      ] },
-      { "kind": "section", "title": "Schedule", "items": [
-        { "attribute": "start", "widget": "date" },
-        { "attribute": "end",   "widget": "date",
-          "validate": [ { "rule": "value >= self.start", "message": "End must not be before start." } ] },
-        { "kind": "computed", "label": "Duration",
-          "value": { "cel": "string(workingDays(self.start, self.end, 'project')) + ' working days'" } }
-      ] },
-      { "kind": "section", "title": "Notes", "collapsed": true, "items": [
-        { "attribute": "notes", "widget": "markdown", "rows": 6 }
-      ] },
-      { "kind": "button", "label": "Split task", "operation": "splitTask", "icon": "scissors" }
-    ]
+{
+  "forms": {
+    "taskInspector": {
+      "for": "Task",
+      "usage": ["inspector", "create"],
+      "layout": { "columns": 2 },
+      "items": [
+        { "kind": "section", "title": "General", "items": [
+          { "attribute": "title", "colSpan": 2, "widget": "text" },
+          { "attribute": "assignee", "widget": "reference",
+            "options": { "cel": "diagram.nodesOfType('Resource')" } },
+          { "attribute": "priority", "widget": "segmented" }
+        ] },
+        { "kind": "section", "title": "Schedule", "items": [
+          { "attribute": "start", "widget": "date" },
+          { "attribute": "end",   "widget": "date",
+            "validate": [ { "rule": "value >= self.start", "message": "End must not be before start." } ] },
+          { "kind": "computed", "label": "Duration",
+            "value": { "cel": "string(workingDays(self.start, self.end, 'project')) + ' working days'" } }
+        ] },
+        { "kind": "section", "title": "Notes", "collapsed": true, "items": [
+          { "attribute": "notes", "widget": "markdown", "rows": 6 }
+        ] },
+        { "kind": "button", "label": "Split task", "operation": "splitTask", "icon": "scissors" }
+      ]
+    }
   }
 }
 ```
@@ -2164,13 +2238,15 @@ If no form is defined for a type, runtimes generate one: one field per non-deriv
 Nodes MAY display live form widgets on the canvas — checkboxes in a to-do card, a slider on a parameter block, a dropdown on a gateway, a table inside an entity — via `NodeNotation.form`:
 
 ```json
-"form": {
-  "form": "taskCard",
-  "region": { "x": 8, "y": 30, "w": "w - 16", "h": "h - 38" },
-  "interaction": "always",
-  "minZoom": 0.6,
-  "fallback": "labels",
-  "autoSize": true
+{
+  "form": {
+    "form": "taskCard",
+    "region": { "x": 8, "y": 30, "w": "w - 16", "h": "h - 38" },
+    "interaction": "always",
+    "minZoom": 0.6,
+    "fallback": "labels",
+    "autoSize": true
+  }
 }
 ```
 
@@ -2194,26 +2270,28 @@ Constraints state what makes a diagram valid. They are written in CEL, evaluated
 ### 8.1 Overview
 
 ```json
-"constraints": {
-  "groups": {
-    "structure": { "label": "Structure", "doc": "Rules without which the machine cannot run." },
-    "style":     { "label": "Style guide", "enabledByDefault": false }
-  },
-  "rules": [
-    {
-      "id": "singleInitial",
-      "group": "structure",
-      "scope": "diagram",
-      "rule": "diagram.nodesOfType('InitialState').size() == 1",
-      "severity": "error",
-      "message": "A state machine needs exactly one initial state.",
-      "doc": { "rationale": "Execution must start somewhere, and only in one place." },
-      "fixes": [
-        { "label": "Add an initial state", "when": "diagram.nodesOfType('InitialState').size() == 0",
-          "actions": [ { "create": { "type": "'InitialState'", "at": "[40.0, 40.0]" } } ] }
-      ]
-    }
-  ]
+{
+  "constraints": {
+    "groups": {
+      "structure": { "label": "Structure", "doc": "Rules without which the machine cannot run." },
+      "style":     { "label": "Style guide", "enabledByDefault": false }
+    },
+    "rules": [
+      {
+        "id": "singleInitial",
+        "group": "structure",
+        "scope": "diagram",
+        "rule": "diagram.nodesOfType('InitialState').size() == 1",
+        "severity": "error",
+        "message": "A state machine needs exactly one initial state.",
+        "doc": { "rationale": "Execution must start somewhere, and only in one place." },
+        "fixes": [
+          { "label": "Add an initial state", "when": "diagram.nodesOfType('InitialState').size() == 0",
+            "actions": [ { "create": { "type": "'InitialState'", "at": "[40.0, 40.0]" } } ] }
+        ]
+      }
+    ]
+  }
 }
 ```
 
@@ -2254,25 +2332,27 @@ Constraints state what makes a diagram valid. They are written in CEL, evaluated
 Invariants (`kind: "invariant"`) are statements about the current state of the diagram, evaluated for each element in `scope`:
 
 ```json
-{ "id": "nameRequired", "scope": "State", "rule": "self.name.trim() != ''",
-  "attribute": "name", "severity": "error", "message": "Every state needs a name." },
+[
+  { "id": "nameRequired", "scope": "State", "rule": "self.name.trim() != ''",
+    "attribute": "name", "severity": "error", "message": "Every state needs a name." },
 
-{ "id": "uniqueNames", "scope": "State",
-  "rule": "diagram.nodesOfType('State').filter(s, s.name == self.name).size() == 1",
-  "severity": "warning", "message": { "cel": "'The name \"' + self.name + '\" is used more than once.'" },
-  "target": "diagram.nodesOfType('State').filter(s, s.name == self.name)" },
+  { "id": "uniqueNames", "scope": "State",
+    "rule": "diagram.nodesOfType('State').filter(s, s.name == self.name).size() == 1",
+    "severity": "warning", "message": { "cel": "'The name \"' + self.name + '\" is used more than once.'" },
+    "target": "diagram.nodesOfType('State').filter(s, s.name == self.name)" },
 
-{ "id": "reachable", "scope": "State",
-  "when": "!self.isA('InitialState')",
-  "rule": "diagram.nodesOfType('InitialState').exists(i, self in i.reachable('Transition'))",
-  "severity": "warning", "cost": "expensive",
-  "message": { "cel": "'State \"' + self.name + '\" can never be reached.'" } },
+  { "id": "reachable", "scope": "State",
+    "when": "!self.isA('InitialState')",
+    "rule": "diagram.nodesOfType('InitialState').exists(i, self in i.reachable('Transition'))",
+    "severity": "warning", "cost": "expensive",
+    "message": { "cel": "'State \"' + self.name + '\" can never be reached.'" } },
 
-{ "id": "deterministic", "scope": "State",
-  "rule": "self.outgoingOf('Transition').map(t, t.trigger).isUnique()",
-  "severity": "error",
-  "message": "Two transitions leave this state on the same trigger.",
-  "doc": { "rationale": "The machine would not know which transition to take." } }
+  { "id": "deterministic", "scope": "State",
+    "rule": "self.outgoingOf('Transition').map(t, t.trigger).isUnique()",
+    "severity": "error",
+    "message": "Two transitions leave this state on the same trigger.",
+    "doc": { "rationale": "The machine would not know which transition to take." } }
+]
 ```
 
 ### 8.4 Gesture constraints
@@ -2289,18 +2369,20 @@ Gesture constraints are evaluated **before** a user action is applied, while the
 | `change`      | Changing an attribute in a form or label           | `self`, `attribute`, `oldValue`, `newValue`                                                                                                   |
 
 ```json
-{ "id": "noEntryIntoInitial", "kind": "connect",
-  "when": "relationType == 'Transition'",
-  "rule": "!target.isA('InitialState')",
-  "message": "Transitions cannot enter the initial state." },
+[
+  { "id": "noEntryIntoInitial", "kind": "connect",
+    "when": "relationType == 'Transition'",
+    "rule": "!target.isA('InitialState')",
+    "message": "Transitions cannot enter the initial state." },
 
-{ "id": "noOverlapPerResource", "kind": "placement", "scope": "Task",
-  "rule": "!diagram.nodesOfType('Task').exists(t, t.id != self.id && t.assignee == self.assignee && t.start < newBounds.x2 && newBounds.x < t.end)",
-  "enforcement": "report", "severity": "warning",
-  "message": "This resource already has a task in that period." },
+  { "id": "noOverlapPerResource", "kind": "placement", "scope": "Task",
+    "rule": "!diagram.nodesOfType('Task').exists(t, t.id != self.id && t.assignee == self.assignee && t.start < newBounds.x2 && newBounds.x < t.end)",
+    "enforcement": "report", "severity": "warning",
+    "message": "This resource already has a task in that period." },
 
-{ "id": "lockedPhase", "kind": "delete", "scope": "Phase",
-  "rule": "!self.locked", "message": "Unlock the phase before deleting it." }
+  { "id": "lockedPhase", "kind": "delete", "scope": "Phase",
+    "rule": "!self.locked", "message": "Unlock the phase before deleting it." }
+]
 ```
 
 When enforcement is `report` on a gesture kind, the gesture is allowed and a problem is reported afterwards if the corresponding state still violates the rule.
@@ -2347,22 +2429,24 @@ Behavior declares what happens in response to user actions, beyond the direct ma
 ### 9.1 Overview
 
 ```json
-"behavior": {
-  "hooks": [
-    { "id": "nameNewState", "on": "create", "for": "State", "when": "!has(self.name)",
-      "actions": [ { "set": { "name": "'State ' + string(diagram.nodesOfType('State').size())" } } ],
-      "doc": "New states are numbered automatically." }
-  ],
-  "operations": {
-    "makeFinal": {
-      "label": "Convert to final state", "for": "State", "icon": "flag",
-      "enabled": "self.outgoing.size() == 0",
-      "actions": [ { "retype": { "to": "'FinalState'" } } ]
-    }
-  },
-  "deletion": { "State": { "relations": "delete" } },
-  "clipboard": { "relations": "internal", "ids": "regenerate", "offset": [20, 20] },
-  "undo": { "mergeWindowMs": 500 }
+{
+  "behavior": {
+    "hooks": [
+      { "id": "nameNewState", "on": "create", "for": "State", "when": "!has(self.name)",
+        "actions": [ { "set": { "name": "'State ' + string(diagram.nodesOfType('State').size())" } } ],
+        "doc": "New states are numbered automatically." }
+    ],
+    "operations": {
+      "makeFinal": {
+        "label": "Convert to final state", "for": "State", "icon": "flag",
+        "enabled": "self.outgoing.size() == 0",
+        "actions": [ { "retype": { "to": "'FinalState'" } } ]
+      }
+    },
+    "deletion": { "State": { "relations": "delete" } },
+    "clipboard": { "relations": "internal", "ids": "regenerate", "offset": [20, 20] },
+    "undo": { "mergeWindowMs": 500 }
+  }
 }
 ```
 
@@ -2456,21 +2540,23 @@ Every action MAY carry `when` (skip unless true) and `doc`.
 Automatic layout arranges nodes and routes edges. DEDL does not define layout algorithms; it names them, passes options, and declares when layout runs and how it interacts with user placement and bound coordinates.
 
 ```json
-"layout": {
-  "algorithms": {
-    "flow": {
-      "algorithm": "layered",
-      "direction": "right",
-      "spacing": { "node": 40, "layer": 80, "edge": 12 },
-      "edgeRouting": "orthogonal",
-      "options": { "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP" },
-      "doc": "Left-to-right flow; transitions become orthogonal."
-    }
-  },
-  "default": "flow",
-  "trigger": "manual",
-  "respect": "pinned",
-  "animate": { "durationMs": 300 }
+{
+  "layout": {
+    "algorithms": {
+      "flow": {
+        "algorithm": "layered",
+        "direction": "right",
+        "spacing": { "node": 40, "layer": 80, "edge": 12 },
+        "edgeRouting": "orthogonal",
+        "options": { "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP" },
+        "doc": "Left-to-right flow; transitions become orthogonal."
+      }
+    },
+    "default": "flow",
+    "trigger": "manual",
+    "respect": "pinned",
+    "animate": { "durationMs": 300 }
+  }
 }
 ```
 
@@ -2511,20 +2597,22 @@ The persistence layer defines exactly how documents — the diagrams users draw 
 ### 11.1 Overview
 
 ```json
-"persistence": {
-  "format": "json",
-  "files": { "mode": "split", "model": "{name}.sm.json", "view": "{name}.sm.view.json" },
-  "ids": { "strategy": "uuid-v7", "prefix": { "State": "st_", "Transition": "tr_" } },
-  "references": "id",
-  "ordering": { "elements": "type-then-id", "keys": "canonical" },
-  "omitDefaults": true,
-  "precision": { "canvas": 2 },
-  "timestamps": { "format": "rfc3339", "timezone": "utc" },
-  "view": { "store": ["bounds", "waypoints", "labelOffsets", "collapsed", "zIndex", "rotation", "viewport"],
-            "styleOverrides": ["fill", "stroke.color", "font.weight"] },
-  "metadata": ["languageVersion", "createdAt", "modifiedAt", "generator"],
-  "migrations": [],
-  "collaboration": { "mode": "crdt", "engine": "yjs" }
+{
+  "persistence": {
+    "format": "json",
+    "files": { "mode": "split", "model": "{name}.sm.json", "view": "{name}.sm.view.json" },
+    "ids": { "strategy": "uuid-v7", "prefix": { "State": "st_", "Transition": "tr_" } },
+    "references": "id",
+    "ordering": { "elements": "type-then-id", "keys": "canonical" },
+    "omitDefaults": true,
+    "precision": { "canvas": 2 },
+    "timestamps": { "format": "rfc3339", "timezone": "utc" },
+    "view": { "store": ["bounds", "waypoints", "labelOffsets", "collapsed", "zIndex", "rotation", "viewport"],
+              "styleOverrides": ["fill", "stroke.color", "font.weight"] },
+    "metadata": ["languageVersion", "createdAt", "modifiedAt", "generator"],
+    "migrations": [],
+    "collaboration": { "mode": "crdt", "engine": "yjs" }
+  }
 }
 ```
 
@@ -2689,25 +2777,27 @@ Nesting is expressed by `parent`, not by physical nesting, so moving an element 
 Migrations upgrade documents written with older language versions. They run on load, before validation, in version order.
 
 ```json
-"migrations": [
-  {
-    "from": ">=1.0.0 <1.1.0", "to": "1.1.0",
-    "doc": "Renamed 'label' to 'name'; transitions got explicit priorities.",
-    "steps": [
-      { "renameAttribute": { "type": "State", "from": "label", "to": "name" } },
-      { "setAttribute": { "type": "Transition", "attribute": "priority", "value": "0", "when": "!has(element.attributes.priority)" } }
-    ]
-  },
-  {
-    "from": ">=1.1.0 <2.0.0", "to": "2.0.0",
-    "steps": [
-      { "renameType": { "from": "EndState", "to": "FinalState" } },
-      { "transform": { "type": "State", "cel": "element.attributes.with({'entryAction': element.attributes.?entry.orValue('')})" } },
-      { "deleteAttribute": { "type": "State", "attribute": "entry" } },
-      { "convertView": { "system": "canvas", "x": "value * 2.0", "y": "value * 2.0" } }
-    ]
-  }
-]
+{
+  "migrations": [
+    {
+      "from": ">=1.0.0 <1.1.0", "to": "1.1.0",
+      "doc": "Renamed 'label' to 'name'; transitions got explicit priorities.",
+      "steps": [
+        { "renameAttribute": { "type": "State", "from": "label", "to": "name" } },
+        { "setAttribute": { "type": "Transition", "attribute": "priority", "value": "0", "when": "!has(element.attributes.priority)" } }
+      ]
+    },
+    {
+      "from": ">=1.1.0 <2.0.0", "to": "2.0.0",
+      "steps": [
+        { "renameType": { "from": "EndState", "to": "FinalState" } },
+        { "transform": { "type": "State", "cel": "element.attributes.with({'entryAction': element.attributes.?entry.orValue('')})" } },
+        { "deleteAttribute": { "type": "State", "attribute": "entry" } },
+        { "convertView": { "system": "canvas", "x": "value * 2.0", "y": "value * 2.0" } }
+      ]
+    }
+  ]
+}
 ```
 
 | Step                       | Fields                                            | Effect                                                                                |
@@ -2840,15 +2930,17 @@ Expressions in the contexts `constraint`, `migration`, `create` (except `env.now
 Plugins provide what the declarative core does not: exotic shapes, special routers and layouts, domain-specific widgets, imports/exports, snapping to external data, custom actions. A definition declares every plugin it uses:
 
 ```json
-"plugins": {
-  "acme.bpmnRouter": {
-    "version": "^2.0.0",
-    "provides": ["routing", "layout"],
-    "required": false,
-    "fallback": { "routing": "orthogonal", "layout": "layered" },
-    "args": { "gridAware": { "type": "bool", "default": true } },
-    "doc": "Specialised BPMN router that keeps sequence flows off pool boundaries.",
-    "source": { "npm": "@acme/dedl-bpmn-router", "integrity": "sha256-…" }
+{
+  "plugins": {
+    "acme.bpmnRouter": {
+      "version": "^2.0.0",
+      "provides": ["routing", "layout"],
+      "required": false,
+      "fallback": { "routing": "orthogonal", "layout": "layered" },
+      "args": { "gridAware": { "type": "bool", "default": true } },
+      "doc": "Specialised BPMN router that keeps sequence flows off pool boundaries.",
+      "source": { "npm": "@acme/dedl-bpmn-router", "integrity": "sha256-…" }
+    }
   }
 }
 ```
