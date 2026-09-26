@@ -6,7 +6,7 @@ The rules every repository in the `etalii-adp` GitHub organization follows. Work
 
 - All lowercase, dot-separated, starting with `etalii.adp`: `etalii.adp` for the specifications, `etalii.adp.ide.<ide>` for an IDE host (`standalone`, `intellij`, `vscode`, `eclipse`).
 - Private, in the `etalii-adp` organization, not under a personal account.
-- One exception: `etalii-adp.github.io`, the organization's GitHub Pages site, is public, because the free plan serves Pages only from public repositories. It holds the `etalii.net` domain, redirects its root to `/adp`, and receives the website built in `etalii.adp.site` in its `adp/` folder.
+- One exception: `etalii.adp.site`, the website, is public, because the free plan serves GitHub Pages only from public repositories. Its Pages site carries the `etalii.net` domain, serves the website under `/adp` and redirects the root there.
 
 ## Branches
 
