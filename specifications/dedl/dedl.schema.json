@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://dedl.adp.ubigia.net/schema/0.1/dedl.schema.json",
+  "$id": "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json",
   "title": "DEDL 0.1 — Diagram Editor Definition Language",
   "description": "Definitions ($defs/Definition) and documents ($defs/Document). The root validates definitions.",
   "$ref": "#/$defs/Definition",
