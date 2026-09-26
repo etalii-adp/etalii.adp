@@ -157,14 +157,14 @@ A definition **SHOULD** declare the schema it conforms to, and MUST declare the 
 
 ```json
 {
-  "$schema": "https://dedl.example/schema/0.1/dedl.schema.json#/$defs/Definition",
+  "$schema": "https://dedl.adp.ubigia.net/schema/0.1/dedl.schema.json#/$defs/Definition",
   "dedl": "0.1",
   "language": { "id": "org.example.statemachine", "version": "1.0.0" },
   "metamodel": { "types": {} }
 }
 ```
 
-> The `dedl.example` domain is a placeholder until a permanent home is chosen.
+> The `dedl.adp.ubigia.net` domain is a placeholder until a permanent home is chosen.
 
 Tools MAY accept YAML or JSON5 input for authoring convenience and convert it to JSON before processing, but the normative form is JSON. Because JSON has no comments, explanations belong in `doc` objects (section 2.4), which has the side effect that they reach end users.
 
@@ -2645,7 +2645,7 @@ Independently of format and file split, a document has this logical structure (J
 
 ```json
 {
-  "$schema": "https://dedl.example/schema/0.1/dedl.schema.json#/$defs/Document",
+  "$schema": "https://dedl.adp.ubigia.net/schema/0.1/dedl.schema.json#/$defs/Document",
   "dedlDocument": "0.1",
   "language": { "id": "org.example.statemachine", "version": "1.2.0" },
   "meta": {
@@ -3069,7 +3069,7 @@ File `examples/statemachine.dedl.json`:
 
 ```json
 {
-  "$schema": "https://dedl.example/schema/0.1/dedl.schema.json#/$defs/Definition",
+  "$schema": "https://dedl.adp.ubigia.net/schema/0.1/dedl.schema.json#/$defs/Definition",
   "dedl": "0.1",
   "language": {
     "id": "org.example.statemachine",
@@ -3591,7 +3591,7 @@ File `examples/timeline.dedl.json`:
 
 ```json
 {
-  "$schema": "https://dedl.example/schema/0.1/dedl.schema.json#/$defs/Definition",
+  "$schema": "https://dedl.adp.ubigia.net/schema/0.1/dedl.schema.json#/$defs/Definition",
   "dedl": "0.1",
   "language": {
     "id": "org.example.timeline",
@@ -3944,7 +3944,7 @@ File `examples/erd.dedl.json`:
 
 ```json
 {
-  "$schema": "https://dedl.example/schema/0.1/dedl.schema.json#/$defs/Definition",
+  "$schema": "https://dedl.adp.ubigia.net/schema/0.1/dedl.schema.json#/$defs/Definition",
   "dedl": "0.1",
   "language": {
     "id": "org.example.erd",
@@ -4169,7 +4169,7 @@ File `examples/timeline.document.json`:
 
 ```json
 {
-  "$schema": "https://dedl.example/schema/0.1/dedl.schema.json#/$defs/Document",
+  "$schema": "https://dedl.adp.ubigia.net/schema/0.1/dedl.schema.json#/$defs/Document",
   "dedlDocument": "0.1",
   "language": { "id": "org.example.timeline", "version": "0.4.0" },
   "meta": { "createdAt": "2026-09-21T08:12:00Z", "modifiedAt": "2026-09-25T16:40:00Z", "generator": "Reference runtime 0.1" },

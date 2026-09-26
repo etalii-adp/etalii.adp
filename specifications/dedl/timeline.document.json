@@ -1,5 +1,5 @@
 {
-  "$schema": "https://dedl.example/schema/0.1/dedl.schema.json#/$defs/Document",
+  "$schema": "https://dedl.adp.ubigia.net/schema/0.1/dedl.schema.json#/$defs/Document",
   "dedlDocument": "0.1",
   "language": { "id": "org.example.timeline", "version": "0.4.0" },
   "meta": { "createdAt": "2026-09-21T08:12:00Z", "modifiedAt": "2026-09-25T16:40:00Z", "generator": "Reference runtime 0.1" },
