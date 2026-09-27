@@ -3,7 +3,7 @@
   "specName": "A Build Workflow and Status Badge for Every Repository",
   "branch": "features/001-ci-and-badges",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -274,6 +274,53 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-09-27T17:33:56.147Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T028",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T21:35:42.985Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T030",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T21:35:43.509Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T026",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T21:35:59.007Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T027",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T21:35:59.532Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T029",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T21:36:00.060Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T21:36:00.202Z"
     }
   ],
   "coverage": {
@@ -438,10 +485,13 @@
     },
     "tasks": {
       "summary": "30 tasks: setup (scan, public, licences), US1 workflows, US2 readmes, US3 tables, US4 vscode/eclipse workflows, US5 checklist, polish"
+    },
+    "implement": {
+      "summary": "Six repos public with Apache-2.0, Build workflow and develop badge each; both tables show six badges"
     }
   },
   "approach": "Add .github/workflows/build.yml named Build to all six product repositories on ubuntu-latest, removing RUNS_ON, with per-repo checks. Put a develop-pinned badge in each readme, make the private repos public after a history scan and Peter's confirmation, then update the .github profile and site tables and the new-repository checklist.",
-  "currentTask": "T025",
+  "currentTask": "T029",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -624,6 +674,55 @@
         "deploy.yml",
         "auto-assign.yml"
       ]
+    },
+    "T028": {
+      "status": "DONE",
+      "did": "Signed-out fetch: 6 badges load with ?branch=develop (etalii.adp, vscode, eclipse, site passing; standalone, intellij failing on their own tests); profile and site each carry 6 matching badges, no N/A",
+      "files": [
+        "six readmes",
+        ".github profile",
+        "etalii.net/adp"
+      ]
+    },
+    "T030": {
+      "status": "DONE",
+      "did": "SC-001 to SC-007 met; the two red badges report real test failures in standalone (release guard) and intellij (flaky editor-switching tests), each owned by its own follow-up thread",
+      "files": [
+        "specs/001-ci-and-badges"
+      ]
+    },
+    "T026": {
+      "status": "DONE",
+      "did": "Seven PRs opened; all merged; Build ran on hosted runners",
+      "files": [
+        "seven pull requests"
+      ]
+    },
+    "T027": {
+      "status": "DONE",
+      "did": "Verified locally: a broken erd.dedl makes the validator exit 1 naming both errors",
+      "files": [
+        ".github/scripts/validate-examples.py"
+      ]
+    },
+    "T029": {
+      "status": "DONE",
+      "did": "vscode and eclipse runs show the plugin steps skipped with the notice",
+      "files": [
+        "vscode#3",
+        "eclipse#3 runs"
+      ]
     }
-  }
+  },
+  "concerns": [
+    {
+      "note": "Standalone develop is red: the release job guard finds no AuthenticationService after a backend refactor; follow-up thread Fix standalone release guard",
+      "step": "implement"
+    },
+    {
+      "note": "IntelliJ develop is red: one follow-the-selected-editor test fails per run on hosted runners; follow-up thread Stabilise IntelliJ editor tests",
+      "step": "implement"
+    }
+  ],
+  "last_action": "All 30 tasks done; 4 of 6 badges passing, 2 red on their own tests with follow-up threads"
 }

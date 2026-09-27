@@ -118,14 +118,14 @@ Files: `etalii.adp/.specify/memory/constitution.md`
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T026** Open one pull request per repository into `develop` (six, plus `.github` for T019), and see each Build run pass on hosted runners (SC-001, SC-005)
-- [ ] **T027** Break one example in a throwaway `etalii.adp` pull request and confirm Build fails naming it; close without merging (US1 scenario 4)
+- [x] **T026** Open one pull request per repository into `develop` (six, plus `.github` for T019), and see each Build run pass on hosted runners (SC-001, SC-005)
+- [x] **T027** Break one example in a throwaway `etalii.adp` pull request and confirm Build fails naming it; close without merging (US1 scenario 4)
 
 **⟶ Wait for the pull requests to merge, then:**
 
-- [ ] **T028** Signed out, check all six readmes and both tables: every badge loads and matches the contract (SC-002 to SC-004)
-- [ ] **T029** Confirm the VS Code and Eclipse runs show the plug-in step skipped with its notice (SC-006)
-- [ ] **T030** Validate against Success Criteria SC-001 to SC-007 and record the outcome
+- [x] **T028** Signed out, check all six readmes and both tables: every badge loads and matches the contract (SC-002 to SC-004)
+- [x] **T029** Confirm the VS Code and Eclipse runs show the plug-in step skipped with its notice (SC-006)
+- [x] **T030** Validate against Success Criteria SC-001 to SC-007 and record the outcome
 
 ## Dependencies & Execution Order
 
