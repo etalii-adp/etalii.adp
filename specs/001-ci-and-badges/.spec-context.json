@@ -83,6 +83,197 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-09-27T17:23:46.734Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-27T17:24:28.926Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:25:19.703Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:25:20.354Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:25:21.031Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:25:21.626Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:28:07.436Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T022",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:28:07.824Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:29:07.032Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:29:07.453Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:30:49.732Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:30:50.119Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T011",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:30:50.509Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T014",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:30:50.893Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T015",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:30:51.286Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T018",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:30:51.677Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T020",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:30:52.076Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:31:34.243Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:31:51.342Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T016",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:31:51.750Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:31:52.143Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T019",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:32:02.841Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T023",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:32:43.842Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T024",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:33:27.927Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T025",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:33:56.147Z"
     }
   ],
   "coverage": {
@@ -250,7 +441,7 @@
     }
   },
   "approach": "Add .github/workflows/build.yml named Build to all six product repositories on ubuntu-latest, removing RUNS_ON, with per-repo checks. Put a develop-pinned badge in each readme, make the private repos public after a history scan and Peter's confirmation, then update the .github profile and site tables and the new-repository checklist.",
-  "currentTask": "T002",
+  "currentTask": "T025",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -264,6 +455,174 @@
       "did": "Made standalone, intellij, vscode and eclipse public",
       "files": [
         "repository settings"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "Added Apache-2.0 LICENSE",
+      "files": [
+        "etalii.adp/LICENSE"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "Added Apache-2.0 LICENSE",
+      "files": [
+        "etalii.adp.ide.standalone/LICENSE"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "Added Apache-2.0 LICENSE",
+      "files": [
+        "etalii.adp.ide.vscode/LICENSE"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "Added Apache-2.0 LICENSE",
+      "files": [
+        "etalii.adp.ide.eclipse/LICENSE"
+      ]
+    },
+    "T021": {
+      "status": "DONE",
+      "did": "Build workflow with file check job and prepared vsix plugin job; check script passes locally and fails on broken files",
+      "files": [
+        "etalii.adp.ide.vscode/.github/workflows/build.yml",
+        "etalii.adp.ide.vscode/.github/scripts/check-files.py"
+      ]
+    },
+    "T022": {
+      "status": "DONE",
+      "did": "Build workflow with file check job and prepared Tycho update-site plugin job",
+      "files": [
+        "etalii.adp.ide.eclipse/.github/workflows/build.yml",
+        "etalii.adp.ide.eclipse/.github/scripts/check-files.py"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "Validator resolves each example's $schema against local schema $id; passes on 4 examples, fails naming a broken one",
+      "files": [
+        ".github/scripts/validate-examples.py"
+      ]
+    },
+    "T012": {
+      "status": "DONE",
+      "did": "Build workflow running the validator on Python 3.13",
+      "files": [
+        ".github/workflows/build.yml"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "Removed RUNS_ON from both jobs; ubuntu-latest",
+      "files": [
+        "etalii.adp.ide.standalone/.github/workflows/build.yml"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "Renamed ci.yml to build.yml named Build with push to develop and workflow_dispatch; ubuntu-latest",
+      "files": [
+        "etalii.adp.site/.github/workflows/build.yml"
+      ]
+    },
+    "T011": {
+      "status": "DONE",
+      "did": "Replaced RUNS_ON with ubuntu-latest",
+      "files": [
+        "etalii.adp.site/.github/workflows/deploy.yml",
+        "etalii.adp.site/.github/workflows/auto-assign.yml"
+      ]
+    },
+    "T014": {
+      "status": "DONE",
+      "did": "Badge pinned to develop and moved under the heading",
+      "files": [
+        "etalii.adp.ide.standalone/readme.md"
+      ]
+    },
+    "T015": {
+      "status": "DONE",
+      "did": "Badge added under the heading",
+      "files": [
+        "etalii.adp.ide.intellij/README.md"
+      ]
+    },
+    "T018": {
+      "status": "DONE",
+      "did": "Badge added under the heading",
+      "files": [
+        "etalii.adp.site/README.md"
+      ]
+    },
+    "T020": {
+      "status": "DONE",
+      "did": "All six repositories public with build.yml; BuildList badge and link pinned to develop",
+      "files": [
+        "etalii.adp.site/src/data/builds.ts",
+        "etalii.adp.site/src/components/BuildList.astro"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "Build workflow: JDK 25, setup-gradle cache, xvfb-run ./gradlew build, reports on failure, plug-in zip upload; gradlew made executable",
+      "files": [
+        "etalii.adp.ide.intellij/.github/workflows/build.yml",
+        "etalii.adp.ide.intellij/gradlew"
+      ]
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "New readme with badge, purpose and licence",
+      "files": [
+        "README.md"
+      ]
+    },
+    "T016": {
+      "status": "DONE",
+      "did": "New readme with badge, purpose and licence",
+      "files": [
+        "etalii.adp.ide.vscode/README.md"
+      ]
+    },
+    "T017": {
+      "status": "DONE",
+      "did": "New readme with badge, purpose and licence",
+      "files": [
+        "etalii.adp.ide.eclipse/README.md"
+      ]
+    },
+    "T019": {
+      "status": "DONE",
+      "did": "Six rows, each with the develop-pinned Build badge",
+      "files": [
+        ".github/profile/README.md"
+      ]
+    },
+    "T023": {
+      "status": "DONE",
+      "did": "Checklist now requires public, Apache-2.0 LICENSE, build.yml named Build, readme badge and both table rows",
+      "files": [
+        "docs/new-repository.md"
+      ]
+    },
+    "T024": {
+      "status": "DONE",
+      "did": "Constitution 1.0.1: CI sentence describes the Build workflow",
+      "files": [
+        ".specify/memory/constitution.md"
+      ]
+    },
+    "T025": {
+      "status": "DONE",
+      "did": "actionlint not installed locally; every workflow parsed with PyYAML and GitHub validates it on the PR run instead",
+      "files": [
+        "all build.yml",
+        "deploy.yml",
+        "auto-assign.yml"
       ]
     }
   }

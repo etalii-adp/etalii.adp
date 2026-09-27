@@ -15,10 +15,10 @@
 
 **Wave 2: independent (different repositories):**
 
-- [ ] **T003** [P] Add the Apache License 2.0 text (FR-020) · `etalii.adp/LICENSE`
-- [ ] **T004** [P] Add the Apache License 2.0 text (FR-020) · `etalii.adp.ide.standalone/LICENSE`
-- [ ] **T005** [P] Add the Apache License 2.0 text (FR-020) · `etalii.adp.ide.vscode/LICENSE`
-- [ ] **T006** [P] Add the Apache License 2.0 text (FR-020) · `etalii.adp.ide.eclipse/LICENSE`
+- [x] **T003** [P] Add the Apache License 2.0 text (FR-020) · `etalii.adp/LICENSE`
+- [x] **T004** [P] Add the Apache License 2.0 text (FR-020) · `etalii.adp.ide.standalone/LICENSE`
+- [x] **T005** [P] Add the Apache License 2.0 text (FR-020) · `etalii.adp.ide.vscode/LICENSE`
+- [x] **T006** [P] Add the Apache License 2.0 text (FR-020) · `etalii.adp.ide.eclipse/LICENSE`
 
 ## Phase 2: Foundational
 
@@ -35,15 +35,15 @@ Files: `etalii.adp/.github/workflows/build.yml`, `etalii.adp/.github/scripts/val
 
 **Wave 1: independent (different files):**
 
-- [ ] **T007** [P] [US1] Write the example validator: resolve each example's `$schema` fragment against the local schema, validate with Draft 2020-12, name every invalid file (R3) · `etalii.adp/.github/scripts/validate-examples.py`
-- [ ] **T008** [P] [US1] Remove `RUNS_ON` from both jobs and its comment; `runs-on: ubuntu-latest` (R7, FR-008) · `etalii.adp.ide.standalone/.github/workflows/build.yml`
-- [ ] **T009** [P] [US1] New Build workflow: JDK 25, Gradle cache, `xvfb-run ./gradlew build`, upload the plug-in zip (R6) · `etalii.adp.ide.intellij/.github/workflows/build.yml`
-- [ ] **T010** [P] [US1] Rename `ci.yml` to `build.yml`, name it Build, add `push` to `develop` and `workflow_dispatch`, `runs-on: ubuntu-latest` (R2, R7) · `etalii.adp.site/.github/workflows/build.yml`
-- [ ] **T011** [P] [US1] Replace `RUNS_ON` with `ubuntu-latest` (R7) · `etalii.adp.site/.github/workflows/deploy.yml`, `etalii.adp.site/.github/workflows/auto-assign.yml`
+- [x] **T007** [P] [US1] Write the example validator: resolve each example's `$schema` fragment against the local schema, validate with Draft 2020-12, name every invalid file (R3) · `etalii.adp/.github/scripts/validate-examples.py`
+- [x] **T008** [P] [US1] Remove `RUNS_ON` from both jobs and its comment; `runs-on: ubuntu-latest` (R7, FR-008) · `etalii.adp.ide.standalone/.github/workflows/build.yml`
+- [x] **T009** [P] [US1] New Build workflow: JDK 25, Gradle cache, `xvfb-run ./gradlew build`, upload the plug-in zip (R6) · `etalii.adp.ide.intellij/.github/workflows/build.yml`
+- [x] **T010** [P] [US1] Rename `ci.yml` to `build.yml`, name it Build, add `push` to `develop` and `workflow_dispatch`, `runs-on: ubuntu-latest` (R2, R7) · `etalii.adp.site/.github/workflows/build.yml`
+- [x] **T011** [P] [US1] Replace `RUNS_ON` with `ubuntu-latest` (R7) · `etalii.adp.site/.github/workflows/deploy.yml`, `etalii.adp.site/.github/workflows/auto-assign.yml`
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T012** [US1] New Build workflow running the validator on Python 3 with `jsonschema` (FR-004, FR-005) · `etalii.adp/.github/workflows/build.yml`
+- [x] **T012** [US1] New Build workflow running the validator on Python 3 with `jsonschema` (FR-004, FR-005) · `etalii.adp/.github/workflows/build.yml`
 
 **Checkpoint**: four repositories show a Build result on their pull requests.
 
@@ -58,12 +58,12 @@ Files: `etalii.adp/README.md`, `etalii.adp.ide.standalone/readme.md`, `etalii.ad
 
 **Wave 1: independent (different files):**
 
-- [ ] **T013** [P] [US2] New readme: name, one-line purpose, badge, licence line (FR-013) · `etalii.adp/README.md`
-- [ ] **T014** [P] [US2] Pin the existing badge to `develop` (FR-012) · `etalii.adp.ide.standalone/readme.md`
-- [ ] **T015** [P] [US2] Add the badge under the heading (FR-012) · `etalii.adp.ide.intellij/README.md`
-- [ ] **T016** [P] [US2] New readme: name, one-line purpose, badge, licence line (FR-013) · `etalii.adp.ide.vscode/README.md`
-- [ ] **T017** [P] [US2] New readme: name, one-line purpose, badge, licence line (FR-013) · `etalii.adp.ide.eclipse/README.md`
-- [ ] **T018** [P] [US2] Add the badge under the heading (FR-012) · `etalii.adp.site/README.md`
+- [x] **T013** [P] [US2] New readme: name, one-line purpose, badge, licence line (FR-013) · `etalii.adp/README.md`
+- [x] **T014** [P] [US2] Pin the existing badge to `develop` (FR-012) · `etalii.adp.ide.standalone/readme.md`
+- [x] **T015** [P] [US2] Add the badge under the heading (FR-012) · `etalii.adp.ide.intellij/README.md`
+- [x] **T016** [P] [US2] New readme: name, one-line purpose, badge, licence line (FR-013) · `etalii.adp.ide.vscode/README.md`
+- [x] **T017** [P] [US2] New readme: name, one-line purpose, badge, licence line (FR-013) · `etalii.adp.ide.eclipse/README.md`
+- [x] **T018** [P] [US2] Add the badge under the heading (FR-012) · `etalii.adp.site/README.md`
 
 **Checkpoint**: every readme shows a loading badge.
 
@@ -78,8 +78,8 @@ Files: `.github/profile/README.md`, `etalii.adp.site/src/data/builds.ts`
 
 **Wave 1: independent (different repositories), after Phases 3, 4 and 6 are merged and have run on `develop`:**
 
-- [ ] **T019** [P] [US3] Six rows, each with the contract badge (FR-014 to FR-016) · `.github/profile/README.md`
-- [ ] **T020** [P] [US3] Every repository `public: true`, `workflow: 'build.yml'`, after site PR #14 merges (FR-014 to FR-016) · `etalii.adp.site/src/data/builds.ts`
+- [x] **T019** [P] [US3] Six rows, each with the contract badge (FR-014 to FR-016) · `.github/profile/README.md`
+- [x] **T020** [P] [US3] Every repository `public: true`, `workflow: 'build.yml'`, after site PR #14 merges (FR-014 to FR-016) · `etalii.adp.site/src/data/builds.ts`
 
 **Checkpoint**: both tables agree with the readmes.
 
@@ -94,8 +94,8 @@ Files: `etalii.adp.ide.vscode/.github/workflows/build.yml`, `etalii.adp.ide.ecli
 
 **Wave 1: independent (different files):**
 
-- [ ] **T021** [P] [US4] Build workflow: `check` job (editorconfig-checker, JSON and YAML parse) and `plugin` job keyed on `package.json`, packaging a `.vsix` (R4, R5, FR-009 to FR-011) · `etalii.adp.ide.vscode/.github/workflows/build.yml`
-- [ ] **T022** [P] [US4] Build workflow: `check` job and `plugin` job keyed on `pom.xml`, packaging the update-site zip (R4, R5, FR-009 to FR-011) · `etalii.adp.ide.eclipse/.github/workflows/build.yml`
+- [x] **T021** [P] [US4] Build workflow: `check` job (`check-files.py`: JSON and YAML parse, markdown links) and `plugin` job keyed on `package.json`, packaging a `.vsix` (R4, R5, FR-009 to FR-011) · `etalii.adp.ide.vscode/.github/workflows/build.yml`
+- [x] **T022** [P] [US4] Build workflow: `check` job and `plugin` job keyed on `pom.xml`, packaging the update-site zip (R4, R5, FR-009 to FR-011) · `etalii.adp.ide.eclipse/.github/workflows/build.yml`
 
 **Checkpoint**: both repositories pass Build with the plug-in step visibly skipped.
 
@@ -103,7 +103,7 @@ Files: `etalii.adp.ide.vscode/.github/workflows/build.yml`, `etalii.adp.ide.ecli
 
 Files: `etalii.adp/docs/new-repository.md`
 
-- [ ] **T023** [US5] Require public, Apache-2.0 `LICENSE`, `build.yml` named Build from the first pull request, the contract badge in the readme, and a row in both tables (FR-018) · `etalii.adp/docs/new-repository.md`
+- [x] **T023** [US5] Require public, Apache-2.0 `LICENSE`, `build.yml` named Build from the first pull request, the contract badge in the readme, and a row in both tables (FR-018) · `etalii.adp/docs/new-repository.md`
 
 **Checkpoint**: the checklist names every place this feature covers.
 
@@ -113,8 +113,8 @@ Files: `etalii.adp/.specify/memory/constitution.md`
 
 **Wave 1: independent (different files):**
 
-- [ ] **T024** [P] Amend the Development Workflow sentence about CI through `/speckit-constitution`, PATCH bump (FR-019) · `etalii.adp/.specify/memory/constitution.md`
-- [ ] **T025** [P] Run `actionlint` on every new or changed workflow file · all `build.yml`, `deploy.yml`, `auto-assign.yml`
+- [x] **T024** [P] Amend the Development Workflow sentence about CI through `/speckit-constitution`, PATCH bump (FR-019) · `etalii.adp/.specify/memory/constitution.md`
+- [x] **T025** [P] Run `actionlint` on every new or changed workflow file · all `build.yml`, `deploy.yml`, `auto-assign.yml`
 
 **⟶ Wait for Wave 1 to finish, then:**
 

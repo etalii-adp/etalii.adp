@@ -44,8 +44,8 @@ jobs:
 | `etalii.adp` | `python .github/scripts/validate-examples.py` | none |
 | `etalii.adp.ide.standalone` | its existing four gates; release job unchanged apart from the runner | release on `develop`, as today |
 | `etalii.adp.ide.intellij` | `xvfb-run ./gradlew build` on JDK 25 | the plug-in zip from `build/distributions/` |
-| `etalii.adp.ide.vscode` | `editorconfig-checker`; JSON and YAML parse | `plugin` job: `.vsix` once `package.json` exists, skipped with a notice before |
-| `etalii.adp.ide.eclipse` | `editorconfig-checker`; JSON and YAML parse | `plugin` job: update-site zip once `pom.xml` exists, skipped with a notice before |
+| `etalii.adp.ide.vscode` | `check-files.py`: JSON and YAML parse, markdown links resolve | `plugin` job: `.vsix` once `package.json` exists, skipped with a notice before |
+| `etalii.adp.ide.eclipse` | `check-files.py`: JSON and YAML parse, markdown links resolve | `plugin` job: update-site zip once `pom.xml` exists, skipped with a notice before |
 | `etalii.adp.site` | the jobs of today's `ci.yml`, unchanged apart from the runner | none (deployment stays in `deploy.yml`) |
 
 ## Plug-in job (VS Code and Eclipse)

@@ -13,7 +13,7 @@ The one new dependency is the `jsonschema` Python package, installed in `etalii.
 ## Technical Context
 
 **Languages**: GitHub Actions YAML; Python 3 for `etalii.adp`'s validation script; Markdown for readmes and tables; TypeScript data in the site.
-**Tools on the runner**: `actions/checkout`, `actions/setup-python`, `actions/setup-java`, `actions/setup-node`, `actions/upload-artifact`, `editorconfig-checker`, `gitleaks` (the scan before going public only).
+**Tools on the runner**: `actions/checkout`, `actions/setup-python`, `actions/setup-java`, `actions/setup-node`, `actions/upload-artifact`, `gradle/actions/setup-gradle`.
 **Runner**: `ubuntu-latest`, hosted, everywhere.
 **Testing**: each workflow is proven by one passing and one deliberately failing pull request (spec US1 independent test); `actionlint` on every workflow file before it is pushed.
 **Constraints**: no branch protection; hosted minutes are unavailable to private repositories until they go public.
@@ -73,7 +73,9 @@ etalii.adp.ide.intellij/
 └── README.md                             # badge added
 
 etalii.adp.ide.vscode/  and  etalii.adp.ide.eclipse/
-├── .github/workflows/build.yml          # new: editorconfig and parse checks, prepared plugin job (R4, R5)
+├── .github/workflows/build.yml          # new: file checks, prepared plugin job (R4, R5)
+├── .github/scripts/check-files.py       # new (R4)
+├── LICENSE                               # new, Apache-2.0
 └── README.md                             # new, with badge
 
 etalii.adp.site/

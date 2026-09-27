@@ -35,11 +35,11 @@ The organization profile (`.github`, `profile/README.md`) has a six-row table wi
 - **Rationale**: the examples point `$schema` at a published URL with a `$defs` fragment (`…/dedl.schema.json#/$defs/Definition`, `…#/$defs/Document`). Off-the-shelf CLIs pick the metaschema from `$schema` and do not map a fragment to a local file. Python and pip are on every hosted runner.
 - **Alternatives considered**: `check-jsonschema` or `ajv-cli`, which would need a per-example mapping list kept by hand, the kind of drift principle II exists to prevent; fetching the schema from etalii.net, which checks the published schema rather than the one in the pull request.
 
-### R4. VS Code and Eclipse check their files with editorconfig-checker and a parse check
+### R4. VS Code and Eclipse check their files with a small script
 
-- **Decision**: until they hold code, their build job runs `editorconfig-checker` against the repository's own `.editorconfig`, and parses every JSON and YAML file.
-- **Rationale**: both repositories already carry an `.editorconfig`, so the rule set exists and is theirs. A broken JSON or YAML file under `.specify/` breaks Spec Kit, which is what these repositories currently hold (US1 scenario 5).
-- **Alternatives considered**: markdownlint, whose default rules contradict the house rule of not wrapping markdown lines and would need configuring; a placeholder that always passes, rejected by Peter (answer 1a).
+- **Decision**: until they hold code, their `check` job runs `.github/scripts/check-files.py`: every tracked JSON and YAML file must parse, and every relative link in a tracked markdown file must resolve.
+- **Rationale**: what these repositories hold today is Spec Kit's setup (JSON, YAML, markdown); a broken file there breaks Spec Kit, and a broken link misleads a reader (US1 scenario 5). The script passes on both repositories and fails, naming the files, when a JSON file is broken or a link points nowhere.
+- **Alternatives considered**: `editorconfig-checker`, first choice in this plan, but both repositories' `.editorconfig` only turns off the markdown line length, so it would check nothing; markdownlint, whose default rules contradict the house rule of not wrapping markdown lines; a placeholder that always passes, rejected by Peter (answer 1a).
 
 ### R5. Plug-in download step, prepared and skipped
 
