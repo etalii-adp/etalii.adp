@@ -22,51 +22,60 @@
   ],
   "coverage": {
     "FR-001": {
-      "title": "Every repository has exactly one designated build workflow, same name everywhere"
+      "title": "Every product repository is public"
     },
     "FR-002": {
-      "title": "Build workflow runs on PRs into develop, new PR commits, and changes to develop"
+      "title": "Every product repository has exactly one designated build workflow, same name everywhere"
     },
     "FR-003": {
-      "title": "Result shown on the PR; a failure names the step and links its output"
+      "title": "Build workflow runs on PRs into develop, new PR commits, and changes to develop"
     },
     "FR-004": {
-      "title": "Workflow checks what the repository holds (schemas, host build and tests, site checks, files)"
+      "title": "Result shown on the PR; a failure names the step and links its output"
     },
     "FR-005": {
-      "title": "Maintainer can re-run the workflow without pushing"
+      "title": "Workflow checks what the repository holds (schemas, host build and tests, site checks, files)"
     },
     "FR-006": {
-      "title": "Fork PRs get no secrets; nothing is published from a PR run"
+      "title": "Maintainer can re-run the workflow without pushing"
     },
     "FR-007": {
-      "title": "Every job runs on the runner chosen by one repo-level switch, hosted when unset"
+      "title": "Fork PRs get no secrets; nothing is published from a PR run"
     },
     "FR-008": {
-      "title": "Every repository readme shows its build badge for develop, linked to its runs"
+      "title": "Every job runs on GitHub hosted runners"
     },
     "FR-009": {
-      "title": "etalii.adp, vscode and eclipse gain a readme with name, purpose and badge"
+      "title": "vscode and eclipse workflows have a step that builds the plug-in and offers it as a run download"
     },
     "FR-010": {
-      "title": "Both build tables list every repository exactly once"
+      "title": "Without plug-in code that step is reported skipped with its reason and does not fail the run"
     },
     "FR-011": {
-      "title": "Public repository rows show the same badge and link as the readme"
+      "title": "A run where the plug-in did not build offers no download"
     },
     "FR-012": {
-      "title": "Private repository rows show a plain-text not-public note, no broken image"
+      "title": "Every repository readme shows its build badge for develop, linked to its runs"
     },
     "FR-013": {
-      "title": "No table row says N/A"
+      "title": "etalii.adp, vscode and eclipse gain a readme with name, purpose and badge"
     },
     "FR-014": {
-      "title": "Renaming a repository or workflow updates every badge and row in the same change"
+      "title": "Both build tables list every product repository exactly once"
     },
     "FR-015": {
-      "title": "docs/new-repository.md requires workflow, readme badge and both table rows"
+      "title": "Every table row shows the same badge and link as the readme"
     },
     "FR-016": {
+      "title": "No table row says N/A"
+    },
+    "FR-017": {
+      "title": "Renaming a repo or workflow, or making a repo private, updates every badge and row in the same change"
+    },
+    "FR-018": {
+      "title": "docs/new-repository.md requires public, workflow, readme badge and both table rows"
+    },
+    "FR-019": {
       "title": "Constitution no longer says there is no CI workflow"
     }
   },
@@ -81,7 +90,9 @@
     "releases, downloads and deployments",
     "badges other than build status",
     "setting up the self-hosted runner",
-    "changing repository visibility"
+    "changing repository visibility",
+    "the .github repository",
+    "marketplace and Releases publishing of the vscode and eclipse plug-ins"
   ],
   "context": [
     "area: all seven etalii-adp repositories (.github/workflows, readmes)",
@@ -91,5 +102,19 @@
     "reference: RUNS_ON switch from standalone PR 93 and site PR 13",
     "constraint: constitution requires CI to validate every example against its schema"
   ],
-  "intent": "Every etalii-adp repository runs one build workflow on PRs and develop, with its badge in its readme and in both org-wide build tables"
+  "intent": "Every etalii-adp product repository is public and runs one build workflow on hosted runners, with its badge in its readme and in both org-wide build tables",
+  "decisions": [
+    {
+      "decision": "vscode and eclipse check the files they hold, and their workflows are prepared to build and offer the plug-in as a run download (Peter, 2026-09-27, answer 1a)"
+    },
+    {
+      "decision": "All product repositories become public; this supersedes the earlier non-goal of not changing visibility (Peter, 2026-09-27, answer 2b)"
+    },
+    {
+      "decision": "Hosted runners only; the RUNS_ON switch is removed and self-hosted runners are no longer involved (Peter, 2026-09-27, answer 3c)"
+    },
+    {
+      "decision": "The .github repository is out of scope: six product repositories only (Peter, 2026-09-27, answer 4b)"
+    }
+  ]
 }

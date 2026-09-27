@@ -31,6 +31,6 @@
 
 ## Notes
 
-- No [NEEDS CLARIFICATION] markers. Four open choices are recorded as defaults under Assumptions and put to Peter: what a repository with no code checks, how private repositories appear on public pages, the shared runner switch, and whether `.github` counts as a repository.
+- No [NEEDS CLARIFICATION] markers. Peter answered the four open choices on 2026-09-27: vscode and eclipse check the files they hold and are prepared for plug-in downloads (1a plus the download preparation), the product repositories become public (2b), hosted runners only (3c), and `.github` is out of scope (4b).
 - GitHub Actions, badges and readmes are the user's own subject matter ("a github action", "badges", "readme.md"), not implementation choices; the `RUNS_ON` variable is named only under Assumptions, as existing context. Workflow file names and job layout are left to the plan.
-- Classified oversized: seven repositories, each with a workflow, a readme and table rows, plus two tables and the new-repository checklist.
+- Classified oversized: six repositories, each with a workflow, a readme and table rows, plus two tables, the visibility change and the new-repository checklist.
