@@ -1,0 +1,95 @@
+{
+  "workflow": "companion",
+  "specName": "A Build Workflow and Status Badge for Every Repository",
+  "branch": "features/001-ci-and-badges",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-27T13:22:26.775Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-09-27T13:24:13.321Z"
+    }
+  ],
+  "coverage": {
+    "FR-001": {
+      "title": "Every repository has exactly one designated build workflow, same name everywhere"
+    },
+    "FR-002": {
+      "title": "Build workflow runs on PRs into develop, new PR commits, and changes to develop"
+    },
+    "FR-003": {
+      "title": "Result shown on the PR; a failure names the step and links its output"
+    },
+    "FR-004": {
+      "title": "Workflow checks what the repository holds (schemas, host build and tests, site checks, files)"
+    },
+    "FR-005": {
+      "title": "Maintainer can re-run the workflow without pushing"
+    },
+    "FR-006": {
+      "title": "Fork PRs get no secrets; nothing is published from a PR run"
+    },
+    "FR-007": {
+      "title": "Every job runs on the runner chosen by one repo-level switch, hosted when unset"
+    },
+    "FR-008": {
+      "title": "Every repository readme shows its build badge for develop, linked to its runs"
+    },
+    "FR-009": {
+      "title": "etalii.adp, vscode and eclipse gain a readme with name, purpose and badge"
+    },
+    "FR-010": {
+      "title": "Both build tables list every repository exactly once"
+    },
+    "FR-011": {
+      "title": "Public repository rows show the same badge and link as the readme"
+    },
+    "FR-012": {
+      "title": "Private repository rows show a plain-text not-public note, no broken image"
+    },
+    "FR-013": {
+      "title": "No table row says N/A"
+    },
+    "FR-014": {
+      "title": "Renaming a repository or workflow updates every badge and row in the same change"
+    },
+    "FR-015": {
+      "title": "docs/new-repository.md requires workflow, readme badge and both table rows"
+    },
+    "FR-016": {
+      "title": "Constitution no longer says there is no CI workflow"
+    }
+  },
+  "size": "oversized",
+  "classification": {
+    "projectedFiles": 22,
+    "projectedTasks": 24,
+    "scopeSignal": "none",
+    "verdict": "oversized"
+  },
+  "expectations": [
+    "releases, downloads and deployments",
+    "badges other than build status",
+    "setting up the self-hosted runner",
+    "changing repository visibility"
+  ],
+  "context": [
+    "area: all seven etalii-adp repositories (.github/workflows, readmes)",
+    "area: .github profile/README.md build table",
+    "area: etalii.adp.site home page build table",
+    "reference: etalii.adp.ide.intellij spec 005-continuous-integration",
+    "reference: RUNS_ON switch from standalone PR 93 and site PR 13",
+    "constraint: constitution requires CI to validate every example against its schema"
+  ],
+  "intent": "Every etalii-adp repository runs one build workflow on PRs and develop, with its badge in its readme and in both org-wide build tables"
+}
