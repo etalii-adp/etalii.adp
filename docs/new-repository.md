@@ -5,8 +5,8 @@ The rules every repository in the `etalii-adp` GitHub organization follows. Work
 ## Name
 
 - All lowercase, dot-separated, starting with `etalii.adp`: `etalii.adp` for the specifications, `etalii.adp.ide.<ide>` for an IDE host (`standalone`, `intellij`, `vscode`, `eclipse`).
-- Private, in the `etalii-adp` organization, not under a personal account.
-- One exception: `etalii.adp.site`, the website, is public, because the free plan serves GitHub Pages only from public repositories. Its Pages site carries the `etalii.net` domain, serves the website under `/adp` and redirects the root there.
+- Public, in the `etalii-adp` organization, not under a personal account (every repository was made public on 2026-09-27, so its build badge shows to every visitor and its workflows run on GitHub's hosted runners for free).
+- `etalii.adp.site`, the website, serves GitHub Pages with the `etalii.net` domain, under `/adp`, and redirects the root there.
 
 ## Branches
 
@@ -23,13 +23,16 @@ The rules every repository in the `etalii-adp` GitHub organization follows. Work
 
 - **Pull Requests:** tick only "Allow merge commits"; untick "Allow squash merging" and "Allow rebase merging".
 - **Tick "Automatically delete head branches".**
-- **No branch protection or rulesets.** On the free plan they are not enforced on private repositories, and the paid plan was declined (2026-09-26). The pull-request rule above is kept by convention, in the repository's `CLAUDE.md`, so agents must never push to `develop` directly.
+- **No branch protection or rulesets.** They were not available while the repositories were private on the free plan, and the paid plan was declined (2026-09-26). The pull-request rule above is kept by convention, in the repository's `CLAUDE.md`, so agents must never push to `develop` directly.
 
 ## Files the repository starts with
 
 - **`CLAUDE.md`** stating the branch and delivery rules above, so every agent reads them. `etalii.adp.ide.eclipse/CLAUDE.md` is the smallest complete example to copy, Spec Kit section included.
 - **GitHub Spec Kit with the SpecKit Companion extension**, copied from `etalii.adp.ide.intellij`: `.specify/` and the `speckit-*` skills under `.claude/skills/`, with `branch_prefix: "features"` in `.specify/extensions/git/git-config.yml` so Spec Kit's branches are `features/<number>-<name>`. Start `.specify/memory/constitution.md` from the template and ratify it with `/speckit-constitution`. Add a `.gitattributes` that keeps `*.sh` LF, and ignore `__pycache__/`, `*.pyc`, `.claude/settings.local.json` and `.trace.jsonl`. The one repository without it is `etalii.adp.ide.standalone`, which plans with spec-workflow instead.
-- **A CI workflow** once there is something to build or test, running on pull requests into `develop`, so a pull request shows whether it is green before it is merged.
+- **`LICENSE`** with the Apache License 2.0 text, copied from any other repository.
+- **`.github/workflows/build.yml`, named `Build`, in the first pull request**, following `specs/001-ci-and-badges/contracts/build-workflow.md` in `etalii.adp`: it runs on pull requests into `develop`, on `develop` and on manual dispatch, every job on `ubuntu-latest`, and checks whatever the repository holds, even before there is code to build.
+- **`README.md`** with the repository's name, one line on what it is for, and its build badge on the line after the heading, exactly as `specs/001-ci-and-badges/contracts/badge.md` in `etalii.adp` gives it.
+- **A row in both build tables**: the organization profile (`.github`, `profile/README.md`) and the site (`etalii.adp.site`, `src/data/builds.ts`). Renaming the repository or its workflow, or making it private, updates the readme and both tables in the same change.
 
 ## Access for Claude
 

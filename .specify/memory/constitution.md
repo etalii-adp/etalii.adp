@@ -1,7 +1,8 @@
 <!--
 Sync Impact Report
-- Version: template → 1.0.0 (first ratification)
-- Source: the spec-workflow steering documents product.md, tech.md and structure.md, folded in when spec-workflow was dropped (Peter, 2026-09-26).
+- Version: 1.0.0 → 1.0.1 (PATCH)
+- Modified: Development Workflow, the CI sentence now describes the Build workflow that exists (spec 001-ci-and-badges) instead of a future one; its obligation is unchanged.
+- Added or removed sections: none.
 - Templates: plan, spec and tasks templates unchanged; no follow-ups.
 -->
 # etalii.adp Constitution
@@ -61,10 +62,10 @@ A construct, format or dependency MUST be justified by a current designer's need
 - Each feature is developed on its own branch, `features/<number>-<name>`, in its own worktree. The one exception is `claude/<name>`, which Claude's cloud sessions are handed by their harness.
 - A feature reaches `develop`, the integration branch, only through a pull request merged with a merge commit. Nothing is merged locally into `develop` or pushed to it directly. When the pull request is merged or closed, the branch is deleted locally and on `origin`, and the worktree removed.
 - Every plan MUST include a Constitution Check against these principles; any deviation MUST be recorded with its justification in the plan's complexity-tracking section.
-- There is no build and no CI workflow yet. When one is added, it MUST at least validate every example against its schema on pull requests into `develop`.
+- The Build workflow, `.github/workflows/build.yml`, runs on every pull request into `develop` and on every change to `develop`. It MUST at least validate every example against its schema, and its badge heads the readme (spec 001-ci-and-badges).
 
 ## Governance
 
 This constitution supersedes other practices in this repository. Amendments are made through `/speckit-constitution`, recorded in version control, and versioned semantically: MAJOR for removing or redefining a principle, MINOR for adding a principle or materially expanding guidance, PATCH for clarifications. Reviews of plans and changes MUST verify compliance with the principles above; runtime guidance for agents lives in `CLAUDE.md`.
 
-**Version**: 1.0.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-09-26
+**Version**: 1.0.1 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-09-27
