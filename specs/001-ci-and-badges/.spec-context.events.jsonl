@@ -1,0 +1,2 @@
+{"step": "implement", "substep": null, "task": "T001", "kind": "complete", "by": "ai", "at": "2026-09-27T17:23:46.335Z", "did": "Pattern-scanned full history of the four private repos; only placeholders found; vendored licences all permissive", "files": ["none"]}
+{"step": "implement", "substep": null, "task": "T002", "kind": "complete", "by": "ai", "at": "2026-09-27T17:23:46.734Z", "did": "Made standalone, intellij, vscode and eclipse public", "files": ["repository settings"]}

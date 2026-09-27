@@ -70,7 +70,8 @@ The organization profile (`.github`, `profile/README.md`) has a six-row table wi
 
 - **Decision**: before any repository's visibility changes, run `gitleaks detect` over its full history and list third-party files with their licences. The results go to Peter; each repository goes public only on his typed confirmation, with `gh repo edit --visibility public --accept-visibility-change-consequences`.
 - **Rationale**: going public cannot be undone once the content has been seen or cloned. The scan is what "confirms it holds nothing that must stay private" in the spec's assumptions.
-- **Note**: standalone, vscode, eclipse and `etalii.adp` have no licence file, so once public they are visible but "all rights reserved". Choosing a licence is outside this feature.
+- **Outcome (2026-09-27)**: Peter asked for Apache-2.0 licences in every repository and for the repositories to be made public. A pattern scan of every branch's full history (cloud keys, private keys, GitHub, Anthropic, OpenAI, Slack and Google tokens, password and secret assignments, storage account keys) found only placeholder values in vendored Ansible and Helm examples and the `changeme`/`developer` development credentials in standalone's `appsettings.developer.json`. Every vendored example in standalone carries its own licence (Apache-2.0, MIT, CC0, CC BY, W3C), all permitting redistribution. `gitleaks` was not installed, so the scan used `git log -G` with those patterns. The four repositories were made public the same day.
+- **Licence**: standalone, vscode, eclipse and `etalii.adp` gain the Apache License 2.0 text that intellij, the site and `.github` already carry (FR-020).
 
 ### R10. Delivery order
 

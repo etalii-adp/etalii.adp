@@ -113,6 +113,7 @@ A maintainer creates the next product repository by following `docs/new-reposito
 **Visibility**
 
 - **FR-001**: Every product repository in the organization MUST be public.
+- **FR-020**: Every product repository MUST carry the Apache License 2.0 in a `LICENSE` file at its root (Peter, 2026-09-27).
 
 **Workflows**
 
@@ -168,7 +169,7 @@ A maintainer creates the next product repository by following `docs/new-reposito
 
 - "All repos" means the six product repositories. The organization's `.github` repository, which holds only the profile, gets no workflow and no row (Peter, 2026-09-27).
 - The badge shows the status of `develop`, the default branch and the integration branch, not of feature branches.
-- Making a repository public is a maintainer's action in the repository's settings, done once per repository before its badges appear on public pages. Before a repository goes public, a maintainer confirms it holds nothing that must stay private, such as secrets in its history or files whose licence forbids publishing.
+- Making a repository public is a maintainer's action in the repository's settings, done once per repository before its badges appear on public pages. Before a repository goes public, a maintainer confirms it holds nothing that must stay private, such as secrets in its history or files whose licence forbids publishing. This was done on 2026-09-27: the four private repositories were scanned and made public on Peter's instruction.
 - Hosted runners are free for public repositories, so the workflows need no self-hosted runner. The `RUNS_ON` switch that `etalii.adp.ide.standalone` and `etalii.adp.site` added while minutes were short becomes unnecessary; removing it, so every repository runs the same way, is part of this feature.
 - The VS Code and Eclipse plug-in downloads are offered from each run only, for reviewers. Publishing them on a Releases page or a marketplace is left to each host's own specification, as `etalii.adp.ide.intellij`'s spec 005 does for its plug-in.
 - Branch protection is not available (the organization is on the free plan), so a failing workflow informs the maintainer but cannot block a merge. Public repositories on the free plan can use branch protection; turning it on is a separate decision.

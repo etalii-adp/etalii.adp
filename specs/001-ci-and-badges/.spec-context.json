@@ -2,8 +2,8 @@
   "workflow": "companion",
   "specName": "A Build Workflow and Status Badge for Every Repository",
   "branch": "features/001-ci-and-badges",
-  "currentStep": "plan",
-  "status": "planned",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -46,65 +46,125 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-09-27T13:33:39.345Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-27T17:22:27.765Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:23:45.568Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:23:46.044Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:23:46.335Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-27T17:23:46.734Z"
     }
   ],
   "coverage": {
     "FR-001": {
-      "title": "Every product repository is public"
+      "title": "Every product repository is public",
+      "tasks": "T002"
     },
     "FR-002": {
-      "title": "Every product repository has exactly one designated build workflow, same name everywhere"
+      "title": "One build workflow per repo, same name",
+      "tasks": "T008,T009,T010,T012,T021,T022"
     },
     "FR-003": {
-      "title": "Build workflow runs on PRs into develop, new PR commits, and changes to develop"
+      "title": "Runs on PRs into develop and on develop",
+      "tasks": "T009,T010,T012,T021,T022"
     },
     "FR-004": {
-      "title": "Result shown on the PR; a failure names the step and links its output"
+      "title": "Result on the PR names the failing step",
+      "tasks": "T007,T012,T027"
     },
     "FR-005": {
-      "title": "Workflow checks what the repository holds (schemas, host build and tests, site checks, files)"
+      "title": "Workflow checks what the repo holds",
+      "tasks": "T007,T009,T010,T012,T021,T022"
     },
     "FR-006": {
-      "title": "Maintainer can re-run the workflow without pushing"
+      "title": "Re-run without pushing",
+      "tasks": "T009,T010,T012,T021,T022"
     },
     "FR-007": {
-      "title": "Fork PRs get no secrets; nothing is published from a PR run"
+      "title": "No secrets or publishing from PR runs",
+      "tasks": "T008,T009,T010,T012,T021,T022"
     },
     "FR-008": {
-      "title": "Every job runs on GitHub hosted runners"
+      "title": "Hosted runners only",
+      "tasks": "T008,T009,T010,T011,T012,T021,T022"
     },
     "FR-009": {
-      "title": "vscode and eclipse workflows have a step that builds the plug-in and offers it as a run download"
+      "title": "vscode/eclipse plugin step builds and offers a download",
+      "tasks": "T021,T022"
     },
     "FR-010": {
-      "title": "Without plug-in code that step is reported skipped with its reason and does not fail the run"
+      "title": "Plugin step skipped with reason without code",
+      "tasks": "T021,T022,T029"
     },
     "FR-011": {
-      "title": "A run where the plug-in did not build offers no download"
+      "title": "No download when the plugin did not build",
+      "tasks": "T021,T022"
     },
     "FR-012": {
-      "title": "Every repository readme shows its build badge for develop, linked to its runs"
+      "title": "Every readme shows its develop badge",
+      "tasks": "T014,T015,T018"
     },
     "FR-013": {
-      "title": "etalii.adp, vscode and eclipse gain a readme with name, purpose and badge"
+      "title": "New readmes for etalii.adp, vscode, eclipse",
+      "tasks": "T013,T016,T017"
     },
     "FR-014": {
-      "title": "Both build tables list every product repository exactly once"
+      "title": "Both tables list every product repo once",
+      "tasks": "T019,T020"
     },
     "FR-015": {
-      "title": "Every table row shows the same badge and link as the readme"
+      "title": "Table badges match the readmes",
+      "tasks": "T019,T020,T028"
     },
     "FR-016": {
-      "title": "No table row says N/A"
+      "title": "No N/A rows",
+      "tasks": "T019,T020"
     },
     "FR-017": {
-      "title": "Renaming a repo or workflow, or making a repo private, updates every badge and row in the same change"
+      "title": "Renames and visibility changes update every badge in the same change",
+      "tasks": "T023"
     },
     "FR-018": {
-      "title": "docs/new-repository.md requires public, workflow, readme badge and both table rows"
+      "title": "new-repository.md requires public, workflow, badge, table rows",
+      "tasks": "T023"
     },
     "FR-019": {
-      "title": "Constitution no longer says there is no CI workflow"
+      "title": "Constitution no longer says there is no CI",
+      "tasks": "T024"
+    },
+    "FR-020": {
+      "title": "Apache-2.0 LICENSE in every product repository",
+      "tasks": "T003,T004,T005,T006"
     }
   },
   "size": "oversized",
@@ -184,7 +244,27 @@
     "plan": {
       "summary": "Plan: build.yml named Build in six repos on ubuntu-latest, pinned badges, tables after repos go public",
       "key_finding": "Private repos cannot run hosted jobs until public, so their workflow PRs are verified locally and tables change last"
+    },
+    "tasks": {
+      "summary": "30 tasks: setup (scan, public, licences), US1 workflows, US2 readmes, US3 tables, US4 vscode/eclipse workflows, US5 checklist, polish"
     }
   },
-  "approach": "Add .github/workflows/build.yml named Build to all six product repositories on ubuntu-latest, removing RUNS_ON, with per-repo checks. Put a develop-pinned badge in each readme, make the private repos public after a history scan and Peter's confirmation, then update the .github profile and site tables and the new-repository checklist."
+  "approach": "Add .github/workflows/build.yml named Build to all six product repositories on ubuntu-latest, removing RUNS_ON, with per-repo checks. Put a develop-pinned badge in each readme, make the private repos public after a history scan and Peter's confirmation, then update the .github profile and site tables and the new-repository checklist.",
+  "currentTask": "T002",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "Pattern-scanned full history of the four private repos; only placeholders found; vendored licences all permissive",
+      "files": [
+        "none"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "Made standalone, intellij, vscode and eclipse public",
+      "files": [
+        "repository settings"
+      ]
+    }
+  }
 }
