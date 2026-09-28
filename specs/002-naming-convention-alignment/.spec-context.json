@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "Naming Convention Alignment",
   "branch": "features/002-naming-convention-alignment",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "plan",
+  "status": "planning",
   "history": [
     {
       "step": "specify",
@@ -11,6 +11,20 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-09-28T19:28:01.833Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-09-28T23:08:20.022Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-28T23:08:20.028Z"
     }
   ],
   "telemetryInstanceId": "549982ba-3d49-43fe-b59b-91a141e2e7d9",
@@ -24,7 +38,7 @@
         "line": 18
       },
       "comment": "🗑️ Remove this line",
-      "status": "pending",
+      "status": "applied",
       "createdAt": "2026-09-28T22:19:41.036Z"
     },
     {
@@ -36,7 +50,7 @@
         "line": 20
       },
       "comment": "And dont forget that it should also be applied to the website",
-      "status": "pending",
+      "status": "applied",
       "createdAt": "2026-09-28T22:20:08.075Z"
     },
     {
@@ -48,8 +62,116 @@
         "line": 27
       },
       "comment": "So DEDL needs to become DISL.",
-      "status": "pending",
+      "status": "applied",
       "createdAt": "2026-09-28T22:21:00.269Z"
+    },
+    {
+      "id": "ref-1790635138437-3e5fh",
+      "doc": "spec",
+      "anchor": {
+        "heading": null,
+        "blockText": "**Feature Branch**: `features/002-naming-convention-alignment`\r\n**Created**: 2026-09-28\r\n**Status**: Draft\r\n**Input**: \"Create a new spec kit specification on etalii.adp called \"Naming convention alignment\". It is about aligning the names related to designers, diagrams, editors and related aspects consistently across all repo's, all code, all functionalities, all documentation, all data sources (notion) and pipelines. It should be covered everywhere, except of course in the history. […] Diagrams: i.e. the visual ones with elements and relations. Designers: Form based visual layouts. […] Editors: Primarily when text based access is the core interaction principle. […] where we have placeholders for diagrams/editors there should also be a placeholder added for designers. […] All of those still persist as how it was before. Write the definitions down on a notion page and also express it on a web page in the document part of the portal. This is a huge change and should be done by multiple threads working in parallel, with them coordinating and testing until the whole code base and web site is consistent and tested as operating as before.\" (Peter, 2026-09-28; full text in the project thread.)\r",
+        "line": 3
+      },
+      "comment": "This would then be \"Browse the tools\", right?",
+      "status": "applied",
+      "createdAt": "2026-09-28T22:38:58.438Z"
+    },
+    {
+      "id": "ref-1790635324301-0ldn2",
+      "doc": "spec",
+      "anchor": {
+        "heading": null,
+        "blockText": "**Feature Branch**: `features/002-naming-convention-alignment`\r\n**Created**: 2026-09-28\r\n**Status**: Draft\r\n**Input**: \"Create a new spec kit specification on etalii.adp called \"Naming convention alignment\". It is about aligning the names related to designers, diagrams, editors and related aspects consistently across all repo's, all code, all functionalities, all documentation, all data sources (notion) and pipelines. It should be covered everywhere, except of course in the history. […] Diagrams: i.e. the visual ones with elements and relations. Designers: Form based visual layouts. […] Editors: Primarily when text based access is the core interaction principle. […] where we have placeholders for diagrams/editors there should also be a placeholder added for designers. […] All of those still persist as how it was before. Write the definitions down on a notion page and also express it on a web page in the document part of the portal. This is a huge change and should be done by multiple threads working in parallel, with them coordinating and testing until the whole code base and web site is consistent and tested as operating as before.\" (Peter, 2026-09-28; full text in the project thread.)\r",
+        "line": 4
+      },
+      "comment": "A tool engineer specifies how the tool (a diagram/designer/editor) should function and look like. if it is a diagram type (say of type A), then he can specify the functionalities of type A diagrams in the DISL language. \nIf a user is later on creating diagrams of type A, then dose are stored according to the DIDL structure.",
+      "status": "applied",
+      "createdAt": "2026-09-28T22:42:04.302Z"
+    },
+    {
+      "id": "ref-1790635691283-6zdrb",
+      "doc": "spec",
+      "anchor": {
+        "heading": null,
+        "blockText": "| Kind | Specification language | Extension | Definition | Extension |\r\n|---|---|---|---|---|\r\n| Diagram | DISL, Diagram Specification Language | `.disl` | DIFL, a diagram definition | `.difl` |\r\n| Designer | DESL, Designer Specification Language | `.desl` | DEFL, a designer definition | `.defl` |\r\n| Editor | EDSL, Editor Specification Language | `.edsl` | EDFL, an editor definition | `.edfl` |\r",
+        "line": 35
+      },
+      "comment": "The above definitions and extensions are wrong.\n\nThey should be:\n\nDIDL - Diagram Definition (.did)\nDEDL - Designer Definition (.ded)\nEDDL - Editor Definition (.edd)",
+      "status": "applied",
+      "createdAt": "2026-09-28T22:48:11.284Z"
+    },
+    {
+      "id": "ref-1790635775002-ju1sy",
+      "doc": "spec",
+      "anchor": {
+        "heading": null,
+        "blockText": "2. **Given** a host's stored settings from before the rename, **When** the host starts after it, **Then** every setting still applies, under whichever name it is now stored.\r",
+        "line": 92
+      },
+      "comment": "In the web portal add a \"Specification & Definition\" page. Introduce the whole concepts and definitely show the table above with the columsn Kind, Specification language, Extension, Definition, Extension. That makes absolutely sence.",
+      "status": "applied",
+      "createdAt": "2026-09-28T22:49:35.004Z"
+    },
+    {
+      "id": "ref-1790635891144-ni5be",
+      "doc": "spec",
+      "anchor": {
+        "heading": null,
+        "blockText": "2. **Given** the markdown and plain-text editors, **When** they are looked up in the standalone host, the site and Notion, **Then** each calls them editors, and they appear in Notion and the catalogue as entries of kind editor.\r",
+        "line": 75
+      },
+      "comment": "Not per-se. We are still building and do not have users yet. if file content has the wrong naming and is based on one of our own specifications then the naming convention needs to be applied.",
+      "status": "applied",
+      "createdAt": "2026-09-28T22:51:31.145Z"
+    },
+    {
+      "id": "ref-1790635992000-g96g4",
+      "doc": "spec",
+      "anchor": {
+        "heading": null,
+        "blockText": "**Independent Test**: in each repository, add a line using a retired term outside the allowed exceptions and see the check fail and name it.\r",
+        "line": 136
+      },
+      "comment": "Absolutely no third party naming can or should be changed.",
+      "status": "applied",
+      "createdAt": "2026-09-28T22:53:12.002Z"
+    },
+    {
+      "id": "ref-1790636163365-tf326",
+      "doc": "spec",
+      "anchor": {
+        "heading": null,
+        "blockText": "### Functional Requirements\r",
+        "line": 158
+      },
+      "comment": "Update DIFL to DID and .did. Remove the call a person a designer.",
+      "status": "applied",
+      "createdAt": "2026-09-28T22:56:03.366Z"
+    },
+    {
+      "id": "ref-1790636208885-6x5vq",
+      "doc": "spec",
+      "anchor": {
+        "heading": null,
+        "blockText": "\r",
+        "line": 159
+      },
+      "comment": "Correct DEFL to DED/.ded and EDFL to EDD and .edd",
+      "status": "applied",
+      "createdAt": "2026-09-28T22:56:48.886Z"
+    },
+    {
+      "id": "ref-1790636308505-tq8t5",
+      "doc": "spec",
+      "anchor": {
+        "heading": null,
+        "blockText": "\r",
+        "line": 189
+      },
+      "comment": "correct to DID, DEF and EDD",
+      "status": "applied",
+      "createdAt": "2026-09-28T22:58:28.506Z"
     }
   ]
 }
