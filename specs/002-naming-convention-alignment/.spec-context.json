@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "Naming Convention Alignment",
   "branch": "features/002-naming-convention-alignment",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
   "history": [
     {
       "step": "specify",
@@ -11,6 +11,20 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-09-28T19:28:01.833Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-28T22:23:01.596Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-28T22:24:04.642Z"
     }
   ]
 }
