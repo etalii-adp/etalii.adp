@@ -13,5 +13,43 @@
       "at": "2026-09-28T19:28:01.833Z"
     }
   ],
-  "telemetryInstanceId": "549982ba-3d49-43fe-b59b-91a141e2e7d9"
+  "telemetryInstanceId": "549982ba-3d49-43fe-b59b-91a141e2e7d9",
+  "reviewComments": [
+    {
+      "id": "ref-1790633981035-pmfg1",
+      "doc": "spec",
+      "anchor": {
+        "heading": null,
+        "blockText": "- \"Designer\" is the umbrella for everything ADP offers in the constitution, the readmes, the organization profile, the site's catalogue (`/adp/designers/`) and the IntelliJ code (`AdpDesignerEditor`, the \"Designers\" settings page), but a *person* who writes a definition in the DEDL specification, and absent from the standalone host's code.\r",
+        "line": 18
+      },
+      "comment": "🗑️ Remove this line",
+      "status": "pending",
+      "createdAt": "2026-09-28T22:19:41.036Z"
+    },
+    {
+      "id": "ref-1790634008075-5po7p",
+      "doc": "spec",
+      "anchor": {
+        "heading": null,
+        "blockText": "- \"Editor\" is the text-editor family in the standalone host, the running tool in the DEDL specification (\"Diagram Editor Definition Language\", \"editor runtime\"), a platform concept in the IDE hosts, and a property-value control.\r",
+        "line": 20
+      },
+      "comment": "And dont forget that it should also be applied to the website",
+      "status": "pending",
+      "createdAt": "2026-09-28T22:20:08.075Z"
+    },
+    {
+      "id": "ref-1790634060268-xspv0",
+      "doc": "spec",
+      "anchor": {
+        "heading": null,
+        "blockText": "## Decisions\r",
+        "line": 27
+      },
+      "comment": "So DEDL needs to become DISL.",
+      "status": "pending",
+      "createdAt": "2026-09-28T22:21:00.269Z"
+    }
+  ]
 }
