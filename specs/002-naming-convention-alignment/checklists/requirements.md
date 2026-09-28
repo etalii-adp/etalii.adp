@@ -31,7 +31,7 @@
 
 ## Notes
 
-- Two [NEEDS CLARIFICATION] markers remain for Peter: the umbrella term (FR-002, recommended "perspective") and what happens to the name "Diagram Editor Definition Language" (FR-006, recommended keeping DEDL and its identifiers and changing only the expansion).
+- FR-002 and FR-006 were answered by Peter on 2026-09-28 (tool; DISL/DESL/EDSL with DIFL/DEFL/EDFL). One marker remains, FR-006b: what a `.disl` file holds, with a default taken.
 - Class names, folder names, IDE APIs and Notion column names appear only as evidence of today's state (Context, Edge Cases) or as the user's own subject matter ("notion", "pipelines"); how they are renamed is left to the plan.
 - The evidence is in inventory.md beside the spec.
 - Classified oversized: seven repositories, Notion and the site pipelines; the plan splits it into parallel parts (FR-015).

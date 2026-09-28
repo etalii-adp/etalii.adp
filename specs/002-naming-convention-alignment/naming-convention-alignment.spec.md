@@ -24,6 +24,23 @@ Today the three words are used for other things, and differently in every place.
 
 This feature fixes one vocabulary, writes it down in the three places people read it, and applies it to every repository, every piece of code, every user-visible text, every document, the Notion data and the pipelines that move data between them, while everything keeps working as it did: existing documents open, settings survive, links resolve.
 
+## Decisions
+
+Peter decided on 2026-09-28, reviewing the first draft:
+
+- The umbrella word for "a diagram, a designer or an editor" is **tool**.
+- DEDL is replaced. It was meant to define diagrams only, and it is not a definition language but a specification language: it specifies what is allowed when defining a tool. There is one specification language per kind, and the definitions made according to them are named after the kind too:
+
+| Kind | Specification language | Extension | Definition | Extension |
+|---|---|---|---|---|
+| Diagram | DISL, Diagram Specification Language | `.disl` | DIFL, a diagram definition | `.difl` |
+| Designer | DESL, Designer Specification Language | `.desl` | DEFL, a designer definition | `.defl` |
+| Editor | EDSL, Editor Specification Language | `.edsl` | EDFL, an editor definition | `.edfl` |
+
+- The definitions are documented in Notion, in markdown and on the site.
+- Every Notion row today is indeed a diagram. The kind column offers Diagram, Designer and Editor, and the markdown and plain-text editors get rows of their own.
+- Persisted identifiers are renamed too ("Change all of it"); keeping them working is how the rename is done, not a reason to leave the old name in place.
+
 Roles used below: a **user** works with ADP in one of its hosts; a **contributor** (person or agent) changes an ADP repository; a **visitor** reads the site, the organization profile or Notion; **Peter** owns the product and decides the classification.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -57,7 +74,7 @@ Peter reviews a classification of every catalogue entry and every host component
 1. **Given** the agreed classification, **When** an entry classified as a diagram is looked up in a host, the catalogue, the site and Notion, **Then** each calls it a diagram and none calls it a designer or an editor.
 2. **Given** the markdown and plain-text editors, **When** they are looked up in the standalone host, the site and Notion, **Then** each calls them editors, and they appear in Notion and the catalogue as entries of kind editor.
 3. **Given** a user-visible text that names the umbrella ("Browse the designers", the "Designers" settings page, "a family of specialized diagram, designer and text editors"), **When** the feature lands, **Then** it uses the umbrella term from the glossary, or the kind when only one kind is meant.
-4. **Given** the DEDL specification, **When** it is read, **Then** the person who writes a definition is no longer called a designer, and the language's name and prose use the vocabulary as the answer to FR-006 decides.
+4. **Given** the specification that was DEDL, **When** it is read, **Then** it is DISL, the Diagram Specification Language, the person who writes a definition is no longer called a designer, and its definitions are DIFL files.
 
 ---
 
@@ -74,7 +91,7 @@ A user updates to a version with the new names and carries on: every document th
 1. **Given** any existing document or registration file, **When** it is opened and saved unchanged after the rename, **Then** it opens and is written back byte-identical.
 2. **Given** a host's stored settings from before the rename, **When** the host starts after it, **Then** every setting still applies, under whichever name it is now stored.
 3. **Given** any URL the site served before, **When** it is requested after, **Then** it serves the same page or redirects permanently to its new address.
-4. **Given** a file extension, schema `$id`, media type, origin or other identifier that documents, settings or external tools persist, **When** the vocabulary would rename it, **Then** the old identifier keeps being read (and, for a URL, redirected), so no stored data needs converting by hand.
+4. **Given** a file extension, schema `$id`, media type, origin or other identifier that documents, settings or external tools persist, **When** the vocabulary renames it, **Then** the new identifier is used from then on and the old one keeps being read (and, for a URL, redirected), so no stored data needs converting by hand.
 5. **Given** each repository's build, tests and checks, **When** they run on the renamed code, **Then** they pass with no fewer tests than before.
 
 ---
@@ -131,7 +148,7 @@ A contributor opens a pull request that reintroduces a retired use of a term, fo
 - **Other meanings of the words.** "Editor" as a property-value or inline label control, "view" as a viewport, a C4 view or an open tab, "diagram" in third-party names (OMG Diagram Definition, "draw.io diagram", "Mermaid class diagram"). The glossary says which of these are kept and under what name; third-party product and standard names are never changed.
 - **An entry that fits two kinds**, for example a matrix that could be read as a form or a hype cycle curve whose items carry no relations. The classification records the rule applied and the reason; Peter decides borderline entries.
 - **An entry that is one kind in one host and another in a second host.** The kind belongs to the entry, not the host; all hosts use the same kind.
-- **Persisted identifiers that contain a retired term**, such as the IntelliJ designer ids `etalii.adp.freemind.editor` and `offDesigners`, `.adp` origins, the `.dedl` extension, the DEDL schema `$id` and media types, and site URLs under `/adp/designers/`. They are renamed only with the old form still read or redirected (FR-011), or left as they are when renaming buys nothing a user sees; the glossary lists them as exceptions.
+- **Persisted identifiers that contain a retired term**, such as the IntelliJ ids `etalii.adp.freemind.editor` and `offDesigners`, `.adp` origins, the `.dedl` extension, the DEDL schema `$id`, media types and version keys, and site URLs under `/adp/designers/` and `/adp/dedl/`. They are renamed, and the old form is still read or redirected (FR-011).
 - **History.** Commits, merged and closed pull requests, release notes of published releases, completed Spec Kit features and spec-workflow archives (implementation logs, approval snapshots) are records of what was, and are not rewritten.
 - **Work in flight.** Branches and threads open while this lands (the catalogue focus-area filtering and IntelliJ screenshot threads, for example) are rebased onto the new names before they merge.
 - **The repositories without code** (`etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse`) only need their texts aligned now; the vocabulary applies to their code when it arrives.
@@ -143,25 +160,27 @@ A contributor opens a pull request that reintroduces a retired use of a term, fo
 **Vocabulary**
 
 - **FR-001**: A glossary **MUST** exist in `etalii.adp` as the single source of the ADP vocabulary. It **MUST** define diagram, designer and editor with a test that places any entry in exactly one kind, the umbrella term for all three, and the related terms named under Key Entities, and it **MUST** list every retired use with its replacement and every allowed exception with its reason.
-- **FR-002**: The umbrella term for "a diagram, designer or editor" **MUST** be one word used everywhere the three are meant together, replacing "designer" in that role. [NEEDS CLARIFICATION: which umbrella term? Recommended "perspective", after the product's own name, A Different Perspective. Alternatives: "view", which is already overloaded; "experience", as in the standalone readme; "tool".]
+- **FR-002**: The umbrella term for "a diagram, designer or editor" **MUST** be **tool**, used everywhere the three are meant together and replacing "designer" in that role. Where a platform already uses "tool" for something else (IntelliJ's tool windows, a toolbox), the glossary **MUST** say which is meant.
 - **FR-003**: The glossary **MUST** be published as a Notion page and as a page in the documentation part of the site, each stating the same definitions and linking to the glossary in `etalii.adp` as the source. A change to the glossary **MUST** update both in the same change.
 - **FR-004**: The constitution of `etalii.adp` and the `CLAUDE.md` of every repository **MUST** use the vocabulary and point to the glossary; the constitution change goes through `/speckit-constitution`.
 
 **Classification**
 
 - **FR-005**: Every catalogue entry, every Notion row and every host component that a user works in (including the markdown and plain-text editors and the settings pages) **MUST** be classified as a diagram, a designer or an editor, in one table that records the rule applied to each, and Peter **MUST** approve the table before any code is renamed.
-- **FR-006**: The DEDL specification **MUST** stop calling a person a designer, and **MUST** state which kinds a DEDL definition can describe. [NEEDS CLARIFICATION: DEDL is the "Diagram Editor Definition Language", and "editor" in it means the running tool, which the vocabulary no longer allows. Options: (a) keep the abbreviation DEDL and every persisted identifier (`.dedl`, schema `$id`, media types), and change only the expansion to fit the vocabulary; (b) keep the name as a proper name and record it as an exception; (c) rename the language, keeping the old identifiers readable. Recommended (a).]
+- **FR-006**: DEDL **MUST** become DISL, the Diagram Specification Language: its specification, schema, examples, identifiers (folder, file names, schema `$id`, media types, version keys, export format names) and every reference to it. A diagram definition written in it **MUST** be a DIFL file (`.difl`). It **MUST NOT** call a person a designer.
+- **FR-006a**: DESL, the Designer Specification Language, and EDSL, the Editor Specification Language, **MUST** exist beside DISL as placeholder specifications, stating their purpose, their definition format (DEFL `.defl`, EDFL `.edfl`) and that their content is to come. The three **MUST** follow one naming pattern for folders, documents, schemas and extensions.
+- **FR-006b**: The glossary **MUST** state what a `.disl`, `.desl` or `.edsl` file holds, as distinct from a definition. [NEEDS CLARIFICATION: a definition is a `.difl`; what is a `.disl` file? Default taken until answered: the language's own machine-readable specification, today's `dedl.schema.json`, so `disl.schema.json` becomes the `.disl` file.]
 
 **Applying the vocabulary**
 
 - **FR-007**: Every repository in the `etalii-adp` organization (`etalii.adp`, `etalii.adp.ide.standalone`, `etalii.adp.ide.intellij`, `etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse`, `etalii.adp.site`, `.github`) **MUST** use the vocabulary in its code identifiers (projects, assemblies, packages, namespaces, folders, files, types, members), user-visible text (menus, labels, titles, messages, settings pages, tooltips), documentation, specifications of work not yet completed, tests and build and pipeline definitions, apart from the exceptions the glossary lists.
 - **FR-008**: Each entry **MUST** have one display name, spelled and capitalised the same in every host, the catalogue, the site and Notion, and its code identifiers **MUST** derive from that name in one pattern per language. A display name **MUST** be a name, not a description.
 - **FR-009**: Where a host or repository has a place for diagrams and a place for editors (module folders, guides, definition folders, registries, menus, catalogue kinds and filters, Notion options), it **MUST** have a place for designers beside them, marked as a placeholder while empty.
-- **FR-010**: The Notion database **MUST** carry a kind for every row with the options Diagram, Designer and Editor, **MUST** hold rows for the editors, **MUST** name its host columns in one pattern, and **MUST** be named for all three kinds. The site's refresh and sync pipelines, their procedures and their generated texts **MUST** be changed in the same step as Notion so that no run fails or reports a gap in between.
+- **FR-010**: The Notion database **MUST** carry a kind for every row with the options Diagram, Designer and Editor, **MUST** hold rows for the markdown and plain-text editors with the fields that apply to an editor filled in, **MUST** name its host columns in one pattern, and **MUST** be named for all three kinds. The site's refresh and sync pipelines, their procedures and their generated texts **MUST** be changed in the same step as Notion so that no run fails or reports a gap in between.
 
 **Preserving behaviour**
 
-- **FR-011**: A persisted identifier (file extension, registration origin, schema `$id`, media type, settings key or id, public URL, Notion data source) **MUST NOT** be changed unless the old form keeps being read, or for a URL keeps redirecting permanently, for at least the next major version of the host concerned. Where keeping the old identifier costs nothing a user sees, it **SHOULD** be kept and listed as an exception instead.
+- **FR-011**: A persisted identifier (file extension, registration origin, schema `$id`, media type, version key, settings key or id, public URL, Notion column or option) that carries a retired term **MUST** be renamed like any other name. From the change on, the new form **MUST** be what is written, and the old form **MUST** keep being read, or for a URL keep redirecting permanently, for at least the next major version of the host concerned. Only identifiers that no one outside ADP can have stored (internal ids that never leave memory, for example) may be renamed without this.
 - **FR-012**: After the change, every existing document and every example in every repository **MUST** open in every host that opened it before, and **MUST** be written back byte-identical when saved unchanged.
 - **FR-013**: After the change, every repository's build, tests and checks **MUST** pass with at least as many tests as before, and the site **MUST** build, pass its checks and serve every URL it served before.
 - **FR-014**: History **MUST NOT** be rewritten: commits, merged or closed pull requests, published release notes, completed Spec Kit features and spec-workflow archives stay as they are.
@@ -177,9 +196,10 @@ A contributor opens a pull request that reintroduces a retired use of a term, fo
 - **Diagram**: a visual arrangement of elements and the relations between them (a mind map, a Wardley map, a C4 container diagram).
 - **Designer**: a form-based visual layout; more than text input, with nothing in it connected.
 - **Editor**: a way of working in which typing text is the core interaction (markdown, plain text).
-- **Umbrella term**: what a diagram, a designer and an editor all are; replaces "designer" in that role (FR-002).
+- **Tool**: what a diagram, a designer and an editor all are; replaces "designer" in that role (FR-002).
+- **Specification language**: what is allowed when defining a tool of one kind: DISL for diagrams, DESL for designers, EDSL for editors.
+- **Definition**: one tool type described according to its kind's specification language: a DIFL, DEFL or EDFL file.
 - **Type**: one particular diagram, designer or editor that ADP offers, such as the Wardley map; identified by its origin (`<vendor>/<type>`) and called "<kind> type" (diagram type, designer type, editor type).
-- **Definition**: a machine-readable description of a type, such as a DEDL file.
 - **Document**: one piece of content a user works on in a type, with its registration file (`.adp`) where the host uses one.
 - **Module**: the code package in a host that implements one or more types of one kind (diagram module, designer module, editor module).
 - **Host**: an IDE that ADP runs in (standalone, IntelliJ, VS Code, Eclipse).
