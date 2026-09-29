@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json",
-  "title": "DEDL 0.1 — Diagram Editor Definition Language",
-  "description": "Definitions ($defs/Definition) and documents ($defs/Document). The root validates definitions.",
-  "$ref": "#/$defs/Definition",
+  "$id": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json",
+  "title": "DISL 0.1 — Diagram Specification Language",
+  "description": "Specifications of diagram types ($defs/Specification), written by tool engineers. The root validates specifications. Stored diagrams are DID definitions, validated by did.schema.json, which references this schema's QualifiedId, SemVer and Point.",
+  "$ref": "#/$defs/Specification",
   "$defs": {
     "SimpleId": {
       "type": "string",
@@ -912,15 +912,21 @@
         "^x-": true
       }
     },
-    "Definition": {
+    "Specification": {
       "type": "object",
       "properties": {
         "$schema": {
           "type": "string"
         },
-        "dedl": {
+        "disl": {
           "type": "string",
           "pattern": "^\\d+\\.\\d+$"
+        },
+        "dedl": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+$",
+          "deprecated": true,
+          "description": "Deprecated alias of \"disl\": read, never written (DISL specification, deprecated aliases)."
         },
         "language": {
           "$ref": "#/$defs/Language"
@@ -997,9 +1003,20 @@
       },
       "additionalProperties": false,
       "required": [
-        "dedl",
         "language",
         "metamodel"
+      ],
+      "oneOf": [
+        {
+          "required": [
+            "disl"
+          ]
+        },
+        {
+          "required": [
+            "dedl"
+          ]
+        }
       ],
       "patternProperties": {
         "^x-": true
@@ -9251,447 +9268,6 @@
         }
       },
       "additionalProperties": false,
-      "patternProperties": {
-        "^x-": true
-      }
-    },
-    "ElementRecord": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "attributes": {
-          "type": "object"
-        },
-        "parent": {
-          "type": "string"
-        },
-        "slot": {
-          "type": "string"
-        },
-        "order": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "string"
-            }
-          ]
-        },
-        "ports": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "type": {
-                "type": "string"
-              },
-              "attributes": {
-                "type": "object"
-              }
-            },
-            "additionalProperties": false,
-            "required": [
-              "id",
-              "type"
-            ],
-            "patternProperties": {
-              "^x-": true
-            }
-          }
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "id",
-        "type"
-      ],
-      "patternProperties": {
-        "^x-": true
-      }
-    },
-    "RelationRecord": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "source": {
-          "type": "string"
-        },
-        "target": {
-          "type": "string"
-        },
-        "attributes": {
-          "type": "object"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "id",
-        "type",
-        "source",
-        "target"
-      ],
-      "patternProperties": {
-        "^x-": true
-      }
-    },
-    "NodeView": {
-      "type": "object",
-      "properties": {
-        "x": true,
-        "y": true,
-        "w": true,
-        "h": true,
-        "x2": true,
-        "y2": true,
-        "angle": true,
-        "radius": true,
-        "rotation": {
-          "type": "number"
-        },
-        "z": {
-          "type": "integer"
-        },
-        "collapsed": {
-          "type": "boolean"
-        },
-        "pinned": {
-          "type": "boolean"
-        },
-        "params": {
-          "type": "object"
-        },
-        "labels": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "properties": {
-              "dx": {
-                "type": "number"
-              },
-              "dy": {
-                "type": "number"
-              }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-              "^x-": true
-            }
-          }
-        },
-        "ports": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "properties": {
-              "side": {
-                "type": "string"
-              },
-              "position": {
-                "type": "number"
-              }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-              "^x-": true
-            }
-          }
-        },
-        "compartments": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "properties": {
-              "collapsed": {
-                "type": "boolean"
-              }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-              "^x-": true
-            }
-          }
-        },
-        "style": {
-          "type": "object"
-        },
-        "hidden": {
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": false,
-      "patternProperties": {
-        "^x-": true
-      }
-    },
-    "EdgeView": {
-      "type": "object",
-      "properties": {
-        "waypoints": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/Point"
-          }
-        },
-        "sourceAnchor": {
-          "type": "array",
-          "items": {
-            "type": "number"
-          },
-          "minItems": 2,
-          "maxItems": 2
-        },
-        "targetAnchor": {
-          "type": "array",
-          "items": {
-            "type": "number"
-          },
-          "minItems": 2,
-          "maxItems": 2
-        },
-        "controlPoints": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/Point"
-          }
-        },
-        "labels": {
-          "type": "object",
-          "additionalProperties": {
-            "type": "object",
-            "properties": {
-              "at": true,
-              "dx": {
-                "type": "number"
-              },
-              "dy": {
-                "type": "number"
-              }
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-              "^x-": true
-            }
-          }
-        },
-        "routing": {
-          "type": "string"
-        },
-        "style": {
-          "type": "object"
-        },
-        "z": {
-          "type": "integer"
-        },
-        "hidden": {
-          "type": "boolean"
-        }
-      },
-      "additionalProperties": false,
-      "patternProperties": {
-        "^x-": true
-      }
-    },
-    "ViewRecord": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "viewpoint": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "viewport": {
-          "type": "object",
-          "properties": {
-            "x": {
-              "type": "number"
-            },
-            "y": {
-              "type": "number"
-            },
-            "zoom": {
-              "type": "number"
-            }
-          },
-          "additionalProperties": false,
-          "patternProperties": {
-            "^x-": true
-          }
-        },
-        "nodes": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/$defs/NodeView"
-          }
-        },
-        "edges": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/$defs/EdgeView"
-          }
-        },
-        "viewOnly": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/ElementRecord"
-          }
-        },
-        "guides": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "axis": {
-                "enum": [
-                  "x",
-                  "y"
-                ]
-              },
-              "value": true
-            },
-            "additionalProperties": false,
-            "patternProperties": {
-              "^x-": true
-            }
-          }
-        },
-        "settings": {
-          "type": "object"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "id"
-      ],
-      "patternProperties": {
-        "^x-": true
-      }
-    },
-    "Document": {
-      "type": "object",
-      "properties": {
-        "$schema": {
-          "type": "string"
-        },
-        "dedlDocument": {
-          "type": "string",
-          "pattern": "^\\d+\\.\\d+$"
-        },
-        "language": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "$ref": "#/$defs/QualifiedId"
-            },
-            "version": {
-              "$ref": "#/$defs/SemVer"
-            },
-            "definition": {
-              "type": "string"
-            },
-            "integrity": {
-              "type": "string"
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "id",
-            "version"
-          ],
-          "patternProperties": {
-            "^x-": true
-          }
-        },
-        "meta": {
-          "type": "object"
-        },
-        "diagram": {
-          "type": "object",
-          "properties": {
-            "attributes": {
-              "type": "object"
-            }
-          },
-          "additionalProperties": false,
-          "patternProperties": {
-            "^x-": true
-          }
-        },
-        "elements": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/ElementRecord"
-          }
-        },
-        "relations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/RelationRecord"
-          }
-        },
-        "views": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/ViewRecord"
-          }
-        },
-        "suppressions": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "constraint": {
-                "type": "string"
-              },
-              "element": {
-                "type": "string"
-              },
-              "reason": {
-                "type": "string"
-              },
-              "by": {
-                "type": "string"
-              },
-              "at": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false,
-            "required": [
-              "constraint",
-              "element"
-            ],
-            "patternProperties": {
-              "^x-": true
-            }
-          }
-        },
-        "extensions": {
-          "type": "object"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "dedlDocument",
-        "language"
-      ],
       "patternProperties": {
         "^x-": true
       }

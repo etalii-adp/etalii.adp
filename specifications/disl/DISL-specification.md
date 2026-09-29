@@ -1,20 +1,21 @@
-# DEDL — Diagram Editor Definition Language
+# DISL — Diagram Specification Language
 
 **Specification, version 0.1 (Working Draft)**
 
 |                           |                                                                              |
 |---------------------------|------------------------------------------------------------------------------|
-| Date                      | 2026-09-25                                                                   |
-| Definition schema         | `dedl.schema.json` (JSON Schema, draft 2020-12), `$defs/Definition`          |
-| Document schema           | `dedl.schema.json`, `$defs/Document`                                         |
+| Date                      | 2026-09-29                                                                   |
+| Specification schema      | `disl.schema.json` (JSON Schema, draft 2020-12), `$defs/Specification`       |
+| Definition language       | DID, the Diagram Definition Language, in [`../did/`](../did/DID-specification.md) |
 | Expression language       | CEL — Common Expression Language (https://cel.dev)                           |
-| Media types (provisional) | `application/vnd.dedl.definition+json`, `application/vnd.dedl.document+json` |
+| Media type (provisional)  | `application/vnd.disl.specification+json`                                    |
+| File extension            | `.disl`                                                                      |
 
 ---
 
 ## Status of this document
 
-This is a working draft. It is complete enough to implement a conforming validator, a documentation generator and a reference editor runtime, but individual constructs may still change before version 1.0. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
+This is a working draft. It is complete enough to implement a conforming validator, a documentation generator and a reference runtime, but individual constructs may still change before version 1.0. DISL 0.1 continues the earlier combined format (DEDL became DISL and DID); section 18 lists the old identifiers that runtimes still read. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
 
 The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY** and **OPTIONAL** are to be interpreted as described in RFC 2119 and RFC 8174 when, and only when, they appear in bold capitals.
 
@@ -24,7 +25,7 @@ The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **
 
 1. [Introduction](#1-introduction)
 2. [Foundations](#2-foundations)
-3. [Definition structure, layers and viewpoints](#3-definition-structure-layers-and-viewpoints)
+3. [Specification structure, layers and viewpoints](#3-specification-structure-layers-and-viewpoints)
 4. [Layer 1 — Metamodel](#4-layer-1--metamodel)
 5. [Layer 2 — Coordinate systems, placement and snapping](#5-layer-2--coordinate-systems-placement-and-snapping)
 6. [Layer 3 — Notation (visual definition)](#6-layer-3--notation-visual-definition)
@@ -39,6 +40,7 @@ The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **
 15. [Conformance](#15-conformance)
 16. [Security, privacy and robustness](#16-security-privacy-and-robustness)
 17. [Complete examples](#17-complete-examples)
+18. [Deprecated aliases](#18-deprecated-aliases)
 - [Appendix A — JSON Schema](#appendix-a--json-schema)
 - [Appendix B — Built-in catalogues](#appendix-b--built-in-catalogues)
 - [Appendix C — Glossary](#appendix-c--glossary)
@@ -48,9 +50,9 @@ The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **
 
 ## 1. Introduction
 
-### 1.1 What DEDL is
+### 1.1 What DISL is
 
-DEDL (Diagram Editor Definition Language) is a declarative, JSON-based language for describing **diagram editors** — not individual diagrams, but the *kind* of diagram an editor lets people draw, and everything the editor needs in order to support it:
+DISL (Diagram Specification Language) is a declarative, JSON-based language in which a **tool engineer** specifies a **diagram type** — not individual diagrams, but the *kind* of diagram people can draw, and everything a runtime needs in order to support it:
 
 - **what** can appear in a diagram: element types, their attributes, containment and relationships (*metamodel*);
 - **where** things can be placed: coordinate systems whose axes may be numeric, temporal (dates and timestamps) or categorical, how element positions relate to model data, and the snapping rules that make positions discrete on one axis, the other, or both (*coordinates*);
@@ -59,25 +61,25 @@ DEDL (Diagram Editor Definition Language) is a declarative, JSON-based language 
 - **what is allowed**: rules written in CEL, with severities, messages, quick fixes and the choice between preventing a gesture and flagging a problem afterwards (*constraints*);
 - **what happens** when users act: hooks and operations (*behavior*);
 - **how** diagrams are arranged automatically (*layout*);
-- and **how** a diagram is stored: format, identifiers, file split, ordering, precision, migrations and collaboration (*persistence*).
+- and **how** a diagram is stored: format, identifiers, file split, ordering, precision, migrations and collaboration (*persistence*). The stored diagrams themselves are DID definitions, specified by DID, the Diagram Definition Language ([DID-specification.md](../did/DID-specification.md)).
 
-A single DEDL file — a **definition** — is a complete, portable, machine-validated description of a visual language and its editor. Every aspect of it may carry human-readable documentation, so a definition doubles as the reference manual of its language and as the source of help texts inside the editor.
+A single DISL file — a **specification** — is a complete, portable, machine-validated description of a diagram type: a visual language and how it is worked with. Every aspect of it may carry human-readable documentation, so a specification doubles as the reference manual of its language and as the source of help texts inside the runtime.
 
-### 1.2 How DEDL is intended to be used *(informative)*
+### 1.2 How DISL is intended to be used *(informative)*
 
-DEDL sits between the people who design a visual language and the software that lets others use it.
+DISL sits between the tool engineers who specify a diagram type and the software that lets others use it.
 
 ```
  ┌────────────────────────┐        ┌─────────────────────────┐        ┌────────────────────────┐
- │ Language designer      │ writes │ DEDL definition         │ loads  │ Editor runtime         │
- │ (domain expert, tool   │───────▶│ my-lang.dedl       │───────▶│ (web, desktop, IDE,    │
+ │ Tool engineer          │ writes │ DISL specification      │ loads  │ Runtime                │
+ │ (domain expert, tool   │───────▶│ my-lang.disl            │───────▶│ (web, desktop, IDE,    │
  │  builder, standards    │        │ checked by JSON Schema  │        │  headless)             │
  │  body, AI assistant)   │        │ + CEL type checker      │        │ toolbox, canvas, forms │
  └────────────────────────┘        └────────────┬────────────┘        │ snapping, rules, save  │
                                                 │                     └───────────┬────────────┘
                                                 │ feeds                           │ reads / writes
                                    ┌────────────▼────────────┐        ┌───────────▼────────────┐
-                                   │ Docs & code generators, │        │ DEDL documents         │
+                                   │ Docs & code generators, │        │ DID definitions        │
                                    │ CI validators, format   │        │ (the diagrams users    │
                                    │ converters, AI context  │        │  draw), deterministic, │
                                    └─────────────────────────┘        │  versioned, migrated   │
@@ -86,57 +88,57 @@ DEDL sits between the people who design a visual language and the software that 
 
 A typical workflow:
 
-1. **Author a definition.** A language designer writes `my-lang.dedl` by hand with IDE support from the JSON Schema (validation, completion, hover help), or generates it from an existing source such as a class model, an ontology or an older editor configuration. Definitions can import shared libraries of shapes, markers, styles and types (section 3.3).
-2. **Validate it.** A validator checks the definition against the JSON Schema, resolves names and imports, flattens inheritance, and type-checks every CEL expression in the context in which it will be evaluated (section 12). Problems are reported with the JSON Pointer of the offending node.
-3. **Load it into a runtime.** A conforming runtime needs no language-specific code: palette, canvas, rendering, snapping, property forms, validation and saving all come from the definition. Whatever the declarative core cannot express is delegated to named, versioned plugins (section 13) rather than to embedded scripts.
-4. **Draw.** End users create **documents** — the actual diagrams — that conform to the definition. The runtime surfaces the definition's documentation as tooltips, field help, problem explanations and a help view, so users learn the language while using it.
-5. **Persist and evolve.** Documents are written exactly as the persistence layer prescribes, so they are deterministic, diff-friendly and readable by any other conforming tool. When the language evolves, declared migrations upgrade old documents automatically.
+1. **Write a specification.** A tool engineer writes `my-lang.disl` by hand with IDE support from the JSON Schema (validation, completion, hover help), or generates it from an existing source such as a class model, an ontology or an older tool configuration. Specifications can import shared libraries of shapes, markers, styles and types (section 3.3).
+2. **Validate it.** A validator checks the specification against the JSON Schema, resolves names and imports, flattens inheritance, and type-checks every CEL expression in the context in which it will be evaluated (section 12). Problems are reported with the JSON Pointer of the offending node.
+3. **Load it into a runtime.** A conforming runtime needs no language-specific code: palette, canvas, rendering, snapping, property forms, validation and saving all come from the specification. Whatever the declarative core cannot express is delegated to named, versioned plugins (section 13) rather than to embedded scripts.
+4. **Draw.** End users create diagrams of the type, stored as **DID definitions**, that conform to the specification. The runtime surfaces the specification's documentation as tooltips, field help, problem explanations and a help view, so users learn the language while using it.
+5. **Persist and evolve.** DID definitions are written exactly as the persistence layer prescribes, so they are deterministic, diff-friendly and readable by any other conforming runtime. When the language evolves, declared migrations upgrade old DID definitions automatically.
 
-The same definition serves other consumers too:
+The same specification serves other consumers too:
 
 - **documentation generators** that render a language reference with rendered samples of every shape;
-- **code generators** that produce typed APIs, database schemas or JSON Schemas for documents;
-- **headless validators** in CI pipelines that check documents without drawing them;
+- **code generators** that produce typed APIs, database schemas or JSON Schemas for DID definitions;
+- **headless validators** in CI pipelines that check DID definitions without drawing them;
 - **converters** to and from other formats (BPMN DI, draw.io, Ecore, SVG, PlantUML);
-- **AI assistants** that read the definition to understand what a diagram may contain, which rules apply and how to produce a valid document.
+- **AI assistants** that read the specification to understand what a diagram may contain, which rules apply and how to produce a valid DID definition.
 
 ### 1.3 Who should read what *(informative)*
 
 | Reader                         | Most relevant sections           |
 |--------------------------------|----------------------------------|
-| Language designers             | 1–11, 17, Appendix B             |
-| Runtime implementers           | All, especially 5, 6, 12, 14, 15 |
-| Tool and converter authors     | 3, 4, 11, 12, Appendix A         |
+| Tool engineers                 | 1–11, 17, Appendix B             |
+| Runtime implementers           | All, especially 5, 6, 12, 14, 15; DID |
+| Converter and generator makers | 3, 4, 11, 12, Appendix A, DID    |
 | Reviewers and standards bodies | 1, 14–16, Appendix D             |
 
 ### 1.4 Design principles
 
-1. **Declarative first, escape hatches second.** The common 90 % of diagram editors must be expressible without code. The remaining 10 % is reached through named plugins with declared parameters, never through embedded general-purpose scripts.
+1. **Declarative first, escape hatches second.** The common 90 % of diagram types must be expressible without code. The remaining 10 % is reached through named plugins with declared parameters, never through embedded general-purpose scripts.
 2. **Layered separation of concerns.** Each layer answers one question and can be read, reviewed, reused and replaced independently. Meaning (metamodel) is strictly separated from appearance (notation) and from placement (view data).
 3. **One expression language.** Every dynamic value — label text, visibility, conditional styles, geometry of custom shapes, marker choice, constraint rules, default values, snapping functions, placement bindings — is a CEL expression. CEL is side-effect free, non-Turing-complete, guaranteed to terminate, statically typable, and has mature implementations in Go, Java, C++, JavaScript/TypeScript, Python, Rust and .NET.
 4. **Self-describing.** Every object may carry a `doc`. Documentation is part of the language, not an afterthought, and runtimes are expected to show it to users.
-5. **Domain-true coordinates.** Positions are stored in the units of their axis — pixels, millimetres, timestamps, category identifiers — never only in screen pixels, so documents keep their meaning when zoom level, scale or renderer change.
-6. **Deterministic persistence.** Two conforming tools saving the same diagram with the same definition MUST produce byte-identical output.
+5. **Domain-true coordinates.** Positions are stored in the units of their axis — pixels, millimetres, timestamps, category identifiers — never only in screen pixels, so stored diagrams keep their meaning when zoom level, scale or renderer change.
+6. **Deterministic persistence.** Two conforming runtimes saving the same diagram with the same specification MUST produce byte-identical output.
 7. **Extensible without forking.** Vendor extensions live under `x-` keys and plugin names; unknown extensions are ignored, never fatal, and are preserved on round trips.
-8. **Progressive complexity.** Every construct has a shorthand for the simple case (`"shape": "ellipse"`) and a full object form for fine control (`"shape": {"type": "ellipse", "params": {...}}`). A usable editor needs fewer than fifty lines of DEDL.
+8. **Progressive complexity.** Every construct has a shorthand for the simple case (`"shape": "ellipse"`) and a full object form for fine control (`"shape": {"type": "ellipse", "params": {...}}`). A usable diagram type needs fewer than fifty lines of DISL.
 
 ### 1.5 Non-goals
 
-- DEDL is not a general-purpose UI framework. It describes diagram editors, including forms embedded in diagram elements and property inspectors, but not arbitrary application screens.
-- DEDL does not prescribe a rendering technology. SVG, Canvas 2D, WebGL, native toolkits and print pipelines are all valid targets.
-- DEDL does not define execution or simulation semantics of the modelled language (for example, how a state machine runs). Such information MAY be carried in extensions.
-- DEDL documents are not a lingua franca for unrelated tools; a document is always interpreted relative to its definition.
+- DISL is not a general-purpose UI framework. It specifies diagram types, including forms embedded in diagram elements and property inspectors, but not arbitrary application screens.
+- DISL does not prescribe a rendering technology. SVG, Canvas 2D, WebGL, native toolkits and print pipelines are all valid targets.
+- DISL does not define execution or simulation semantics of the modelled language (for example, how a state machine runs). Such information MAY be carried in extensions.
+- DID definitions are not a lingua franca for unrelated software; a DID definition is always interpreted relative to its specification.
 
 ### 1.6 Relation to prior art *(informative)*
 
-DEDL deliberately borrows proven ideas:
+DISL deliberately borrows proven ideas:
 
 | Source                           | Idea adopted                                                                  |
 |----------------------------------|-------------------------------------------------------------------------------|
 | Eclipse Sirius, GMF              | Split into model, graphical, tooling and mapping definitions; viewpoints      |
 | MetaEdit+ (GOPPRR)               | Small, closed meta-metamodel of objects, relationships, ports and properties  |
 | OMG Diagram Definition, BPMN DI  | Strict separation of semantic model and diagram interchange data              |
-| GLSP, Sprotty                    | Runtime-agnostic, client/server-friendly editor description                   |
+| GLSP, Sprotty                    | Runtime-agnostic, client/server-friendly diagram description                  |
 | SVG, CSS                         | Paint, stroke, dash, marker and text vocabulary; cascading styles and states  |
 | draw.io / mxGraph                | Parameter handles on shapes; jump-overs; rich marker catalogue                |
 | Vega-Lite, D3 scales             | Axes as scales from domain values (numbers, time, categories) to screen space |
@@ -151,24 +153,24 @@ DEDL deliberately borrows proven ideas:
 
 ### 2.1 Serialization
 
-A DEDL definition is a JSON text (RFC 8259) encoded in UTF-8 without a byte-order mark. Its top-level value MUST be an object. The file extension **SHOULD** be `.dedl`.
+A DISL specification is a JSON text (RFC 8259) encoded in UTF-8 without a byte-order mark. Its top-level value MUST be an object. The file extension **SHOULD** be `.disl`.
 
-A definition **SHOULD** declare the schema it conforms to, and MUST declare the specification version it targets:
+A specification **SHOULD** declare the schema it conforms to, and MUST declare the DISL version it targets:
 
 ```json
 {
-  "$schema": "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json#/$defs/Definition",
-  "dedl": "0.1",
+  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
+  "disl": "0.1",
   "language": { "id": "org.example.statemachine", "version": "1.0.0" },
   "metamodel": { "types": {} }
 }
 ```
 
-> The schema is published by the ADP website, `etalii-adp/adp`, at `https://etalii.net/adp/dedl/schema/<version>/dedl.schema.json`.
+> The schema is published by the ADP website at `https://etalii.net/adp/disl/schema/<version>/disl.schema.json`.
 
 Tools MAY accept YAML or JSON5 input for authoring convenience and convert it to JSON before processing, but the normative form is JSON. Because JSON has no comments, explanations belong in `doc` objects (section 2.4), which has the side effect that they reach end users.
 
-Duplicate keys within one JSON object are a definition error. Property order in definitions carries no meaning except where this specification says so explicitly (arrays are always ordered; the order of toolbox groups, form fields, labels and constraints is significant).
+Duplicate keys within one JSON object are a specification error. Property order in specifications carries no meaning except where this specification says so explicitly (arrays are always ordered; the order of toolbox groups, form fields, labels and constraints is significant).
 
 ### 2.2 Identifiers
 
@@ -176,10 +178,10 @@ Identifiers name types, attributes, styles, shapes, tools, constraints and all o
 
 - A **simple identifier** matches `^[A-Za-z_][A-Za-z0-9_]*$`. Type names, attribute names, parameter names, port names and function names MUST be simple identifiers so that they are valid CEL identifiers.
 - A **qualified identifier** matches `^[A-Za-z_][A-Za-z0-9_-]*(\.[A-Za-z_][A-Za-z0-9_-]*)*$` and is used for language IDs, theme tokens (`color.surface`), names from imports (`std.cylinder`) and plugin names.
-- Identifiers are case-sensitive. Two identifiers in the same namespace MUST NOT differ only in case, to keep documents portable across case-insensitive systems.
+- Identifiers are case-sensitive. Two identifiers in the same namespace MUST NOT differ only in case, to keep specifications and DID definitions portable across case-insensitive systems.
 - Where an object is stored in a map, the map key is its identifier. Where it is stored in an array, it carries an `id` property.
 
-**Namespaces.** Each of the following is a separate namespace: types (node types and relation types share one namespace), enums and data types (share one namespace, which must also not clash with types), axes, coordinate systems, snapping profiles, styles, shapes, markers, icons, forms, tools, templates, constraints, operations, functions, layouts and viewpoints. Imported definitions contribute names prefixed with their alias (`alias.Name`).
+**Namespaces.** Each of the following is a separate namespace: types (node types and relation types share one namespace), enums and data types (share one namespace, which must also not clash with types), axes, coordinate systems, snapping profiles, styles, shapes, markers, icons, forms, tools, templates, constraints, operations, functions, layouts and viewpoints. Imported specifications contribute names prefixed with their alias (`alias.Name`).
 
 **Reserved names.** The following MUST NOT be used as attribute names, because they are built-in fields of elements in CEL (section 12.2): `id`, `type`, `kind`, `parent`, `children`, `descendants`, `ancestors`, `incoming`, `outgoing`, `source`, `target`, `sourcePort`, `targetPort`, `ports`, `owner`, `view`, `diagram`, `self`, `value`, `item`, `index`, `env`, `old`, `event`, and any name beginning with `_` or `$`. CEL keywords (`in`, `as`, `break`, `const`, `continue`, `else`, `for`, `function`, `if`, `import`, `let`, `loop`, `package`, `namespace`, `return`, `var`, `void`, `while`, `true`, `false`, `null`) are also excluded.
 
@@ -196,11 +198,11 @@ Any human-facing string (labels, messages, descriptions, placeholders) is a **Lo
 
 When a map is given, it **SHOULD** include the locale declared in `language.defaultLocale` (default `"en"`). Runtimes select the best match for the user's locale (RFC 4647 lookup) and fall back to the default locale, then to the first entry in the map.
 
-Where a human-facing string must contain computed values (constraint messages, dynamic tooltips), the object form `{ "cel": "..." }` returning a `string` (or a `map(string, string)` keyed by locale) is used instead. DEDL deliberately has no second template syntax.
+Where a human-facing string must contain computed values (constraint messages, dynamic tooltips), the object form `{ "cel": "..." }` returning a `string` (or a `map(string, string)` keyed by locale) is used instead. DISL deliberately has no second template syntax.
 
 ### 2.4 Documentation objects
 
-Every object in a definition MAY carry a `doc` property — the language itself, types, attributes, enum values, data types, axes, coordinate systems, snapping rules, styles, shapes, shape parameters, handles, markers, node and edge notations, labels, compartments, forms, fields, tool groups, tools, templates, constraints, hooks, operations, layouts, persistence settings and migrations. This is the mechanism that keeps users informed: a runtime can explain any element, field, tool, rule or snapping behavior it presents.
+Every object in a specification MAY carry a `doc` property — the language itself, types, attributes, enum values, data types, axes, coordinate systems, snapping rules, styles, shapes, shape parameters, handles, markers, node and edge notations, labels, compartments, forms, fields, tool groups, tools, templates, constraints, hooks, operations, layouts, persistence settings and migrations. This is the mechanism that keeps users informed: a runtime can explain any element, field, tool, rule or snapping behavior it presents.
 
 `doc` is either a LocalizedText (shorthand for `summary`) or a **Doc** object:
 
@@ -210,9 +212,9 @@ Every object in a definition MAY carry a `doc` property — the language itself,
 | `description` | LocalizedText                                | Longer explanation in CommonMark. Used in help panels, inspector help and generated reference docs.                                            |
 | `rationale`   | LocalizedText                                | Why this rule or design exists. Particularly useful on constraints and snapping rules.                                                         |
 | `examples`    | array of `{title, description, value}`       | Illustrations; `value` is arbitrary JSON (for example a sample attribute value).                                                               |
-| `seeAlso`     | array of `{title, href}`                     | Links. External links are absolute URIs; internal links are JSON Pointer fragments into the definition (`#/metamodel/relations/Transition`).   |
+| `seeAlso`     | array of `{title, href}`                     | Links. External links are absolute URIs; internal links are JSON Pointer fragments into the specification (`#/metamodel/relations/Transition`). |
 | `tags`        | array of strings                             | Keywords; used by toolbox search and documentation indexes.                                                                                    |
-| `audience`    | array of `"user"`, `"author"`, `"developer"` | Intended readers. Absent means all. Runtimes SHOULD show only `user` documentation to end users when an audience is declared.                  |
+| `audience`    | array of `"user"`, `"author"`, `"developer"` | Intended readers; `"author"` means the tool engineer. Absent means all. Runtimes SHOULD show only `user` documentation to end users when an audience is declared. |
 | `since`       | string                                       | Language version (SemVer) in which the object appeared.                                                                                        |
 | `deprecated`  | boolean or `{since, message, replacedBy}`    | Marks the object deprecated. Runtimes SHOULD warn when a deprecated type, attribute or tool is used and MAY offer `replacedBy` as a quick fix. |
 | `image`       | string (URI)                                 | An illustration, for example a rendered sample.                                                                                                |
@@ -236,13 +238,13 @@ Every object in a definition MAY carry a `doc` property — the language itself,
 - show a constraint's `label`, `doc.summary` and `doc.rationale` alongside every problem it reports, and list its quick fixes;
 - show the `doc` of axes, coordinate systems and snapping rules in canvas settings, ruler tooltips or a status bar while dragging (for example "Snapping to working days: tasks start at the beginning of a working day");
 - show a node or edge type's `doc` in a hover card on the canvas when a help mode is active;
-- offer a help view that renders the whole definition's documentation, including rendered samples of shapes and markers.
+- offer a help view that renders the whole specification's documentation, including rendered samples of shapes and markers.
 
 A **label** is distinct from `doc`: it is the short display name of an object (for example `"Initial state"` for the type `InitialState`). If `label` is absent, runtimes derive one from the identifier by splitting camel case and snake case and capitalising the first word only (`InitialState` → "Initial state", `due_date` → "Due date").
 
 ### 2.5 Expressions and dynamic values
 
-All dynamic values are written in CEL. DEDL uses four embeddings, and the specification states for every property which one applies.
+All dynamic values are written in CEL. DISL uses four embeddings, and this document states for every property which one applies.
 
 **(a) Expression.** A property of type *Expression* always contains CEL. It is written either as a bare string or as an object that adds documentation and an expected result type:
 
@@ -279,7 +281,7 @@ Because literals may be strings, **a bare string in a Bindable position is alway
 | Placement binding                  | The element is drawn at its last valid position and marked as invalid.                                                   |
 | Snapping function                  | The unsnapped value is used.                                                                                             |
 | Behavior action, hook, operation   | The whole transaction is rolled back and the error reported to the user.                                                 |
-| Migration                          | Loading the document fails with a descriptive error; the original file is left untouched.                                |
+| Migration                          | Loading the DID definition fails with a descriptive error; the original file is left untouched.                          |
 
 **Static checking.** Every expression is evaluated in a well-defined *context* that determines which variables exist and what types they have (section 12.3). Validators MUST type-check every expression in its context, using attribute types from the metamodel. Expressions whose type cannot be determined statically (for example because they use `dyn`) are permitted but SHOULD produce a validator warning.
 
@@ -303,31 +305,31 @@ Because literals may be strings, **a bare string in a Bindable position is alway
 - **Type references** are identifiers from the type namespace, optionally prefixed with an import alias (`bpmn.Task`). Wherever a single type is expected, a list of types MAY be given where the schema allows it; a type reference always includes all subtypes.
 - **Library references** — to styles, shapes, markers, icons, forms, tools, snapping profiles — are identifiers of entries in the respective library, or an inline object of the same kind.
 - **JSON Pointer references** (`"#/notation/styles/base"`) are used in `doc.seeAlso` and in error reports.
-- A reference to an undefined name is a definition error. A reference to a deprecated object is a validator warning.
+- A reference to an undefined name is a specification error. A reference to a deprecated object is a validator warning.
 
 ### 2.8 Extension properties
 
-Any object in a definition or document MAY contain properties whose names begin with `x-` (for example `x-acme-simulation`). Their content is unconstrained. Conforming tools MUST ignore extension properties they do not understand and MUST preserve them unchanged when rewriting a file. Section 13 describes plugins, the structured way to add behavior.
+Any object in a specification or DID definition MAY contain properties whose names begin with `x-` (for example `x-acme-simulation`). Their content is unconstrained. Conforming tools MUST ignore extension properties they do not understand and MUST preserve them unchanged when rewriting a file. Section 13 describes plugins, the structured way to add behavior.
 
 ### 2.9 Versioning
 
-- `dedl` (required) is the version of this specification the definition targets, as `"major.minor"`. A runtime MUST refuse a definition with a higher major version than it supports and SHOULD warn for a higher minor version.
-- `language.version` (required) is the semantic version (SemVer 2.0.0) of the defined language. Documents record the language version they were written with; this drives migrations (section 11.9).
-- A change that can make previously valid documents invalid or change their meaning is a **major** change; adding optional constructs is a **minor** change; documentation, visual and toolbox-only changes are **patch** changes. Validators MAY warn when a version increment does not match the observed difference to a previous definition.
+- `disl` (required) is the version of DISL the specification targets, as `"major.minor"`. A runtime MUST refuse a specification with a higher major version than it supports and SHOULD warn for a higher minor version. The deprecated alias of section 18 is still read.
+- `language.version` (required) is the semantic version (SemVer 2.0.0) of the defined language. DID definitions record the language version they were written with; this drives migrations (section 11.9).
+- A change that can make previously valid DID definitions invalid or change their meaning is a **major** change; adding optional constructs is a **minor** change; documentation, visual and toolbox-only changes are **patch** changes. Validators MAY warn when a version increment does not match the observed difference to a previous specification.
 
 
 ---
 
-## 3. Definition structure, layers and viewpoints
+## 3. Specification structure, layers and viewpoints
 
 ### 3.1 Top-level object
 
 | Property      | Type            | Req. | Layer | Description                                                                                                          |
 |---------------|-----------------|------|-------|----------------------------------------------------------------------------------------------------------------------|
-| `$schema`     | string          | –    | –     | URI of the DEDL JSON Schema.                                                                                         |
-| `dedl`        | string          | ✓   | –     | Targeted specification version, `"0.1"`.                                                                             |
+| `$schema`     | string          | –    | –     | URI of the DISL JSON Schema.                                                                                         |
+| `disl`        | string          | ✓   | –     | Targeted DISL version, `"0.1"`.                                                                                      |
 | `language`    | Language        | ✓   | –     | Identity, version, locales and limits (3.2).                                                                         |
-| `imports`     | Import[]        | –    | –     | Reused definitions and libraries (3.3).                                                                              |
+| `imports`     | Import[]        | –    | –     | Reused specifications and libraries (3.3).                                                                            |
 | `functions`   | map → Function  | –    | –     | Reusable CEL functions (3.4).                                                                                        |
 | `metamodel`   | Metamodel       | ✓   | 1     | What can exist (section 4).                                                                                          |
 | `coordinates` | Coordinates     | –    | 2     | Axes, coordinate systems, snapping (section 5). Default: one free cartesian pixel system without snapping.           |
@@ -343,11 +345,11 @@ Any object in a definition or document MAY contain properties whose names begin 
 | `doc`         | Doc             | –    | –     | Documentation of the language as a whole.                                                                            |
 | `x-*`         | any             | –    | –     | Extensions.                                                                                                          |
 
-Only `dedl`, `language` and `metamodel` are required. Every other layer has a documented default, so definitions can start tiny and grow.
+Only `disl`, `language` and `metamodel` are required. Every other layer has a documented default, so specifications can start tiny and grow.
 
 ```json
 {
-  "dedl": "0.1",
+  "disl": "0.1",
   "language": { "id": "org.example.mindmap", "version": "0.1.0", "label": "Mind map" },
   "metamodel": {
     "types": { "Idea": { "attributes": { "text": { "type": "string", "required": true } } } },
@@ -356,42 +358,42 @@ Only `dedl`, `language` and `metamodel` are required. Every other layer has a do
 }
 ```
 
-This five-line language already yields a usable editor: a palette with an *Idea* tool and a *Branch* tool, rectangles labelled with `text` (the first string attribute is the default label), arrows, a generated property form, and JSON persistence.
+This five-line language already yields a usable diagram type: a palette with an *Idea* tool and a *Branch* tool, rectangles labelled with `text` (the first string attribute is the default label), arrows, a generated property form, and JSON persistence.
 
 ### 3.2 Language
 
 | Property        | Type                   | Req. | Description                                                                                                                                                            |
 |-----------------|------------------------|------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `id`            | qualified identifier   | ✓   | Globally unique language id; reverse-DNS style is RECOMMENDED. Recorded in every document.                                                                             |
+| `id`            | qualified identifier   | ✓   | Globally unique language id; reverse-DNS style is RECOMMENDED. Recorded in every DID definition.                                                                          |
 | `version`       | SemVer string          | ✓   | Version of this language.                                                                                                                                              |
 | `label`         | LocalizedText          | –    | Display name ("State machine").                                                                                                                                        |
-| `doc`           | Doc                    | –    | Language documentation, shown in the editor's help view.                                                                                                               |
+| `doc`           | Doc                    | –    | Language documentation, shown in the runtime's help view.                                                                                                              |
 | `defaultLocale` | BCP 47 tag             | –    | Default `"en"`.                                                                                                                                                        |
 | `locales`       | string[]               | –    | Locales for which all LocalizedTexts SHOULD provide translations; validators MAY warn about gaps.                                                                      |
-| `authors`       | `{name, email, url}`[] | –    | Maintainers.                                                                                                                                                           |
-| `license`       | SPDX expression        | –    | License of the definition.                                                                                                                                             |
+| `authors`       | `{name, email, url}`[] | –    | Maintainers (tool engineers).                                                                                                                                                      |
+| `license`       | SPDX expression        | –    | License of the specification.                                                                                                                                          |
 | `homepage`      | URI                    | –    | Project page.                                                                                                                                                          |
 | `icon`          | IconRef                | –    | Icon of the language (file type icon, window title).                                                                                                                   |
-| `fileExtension` | string                 | –    | Preferred document extension without dot, for example `"sm.json"`.                                                                                                     |
+| `fileExtension` | string                 | –    | Preferred extension of stored diagrams without dot, for example `"sm.json"`.                                                                                                   |
 | `limits`        | object                 | –    | `celCost` (per-expression cost limit), `maxElements` (soft limit, runtimes SHOULD warn beyond it), `maxDocumentBytes`.                                                 |
-| `requires`      | object                 | –    | `conformance`: minimum runtime conformance level (`"core"`, `"standard"`, `"full"`); `features`: list of optional feature ids (Appendix B.8) the definition relies on. |
+| `requires`      | object                 | –    | `conformance`: minimum runtime conformance level (`"core"`, `"standard"`, `"full"`); `features`: list of optional feature ids (Appendix B.8) the specification relies on. |
 
 ### 3.3 Imports
 
-Definitions may import other definitions or *libraries* — definitions that contain only notation, forms, functions or data types and whose `metamodel` may be empty.
+Specifications may import other specifications or *libraries* — specifications that contain only notation, forms, functions or data types and whose `metamodel` may be empty.
 
 | Property    | Type                 | Req. | Description                                                                                                                 |
 |-------------|----------------------|------|-----------------------------------------------------------------------------------------------------------------------------|
-| `from`      | URI or relative path | ✓   | Location of the imported definition.                                                                                        |
+| `from`      | URI or relative path | ✓   | Location of the imported specification.                                                                                     |
 | `as`        | simple identifier    | ✓   | Alias; imported names are referenced as `alias.Name`.                                                                       |
 | `version`   | SemVer range         | –    | Acceptable versions of the imported language (for example `"^2.1.0"`).                                                      |
 | `integrity` | string               | –    | Subresource-integrity hash (`"sha256-…"`). Runtimes MUST verify it when present and SHOULD require it for remote URIs.      |
 | `include`   | string[]             | –    | Layers to import: any of `"metamodel"`, `"notation"`, `"forms"`, `"functions"`, `"constraints"`, `"toolbox"`. Default: all. |
 | `doc`       | Doc                  | –    | Why the import exists.                                                                                                      |
 
-Imported types may be extended (`"extends": "base.Element"`), imported styles, shapes and markers referenced, and imported constraints are active unless the import lists `include` without `"constraints"`. Import cycles are a definition error. Names are never merged implicitly: a local `State` and `lib.State` are different types.
+Imported types may be extended (`"extends": "base.Element"`), imported styles, shapes and markers referenced, and imported constraints are active unless the import lists `include` without `"constraints"`. Import cycles are a specification error. Names are never merged implicitly: a local `State` and `lib.State` are different types.
 
-The DEDL standard library is always available under the reserved alias `std` without an import (Appendix B): `std.roundedRect`, `std.arrowFilled`, `std.grid10`, and so on. Built-in names MAY also be referenced without the `std.` prefix when no local name shadows them.
+The DISL standard library is always available under the reserved alias `std` without an import (Appendix B): `std.roundedRect`, `std.arrowFilled`, `std.grid10`, and so on. Built-in names MAY also be referenced without the `std.` prefix when no local name shadows them.
 
 ### 3.4 Functions
 
@@ -423,7 +425,7 @@ User-defined functions make repeated CEL logic reusable and documented.
 | `uses`    | string[]              | –    | Context variables the function may read: `"diagram"`, `"env"`.                                                                                                                                        |
 | `doc`     | Doc                   | –    | Documentation.                                                                                                                                                                                        |
 
-Functions are called as `displayName(self)`. A function MAY call functions declared before it in the definition order; recursion (direct or indirect) is a definition error. This preserves CEL's termination guarantee.
+Functions are called as `displayName(self)`. A function MAY call functions declared before it in the specification order; recursion (direct or indirect) is a specification error. This preserves CEL's termination guarantee.
 
 ### 3.5 Viewpoints
 
@@ -640,8 +642,8 @@ A node type describes a kind of element that is drawn as a node.
 A type inherits all attributes, ports, containment rules and tags from its supertypes, and is accepted wherever a supertype is expected (in relation ends, containment, references, constraint scopes, notation lookups).
 
 - Multiple inheritance is allowed. The set of supertypes MUST form a directed acyclic graph.
-- A subtype MAY redeclare an inherited attribute to *narrow* it: tighten facets, change `default`, `label` or `doc`, set `required: true`, or narrow a reference type to a subtype. It MUST NOT change the base type or relax facets. Conflicting inherited declarations of the same attribute from two supertypes are a definition error unless the subtype redeclares it.
-- Notation, forms and constraints are looked up along the linearised supertype chain (C3 linearisation, as in Python): the most specific definition wins, and a node type without its own notation uses its nearest supertype's notation.
+- A subtype MAY redeclare an inherited attribute to *narrow* it: tighten facets, change `default`, `label` or `doc`, set `required: true`, or narrow a reference type to a subtype. It MUST NOT change the base type or relax facets. Conflicting inherited declarations of the same attribute from two supertypes are a specification error unless the subtype redeclares it.
+- Notation, forms and constraints are looked up along the linearised supertype chain (C3 linearisation, as in Python): the most specific declaration wins, and a node type without its own notation uses its nearest supertype's notation.
 - Relation types inherit from relation types only; node types from node types only.
 
 ### 4.8 Containment and references
@@ -763,7 +765,7 @@ Port instances are elements with `kind == "port"`, an `id`, a `type` of the form
 
 ## 5. Layer 2 — Coordinate systems, placement and snapping
 
-Most diagram editors assume a single, infinite pixel plane. Many real diagrams do not fit that assumption: a Gantt chart places tasks along **time**; a swimlane diagram places activities in **categories** (lanes); a sequence diagram orders messages along a **logical sequence**; a floor plan measures in **millimetres**; a radial mind map uses **angles and radii**. DEDL makes the coordinate system an explicit layer so that positions keep their meaning, can be bound to model data, and can be snapped in domain units.
+Most diagram tools assume a single, infinite pixel plane. Many real diagrams do not fit that assumption: a Gantt chart places tasks along **time**; a swimlane diagram places activities in **categories** (lanes); a sequence diagram orders messages along a **logical sequence**; a floor plan measures in **millimetres**; a radial mind map uses **angles and radii**. DISL makes the coordinate system an explicit layer so that positions keep their meaning, can be bound to model data, and can be snapped in domain units.
 
 ### 5.1 Concepts
 
@@ -1002,7 +1004,7 @@ Dragging the task horizontally moves both `start` and `end` (keeping the duratio
 
 Snapping restricts where elements can be placed and how they can be sized, so that diagrams stay tidy and values stay meaningful (a task starts on a day, not at 13:47:12; a component sits on a 2.54 mm pitch).
 
-Snapping is defined **per axis**. Each axis of a coordinate system can have its own rule, so an editor may snap only horizontally, only vertically, or both, with different rules on each. The same rule model applies to positions, sizes, edge bendpoints, label offsets and rotation.
+Snapping is defined **per axis**. Each axis of a coordinate system can have its own rule, so a diagram type may snap only horizontally, only vertically, or both, with different rules on each. The same rule model applies to positions, sizes, edge bendpoints, label offsets and rotation.
 
 ```json
 {
@@ -1095,11 +1097,11 @@ Size snapping on time axes uses durations: `{ "calendar": { "unit": "day" }, "mi
 5. Clamp to rule `min`/`max`, axis `min`/`max` and container bounds.
 6. For bound placements, write the domain value to the attribute; for free placements, to the view data.
 
-The rule result MUST be idempotent: snapping an already snapped value returns the same value. Runtimes MUST apply snapping to programmatic changes made through tools and operations only if the definition sets `snapping.applyToProgrammatic: true` (default `false`); values typed into forms are never snapped, but a placement constraint (8.4) can reject them.
+The rule result MUST be idempotent: snapping an already snapped value returns the same value. Runtimes MUST apply snapping to programmatic changes made through tools and operations only if the specification sets `snapping.applyToProgrammatic: true` (default `false`); values typed into forms are never snapped, but a placement constraint (8.4) can reject them.
 
 ### 5.11 Snapping examples
 
-Grid in both directions (classic diagram editor):
+Grid in both directions (classic node-and-edge diagram):
 
 ```json
 {
@@ -1229,9 +1231,9 @@ The notation layer defines the concrete syntax: how every node, edge, port and l
 }
 ```
 
-**Resolution of a visual property.** For a given element, the value of a visual property (for example `stroke.width` of a node's body) is resolved in this order; the first definition found wins:
+**Resolution of a visual property.** For a given element, the value of a visual property (for example `stroke.width` of a node's body) is resolved in this order; the first value found wins:
 
-1. **Per-element style override** stored in the document's view data (11.6), if the definition allows overrides.
+1. **Per-element style override** stored in the DID definition's view data (11.6), if the specification allows overrides.
 2. **Interaction state** styles (`states.selected`, `states.hover`, …) that are active, in the fixed priority `dragging` > `selected` > `focused` > `hover` > `highlighted` > `dropTarget` > `invalid` > `warning` > `disabled`.
 3. **Conditional styles** (`conditions`) whose `when` expression is true, in declaration order (later wins).
 4. **Variants** (`variants`) whose `when` is true — they may replace shape, size, labels and style.
@@ -1244,7 +1246,7 @@ Properties merge per key: a state style that only sets `stroke.color` keeps the 
 
 ### 6.2 Theme and tokens
 
-Tokens give colors, fonts and sizes semantic names so that one definition renders correctly in light mode, dark mode, high contrast and the brand palette of an organisation.
+Tokens give colors, fonts and sizes semantic names so that one specification renders correctly in light mode, dark mode, high contrast and the brand palette of an organisation.
 
 ```json
 {
@@ -1284,7 +1286,7 @@ Tokens give colors, fonts and sizes semantic names so that one definition render
 | `followSystem` | bool                     | Follow the operating system's light/dark preference.                                                     |
 | `extends`      | string                   | Name of an imported theme to extend (`"corp.theme"`).                                                    |
 
-Tokens are referenced with `{ "token": "color.accent" }` in any Bindable position, and from CEL with `token('color.accent')`. Runtimes MAY let users switch modes; documents never store resolved token values unless a user explicitly overrides a style.
+Tokens are referenced with `{ "token": "color.accent" }` in any Bindable position, and from CEL with `token('color.accent')`. Runtimes MAY let users switch modes; DID definitions never store resolved token values unless a user explicitly overrides a style.
 
 ### 6.3 Paint
 
@@ -1425,7 +1427,7 @@ A **Style** bundles visual properties. Styles are declared in `notation.styles` 
 | `disabled`    | The element is read-only (locked, or `enabled` of its notation is false).                            |
 | `editing`     | A label of the element is being edited inline.                                                       |
 
-Runtimes provide sensible defaults for `hover`, `selected`, `dropTarget`, `dropReject`, `invalid` and `warning` (for example a selection outline and a red problem badge) that apply when the definition declares none.
+Runtimes provide sensible defaults for `hover`, `selected`, `dropTarget`, `dropReject`, `invalid` and `warning` (for example a selection outline and a red problem badge) that apply when the specification declares none.
 
 **Conditional styles** apply when an expression holds:
 
@@ -1498,7 +1500,7 @@ Every built-in shape defines its **outline** (for edge anchoring and hit testing
 
 ### 6.8 Custom shapes
 
-When no primitive fits, a definition declares its own shapes in `notation.shapes`. A custom shape can be as simple as a static SVG path, or a fully parameterised, handle-editable shape whose geometry is computed with CEL.
+When no primitive fits, a specification declares its own shapes in `notation.shapes`. A custom shape can be as simple as a static SVG path, or a fully parameterised, handle-editable shape whose geometry is computed with CEL.
 
 | Property       | Type                                       | Description                                                                                                        |
 |----------------|--------------------------------------------|--------------------------------------------------------------------------------------------------------------------|
@@ -1536,7 +1538,7 @@ Coordinates are relative to the top-left of the bounds; x grows right, y grows d
 | `default`      | value or `{cel}`                                               | Default value; CEL defaults may depend on `w` and `h` (for example `"min(w, h) * 0.15"`).                            |
 | `min`, `max`   | GeomExpr                                                       | Bounds; may depend on `w` and `h`.                                                                                   |
 | `values`       | string[]                                                       | For `enum`.                                                                                                          |
-| `unit`         | `"length"`, `"fraction"`, `"angle"`, `"count"`                 | Semantics for editors and handle behavior.                                                                           |
+| `unit`         | `"length"`, `"fraction"`, `"angle"`, `"count"`                 | Semantics for property forms and handle behavior.                                                                          |
 | `label`, `doc` |                                                                | Shown in the shape parameter panel.                                                                                  |
 | `persist`      | `"view"`, `"none"`                                             | Whether user-adjusted values (via handles or the style panel) are stored per element in view data. Default `"view"`. |
 
@@ -1869,7 +1871,7 @@ A Variant may contain any NodeNotation property except `placement`; matching var
 
 ### 6.11 Markers (arrowheads and end decorations)
 
-A **marker** is drawn at an edge end (or along the edge) and oriented along the path tangent. References are a name, a name with parameters, or an inline definition:
+A **marker** is drawn at an edge end (or along the edge) and oriented along the path tangent. References are a name, a name with parameters, or an inline declaration:
 
 ```json
 {
@@ -2021,12 +2023,12 @@ Notations SHOULD make diagrams accessible:
 - `accessibility.name` (Bindable string) names each element for screen readers; the default is the type label plus `labelAttribute`.
 - `accessibility.description` describes relations (default: "Transition from Idle to Running, trigger start").
 - Runtimes SHOULD provide keyboard navigation between elements and along edges, and expose the model as an accessible tree.
-- Color MUST NOT be the only carrier of meaning in built-in defaults; definitions SHOULD pair color with shape, pattern, dash, icon or text. Validators MAY warn when two types differ only in fill color.
+- Color MUST NOT be the only carrier of meaning in built-in defaults; specifications SHOULD pair color with shape, pattern, dash, icon or text. Validators MAY warn when two types differ only in fill color.
 - Themes SHOULD provide a `high-contrast` mode; runtimes SHOULD honour reduced-motion settings (disable `flow` animations).
 
 ### 6.16 Rendering order
 
-Elements are drawn in layers: canvas background → grid and bands → `background` layer nodes → edges with `layer: "belowNodes"` → `default` nodes (containers before their children; siblings by `zIndex` in view data, then by document order) → edges with `layer: "aboveNodes"` → `foreground` nodes → labels that are marked `layer: "top"` → selection, handles, guides and snapping feedback. Integer layers sort numerically between these named layers (background = −100, default = 0, foreground = 100).
+Elements are drawn in layers: canvas background → grid and bands → `background` layer nodes → edges with `layer: "belowNodes"` → `default` nodes (containers before their children; siblings by `zIndex` in view data, then by stored order) → edges with `layer: "aboveNodes"` → `foreground` nodes → labels that are marked `layer: "top"` → selection, handles, guides and snapping feedback. Integer layers sort numerically between these named layers (background = −100, default = 0, foreground = 100).
 
 
 ---
@@ -2300,7 +2302,7 @@ Constraints state what makes a diagram valid. They are written in CEL, evaluated
 | `rules`       | Constraint[]                                             | Ordered list of constraints.                                                                                                                |
 | `groups`      | map → `{label, doc, enabledByDefault, severityOverride}` | Groups users can enable, disable or re-rate as a unit ("rule sets").                                                                        |
 | `defaults`    | `{severity, timing}`                                     | Defaults for rules.                                                                                                                         |
-| `blockSaveOn` | `"never"`, `"error"`                                     | Whether saving is prevented while errors exist. Default `"never"` (never lose work); documents are saved with problems and remain loadable. |
+| `blockSaveOn` | `"never"`, `"error"`                                     | Whether saving is prevented while errors exist. Default `"never"` (never lose work); DID definitions are saved with problems and remain loadable. |
 | `builtIn`     | map built-in id → `{severity, enabled}`                  | Tune the built-in constraints (8.7).                                                                                                        |
 
 ### 8.2 Constraint object
@@ -2321,7 +2323,7 @@ Constraints state what makes a diagram valid. They are written in CEL, evaluated
 | `timing`       | (`"live"`, `"save"`, `"explicit"`, `"export"`)[]                           | When evaluated. `live`: after each transaction (debounced); `save`: before saving; `explicit`: on "Validate" command; `export`: before export. Default `["live", "save"]`.                    |
 | `enforcement`  | `"report"`, `"prevent"`, `"prevent-and-report"`                            | `prevent`: a transaction that would make the rule false (for elements it was true for before) is rejected with the message. Default `"report"` for invariants, `"prevent"` for gesture kinds. |
 | `fixes`        | QuickFix[]                                                                 | Suggested corrections.                                                                                                                                                                        |
-| `suppressible` | bool                                                                       | Users may suppress the problem for a specific element; suppressions are stored in the document (11.7). Default `true` for warnings and below, `false` for errors.                             |
+| `suppressible` | bool                                                                       | Users may suppress the problem for a specific element; suppressions are stored in the DID definition (11.7). Default `true` for warnings and below, `false` for errors.                             |
 | `enabled`      | bool                                                                       | Default `true` (subject to group).                                                                                                                                                            |
 | `group`        | group id                                                                   |                                                                                                                                                                                               |
 | `tags`         | string[]                                                                   |                                                                                                                                                                                               |
@@ -2357,7 +2359,7 @@ Invariants (`kind: "invariant"`) are statements about the current state of the d
 
 ### 8.4 Gesture constraints
 
-Gesture constraints are evaluated **before** a user action is applied, while the user is still dragging, so the editor can show a "not allowed" cursor, apply the `dropReject` state and explain why. Their default enforcement is `prevent`.
+Gesture constraints are evaluated **before** a user action is applied, while the user is still dragging, so the runtime can show a "not allowed" cursor, apply the `dropReject` state and explain why. Their default enforcement is `prevent`.
 
 | `kind`        | Evaluated when                                     | Variables (in addition to `diagram`, `env`)                                                                                                   |
 |---------------|----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
@@ -2418,7 +2420,7 @@ Metamodel declarations generate built-in constraints automatically. They behave 
 | `std.acyclic`      | `acyclic: true`                                                                            | error / prevent                                               |
 | `std.references`   | references to missing elements                                                             | error / report                                                |
 | `std.axisBounds`   | axis `min`/`max`, system `bounds`                                                          | error / prevent                                               |
-| `std.typeExists`   | unknown types in loaded documents                                                          | error / report (element preserved, 14.3)                      |
+| `std.typeExists`   | unknown types in loaded DID definitions                                                     | error / report (element preserved, 14.3)                      |
 
 ---
 
@@ -2527,17 +2529,17 @@ Every action MAY carry `when` (skip unless true) and `doc`.
 | `references` | `"unset"` (default), `"delete-referencing"`, `"forbid"` | Reference attributes pointing at the element.                                                                   |
 | `confirm`    | LocalizedText                                           | Ask before deleting.                                                                                            |
 
-**Clipboard** (`behavior.clipboard`): `relations` (`"internal"` — only edges between copied elements, `"all"`, `"none"`), `ids` (`"regenerate"`), `names` (`"keep"`, `"suffix"` — adds " (copy)" to the label attribute), `offset` (canvas offset on paste; on time axes a duration), `crossDocument` (bool), `formats` (clipboard MIME types offered: `application/vnd.dedl.fragment+json`, `image/svg+xml`, `text/plain`).
+**Clipboard** (`behavior.clipboard`): `relations` (`"internal"` — only edges between copied elements, `"all"`, `"none"`), `ids` (`"regenerate"`), `names` (`"keep"`, `"suffix"` — adds " (copy)" to the label attribute), `offset` (canvas offset on paste; on time axes a duration), `crossDocument` (bool), `formats` (clipboard MIME types offered: `application/vnd.did.fragment+json` (DID, section 7), `image/svg+xml`, `text/plain`).
 
 **Retyping** (`behavior.retype`): map of type → allowed target types, with `attributeMapping` (target attr → Expression over `old`).
 
-**Undo** (`behavior.undo`): `mergeWindowMs` (typing in a label merges into one step), `maxSteps`, `persistHistory` (bool, stores history in the document for collaborative review, default `false`).
+**Undo** (`behavior.undo`): `mergeWindowMs` (typing in a label merges into one step), `maxSteps`, `persistHistory` (bool, stores history in the DID definition for collaborative review, default `false`).
 
 ---
 
 ## 10. Layer 7 — Layout
 
-Automatic layout arranges nodes and routes edges. DEDL does not define layout algorithms; it names them, passes options, and declares when layout runs and how it interacts with user placement and bound coordinates.
+Automatic layout arranges nodes and routes edges. DISL does not define layout algorithms; it names them, passes options, and declares when layout runs and how it interacts with user placement and bound coordinates.
 
 ```json
 {
@@ -2565,7 +2567,7 @@ Automatic layout arranges nodes and routes edges. DEDL does not define layout al
 | `algorithms`  | map → LayoutConfig                                                      | Named configurations.                                                                                                                                                                                                  |
 | `default`     | name                                                                    | Used by the "Arrange" command and `trigger`.                                                                                                                                                                           |
 | `containers`  | map TypeRef → name or LayoutConfig                                      | Layout inside containers of a type (in addition to ContainerSpec's simple layouts).                                                                                                                                    |
-| `trigger`     | `"manual"`, `"onCreate"`, `"onChange"`, `"onLoadIfMissing"`, `"always"` | When layout runs automatically. `onLoadIfMissing`: when a document lacks view data (for example generated by a tool). `always`: positions are never user-controlled (pure layout-driven diagrams). Default `"manual"`. |
+| `trigger`     | `"manual"`, `"onCreate"`, `"onChange"`, `"onLoadIfMissing"`, `"always"` | When layout runs automatically. `onLoadIfMissing`: when a DID definition lacks view data (for example generated by a program). `always`: positions are never user-controlled (pure layout-driven diagrams). Default `"manual"`. |
 | `respect`     | `"none"`, `"pinned"`, `"all"`                                           | Which user positions survive automatic layout: none, only pinned elements (users can pin), or all existing (incremental layout places new elements only). Default `"pinned"`.                                          |
 | `incremental` | bool                                                                    | Prefer stability: minimise movement of existing elements.                                                                                                                                                              |
 | `animate`     | `{durationMs, easing}` or `false`                                       |                                                                                                                                                                                                                        |
@@ -2592,7 +2594,7 @@ Automatic layout arranges nodes and routes edges. DEDL does not define layout al
 
 ## 11. Layer 8 — Persistence
 
-The persistence layer defines exactly how documents — the diagrams users draw — are stored: which format, which files, how identifiers are generated, how elements and keys are ordered, which view data is kept, how precise numbers are, how old documents are migrated, and how several people can edit at once. The goal is that any two conforming tools produce identical files for the same diagram, that files diff and merge well in version control, and that documents remain readable for decades.
+The persistence layer declares exactly how the diagrams users draw are stored as DID definitions: which format, which files, how identifiers are generated, how elements and keys are ordered, which view data is kept, how precise numbers are, how old DID definitions are migrated, and how several people can edit at once. The goal is that any two conforming runtimes produce identical files for the same diagram, that files diff and merge well in version control, and that stored diagrams remain readable for decades. The structure these settings configure, and the rules a writer follows, are specified by DID ([DID-specification.md](../did/DID-specification.md)).
 
 ### 11.1 Overview
 
@@ -2620,13 +2622,13 @@ The persistence layer defines exactly how documents — the diagrams users draw 
 
 | Property       | Type                                                                 | Description                                                                                                                                                                            |
 |----------------|----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `format`       | `"json"` (default), `"yaml"`, `"jsonl"`, `"cbor"`, `"plugin:<name>"` | Serialization. All formats encode the same logical document (11.4). `jsonl` writes one element per line, which merges particularly well. `cbor` is for large binary-efficient storage. |
+| `format`       | `"json"` (default), `"yaml"`, `"jsonl"`, `"cbor"`, `"plugin:<name>"` | Serialization. All formats encode the same logical DID definition (11.4). `jsonl` writes one element per line, which merges particularly well. `cbor` is for large binary-efficient storage. |
 | `encoding`     | `"utf-8"`                                                            | Only UTF-8 is allowed.                                                                                                                                                                 |
 | `indent`       | int or `"tab"`                                                       | Default 2. `0` writes minified JSON.                                                                                                                                                   |
 | `newline`      | `"lf"`, `"crlf"`                                                     | Default `"lf"`.                                                                                                                                                                        |
 | `finalNewline` | bool                                                                 | Default `true`.                                                                                                                                                                        |
 | `compression`  | `"none"`, `"gzip"`, `"zip-bundle"`                                   | `zip-bundle` stores model, views and binary assets (images) in one archive with a manifest.                                                                                            |
-| `mediaType`    | string                                                               | Media type of documents.                                                                                                                                                               |
+| `mediaType`    | string                                                               | Media type of DID definitions.                                                                                                                                                            |
 
 YAML output MUST quote strings that would otherwise be read as other types (the "Norway problem": `no`, `yes`, `on`, `off`, `~`, numeric-looking strings, dates) and MUST NOT use anchors, aliases or tags.
 
@@ -2635,110 +2637,19 @@ YAML output MUST quote strings that would otherwise be read as other types (the 
 | Property                 | Type                                                         | Description                                                                                                                                                                                                                                                                                         |
 |--------------------------|--------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `mode`                   | `"single"` (default), `"split"`, `"per-element"`, `"bundle"` | `single`: one file with model and views. `split`: model and view data in separate files, so layout edits never touch the model file. `per-element`: one file per top-level element in a directory plus an index (for very large models edited by teams). `bundle`: see `compression: "zip-bundle"`. |
-| `model`, `view`, `index` | pattern                                                      | File name patterns; `{name}` is the document name, `{id}` and `{type}` the element's id and type for `per-element`.                                                                                                                                                                                 |
+| `model`, `view`, `index` | pattern                                                      | File name patterns; `{name}` is the diagram's name, `{id}` and `{type}` the element's id and type for `per-element`.                                                                                                                                                                                 |
 | `assets`                 | `{mode, dir}`                                                | Binary assets: `"inline"` (base64), `"external"` (files in `dir`, referenced by relative URI), `"bundle"`.                                                                                                                                                                                          |
 | `lock`                   | bool                                                         | Write a lock file while open (for file-based single-user editing).                                                                                                                                                                                                                                  |
 
-### 11.4 Logical document structure
+### 11.4 Stored structure
 
-Independently of format and file split, a document has this logical structure (JSON Schema: `$defs/Document`):
-
-```json
-{
-  "$schema": "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json#/$defs/Document",
-  "dedlDocument": "0.1",
-  "language": { "id": "org.example.statemachine", "version": "1.2.0" },
-  "meta": {
-    "createdAt": "2026-09-25T20:14:03Z",
-    "modifiedAt": "2026-09-26T08:00:00Z",
-    "generator": "Acme Diagrams 4.2"
-  },
-  "diagram": { "attributes": { "title": "Door controller" } },
-  "elements": [
-    { "id": "st_01J8Z3…", "type": "InitialState" },
-    { "id": "st_01J8Z4…", "type": "State", "attributes": { "name": "Closed" } },
-    { "id": "st_01J8Z5…", "type": "State", "attributes": { "name": "Open", "entryAction": "light.on()" } }
-  ],
-  "relations": [
-    { "id": "tr_01J8Z6…", "type": "Transition", "source": "st_01J8Z4…", "target": "st_01J8Z5…",
-      "attributes": { "trigger": "open" } }
-  ],
-  "views": [
-    {
-      "id": "v_main", "viewpoint": "main",
-      "viewport": { "x": 0, "y": 0, "zoom": 1 },
-      "nodes": {
-        "st_01J8Z3…": { "x": 40,  "y": 60,  "w": 20,  "h": 20 },
-        "st_01J8Z4…": { "x": 120, "y": 40,  "w": 120, "h": 60 },
-        "st_01J8Z5…": { "x": 340, "y": 40,  "w": 120, "h": 60, "style": { "fill": "#EAF3DE" } }
-      },
-      "edges": {
-        "tr_01J8Z6…": { "waypoints": [], "labels": { "trigger": { "dx": 0, "dy": -6 } } }
-      }
-    }
-  ],
-  "suppressions": [],
-  "extensions": {}
-}
-```
-
-**Element record** (`elements[]`):
-
-| Property     | Type                       | Description                                                                                                                                       |
-|--------------|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| `id`         | string                     | **Required**, unique within the document.                                                                                                         |
-| `type`       | string                     | **Required**, a concrete node type (qualified by import alias if imported).                                                                       |
-| `attributes` | object                     | Stored attribute values (omitting unset and, if `omitDefaults`, default values). Attribute values follow 4.2 representations; references are ids. |
-| `parent`     | id                         | Containing element (omitted for top-level).                                                                                                       |
-| `slot`       | string                     | Slot within the parent (4.8).                                                                                                                     |
-| `order`      | int or string              | Position among siblings when `children.ordered` (fractional-index strings are RECOMMENDED for collaboration: `"a0"`, `"a0V"`).                    |
-| `ports`      | `{id, type, attributes}`[] | Port instances. `type` is the port name (`"in"`).                                                                                                 |
-| `x-*`        |                            | Extensions.                                                                                                                                       |
-
-Nesting is expressed by `parent`, not by physical nesting, so moving an element between containers changes one line. Runtimes MAY offer a nested pretty-print as an alternative `layout: "nested"`, but the flat form is canonical.
-
-**Relation record** (`relations[]`): `id`, `type`, `source`, `target` (element or port ids), `attributes`, `x-*`. A port id is written `"<elementId>#<portId>"` when port ids are only unique per element.
-
-**View record** (`views[]`): one per diagram (a document can hold several diagrams of the same model, one per viewpoint or several of one viewpoint).
-
-| Property    | Type                       | Description                                                                                                                                               |
-|-------------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `id`        | string                     | View id.                                                                                                                                                  |
-| `viewpoint` | string                     | Viewpoint name.                                                                                                                                           |
-| `name`      | string                     | Diagram name shown in tabs.                                                                                                                               |
-| `viewport`  | `{x, y, zoom}`             | Last viewport, if `viewport` is in `view.store`.                                                                                                          |
-| `nodes`     | map id → NodeView          | Placement of nodes in this view. Elements not listed are hidden in this view (unless the viewpoint auto-includes them, in which case layout places them). |
-| `edges`     | map id → EdgeView          | Routing and label data.                                                                                                                                   |
-| `viewOnly`  | `{id, type, attributes}`[] | View-only elements (notes, frames, images, free text) that belong to this view only.                                                                      |
-| `guides`    | `{axis, value}`[]          | User guides.                                                                                                                                              |
-| `settings`  | object                     | Per-view settings (grid visible, snapping on/off, theme mode).                                                                                            |
-
-**NodeView**:
-
-| Property          | Description                                                                                                                                                                                                    |
-|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `x`, `y`          | Position in domain values of the placement's system (numbers, timestamps, band references). Omitted for bound or computed coordinates — **bound values live only in the model**, never duplicated in the view. |
-| `w`, `h`          | Size in domain units (durations as ISO 8601 on time axes). Omitted when bound, computed or equal to the default (with `omitDefaults`).                                                                         |
-| `x2`, `y2`        | When the placement uses `x2`/`y2` and they are free.                                                                                                                                                           |
-| `angle`, `radius` | Polar placements.                                                                                                                                                                                              |
-| `rotation`        | Degrees.                                                                                                                                                                                                       |
-| `z`               | Integer z-order among siblings.                                                                                                                                                                                |
-| `collapsed`       | bool.                                                                                                                                                                                                          |
-| `pinned`          | bool (layout `respect: "pinned"`).                                                                                                                                                                             |
-| `params`          | Shape parameter values adjusted by handles (6.8).                                                                                                                                                              |
-| `labels`          | map label id → `{dx, dy}` offsets.                                                                                                                                                                             |
-| `ports`           | map port id → `{side, position}`.                                                                                                                                                                              |
-| `compartments`    | map id → `{collapsed}`.                                                                                                                                                                                        |
-| `style`           | Style overrides, restricted to `view.styleOverrides`.                                                                                                                                                          |
-| `hidden`          | bool — element placed but hidden.                                                                                                                                                                              |
-
-**EdgeView**: `waypoints` (list of Points in domain values), `sourceAnchor`, `targetAnchor` (`[fx, fy]` fixed anchors), `controlPoints` (for bezier), `labels` (map id → `{at, dx, dy}`), `routing` (per-edge override if allowed), `style`, `z`, `hidden`.
+What a stored diagram looks like, independently of format and file split, is specified by DID, the Diagram Definition Language ([DID-specification.md](../did/DID-specification.md), section 3): the element, relation and view records, and the node and edge view data. Every DID definition names the DISL specification it was made with in its `language` object. The settings in this section and in 11.5–11.7 are declared by a specification and configure that structure; DID specifies what a conforming writer produces from them.
 
 ### 11.5 Identifiers
 
 | Property     | Type                                                                                           | Description                                                                                                                                                                                                                                                                                                                         |
 |--------------|------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `strategy`   | `"uuid-v4"`, `"uuid-v7"` (default), `"ulid"`, `"nanoid"`, `"sequential"`, `"natural"`, `"cel"` | How new ids are generated. `uuid-v7` and `ulid` are time-ordered, which keeps `id`-sorted files in creation order and helps merges. `sequential` uses per-type counters (`State_1`) and is only suitable for single-user editing. `natural` derives ids from `key` attributes (unique by constraint). `cel` evaluates `expression`. |
+| `strategy`   | `"uuid-v4"`, `"uuid-v7"` (default), `"ulid"`, `"nanoid"`, `"sequential"`, `"natural"`, `"cel"` | How new ids are generated (DID, section 4). `uuid-v7` and `ulid` are time-ordered, which keeps `id`-sorted files in creation order and helps merges. `sequential` uses per-type counters (`State_1`) and is only suitable for single-user editing. `natural` derives ids from `key` attributes (unique by constraint). `cel` evaluates `expression`. |
 | `prefix`     | string or map TypeRef → string                                                                 | Type prefixes (`"st_"`), making ids self-describing in diffs.                                                                                                                                                                                                                                                                       |
 | `expression` | Expression                                                                                     | For `cel`: context `create`, must return a string; uniqueness is enforced by appending `-2`, `-3`, …                                                                                                                                                                                                                                |
 | `stable`     | bool                                                                                           | Ids never change once assigned, even if `natural` keys change (the first derived id is kept). Default `true`.                                                                                                                                                                                                                       |
@@ -2746,7 +2657,7 @@ Nesting is expressed by `parent`, not by physical nesting, so moving an element 
 
 ### 11.6 View data and style overrides
 
-`view.store` lists which kinds of view data are persisted: `bounds`, `waypoints`, `anchors`, `labelOffsets`, `collapsed`, `zIndex`, `rotation`, `params`, `ports`, `viewport`, `guides`, `pinned`, `settings`. Anything not listed is recomputed on load (by layout or defaults). A pure layout-driven language stores nothing but the model.
+`view.store` lists which kinds of view data are persisted: `bounds`, `waypoints`, `anchors`, `labelOffsets`, `collapsed`, `zIndex`, `rotation`, `params`, `ports`, `viewport`, `guides`, `pinned`, `settings`. Anything not listed is recomputed on load (by layout or defaults). A pure layout-driven language stores nothing but the model. DID, section 5, specifies the stored form.
 
 `view.styleOverrides` is `"none"` (default), `"all"`, or a list of style property paths users may override per element (`"fill"`, `"stroke.color"`, `"stroke.dash"`, `"font.size"`). Overrides are stored in `NodeView.style` / `EdgeView.style` and have the highest precedence (6.1).
 
@@ -2762,19 +2673,17 @@ Nesting is expressed by `parent`, not by physical nesting, so moving an element 
 | `timestamps`        | `{format, timezone}`                                      | `format`: `"rfc3339"` (default) or `"epoch-ms"`; `timezone`: `"utc"` (normalise to `Z`) or `"preserve"` (keep the offset entered).                                                          |
 | `canonical`         | bool                                                      | Follow RFC 8785 (JSON Canonicalization Scheme) number and string serialization. Default `true`.                                                                                             |
 
-**Determinism requirement.** Given the same logical document and definition, a conforming writer MUST produce byte-identical output. In particular: no volatile metadata unless listed in `metadata`; `modifiedAt` only changes when content changes; maps are written in the declared key order; floating-point values are rounded to `precision` then serialized per RFC 8785.
+A conforming writer applies these settings as DID, section 6, specifies, including its determinism requirement: the same logical DID definition and specification MUST produce byte-identical output. Suppressions of constraint problems are stored as DID, section 3, describes.
 
-**Suppressions** of constraint problems are stored as `suppressions: [{constraint, element, reason, by, at}]`.
+### 11.8 Metadata and specification embedding
 
-### 11.8 Metadata and definition embedding
+`metadata` lists the metadata a DID definition carries in `meta`: `languageVersion` (always written in `language.version`), `createdAt`, `modifiedAt`, `generator`, `authors` (from `env.user` if the user consents), `title` (mirrors a diagram attribute), `checksum`.
 
-`metadata` lists document-level metadata written in `meta`: `languageVersion` (always written in `language.version`), `createdAt`, `modifiedAt`, `generator`, `authors` (from `env.user` if the user consents), `title` (mirrors a diagram attribute), `checksum`.
-
-`definition` controls how documents refer to their definition: `{ "embed": "none" | "reference" | "inline", "uri": "https://…/statemachine-1.2.0.dedl" }`. `reference` writes `language.definition` with the URI and integrity hash; `inline` embeds the whole definition (self-contained archives).
+`definition` controls how DID definitions refer to their specification: `{ "embed": "none" | "reference" | "inline", "uri": "https://…/statemachine-1.2.0.disl" }`. `reference` writes `language.definition` with the URI of the specification and its integrity hash; `inline` embeds the whole specification (self-contained archives). The property names `definition` are kept unchanged from the earlier format.
 
 ### 11.9 Migrations
 
-Migrations upgrade documents written with older language versions. They run on load, before validation, in version order.
+Migrations upgrade DID definitions written with older language versions. They run on load, before validation, in version order.
 
 ```json
 {
@@ -2814,9 +2723,9 @@ Migrations upgrade documents written with older language versions. They run on l
 | `renamePort`, `renameSlot` |                                                   |                                                                                       |
 | `plugin`                   | `name`, `args`                                    | Custom migration.                                                                     |
 
-Migration expressions run in the `migration` context (12.3), which sees raw records as maps (`element`, `value`, `document`) rather than typed elements, because the old document does not conform to the new metamodel. A migration that fails aborts loading; the original file is never modified until the user saves. Runtimes SHOULD tell users that a document was migrated and to which version, and MAY keep a backup.
+Migration expressions run in the `migration` context (12.3), which sees raw records as maps (`element`, `value`, `document`) rather than typed elements, because the old DID definition does not conform to the new metamodel. A migration that fails aborts loading; the original file is never modified until the user saves. Runtimes SHOULD tell users that a diagram was migrated and to which version, and MAY keep a backup.
 
-Documents with a **newer** minor or patch language version than the loaded definition are opened with a warning; newer major versions are opened read-only or refused.
+DID definitions with a **newer** minor or patch language version than the loaded specification are opened with a warning; newer major versions are opened read-only or refused.
 
 ### 11.10 Collaboration
 
@@ -2830,11 +2739,11 @@ Documents with a **newer** minor or patch language version than the loaded defin
 | `presence`    | bool                                           | Share cursors and selections.                                                                                                 |
 | `conflicts`   | `"last-writer-wins"`, `"report"`               | Whether semantic conflicts (both sides valid, the merge invalid) are reported as constraint problems attributed to the merge. |
 
-The CRDT state is a transport concern; the persisted document remains the canonical form of 11.4. Constraints are re-evaluated after merges.
+The CRDT state is a transport concern; the persisted DID definition remains the canonical form (DID, section 6). Constraints are re-evaluated after merges.
 
 ### 11.11 Import and export
 
-`persistence.export` and `persistence.import` declare conversions: `[{ "format": "svg" | "png" | "pdf" | "dedl-fragment" | "plugin:<name>", "label", "doc", "options" }]`. Image exports render the notation exactly as on screen (without interaction states) at a chosen scale; `pdf` honours `canvas.page`. Constraints with `timing: "export"` run before export.
+`persistence.export` and `persistence.import` declare conversions: `[{ "format": "svg" | "png" | "pdf" | "did-fragment" | "plugin:<name>", "label", "doc", "options" }]`. `did-fragment` writes a DID fragment (DID, section 7). Image exports render the notation exactly as on screen (without interaction states) at a chosen scale; `pdf` honours `canvas.page`. Constraints with `timing: "export"` run before export.
 
 ---
 
@@ -2842,9 +2751,9 @@ The CRDT state is a transport concern; the persisted document remains the canoni
 
 ### 12.1 Base language
 
-DEDL uses CEL as specified at https://github.com/google/cel-spec, with these standard extensions REQUIRED: **strings** (`charAt`, `indexOf`, `lowerAscii`, `replace`, `split`, `substring`, `trim`, `upperAscii`, `format`, `join`, `reverse`, `quote`), **math** (`math.greatest`, `math.least`, `math.ceil`, `math.floor`, `math.round`, `math.abs`, `math.sqrt`, …), **lists** (`distinct`, `flatten`, `range`, `slice`, `sort`, `sortBy`), **sets** (`sets.contains`, `sets.intersects`, `sets.equivalent`), **optional types** (`?.`, `.?`, `optional.of`, `orValue`), and the `cel.bind` macro. Comprehension macros `all`, `exists`, `exists_one`, `map`, `filter` and `has` are available as in core CEL.
+DISL uses CEL as specified at https://github.com/google/cel-spec, with these standard extensions REQUIRED: **strings** (`charAt`, `indexOf`, `lowerAscii`, `replace`, `split`, `substring`, `trim`, `upperAscii`, `format`, `join`, `reverse`, `quote`), **math** (`math.greatest`, `math.least`, `math.ceil`, `math.floor`, `math.round`, `math.abs`, `math.sqrt`, …), **lists** (`distinct`, `flatten`, `range`, `slice`, `sort`, `sortBy`), **sets** (`sets.contains`, `sets.intersects`, `sets.equivalent`), **optional types** (`?.`, `.?`, `optional.of`, `orValue`), and the `cel.bind` macro. Comprehension macros `all`, `exists`, `exists_one`, `map`, `filter` and `has` are available as in core CEL.
 
-### 12.2 DEDL types
+### 12.2 DISL types
 
 | CEL type                                     | Fields and methods                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 |----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -2883,7 +2792,7 @@ The context of an expression determines its variables. Validators type-check eac
 | `migration`       | migration steps                                                                                                                              | `element` (raw record map), `value`, `document` (raw map), `from`, `to` (version strings) |
 | `function`        | user functions                                                                                                                               | parameters, plus `diagram`/`env` if declared in `uses`                                    |
 
-### 12.4 DEDL function library
+### 12.4 DISL function library
 
 In addition to the members listed in 12.2, these global functions are available in all contexts unless noted:
 
@@ -2919,7 +2828,7 @@ Implementations MUST provide cost estimates for all library functions; graph tra
 
 ### 12.5 Determinism
 
-Expressions in the contexts `constraint`, `migration`, `create` (except `env.now`), `placement` and `snap` MUST be deterministic given the document. `env.now` is the only source of time and is fixed per evaluation run. Random functions do not exist. Iteration order of `diagram.nodes` and similar lists is the persistence order (11.7), so results are reproducible across tools.
+Expressions in the contexts `constraint`, `migration`, `create` (except `env.now`), `placement` and `snap` MUST be deterministic given the DID definition. `env.now` is the only source of time and is fixed per evaluation run. Random functions do not exist. Iteration order of `diagram.nodes` and similar lists is the persistence order (11.7), so results are reproducible across tools.
 
 ---
 
@@ -2927,7 +2836,7 @@ Expressions in the contexts `constraint`, `migration`, `create` (except `env.now
 
 ### 13.1 Plugin declarations
 
-Plugins provide what the declarative core does not: exotic shapes, special routers and layouts, domain-specific widgets, imports/exports, snapping to external data, custom actions. A definition declares every plugin it uses:
+Plugins provide what the declarative core does not: exotic shapes, special routers and layouts, domain-specific widgets, imports/exports, snapping to external data, custom actions. A specification declares every plugin it uses:
 
 ```json
 {
@@ -2939,7 +2848,7 @@ Plugins provide what the declarative core does not: exotic shapes, special route
       "fallback": { "routing": "orthogonal", "layout": "layered" },
       "args": { "gridAware": { "type": "bool", "default": true } },
       "doc": "Specialised BPMN router that keeps sequence flows off pool boundaries.",
-      "source": { "npm": "@acme/dedl-bpmn-router", "integrity": "sha256-…" }
+      "source": { "npm": "@acme/disl-bpmn-router", "integrity": "sha256-…" }
     }
   }
 }
@@ -2949,7 +2858,7 @@ Plugins provide what the declarative core does not: exotic shapes, special route
 |----------------|----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `version`      | SemVer range                           | Accepted plugin versions.                                                                                                                                                                       |
 | `provides`     | string[]                               | Extension points: `shape`, `marker`, `lineEffect`, `routing`, `layout`, `snap`, `widget`, `action`, `celFunctions`, `import`, `export`, `persistenceFormat`, `collaboration`.                   |
-| `required`     | bool                                   | If `true`, runtimes without the plugin MUST refuse to open documents for editing (read-only viewing MAY still be offered). If `false`, `fallback` is used.                                      |
+| `required`     | bool                                   | If `true`, runtimes without the plugin MUST refuse to open diagrams of the type for editing (read-only viewing MAY still be offered). If `false`, `fallback` is used.                                      |
 | `fallback`     | map extension point → built-in name    | Declarative fallbacks.                                                                                                                                                                          |
 | `args`         | map → Attribute                        | Declared arguments with types, so uses of the plugin are validated.                                                                                                                             |
 | `source`       | object                                 | Hints where implementations can be obtained (`npm`, `maven`, `url`, …) with integrity hashes. Runtimes MUST NOT download and execute code automatically without user or administrator approval. |
@@ -2960,39 +2869,34 @@ Every plugin use (`{ "plugin": "acme.bpmnRouter", "args": {…} }`) references a
 
 ### 13.2 Extension properties and profiles
 
-`x-` properties (2.8) carry tool-specific data. A group of related extension properties MAY be documented as a **profile** — a JSON Schema published by a vendor or community that constrains `x-<prefix>-*` properties. Definitions list profiles they use in `language.profiles: ["https://…/simulation-profile.json"]`; validators that know a profile validate accordingly.
+`x-` properties (2.8) carry tool-specific data. A group of related extension properties MAY be documented as a **profile** — a JSON Schema published by a vendor or community that constrains `x-<prefix>-*` properties. Specifications list profiles they use in `language.profiles: ["https://…/simulation-profile.json"]`; validators that know a profile validate accordingly.
 
 ---
 
 ## 14. Processing model
 
-### 14.1 Loading a definition
+### 14.1 Loading a specification
 
 1. **Parse** the JSON; reject duplicate keys.
-2. **Check versions**: `dedl` major version supported.
+2. **Check versions**: `disl` major version supported (or its deprecated alias, section 18).
 3. **Resolve imports** recursively, verify integrity hashes, detect cycles, apply `include` filters, prefix names with aliases.
-4. **Validate structure** against the JSON Schema `$defs/Definition`.
+4. **Validate structure** against the JSON Schema `$defs/Specification`.
 5. **Resolve names**: every type, style, shape, marker, icon, form, tool, snap profile, layout, operation, function and plugin reference must resolve.
 6. **Flatten inheritance**: compute C3 linearisations; merge attributes, ports, containment; check narrowing rules (4.7).
 7. **Derive built-ins**: generate built-in constraints (8.7), default notations, default forms and the default toolbox where absent.
 8. **Compile CEL**: parse and type-check every expression in its context (12.3); estimate costs against `language.limits.celCost`; check user functions for recursion.
-9. **Check semantic rules** not expressible in JSON Schema: reserved attribute names, placement attribute types compatible with axes, snapping rules compatible with axis kinds, `x2` vs `width` exclusivity, handle parameters exist, label `editable` requires attribute binding, exactly one of `path`/`parts`/`svg`/`plugin` in shapes, and all other MUST statements of this specification.
+9. **Check semantic rules** not expressible in JSON Schema: reserved attribute names, placement attribute types compatible with axes, snapping rules compatible with axis kinds, `x2` vs `width` exclusivity, handle parameters exist, label `editable` requires attribute binding, exactly one of `path`/`parts`/`svg`/`plugin` in shapes, and all other MUST statements of this document.
 10. **Build** the runtime model.
 
-Validators report every problem with the JSON Pointer of its location, a severity (`error` makes the definition unusable; `warning` does not) and a message.
+Validators report every problem with the JSON Pointer of its location, a severity (`error` makes the specification unusable; `warning` does not) and a message.
 
-### 14.2 Loading a document
+### 14.2 Loading a DID definition
 
-1. Parse; read `language.id` and `language.version`. If the id differs from the definition's, refuse.
-2. If the document version is older, run **migrations** (11.9) on the raw structure.
-3. Validate against `$defs/Document` and the metamodel (types exist, attributes typed, references resolvable).
-4. Resolve view data; run layout for elements lacking view data if `trigger` is `onLoadIfMissing` or `always`.
-5. Evaluate constraints with `live` timing; show problems.
-6. Render.
+A runtime loads a stored diagram as DID specifies ([DID-specification.md](../did/DID-specification.md), section 8.1): it checks the language id and version against the specification's, runs this specification's migrations (11.9), validates, resolves view data, evaluates `live` constraints and renders.
 
 ### 14.3 Unknown content
 
-Elements of unknown types, unknown attributes and unknown view properties in a document (for example written by a newer language version or a vendor extension) MUST be preserved on save. Unknown elements are shown as neutral placeholders ("Unknown element of type X") and reported by `std.typeExists`. Tools MUST NOT silently drop data.
+Unknown types, attributes and view properties in a stored diagram are preserved as DID specifies ([DID-specification.md](../did/DID-specification.md), section 8.2), and unknown elements are reported by `std.typeExists`.
 
 ### 14.4 The editing transaction
 
@@ -3010,8 +2914,7 @@ Transactions are atomic: either all effects apply or none. Remote changes from c
 ### 14.5 Saving
 
 1. Evaluate constraints with `save` timing. If `blockSaveOn: "error"` and errors exist, ask the user (saving MUST remain possible under a different name or as a draft if the runtime supports drafts).
-2. Serialize the logical document canonically (11.7).
-3. Write files according to `files.mode` atomically (write to temporary file, then rename).
+2. Write the DID definition canonically and atomically, as DID specifies ([DID-specification.md](../did/DID-specification.md), section 8.3).
 
 ---
 
@@ -3021,14 +2924,14 @@ Transactions are atomic: either all effects apply or none. Remote changes from c
 
 | Class                  | Requirements                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 |------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Definition**         | A definition is conforming if it validates against the JSON Schema, passes all checks of 14.1 without errors, and uses only declared plugins.                                                                                                                                                                                                                                                                                                                 |
-| **Document**           | A document is conforming to a definition if it validates against `$defs/Document`, its elements conform to the metamodel after migrations, and it is serialised as layer 8 prescribes. Constraint problems do not make a document non-conforming.                                                                                                                                                                                                             |
-| **Validator**          | Implements 14.1 and 14.2 (without rendering), reports problems with JSON Pointers, and evaluates constraints headlessly.                                                                                                                                                                                                                                                                                                                                      |
+| **Specification**      | A specification is conforming if it validates against the JSON Schema, passes all checks of 14.1 without errors, and uses only declared plugins.                                                                                                                                                                                                                                                                                                             |
+| **DID definition**     | Conformance of a stored diagram to a specification is defined by DID ([DID-specification.md](../did/DID-specification.md), section 9).                                                                                                                                                                                                                                                                                                                       |
+| **Validator**          | Implements 14.1 and DID's loading rules (without rendering), reports problems with JSON Pointers, and evaluates constraints headlessly.                                                                                                                                                                                                                                                                                                                                      |
 | **Runtime — Core**     | Metamodel, persistence (including migrations, determinism), constraints, behavior, CEL environment, one cartesian numeric coordinate system with grid snapping, built-in shapes `rect`, `roundedRect`, `ellipse`, `diamond`, `text`, straight and polyline edges, markers `none`, `arrow`, `arrowFilled`, generated forms and toolbox.                                                                                                                        |
 | **Runtime — Standard** | Core, plus: all built-in shapes and markers, styles with states and conditions, labels at all positions, compartments, ports, containers, custom path shapes, orthogonal and curved routing, all snap rules for numeric axes, per-axis snapping, time axes with calendar snapping, ordinal axes with bands, bound and computed placement, explicit forms and all standard widgets, context tools, templates, documentation surfaces (2.4), themes with modes. |
 | **Runtime — Full**     | Standard, plus: composite shapes with handles, nine-slice scaling, line effects, jump-overs, stacked and custom markers, embedded forms, nested coordinate systems, polar systems, level of detail, variants, collaboration, all export formats, plugins.                                                                                                                                                                                                     |
 
-A runtime MUST state its conformance class and list unsupported optional features. When a definition `requires` a higher class or unsupported features, the runtime MUST inform the user and MAY open the diagram read-only.
+A runtime MUST state its conformance class and list unsupported optional features. When a specification `requires` a higher class or unsupported features, the runtime MUST inform the user and MAY open the diagram read-only.
 
 ### 15.2 Graceful degradation
 
@@ -3038,12 +2941,12 @@ Runtimes that do not support a visual feature SHOULD degrade visually rather tha
 
 ## 16. Security, privacy and robustness
 
-- **No code execution.** Definitions contain no executable code other than CEL, which is sandboxed, side-effect free and terminating. Plugins are code and MUST be installed through an explicit trust decision.
-- **Resource limits.** Runtimes MUST enforce CEL cost limits (2.5), limits on document size and element count (`language.limits`), hook depth (9.2), import depth (default 16) and path segment counts in custom shapes (default 10 000).
-- **Sanitisation.** Inline SVG (shapes, icons) MUST be sanitised: no `<script>`, no event handler attributes, no `<foreignObject>`, no external references except data URIs of images. Markdown in labels and docs MUST be rendered without raw HTML. URIs in labels and links MUST be restricted to `http`, `https`, `mailto` and internal references unless the definition allows more.
+- **No code execution.** Specifications contain no executable code other than CEL, which is sandboxed, side-effect free and terminating. Plugins are code and MUST be installed through an explicit trust decision.
+- **Resource limits.** Runtimes MUST enforce CEL cost limits (2.5), limits on stored diagram size and element count (`language.limits`), hook depth (9.2), import depth (default 16) and path segment counts in custom shapes (default 10 000).
+- **Sanitisation.** Inline SVG (shapes, icons) MUST be sanitised: no `<script>`, no event handler attributes, no `<foreignObject>`, no external references except data URIs of images. Markdown in labels and docs MUST be rendered without raw HTML. URIs in labels and links MUST be restricted to `http`, `https`, `mailto` and internal references unless the specification allows more.
 - **Remote resources.** Imports, fonts, images and icons from remote URIs SHOULD carry integrity hashes; runtimes MAY block remote loading and SHOULD cache with integrity verification.
-- **Privacy.** `env.user` is empty unless the runtime is configured to expose it; documents store user names in metadata only with consent (11.8). Attributes marked `secret` are excluded from exports, logs, telemetry and AI assistant context.
-- **Integrity of documents.** Unknown content is preserved (14.3); failed migrations never overwrite originals; saves are atomic.
+- **Privacy.** `env.user` is empty unless the runtime is configured to expose it; DID definitions store user names in metadata only with consent (11.8). Attributes marked `secret` are excluded from exports, logs, telemetry and AI assistant context.
+- **Integrity of stored diagrams.** Unknown content is preserved (14.3); failed migrations never overwrite originals; saves are atomic.
 - **Denial of service through geometry.** Runtimes SHOULD cap the number of rendered sub-rows in stacking, bands in ordinal axes and grid lines per frame.
 
 
@@ -3051,11 +2954,11 @@ Runtimes that do not support a visual feature SHOULD degrade visually rather tha
 
 ## 17. Complete examples
 
-The three definitions below are complete, and each one validates against the JSON Schema of Appendix A. Every CEL expression in them compiles with a reference CEL implementation (cel-go) configured with the DEDL library of section 12. Together they exercise most of the language. They are also distributed as separate files next to this specification.
+The three specifications below are complete, and each one validates against the JSON Schema of Appendix A. Every CEL expression in them compiles with a reference CEL implementation (cel-go) configured with the DISL library of section 12. Together they exercise most of the language. They are also distributed as separate files next to this specification.
 
 ### 17.1 State machine — free canvas, grid snapping in both directions
 
-This example shows a classic node-and-edge editor:
+This example shows a classic node-and-edge diagram type:
 
 - **Metamodel:** an abstract `Vertex` supertype, a `State` with containment (composite states), pseudo-states with `multiplicity`, a view-only `Comment`, a `Transition` with an `expression`-typed guard, and an `Anchor` relation that may point at other relations (`connectsRelations`).
 - **Coordinates:** one pixel system with a 10 px grid applied to both axes, 10 px size snapping with a minimum of 20, 15° rotation steps and object snapping, all documented for users.
@@ -3065,12 +2968,12 @@ This example shows a classic node-and-edge editor:
 - **Behavior:** automatic naming, an operation that groups the selection into a composite state, and deletion and clipboard policies.
 - **Persistence:** split model and view files, prefixed UUIDv7 ids, tree ordering and a chain of migrations.
 
-File `examples/statemachine.dedl`:
+File `statemachine.disl`:
 
 ```json
 {
-  "$schema": "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json#/$defs/Definition",
-  "dedl": "0.1",
+  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
+  "disl": "0.1",
   "language": {
     "id": "org.example.statemachine",
     "version": "1.2.0",
@@ -3583,16 +3486,16 @@ File `examples/statemachine.dedl`:
 
 ### 17.2 Project timeline — time on x, resource lanes on y, bound placement
 
-This example shows the coordinate layer in action. The x axis is a **time axis** in working days: weekends and holidays are collapsed, the time zone comes from a diagram attribute, and the ruler has several levels with today marked. The y axis is an **ordinal axis** whose bands are the `Resource` nodes. Tasks are **bound** to the model: `x ↔ start`, `x2 ↔ end`, `y ↔ assignee`. Dragging a task changes dates and assignment, never view data, so the view record of a task is empty (see the document in 17.4).
+This example shows the coordinate layer in action. The x axis is a **time axis** in working days: weekends and holidays are collapsed, the time zone comes from a diagram attribute, and the ruler has several levels with today marked. The y axis is an **ordinal axis** whose bands are the `Resource` nodes. Tasks are **bound** to the model: `x ↔ start`, `x2 ↔ end`, `y ↔ assignee`. Dragging a task changes dates and assignment, never view data, so the view record of a task is empty (see the DID definition in 17.4).
 
 Snapping is **different per axis**. On x, tasks snap to whole working days using calendar rules. On y, they snap to the centre of a lane. Sizes snap to whole days with a minimum of one day. The task bar is a composite `progressBar` shape whose progress handle snaps to quarters. Dependencies anchor at the finish and start of bars; variants move the anchors for start-to-start and finish-to-finish links. The link type is shown at the edge start and the lag in the middle, and conditional styles turn a violated dependency red.
 
-File `examples/timeline.dedl`:
+File `timeline.disl`:
 
 ```json
 {
-  "$schema": "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json#/$defs/Definition",
-  "dedl": "0.1",
+  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
+  "disl": "0.1",
   "language": {
     "id": "org.example.timeline",
     "version": "0.4.0",
@@ -3940,12 +3843,12 @@ File `examples/timeline.dedl`:
 
 This example shows notation driven by the model. Columns are child elements listed in a compartment, with conditional item styles and icons. Relationship markers are **computed** from the cardinality attributes (`erZeroOrMany`, `erOne`, …). The line is dashed for non-identifying relationships. Cardinality labels sit at both ends and only appear when zoomed in. Tables align to a 20 px grid while bendpoints use a 10 px grid. Ids are **natural** (derived from table and column names), persistence is YAML, and a plugin provides SQL export.
 
-File `examples/erd.dedl`:
+File `erd.disl`:
 
 ```json
 {
-  "$schema": "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json#/$defs/Definition",
-  "dedl": "0.1",
+  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
+  "disl": "0.1",
   "language": {
     "id": "org.example.erd",
     "version": "2.0.0",
@@ -4156,72 +4059,15 @@ File `examples/erd.dedl`:
 }
 ```
 
-### 17.4 A document of the timeline language
+### 17.4 A DID definition of the timeline diagram type
 
-This document was written with the timeline language of 17.2. Several things to notice:
-
-- Elements are a flat list; relations are separate.
-- All placement of tasks and milestones lives in the model (`start`, `end`, `assignee`). The view stores only a moved label and the viewport.
-- References (`assignee`, relation ends) are plain ids.
-- Unset attributes and defaults are omitted (`status` of *Build pages*, `lag` of most dependencies).
-
-File `examples/timeline.document.json`:
-
-```json
-{
-  "$schema": "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json#/$defs/Document",
-  "dedlDocument": "0.1",
-  "language": { "id": "org.example.timeline", "version": "0.4.0" },
-  "meta": { "createdAt": "2026-09-21T08:12:00Z", "modifiedAt": "2026-09-25T16:40:00Z", "generator": "Reference runtime 0.1" },
-  "diagram": {
-    "attributes": {
-      "title": "Website relaunch",
-      "projectStart": "2026-10-01",
-      "projectEnd": "2026-12-18",
-      "holidays": ["2026-10-03", "2026-12-24", "2026-12-25"]
-    }
-  },
-  "elements": [
-    { "id": "ms_01K5YZT2", "type": "Milestone",
-      "attributes": { "title": "Go live", "start": "2026-12-01", "assignee": "res_01K5YX10" } },
-    { "id": "res_01K5YX10", "type": "Resource", "attributes": { "name": "Design team" } },
-    { "id": "res_01K5YX11", "type": "Resource", "attributes": { "name": "Frontend", "position": 1, "capacity": 2 } },
-    { "id": "task_01K5YY01", "type": "Task",
-      "attributes": { "title": "Wireframes", "start": "2026-10-01", "end": "2026-10-09",
-                      "assignee": "res_01K5YX10", "status": "done", "progress": 1 } },
-    { "id": "task_01K5YY02", "type": "Task",
-      "attributes": { "title": "Visual design", "start": "2026-10-12", "end": "2026-10-30",
-                      "assignee": "res_01K5YX10", "status": "active", "progress": 0.4 } },
-    { "id": "task_01K5YY03", "type": "Task",
-      "attributes": { "title": "Build pages", "start": "2026-11-03", "end": "2026-11-27",
-                      "assignee": "res_01K5YX11" } }
-  ],
-  "relations": [
-    { "id": "dep_01K5Z1A8", "type": "Dependency", "source": "task_01K5YY01", "target": "task_01K5YY02" },
-    { "id": "dep_01K5Z1A9", "type": "Dependency", "source": "task_01K5YY02", "target": "task_01K5YY03",
-      "attributes": { "lag": 1 } },
-    { "id": "dep_01K5Z1B0", "type": "Dependency", "source": "task_01K5YY03", "target": "ms_01K5YZT2" }
-  ],
-  "views": [
-    {
-      "id": "v_schedule",
-      "viewpoint": "main",
-      "name": "Schedule",
-      "viewport": { "x": 0, "y": 0, "zoom": 1 },
-      "nodes": {
-        "task_01K5YY02": { "labels": { "dates": { "dx": 4, "dy": 0 } } }
-      },
-      "edges": {}
-    }
-  ]
-}
-```
+A diagram created with the timeline specification of 17.2 is stored as the DID definition `timeline.did`, shown and explained in DID ([DID-specification.md](../did/DID-specification.md), section 10). Section 17.5 reads it with the processing model.
 
 ### 17.5 Reading the examples with the processing model *(informative)*
 
-When the timeline document is loaded (14.2), the runtime:
+When the timeline DID definition is loaded (14.2), the runtime:
 
-1. finds `language.version` equal to the definition's, so no migrations run;
+1. finds `language.version` equal to the specification's, so no migrations run;
 2. builds the `lanes` axis from the two `Resource` nodes, ordered by `position`;
 3. resolves the `time` axis: origin at `projectStart`, zone `Europe/Berlin`, weekends and the three holidays collapsed;
 4. places *Wireframes* from 1 to 9 October in the *Design team* lane, *Visual design* after it (the pack algorithm keeps both in one sub-row because they do not overlap), and *Build pages* in the *Frontend* lane;
@@ -4232,9 +4078,24 @@ If a user then drags *Build pages* one working day to the left, the calendar sna
 
 ---
 
+## 18. Deprecated aliases
+
+DISL 0.1 continues the combined format it came from: DEDL became DISL and DID, and the constructs did not change. What that format called a definition is a DISL specification, and what it called a document is a DID definition (DID, section 11). Runtimes of DISL 0.x **MUST** accept the following identifiers of the earlier format, version 0.1, as deprecated aliases, read them as their DISL form, and never write them:
+
+| Deprecated alias                                                              | DISL 0.1                                                                       |
+|-------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| file extension `.dedl`                                                        | `.disl`                                                                        |
+| `$schema` `https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json#/$defs/Definition` | `https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification` |
+| media type `application/vnd.dedl.definition+json`                             | `application/vnd.disl.specification+json`                                      |
+| version key `"dedl": "0.1"`                                                   | `"disl": "0.1"`                                                                |
+
+A specification carries exactly one of the two version keys; the schema accepts either and marks the old one `deprecated`. The old schema address stays published unchanged, so files that name it keep validating. A legacy fixture in the earlier form, in `specifications/disl/legacy/`, is validated through these aliases on every change to this repository. The aliases are removed no earlier than DISL 1.0.
+
+---
+
 ## Appendix A — JSON Schema
 
-The normative JSON Schema is published as `dedl.schema.json` (JSON Schema draft 2020-12). Its root validates **definitions**, and `#/$defs/Document` validates **documents**. The schema is generated from a single source together with this specification, and every example in section 17 validates against it.
+The normative JSON Schema is published as `disl.schema.json` (JSON Schema draft 2020-12), `$id` `https://etalii.net/adp/disl/schema/0.1/disl.schema.json`. Its root, `#/$defs/Specification`, validates **specifications**. Stored diagrams are validated by DID's schema, `did.schema.json`, which references this schema's `QualifiedId`, `SemVer` and `Point`. The schema is kept together with this document, and every specification example in section 17 validates against it.
 
 ### A.1 Structure
 
@@ -4242,16 +4103,16 @@ All objects in the schema:
 
 - forbid unknown properties (`additionalProperties: false`), except extension properties matching `^x-`;
 - accept an optional `doc` property where this specification allows documentation;
-- use shared definitions for recurring concepts (`Expression`, `Dynamic`, `Paint`, `Stroke`, `SnapRule`, `Label`, `Action`, …).
+- use shared `$defs` for recurring concepts (`Expression`, `Dynamic`, `Paint`, `Stroke`, `SnapRule`, `Label`, `Action`, …).
 
-Rules that JSON Schema cannot express — name resolution, CEL type checking, inheritance narrowing, reserved names, compatibility of placement bindings with axis kinds, and the other checks in 14.1 step 9 — are the job of a DEDL validator.
+Rules that JSON Schema cannot express — name resolution, CEL type checking, inheritance narrowing, reserved names, compatibility of placement bindings with axis kinds, and the other checks in 14.1 step 9 — are the job of a DISL validator.
 
-### A.2 Definitions by layer
+### A.2 `$defs` by layer
 
 | Layer                 | `$defs`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 |-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Common                | `SimpleId`, `QualifiedId`, `TypeRef`, `TypeRefs`, `SemVer`, `LocalizedText`, `Doc`, `CelSource`, `Expression`, `CelValue`, `AttrBinding`, `TokenRef`, `ParamRef`, `Dynamic`, `BString`, `BNumber`, `BBool`, `GeomExpr`, `Length`, `Color`, `Size`, `Insets`, `Point`, `Box`, `MinMax`, `PluginUse`, `PluginCall`, `Modifier`                                                                                                                                                                                                                                                                                                            |
-| Top level             | `Definition`, `Language`, `Import`, `Function`, `Viewpoint`, `Plugin`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Top level             | `Specification`, `Language`, `Import`, `Function`, `Viewpoint`, `Plugin`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | 1 · Metamodel         | `Metamodel`, `Attribute`, `DataType`, `Enum`, `EnumValue`, `NodeType`, `Containment`, `PortType`, `RelationType`, `RelationEnd`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | 2 · Coordinates       | `Coordinates`, `Axis`, `AxisRef`, `Calendar`, `Category`, `Ruler`, `ZoomLevel`, `CoordinateSystem`, `GridDisplay`, `Guides`, `Placement`, `PlacementSource`, `Anchor`, `Snapping`, `SnappingRef`, `SnapRule`, `SnapRuleObject`, `AxisRules`                                                                                                                                                                                                                                                                                                                                                                                             |
 | 3 · Notation          | `Notation`, `Theme`, `Paint`, `Gradient`, `Pattern`, `ImagePaint`, `Stroke`, `DashStyle`, `LineEffect`, `Font`, `Style`, `StyleRef`, `StyleRefs`, `States`, `Conditions`, `IconDef`, `IconRef`, `ShapeRef`, `ShapeInstance`, `ShapeDef`, `ShapeParam`, `PathDef`, `PathSegment`, `ShapePart`, `Handle`, `ScaleMode`, `Position`, `Label`, `Compartment`, `NodeIcon`, `Badge`, `PortNotation`, `AnchorSpec`, `ContainerSpec`, `SizeSpec`, `EmbeddedForm`, `LodRule`, `NodeNotation`, `NodeVariant`, `MarkerDef`, `MarkerInstance`, `MarkerRef`, `MidMarker`, `Routing`, `LineSpec`, `EndAnchor`, `EdgeNotation`, `EdgeVariant`, `Canvas` |
@@ -4262,7 +4123,7 @@ Rules that JSON Schema cannot express — name resolution, CEL type checking, in
 | 8 · Persistence       | `Persistence`, `Migration`, `MigrationStep`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | Documents             | `Document`, `ElementRecord`, `RelationRecord`, `ViewRecord`, `NodeView`, `EdgeView`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
-In total the schema has 141 definitions.
+In total the schema has 135 `$defs` entries. The stored-diagram structures `Document`, `ElementRecord`, `RelationRecord`, `ViewRecord`, `NodeView` and `EdgeView` of the earlier combined schema moved to DID's schema.
 
 ### A.3 Excerpt: snapping
 
@@ -4917,7 +4778,7 @@ The following excerpt shows how per-axis snapping is encoded. A snap rule is eit
 | `warning` state             | stroke token `color.warning` (`#BA7517`), warning badge top-right                                                                                                                          |
 | `dropTarget` / `dropReject` | fill token `color.accent.soft` / stroke `color.danger` dashed                                                                                                                              |
 
-**Standard theme tokens.** Runtimes provide these tokens with light and dark values, and definitions may override them: `color.canvas`, `color.surface`, `color.surface.alt`, `color.text`, `color.text.muted`, `color.border`, `color.border.strong`, `color.accent`, `color.accent.soft`, `color.danger`, `color.warning`, `color.success`, `color.info`, `font.body`, `font.mono`, `size.stroke`, `size.corner`, `size.font`.
+**Standard theme tokens.** Runtimes provide these tokens with light and dark values, and specifications may override them: `color.canvas`, `color.surface`, `color.surface.alt`, `color.text`, `color.text.muted`, `color.border`, `color.border.strong`, `color.accent`, `color.accent.soft`, `color.danger`, `color.warning`, `color.success`, `color.info`, `font.body`, `font.mono`, `size.stroke`, `size.corner`, `size.font`.
 
 ### B.2 Shape parameter defaults
 
@@ -5006,7 +4867,7 @@ Units: `millisecond`, `second`, `minute`, `hour`, `day`, `week` (starts on `firs
 
 ### B.6 Standard icons
 
-Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`, `edit`, `copy`, `link`, `unlink`, `lock`, `unlock`, `eye`, `eye-off`, `info`, `warning`, `error`, `check`, `x`, `plus`, `minus`, `arrow-right`, `arrow-left`, `arrow-up`, `arrow-down`, `flag`, `key`, `database`, `table`, `user`, `users`, `clock`, `calendar`, `message`, `note`, `folder`, `file`, `image`, `code`, `play`, `pause`, `stop`, `settings`, `search`, `filter`, `star`, `bolt`, `circle`, `circle-dot`, `square`, `square-rounded`, `diamond`, `triangle`, `hexagon`. Definitions may also reference icon sets by prefix (`tabler:database`, `material:table_chart`) when the runtime supports them.
+Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`, `edit`, `copy`, `link`, `unlink`, `lock`, `unlock`, `eye`, `eye-off`, `info`, `warning`, `error`, `check`, `x`, `plus`, `minus`, `arrow-right`, `arrow-left`, `arrow-up`, `arrow-down`, `flag`, `key`, `database`, `table`, `user`, `users`, `clock`, `calendar`, `message`, `note`, `folder`, `file`, `image`, `code`, `play`, `pause`, `stop`, `settings`, `search`, `filter`, `star`, `bolt`, `circle`, `circle-dot`, `square`, `square-rounded`, `diamond`, `triangle`, `hexagon`. Specifications may also reference icon sets by prefix (`tabler:database`, `material:table_chart`) when the runtime supports them.
 
 ### B.7 Default widgets by attribute type
 
@@ -5045,11 +4906,11 @@ Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`,
 | **Bindable**           | A property that accepts a literal or a dynamic value (`cel`, `attribute`, `token`, `param`).                 |
 | **Bound placement**    | A coordinate read from and written to a model attribute.                                                     |
 | **Canvas units**       | Rendering units at zoom 1; pixels for the default axis.                                                      |
-| **CEL**                | Common Expression Language, the only expression language of DEDL.                                            |
+| **CEL**                | Common Expression Language, the only expression language of DISL.                                            |
 | **Compartment**        | A stacked region inside a node listing items.                                                                |
 | **Context (CEL)**      | The set of variables available to an expression, determined by where it appears.                             |
-| **Definition**         | A DEDL file describing a diagram language and its editor.                                                    |
-| **Document**           | A diagram created with a definition.                                                                         |
+| **DID definition**     | A diagram a user created of a diagram type, stored as a `.did` file (DID, the Diagram Definition Language).   |
+| **Document**           | The content a user works on in a host; for a diagram, its stored form is a DID definition.                   |
 | **Domain value**       | A position in the units of its axis: a number, a timestamp or a band reference.                              |
 | **Gesture constraint** | A constraint evaluated before a user action is applied (connect, contain, create, delete, place, change).    |
 | **Handle**             | An interactive point on a shape that edits a shape parameter.                                                |
@@ -5059,7 +4920,9 @@ Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`,
 | **Notation**           | The concrete syntax: shapes, styles, labels and markers.                                                     |
 | **Plugin**             | Named, declared, versioned code that extends a runtime.                                                      |
 | **Port**               | A named connection point on a node.                                                                          |
-| **Runtime**            | Software that loads a definition and provides an editor.                                                     |
+| **Runtime**            | Software in a host that loads a specification and lets users create and change DID definitions with it.      |
+| **Specification**      | A DISL file (`.disl`) in which a tool engineer specifies one diagram type.                                   |
+| **Tool engineer**      | The person who specifies a diagram type in DISL.                                                             |
 | **Snap rule**          | A function mapping a raw domain value to an allowed value on one axis.                                       |
 | **Token**              | A named theme value (a color, font or size), resolved per theme mode.                                        |
 | **Transaction**        | An atomic, undoable unit of change.                                                                          |
@@ -5074,25 +4937,25 @@ Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`,
 
 ### D.1 Rationale *(informative)*
 
-**Why JSON rather than YAML as the normative form?** JSON has a single, unambiguous data model, universal parser support, and first-class JSON Schema tooling. It also avoids YAML's implicit typing pitfalls. Authors who prefer YAML can write it and convert, because the logical content is identical, and persistence may still write documents as YAML (11.2).
+**Why JSON rather than YAML as the normative form?** JSON has a single, unambiguous data model, universal parser support, and first-class JSON Schema tooling. It also avoids YAML's implicit typing pitfalls. Tool engineers who prefer YAML can write it and convert, because the logical content is identical, and persistence may still write DID definitions as YAML (11.2).
 
-**Why CEL?** DEDL needs expressions everywhere, but it must stay safe to load definitions from untrusted sources and must guarantee termination for live evaluation on every keystroke. CEL is non-Turing-complete, side-effect free, has a static type checker and cost estimation, and runs in all major ecosystems. User functions are allowed but may not recurse, which preserves those guarantees. OCL was considered too heavy, and JavaScript too powerful.
+**Why CEL?** DISL needs expressions everywhere, but it must stay safe to load specifications from untrusted sources and must guarantee termination for live evaluation on every keystroke. CEL is non-Turing-complete, side-effect free, has a static type checker and cost estimation, and runs in all major ecosystems. User functions are allowed but may not recurse, which preserves those guarantees. OCL was considered too heavy, and JavaScript too powerful.
 
 **Why coordinate systems as a separate layer?** Coordinates carry meaning in many diagram kinds (schedules, lanes, sequences, floor plans), and snapping only makes sense in domain units ("snap to working days"). Binding coordinates to attributes removes the classic duplication between a task's date field and its position on the canvas, along with the bugs that duplication causes.
 
-**Why per-axis snapping?** Real editors often need different discreteness on each axis: continuous time with discrete lanes, discrete time with free vertical stacking, a coarse horizontal grid with a fine vertical one. A single "grid size" cannot express that.
+**Why per-axis snapping?** Real diagrams often need different discreteness on each axis: continuous time with discrete lanes, discrete time with free vertical stacking, a coarse horizontal grid with a fine vertical one. A single "grid size" cannot express that.
 
-**Why flat element lists in documents?** Nesting documents physically makes moves between containers produce large diffs and makes merge conflicts likely. Flat lists with `parent` references keep changes local.
+**Why flat element lists in DID definitions?** Nesting elements physically makes moves between containers produce large diffs and makes merge conflicts likely. Flat lists with `parent` references keep changes local.
 
-**Why so much documentation structure?** An editor is also a teaching tool. When every type, field, rule and snapping behavior can explain itself, users learn the language while working, and documentation cannot drift from the implementation because both come from the same source.
+**Why so much documentation structure?** A diagram type is also a teaching tool. When every type, field, rule and snapping behavior can explain itself, users learn the language while working, and documentation cannot drift from the implementation because both come from the same source.
 
 ### D.2 Open questions for 0.2
 
-1. **Diagram-to-diagram links:** cross-document references (a sub-process defined in another file) and their persistence and integrity rules.
+1. **Diagram-to-diagram links:** references across DID definitions (a sub-process defined in another file) and their persistence and integrity rules.
 2. **Typed CEL for view-only data:** stronger static typing for `self.view` fields per coordinate system (currently `dyn`).
 3. **Animation and simulation:** a standard extension profile for token-flow animation (Petri nets, BPMN simulation) driven by CEL.
 4. **Responsive notation:** notation variants driven by available screen size (mobile editing).
-5. **Standard library packaging:** a registry of shareable DEDL libraries (shapes, markers, themes) with semantic versioning and signatures.
+5. **Standard library packaging:** a registry of shareable DISL libraries (shapes, markers, themes) with semantic versioning and signatures.
 6. **Bidirectional text formats:** declaring a textual syntax (grammar) alongside the graphical one, to support round-tripping with textual DSLs such as PlantUML or Mermaid.
 7. **Accessibility conformance:** measurable requirements (contrast ratios of built-in tokens, keyboard coverage) as a conformance class of its own.
 8. **Constraint explanations:** machine-generated explanations of why a CEL rule failed (counterexample elements), beyond the declared `target`.

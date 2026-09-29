@@ -1,5 +1,6 @@
 # Checks every pull request into develop and every change to develop (spec 001-ci-and-badges): every example
-# under specifications/ must validate against its specification's schema, as the constitution requires.
+# under specifications/ (every *.disl and *.did, and the legacy fixtures through their aliases) must validate against its
+# specification's schema, as the constitution requires.
 name: Build
 
 on:

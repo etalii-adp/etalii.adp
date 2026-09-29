@@ -1,6 +1,6 @@
 {
-  "$schema": "https://etalii.net/adp/did/schema/0.1/did.schema.json#/$defs/Definition",
-  "did": "0.1",
+  "$schema": "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json#/$defs/Document",
+  "dedlDocument": "0.1",
   "language": { "id": "org.example.timeline", "version": "0.4.0" },
   "meta": { "createdAt": "2026-09-21T08:12:00Z", "modifiedAt": "2026-09-25T16:40:00Z", "generator": "Reference runtime 0.1" },
   "diagram": {
