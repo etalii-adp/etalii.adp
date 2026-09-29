@@ -2,7 +2,7 @@
 
 **Feature Branch**: `features/002-naming-convention-alignment`
 **Created**: 2026-09-28
-**Status**: Draft
+**Status**: Completed (2026-09-29)
 **Input**: "Create a new spec kit specification on etalii.adp called "Naming convention alignment". It is about aligning the names related to designers, diagrams, editors and related aspects consistently across all repo's, all code, all functionalities, all documentation, all data sources (notion) and pipelines. It should be covered everywhere, except of course in the history. […] Diagrams: i.e. the visual ones with elements and relations. Designers: Form based visual layouts. […] Editors: Primarily when text based access is the core interaction principle. […] where we have placeholders for diagrams/editors there should also be a placeholder added for designers. […] All of those still persist as how it was before. Write the definitions down on a notion page and also express it on a web page in the document part of the portal. This is a huge change and should be done by multiple threads working in parallel, with them coordinating and testing until the whole code base and web site is consistent and tested as operating as before." (Peter, 2026-09-28; full text in the project thread.)
 
 ## Context

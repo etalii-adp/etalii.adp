@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "Naming Convention Alignment",
   "branch": "features/002-naming-convention-alignment",
-  "currentStep": "tasks",
-  "status": "ready-to-implement",
+  "currentStep": "implement",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -95,6 +95,20 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-09-28T23:58:27Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "ai",
+      "at": "2026-09-29T21:05:39.715Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-29T21:05:49.195Z"
     }
   ],
   "telemetryInstanceId": "549982ba-3d49-43fe-b59b-91a141e2e7d9",
@@ -304,6 +318,9 @@
     },
     "tasks": {
       "summary": "68 tasks in 9 phases (baseline 7, foundational glossary + site dual-read 10, US1 8, US2 21, US3 6, US4 5, US5 4, US6 2, final pass 5), each tagged with its part 0-7; re-dispatch confirmed the list against the DISL/DID, DESL/DED, EDSL/EDD design docs"
+    },
+    "implement": {
+      "summary": "Parts 0-7 delivered as merged pull requests across the seven repositories; T064 keeps the site's docs/diagrams.md fallback until the next catalogue refresh (baseline/final.md section 6)"
     }
   },
   "coverage": {
