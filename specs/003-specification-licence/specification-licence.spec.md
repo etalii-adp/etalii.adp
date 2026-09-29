@@ -21,7 +21,7 @@ What that finds in this repository today:
 - A dry run of the site's refresh at `9f13b8b` passes for DISL and for DID, each reporting `Licence: Apache-2.0`. The licence therefore no longer blocks their first publish; what remains on the site's side is running the refresh and merging its pull request in `etalii.adp.site`.
 - `LICENSE` is the unmodified Apache text, so it has no `Copyright` line and the site records no copyright holder.
 - None of the six specification documents says under which licence it is published. A reader who has only the document, or the page the site builds from it, learns the licence only from the site's provenance block or from the repository.
-- DESL, DED, EDSL and EDD are placeholders with no version and no schema, and the site does not list them yet. DEDL is retired in favour of DISL and DID (spec 002) and the site does not publish it.
+- DESL, DED, EDSL and EDD are placeholders with no version and no schema, and the site does not list them yet. The language DISL and DID replaced (spec 002) is retired and the site does not publish it.
 
 So this feature does not unblock the site by itself; the licence the refresh needs is already there. It makes the licence something each specification states, keeps the repository in the form the refresh recognises, adds the copyright holder the site shows beside it, and makes sure none of this silently regresses.
 
@@ -76,7 +76,7 @@ A contributor adds a new specification, or edits a header, and leaves the licenc
 ### Edge Cases
 
 - The copyright notice must not stop GitHub identifying the licence file as Apache-2.0; if the chosen form would do that, the licence is lost for the site, which is worse than a missing copyright holder.
-- Retired material (DEDL files kept under `legacy/`) is not a published specification; it is covered by the repository licence and needs no statement of its own.
+- Retired material (the files kept under `legacy/`) is not a published specification; it is covered by the repository licence and needs no statement of its own.
 - Schemas and examples are published by the site beside the prose. They are covered by the repository licence and the provenance of the version they belong to; they do not state it themselves (see Assumptions).
 - A second licence file, or one in a specification folder, could make GitHub's identification ambiguous; the repository keeps exactly one licence.
 - A future decision to license a specification differently from the repository would have to change this rule; until then every specification states the repository's licence.
@@ -119,4 +119,4 @@ A contributor adds a new specification, or edits a header, and leaves the licenc
 - **Scope**: this feature changes `etalii.adp` only. Running the site's refresh for DISL and DID and merging the result is etalii.adp.site's procedure and follows independently; it no longer waits on this feature.
 - **Schemas and examples**: they keep being covered by the repository licence and the site's provenance. Adding a licence to each schema file or example is out of scope; a schema read on its own, at its `$id`, names its source repository through the site.
 - **Placeholders**: DESL, DED, EDSL and EDD are not published by the site until they have a version and a schema and the site lists them; stating their licence now only makes sure they have it when that happens.
-- **Legacy**: retired DEDL material under `legacy/` folders is not a specification document and is not checked.
+- **Legacy**: retired material under `legacy/` folders is not a specification document and is not checked.
