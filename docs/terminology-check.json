@@ -171,9 +171,14 @@
     "etalii.adp.site": [
       "specs/001-*/**",
       "specs/002-*/**",
+      "specs/003-*/**",
       "specs/004-*/**",
+      "specs/005-*/**",
+      "specs/006-*/**",
       "src/data/redirects.ts",
-      "scripts/refresh/fixtures/etalii.adp/specifications/dedl/**"
+      "tests/reference/fixtures/dedl-aaef333/**",
+      "tests/reference/fixtures/disl-c2623d4/**",
+      "sources/catalogue/*/diagrams.md"
     ]
   },
   "allowedLiterals": [
@@ -218,6 +223,72 @@
       "path": "core/src/test/java/etalii/adp/core/settings/AdpSettingsStateRoundTripTest.java",
       "regex": "offDesigners|designerSettings",
       "reason": "tests that the old settings keys are still read"
+    },
+    {
+      "repository": "etalii.adp.site",
+      "path": "src/content/reference/languages.json",
+      "regex": "\"(name|short|prose|schema)\": \"(DEDL|dedl)",
+      "reason": "DEDL stays registered (publish false, movedTo disl) so that its old addresses redirect and DEDL 0.1's schema keeps its address (T050)"
+    },
+    {
+      "repository": "etalii.adp.site",
+      "path": "tests/reference/languages.test.ts",
+      "regex": "DEDL|dedl",
+      "reason": "tests that DEDL stays registered and that its addresses redirect to /adp/disl/ (T050)"
+    },
+    {
+      "repository": "etalii.adp.site",
+      "path": "tests/catalogue.spec.ts",
+      "regex": "/adp/designers/|the designer catalogue moved to /adp/tools/",
+      "reason": "tests that the old /adp/designers/ addresses redirect to /adp/tools/ (T050)"
+    },
+    {
+      "repository": "etalii.adp.site",
+      "path": "scripts/reference/check-moved.ts",
+      "regex": "DEDL moved to DISL",
+      "reason": "describes the check that the DEDL addresses redirect (T050)"
+    },
+    {
+      "repository": "etalii.adp.site",
+      "path": "scripts/reference/check.ts",
+      "regex": "where the schema has one \\(DEDL\\)",
+      "reason": "validation of the DEDL 0.1 fixture's documents in the CI compatibility build"
+    },
+    {
+      "repository": "etalii.adp.site",
+      "path": ".github/workflows/build.yml",
+      "regex": "DEDL 0\\.1",
+      "reason": "the CI step that builds the DEDL 0.1 fixture and checks that the old addresses redirect and its schema is still served (T050)"
+    },
+    {
+      "repository": "etalii.adp.site",
+      "path": ".specify/memory/constitution.md",
+      "regex": "reference for DEDL\\)",
+      "reason": "Sync Impact Report: history of the constitution's amendment"
+    },
+    {
+      "repository": "etalii.adp.site",
+      "path": "tests/reference/fixture.ts",
+      "regex": "DEDL-specification\\.md",
+      "reason": "a file name inside the pinned DEDL 0.1 fixture"
+    },
+    {
+      "repository": "etalii.adp.site",
+      "path": "tests/reference/fixtures/README.md",
+      "regex": "DEDL|specifications/dedl/",
+      "reason": "describes the pinned DEDL 0.1 fixture and where it came from"
+    },
+    {
+      "repository": "etalii.adp.site",
+      "path": "tests/reference/split.test.ts",
+      "regex": "DEDL — Diagram Editor Definition Language",
+      "reason": "the title of the pinned DEDL 0.1 fixture that the prose tests read"
+    },
+    {
+      "repository": "etalii.adp.site",
+      "path": "tests/reference/visuals.test.ts",
+      "regex": "(statemachine|x)\\.dedl",
+      "reason": "file names of the pinned DEDL 0.1 fixture that the visual tests read"
     }
   ]
 }

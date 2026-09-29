@@ -192,8 +192,8 @@ description: "Tasks for spec 002, naming convention alignment"
 
 **Independent test**: a scratch line using a retired term fails the check in each repository and names file, line and replacement.
 
-- [ ] T062 [P] [US6] Part 7: run `etalii.adp/.github/scripts/terminology-check.py` against `docs/terminology-check.json` on pull requests into `develop` in the existing CI workflow of each repository: `etalii.adp/.github/workflows/build.yml`, and the build workflows of `etalii.adp.ide.standalone`, `etalii.adp.ide.intellij`, `etalii.adp.site`, `etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse` and `etalii-adp/.github`, each fetching the list from etalii.adp `develop`
-- [ ] T063 [US6] Part 7: on a scratch branch per repository, add one retired use (for example a class `…Designer` for a diagram, or `.difl`) and one allowed exception, and confirm the check fails on the first, naming file, line, glossary entry and replacement, and passes the second; delete the scratch branches
+- [x] T062 [P] [US6] Part 7: run `etalii.adp/.github/scripts/terminology-check.py` against `docs/terminology-check.json` on pull requests into `develop` in the existing CI workflow of each repository: `etalii.adp/.github/workflows/build.yml`, and the build workflows of `etalii.adp.ide.standalone`, `etalii.adp.ide.intellij`, `etalii.adp.site`, `etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse` and `etalii-adp/.github`, each fetching the list from etalii.adp `develop`
+- [x] T063 [US6] Part 7: on a scratch branch per repository, add one retired use (for example a class `…Designer` for a diagram, or `.difl`) and one allowed exception, and confirm the check fails on the first, naming file, line, glossary entry and replacement, and passes the second; delete the scratch branches
 
 ---
 
@@ -201,10 +201,10 @@ description: "Tasks for spec 002, naming convention alignment"
 
 **Purpose**: prove the whole feature on every `develop` together (FR-016).
 
-- [ ] T064 Part 7: remove the site's part 1 fallbacks: `docs/diagrams.md` in `etalii.adp.site/src/lib/catalogue/sources.ts`, the `dedl` entry's upstream fallback in `scripts/reference/refresh.ts`, the procedure name `dedl` in `scripts/refresh/run.mjs`, `decide.mjs` and `.github/workflows/refresh.yml`, the old Notion column names in `src/lib/catalogue/notion-api.ts`, and the `…/dedl/` refresh fixture; persisted-identifier compatibility (T047–T050) stays
-- [ ] T065 Part 7: run `etalii.adp/.github/scripts/terminology-check.py` across all seven repositories: no finding outside the allowed list (SC-001); check the site's served pages and Notion the same way
-- [ ] T066 Part 7: run quickstart §§ 2–8 on every `develop` together and record the results against the baseline in `etalii.adp/…/002/baseline/final.md` (SC-002–SC-007), listing every migrated file of T032 and T052 with its migrated hash
-- [ ] T067 Part 7: give a contributor new to ADP the glossary and ten sample entries, and record in `etalii.adp/…/002/baseline/final.md` that each is placed in the same kind as [classification.md](contracts/classification.md) (SC-008)
+- [ ] T064 Part 7: remove the site's part 1 fallbacks: `docs/diagrams.md` in `etalii.adp.site/src/lib/catalogue/sources.ts`, the `dedl` entry's upstream fallback in `scripts/reference/refresh.ts`, the procedure name `dedl` in `scripts/refresh/run.mjs`, `decide.mjs` and `.github/workflows/refresh.yml`, the old Notion column names in `src/lib/catalogue/notion-api.ts`, and the `…/dedl/` refresh fixture; persisted-identifier compatibility (T047–T050) stays. Done except the `docs/diagrams.md` fallback, which stays until the next catalogue refresh and host releases (baseline/final.md § 6)
+- [x] T065 Part 7: run `etalii.adp/.github/scripts/terminology-check.py` across all seven repositories: no finding outside the allowed list (SC-001); check the site's served pages and Notion the same way
+- [x] T066 Part 7: run quickstart §§ 2–8 on every `develop` together and record the results against the baseline in `etalii.adp/…/002/baseline/final.md` (SC-002–SC-007), listing every migrated file of T032 and T052 with its migrated hash
+- [x] T067 Part 7: give a contributor new to ADP the glossary and ten sample entries, and record in `etalii.adp/…/002/baseline/final.md` that each is placed in the same kind as [classification.md](contracts/classification.md) (SC-008)
 - [ ] T068 Part 7: mark spec 002 complete once Peter approves (`/speckit-companion-mark-complete`) and list any follow-up in the project thread
 
 ---
