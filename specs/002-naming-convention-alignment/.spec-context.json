@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "Naming Convention Alignment",
   "branch": "features/002-naming-convention-alignment",
-  "currentStep": "plan",
-  "status": "planning",
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
   "history": [
     {
       "step": "specify",
@@ -25,6 +25,76 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-09-28T23:08:20.028Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-28T23:20:42.363Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-28T23:25:53.875Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-28T23:29:00Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-28T23:30:24Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-09-28T23:43:53.432Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-28T23:43:53.439Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-28T23:50:13.711Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-28T23:50:27.052Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-28T23:56:13.464Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-28T23:58:27Z"
     }
   ],
   "telemetryInstanceId": "549982ba-3d49-43fe-b59b-91a141e2e7d9",
@@ -172,6 +242,225 @@
       "comment": "correct to DID, DEF and EDD",
       "status": "applied",
       "createdAt": "2026-09-28T22:58:28.506Z"
+    },
+    {
+      "id": "ref-1790637758038-c47gj",
+      "doc": "spec",
+      "anchor": {
+        "heading": null,
+        "blockText": "## Decisions\r",
+        "line": 26
+      },
+      "comment": "Rename all \nDIDL to DID, and .didl to .did\nDEDL to DED, and .dedl to .ded\nEDDL to EDD, and .eddl to .edd",
+      "status": "applied",
+      "createdAt": "2026-09-28T23:22:38.039Z"
+    },
+    {
+      "id": "ref-1790638425194-qoq5n",
+      "doc": "plan",
+      "anchor": {
+        "heading": null,
+        "blockText": "\r",
+        "line": 5
+      },
+      "comment": "re-update from DIFL to DID, DEFL to DED, and EDFL to EDD.",
+      "status": "applied",
+      "createdAt": "2026-09-28T23:33:45.195Z"
+    },
+    {
+      "id": "ref-1790638540173-1xylj",
+      "doc": "data-model",
+      "anchor": {
+        "heading": null,
+        "blockText": "DISL keeps reading the deprecated DEDL forms (research R3).\r",
+        "line": 26
+      },
+      "comment": "correct from DIFL to DID, DEFL to DED and EDFL to EDD.",
+      "status": "pending",
+      "createdAt": "2026-09-28T23:35:40.174Z"
     }
-  ]
+  ],
+  "approach": "Re-planned against the spec's last revision: DEDL splits into DISL (.disl, what a tool engineer specifies) and DID (.did, how users' diagrams are stored), with DESL/DED and EDSL/EDD as placeholders. Every language uses its lowercase acronym as <name> and extension; DEDL is retired, its old identifiers read or redirected as DISL/DID. Seven parallel parts coordinated by the glossary, classification, rename map and terminology check.",
+  "decisions": [
+    {
+      "decision": "Retire DEDL entirely: remove specifications/dedl/, redirect /adp/dedl/ to DISL, and never reuse DEDL identifiers",
+      "why": "Peter renamed the definition languages to DID, DED and EDD, so the acronym is no longer needed and the redirect conflict disappears",
+      "rejected": "Reusing specifications/dedl/ for the Designer Definition Language placeholder (previous revision)"
+    },
+    {
+      "decision": "Each language uses its lowercase acronym for folder, schema, $id, media type, version key and extension (disl, did, desl, ded, edsl, edd)",
+      "why": "One pattern for all six (FR-006a) and the constitution’s specifications/<name>/ rule",
+      "rejected": "Keeping didl/eddl-style folder names alongside .did/.edd extensions"
+    },
+    {
+      "decision": "Match acronyms case-sensitively in the terminology check and leave the W3C DID untouched",
+      "why": "DID collides with the English word did and with W3C Decentralized Identifiers; third-party names are never changed",
+      "rejected": "Case-insensitive matching of all retired patterns"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "Plan revised to DISL/DID, DESL/DED, EDSL/EDD with DEDL retired; research, data model, contracts and quickstart updated; no clarifications left"
+    },
+    "tasks": {
+      "summary": "68 tasks in 9 phases (baseline 7, foundational glossary + site dual-read 10, US1 8, US2 21, US3 6, US4 5, US5 4, US6 2, final pass 5), each tagged with its part 0-7; re-dispatch confirmed the list against the DISL/DID, DESL/DED, EDSL/EDD design docs"
+    }
+  },
+  "coverage": {
+    "FR-001": {
+      "tasks": [
+        "T008",
+        "T011"
+      ]
+    },
+    "FR-002": {
+      "tasks": [
+        "T008",
+        "T033",
+        "T038",
+        "T042"
+      ]
+    },
+    "FR-003": {
+      "tasks": [
+        "T009",
+        "T010",
+        "T011",
+        "T025"
+      ]
+    },
+    "FR-004": {
+      "tasks": [
+        "T018",
+        "T019",
+        "T020",
+        "T021",
+        "T022",
+        "T023"
+      ]
+    },
+    "FR-005": {
+      "tasks": [
+        "T045",
+        "T059",
+        "T067"
+      ]
+    },
+    "FR-006": {
+      "tasks": [
+        "T026",
+        "T027",
+        "T028",
+        "T029",
+        "T030",
+        "T031"
+      ]
+    },
+    "FR-006a": {
+      "tasks": [
+        "T053"
+      ]
+    },
+    "FR-006b": {
+      "tasks": [
+        "T008",
+        "T024"
+      ]
+    },
+    "FR-007": {
+      "tasks": [
+        "T033",
+        "T034",
+        "T035",
+        "T036",
+        "T038",
+        "T039",
+        "T040",
+        "T042",
+        "T043",
+        "T044",
+        "T046"
+      ]
+    },
+    "FR-008": {
+      "tasks": [
+        "T036",
+        "T038",
+        "T059"
+      ]
+    },
+    "FR-009": {
+      "tasks": [
+        "T054",
+        "T055",
+        "T056",
+        "T057"
+      ]
+    },
+    "FR-010": {
+      "tasks": [
+        "T016",
+        "T058",
+        "T059",
+        "T060",
+        "T061"
+      ]
+    },
+    "FR-011": {
+      "tasks": [
+        "T047",
+        "T048",
+        "T049",
+        "T050"
+      ]
+    },
+    "FR-012": {
+      "tasks": [
+        "T004",
+        "T032",
+        "T037",
+        "T052",
+        "T066"
+      ]
+    },
+    "FR-013": {
+      "tasks": [
+        "T001",
+        "T002",
+        "T003",
+        "T017",
+        "T037",
+        "T041",
+        "T051",
+        "T061",
+        "T066"
+      ]
+    },
+    "FR-014": {
+      "tasks": [
+        "T005",
+        "T040"
+      ]
+    },
+    "FR-015": {
+      "tasks": [
+        "T011",
+        "T017"
+      ]
+    },
+    "FR-016": {
+      "tasks": [
+        "T065",
+        "T066"
+      ]
+    },
+    "FR-017": {
+      "tasks": [
+        "T005",
+        "T006",
+        "T062",
+        "T063"
+      ]
+    }
+  }
 }

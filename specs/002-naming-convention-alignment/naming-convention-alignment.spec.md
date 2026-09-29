@@ -28,13 +28,13 @@ This feature fixes one vocabulary, writes it down in the three places people rea
 Peter decided on 2026-09-28, reviewing the first draft:
 
 - The umbrella word for "a diagram, a designer or an editor" is **tool**.
-- DEDL becomes DISL, the Diagram Specification Language. It was meant for diagrams only, and it is not a definition language but a specification language: in it a tool engineer specifies how one diagram type (say type A) functions and looks. The diagrams of type A that users then create are stored according to a definition language, DIDL. There is one specification language and one definition language per kind:
+- DEDL becomes DISL, the Diagram Specification Language. It was meant for diagrams only, and it is not a definition language but a specification language: in it a tool engineer specifies how one diagram type (say type A) functions and looks. The diagrams of type A that users then create are stored according to a definition language, DID. There is one specification language and one definition language per kind:
 
 | Kind | Specification language | Extension | Definition language | Extension |
 |---|---|---|---|---|
-| Diagram | DISL, Diagram Specification Language | `.disl` | DIDL, Diagram Definition Language | `.did` |
-| Designer | DESL, Designer Specification Language | `.desl` | DEDL, Designer Definition Language | `.ded` |
-| Editor | EDSL, Editor Specification Language | `.edsl` | EDDL, Editor Definition Language | `.edd` |
+| Diagram | DISL, Diagram Specification Language | `.disl` | DID, Diagram Definition Language | `.did` |
+| Designer | DESL, Designer Specification Language | `.desl` | DED, Designer Definition Language | `.ded` |
+| Editor | EDSL, Editor Specification Language | `.edsl` | EDD, Editor Definition Language | `.edd` |
 
 - The definitions are documented in Notion, in markdown and on the site.
 - Every Notion row today is indeed a diagram. The kind column offers Diagram, Designer and Editor, and the markdown and plain-text editors get rows of their own.
@@ -73,7 +73,7 @@ Peter reviews a classification of every catalogue entry and every host component
 1. **Given** the agreed classification, **When** an entry classified as a diagram is looked up in a host, the catalogue, the site and Notion, **Then** each calls it a diagram and none calls it a designer or an editor.
 2. **Given** the markdown and plain-text editors, **When** they are looked up in the standalone host, the site and Notion, **Then** each calls them editors, and they appear in Notion and the catalogue as entries of kind editor.
 3. **Given** a user-visible text that names the umbrella ("Browse the designers", the "Designers" settings page, "a family of specialized diagram, designer and text editors"), **When** the feature lands, **Then** it uses the umbrella term from the glossary ("Browse the tools", the "Tools" settings page), or the kind when only one kind is meant.
-4. **Given** the specification that was DEDL, **When** it is read, **Then** it is DISL, the Diagram Specification Language, the person who writes in it is a tool engineer and no longer a designer, a diagram type specified in it is a `.disl` file, and the diagrams users create of that type are stored as DIDL (`.did`) files.
+4. **Given** the specification that was DEDL, **When** it is read, **Then** it is DISL, the Diagram Specification Language, the person who writes in it is a tool engineer and no longer a designer, a diagram type specified in it is a `.disl` file, and the diagrams users create of that type are stored as DID (`.did`) files.
 
 ---
 
@@ -148,7 +148,7 @@ A contributor opens a pull request that reintroduces a retired use of a term, fo
 - **An entry that fits two kinds**, for example a matrix that could be read as a form or a hype cycle curve whose items carry no relations. The classification records the rule applied and the reason; Peter decides borderline entries.
 - **An entry that is one kind in one host and another in a second host.** The kind belongs to the entry, not the host; all hosts use the same kind.
 - **Persisted identifiers that contain a retired term**, such as the IntelliJ ids `etalii.adp.freemind.editor` and `offDesigners`, `.adp` origins, the `.dedl` extension, the DEDL schema `$id`, media types and version keys, and site URLs under `/adp/designers/` and `/adp/dedl/`. They are renamed, and the old form is still read or redirected (FR-011).
-- **The reused acronym DEDL.** Today DEDL is the diagram language that becomes DISL; from now on DEDL is the Designer Definition Language. Old DEDL identifiers (`.dedl`, the schema `$id`, `/adp/dedl/`) lead to DISL, and the new DEDL uses its own (`.ded`). [NEEDS CLARIFICATION: `/adp/dedl/` cannot both redirect to DISL and become the address of the new DEDL; which does it do?]
+- **The retired acronym DEDL.** Today DEDL is the diagram language that becomes DISL; the Designer Definition Language is DED, so the acronym DEDL is not reused. Old DEDL identifiers (`.dedl`, the schema `$id`, `/adp/dedl/`) lead to DISL, and DED uses its own (`.ded`).
 - **History.** Commits, merged and closed pull requests, release notes of published releases, completed Spec Kit features and spec-workflow archives (implementation logs, approval snapshots) are records of what was, and are not rewritten.
 - **Work in flight.** Branches and threads open while this lands (the catalogue focus-area filtering and IntelliJ screenshot threads, for example) are rebased onto the new names before they merge.
 - **The repositories without code** (`etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse`) only need their texts aligned now; the vocabulary applies to their code when it arrives.
@@ -167,8 +167,8 @@ A contributor opens a pull request that reintroduces a retired use of a term, fo
 **Classification**
 
 - **FR-005**: Every catalogue entry, every Notion row and every host component that a user works in (including the markdown and plain-text editors and the settings pages) **MUST** be classified as a diagram, a designer or an editor, in one table that records the rule applied to each, and Peter **MUST** approve the table before any code is renamed.
-- **FR-006**: DEDL **MUST** become DISL, the Diagram Specification Language: its specification, schema, examples, identifiers (folder, file names, schema `$id`, media types, version keys, export format names) and every reference to it. A diagram type specified in it **MUST** be a `.disl` file, and the diagrams users create of that type **MUST** be stored according to DIDL, the Diagram Definition Language (`.did`). It **MUST** call the person who writes in it a tool engineer, never a designer.
-- **FR-006a**: DESL, the Designer Specification Language, and EDSL, the Editor Specification Language, **MUST** exist beside DISL, and DIDL, DEDL (Designer Definition Language, `.ded`) and EDDL (Editor Definition Language, `.edd`) beside each other, as placeholder specifications where they have no content yet, each stating its purpose, its extension and that its content is to come. The six **MUST** follow one naming pattern for folders, documents, schemas and extensions.
+- **FR-006**: DEDL **MUST** become DISL, the Diagram Specification Language: its specification, schema, examples, identifiers (folder, file names, schema `$id`, media types, version keys, export format names) and every reference to it. A diagram type specified in it **MUST** be a `.disl` file, and the diagrams users create of that type **MUST** be stored according to DID, the Diagram Definition Language (`.did`). It **MUST** call the person who writes in it a tool engineer, never a designer.
+- **FR-006a**: DESL, the Designer Specification Language, and EDSL, the Editor Specification Language, **MUST** exist beside DISL, and DID, DED (Designer Definition Language, `.ded`) and EDD (Editor Definition Language, `.edd`) beside each other, as placeholder specifications where they have no content yet, each stating its purpose, its extension and that its content is to come. The six **MUST** follow one naming pattern for folders, documents, schemas and extensions.
 - **FR-006b**: The glossary **MUST** state what a specification file holds (`.disl`, `.desl`, `.edsl`: one tool type as a tool engineer specifies how it functions and looks) and what a definition file holds (`.did`, `.ded`, `.edd`: one diagram, designer or editor a user created of such a type).
 
 **Applying the vocabulary**
@@ -199,7 +199,7 @@ A contributor opens a pull request that reintroduces a retired use of a term, fo
 - **Tool**: what a diagram, a designer and an editor all are; replaces "designer" in that role (FR-002).
 - **Tool engineer**: the person who specifies how a tool type functions and looks, in its kind's specification language.
 - **Specification language**: the language in which a tool engineer specifies a tool type of one kind: DISL for diagrams, DESL for designers, EDSL for editors (`.disl`, `.desl`, `.edsl`).
-- **Definition language**: the structure in which the tools users create of a type are stored: DIDL for diagrams, DEDL for designers, EDDL for editors (`.did`, `.ded`, `.edd`).
+- **Definition language**: the structure in which the tools users create of a type are stored: DID for diagrams, DED for designers, EDD for editors (`.did`, `.ded`, `.edd`).
 - **Type**: one particular diagram, designer or editor that ADP offers, such as the Wardley map; identified by its origin (`<vendor>/<type>`) and called "<kind> type" (diagram type, designer type, editor type).
 - **Document**: one piece of content a user works on in a type, with its registration file (`.adp`) where the host uses one.
 - **Module**: the code package in a host that implements one or more types of one kind (diagram module, designer module, editor module).
