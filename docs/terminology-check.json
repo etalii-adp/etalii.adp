@@ -163,7 +163,10 @@
       "specs/001-*/**",
       "specs/002-*/**",
       "specs/003-*/**",
-      "specs/004-*/**"
+      "specs/004-*/**",
+      "core/src/test/resources/settings/baseline-adp.xml",
+      "freemind/testdata/reference/spec001-test-inventory.md",
+      "allure-results/**"
     ],
     "etalii.adp.site": [
       "specs/001-*/**",
@@ -203,6 +206,18 @@
       "path": "specifications/*/*.schema.json",
       "regex": "\"(dedl|dedlDocument)\"",
       "reason": "deprecated version key still accepted (FR-011)"
+    },
+    {
+      "repository": "etalii.adp.ide.intellij",
+      "path": "core/src/main/java/etalii/adp/core/settings/AdpSettings.java",
+      "regex": "offDesigners|designerSettings",
+      "reason": "old settings keys still read (FR-011)"
+    },
+    {
+      "repository": "etalii.adp.ide.intellij",
+      "path": "core/src/test/java/etalii/adp/core/settings/AdpSettingsStateRoundTripTest.java",
+      "regex": "offDesigners|designerSettings",
+      "reason": "tests that the old settings keys are still read"
     }
   ]
 }

@@ -60,6 +60,12 @@ What each part renames, old to new. It applies `docs/terminology.md` and [classi
 | plug-in description "a family of specialized diagram, designer and text editors", "Each designer is an editor on the file's own text", "two designers" | "specialized tools: diagrams, designers and editors", "Each tool opens in an editor on the file's own text", "two diagrams" |
 | "designer framework", "diagram designer framework", `docs/diagram-designer-guide.md` "Building a diagram designer" | "tool framework", "diagram framework", `docs/diagram-guide.md` "Building a diagram" |
 | "Mind map" spelled five ways | display "Mind map"; `MindMap` in code; format classes stay `FreeMind…` (rule 5) |
+| `DesignerSetting`, `AdpDesigners`, `DesignerPagesSection`, `DesignerSettingsConfigurable`, `DesignerTableModel`, `ZoomActions.DesignerAction` | `ToolSetting`, `AdpTools`, `ToolPagesSection`, `ToolSettingsConfigurable`, `ToolTableModel`, `ZoomActions.ToolAction` (added by part 4) |
+| test kit `Layout.DESIGNER`, `PropertyPanel.NO_DESIGNER`, popup place `AdpDesignerPopup` | `Layout.TOOL`, `PropertyPanel.NO_TOOL`, `AdpToolPopup` (added by part 4) |
+| `adp-settings-designers.xml`, `adp-settings-designer-pages.xml` | `adp-settings-tools.xml`, `adp-settings-tool-pages.xml` (added by part 4) |
+| `ToolOrigin.BundledDefinition(dedlVersion)`, "DEDL definition … (DEDL x)" | `ToolOrigin.BundledSpecification(dislVersion)`, "DISL specification … (DISL x)" (added by part 4) |
+| `DrawioDesignerTest` | `DrawioDiagramTest` (added by part 4) |
+| `docs/diagrams.md` (the catalogue the site reads) | `docs/tools.md`, as in standalone; the site reads both until part 7 |
 
 ## etalii.adp.site
 

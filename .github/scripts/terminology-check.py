@@ -65,8 +65,8 @@ def main() -> int:
     config = load_config(args.config)
     allowed_paths = config.get("allowedPaths", []) + config.get("allowedPathsByRepository", {}).get(name, [])
     literals = [item["text"] for item in config.get("allowedLiterals", [])]
-    allowed_sections = config.get("allowedSections", [])
-    allowed_lines = config.get("allowedLines", [])
+    allowed_sections = [item for item in config.get("allowedSections", []) if item.get("repository", name) == name]
+    allowed_lines = [item for item in config.get("allowedLines", []) if item.get("repository", name) == name]
     patterns = []
     for item in config["patterns"]:
         flags = 0 if item.get("caseSensitive") else re.IGNORECASE
