@@ -70,7 +70,7 @@ A single DISL file — a **specification** — is a complete, portable, machine-
 DISL sits between the tool engineers who specify a diagram type and the software that lets others use it.
 
 ```mermaid
-flowchart LR
+flowchart TB
   accTitle: How DISL is intended to be used
   accDescr: A tool engineer writes a DISL specification. A runtime loads the specification, and the specification also feeds docs and code generators, CI validators, format converters and AI context. The runtime reads and writes DID definitions, the diagrams users draw.
   engineer["<b>Tool engineer</b><br/>domain expert, tool builder,<br/>standards body, AI assistant"]
