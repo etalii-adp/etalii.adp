@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "Naming Convention Alignment",
   "branch": "features/002-naming-convention-alignment",
-  "currentStep": "tasks",
-  "status": "ready-to-implement",
+  "currentStep": "analyze",
+  "status": "tasking",
   "history": [
     {
       "step": "specify",
@@ -95,6 +95,13 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-09-28T23:58:27Z"
+    },
+    {
+      "step": "analyze",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-29T10:20:27.167Z"
     }
   ],
   "telemetryInstanceId": "549982ba-3d49-43fe-b59b-91a141e2e7d9",
