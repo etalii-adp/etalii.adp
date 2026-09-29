@@ -1,0 +1,24 @@
+{
+  "workflow": "speckit",
+  "specName": "Specification Licence",
+  "branch": "features/003-specification-licence",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-29T16:51:23.944Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-09-29T16:51:38.832Z"
+    }
+  ],
+  "telemetryInstanceId": "54c03356-66cc-4df9-b97d-c834af2feb6d"
+}

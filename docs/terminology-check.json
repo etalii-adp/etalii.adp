@@ -204,6 +204,12 @@
       "path": "specifications/*/*-specification.md",
       "heading": "Deprecated aliases",
       "reason": "the old DEDL identifiers a runtime keeps reading (FR-011)"
+    },
+    {
+      "repository": "etalii.adp.site",
+      "path": "src/content/reference/*/*/source/*-specification.md",
+      "heading": "Deprecated aliases",
+      "reason": "the site's verbatim copy of a specification's deprecated aliases (FR-011)"
     }
   ],
   "allowedLines": [
@@ -211,6 +217,12 @@
       "path": "specifications/*/*.schema.json",
       "regex": "\"(dedl|dedlDocument)\"",
       "reason": "deprecated version key still accepted (FR-011)"
+    },
+    {
+      "repository": "etalii.adp.site",
+      "path": "src/content/reference/*/*/source/*.schema.json",
+      "regex": "\"(dedl|dedlDocument)\"",
+      "reason": "the site's verbatim copy of a schema's deprecated version key (FR-011)"
     },
     {
       "repository": "etalii.adp.ide.intellij",
