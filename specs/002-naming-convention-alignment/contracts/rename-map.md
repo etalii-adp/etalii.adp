@@ -43,6 +43,11 @@ What each part renames, old to new. It applies `docs/terminology.md` and [classi
 | — | `src/designers/README.md`, `docs/creating-a-designer-module.md`, an empty designer family in module discovery and the panel registry (research R7) |
 | display names that are descriptions ("Mind map (radial/hierarchical, single central topic)", "Full UML set (see section 1)") and mixed capitals ("Wardley Map" / "Wardley map") | rule 4 |
 | folder names that disagree with the display name (`helm-charts`, `azure-pipeline`, `causal-loop`, `dependency-graph`, `gartner-hypecycle-graph`) | rule 4, one kebab-case form per tool type; module assembly names follow |
+| `DiagramCanvasRegistration` field `Canvas`, `PluginDefinitionScan` | `ToolPanelRegistration` field `Panel`, `ToolDefinitionScan`; client `ToolClientModule`, `ToolContentProps` (added by part 3) |
+| `DiagramService.SaveText` | `EditorService.SaveText` in `src/api/editors.proto`, hosted in `EtAlii.Adp.Diagram` to avoid a reference loop (added by part 3) |
+| folders `helm-charts`, `azure-pipeline`, `causal-loop`, `gartner-hypecycle-graph` | `helm-chart`, `azure-devops-pipeline`, `causal-loop-diagram`, `gartner-hype-cycle-graph`; assemblies and namespaces follow, class and file names inside modules unchanged (added by part 3) |
+| C4 titles "System Context", "Container", … | "C4 system context diagram", "C4 container diagram", …; Notion's `Name` uses the same (added by part 3) |
+| follow-up candidates, not renamed: `DiagramService.Open` and the `EtAlii.Adp.Diagram` project, both also used by editor tabs | a later change (gRPC address and exported fixture models move with them) |
 
 ## etalii.adp.ide.intellij
 

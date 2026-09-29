@@ -117,7 +117,7 @@
     },
     {
       "id": "designer-umbrella-prose",
-      "regex": "ADP designers|the designers|designer catalogue|designer framework|Designers settings|each designer|every designer|/designers/|diagram designers?\\b",
+      "regex": "ADP designers|the designers|designer catalogue|designer framework|Designers settings|each designer|every designer|/adp/designers/|diagram designers?\\b",
       "severity": "error",
       "entry": "tool is the umbrella",
       "replacement": "ADP tools, the tools, tool catalogue, tool framework, …"
