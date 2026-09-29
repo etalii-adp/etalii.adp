@@ -18,6 +18,6 @@ This is a placeholder. It holds nothing normative: no construct, no schema and n
 
 ## Purpose
 
-In DESL a tool engineer will specify one designer type: how a form-based visual layout, in which nothing is connected, functions and looks. A DESL file (`.desl`) will hold one designer type, as a DISL file holds one diagram type. The designers users create of such a type are stored in DED.
+In DESL a tool engineer will specify one designer type: how a form-based visual layout, in which nothing is connected, functions and looks. A DESL file (`.desl`) will hold one designer type, as a DISL file holds one diagram type. What users create of such a type is stored in DED, one designer per file.
 
 When content arrives, it follows the pattern of [DISL](../disl/DISL-specification.md) and [DID](../did/DID-specification.md): this document, the schema `desl.schema.json` with `$id` `https://etalii.net/adp/desl/schema/<version>/desl.schema.json`, the version key `"desl": "<version>"`, and examples with the extension `.desl`, side by side in `specifications/desl/`.
