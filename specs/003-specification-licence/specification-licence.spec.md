@@ -33,7 +33,7 @@ A maintainer of etalii.adp.site runs the refresh for a published language (today
 
 **Why this priority**: publishing on the site is the purpose Peter gave. The licence must stay recognisable at every revision the site may publish, and the copyright holder is the one part of the provenance that is missing today.
 
-**Independent Test**: after the change is merged, run the site's refresh as a dry run for DISL and for DID against `develop`; each reports `Apache-2.0` and names the copyright holder.
+**Independent Test**: after the change is merged, run the site's refresh as a dry run for DISL and for DID against `develop`; each reports `Apache-2.0` and records the copyright notice `© Peter Vrenken 2026`.
 
 **Acceptance Scenarios**:
 
@@ -86,7 +86,7 @@ A contributor adds a new specification, or edits a header, and leaves the licenc
 ### Functional Requirements
 
 - **FR-001**: The repository **MUST** keep exactly one licence file, at its root, that GitHub identifies as `Apache-2.0`, on `develop` and at every revision merged into it. This is the form the site's refresh recognises.
-- **FR-002**: The repository **MUST** state its copyright holder in a form the site's refresh records as the copyright, without changing GitHub's identification of the licence (FR-001).
+- **FR-002**: The repository **MUST** state its copyright notice, `© Peter Vrenken 2026` (the © being U+00A9 COPYRIGHT SIGN), in a form the site's refresh records as the copyright, without changing GitHub's identification of the licence (FR-001). The site's provenance **MUST** then show that notice beside the licence.
 - **FR-003**: Each of the six specification documents (DISL, DID, DESL, DED, EDSL, EDD) **MUST** state in its header table that it is published under the Apache License 2.0, give the SPDX id `Apache-2.0`, and link the repository's licence file. Placeholders **MUST** state it too.
 - **FR-004**: The licence each document states **MUST** be the licence of the repository (FR-001).
 - **FR-005**: The Build workflow **MUST** fail a pull request in which a specification document under `specifications/` lacks the statement of FR-003 or names a licence other than the repository's, and **MUST** name the document. It **MUST** find the documents by the naming rule of the constitution, so a new language needs no configuration.
@@ -97,7 +97,7 @@ A contributor adds a new specification, or edits a header, and leaves the licenc
 ### Key Entities
 
 - **Repository licence**: the single licence file at the root, the Apache License 2.0, as GitHub identifies it. The site reads it; everything else refers to it.
-- **Copyright holder**: who holds the copyright in the specifications, stated once for the repository and shown by the site beside the licence.
+- **Copyright notice**: `© Peter Vrenken 2026`, stated once for the repository and shown by the site beside the licence.
 - **Licence statement**: the row in a specification document's header table naming the licence, its SPDX id and a link to the repository licence.
 - **Specification document**: `specifications/<name>/<NAME>-specification.md`, one per language, as the constitution names it.
 
@@ -106,7 +106,7 @@ A contributor adds a new specification, or edits a header, and leaves the licenc
 ### Measurable Outcomes
 
 - **SC-001**: 6 of 6 specification documents state Apache-2.0 in their header, and each links a licence file that exists.
-- **SC-002**: A dry run of the site's refresh for each language the site publishes (DISL, DID) against `develop` after the merge reports `Apache-2.0` and a copyright holder, with no refusal.
+- **SC-002**: A dry run of the site's refresh for each language the site publishes (DISL, DID) against `develop` after the merge reports `Apache-2.0` and the copyright notice `© Peter Vrenken 2026`, with no refusal.
 - **SC-003**: GitHub identifies the repository licence as `Apache-2.0` after the merge.
 - **SC-004**: Each failure in User Story 3 is caught by the Build workflow on its pull request: 3 of 3 deliberate faults (missing statement, wrong licence, unidentifiable licence file) fail it, each naming its cause.
 - **SC-005**: The Build workflow passes on the pull request that delivers this feature.
@@ -114,7 +114,7 @@ A contributor adds a new specification, or edits a header, and leaves the licenc
 ## Assumptions
 
 - **Licence**: Apache-2.0 for every specification, as for the rest of the project; no specification is licensed differently.
-- **Copyright holder**: EtAlii, from 2026, the organization's name in prose (constitution, Structure and Naming). Peter can name another holder in review.
+- **Copyright notice**: `© Peter Vrenken 2026`, as Peter gave it on 2026-09-29. The site's refresh records only a line that begins with the word `Copyright`, so the licence file carries it as `Copyright © Peter Vrenken 2026` and the site shows it that way. Recording the bare `© Peter Vrenken 2026` would need a change to the refresh in etalii.adp.site, which FR-008 keeps out of this feature.
 - **Recognised form**: "a form the refresh recognises" means what the site reads today: GitHub's identification of the repository's licence file, and a `Copyright` line in it. If the site later reads the licence from each document, the statement of FR-003 is the obvious source, but that change belongs to etalii.adp.site.
 - **Scope**: this feature changes `etalii.adp` only. Running the site's refresh for DISL and DID and merging the result is etalii.adp.site's procedure and follows independently; it no longer waits on this feature.
 - **Schemas and examples**: they keep being covered by the repository licence and the site's provenance. Adding a licence to each schema file or example is out of scope; a schema read on its own, at its `$id`, names its source repository through the site.

@@ -32,4 +32,4 @@
 ## Notes
 
 - The Context section records how etalii.adp.site's refresh recognises a licence today (GitHub's identification of the repository licence file, and a `Copyright` line in it). That is the fact the requirements are measured against, not a choice of implementation; how the copyright line and the Build check are made is left to the plan.
-- The copyright holder (EtAlii, from 2026) is an assumption Peter can change in review rather than a clarification marker, since it has an obvious default.
+- The copyright notice, `© Peter Vrenken 2026`, was given by Peter on 2026-09-29.
