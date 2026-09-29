@@ -1,6 +1,8 @@
 # etalii.adp
 
-The specifications for ADP ("A Different Perspective"): the formats and languages that the ADP designers in the `etalii.adp.ide.*` repositories implement. The first is DEDL, the Diagram Editor Definition Language, under `specifications/dedl/`.
+The specifications for ADP ("A Different Perspective"): the formats and languages that the ADP tools in the `etalii.adp.ide.*` repositories implement. Every tool is a diagram, a designer or an editor, and each kind has a specification language, in which a tool engineer specifies a tool type, and a definition language, in which the tools users create of that type are stored. The six live under `specifications/`: DISL, the Diagram Specification Language (`specifications/disl/`), and DID, the Diagram Definition Language (`specifications/did/`), have content; DESL and DED (designers) and EDSL and EDD (editors) are placeholders.
+
+The vocabulary (tool, diagram, designer, editor, tool engineer, specification, definition, runtime) is defined in [docs/terminology.md](docs/terminology.md). Use its words in every file, name and message, and change a definition there first.
 
 ## Creating a new repository
 
@@ -32,6 +34,7 @@ Specs say *what* and *why*; plans say *how*. Do not put implementation choices i
 
 ## Writing specifications
 
-- Normative text uses the RFC 2119 and RFC 8174 key words in bold capitals, as the DEDL specification does.
-- Each specification lives in its own folder under `specifications/`, with its prose, its JSON Schema and its examples side by side.
+- Normative text uses the RFC 2119 and RFC 8174 key words in bold capitals, as the DISL specification does.
+- Each specification lives in its own folder under `specifications/<name>/`, with its prose `<NAME>-specification.md`, its JSON Schema `<name>.schema.json` and its examples `*.<name>` side by side; `<name>` is the language's acronym in lowercase (`disl`, `did`, `desl`, `ded`, `edsl`, `edd`).
+- `python .github/scripts/validate-examples.py` validates every `*.disl` and `*.did` example, and the legacy fixtures under `specifications/*/legacy/`, against their schemas; the Build workflow runs it on every pull request.
 - When writing markdown files do not split lines to ensure a maximum line length is honored.
