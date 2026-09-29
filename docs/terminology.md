@@ -1,6 +1,6 @@
 # ADP terminology
 
-The words ADP uses for what it offers, and what each one means. This file is the single source of these definitions (spec [002, naming convention alignment](../specs/002-naming-convention-alignment/naming-convention-alignment.spec.md)); the Notion page "ADP terminology" and the site's terminology page repeat it and point here. A change to a definition is made here first, and the other two follow in the same change.
+The words ADP uses for what it offers, and what each one means. This file is the single source of these definitions (spec [002, naming convention alignment](../specs/002-naming-convention-alignment/naming-convention-alignment.spec.md)); the Notion page "ADP terminology" and the site's pages `/adp/docs/terminology/` and `/adp/docs/specification-and-definition/` repeat it and point here. A change to a definition is made here first, and the others follow in the same change.
 
 ## Tools
 
@@ -10,7 +10,7 @@ ADP offers new ways to visualize, enter and interact with data, mostly text-base
 |---|---|---|---|
 | **Diagram** | A visual arrangement of elements and the relations between them. | Are elements connected to each other? Then it is a diagram. | Mind map, Wardley map, C4 container diagram, causal loop diagram |
 | **Designer** | A form-based visual layout. More than text input, and not a diagram, because nothing in it is connected. | Is it laid out visually, with nothing connected, and filled in rather than typed? Then it is a designer. | None yet |
-| **Editor** | A way of working in which typing text is the core interaction. | Is typing text the main thing the user does? Then it is an editor. | Markdown editor, plain-text editor |
+| **Editor** | A way of working in which typing text is the core interaction. | Is typing text the main thing the user does? Then it is an editor. | Markdown editor, plain text editor |
 
 Apply the tests in the order editor, diagram, designer: a text format that is also drawn (a Mermaid file, for example) is a diagram when the user works in the drawing, and an editor when the user works in the text.
 
@@ -18,26 +18,30 @@ Apply the tests in the order editor, diagram, designer: a text format that is al
 
 ## Specifying and defining tools
 
-What may be said about a tool of one kind is fixed by that kind's **specification language**. A **definition** describes one tool type according to it.
+A **tool engineer** specifies how one tool type functions and looks, in its kind's **specification language**. The tools users then create of that type are stored in its kind's **definition language**. There is one of each per kind:
 
-| Kind | Specification language | Extension | Definition | Extension |
+| Kind | Specification language | Extension | Definition language | Extension |
 |---|---|---|---|---|
-| Diagram | DISL, Diagram Specification Language | `.disl` | DIFL, a diagram definition | `.difl` |
-| Designer | DESL, Designer Specification Language | `.desl` | DEFL, a designer definition | `.defl` |
-| Editor | EDSL, Editor Specification Language | `.edsl` | EDFL, an editor definition | `.edfl` |
+| Diagram | DISL, Diagram Specification Language | `.disl` | DID, Diagram Definition Language | `.did` |
+| Designer | DESL, Designer Specification Language | `.desl` | DED, Designer Definition Language | `.ded` |
+| Editor | EDSL, Editor Specification Language | `.edsl` | EDD, Editor Definition Language | `.edd` |
 
-A `.disl`, `.desl` or `.edsl` file holds the language's own machine-readable specification, which definitions are checked against (today's `dedl.schema.json`); this reading is pending Peter's confirmation. A `.difl`, `.defl` or `.edfl` file is one definition.
+- A **specification file** (`.disl`, `.desl`, `.edsl`) holds one tool type as a tool engineer specifies how it functions and looks: for example, what a state machine diagram's elements and relations are and how they are drawn.
+- A **definition file** (`.did`, `.ded`, `.edd`) holds one diagram, designer or editor a user created of such a type: for example, one particular state machine.
 
-DISL is the language that was called DEDL, the Diagram Editor Definition Language. DESL and EDSL are placeholders until a designer or an editor needs them.
+DISL and DID have content; DESL, DED, EDSL and EDD are placeholders until a designer or an editor needs them. DID here always means ADP's Diagram Definition Language, not the W3C's Decentralized Identifiers.
+
+History: DEDL became DISL and DID. What was one language, DEDL 0.1, holding both a language definition and the documents made with it, is now DISL (the specification of a diagram type) and DID (a stored diagram). The acronym DEDL is retired and has no current meaning; files, schema addresses and links in its old form are still read or redirected as DISL or DID.
 
 ## Related terms
 
 - **Tool type**: one particular tool ADP offers, such as the Wardley map; by kind a *diagram type*, *designer type* or *editor type*. Identified by its **origin**, `<vendor>/<type>`, for example `wardley/map`.
-- **Document**: one piece of content a user works on with a tool, such as one Wardley map. Where a host registers documents, its **registration file** (`.adp`) names the origin on its first line.
+- **Tool engineer**: the person who specifies a tool type in a specification language. Not a "designer", which is a kind of tool, and not an "author".
+- **Document**: one piece of content a user works on with a tool, such as one Wardley map. Where a host registers documents, its **registration file** (`.adp`) names the origin on its first line. For a diagram built on DISL, the stored form of the document is a DID definition file.
 - **Module**: the code package in a host that implements one or more tool types of one kind: a *diagram module*, *designer module* or *editor module*.
 - **Host**: an IDE that ADP's tools run in: standalone, IntelliJ, VS Code or Eclipse.
+- **Runtime**: the software in a host that loads a specification file and lets users create and change definition files with it.
 - **Canvas**: the surface a diagram or a designer is drawn on.
-- **Author**: the person who writes a definition. (Not a "designer", which is a kind of tool.)
 - **Display name**: the one name of a tool type, spelled and capitalised the same in every host, the catalogue, the site and Notion. It is a name, not a description: "Mind map", not "Mind map (radial/hierarchical, single central topic)".
 
 ## Retired uses
@@ -45,18 +49,19 @@ DISL is the language that was called DEDL, the Diagram Editor Definition Languag
 | Retired | Use instead |
 |---|---|
 | "designer" for any tool, or for all tools ("ADP designers", "the designer catalogue", "Designers" settings) | tool, tools, tool catalogue; or the kind, when only one kind is meant |
-| "designer" for a person who writes a definition ("language designer") | author |
-| "diagram" for any tool, or for all tools ("diagram type" for an editor, the "Diagrams" database) | tool; or the kind that applies |
-| "editor" for the running diagram or designer ("diagram editor", "editor runtime", "a designer is an editor") | the kind (diagram, designer); host software that runs definitions is a *runtime* |
-| DEDL, Diagram Editor Definition Language, `.dedl` | DISL for the language, DIFL (`.difl`) for a definition |
-| "diagram, designer and text editors", "diagram and text designers" | diagrams, designers and editors; or tools |
+| "designer" or "author" for the person who writes a specification ("language designer") | tool engineer |
+| "diagram" for any tool, or for all tools (the "Diagrams" database, "diagram type" for an editor) | tool; or the kind that applies |
+| "editor" for the running diagram or designer ("diagram editor", "editor runtime", "a designer is an editor") | the kind (diagram, designer); the software that runs specifications is a runtime |
+| DEDL, Diagram Editor Definition Language, `.dedl`, `dedl.schema.json` | DISL for a diagram type (`.disl`, `disl.schema.json`); DID for a stored diagram (`.did`, `did.schema.json`) |
+| DIFL, DEFL, EDFL, DIDL, EDDL and their extensions; `disl.disl` | earlier drafts' names: use the tables above |
+| "diagram, designer and text editors", "diagram and text designers" | tools: diagrams, designers and editors |
 
 ## Exceptions
 
 These keep their names:
 
 - **Platform APIs**: IntelliJ's `FileEditor`, `FileEditorProvider`, `TextEditorWithPreview` and tool windows, VS Code's custom editors, Eclipse's editor extension points. An ADP tool is *shown in* a platform editor; it is not called one.
-- **Third-party names**: product, standard and file-type names such as "draw.io diagram", "Mermaid class diagram", OMG Diagram Definition.
-- **Other meanings**: a property-value or inline label control may be called an editor inside code that is clearly about controls.
+- **Third-party names**: product, standard and file-type names are never changed, such as "draw.io diagram", "Mermaid class diagram", OMG Diagram Definition and the W3C's DID.
+- **Controls**: a property-value or inline label control may be called an editor inside code that is clearly about controls.
 - **History**: commits, merged and closed pull requests, published release notes, completed Spec Kit features and spec-workflow archives.
-- **Old persisted identifiers**, only where they are still *read* for compatibility after being renamed (an old extension, settings key, schema `$id` or URL); they are never written again.
+- **Old persisted identifiers**, only where they are still *read* for compatibility after being renamed (an old extension, settings key, schema address or URL), and the legacy fixtures that prove it; they are never written again.

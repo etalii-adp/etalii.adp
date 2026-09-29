@@ -1,0 +1,790 @@
+b620df5a4b8cb41932c16b67ca103cf6c4094d33eadfac8022deae28f440c361  etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy.Tests/Fixtures/unknown-type.adp
+01c195c597a33fc21f3c9194895bd6d117bcde0c3d05ab1b0c683990453b0bc6  etalii.adp.ide.standalone/src/backend/EtAlii.Adp.adp
+b6f9f99db9760995e54601e5d68be37dcdf17bd2146053446712b35ae44d561e  etalii.adp.ide.standalone/src/diagrams/ansible-structure/examples/example 1/infrastructure/.adp
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/diagrams/azure-pipeline/examples/example 1/edge-anchors.adp
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/diagrams/azure-pipeline/examples/example 1/edge-broken-graph.adp
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/diagrams/azure-pipeline/examples/example 1/edge-expressions.adp
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/diagrams/azure-pipeline/examples/example 1/edge-indentation.adp
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/diagrams/azure-pipeline/examples/example 1/jobs-only.adp
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/diagrams/azure-pipeline/examples/example 1/multi-stage.adp
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/diagrams/azure-pipeline/examples/example 1/steps-only.adp
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/diagrams/azure-pipeline/examples/example 1/templates.adp
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/diagrams/azure-pipeline/examples/example 1/templates/build-jobs.adp
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/diagrams/azure-pipeline/examples/example 1/templates/pipeline.adp
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/diagrams/azure-pipeline/examples/example 1/templates/test-steps.adp
+de3bab320490043b35a84817b7c5f84548d6c080ca100c8ffd613170f25fc65a  etalii.adp.ide.standalone/src/diagrams/c4/examples/industrial-plant/architecture/bottling-mes.adp
+1b853a87143596d5379f2c86fefb2e96c0efb1bcadf856988a63d9f4271ebbaf  etalii.adp.ide.standalone/src/diagrams/c4/examples/industrial-plant/architecture/bottling-mes.batch-release.adp
+2b1f587d981876988bcaae398e35c07b01925c2b4985308f759ed60d6a3faeb5  etalii.adp.ide.standalone/src/diagrams/c4/examples/industrial-plant/architecture/bottling-mes.mes-containers.adp
+552ebaa2fc66ec2f8f1723c588d9243cc0c3b85f5d7f63693c1e7ee894b2a78a  etalii.adp.ide.standalone/src/diagrams/c4/examples/industrial-plant/architecture/bottling-mes.order-service-components.adp
+c10f288821c224ab1c9e39d39f9d2b7249612a6faca019fe253ebed13125c1e1  etalii.adp.ide.standalone/src/diagrams/c4/examples/industrial-plant/architecture/bottling-mes.plant-deployment.adp
+ca109e23c548aa1820efe900ca0fa9d21083ad2ffec36db7a137d2791255aa71  etalii.adp.ide.standalone/src/diagrams/c4/examples/industrial-plant/architecture/bottling-mes.plant-landscape.adp
+7dbf64c091fc5f9f25282c69e33902d78537121e899b5771b7077cc199275b69  etalii.adp.ide.standalone/src/diagrams/c4/examples/reference/architecture/code-level.adp
+de3bab320490043b35a84817b7c5f84548d6c080ca100c8ffd613170f25fc65a  etalii.adp.ide.standalone/src/diagrams/c4/examples/reference/architecture/courier.adp
+bdb8b2aee7859b291419ab3a931f70f07152a9d8c124b5789317d470fc353b7f  etalii.adp.ide.standalone/src/diagrams/c4/examples/reference/architecture/courier.api-components.adp
+b2557094ab62721f363a5b2e0433dc908db5ef8ea26758b210df482808e2d24c  etalii.adp.ide.standalone/src/diagrams/c4/examples/reference/architecture/courier.containers.adp
+972551e30f689aae622fafa1ea71f7c1b8901a0357345ac72482dfd3ddfb4425  etalii.adp.ide.standalone/src/diagrams/c4/examples/reference/architecture/courier.landscape.adp
+e5cc067df90f777ad47354166d2fdbc010832dc6aba37575400ada9b22907182  etalii.adp.ide.standalone/src/diagrams/c4/examples/reference/architecture/courier.parcel-scanned.adp
+8113c145fe1234de0d72ca38958cd1e4e68fe874f9342d0a5edebc88ac35e801  etalii.adp.ide.standalone/src/diagrams/c4/examples/reference/architecture/courier.production.adp
+f6c908bd06eff3006fa4bbcf12bf7d1f3be39c8be859884c6cac9a78f581284a  etalii.adp.ide.standalone/src/diagrams/causal-loop/examples/on-call/on-call.adp
+f6c908bd06eff3006fa4bbcf12bf7d1f3be39c8be859884c6cac9a78f581284a  etalii.adp.ide.standalone/src/diagrams/causal-loop/examples/reference/reference.adp
+20a5befc009c6004775801a6e145a32193e06a11dd9be91006cdbc37604c2bb0  etalii.adp.ide.standalone/src/diagrams/databricks/examples/lakehouse/databricks.adp
+a39816abd0454d526cbe5f5635670712f8014095f15e292dc0a08b0d172616d5  etalii.adp.ide.standalone/src/diagrams/databricks/examples/lakehouse/databricks.pipeline.adp
+7480bdc1f832921fb9e40269f73c40742900c97fde60c3de55aa99bfcae63c7d  etalii.adp.ide.standalone/src/diagrams/databricks/examples/lakehouse/resources/nightly-ingest.adp
+00f8c21dee1731a10f6538f5b4e44c5e16cdcfc674a4ef1a25e10280b69444b0  etalii.adp.ide.standalone/src/diagrams/dependency-graph/examples/example-1/services.adp
+f4ae0f888ba3c3e16bd8dd0972b7b7a92864761170aa933528eb985e8427bd62  etalii.adp.ide.standalone/src/diagrams/dotnet-dependency-graph/examples/example 1/pipeline-toolkit/PipelineToolkit.adp
+141f34f0e21eba044f0a4bc27275fc437cca69918ed39ebd391ec4ea7669104d  etalii.adp.ide.standalone/src/diagrams/functional-decomposition-graph/examples/field-service/field-service.adp
+913f95ff05480c5c660549a7076bbb94b724342b19fcae2345249d8d30a90fd6  etalii.adp.ide.standalone/src/diagrams/gartner-hypecycle-graph/examples/coal-technologies/coal-technologies.adp
+3bf2f770cf2549b19701054c9111d9d283d9c3d8b19fa9abdc9754cb1ee56df9  etalii.adp.ide.standalone/src/diagrams/gartner-hypecycle-graph/examples/digital-trends/digital-trends.adp
+8c321f3574381d3b1827129e8260d0cd0d35bc48012367ca24540e4a436d6649  etalii.adp.ide.standalone/src/diagrams/gartner-hypecycle-graph/examples/electric-vehicles/electric-vehicles.adp
+2a835cda39b06dbd91c5b6fc9e837d6c3f8fa6a3c9496ba725904e649e4a430f  etalii.adp.ide.standalone/src/diagrams/gartner-hypecycle-graph/examples/energy-breakthroughs/energy-breakthroughs.adp
+5ac0d9598d0b1c798bdc6c217f22a26a8fdc8c1819a15016267839de5fbcab66  etalii.adp.ide.standalone/src/diagrams/gartner-hypecycle-graph/examples/eras-of-innovation/eras-of-innovation.adp
+a36cde1673671943c347f3a271847e8cd683a1c0e4f8fceeb667b39e3d460f3b  etalii.adp.ide.standalone/src/diagrams/gartner-hypecycle-graph/examples/internet-evolution/internet-evolution.adp
+12613a4b3430f66972e6b742d67a80dfefd4ce79dbeaa7a31fc4d6f4225f6a27  etalii.adp.ide.standalone/src/diagrams/gartner-hypecycle-graph/examples/llms-and-agents/llms-and-agents.adp
+11b2382c2b72677e471109346408bf01adc3a4c9b4db8dd7fc82f449f024af84  etalii.adp.ide.standalone/src/diagrams/gartner-hypecycle-graph/examples/technology-trends/technology-trends.adp
+93ddc58beaeab68d5d636efcb80b3b83e9751f18fad3e0d46ef2a951b634f5af  etalii.adp.ide.standalone/src/diagrams/gartner-hypecycle-graph/examples/warfare-in-ukraine/warfare-in-ukraine.adp
+c737c2a7b0ebf3b8d85055b0020cb4e5b5a44b049cabea5b342102b19b8eda9c  etalii.adp.ide.standalone/src/diagrams/helm-charts/examples/hello-world/.adp
+c7e1cc9ce17d43c13129fb6a41a2995dc5163137a55c06f34f71bbec94893069  etalii.adp.ide.standalone/src/diagrams/helm-charts/examples/nginx/.adp
+0c3c20899050e364554a1a183697dccbf15abf8c1df663ce39e705b024bc1552  etalii.adp.ide.standalone/src/diagrams/helm-charts/examples/prometheus/.adp
+86b30e765a48fc9582a5b463547f6f6462ccdd83626563dffeff5cbe396e7457  etalii.adp.ide.standalone/src/diagrams/mindmap/examples/example 1/mindmap.adp
+5ce9c536fb5d5d25268ae458cda7c5f509cd043b2666f8673259f51a2ddcdef1  etalii.adp.ide.standalone/src/diagrams/rdf/examples/nobel/laureates.adp
+9bfbaa4d9b7b4ccf775b881c84a167bdcd8795e894e36841d47ac8c528ecb3fa  etalii.adp.ide.standalone/src/diagrams/rdf/examples/nobel/nobel-1903.adp
+dff16e95fdc483df09685aec559adf92af7719be31006f412ef32eb030e9680a  etalii.adp.ide.standalone/src/diagrams/rdf/examples/owl-time/owl-time.adp
+a2d74f656323835ff8f9c77d6e0c5f7df308e222bb3959af08582bb14e3dbc57  etalii.adp.ide.standalone/src/diagrams/rdf/examples/prov-o/prov-o.adp
+d5666827e08331ead04c90226d5a33020154c8762d3050c19f43feacc6eeb38b  etalii.adp.ide.standalone/src/diagrams/rdf/examples/shacl/fair-data-point/navigation-shapes.adp
+c9592be7f4e2bfdd61881af8d77aa28539445acd7fc838cc82e7d7ad0aaf5939  etalii.adp.ide.standalone/src/diagrams/rdf/examples/shacl/w3c-shacl/shacl-shacl.adp
+eef742f45654697fd823c7ccc67d3f354557bf21f95c777b3f18b062e55619be  etalii.adp.ide.standalone/src/diagrams/rdf/examples/shacl/w3c-shacl/spec-examples.adp
+f14c3dacf49679882f0321e86db44d1b5f1748578d262e703145cd759d5336c6  etalii.adp.ide.standalone/src/diagrams/rdf/examples/stw/business-economics.adp
+02ec8f30049e2eb96cbcf14cbbdb196424c49a3f79068e186c4f4356c84029f0  etalii.adp.ide.standalone/src/diagrams/rdf/examples/stw/geographic-names.adp
+dd6eff09cc2dcf0d79bf59f953e96927a33768537cde9b674510cd501596510b  etalii.adp.ide.standalone/src/diagrams/rdf/examples/w3c-turtle/example-1.adp
+65983ac5524b88933d8fecf8fc3c8fbfcb0d0ef4b88711b10f20ecb09d15d9fe  etalii.adp.ide.standalone/src/diagrams/rdf/examples/wikidata/marie-curie-nt.adp
+633795deb4a9d4e7e186e2439f0e5774c98ddf9106d432c1af3e389c4541f555  etalii.adp.ide.standalone/src/diagrams/rdf/examples/wikidata/marie-curie.adp
+36c210a3f9a85adf6534f530984bf4eb0c923756239a1cf925ad0b4eb6156d1f  etalii.adp.ide.standalone/src/diagrams/sparql/examples/adp/ask.adp
+b387b6a6de05fa139917663b14f84c9fe921029741ff790f4c275ab410fa9242  etalii.adp.ide.standalone/src/diagrams/sparql/examples/uniprot/describe-embl-cds.adp
+538cc0e1e3ae46abcbc3cb8b65162ae3fbff404840b6fa55e70d454d7b814eba  etalii.adp.ide.standalone/src/diagrams/sparql/examples/uniprot/proteome-location-of-gene.adp
+c7eb6b802874c5b3b027479bbcf6fcf44d99d73dab2780c6fd21e82edf19a0c3  etalii.adp.ide.standalone/src/diagrams/sparql/examples/w3c-sparql/aggregate.adp
+6c6aa8cd78da92d57d20b3bbdcf97b88eeaae2de166799d03b6a0630d00033a3  etalii.adp.ide.standalone/src/diagrams/sparql/examples/w3c-sparql/construct.adp
+310d7526e1ad2bab0daf7b6472883f48dcbef656958233a75e5745ab2ac610ff  etalii.adp.ide.standalone/src/diagrams/sparql/examples/w3c-sparql/filter.adp
+c75533ee880ae53ed51f64b308463bfbfde628d42a9dd98482a4087ff637c1bd  etalii.adp.ide.standalone/src/diagrams/sparql/examples/w3c-sparql/optional.adp
+1fdcbad5920626481d2a3c637da8c0feee2c8853ae553ad86b29ed66190724e2  etalii.adp.ide.standalone/src/diagrams/sparql/examples/w3c-sparql/property-path.adp
+df48e884c74f0371c6992e4ea285371497c6e93f4df5644ba1d21a2a37c612d0  etalii.adp.ide.standalone/src/diagrams/sparql/examples/w3c-sparql/simple.adp
+906450e19f1e5d3e5097bf88b11f30bb936465878b1f3cabaef36edd5135ea15  etalii.adp.ide.standalone/src/diagrams/sparql/examples/w3c-sparql/union.adp
+0101aea91bc48ad236d94f6fc652e1fce7c1e8f920532a5d8d0fd29430d96a6c  etalii.adp.ide.standalone/src/diagrams/timeline/examples/example-2/roadmap.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 1/tea.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 2/annotations-and-labels.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 2/blank-line-runs.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 2/comments-everywhere.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 2/crlf-line-endings.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 2/lf-line-endings.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 2/minimal.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 2/mixed-line-endings.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 2/no-trailing-newline.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 2/pipelines-both-forms.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 2/strategy-vocabulary.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 2/submaps-and-urls.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 2/tea-shop.adp
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/diagrams/wardley-map/examples/example 2/unmodelled-statements.adp
+af0b0e4acfaf0e4ab76775510f30e8c8791825560c032e71070df3e7e5d52460  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/.adp
+92ef4143add5aa1d03f82f47cbf1be5b565390c3cef061c96ebbcaa9a25285d5  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/Makefile
+681141597ac37805d9fa1fc798af6c498b845e08c0a08c6df46837138f7873a2  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/ansible.cfg
+311edd22ed3a5edd05c8644191565ee862dc064859c4913c33a2da86bfe86209  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/collections/requirements.yml
+0ce95877a28a66ca2c6d4e1f9cb552e75d0c7803cf621d2a7cc48b21fce02e81  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/dbservers.yml
+f8d9cf1dabd2fc0e41dcf2ab8339969ba81de46f4f83b404c60d2cbe3dfc9caf  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/docs/runbook.md
+099da098e4b4f2f4899da086dc7dff76e87e582eaf6a2e27ad9d4583ce0574b5  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/docs/topology.yml
+f29194366cd348200f0cbfffea9f79c4e34235d9faee91ac768bbc4513c9eb9b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/inventories/production/group_vars/all.yml
+3ee1b0b54630e1fd3a2e3eb77e7556c2b96a1cabc65b86ef97dcedcf375e08f4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/inventories/production/group_vars/web.yml
+8f641d35d8a14f018017056276be84cf37127db0472ceb278f6d37137468cba3  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/inventories/production/host_vars/web-01.prod.example.com.yml
+a78eef8121644031bd9b3fa84fc351a43b74b164362d917354143187657fbe7d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/inventories/production/hosts.yml
+50ed9fd55fe58afec94aedc1ad93b51382efda05d1ab4c9ee325a81b020954b9  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/inventories/staging/group_vars/all.yml
+55a2c7a12bee06a9c5aa17d09e732a7e0cb485e0f4ad7b2ac873599607b6c1f0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/inventories/staging/hosts.yml
+c1559cceaac49896961850de521583be2fd65c755694fa88d2a199cd64b9e7ce  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/roles/common/defaults/main.yml
+5d57b2967994e826294115c52794b476b59bb5aebd04ac5de25ec8cebf8dcebc  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/roles/common/tasks/main.yml
+b4efdc90018f6cc8e701e8436f27e43c28e1c3f90c565436ea15be600869c254  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/roles/nginx/handlers/main.yml
+1d8c8a06f9af9b027aa2b5fa25d7e97e0c3955ab42f459ba0eb3e0454a64cf60  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/roles/nginx/meta/main.yml
+6c1b127347cbe80cb67bdba02629cc2a3735328c44c2b822972c800017c507ca  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/roles/nginx/tasks/main.yml
+5130b54cfac243c8b29111680df6173df5a37797ab4c7152e456f99e85113ec2  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/roles/nginx/tasks/tls.yml
+8f1eaa5f787dee5d6f66f0ab436d56bd38e1b5266aa5b25dab1c676b29af365a  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/roles/nginx/templates/nginx.conf.j2
+e20ecc7b647262fb8c0761202d6a1aa324656399b9cf94308666fbf897532d27  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/roles/postgres/meta/main.yml
+5d7ee5940a624a9a3271976e6fc4531601688c8aa36c13c225562552c7be44bf  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/roles/postgres/tasks/main.yml
+f32baafc93d31b840164e04adb310149a94fd4a78b05f2e9e8dc81fefa3221c1  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/scripts/rotate-certs.sh
+e05e9e251478fc51d7cdfcae3d24ef9c009da12ec18f93ca1cc09ba4317f48d1  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/site.yml
+3474d9422d27d7175c594be6020b4e2af08c18f58594f16d898997b701b385b8  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/example 1/infrastructure/webservers.yml
+b6f9f99db9760995e54601e5d68be37dcdf17bd2146053446712b35ae44d561e  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/.adp
+54f67c27fb6e36ce26327e958e3d187962ba6487fa773f64bc9e4edbff9ada13  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/LICENSE.md
+f7a8c45a17cd2b65c4c886d69ec827049a7ea62d910644eee059d3f5db9e8376  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/README.md
+6503d55afe9dae9aa1843c9ff5310fae0b896490785367d14a455eb3fab1059d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/demo-aws-launch.yml
+c36443534e05bc7d0c5bc3506beff19b53c55fd38edff08a69cf6b3c3a1ae8d3  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/deploy-application.yml
+c5d042c17e16ea543d3e37818f4bdf747dd76b074713f14c3a4335de93adf57d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/group_vars/all
+14d5fa068a9ed38f2c493600cf211831822a5e2b4e40d4d82a5867e3c65c9b8d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/hosts
+64db03d411c324f7dcf8ed49a28a185e710ef5897d82a88de00e345c8d301818  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/roles/java-app/files/jboss-helloworld.war
+be39075df2dd87e887119195753bec799b2e73fe4516b47ad87860cbd884cb3b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/roles/java-app/files/ticket-monster.war
+d7f92e4eaadbb93e1585eae560636b62ccdb6c477b88821159db8295f9cc5c13  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/roles/java-app/tasks/main.yml
+325ebd94ee3fa08f828b6aa6103d7694fe18da52bf1767c4fa57ab7a5bfc07cc  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/roles/jboss-standalone/files/jboss-as-standalone.sh
+4a504a3c943ee5b94194a21ff826dc352f47be3b1b874ca531db2bd462d9679b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/roles/jboss-standalone/handlers/main.yml
+954e46e3c7d1adbf0928b5f6afdee5d4ce240ab8854e1fafaf9e6a4e2a61545b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/roles/jboss-standalone/tasks/main.yml
+6937173f890850465634ecb8f76922d39b8308c996a5bbd5a3fa405b53649cb8  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/roles/jboss-standalone/templates/iptables-save
+2b29253d39380bb787bfaabb47b54b658f7ae5834592f89af9c33158e8f2f134  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/roles/jboss-standalone/templates/standalone.xml
+2bd0bd436f7009c5f4e3cce216e14766928371134201bc72572c54d805755193  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/jboss-standalone/site.yml
+54f67c27fb6e36ce26327e958e3d187962ba6487fa773f64bc9e4edbff9ada13  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/LICENSE.md
+e2227e1c4039ab9bb1c26ea4040f0a7cced6b4542d90a6fece88491fae9a63d1  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/README.md
+54f67c27fb6e36ce26327e958e3d187962ba6487fa773f64bc9e4edbff9ada13  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/LICENSE.md
+1fc407a6c96213596b41ec07ade73f8d1c1db87865db6cfde9b549d2993dfcc4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/README.md
+80083271cedfa06c2ff0e110597331066eec3cc01e97312fdbb2a377cba4ca53  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/demo-aws-launch.yml
+d4b536f375ec41d8d33528f192ec5def72c504441002c0d1d1d0923219925d29  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/group_vars/all
+f19e5b3325d420e4a0cfa0225a7a4a32875fca13d78110512b454543b2f3f688  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/group_vars/tag_ansible_group_dbservers
+749db8240c0b16f633c0ad86492be6cd50732b577049acce4169fac3079613c4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/group_vars/tag_ansible_group_lbservers
+1e1068cb4e7449542cda3cfb8fdf0d5e72d08537b57041f752e6d312e38e8c81  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/group_vars/tag_ansible_group_webservers
+3332d84174245d8481cc69bb1c7a165faa9d57bd920351809345f068471d1a1a  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/base-apache/tasks/main.yml
+1a98d261c1d9eb0e604f80c62cf467d66a059018ba22917662f979a06a469965  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/common/files/RPM-GPG-KEY-EPEL-6
+2b1fa3aaca83aca6ad1cc12b9a4eb3b6ed41b6f4485dfaf86b8019273a271016  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/common/files/epel.repo
+d5cdc57d8d6df051ee1cc6d9f055b521f7ac7ab8cf6b5ab062e1cb9d8db3b437  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/common/handlers/main.yml
+5d981451983e953e8d9521d4d873e46c27ac133d55f94418ae5fddb855d4ce50  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/common/tasks/main.yml
+96212aaf58516a9ccbad6b47703dca900ba84fc71e7fb2db969f4a91944896c1  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/common/templates/iptables.j2
+cf6d347e8121c8b1016614a8cfa90bc80b0532ef6c0989b163a905eceb0c6724  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/common/templates/ntp.conf.j2
+8ea7556be7754b174dd4c0eacc21059c3cdc3b56b0f724265ec828eaecdd70ea  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/db/handlers/main.yml
+2874a33a6212c3d29935c7e379c89deeb1df93c4c438bece24819d4a48a0008a  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/db/tasks/main.yml
+129880e3ed62a5d290d4f8bfedb34d8af3e6cdfb4574d226777375089b434596  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/db/templates/my.cnf.j2
+53b68b2baf89d23571b95604efa61b27ce762ef159988e3b604957ccf12f4472  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/haproxy/handlers/main.yml
+868f04d300ff7b846c5816c2102b50d32a73790dd167ff05e54b85e632ca7493  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/haproxy/tasks/main.yml
+65e5c485390ffaff5419f4b88de80bcf307e29dec858ca082d131d130ab5d859  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/haproxy/templates/haproxy.cfg.j2
+ad730527a90eae3c709376323793cb8f2332631589ac62f8e5ec9422e0297bcf  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/nagios/files/ansible-managed-services.cfg
+90764d418a780b8883a1bb9519bf46972d9d4f944ae10572e2e796494d7c2d0a  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/nagios/files/localhost.cfg
+b7f32c73bb2af504ea72ba45b99c9b4f18e4084adf7bafcad7dd22b91af850a7  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/nagios/files/nagios.cfg
+f1b06fb0f08c1b18db303770e5d0ae8b77b5d0fd28042c4172ac4a0cea4bcec0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/nagios/handlers/main.yml
+5cab9969ac7f8eb2f5501954f36bf9d88044707ad125b14f1c3194e64c5a039e  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/nagios/tasks/main.yml
+cd66437918a8d905d8b679a34f9f3061d700e457cf831c6062e70f4b333e5bcd  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/nagios/templates/dbservers.cfg.j2
+14a1b58bf0ff2155732f4d0a54354059681cd46ca281269e1ffba615ab00c256  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/nagios/templates/lbservers.cfg.j2
+888715bb9c9cbfb7cb6ecfe5c87bc04837b3cbb46e35cc5f69af4cc69418d0f0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/nagios/templates/webservers.cfg.j2
+ebaa9f843d47a18ca0a9c362f2c802c4e1b15ad3de227489e0a186da281c373f  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/roles/web/tasks/main.yml
+c8c044ace5ea2bca12d061c4b04ad120d7bb563b0a9dec8322e7b216c4c323e0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/rolling_update.yml
+d73105c318234007896992edb1a64a7b532d296f46dd6828f73696a29b76b156  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/aws/site.yml
+3b0b2f0b0d88e29d020024c5a3f2d8b5c2b50a094aa9584895bbb9ea76018b03  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/group_vars/all
+f19e5b3325d420e4a0cfa0225a7a4a32875fca13d78110512b454543b2f3f688  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/group_vars/dbservers
+749db8240c0b16f633c0ad86492be6cd50732b577049acce4169fac3079613c4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/group_vars/lbservers
+1e1068cb4e7449542cda3cfb8fdf0d5e72d08537b57041f752e6d312e38e8c81  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/group_vars/webservers
+1b20fcc5924fac705e94af8f87eea235c87df8bc2031908372c6b02cd8776a03  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/hosts
+d476912b2b38509dc0bf3c0f80eb37a1a4d102a9e7c2d76ce405c56f7289fdbe  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/provision.yml
+3332d84174245d8481cc69bb1c7a165faa9d57bd920351809345f068471d1a1a  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/base-apache/tasks/main.yml
+1a98d261c1d9eb0e604f80c62cf467d66a059018ba22917662f979a06a469965  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/common/files/RPM-GPG-KEY-EPEL-6
+2b1fa3aaca83aca6ad1cc12b9a4eb3b6ed41b6f4485dfaf86b8019273a271016  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/common/files/epel.repo
+d5cdc57d8d6df051ee1cc6d9f055b521f7ac7ab8cf6b5ab062e1cb9d8db3b437  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/common/handlers/main.yml
+450895a7aea65bb881d3bd25240d09c4e2e59a4ce18ea532f3221dfc5007f20b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/common/tasks/main.yml
+1f5e1f92c5bc909d5b142bc31fc76361058a8cecf7f4d7b17159799f23356182  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/common/templates/iptables.j2
+cf6d347e8121c8b1016614a8cfa90bc80b0532ef6c0989b163a905eceb0c6724  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/common/templates/ntp.conf.j2
+8ea7556be7754b174dd4c0eacc21059c3cdc3b56b0f724265ec828eaecdd70ea  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/db/handlers/main.yml
+0b8f59e2d44596772921266284f7f0df8c9ea292f709298a1b5eedb8ac394a67  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/db/tasks/main.yml
+129880e3ed62a5d290d4f8bfedb34d8af3e6cdfb4574d226777375089b434596  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/db/templates/my.cnf.j2
+53b68b2baf89d23571b95604efa61b27ce762ef159988e3b604957ccf12f4472  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/haproxy/handlers/main.yml
+b157e2df898d98fb65bb7897c91c316eb8fb8be0a9c47dac1665a7c1f8d49004  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/haproxy/tasks/main.yml
+98b3b005273c1e415c9b1a4dbd568943b944efbfe11fddfbe46290641fad2c95  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/haproxy/templates/haproxy.cfg.j2
+ad730527a90eae3c709376323793cb8f2332631589ac62f8e5ec9422e0297bcf  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/nagios/files/ansible-managed-services.cfg
+90764d418a780b8883a1bb9519bf46972d9d4f944ae10572e2e796494d7c2d0a  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/nagios/files/localhost.cfg
+b7f32c73bb2af504ea72ba45b99c9b4f18e4084adf7bafcad7dd22b91af850a7  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/nagios/files/nagios.cfg
+f1b06fb0f08c1b18db303770e5d0ae8b77b5d0fd28042c4172ac4a0cea4bcec0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/nagios/handlers/main.yml
+4dc8a2ba165e8f0c110bbcbe720c181b853768458b079ea32db5c20fabcce912  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/nagios/tasks/main.yml
+cc9feecc066ea971105b0e50e992f43ed4c2771eece7c4d3117a2e98e9080e0d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/nagios/templates/dbservers.cfg.j2
+02486f7e9e4f6a35af12f2f4dd230a4492f8c2ff4f88f0f3817b8402c2b56598  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/nagios/templates/lbservers.cfg.j2
+09b71cb6724dd1403f1516b80f3bf3bbac740b15295be3d1466741c0a62661f0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/nagios/templates/webservers.cfg.j2
+d7a5d6359ce053b792897fa15c9d03410de529df6f1250f7f41008371121da58  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/roles/web/tasks/main.yml
+72b5e03801cb8dc20f25632b655119ac53a5af6accdfcfe4bc884e9cc3360ce2  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/rolling_update.yml
+4f7ab4680897f6bcd56e30e68044845a318dca36c937d668e8f7b15a1e2e27df  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_haproxy/site.yml
+bdc0e11ef2f4d9ca378b8441124ad6425406e32be209a60c71150d8c5a6416e7  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/.adp
+54f67c27fb6e36ce26327e958e3d187962ba6487fa773f64bc9e4edbff9ada13  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/LICENSE.md
+6f9250f152d7a35f2f72ae5c9a2e5bbbe636d89ec0ad786f817994df1018c4af  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/README.md
+bf7cfa907e75a362430330b1bd1da387678e8da65b115628ef3734ef1993a441  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/group_vars/all
+ca0a2aecb60c65827ce4d7c1a95b430d9103606183bfaa8200e4dd1ca205eae9  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/group_vars/dbservers
+de15b244cce5310661e14a0d5e4fd4fd2a44ea7b9948c5c9680c5c44688a4ba4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/hosts
+c0d437d69386b8eda80b80e764fb8487d81f231a1b945cceafb3fcb382d4bb0a  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/roles/common/handlers/main.yml
+108270b09dd4545de5bf4108281b1e6b6c31905a2fa2ec12505396e1443e0d5b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/roles/common/tasks/main.yml
+cf6d347e8121c8b1016614a8cfa90bc80b0532ef6c0989b163a905eceb0c6724  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/roles/common/templates/ntp.conf.j2
+2f571af74df0104877d2c54f083712bf41a735db1f4d5bdd9e472fc241b14173  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/roles/db/handlers/main.yml
+9e9322b4247050a9740394bd998af119dd10c29d926803a27c37810e7ff0a1d4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/roles/db/tasks/main.yml
+129880e3ed62a5d290d4f8bfedb34d8af3e6cdfb4574d226777375089b434596  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/roles/db/templates/my.cnf.j2
+8c29b61bb639b2189cce192a9d01a503a2102586b6f256e7915ac5d961c07b10  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/roles/web/handlers/main.yml
+fb3f0d2992a5f7218581b61220e5ac987dfcd60a74db436b4412fdf4a6ea9e7d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/roles/web/tasks/copy_code.yml
+3c5bf4fd62103997b6a0cd3ad5a8761ce44ee1bf4bbc7e16e119b681179dfa18  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/roles/web/tasks/install_httpd.yml
+bf85fc9688e7a1c1906f45ea76f2b0d0f9b183540284e4fe59ea7a1e7c4bf398  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/roles/web/tasks/main.yml
+1d7ee1db28dc98dac11c86ef0d309602f0c61c923d143f5aaad940fab4eb2839  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/roles/web/templates/index.php.j2
+cbe09f8effb385a719312aa8c74dc8476a3105f16f8673ed7ea803806b82733b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple/site.yml
+f898a85a6adf939c43d36ee6b999d11b1f6ad8d0e8a621e167436cb1fb735aba  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/.adp
+83f0cdbb41bebbd8909b4f7c65243d0864203a83810cc65c87d5cf60f6ff24d6  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/LICENSE.md
+351619efecbf539e8e126eec6a9effc0af6e348250762884e158cfdf47aabcab  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/README.md
+bf7cfa907e75a362430330b1bd1da387678e8da65b115628ef3734ef1993a441  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/group_vars/all
+ca0a2aecb60c65827ce4d7c1a95b430d9103606183bfaa8200e4dd1ca205eae9  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/group_vars/dbservers
+5355503a59d0af46c3695a2920373dac8d1731b080a4ced51e61675b57ff0a49  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/hosts
+d1ffd6bfed53152097c538c053ae5396796cc35267da64b5352a7dccee473036  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/roles/common/handlers/main.yml
+0468b8ec5be7e2cf2ba0c7a71b5c55877a9c15846ff2290ba5f4579319e21352  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/roles/common/tasks/main.yml
+cf6d347e8121c8b1016614a8cfa90bc80b0532ef6c0989b163a905eceb0c6724  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/roles/common/templates/ntp.conf.j2
+121c120e6f0b23f182f8f6a18f276b678c5448bfaa08f125d62d33b0724e0d92  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/roles/db/handlers/main.yml
+a6051297508ec46cf1fd8a385be94b2c863a7d05ba69dc4446afd61d9c1a67be  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/roles/db/tasks/main.yml
+129880e3ed62a5d290d4f8bfedb34d8af3e6cdfb4574d226777375089b434596  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/roles/db/templates/my.cnf.j2
+0bcd4bc1e662eb74d41afa248411fd01930517d8c67b270e61fcffe4da376b20  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/roles/web/tasks/copy_code.yml
+d3b6c8c4190e456b2f9871592b66d5531f95bfbb234331beee8c3096616283f3  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/roles/web/tasks/install_httpd.yml
+bf85fc9688e7a1c1906f45ea76f2b0d0f9b183540284e4fe59ea7a1e7c4bf398  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/roles/web/tasks/main.yml
+1d7ee1db28dc98dac11c86ef0d309602f0c61c923d143f5aaad940fab4eb2839  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/roles/web/templates/index.php.j2
+cbe09f8effb385a719312aa8c74dc8476a3105f16f8673ed7ea803806b82733b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/lamp_simple_rhel7/site.yml
+b6f9f99db9760995e54601e5d68be37dcdf17bd2146053446712b35ae44d561e  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/.adp
+22b41e215fd3c83367b14fac8dabd91f4414af52413de0c7cb3924a5a96d7cb3  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/ansible_pull.yml
+6293bc58399fd44921bdd6c2bb61ec7c3fe4020d78bd4d0c904b6a13b29ea771  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/batch_size_control.yml
+10b689743f8ffc646dc2cab192944455c9b29d043388db2bc8fb06f9caf67c97  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/cloudformation.yaml
+cc717d6dc5ac43ac345a67e046d683e7cb399397bdea112914a3651974eb55f3  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/complex_args.yml
+cb96ffed154bf74c09ef591ac59c550aea78c0477148d13d8f1ceb5979190e0f  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/conditionals_part1.yml
+b62b29fe20647477f16833d1c3c0f02a8281eb7419d4344e919cd18960ed096e  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/conditionals_part2.yml
+16ac73f226157146bf4a958aa8af3a266bea67a83440e3c670118989d617f608  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/custom_filters.yml
+b4fdfc756016a3cf5fd88426f470e35b1aa7ff92f95cf530b40afe4a872be7b0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/delegation.yml
+98f01555afb9081f18b57a75f2a01024a8eaefc7e2b439270bbfba72d480430c  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/environment.yml
+e4e0bdf00338868b5a16163c7ed8445ea74cd898c08c466f2fc1fa1ed1e0a302  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/eucalyptus-ec2.yml
+5d92e38c93af3a80dd9a3b98dd4c4e40153f39e02da752591777d341ae44b517  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/file_secontext.yml
+5a90bca647dde303298670bdf1664d4972b2a18dc5b311a34ef2be3113600a68  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/files/cloudformation-example.json
+3264cda62258089d95c6182743b2c0778923ced05f4a88199472001fbd917de6  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/filter_plugins/custom_plugins.py
+c39dfbe3acd6d98aea6f2df3cae8891e24781e59ae06acc1ad762ae92e83027e  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/get_url.yml
+581bf15538830001fdbf5a047685b602c7935a75dc9d054c95935164ac16973d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/group_by.yml
+7579b15cf32dce66132d7011b1e2c51ab2c31a65dd7a0b5ce784b3cfb973996f  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/group_commands.yml
+319395b453e4e8a127718d5ef648ed28ed9626aa5bdef4001aa013ab93e1a17c  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/handlers/handlers.yml
+618e9aa06660567bb72bbd2f42767d5f1a07dc738cc35ee3575be1f43b29bce9  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/intermediate_example.yml
+8b958765c668bd4e8ebc36489b564dd195551647890da90241b834272ffe50b0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/intro_example.yml
+fa3fb0c51e8f93dc430bc5f54fbee7ca339a2d2cbe3b138d6ef76bf8dabc7ac0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/loop_nested.yml
+781051ca541c4c6e5aef1f5d0f2fe8d9bea1463c71ce0e5aae7d76c7c46d94f8  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/loop_plugins.yml
+c7445e7e338d71439e7098c297c8e5bf3c27f427d3c13dd00e5ea5fdb92f80d3  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/loop_with_items.yml
+8f5c76e29c69852da496b61db61e2a1f9deb6bd3897249aacb3f2500db597a2d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/mysql.yml
+3ca6922e902b77b1574d49f1c5e414c59994d4c2760f4c6089f694708ef65621  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/nested_playbooks.yml
+d5108672264a3a83d27a04761930266a0a51060f1cf75da8ddd125234bf512f9  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/netscaler.yml
+a643c78326b109d6af76db949837f6bcc053bf54a91317403c8157a7a93244e1  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/postgresql.yml
+5eadfacaa9ac599b44233afa2b9b038ec6dedb3f6edd3dd77cda0620f3ad1f3b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/prompts.yml
+99861b173e14e41597a6f724f3fa390e43078a170c1a868bc5672228b4cf445d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/rabbitmq.yml
+e9f698b4a0c334b9a96ca9d5c4236bd786e2dfbced5507864ea4b0ac61cec064  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/register_logic.yml
+56ff0a40a99853cd38805334cc7bc5462c8244fe8a71f495da8d45c63e9b96fd  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/roles/foo/files/foo.txt
+8a3f483d8279171f335f66a46abc33528b6cbf21456f7c494359ac7b518b0236  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/roles/foo/handlers/main.yml
+84cd4964701b909a3a29220e298b8522bb0241e7b3a5bd5a38acc16a77f77723  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/roles/foo/tasks/main.yml
+ab0a596197d0cb18e9c512a3743d528f3278e546e1a2961649749901aaa442db  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/roles/foo/templates/foo.j2
+e610be6f3f925e309323f0a5957b8a5f5b1e05633ebd5825d704ad52cd866960  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/roles/foo/vars/main.yml
+d7f5267ab3655e59d53ba460fc8fa9bb8041e19100cf41da5c526080894209f0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/roletest.yml
+d34cdb313d98c754e1144f6a5310568621d8f9ba585196395b29c8506c0f5eb0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/roletest2.yml
+f2fb033c15543ae5be8e17036b511420916a3ed5b21eeb37cc60df32a8bc04aa  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/selective_file_sources.yml
+ac86269a9d11bb3ff784a65851f948eb97004cba17d6e40ec6f1c3764231d057  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/tags.yml
+0ff8c1be2977b681bf504fddfd5a1777e7e018d158208a7349e280f77523cdee  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/tasks/base.yml
+f04c57ade18adadabb59a1a7cccf0bc7ec907ea41a794f0bd622cfe00e392805  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/templates/custom-filters.j2
+d3ca8c8560a5a123fd240642a23536c63aea15926361ebe81d17548d370afe16  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/templates/etc_cron.d_ansible-pull.j2
+b4881141326e94b8ea31baa22c06b2f4ab085a0ecd53fb2ba5f994bec8a4cc05  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/templates/etc_logrotate.d_ansible-pull.j2
+755f4897250c0b33b6c99e9c39b1942e9021fbe62e06b670dc5cfe30fbb9b379  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/templates/foo.j2
+d732a6d81fc8c38dcec9cf01ec749d39267a421940989ec84553248bdfe8bba3  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/templates/hostvars.j2
+9f3a4b919472fd1abecc9cffd7dcd61718f2b5a6c3276324d43b232de17dcd6f  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/upgraded_vars.yml
+3a55795740fc9df98727bc5b2712cbe7405a4b0187e23f1357071d15e5373fc2  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/user_commands.yml
+0a9e2d7e3f2ecab2eadc830658d169a183aa3ebde069d07127da5a12fb703561  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/vars/CentOS.yml
+b29f278a6357905823b1ba05a6d9dcfe90558393e32d78bbf590d674d7b62d26  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/vars/defaults.yml
+5bc6667ce55b54626ab922cf5b111150c3e40186cb6dfc6043c46b1f51ac1c0f  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/vars/external_vars.yml
+ec7233b9c0f1cddf63903d022a3480917c91988cc0cb5717d5a96caf721bb346  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/language_features/zfs.yml
+b6f9f99db9760995e54601e5d68be37dcdf17bd2146053446712b35ae44d561e  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/.adp
+54f67c27fb6e36ce26327e958e3d187962ba6487fa773f64bc9e4edbff9ada13  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/LICENSE.md
+e898009cf12c9a9545e2aa9b02a9c51d7d4b3d3865bdaaf00feb8613ea00f7dd  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/README.md
+305826712786f2d50577ab0bd985c213563c359bab78536671ac8bb3829b747a  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/group_vars/all
+75b7d358f310c3cc123cb5f9f1038be5385131febc2e3f90cef4be95a08cef6c  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/hosts
+3bb9d96662aa4b7a137c457b093e146fbb378e73983340e59575fa91f10183c8  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/images/check.png
+9f70adfed6b85b8d493ac3cb2cb167ccf6770abcacfd52cf46858c75365cafcd  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/images/nosql_primer.png
+6a660e15d341f6e67ba9458aaf1d6ab069d8255e58c349d07bba5de70dcb94e7  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/images/replica_set.png
+7960387a75dd9f43d6e52108bbf5f02a12f9573b986da12269e7605a684b9898  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/images/scale.png
+bc66db682f2d792b48245b69473a2dcb4568c88fdb3546a118b69fb6dad15c57  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/images/sharding.png
+021a64b91f459525fb316de17ec80037d4f314aae57be899383bd65809dcc4e8  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/images/site.png
+7df45d574bf56e52f03109b9da06e57b3c326bf695ab5153db1335cedecc8ed4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/playbooks/testsharding.yml
+b91dd9cd6819603c32ba718f342e1d790d9748af7b35ad3a62d6c6a4ef77577d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/common/files/10gen.repo.j2
+1a98d261c1d9eb0e604f80c62cf467d66a059018ba22917662f979a06a469965  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/common/files/RPM-GPG-KEY-EPEL-6
+4909f8e1658a474a19bd5d1d32a9037358bedd9b477239d53819b7b8794d711c  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/common/files/epel.repo.j2
+9bfddc1251878fa65f81339611e601c1e412e2deb8c4e6a14d39736243297750  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/common/handlers/main.yml
+79457e7b1e96379cf31fbc95b77da38d8e9eaf335e23bc2deae2c7d5414d3b13  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/common/tasks/main.yml
+f03ad1a85072968304fa7bac8975f83a3b50f8f751ef20fedd9cd268823f2ec8  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/common/templates/hosts.j2
+7dd605397302401f5f99e17f04bff6038d3586da2d29cc6a966d8d8c48011580  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/common/templates/iptables.j2
+701f1aa7b097555354ebab9aa84731d80f7ed573ca0f151154f352b3d7a700b4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongoc/files/secret
+281c835c11813f87f3726fdf7f829612d7d4f35c8b3b923afbe661088ac078bb  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongoc/tasks/main.yml
+6bb62a23ab1619dbfb4f34ca837de15564adcfa691c97f331ddf589896853b4d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongoc/templates/adduser.j2
+8ff2ba20ca68f120b21284c53d106655ac562dd20bd3e4f30b3e6b4daa56681a  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongoc/templates/mongoc.conf.j2
+64011b1eda2987f9be72a646a307d60a76320f1d2c5fdae4dab5a8c0e7555f13  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongoc/templates/mongoc.j2
+701f1aa7b097555354ebab9aa84731d80f7ed573ca0f151154f352b3d7a700b4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongod/files/secret
+13342f92c9ed8c84f42e656a175d6c112d3d936bf31652200df0754517a84d22  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongod/tasks/main.yml
+515470578e3e33a20ab4388d7a57d083b5ffbf44e8f8e3fcbc2737298a8b931f  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongod/tasks/shards.yml
+0b4ded5f433cc33cc345a035870e6c088cafffdc98c1cf81ba8ea3ce47fd2431  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongod/templates/mongod.conf.j2
+45db0190c61b7184f64bdb1ef03888ed75615faaf51ebd996cac4b8f358cdaeb  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongod/templates/mongod.j2
+c64a4fa4b72c90be8df4d5f5421846f7b4dacd306ca17c92da82743a5c9cb5e2  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongod/templates/repset_init.j2
+558c643cb1ea79e1074e440f20c9bc8e8eb9b6e8e2c61c8c684647e2cc5a6f16  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongod/templates/shard_init.j2
+701f1aa7b097555354ebab9aa84731d80f7ed573ca0f151154f352b3d7a700b4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongos/files/secret
+1fa0c032a3bbad361131ce1615595ffe06c20e52021167c860f390ded15b56de  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongos/tasks/main.yml
+ed85b6259d730c390215ec5400fd15f8dcf7e396b80b60dab4437781a45bad22  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongos/templates/enablesharding.j2
+21f53f10c47afca6f0d11d5e3674aaa0c49b0a3b801edbb9fbc48d08f67455ef  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongos/templates/mongos.conf.j2
+1fbab55abbe103e2bedd0b046316e9c5cdbb349b23c321d6b844686f052f741e  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongos/templates/mongos.j2
+f37045dbb439266b330f6e0e550c01f63db3bb7eb67ac4ff919f6281206af205  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/roles/mongos/templates/testsharding.j2
+42afa211dc09fb8d3665ac8340a84ff969cace640b8ad4276d08d12373f08075  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/mongodb/site.yml
+b6f9f99db9760995e54601e5d68be37dcdf17bd2146053446712b35ae44d561e  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/phillips_hue/.adp
+45275c10d3547a38ebe4a01652ca82ecbf92c25c44182558f3779c46a380386b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/phillips_hue/README.md
+2f9a340cc62d02ade8f717a30271e48b6e1b47d00282d219eb88c5d46d84e4c6  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/phillips_hue/ansible.cfg
+8de3ef62e9db67facaf91cec1ef3f47507b8bf28aed1967cc641c97342972804  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/phillips_hue/ansible_colors.yml
+5c878283f49fa89d0f46bf13d45aae0460252ea8bc0eeed79f6f41879ea9ddf4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/phillips_hue/effect.yml
+13e656387693dc2e14f2d7fbbf5bde4b93630931488f144aa146ae9f39ad061c  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/phillips_hue/hosts
+83cc1e466c79409fb2192e68c15cea1dd54ba801538a1697e84a3393d8e8e607  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/phillips_hue/hue.gif
+e515d6ae4de2428886d45e6c154db55e899bcf8522ae4f88cfe0bd41c7c873d3  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/phillips_hue/on_off.yml
+090c00bf094caab92acb48bc1faaf3f13dbd74677e8359f804c459e948b7f169  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/phillips_hue/register.yml
+3dc256f5c476a3fa4bcc6d2f1a193991a81b0675a9843e3c6bc97f223acada51  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/phillips_hue/username_info.yml
+b6f9f99db9760995e54601e5d68be37dcdf17bd2146053446712b35ae44d561e  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/rust-module-hello-world/.adp
+c2f175681528658d4ab339abc1aa17445505d9f1386c2daa9a0d67dfee97c76a  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/rust-module-hello-world/Makefile
+a73957412b32f78e6f1ba68fc2c879dc5abc3f6c2a78c0022314c1a8fa769a86  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/rust-module-hello-world/module-src/Cargo.lock
+8113f0cbe38d869ceeb0c169ef0ad3fb3765df84bd9d98c980e30a3df8c77da7  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/rust-module-hello-world/module-src/Cargo.toml
+e51e7fa612ec2ccd4fe2d51dba2133d2411ea4322a354343cc412400841dc048  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/rust-module-hello-world/module-src/src/main.rs
+b0b68749eb94ec245016fe552637328a259d26e8e63f4d4df19a1ce1dbb9dc3b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/rust-module-hello-world/rust.yml
+96ef2ed2c569d2fb1095e386cf032a5e4d8459d690fdca41d9eb449de8ab0936  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/.adp
+4e9e0952e2c6980b520392db7cd2bc530e3ed76b7bb3ba035cb606f43c9a306e  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/LICENSE.md
+8512636f692688bf9acd7c2522f7133e05b1c9da0576bfc3ccfb89a8221cb6f4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/README.md
+f2409f162ca9a50b1bbf6bec66ef2a923445f3d99c5f6b2423ec0995b5c02db0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/group_vars/all
+f80d4ac47f9a716a7b481fc397f0bac782a4a12edd919fbe3db4c42a00b82db2  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/hosts
+af8483884bc44e0e30918b638912aeae6ed70df74c124febc40b32a9abfbcf60  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/common/handlers/main.yml
+3ec40dee2434f14cd32613032704456313de6bf6a92c8642784f922e11684a45  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/common/tasks/main.yml
+464038b5fc4d51a81deba9c652ecd2d14e59b86d995504f4ff69b8ee7d2532ef  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/common/templates/iptables.j2
+d5a8eeac643a3518fabb4e2972c3b7f134bd5dfe290ddb5c1b811fdc99090c62  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/lb-nginx/handlers/main.yml
+1ed9026c06c8b7267680b9aaa4fb5756f2e50964ad61d686950d0814c2c28e3d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/lb-nginx/tasks/main.yml
+d1ef26be7fce4cdbf473d86aaadfc3be3b375e473fc39628aa9785319425ddb0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/lb-nginx/templates/default.conf.j2
+fcc39bba94ed3e140d41be9379d958ece527b4f27e1149a265fee35844d0ddda  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/lb-nginx/templates/nginx.conf.j2
+1dc966219a94c0135341e19bc165afb7a278579378e0ac88ed23bfddbaccac1c  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/memcached/handlers/main.yml
+9ffe4c2ba25b8ffb482d412f31ca9d50907238dad455df81f872d6c5a2a26760  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/memcached/tasks/main.yml
+90c407549893d0df6eab95f1cbb29603a8c2d5fb86e72c2bb51eaeeaa36d16a2  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/memcached/templates/init.sh.j2
+1d284f2681a00bf56978c2f6408517d91ec37b7dc3ec8886de4a586e066491f5  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/memcached/templates/memcached.conf.j2
+1636929cd73c4f15e68f9f545e246b4ba47700de98d4a18db8858db285efb4e4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/tomcat/files/msm-sample-webapp-1.0-SNAPSHOT.war
+da6c6eaaafcc338479c8ac8afc313f361b8ff715adeb93c10aee83460c29a5e1  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/tomcat/handlers/main.yml
+68c266ef9b60942d0cdcc43de3b8cd00a82dfaaa43daa166e2f2518fb75b1c28  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/tomcat/tasks/main.yml
+d105be8526a24107c7ce81fcdccbf8131248503b60980042ba62915608b9d6a5  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/tomcat/templates/context.xml.j2
+65d9b645c04b474cce01e3903e8fd627fa6aaf1f7ea30f1ac59d7da05b6d88fa  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/tomcat/templates/default.j2
+da8eb9ec07e7e77e03e536ec2be5146abc813fd6311c7fe84c58ab54ce025b06  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/roles/tomcat/templates/server.xml.j2
+43eb0257ea86aaca2fd2641d74a70ce3225fea081471ea2f52df8ff1a4a536bb  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-memcached-failover/site.yml
+54f67c27fb6e36ce26327e958e3d187962ba6487fa773f64bc9e4edbff9ada13  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-standalone/LICENSE.md
+7b34d982d8e3ee5ee604374e727ee7f3e053e3adb1935c2ee6f74fa0c670301e  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-standalone/README.md
+cd1b3cfe0f2381cfd101de85b22c0954b69ed9079357cbe82b82001d40d29168  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-standalone/group_vars/tomcat-servers
+4719b10f9c9ab5d7d4fc6d7d35b63af7ec06340fc9222008b2f5842facfc88c3  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-standalone/hosts
+803205f736bccab617aeec7b74142abdec16444d4c4a17c677f0bccad0b7e8c4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-standalone/roles/selinux/tasks/main.yml
+b3144e8da86d3cc0f619aee192f29e3a1da592a7b90f2b23dae9bd994b27e9a6  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-standalone/roles/tomcat/files/tomcat-initscript.sh
+4c999312ec1cc524446347cf2f61086752c20285bda1959184c8d0a0a2774799  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-standalone/roles/tomcat/handlers/main.yml
+74eacdc97c7fc92f915e13078ec51bb98d568856065a2bda15592d2a32d0c6f3  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-standalone/roles/tomcat/tasks/main.yml
+6937173f890850465634ecb8f76922d39b8308c996a5bbd5a3fa405b53649cb8  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-standalone/roles/tomcat/templates/iptables-save
+2c150f2e3f569ade0b4e03ba8f0498b4cb4dec8394add3e6486367d004a3e257  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-standalone/roles/tomcat/templates/server.xml
+42a12cb4018b2ab16464892858670d97808f52b25eecec2bdf6c73f302504dd3  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-standalone/roles/tomcat/templates/tomcat-users.xml
+b559c7a434fdba0095d648d5d26aa046398c25231cf8ad42150b5ea782d77f52  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/tomcat-standalone/site.yml
+b6f9f99db9760995e54601e5d68be37dcdf17bd2146053446712b35ae44d561e  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/.adp
+bb7a928142a3a7690f2ad5474212b0185154e1aa9cffab056701be289e83467d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/create-user.yml
+2f0745ba464651a94b4cc32c3820d41cc78f24ffb5c8f4a723c52613ed339ed9  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/deploy-site.yml
+30ddbced95cebb6603702f8beed7947b24ad1e765844024cdf846002047cad9e  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/enable-iis.yml
+9533f00a7df0e7613cff8bbc70ad032c64d5b3035954e58491073cada8d80c01  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/files/helloworld.ps1
+4f5b0f53253321885854cbf6cc5a99c2888e2fc0d115569e575405c744e9ecdc  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/install-msi.yml
+22b3bcaf5b75689ddd1356eb032753f8b9156d7e2670cf1a87864d65dc6fb3c1  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/ping.yml
+da4d84f9a51656b0679da052ba24fd0e4e428ab804dfb9895948a222c5db10d7  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/run-powershell.yml
+457a1231470a6f0c9b39e6a20c2b2f06134162d584c86283d0b5571e7e2ee8aa  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/test.yml
+09fba66be5bffcba5cbc6282f08b6bf1bb8244837a8b4342abe8549e4893fa61  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/wamp_haproxy/demo-aws-wamp-launch.yml
+ebb7fb35707272abec9a82e47c8d9e049032f40497f3f0e4332718f1ecf5fe7b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/wamp_haproxy/group_vars/all
+3ef11c1d96e3486e02cc8bdfea3894e95da235a3f8c950125c1279a62bb340a8  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/wamp_haproxy/group_vars/windows_dbservers
+1e1068cb4e7449542cda3cfb8fdf0d5e72d08537b57041f752e6d312e38e8c81  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/wamp_haproxy/group_vars/windows_webservers
+13a1e763492083ffff5589bab30d33271c5440fde292f89225c83487683c5437  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/wamp_haproxy/roles/elb/tasks/main.yml
+4343298413e47eba73b9b873fa1c0c8ada208f98ae6065a84a46abf71719a004  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/wamp_haproxy/roles/iis/tasks/main.yml
+7b9edaae360be488ff194afc299097eac5366a1b5ef495a01845bb0bd22c55d5  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/wamp_haproxy/roles/mssql/files/create-db.ps1
+02ee33db868188b7fc89ccfd41f5882f51cd0e38534687a639a09afe70862894  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/wamp_haproxy/roles/mssql/tasks/main.yml
+be0a62e7cf4ff0aa2ee43f933f0826d16a10f5a6170261ee1ca42d93d291df48  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/wamp_haproxy/roles/web/tasks/main.yml
+6c3649b4f21e6d1981ef116c0f1ef2256ac25f5b9b4e0d9d9b1e5ed396693610  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/wamp_haproxy/rolling_update.yml
+49e8b9dcfc8039db0d856b38a51ecddd19dbecdf873301c26ed58ae5763629da  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/windows/wamp_haproxy/site.yml
+e5609ca6496676c69e936a40f8d1f77754df43ca1e2ef83a0c6d33c2ce4d8d47  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/.adp
+54f67c27fb6e36ce26327e958e3d187962ba6487fa773f64bc9e4edbff9ada13  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/LICENSE.md
+811a86a2face2698916d4b37b9f6222ca6e5064c7bc115fe6859f9cf3fe95ccc  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/README.md
+c69749ac74033d3c3f305e8443b2836a1a22e7c8e5e420dac582da31e827802b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/group_vars/all
+e7fe96a5a295d805cf74b7e2bc1313af76c3168dba235f32160cec3cb7848a85  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/hosts.example
+1a98d261c1d9eb0e604f80c62cf467d66a059018ba22917662f979a06a469965  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/common/files/RPM-GPG-KEY-EPEL-6
+2b1fa3aaca83aca6ad1cc12b9a4eb3b6ed41b6f4485dfaf86b8019273a271016  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/common/files/epel.repo
+00db5e4d962c0f68ba7dcebe689d601bf1d0f537680325691541a9792a31a0f5  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/common/files/iptables-save
+af8483884bc44e0e30918b638912aeae6ed70df74c124febc40b32a9abfbcf60  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/common/handlers/main.yml
+c5c959a7523fc7614e737254f48fe04d9b5bb7d70076bffec5bf93b3f5da02eb  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/common/tasks/main.yml
+6965d2373bea35d3cd280a63d88742d969a3df0adbb8ee4c70ab4f94f6518e93  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/mysql/handlers/main.yml
+61ee4f5a1748de31f8d74c2560d4ce10a4d025f8d3b399772efc8f7fa4600566  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/mysql/tasks/main.yml
+129880e3ed62a5d290d4f8bfedb34d8af3e6cdfb4574d226777375089b434596  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/mysql/templates/my.cnf.j2
+6da9fb6f72172840098bd96387bdd3a5cb1623a17171a756796e503f9cbf91bb  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/nginx/handlers/main.yml
+0367a683d4ae8f4d288bf961eaa4a538af8cd722478f2ca47634f340fc1b458d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/nginx/tasks/main.yml
+0b64eb371ff81fc4dc23d27ea43e0c0fea159d5965675d9f2c2e3fb2713d5e5d  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/nginx/templates/default.conf
+e165baa05752cf465da8d53aabe3d89d6e78ed8cb9b6f636a1f59cca6effadc3  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/php-fpm/handlers/main.yml
+c6eff44a2bf7bb94ba686963d27ea34dacc5b25cb783da5d4e609ddafa7f4ff5  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/php-fpm/tasks/main.yml
+120a8e3945369bfafc061d2824e0044b68c82efa65289ee2836d0ad70d2bbd0f  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/php-fpm/templates/wordpress.conf
+e9fbad115ede22b45a6c13440de48c204928671f6895e51053ff22280393a7d1  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/wordpress/tasks/main.yml
+ea283584e8b71e9ef83c78b3a8f44b468e1e1c8490e5bade6b9789314b76211b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/roles/wordpress/templates/wp-config.php
+331e43abc6717e1e854d2c67aa1bb8aa55f7895852382c5a4af6e0bf94fa3a2b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx/site.yml
+717142ec68ab3b77362d662758443ecbedfdfb5e260f5b9c538eba3f14991051  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/.adp
+0b4347701cfd48c6f6bc99bc1f189ac1db28b1708fc77e039e5f0778be1b02a1  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/LICENSE.md
+55ff5c7d61719000e57634e2a67d7adef2e9acceec7d3dd8602592fb9f83ecfb  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/README.md
+660f4db45566852a8c55d4466b6db72f40b81ab13ea0c4dbeb83b765397e2fd7  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/group_vars/all
+e7fe96a5a295d805cf74b7e2bc1313af76c3168dba235f32160cec3cb7848a85  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/hosts.example
+c7b3f00324f02f8d60521d58067f8d6701e0ff83ea4a48507adbc35e923a9c83  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/common/files/RPM-GPG-KEY-EPEL-7
+667de6f58b127c47073b0fa52aed9dc5c3959eafaa3b1679b43d7639423b49cb  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/common/files/RPM-GPG-KEY-NGINX
+474ac2d2b426e9b8ebe60b641f9db75d05d77cdd9482a0a9f75458add32c6311  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/common/files/RPM-GPG-KEY-remi
+f6d084bb6c4f8625e4906beeff2d6c2431a240368d8b044a288539ca477d0b96  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/common/files/epel.repo
+60c4e6f1a886ca08711dcb32ddd97e00ada8b0c4e6693a8afbd0e32f0b5492b0  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/common/files/nginx.repo
+6f5170b9b8ca00f5f74abd489a922ab2da40e75b79250f848d31bdd1c3e9fcbf  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/common/files/remi.repo
+adaefa6eec0f2f5140f928529ee1a4f8c4154ebbb30d8caed77c34e724f2d7a4  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/common/tasks/main.yml
+121c120e6f0b23f182f8f6a18f276b678c5448bfaa08f125d62d33b0724e0d92  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/mariadb/handlers/main.yml
+0b165452fe572d5e89449f44aa2603e641510dc042af14ea46a7fe43e4e6f901  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/mariadb/tasks/main.yml
+f2e1bd843884d69b7fb5939d600b8c09d8de11620760403fd42709c2e116c057  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/mariadb/templates/my.cnf.j2
+6da9fb6f72172840098bd96387bdd3a5cb1623a17171a756796e503f9cbf91bb  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/nginx/handlers/main.yml
+e58b794102fdd7fc4ec09beac082e63bfe94384ee120712e3b8d972f0ce9b3fe  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/nginx/tasks/main.yml
+2973e309607ddcce57256b5b0d0a142d0d81a3c7b881f6956114bee98f974d05  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/nginx/templates/default.conf
+e165baa05752cf465da8d53aabe3d89d6e78ed8cb9b6f636a1f59cca6effadc3  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/php-fpm/handlers/main.yml
+c6eff44a2bf7bb94ba686963d27ea34dacc5b25cb783da5d4e609ddafa7f4ff5  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/php-fpm/tasks/main.yml
+120a8e3945369bfafc061d2824e0044b68c82efa65289ee2836d0ad70d2bbd0f  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/php-fpm/templates/wordpress.conf
+e52ced548c6ded5c931d91701405e5501f256861778949cace092af1dfcf2a68  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/wordpress/tasks/main.yml
+ea283584e8b71e9ef83c78b3a8f44b468e1e1c8490e5bade6b9789314b76211b  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/roles/wordpress/templates/wp-config.php
+dca0dfb5e067fc01a3828e1d7276aee75cd731a71eda79829d72ddd664a269b5  etalii.adp.ide.standalone/src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/site.yml
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/edge-anchors.adp
+fb589d3eb7a784180c602f862e9a802eddbd46033e0b6b103631367597af2e65  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/edge-anchors.yml
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/edge-broken-graph.adp
+a296d59f0b7dcde5c5e3a149f9623f1b81569bb2e67dddebaef418f12ef78cc2  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/edge-broken-graph.yml
+9c6d97b4d046897b589d98a2660ac5d65a82c7ff02ff3c919b2e512a381890e2  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/edge-comments.yml
+045e4b5cb05c9f665740613b958bea87d46a711d3b41475c648938d465efd314  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/edge-crlf.yml
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/edge-expressions.adp
+68e6e9087d33f2d49ce054e5257fb692763d705c8b50067fb212730377242567  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/edge-expressions.yml
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/edge-indentation.adp
+05619df7704bd07b8b64b0e04cf6343b1c6a9e39cfc29475877c9822556bd5ed  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/edge-indentation.yml
+2846a218247faa52bb8dd75bfdf59fc9228b7c0898b0d517cab197a32b6c59b9  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/extends.yml
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/jobs-only.adp
+baa0ed54cb353f1dbd201ad48499237c21de37c76ef2785725c5a019ac4d5b32  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/jobs-only.yml
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/multi-stage.adp
+c725af77400292b4d12dd42d26b9ee3665b9ea84d438b2235a59d44f55b8ad71  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/multi-stage.yml
+10a8555f8f1c3265271b84fa8a3a45d42635450b56600e8f706dd3cdf7b708d5  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/readme.md
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/steps-only.adp
+31cf3c3129763a05b27f04d7f336402da5b505cc4c5e85ca70e9aa69a9c9ad13  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/steps-only.yml
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/templates.adp
+6fe3cbda581d18bde86db5097c8c90d6dd769781a5dd9412f11e241912ee9060  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/templates.yml
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/templates/build-jobs.adp
+853f7b633f57f6ea18ceb87dcd32b3420d107933977db2a6fbacc72d569a471a  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/templates/build-jobs.yml
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/templates/pipeline.adp
+d7e870878dc419d60cc775c9d1e9aa77053c2934672e847a5b303a227ce911df  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/templates/pipeline.yml
+1c08536b6b697ef638c5fc9a52c51619ee4b9b02d7f9c648eaa0c30cd7b12095  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/templates/test-steps.adp
+62a7b39858d9246053411f82c16c57962668d5484da85c0b262116490f056def  etalii.adp.ide.standalone/src/examples/diagrams/azure-pipeline/example 1/templates/test-steps.yml
+de3bab320490043b35a84817b7c5f84548d6c080ca100c8ffd613170f25fc65a  etalii.adp.ide.standalone/src/examples/diagrams/c4/industrial-plant/architecture/bottling-mes.adp
+1b853a87143596d5379f2c86fefb2e96c0efb1bcadf856988a63d9f4271ebbaf  etalii.adp.ide.standalone/src/examples/diagrams/c4/industrial-plant/architecture/bottling-mes.batch-release.adp
+12596937a3e1d14312a8fa39e98d94d754615366b16b984455752a58d67dbd90  etalii.adp.ide.standalone/src/examples/diagrams/c4/industrial-plant/architecture/bottling-mes.dsl
+0a14e8f762af374dd121b966aeae846697f9513e713c1c1369252cd5a04b0349  etalii.adp.ide.standalone/src/examples/diagrams/c4/industrial-plant/architecture/bottling-mes.layout.json
+2b1f587d981876988bcaae398e35c07b01925c2b4985308f759ed60d6a3faeb5  etalii.adp.ide.standalone/src/examples/diagrams/c4/industrial-plant/architecture/bottling-mes.mes-containers.adp
+552ebaa2fc66ec2f8f1723c588d9243cc0c3b85f5d7f63693c1e7ee894b2a78a  etalii.adp.ide.standalone/src/examples/diagrams/c4/industrial-plant/architecture/bottling-mes.order-service-components.adp
+c10f288821c224ab1c9e39d39f9d2b7249612a6faca019fe253ebed13125c1e1  etalii.adp.ide.standalone/src/examples/diagrams/c4/industrial-plant/architecture/bottling-mes.plant-deployment.adp
+ca109e23c548aa1820efe900ca0fa9d21083ad2ffec36db7a137d2791255aa71  etalii.adp.ide.standalone/src/examples/diagrams/c4/industrial-plant/architecture/bottling-mes.plant-landscape.adp
+4b8e844539e007af723bca6720ec27c640cdc7eda91884b7b0a980fbaa47da01  etalii.adp.ide.standalone/src/examples/diagrams/c4/industrial-plant/architecture/decisions/0001-one-way-out-of-the-control-network.md
+f0727695de910c3fe46a64db306c9c4a96c46ebbc35cb005057c23bcbd1dab68  etalii.adp.ide.standalone/src/examples/diagrams/c4/industrial-plant/architecture/decisions/0002-keep-the-plant-running-without-the-corporate-network.md
+c4984c8796b63bf873eaeeb949772c9ee3ca46403e80a36620289508af6e3fbf  etalii.adp.ide.standalone/src/examples/diagrams/c4/industrial-plant/architecture/docs/index.md
+5ae89b8e8966ff0f0f3d403d244c46073d0a67da9b7a9a47e2f533bb4abed884  etalii.adp.ide.standalone/src/examples/diagrams/c4/industrial-plant/readme.md
+a6ae92d83c296e6bcb37ab5c2c7ec94fbe179379c460c9a87ec2dd4ae45776f1  etalii.adp.ide.standalone/src/examples/diagrams/c4/readme.md
+7dbf64c091fc5f9f25282c69e33902d78537121e899b5771b7077cc199275b69  etalii.adp.ide.standalone/src/examples/diagrams/c4/reference/architecture/code-level.adp
+de3bab320490043b35a84817b7c5f84548d6c080ca100c8ffd613170f25fc65a  etalii.adp.ide.standalone/src/examples/diagrams/c4/reference/architecture/courier.adp
+bdb8b2aee7859b291419ab3a931f70f07152a9d8c124b5789317d470fc353b7f  etalii.adp.ide.standalone/src/examples/diagrams/c4/reference/architecture/courier.api-components.adp
+b2557094ab62721f363a5b2e0433dc908db5ef8ea26758b210df482808e2d24c  etalii.adp.ide.standalone/src/examples/diagrams/c4/reference/architecture/courier.containers.adp
+caf578ad5bb5d8c00d0b347d2a2cbf3bb2e937d076536b600abeb930b6c2fbf3  etalii.adp.ide.standalone/src/examples/diagrams/c4/reference/architecture/courier.dsl
+972551e30f689aae622fafa1ea71f7c1b8901a0357345ac72482dfd3ddfb4425  etalii.adp.ide.standalone/src/examples/diagrams/c4/reference/architecture/courier.landscape.adp
+e7137f95b587b94dce768c00e2ca23c489e37aa62f1853674ebe06c13997e15f  etalii.adp.ide.standalone/src/examples/diagrams/c4/reference/architecture/courier.layout.json
+e5cc067df90f777ad47354166d2fdbc010832dc6aba37575400ada9b22907182  etalii.adp.ide.standalone/src/examples/diagrams/c4/reference/architecture/courier.parcel-scanned.adp
+8113c145fe1234de0d72ca38958cd1e4e68fe874f9342d0a5edebc88ac35e801  etalii.adp.ide.standalone/src/examples/diagrams/c4/reference/architecture/courier.production.adp
+1375efce147e285fdbf1b3a549564ce0272712883be2b2dc6a2d316ce7d5d55c  etalii.adp.ide.standalone/src/examples/diagrams/c4/reference/architecture/decisions/0001-record-architecture-decisions.md
+66e02d7c6ae522843660e4457181c14a613b845be3f7995229bc8da49b812512  etalii.adp.ide.standalone/src/examples/diagrams/c4/reference/architecture/decisions/0002-decouple-scans-from-notifications.md
+4604a2d2febe4d0a6f2907e0651134ab08b6be85023a57feff6dadbdaa99130c  etalii.adp.ide.standalone/src/examples/diagrams/c4/reference/architecture/docs/index.md
+8749a7fb63e983a979dfd02d9835abb529136da2759b695b16bdd28d6de84e30  etalii.adp.ide.standalone/src/examples/diagrams/c4/reference/readme.md
+e5b81c1fc2c8aa05f66db766129d8cd63e041efca5950cfd756c3f915c738078  etalii.adp.ide.standalone/src/examples/diagrams/causal-loop/on-call/on-call.adp
+951ab372ffab7b4f30619fa186468dc606ace9b933a6fb42fa66df8410a41815  etalii.adp.ide.standalone/src/examples/diagrams/causal-loop/on-call/on-call.cld
+30d1b12acb74c4e9e671028f9458df01da13fb2093d0a557eb8d7bbea2523e3b  etalii.adp.ide.standalone/src/examples/diagrams/causal-loop/readme.md
+01f045b8171146cb804f4e615cced2bda4b3e6ae39f74c4ffda350f009fa9e89  etalii.adp.ide.standalone/src/examples/diagrams/causal-loop/reference/reference.adp
+dc34a27643f605c3dd773e0e38c9d0bc620429f19b26959652c7f1395243f5ea  etalii.adp.ide.standalone/src/examples/diagrams/causal-loop/reference/reference.cld
+f16475ddbc8f44864fc16812c932d048b930d741b555b22dafd5a52c9f00e58d  etalii.adp.ide.standalone/src/examples/diagrams/databricks/lakehouse/databricks.adp
+a39816abd0454d526cbe5f5635670712f8014095f15e292dc0a08b0d172616d5  etalii.adp.ide.standalone/src/examples/diagrams/databricks/lakehouse/databricks.pipeline.adp
+0c6aa12eab63f0eaf2d254d124513d1887e1b5439a05be74901f8d04af247d87  etalii.adp.ide.standalone/src/examples/diagrams/databricks/lakehouse/databricks.yml
+05695e1d820cd1476f27e8fd40dd315ed59fa02e8eb3f1c195986fee22175343  etalii.adp.ide.standalone/src/examples/diagrams/databricks/lakehouse/readme.md
+7480bdc1f832921fb9e40269f73c40742900c97fde60c3de55aa99bfcae63c7d  etalii.adp.ide.standalone/src/examples/diagrams/databricks/lakehouse/resources/nightly-ingest.adp
+0041ed5073e94019149330c9f33e0e15cfc3d4d8e6421b354ffa7c47cef3e917  etalii.adp.ide.standalone/src/examples/diagrams/databricks/lakehouse/resources/nightly-ingest.yml
+00f8c21dee1731a10f6538f5b4e44c5e16cdcfc674a4ef1a25e10280b69444b0  etalii.adp.ide.standalone/src/examples/diagrams/dependency-graph/example-1/services.adp
+717f359b466dd4103b6c973223e9d03a8d6aba367b9496e805b2ed997fa3f434  etalii.adp.ide.standalone/src/examples/diagrams/dependency-graph/example-1/services.dgr
+598c4801e584198288c4260cdd6ba514602fc0a7e25e31570d697b77f9fef16e  etalii.adp.ide.standalone/src/examples/diagrams/dotnet-dependency-graph/pipeline-toolkit/Directory.Packages.props
+1202b17f8a8c967046f73a72071b5ca34a8e4e98e5105bccbfd9ef6860e14de7  etalii.adp.ide.standalone/src/examples/diagrams/dotnet-dependency-graph/pipeline-toolkit/PipelineToolkit.adp
+65f99323b4b62d30382daeb8d3793282925a7e45db266f36aaa3b466c9d7d1ca  etalii.adp.ide.standalone/src/examples/diagrams/dotnet-dependency-graph/pipeline-toolkit/PipelineToolkit.slnx
+898ac566e62590a7b681769f345245db42eab96d0c437b3e409b05749dd94e6b  etalii.adp.ide.standalone/src/examples/diagrams/dotnet-dependency-graph/pipeline-toolkit/src/Pipeline.Cli/Pipeline.Cli.csproj
+fe43d887ebde92aa5959fd2ae065370d2b42924b09d20aa8ba116f0c785c79a4  etalii.adp.ide.standalone/src/examples/diagrams/dotnet-dependency-graph/pipeline-toolkit/src/Pipeline.Core/Pipeline.Core.csproj
+1f8aa32ea7d258cfb5cea016e1a2925af0541681abc6965b5338265b7213091d  etalii.adp.ide.standalone/src/examples/diagrams/dotnet-dependency-graph/pipeline-toolkit/src/Pipeline.Storage/Pipeline.Storage.csproj
+e2ac6894eb0c6fffd61929dc1bb14797f1096e57ea159a15987a353e8c0f0265  etalii.adp.ide.standalone/src/examples/diagrams/dotnet-dependency-graph/pipeline-toolkit/tests/Pipeline.Core.Tests/Pipeline.Core.Tests.csproj
+141f34f0e21eba044f0a4bc27275fc437cca69918ed39ebd391ec4ea7669104d  etalii.adp.ide.standalone/src/examples/diagrams/functional-decomposition-graph/field-service/field-service.adp
+465e093c8896a24f678dc5d5eb35986c8c19b5d70447cd9d67083e4cc3bcece2  etalii.adp.ide.standalone/src/examples/diagrams/functional-decomposition-graph/field-service/field-service.fdg
+913f95ff05480c5c660549a7076bbb94b724342b19fcae2345249d8d30a90fd6  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/coal-technologies/coal-technologies.adp
+92b12d797713d3e5104960861474b8092757d164df6fccace0691baa50bcafb3  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/coal-technologies/coal-technologies.ghg
+3bf2f770cf2549b19701054c9111d9d283d9c3d8b19fa9abdc9754cb1ee56df9  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/digital-trends/digital-trends.adp
+4b78dbc66402e22888ceebcce10aca0abed90eaff914c43a5db6812014aa4333  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/digital-trends/digital-trends.ghg
+8c321f3574381d3b1827129e8260d0cd0d35bc48012367ca24540e4a436d6649  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/electric-vehicles/electric-vehicles.adp
+6772d7bc843837b9e7db57b017da6154418671966d5aac6501aebf42d7d84071  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/electric-vehicles/electric-vehicles.ghg
+2a835cda39b06dbd91c5b6fc9e837d6c3f8fa6a3c9496ba725904e649e4a430f  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/energy-breakthroughs/energy-breakthroughs.adp
+6d03f01c389e75549fcafacee370b44ea13a9e75b8e9831e358459be233dab49  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/energy-breakthroughs/energy-breakthroughs.ghg
+5ac0d9598d0b1c798bdc6c217f22a26a8fdc8c1819a15016267839de5fbcab66  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/eras-of-innovation/eras-of-innovation.adp
+b0b87c56298f2b0513dcb848071ef168b1b4320048f6f86164072268f9c91815  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/eras-of-innovation/eras-of-innovation.ghg
+a36cde1673671943c347f3a271847e8cd683a1c0e4f8fceeb667b39e3d460f3b  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/internet-evolution/internet-evolution.adp
+309d75b484c2e51d5b273045ad7b91281dab884e2224b376457f371d09eb397d  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/internet-evolution/internet-evolution.ghg
+12613a4b3430f66972e6b742d67a80dfefd4ce79dbeaa7a31fc4d6f4225f6a27  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/llms-and-agents/llms-and-agents.adp
+e452723ee221178312f54a13ed37a990614cefa58f046d8aeedd879dea898d42  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/llms-and-agents/llms-and-agents.ghg
+11b2382c2b72677e471109346408bf01adc3a4c9b4db8dd7fc82f449f024af84  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/technology-trends/technology-trends.adp
+2b365f9576ce489c1fe47ba48e9a73490ce4e861eb592ea6012a5905e9511d51  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/technology-trends/technology-trends.ghg
+93ddc58beaeab68d5d636efcb80b3b83e9751f18fad3e0d46ef2a951b634f5af  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/warfare-in-ukraine/warfare-in-ukraine.adp
+98eea4e208fb6d88454df1cb7ab33d90d422d6567fa0887c2767cdac1569752c  etalii.adp.ide.standalone/src/examples/diagrams/gartner-hypecycle-graph/warfare-in-ukraine/warfare-in-ukraine.ghg
+d0690641da8bc5168297180da425787c14fab72e91b1a4c988e83e48f5452583  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/hello-world/.adp
+c5a9bd139c9e10545d48e9a9637e2eeb16777918f97b69e193b429026dce8235  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/hello-world/.helmignore
+d90dbf5a26f72f382eea61534ec124fa3a3e007f77c1c40e7c8a084c906ced86  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/hello-world/Chart.yaml
+da628e8671b11e7242cf72563bd9316b0618939f6c59349a2b051268e100c3d6  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/hello-world/LICENSE
+5f80b061bb144577fe176630290778a658e919a426d3b42a38ed6e9d591bf1dd  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/hello-world/README.md
+cf7dcc81ce13fd944c338bc6b410a12ceb418704e6609012c7981bf89535eaff  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/hello-world/provenance.md
+9055a2e17a1c2696b62ca83d0d29d538e024b700ee0a829d7dd76c026666b954  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/hello-world/templates/NOTES.txt
+bb4c2b9cf3a083964ae69b8e1cfdc8109837730a37e6994f1943bb7c840049f0  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/hello-world/templates/_helpers.tpl
+8ee5dc182f0023b8bc348f66910cbe74181389cf74fd557b84b993b478364717  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/hello-world/templates/deployment.yaml
+00954a1b9900e3b44149647929c576c6a445b88291d146fe9ef6e674cc884516  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/hello-world/templates/service.yaml
+ac26aaeb844f675a12dc65fd510fe9b54222898414312e1454edc42c3ab43389  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/hello-world/templates/serviceaccount.yaml
+8cbe1989496321696c799d1fba1c5321f66d840f15ed9b927da83417bc574c4a  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/hello-world/values.yaml
+bc02062e305bf15a82137065b4d3bcf4a11228f30ebe88f4cb8fdafa3eaee146  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/.adp
+c40ae79417cf16341d44ca85011fd8c962171290b81252e4ca45e500b64ee7f9  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/.helmignore
+1133a7abec118884ee51bade93c4b37f3eeecce3362fac650450ba62e45ec472  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/CHANGELOG.md
+a376c3960ac63d228fbe89f04b79cd6a5eb1cc1d9d86c94c3280c23962284946  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/Chart.lock
+38ffe755c1e38c767c01fd3dddec3ac84376c530c6014811744ede5db3bef93d  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/Chart.yaml
+ff94c1f072acd4abc9f00e78af4017ada18a6adff29f8aaa0901ea4965f3a237  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/LICENSE.md
+ede71151be56744d0715d4e1b5b135f3f1401252fc2ff195144f14d3b025ee1a  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/README.md
+d14b283d36d82ee888ff2eb52438756377be60c1dd2a82a215c99cd13798d4de  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/.helmignore
+5a0c0dde3d358a63777990721f49dc6685bc4e9a8fca8c07b138c25111ffef63  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/CHANGELOG.md
+28914b0edb5510752dc1733f05125cde58a9e8ec13e7654bcb7f412413d3ff21  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/Chart.yaml
+ff94c1f072acd4abc9f00e78af4017ada18a6adff29f8aaa0901ea4965f3a237  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/LICENSE.md
+dc1f8b34251060ebbc99568da7168599055a33d5e557d3aa4346ce8eabad686e  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/README.md
+28e5876ef4fecd4e512567358204d6afa776bcbdc214652aa5b78c51e09564a4  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_affinities.tpl
+95cca5588efd56295fe11d984a39df11954d6e871709f923ad9c027d7edf4479  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_capabilities.tpl
+d707440ec1935ed428f0d25bfac49469b062cca7553501d9f723a443b6e15abb  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_compatibility.tpl
+2982ad52733572d965f7f11273f36286f5da5de6a1ee50135f2b176929e9dd75  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_errors.tpl
+3a909868e6d6e0003a398d529725624fc8848dfd5d93f4934269a0769991696b  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_images.tpl
+6715750107c99bac0974fd66c0124f40f5b59f8bbadde9868720601e6973ef66  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_ingress.tpl
+afcf386bc309414dc2b6f4c6e2e1199070bdd7c51adb4805e945a24068bb69cb  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_labels.tpl
+7c49000822e163ec8f8f7be38b0f9a70b1ed3931b82f597713a77844c15d041c  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_names.tpl
+85db876182fb97ecc8df6a9240d8ca97dbb5f0e95dc62a3ef3fdf01bc508120c  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_resources.tpl
+3ff3ec1db3779190ddd8a6c2ee014c2c2ec49ee4a9055d8cb32a9fffdd9edaa7  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_secrets.tpl
+3f0bb1793e3766ed8d4ff3ceb8234f9f9b0eb2942d294edbefef874e6eed44da  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_storage.tpl
+fd9e25850222f300d40244c01c8db15246a15c13be02a39143053081cda2546b  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_tplvalues.tpl
+9aeeb9ef69c06359fc6a05f4f16df6146cde6d00153d777d204ece1b8539a4fe  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_utils.tpl
+fd793cd8f6af9a880487146858d4d451fabf46d7c41885b04a30bb9a935adf00  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/_warnings.tpl
+5c7e9b537b484e1176b0af526114134c0c81ccf49dedd5319dd6ac11bda5e116  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/validations/_cassandra.tpl
+1492828a1f6336f8839ff51fb43486a266e985a8ba8597aedc5517f27a324cc4  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/validations/_mariadb.tpl
+65b5cb1c648305c939f18317b20038f6d0ab883411bed5deebc2f04639dbff80  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/validations/_mongodb.tpl
+48bbccad2617af7f1b7cfebf2fb822bd2da2907497d6e767d8e8bec8e3f6eda1  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/validations/_mysql.tpl
+7466c4dd67477db224b3e009af0a599203662b37105f37dcc57d7bac5fde55a2  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/validations/_postgresql.tpl
+90ea2bde7a3f7de478884e5ac13f419d76222744d6cffb4d6995115637224eb1  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/validations/_redis.tpl
+bca939db98591b99ea100e0dfb20d6a041fb2fc9fd57039c8340ba9c7737ebaf  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/templates/validations/_validations.tpl
+7a56b92c5755966e7fb539d650f83621f4f497c8e93e8bb8fbf1a018b296360c  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/charts/common/values.yaml
+d686db4f92675345cc91983bbcc95f4840c5997d4dee5e5ceee6519b975b9c55  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/provenance.md
+509246944c59093a90cc2608be19b0177090cb087efe684524daafd65d5cb136  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/NOTES.txt
+74c34b421d0af579b544bed1fd48f29fc242ba8edfbbd4c633c4e71b358482a9  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/_helpers.tpl
+0bf293e94b8dd2a4411110cfefb4b753f18d8f19976e831f9175109cc0c394d4  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/context-includes-configmap.yaml
+9d7a890160cc93e9650103d2433fd036d26808711b87fca44691f2527845c2a9  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/deployment.yaml
+0e421419a01ca244071c3a0ec79da29168371d5cc23a4f30b895e96abb28d584  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/extra-list.yaml
+8a5e65b2117a4347c68f2096e4873094e527ef63c58f5a54c2641ac88c036585  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/health-ingress.yaml
+d91af7bc0d53278e78343f318e654bbadf366f564c28e0b1f9fbc460b920406c  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/hpa.yaml
+7fa51c9272b8e7ca920bfdb4a54d9de6502ae25b686bef31fb2750c77466298b  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/ingress-tls-secret.yaml
+e6d1f95afd02406bf2b257b9cacc60afd8c999d38b2e97e44c448bb7962b7194  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/ingress.yaml
+2bc7d7356fc1b71804d6088d56b2a14557cf13ce095d1941a11232796d9c0e15  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/networkpolicy.yaml
+8bcec97121c9d9474c06041239bf13989c833366d76556226a7577853e99b57e  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/pdb.yaml
+3187d224d174204b3b8cc099e5ec4fb470927a5722d66a27b9443fc24303e467  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/prometheusrules.yaml
+b1a0c0d3ae4c396ff0cf1227907eaa5df5987d90f3779748ed7da75428b5ec61  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/server-block-configmap.yaml
+9fb7aa7314ec2212c55f3894d9f3a10977687c8a3cd82fb9a6351bf5cb7ac54b  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/serviceaccount.yaml
+9f82c624ae888ca498362d376f71cada15388014a8c8a39e8cbc191fe95e90e7  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/servicemonitor.yaml
+09ee7de9ad3d89cacad46dd336ba7f94efdd5bd3243109260df59498bd3bb199  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/stream-server-block-configmap.yaml
+bc850adc2c3b97a955769935c47be605d433913892f4b68c446d58404afdca06  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/svc.yaml
+5b26e36af33621c8acd80a6ad6703eaa86e8402471f84bd5dcc088979eace800  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/templates/tls-secret.yaml
+4b38312f06632881ac4139b634d405e5b685d9c72bc2cff837bc8693d0e09202  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/values-dev.yaml
+7b12ccc9adb6a4f69dbc85e0009c483e55a514d9e4cb8d08d175afcd833d363c  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/values-prod.yaml
+d6a993a9fcb55993b6dea5ad13ded0625b2271f19eb0f919d18c2c7bc2055faf  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/values.schema.json
+5bdb1002b45e985340f40e78c0cd5bd89376c2f4fe53c282aabe9281fee00952  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/nginx/values.yaml
+8341b4815e09fc96958837f42ef64d02c9a72faeb4ac978025c367b69adb290c  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/.adp
+83d9b8397d1724e0d586136e6493930bcc5f3944a682a0ee943928f73ac388d3  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/.helmignore
+49be2baf362d8983e89d6d9547b9107abfd416cfbcc82a6e55499c01d2daeb2e  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/Chart.lock
+4d0a6096363ded703190dfe57efd7c54df35b9aada436ca139b52521ab74732f  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/Chart.yaml
+1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/LICENSE
+abedcf948d8e101c73e62a4a8b31349dfb6a5fe00601cf4527b2e1473ac2f4cc  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/README.md
+84a76cdce86f0ff3092bd7ef7df94cbe0b0fbf2e51fab051bb1f838eb9472288  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/01-automount-sa-token-values.yaml
+06cbe98a7bd1e49dea8abf327cd4c0bd709331fa193f1a06176ffc367c7afc32  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/02-config-reloader-deployment-values.yaml
+6de6c96ffa96b197accd5caf5581e176185df9dd1823bfe9b5dcbad286736af3  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/03-config-reloader-sts-values.yaml
+aaaba33c563a80608e120fb6a42f7bd2c281471e5023292f10c30ee580d1bffd  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/04-extra-manifest-values.yaml
+d6a0c6ba0cffe2dd021bffb97acce69ef1594e7eaa8cef3eb722cfc177d0be11  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/05-server-deployment-values.yaml
+feff3491e74728a87aa955c7c8aa8d27221fae37e07a7fd4c38b477e4a65905a  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/06-server-sts-values.yaml
+aa2f9bd6395e4148f5fe55ac1acbc90f30dfbfc1d87f22a377c3ad163f08ffaf  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/07-meta-labels-values.yaml
+4bbf2d72b7a0a314852a044b3fa1cc5b39f94e05a531fc2d4b8fd59fd6de1eec  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/08-sts-pvc-retention-policy-values.yaml
+7ae30d987fed7165bdb70b40a92c1c555fe1435c8f7e0781130f64a1ec2ccd57  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/09-standalone-deployment-values.yaml
+796f0a7152c262c25ff78239951a061ae04e37283be549ce574b0be2c4919a3e  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/10-namespaced-sd-values.yaml
+be28ec9a5a08eaaaca918438483a1b3238df1440f7b56344435d631bc5105fae  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/11-default-values.yaml
+676e41a53ab6b756769255d60e790a3dc615d106bb0f7c97eb0ab26fe2b28d8e  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/12-ingress-values.yaml
+e5a3f84b81fa407aa264a0e7e6b60755f824b45c092c8e49f9723f06cc79ef43  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/13-pdb-values.yaml
+0fd5d119b96a48ae3a07bc771b14c3bf5e1f6c9fe4a303d546de68ddca8e8e65  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/14-config-secret-values.yaml
+56c0faf79c708e322d0a3eccb45f39971e38692f0ba181a4b94f07ef899699e4  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/15-config-configmap-override-values.yaml
+4fb38c32a53e05cf0417bb0859217067c3823bf96568df9b4509e532c83b6bf1  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/16-httproute-values.yaml
+1107d50f14403a21c35dc5d2eebe4916ce6b84b5cd58a3facf7c2fb89eafde7f  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/17-daemonset-values.yaml
+76b38fab26d09791d953f7fd3cd1a4a2bb522bdf1e4dd5ed07cb238bea4de82b  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/18-scrape-configs-values.yaml
+803f01872bdf9790ea1b3730d84823798d98340e63226be7da97c67af33d36dc  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/ci/19-scrape-configs-legacy-values.yaml
+b29e0d0872d1c227d6282660614a19aa3c9b479fe4c136d8e7184a3090b19301  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/provenance.md
+c58d53b3d7dd0fbbde2144447fdaea83575081e9f4a658bef7a1f8fb35081c39  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/NOTES.txt
+2d59aaa0f9b68bc8b0eef0246031072ec4f5b3a64939a61e5fb4d92d2c2fd21c  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/_helpers.tpl
+515d47ddf5951e9e03a64fdf3b74c815c9a8732457c8ba0cb20b3f45ac7108b3  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/clusterrole.yaml
+3cdb00068fda0c802464e24fc3375d7f1522c89e0f793bc3805eb706d20d32fd  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/clusterrolebinding.yaml
+da848673166f5ee5d3a10b442e9a168b88feacd2cdece67450525f9047d06c10  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/cm.yaml
+641d364eb2a3ca6d0a19c567a4f2ae89947a310ef76808b62f6d046d6246e506  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/deploy.yaml
+76df01beb85b56a88a7598ee80634494cd561e511889b95d1b9a183672596987  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/extra-manifests.yaml
+cda358e37e0e95ea8e08d26a46ed52b3d48f73f20c9ca39e6a06e41c27145819  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/headless-svc.yaml
+4556a57d8eb188b5e7fe459a52e59a19d2a39b05f2dbd7f0754d2366d5e36493  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/httproute.yaml
+845080bc88e0862ddac194164247ab8d90f52de4a84fef0778ddee57339bd94e  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/ingress.yaml
+626760c57848c8264e90a554bf349e263f7ba4e859deb7191b179748a1665514  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/network-policy.yaml
+6760d8519f393c8ff8e5807804a5988ea1844022eef039d4b31bb6cd15bd9c1b  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/pdb.yaml
+c502a8d92360699ca6acec93a5ffc71f6271d692f436a0c2e76b3f9e2eba27b5  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/pvc.yaml
+49074618ad74ce4cb684a93f85be8e6f106a1d49446e1c810598830655fbbec6  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/rolebinding.yaml
+b5c853264f9430c81309e5bcba436325355043485ba4802c265b0ad6af75932a  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/service.yaml
+fa2efacb799f14e2b9dec55ef6fe2d2f8c45c8704f85a4eb85b2c442e6835ea0  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/serviceaccount.yaml
+a217029de30ed9276c133a2f3aaef4dd29b22ccefa8e899001714fb6bce067fc  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/templates/vpa.yaml
+5c535730de05297c6a423a1464fcbaaf6bd3e420aed1a0f9f4a1f483aee9954c  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/values.schema.json
+f6f31336833f574e849f2cd59391db355e21d7915d1fd7621fdbab3c78ad8e5c  etalii.adp.ide.standalone/src/examples/diagrams/helm-charts/prometheus/values.yaml
+86b30e765a48fc9582a5b463547f6f6462ccdd83626563dffeff5cbe396e7457  etalii.adp.ide.standalone/src/examples/diagrams/mindmap/example 1/design.adp
+07dc3d97e2672ff5b7e616596b8c4fe08d3143f4ff5ea3af15ce220b75be510c  etalii.adp.ide.standalone/src/examples/diagrams/mindmap/example 1/design.mm
+86b30e765a48fc9582a5b463547f6f6462ccdd83626563dffeff5cbe396e7457  etalii.adp.ide.standalone/src/examples/diagrams/mindmap/example 1/mindmap.adp
+c9ae34c4ecae53efaf66fb7601b8622cf9bcc90725a90dc1945a8f4c684ab20b  etalii.adp.ide.standalone/src/examples/diagrams/mindmap/example 1/mindmap.mm
+daec710dfd45867594006e1f7be8a2bd1abe215f8e77ceca5c86e22bfad33eab  etalii.adp.ide.standalone/src/examples/diagrams/mindmap/readme.md
+05f512779ff71536e1aa4f65e0ea5a502fb1cbaed9f23e11cd06263032e9ac60  etalii.adp.ide.standalone/src/examples/diagrams/owl/owl-time/LICENSE.md
+dff16e95fdc483df09685aec559adf92af7719be31006f412ef32eb030e9680a  etalii.adp.ide.standalone/src/examples/diagrams/owl/owl-time/owl-time.adp
+251bd6970b0d7a5efa97ff681afe81a297df85deab3d860fa4f8eeba72d8f16c  etalii.adp.ide.standalone/src/examples/diagrams/owl/owl-time/owl-time.ttl
+5bf62354be2d0b6014587136899895063e1454ab95793f08677c69ac0427dd4c  etalii.adp.ide.standalone/src/examples/diagrams/owl/owl-time/readme.md
+ab0635422973b86ac3fc6dfd7d7a028178f1bd7878a85344ec806101ca5c8ceb  etalii.adp.ide.standalone/src/examples/diagrams/owl/prov-o/LICENSE.md
+16b82716dac14678fc269a3247e41f3b7fa3eec724a973cd19fecc051c542917  etalii.adp.ide.standalone/src/examples/diagrams/owl/prov-o/prov-o.adp
+7d203989f67b38bca572253942acc5a1bf24ce3ccfece16f072dcb4be2b79a96  etalii.adp.ide.standalone/src/examples/diagrams/owl/prov-o/prov-o.ttl
+cd73fdc0f12ce0d017cb906668f2c1c484b0b2cfb421c1524916adc0ffc54ae5  etalii.adp.ide.standalone/src/examples/diagrams/owl/prov-o/readme.md
+f56859f1533a526b9443392ede1a387197b2444f5b64edc536d079409df9a8d7  etalii.adp.ide.standalone/src/examples/diagrams/rdf/nobel/LICENSE.md
+f65739be8a4d983faa526fb085cd792ef56eac93a0339db8bb21ba7bbd148993  etalii.adp.ide.standalone/src/examples/diagrams/rdf/nobel/generate.mjs
+5ce9c536fb5d5d25268ae458cda7c5f509cd043b2666f8673259f51a2ddcdef1  etalii.adp.ide.standalone/src/examples/diagrams/rdf/nobel/laureates.adp
+ac80d5eff9a6ed218ea88c653f6abaabcad629337429b77f2748bba5f88d2315  etalii.adp.ide.standalone/src/examples/diagrams/rdf/nobel/laureates.ttl
+aabebe6999110e3f80c117c4e7d89e7cdbf1a103a7f8825497b2fee8a8d404f8  etalii.adp.ide.standalone/src/examples/diagrams/rdf/nobel/nobel-1903.adp
+d2889e175ddf89906fafd08515a0511aba60382a98bd32ad28e0a3621a5d86e5  etalii.adp.ide.standalone/src/examples/diagrams/rdf/nobel/nobel-1903.ttl
+d23dc92d82fcba3b05185dc2bc692c4d0ee83e216a771a8230b6ba2bfa021778  etalii.adp.ide.standalone/src/examples/diagrams/rdf/nobel/readme.md
+db8e6f9aa6013014b3bd01ae240cd253849fa34c5e8214677a2dbf79f938b18e  etalii.adp.ide.standalone/src/examples/diagrams/rdf/readme.md
+73192b7cf39754330444bfb71d575d39cbd31acba2de971f79422c3e2e0d424d  etalii.adp.ide.standalone/src/examples/diagrams/rdf/w3c-turtle/LICENSE.md
+317dbcbd07ba72963a3205fb21cf376d02b60ef9630c1d6058c91932c2c4efba  etalii.adp.ide.standalone/src/examples/diagrams/rdf/w3c-turtle/example-1.adp
+af8cc92c88c9cb9b06febfb23c74ecc3fff300f5584350ce8a53a20ed156827a  etalii.adp.ide.standalone/src/examples/diagrams/rdf/w3c-turtle/example-1.ttl
+29eb52f1ea852d50a1d165f18cd2d873d896b7b5690f33c35746d317da55e529  etalii.adp.ide.standalone/src/examples/diagrams/rdf/w3c-turtle/readme.md
+5af91495fb6029f8053f27009526b236500a6ad93302444f075b4dc1295801f6  etalii.adp.ide.standalone/src/examples/diagrams/rdf/wikidata/LICENSE.md
+65983ac5524b88933d8fecf8fc3c8fbfcb0d0ef4b88711b10f20ecb09d15d9fe  etalii.adp.ide.standalone/src/examples/diagrams/rdf/wikidata/marie-curie-nt.adp
+633795deb4a9d4e7e186e2439f0e5774c98ddf9106d432c1af3e389c4541f555  etalii.adp.ide.standalone/src/examples/diagrams/rdf/wikidata/marie-curie.adp
+0ed638bc6069d7b406e918df4df7202eb22d1f685fc6a296a5766933191146d4  etalii.adp.ide.standalone/src/examples/diagrams/rdf/wikidata/marie-curie.nt
+3032b291b834df2229376e6c0bc584a1c8fb8661c9976dda82715a073000f280  etalii.adp.ide.standalone/src/examples/diagrams/rdf/wikidata/marie-curie.ttl
+db88fd0b058a5bd1a40e7d6a5c873615d1b0f0cc67daad44e4a0eb60278439cf  etalii.adp.ide.standalone/src/examples/diagrams/rdf/wikidata/readme.md
+43f66667f0738a7d5745487da5f173302380ae12b60d2288b16bce3fe387dbae  etalii.adp.ide.standalone/src/examples/diagrams/shacl/fair-data-point/LICENSE.md
+5d7d8383d8e36bb8e7938fd4cf99f369bf405e9b54300212e65fb43b21b0e59c  etalii.adp.ide.standalone/src/examples/diagrams/shacl/fair-data-point/navigation-shapes.adp
+e295662b1150b3ab58999f30edf4171d27233ca6789d9ffde037f1b3755eb80f  etalii.adp.ide.standalone/src/examples/diagrams/shacl/fair-data-point/navigation-shapes.ttl
+ff34a9fb75e9a05107bae45f5076f2446bf355bd32a8b39e5b4a96990fec7157  etalii.adp.ide.standalone/src/examples/diagrams/shacl/fair-data-point/readme.md
+e31f249cfc6112461f38526a48454e2bc6cbc0c623dfbb29fb038d20c369a813  etalii.adp.ide.standalone/src/examples/diagrams/shacl/w3c-shacl/LICENSE.md
+50cae6f80336cf07fbbf3382b3ba7cb50d113ad382cfe5be8b60adaaf9d455af  etalii.adp.ide.standalone/src/examples/diagrams/shacl/w3c-shacl/readme.md
+c9592be7f4e2bfdd61881af8d77aa28539445acd7fc838cc82e7d7ad0aaf5939  etalii.adp.ide.standalone/src/examples/diagrams/shacl/w3c-shacl/shacl-shacl.adp
+3aef8e34d616d78867b09047e773598d2505548051bed486af9d3f65957cdc32  etalii.adp.ide.standalone/src/examples/diagrams/shacl/w3c-shacl/shacl-shacl.ttl
+eef742f45654697fd823c7ccc67d3f354557bf21f95c777b3f18b062e55619be  etalii.adp.ide.standalone/src/examples/diagrams/shacl/w3c-shacl/spec-examples.adp
+3bedc139f4e82178bbbf5f49ba8eaa1901a818c2da38ee62f8b0f7c8f941ac82  etalii.adp.ide.standalone/src/examples/diagrams/shacl/w3c-shacl/spec-examples.ttl
+d07988f4be47912f75a73b44da8a9c0b602bf6c8ced69de858b848f379ecd973  etalii.adp.ide.standalone/src/examples/diagrams/skos/stw/LICENSE.md
+f14c3dacf49679882f0321e86db44d1b5f1748578d262e703145cd759d5336c6  etalii.adp.ide.standalone/src/examples/diagrams/skos/stw/business-economics.adp
+1c146b4575ba583ca1359465fe4522324ff9bd63a27c12c6efa8f7d5dc3b2ba0  etalii.adp.ide.standalone/src/examples/diagrams/skos/stw/business-economics.ttl
+02ec8f30049e2eb96cbcf14cbbdb196424c49a3f79068e186c4f4356c84029f0  etalii.adp.ide.standalone/src/examples/diagrams/skos/stw/geographic-names.adp
+666255a84764d6cd4e32e37eecd93314a8b9759c9b4e51b518bd551e3a146138  etalii.adp.ide.standalone/src/examples/diagrams/skos/stw/geographic-names.ttl
+b6285ab96f86fb8629184ccc04976405935ea9946941d420d5e34dd06f3b0673  etalii.adp.ide.standalone/src/examples/diagrams/skos/stw/readme.md
+36c210a3f9a85adf6534f530984bf4eb0c923756239a1cf925ad0b4eb6156d1f  etalii.adp.ide.standalone/src/examples/diagrams/sparql/adp/ask.adp
+89bc376ff84b1b698d4bfac97053109d834d9e12f45f985e050be9f41f2bca01  etalii.adp.ide.standalone/src/examples/diagrams/sparql/adp/ask.rq
+ebc0d0ab110229cd077422f040bdf89d84536a4849bc362a83083eda233be91e  etalii.adp.ide.standalone/src/examples/diagrams/sparql/adp/readme.md
+33420800e1650c33e70ca0130598c54cbeb39cb79d4c0d1bf8e0736dcc86b682  etalii.adp.ide.standalone/src/examples/diagrams/sparql/readme.md
+0d0157726b0c23e2aba6dcd59543f1613e40162011d06bffccf4f11dce17eb7d  etalii.adp.ide.standalone/src/examples/diagrams/sparql/uniprot/LICENSE.md
+3f251f4187a301126e6b1cf0b23169dfab4d8a35eee2ad5a8ecd1d49f1bc2ce4  etalii.adp.ide.standalone/src/examples/diagrams/sparql/uniprot/describe-embl-cds.adp
+26abb8a316e5d4d12112c3477caa2acd495ef804fd348afa53ec1faad0ea767e  etalii.adp.ide.standalone/src/examples/diagrams/sparql/uniprot/describe-embl-cds.rq
+538cc0e1e3ae46abcbc3cb8b65162ae3fbff404840b6fa55e70d454d7b814eba  etalii.adp.ide.standalone/src/examples/diagrams/sparql/uniprot/proteome-location-of-gene.adp
+37c2e3a6350d4b35cd86587cb5e13fd353b2565ed6e1000b1d6daca965084560  etalii.adp.ide.standalone/src/examples/diagrams/sparql/uniprot/proteome-location-of-gene.rq
+038caca7f67173a5f9ac84d68ec2aed63970454fdb5951d010b79c93565002ac  etalii.adp.ide.standalone/src/examples/diagrams/sparql/uniprot/readme.md
+5170c03d45dff0972681db604343cb3bd336a62f0098fed3612848fca9b1c8ad  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/LICENSE.md
+c7eb6b802874c5b3b027479bbcf6fcf44d99d73dab2780c6fd21e82edf19a0c3  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/aggregate.adp
+b4cce2d79133328f6e86a7d24d3f4cef4c10d0ab9e81e48e78ff60d0a5add14a  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/aggregate.rq
+6c6aa8cd78da92d57d20b3bbdcf97b88eeaae2de166799d03b6a0630d00033a3  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/construct.adp
+9ae8ae199a45c95bdeb36d7907e458b1163709260150c4d51c1789e4fcbbc1c9  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/construct.rq
+310d7526e1ad2bab0daf7b6472883f48dcbef656958233a75e5745ab2ac610ff  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/filter.adp
+7e92491e4a13074c58e43084eca3f1087d49e3b4c7900324e3e5973b232c55e4  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/filter.rq
+c75533ee880ae53ed51f64b308463bfbfde628d42a9dd98482a4087ff637c1bd  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/optional.adp
+46fcf54749a00f2ae914f048fb7a3ed6d772d4b1a36e8400fb5a9dad9865febf  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/optional.rq
+b867a08cc731b2bb44fadf04284e2a91de9b278a7bf3f8e131ff7c728a4691cf  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/property-path.adp
+33e204f034d78bc718b24e82fcd8babe9d4b9f6532f2c8226c148f530c4a4393  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/property-path.rq
+c08ecf0a2a62db07f8ff3b092e7ee8e212cb4452bbdc4f3f23dc15593ec39b1e  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/readme.md
+df48e884c74f0371c6992e4ea285371497c6e93f4df5644ba1d21a2a37c612d0  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/simple.adp
+892b09d098ae097e1a105cf2460210fac38d63ae1d328ef83158f86be516ea47  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/simple.rq
+e0d79efc5a16551671ed5c13c9268fcba9062681a5b158f806b87b5f01b7e073  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/union.adp
+57f7a5ae6917cb07dce21060b8090b4329fcee5dfd89b5fdd9930440e6d7a978  etalii.adp.ide.standalone/src/examples/diagrams/sparql/w3c-sparql/union.rq
+de0a1dec4c897c0e8fbaaa218a3ac08b8fec176b5acccbcb75b4e9e2a70519e1  etalii.adp.ide.standalone/src/examples/diagrams/timeline/example-1/roadmap.tml
+0101aea91bc48ad236d94f6fc652e1fce7c1e8f920532a5d8d0fd29430d96a6c  etalii.adp.ide.standalone/src/examples/diagrams/timeline/example-2/roadmap.adp
+3fe57a56ca7d264c4fddd5e580384fcc9b6640d6b68f3e6977771aa2eb40458c  etalii.adp.ide.standalone/src/examples/diagrams/timeline/example-2/roadmap.tml
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 1/tea.adp
+f2572e67a7047d0195646f9b55dcd90cdc987b59ea7b78cf70457ed49412e1e2  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 1/tea.owm
+c0022083538ec5d91b0ae353718ec51781392f66209cdd33feb744eb71e4bf26  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/.gitattributes
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/annotations-and-labels.adp
+f7e3b9e9ef2387f02a8df6fe8983aa50eeccd3c919aa3af7dbdabfee91f7f458  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/annotations-and-labels.identities.json
+a5cd56d193a11740393c1677f5be1bb7eb9b09ed5a291fce1e683a09c6ff3819  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/annotations-and-labels.owm
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/blank-line-runs.adp
+09bc97fe4f227beff1cb6aea40f3ac3f460b9f6908cc93e36f0a0786bc9d4f7d  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/blank-line-runs.owm
+2fd7d23df3300e1048ffebbe9d6590e7437bc08a266cba8c4ab83553f59b16b1  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/certify.mjs
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/comments-everywhere.adp
+ac753ccf72d974038f443196a7ff71821ac3b7a1a4da20a59621bfb61e6c3762  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/comments-everywhere.owm
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/crlf-line-endings.adp
+b9796394a35a23997393b3a9de444192f9e39b37711cdaf624714b3f5af64399  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/crlf-line-endings.owm
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/lf-line-endings.adp
+b2b768300de10033b02ad4395521648f1abcb3aba82fcf77ee8a76b8ec456dc7  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/lf-line-endings.owm
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/minimal.adp
+f7b89a7c7e5651ad3d9b5603ab24f7331f515542db702650e3f004a65d0d0a32  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/minimal.owm
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/mixed-line-endings.adp
+2d90b6421c1a0275b64edda292a2661710e67bd830c5bf11451b6b8b7076df4b  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/mixed-line-endings.owm
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/no-trailing-newline.adp
+b6b62efc554ff73d5a0f412081c6924f3c938036e731fe31666e4bec04b8be84  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/no-trailing-newline.owm
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/pipelines-both-forms.adp
+0bf4e7623c98a78dc5380db05d01a77471e9c4b926fc58c6f1c6862c538af4f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/pipelines-both-forms.owm
+924635b542d4fac489fb95091719e93b8b46b5b9e1ceefc53f3c955ccca672a4  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/readme.md
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/strategy-vocabulary.adp
+17960cd6720620f84d7676d53a8348972e55bfd2801e67b6b22998dca7645313  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/strategy-vocabulary.identities.json
+33b327700392a41b2e802d7d993a07009f3e0a264ee32b4de617d15079f5ed75  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/strategy-vocabulary.owm
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/submaps-and-urls.adp
+2470ca9fa2bbe7f22d5c4387b2bff044c39ddfcaddadd5b06f51bdbcacbcade8  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/submaps-and-urls.owm
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/tea-shop.adp
+c711d675f5903b1fa784269562a20810d72372ac3fc945df29591f5e5fc99578  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/tea-shop.owm
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/unmodelled-statements.adp
+dd5f48d643bf536e6d465631d9f1ced1057954b48055acf29b392b8b8484e43e  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/example 2/unmodelled-statements.owm
+3014e04446afb720c98fa5d1c7592faeb6f74889c18305f423645fb9228cf9f5  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/map2.adp
+5c37ea0da0dabe1f08cd09f3e80bb078e6d216ab434a7f2580388dfc76c47e7a  etalii.adp.ide.standalone/src/examples/diagrams/wardley-map/map2.owm
+b4556036a7339481237e11dc316295d024fabd0b26fc380c2e3c1adabf1b805e  etalii.adp.ide.standalone/src/examples/editors/markdown/guide.md
+4ad66a436ddba1ea2691962cc8b8ab97978c1fffffacb996a379853f6eac59bf  etalii.adp.ide.standalone/src/examples/editors/markdown/readme.md
+d39e54b5f673d0aacfada752d4fe6db5438ffc6b2a88f8c471f68349b8ed63a6  etalii.adp.ide.standalone/src/examples/editors/plain/crlf-notes.txt
+450ab7fc13b76b0775075924c9bf7b93fff098bdfef0b47ccbc6c3cca720cc90  etalii.adp.ide.standalone/src/examples/editors/plain/readme.md
+57c7b3659aef40178f8f565a2c50d013fae94967b924c809f555cf1f072fd530  etalii.adp.ide.standalone/src/examples/editors/plain/utf8-bom-notes.txt
+358199a4feb5625fc5bf3b17deb9adb7a1b2f738e3a88a05850fc748cbacd5c9  etalii.adp.ide.standalone/src/fixtures/cross-tier/element-types.json
+ecb0e4cb45fdee8488553bf19ee65bd0e0142d2873e641f57f54114c13b3bf2b  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-ansible-structure.json
+bf80acd3e0df1b7ff85e7eaf5042001e7dfe8c09f8f0416069aa721782e15a79  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-azure-pipeline.json
+bf80acd3e0df1b7ff85e7eaf5042001e7dfe8c09f8f0416069aa721782e15a79  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-c4.json
+67caf5b89662be46b06ef0d596d4e1960a47006056d68a9d4b7c347615b22a1b  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-causal-loop.json
+90a4b7f1a4a423a1440f6c04881c096e4495ce8257903d2d261a41b859c3e97c  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-databricks.json
+bf80acd3e0df1b7ff85e7eaf5042001e7dfe8c09f8f0416069aa721782e15a79  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-dependency-graph.json
+317c9c0b8ad39bb289efb2df83aac1e39e3fbebfb5f68c42cc0c759ce947a2f5  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-dotnet-dependency-graph.json
+bf80acd3e0df1b7ff85e7eaf5042001e7dfe8c09f8f0416069aa721782e15a79  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-functional-decomposition-graph.json
+bf80acd3e0df1b7ff85e7eaf5042001e7dfe8c09f8f0416069aa721782e15a79  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-gartner-hypecycle-graph.json
+58c7487298d45afe476585c89bb553ce80c5ddddd66631eb9e8607db26cc5a1d  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-helm-charts.json
+bf80acd3e0df1b7ff85e7eaf5042001e7dfe8c09f8f0416069aa721782e15a79  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-mindmap.json
+2ace0c87ed7f8af7a344ceaa4985a84e7fcaf09369314a1901b47de2b9fa4677  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-rdf.json
+a0ab925f1904c5ed36886b19781c1d535ab47182831e3181b1ad1ee5fe16280f  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-sparql.json
+e9359d800b4b243c3992781fb02ac275b0ee8a8d5760eff5e9338d50cabc0b82  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-timeline.json
+bf80acd3e0df1b7ff85e7eaf5042001e7dfe8c09f8f0416069aa721782e15a79  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/module-wardley-map.json
+d75313a2af7bfea5696058bc208504547c4c4de5bc39ef1cfc79da86a039014b  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-ansible-structure.json
+2d53dee1e3dc1df614c8ff6a6ab010ede591a18466302b48de754f6decb86c87  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-azure-pipeline.json
+a9429f31f9ccaef3a7232b93049b432a3f8ada3e5f1861c0309c92f536a75dbb  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-c4.json
+1ed18eb40084a3289d0e6601d0dd15f0d2a42c15957d737fb5420a2a0e609f37  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-causal-loop.json
+99431af4fbac972cd5a532805390ab591b7f70e7fefaf138e6f73fd8a97ddcf9  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-databricks.json
+9d6215219b0e4a69a2f4fef3c81d24e39b63f898a41239d443ff8eff9c170904  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-dependency-graph.json
+dfdf721e0986b255f3665723e8c4addc1cd2937b583f4c57552f4785219258cd  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-dotnet-dependency-graph.json
+8266f80af6d6bfcec886a024d8dc89eb1e97cd9f49332434b962cfc2fdb2d5b1  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-functional-decomposition-graph.json
+d1c2bf81c5ebe28d2afe46234a91377d6af10b510dec573cfbfaea53ae63c8bd  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-gartner-hypecycle-graph.json
+8695cf27c6459536a2f1c8df82abb2e39c99674a447222b16ffbad64fd270817  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-helm-charts.json
+5cf3f02c89e1e0016793698082a75286fdb730f10ff5afd0bf607c27e8f9f297  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-mindmap.json
+7f510dd44fa2e841cf94b74736822c6b9a9785815b5afb2df047c642bdc78eee  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-owl.json
+a2a05bb3922a92e4aab0cc0a086ded8a6f69293b31e037af4e31ccdd1b013884  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-rdf.json
+d8e6420cc1fbecf4ae7afeaa9c9d664cf62f1d923b9aff08972eae73404f2103  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-shacl.json
+0814b1e8dfc1725d00b6e5583856b6361391ee626de6b6511989e537101d3b3e  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-skos.json
+fe1080c6a81eebbfa783d1f390767462c01966d342e3dbd5739659c6d0d763a2  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-sparql.json
+f0e8d4bf4c187f156b4a10ec4d6823f7d8c4d5fc9cc49fd33cb84b61e78b4896  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-timeline.json
+9f6af3014272f99fa646e99684124e197be65c856975d312361fc2eeaf5f2594  etalii.adp.ide.standalone/src/fixtures/cross-tier/example-models/showcase-wardley-map.json
+f1d552b5c841ba7002317b8e5c6ebb2cee8c2895d327ba5995c6bd93781d92bb  etalii.adp.ide.standalone/src/fixtures/cross-tier/gesture-ids.json
+f5a29f9bb1381e2913f6483ff258366eae06fc691671f693deda3bfdc4d39220  etalii.adp.ide.standalone/src/fixtures/cross-tier/permanent-statuses.json
+67442df73f759f1b11d541847343f5cb2c7ba12b59a2ca895394eb00bc9765c8  etalii.adp.ide.standalone/src/fixtures/cross-tier/row-rounding.json
+e4e8c5d055582e3737d58cb1d055650bb543680adcd7bfcf9aea7ffa4563eed5  etalii.adp.ide.standalone/src/fixtures/cross-tier/text-metric.json

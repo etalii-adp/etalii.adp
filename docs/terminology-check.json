@@ -1,0 +1,223 @@
+{
+  "$comment": "Retired uses of the ADP vocabulary (docs/terminology.md), checked by .github/scripts/terminology-check.py in every etalii-adp repository (spec 002, contracts/terminology-check.md). Words are matched case-insensitively and acronyms case-sensitively. A finding of severity 'error' fails the check; 'review' is printed for a person to judge, because 'designer' is also a valid kind.",
+  "version": 1,
+  "patterns": [
+    {
+      "id": "dedl-name",
+      "regex": "\\bDEDL\\b",
+      "caseSensitive": true,
+      "severity": "error",
+      "entry": "DEDL is retired",
+      "replacement": "DISL (a diagram type) or DID, the Diagram Definition Language (a stored diagram)"
+    },
+    {
+      "id": "dedl-expansion",
+      "regex": "Diagram Editor Definition",
+      "severity": "error",
+      "entry": "DEDL is retired",
+      "replacement": "Diagram Specification Language (DISL) or Diagram Definition Language (DID)"
+    },
+    {
+      "id": "dedl-extension",
+      "regex": "\\.dedl\\b",
+      "severity": "error",
+      "entry": "DEDL is retired",
+      "replacement": ".disl"
+    },
+    {
+      "id": "dedl-schema",
+      "regex": "dedl\\.schema\\.json",
+      "severity": "error",
+      "entry": "DEDL is retired",
+      "replacement": "disl.schema.json or did.schema.json"
+    },
+    {
+      "id": "dedl-version-key",
+      "regex": "dedlDocument|\"dedl\"\\s*:",
+      "caseSensitive": true,
+      "severity": "error",
+      "entry": "DEDL is retired",
+      "replacement": "\"disl\": or \"did\":"
+    },
+    {
+      "id": "dedl-media-type",
+      "regex": "vnd\\.dedl\\.",
+      "severity": "error",
+      "entry": "DEDL is retired",
+      "replacement": "vnd.disl.specification / vnd.did.definition / vnd.did.fragment"
+    },
+    {
+      "id": "dedl-fragment",
+      "regex": "dedl-fragment",
+      "severity": "error",
+      "entry": "DEDL is retired",
+      "replacement": "did-fragment"
+    },
+    {
+      "id": "dedl-paths",
+      "regex": "/adp/dedl/|specifications/dedl/",
+      "severity": "error",
+      "entry": "DEDL is retired",
+      "replacement": "/adp/disl/, specifications/disl/ or specifications/did/"
+    },
+    {
+      "id": "draft-acronyms",
+      "regex": "\\b(DIFL|DEFL|EDFL|DIDL|EDDL)\\b",
+      "caseSensitive": true,
+      "severity": "error",
+      "entry": "earlier drafts' terms",
+      "replacement": "DID, DED or EDD (definition languages); DISL, DESL or EDSL (specification languages)"
+    },
+    {
+      "id": "draft-extensions",
+      "regex": "\\.(difl|defl|edfl|didl|eddl)\\b|disl\\.disl|specifications/(didl|eddl)/",
+      "severity": "error",
+      "entry": "earlier drafts' terms",
+      "replacement": ".did, .ded, .edd; disl.schema.json"
+    },
+    {
+      "id": "language-designer",
+      "regex": "\\b(language|definition) designers?\\b",
+      "severity": "error",
+      "entry": "the person who specifies a tool type is a tool engineer",
+      "replacement": "tool engineer(s)"
+    },
+    {
+      "id": "author-of-definition",
+      "regex": "\\bauthors?\\b",
+      "severity": "review",
+      "paths": [
+        "specifications/**/*-specification.md",
+        "docs/terminology.md"
+      ],
+      "entry": "the person who specifies a tool type is a tool engineer",
+      "replacement": "tool engineer(s)"
+    },
+    {
+      "id": "diagram-editor",
+      "regex": "\\bdiagram editors?\\b|\\beditor runtime\\b",
+      "severity": "error",
+      "entry": "\"editor\" is not the running diagram or designer",
+      "replacement": "diagram; runtime"
+    },
+    {
+      "id": "mixed-copy",
+      "regex": "diagram, designer and (text )?editors?|diagram and text designers|diagram, designer and editor experiences|Browse the designers",
+      "severity": "error",
+      "entry": "tool is the umbrella",
+      "replacement": "tools: diagrams, designers and editors; Browse the tools"
+    },
+    {
+      "id": "designer-umbrella-code",
+      "regex": "DesignerEditor|offDesigners|designerSettings|ADP_DESIGNER|etalii\\.adp\\.designer\\b|DesignerInfo|DesignerOrigin|DesignersSection|DesignerState|DesignerPanel|DesignerDriver|DiagramDesigner|MindMapDesigner|createDesigner|designerInfo|DesignerPopup|DesignerCard|DesignerList|DesignerPage|RetiredDesigner",
+      "caseSensitive": true,
+      "severity": "error",
+      "entry": "tool is the umbrella",
+      "replacement": "Tool… (rename map)"
+    },
+    {
+      "id": "designer-umbrella-prose",
+      "regex": "ADP designers|the designers|designer catalogue|designer framework|Designers settings|each designer|every designer|/adp/designers/|diagram designers?\\b",
+      "severity": "error",
+      "entry": "tool is the umbrella",
+      "replacement": "ADP tools, the tools, tool catalogue, tool framework, …"
+    },
+    {
+      "id": "designer-word",
+      "regex": "\\bdesigners?\\b",
+      "severity": "review",
+      "entry": "\"designer\" now means only the form-based kind",
+      "replacement": "tool, or the kind that applies"
+    }
+  ],
+  "allowedPaths": [
+    "**/.git/**",
+    "**/node_modules/**",
+    "**/bin/**",
+    "**/obj/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.gradle/**",
+    "**/.astro/**",
+    "**/out/**",
+    "**/package-lock.json",
+    "**/*.lock",
+    "**/legacy/**",
+    "**/.spec-workflow/approvals/**",
+    "**/.spec-workflow/archive/**",
+    "**/Implementation Logs/**",
+    "**/audit.log",
+    "docs/terminology.md",
+    "docs/terminology-check.json",
+    ".github/scripts/terminology-check.py",
+    "src/content/docs/docs/terminology.mdx",
+    "src/content/docs/docs/specification-and-definition.mdx"
+  ],
+  "allowedPathsByRepository": {
+    "etalii.adp": [
+      "specs/001-*/**",
+      "specs/002-*/**",
+      ".github/scripts/validate-examples.py"
+    ],
+    "etalii.adp.ide.intellij": [
+      "specs/001-*/**",
+      "specs/002-*/**",
+      "specs/003-*/**",
+      "specs/004-*/**",
+      "core/src/test/resources/settings/baseline-adp.xml",
+      "freemind/testdata/reference/spec001-test-inventory.md",
+      "allure-results/**"
+    ],
+    "etalii.adp.site": [
+      "specs/001-*/**",
+      "specs/002-*/**",
+      "specs/004-*/**",
+      "src/data/redirects.ts",
+      "scripts/refresh/fixtures/etalii.adp/specifications/dedl/**"
+    ]
+  },
+  "allowedLiterals": [
+    {
+      "text": "FileEditor",
+      "reason": "IntelliJ platform API"
+    },
+    {
+      "text": "TextEditorWithPreview",
+      "reason": "IntelliJ platform API"
+    },
+    {
+      "text": "OMG Diagram Definition",
+      "reason": "third-party standard"
+    },
+    {
+      "text": "DEDL became DISL and DID",
+      "reason": "the glossary's one line of history"
+    }
+  ],
+  "allowedSections": [
+    {
+      "path": "specifications/*/*-specification.md",
+      "heading": "Deprecated aliases",
+      "reason": "the old DEDL identifiers a runtime keeps reading (FR-011)"
+    }
+  ],
+  "allowedLines": [
+    {
+      "path": "specifications/*/*.schema.json",
+      "regex": "\"(dedl|dedlDocument)\"",
+      "reason": "deprecated version key still accepted (FR-011)"
+    },
+    {
+      "repository": "etalii.adp.ide.intellij",
+      "path": "core/src/main/java/etalii/adp/core/settings/AdpSettings.java",
+      "regex": "offDesigners|designerSettings",
+      "reason": "old settings keys still read (FR-011)"
+    },
+    {
+      "repository": "etalii.adp.ide.intellij",
+      "path": "core/src/test/java/etalii/adp/core/settings/AdpSettingsStateRoundTripTest.java",
+      "regex": "offDesigners|designerSettings",
+      "reason": "tests that the old settings keys are still read"
+    }
+  ]
+}

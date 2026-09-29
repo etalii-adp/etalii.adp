@@ -9,7 +9,7 @@ What each part renames, old to new. It applies `docs/terminology.md` and [classi
 3. **Platform suffixes stay.** A class that implements a platform editor API may end in the platform's word (`…FileEditor`, `…EditorProvider`), with the ADP part of the name following rules 1 and 2.
 4. **One display name per tool type**, from the Notion `Name` column after it is cleaned up (a name, not a description), used for titles, labels, tabs and headings in every host and on the site. Code identifiers derive from it: PascalCase for types (`MindMap`), kebab-case for folders and packages (`mind-map`), except where an origin already fixes the spelling (`freeplane/mindmap` stays, rule 7).
 5. **Format versus tool.** A name for a third-party file format keeps the format's name (`FreeMind…`, `Drawio…`); a name for the tool built on it uses the tool's display name (`MindMap…`).
-6. **Persisted identifiers** are renamed, the new form is written, and the old form is read for at least the next major version (FR-011, research R4).
+6. **Persisted identifiers** are renamed, the new form is written, and the old form is read for at least the next major version (FR-011, research R3 and R5).
 7. **Origins stay.** `<vendor>/<type>` origins already name the tool type, not its kind, and are stored in every `.adp` file; they are not renamed by this feature. A later origin rename goes through Notion's `Previous origin` column so the site redirects.
 8. **History stays** (FR-014). Completed specifications keep their folders and text. An open specification keeps its folder name, which is an identifier, and its text is updated.
 
@@ -17,15 +17,20 @@ What each part renames, old to new. It applies `docs/terminology.md` and [classi
 
 | Old | New |
 |---|---|
-| DEDL, Diagram Editor Definition Language (everywhere) | DISL, Diagram Specification Language |
-| `specifications/dedl/`, `DEDL-specification.md`, `dedl.schema.json` | `specifications/disl/`, `DISL-specification.md`, `disl.disl` |
-| examples `*.dedl` | `*.difl` |
+| DEDL, Diagram Editor Definition Language (the diagram language) | DISL, Diagram Specification Language, for what a tool engineer writes; DID, Diagram Definition Language, for what users' diagrams are stored as (research R3) |
+| `specifications/dedl/DEDL-specification.md` | `specifications/disl/DISL-specification.md` and `specifications/did/DID-specification.md`, split by research R3's rule; `specifications/dedl/` removed (research R4) |
+| `dedl.schema.json` `$defs/Definition` / `$defs/Document` | `disl.schema.json` `$defs/Specification` / `did.schema.json` `$defs/Definition` |
+| examples `erd.dedl`, `statemachine.dedl`, `timeline.dedl` | `specifications/disl/erd.disl`, `statemachine.disl`, `timeline.disl`, content migrated |
+| example `timeline.document.json` | `specifications/did/timeline.did`, content migrated |
 | `$id`, media types, version keys, `dedl-fragment` | see research R3 |
-| "Language designer(s)" | author(s) |
+| — | legacy fixtures in the DEDL 0.1 form, one per format, and an alias table in `.github/scripts/validate-examples.py`; the validator also picks up `*.disl` and `*.did` |
+| "definition" (of a language), "document" (a stored diagram) in the DEDL text | "specification" (of a diagram type), "definition" (a stored diagram); "document" stays for the content a user works on |
+| "Language designer(s)", "author(s)" | tool engineer(s) |
 | "diagram editor", "editor runtime" (the running tool) | diagram; runtime |
-| — | `specifications/desl/DESL-specification.md`, `specifications/edsl/EDSL-specification.md` (placeholders) |
+| — | `specifications/desl/`, `specifications/ded/`, `specifications/edsl/`, `specifications/edd/`, each a placeholder `<NAME>-specification.md` |
 | `definitions/diagrams/`, `definitions/editors/` (untracked, empty) | tracked with a `README.md` each, plus `definitions/designers/` |
-| constitution and `CLAUDE.md`: "diagram and text designers", "ADP designers", "a designer is built from" | "tools: diagrams, designers and editors", "ADP tools", "a tool is built from"; DEDL → DISL; `specifications/<name>/` structure example → `disl` |
+| `docs/terminology.md` with DIFL/DEFL/EDFL (or DIDL/DEDL/EDDL), "author", the `.disl` reading "pending Peter's confirmation" | the revised spec's table, "tool engineer", what a specification file and a definition file hold (FR-006b); corrected in part 0 |
+| constitution and `CLAUDE.md`: "diagram and text designers", "ADP designers", "a designer is built from", "authors of designers" | "tools: diagrams, designers and editors", "ADP tools", "a tool is built from", "tool engineers"; DEDL → DISL; `specifications/<name>/` structure example → `disl` |
 
 ## etalii.adp.ide.standalone
 
@@ -38,6 +43,11 @@ What each part renames, old to new. It applies `docs/terminology.md` and [classi
 | — | `src/designers/README.md`, `docs/creating-a-designer-module.md`, an empty designer family in module discovery and the panel registry (research R7) |
 | display names that are descriptions ("Mind map (radial/hierarchical, single central topic)", "Full UML set (see section 1)") and mixed capitals ("Wardley Map" / "Wardley map") | rule 4 |
 | folder names that disagree with the display name (`helm-charts`, `azure-pipeline`, `causal-loop`, `dependency-graph`, `gartner-hypecycle-graph`) | rule 4, one kebab-case form per tool type; module assembly names follow |
+| `DiagramCanvasRegistration` field `Canvas`, `PluginDefinitionScan` | `ToolPanelRegistration` field `Panel`, `ToolDefinitionScan`; client `ToolClientModule`, `ToolContentProps` (added by part 3) |
+| `DiagramService.SaveText` | `EditorService.SaveText` in `src/api/editors.proto`, hosted in `EtAlii.Adp.Diagram` to avoid a reference loop (added by part 3) |
+| folders `helm-charts`, `azure-pipeline`, `causal-loop`, `gartner-hypecycle-graph` | `helm-chart`, `azure-devops-pipeline`, `causal-loop-diagram`, `gartner-hype-cycle-graph`; assemblies and namespaces follow, class and file names inside modules unchanged (added by part 3) |
+| C4 titles "System Context", "Container", … | "C4 system context diagram", "C4 container diagram", …; Notion's `Name` uses the same (added by part 3) |
+| follow-up candidates, not renamed: `DiagramService.Open` and the `EtAlii.Adp.Diagram` project, both also used by editor tabs | a later change (gRPC address and exported fixture models move with them) |
 
 ## etalii.adp.ide.intellij
 
@@ -55,18 +65,26 @@ What each part renames, old to new. It applies `docs/terminology.md` and [classi
 | plug-in description "a family of specialized diagram, designer and text editors", "Each designer is an editor on the file's own text", "two designers" | "specialized tools: diagrams, designers and editors", "Each tool opens in an editor on the file's own text", "two diagrams" |
 | "designer framework", "diagram designer framework", `docs/diagram-designer-guide.md` "Building a diagram designer" | "tool framework", "diagram framework", `docs/diagram-guide.md` "Building a diagram" |
 | "Mind map" spelled five ways | display "Mind map"; `MindMap` in code; format classes stay `FreeMind…` (rule 5) |
+| `DesignerSetting`, `AdpDesigners`, `DesignerPagesSection`, `DesignerSettingsConfigurable`, `DesignerTableModel`, `ZoomActions.DesignerAction` | `ToolSetting`, `AdpTools`, `ToolPagesSection`, `ToolSettingsConfigurable`, `ToolTableModel`, `ZoomActions.ToolAction` (added by part 4) |
+| test kit `Layout.DESIGNER`, `PropertyPanel.NO_DESIGNER`, popup place `AdpDesignerPopup` | `Layout.TOOL`, `PropertyPanel.NO_TOOL`, `AdpToolPopup` (added by part 4) |
+| `adp-settings-designers.xml`, `adp-settings-designer-pages.xml` | `adp-settings-tools.xml`, `adp-settings-tool-pages.xml` (added by part 4) |
+| `ToolOrigin.BundledDefinition(dedlVersion)`, "DEDL definition … (DEDL x)" | `ToolOrigin.BundledSpecification(dislVersion)`, "DISL specification … (DISL x)" (added by part 4) |
+| `DrawioDesignerTest` | `DrawioDiagramTest` (added by part 4) |
+| `docs/diagrams.md` (the catalogue the site reads) | `docs/tools.md`, as in standalone; the site reads both until part 7 |
 
 ## etalii.adp.site
 
 | Old | New |
 |---|---|
-| `/adp/designers/…`, nav "Designers" | `/adp/tools/…`, nav "Tools"; every old address redirected |
-| `/adp/dedl/…`, nav "DEDL reference", schema at `/dedl/schema/0.1/dedl.schema.json` | `/adp/disl/…`, "DISL reference", schema at `/disl/schema/0.1/disl.disl` and still at the old address |
+| `/adp/designers/…`, nav "Designers" | `/adp/tools/…`, nav "Tools"; every old address redirected, and the existing redirects into `/adp/designers/` repointed so no chain forms |
+| `/adp/dedl/…`, nav "DEDL reference", schema at `/dedl/schema/0.1/dedl.schema.json` | `/adp/disl/…` "DISL reference" and `/adp/did/…` "DID reference"; every old `/adp/dedl/` address redirected to DISL (research R4); schemas at `/disl/schema/0.1/disl.schema.json` and `/did/schema/0.1/did.schema.json`, and the old combined schema still served at its old address |
+| — | a "Specification & Definition" page in the documentation section, with the six-language table (research R7) |
+| terminology page with DIFL/DEFL/EDFL (or DIDL/DEDL/EDDL) | the revised terms; corrected in part 0 |
 | collection `designers`, components `DesignerCard`, `DesignerList`, `DesignerPage`, `RetiredDesigner` | `tools`, `ToolCard`, `ToolList`, `ToolPage`, `RetiredTool` |
-| copy: "a family of specialized diagram, designer and text editors", "Browse the designers", "ADP gives each such task its own designer", "opens designers as real editors", "Diagram Editor Definition Language" | "specialized tools: diagrams, designers and editors", "Browse the tools", "its own tool", "opens tools in real editors", "Diagram Specification Language" |
-| procedures "Refresh the designer catalogue", `refresh-dedl.md`, procedure name `dedl` | "Refresh the tool catalogue", `refresh-disl.md`, `disl` (old name accepted until part 7) |
+| copy: "a family of specialized diagram, designer and text editors", "Browse the designers", "ADP gives each such task its own designer", "opens designers as real editors", "Diagram Editor Definition Language", "language designer" | "specialized tools: diagrams, designers and editors", "Browse the tools", "its own tool", "opens tools in real editors", "Diagram Specification Language" (or DID where the stored form is meant), "tool engineer" |
+| procedures "Refresh the designer catalogue", `refresh-dedl.md`, procedure name `dedl` | "Refresh the tool catalogue", `refresh-disl.md` (covering DISL and DID), `disl` (old name accepted until part 7) |
 | catalogue source `docs/diagrams.md` | `docs/tools.md`, falling back to `docs/diagrams.md` until part 7 |
-| reference source `specifications/dedl/` | `specifications/disl/`, falling back until part 7 |
+| reference source `specifications/dedl/` | `specifications/disl/` and `specifications/did/`; falls back to `specifications/dedl/` while `specifications/disl/` is absent, until part 7 |
 | `src/lib/catalogue/notion-api.ts` column names | new names, old names accepted until part 7 |
 | open spec 003 text ("designer catalogue") | "tool catalogue"; folder name kept (rule 8) |
 
