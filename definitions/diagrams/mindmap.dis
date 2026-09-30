@@ -381,7 +381,7 @@
         "for": ["Node"],
         "icon": "mdi-link-variant",
         "doc": "Picks a file or folder of the project from a tree and stores it relative to the map file.",
-        "plugin": { "name": "net.etalii.adp.projectLinkPicker" }
+        "plugin": { "name": "net.etalii.adp.ide.projectLinkPicker" }
       },
       "unlink": {
         "label": "Unlink",
@@ -396,7 +396,7 @@
         "shortcut": "Space",
         "enabled": "self.children.size() > 0",
         "doc": "Collapses or expands the branch for this viewer only. View state: nothing is written and nothing lands on the undo history.",
-        "plugin": { "name": "net.etalii.adp.mindmapFold" }
+        "plugin": { "name": "net.etalii.adp.freeplane.mindmapFold" }
       }
     },
     "deletion": {
@@ -420,7 +420,7 @@
   "layout": {
     "algorithms": {
       "mindmap": {
-        "algorithm": "plugin:net.etalii.adp.mindmapLayout",
+        "algorithm": "plugin:net.etalii.adp.freeplane.mindmapLayout",
         "spacing": { "node": 10, "layer": 48 },
         "options": {
           "net.etalii.adp.mindmap.minimumGapRatio": 0.1,
@@ -441,7 +441,7 @@
   },
 
   "persistence": {
-    "format": "plugin:net.etalii.adp.freeplaneMm",
+    "format": "plugin:net.etalii.adp.freeplane.mm",
     "encoding": "utf-8",
     "files": { "mode": "single", "model": "{name}.mm" },
     "ids": { "strategy": "uuid-v4", "prefix": "ID_", "stable": true },
@@ -454,26 +454,26 @@
   },
 
   "plugins": {
-    "net.etalii.adp.freeplaneMm": {
+    "net.etalii.adp.freeplane.mm": {
       "version": "^0.1.0",
       "provides": ["persistenceFormat"],
       "required": true,
       "doc": "Reads and writes Freeplane `.mm` XML with byte-exact round-tripping of everything the map does not change."
     },
-    "net.etalii.adp.mindmapLayout": {
+    "net.etalii.adp.freeplane.mindmapLayout": {
       "version": "^0.1.0",
       "provides": ["layout"],
       "required": false,
       "fallback": { "layout": "mrtree" },
       "doc": "The two-sided mind map layout."
     },
-    "net.etalii.adp.mindmapFold": {
+    "net.etalii.adp.freeplane.mindmapFold": {
       "version": "^0.1.0",
       "provides": ["action"],
       "required": false,
       "doc": "Toggles a branch's collapsed state in the current viewer's view only."
     },
-    "net.etalii.adp.projectLinkPicker": {
+    "net.etalii.adp.ide.projectLinkPicker": {
       "version": "^0.1.0",
       "provides": ["action", "widget"],
       "required": false,

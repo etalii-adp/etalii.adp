@@ -17,7 +17,7 @@ Its catalogue entries agree: standalone [`docs/tools.md`](https://github.com/eta
 
 ## 1. The `.dgr` file format
 
-DISL's persistence layer (section 11) configures a DID definition. A `.dgr` file is not one, so the `.dis` names a required persistence plugin, `adp.dgr`, and this section is that plugin's specification.
+DISL's persistence layer (section 11) configures a DID definition. A `.dgr` file is not one, so the `.dis` names a required persistence plugin, `net.etalii.adp.generic.dgr`, and this section is that plugin's specification.
 
 ### 1.1 Grammar
 
@@ -151,7 +151,7 @@ Every edit is one command on the project's history. What DISL's single "one tran
 
 ## 7. The dependency curve
 
-The `.dis` names a routing plugin, `adp.dependencyCurve`, with `bezier` as its fallback. Its geometry ([`DependencyGraphCanvas.tsx`](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/develop/src/diagrams/dependency-graph/client/DependencyGraphCanvas.tsx)):
+The `.dis` names a routing plugin, `net.etalii.adp.generic.dependencyCurve`, with `bezier` as its fallback. Its geometry ([`DependencyGraphCanvas.tsx`](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/develop/src/diagrams/dependency-graph/client/DependencyGraphCanvas.tsx)):
 
 - When the dependency's left edge lies to the right of the dependent's right edge, the curve is a horizontal bezier between the two facing side anchors.
 - Otherwise, when the dependency sits behind or overlaps the dependent, the curve is a forward loop: out of the dependent's right side and back into the dependency's left side.

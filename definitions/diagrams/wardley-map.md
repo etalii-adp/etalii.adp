@@ -33,7 +33,7 @@ Every statement here is tied to the source that shows it. Paths are in [etalii.a
 
 ## 3. The `.owm` format
 
-DISL's persistence is a structured serialization (JSON, YAML and the like). A Wardley map is stored in the Online Wardley Maps text DSL instead, so the `.dis` names a required `plugin:etalii.adp.owm` format. What the plugin does is below.
+DISL's persistence is a structured serialization (JSON, YAML and the like). A Wardley map is stored in the Online Wardley Maps text DSL instead, so the `.dis` names a required `plugin:net.etalii.adp.wardley.owm` format. What the plugin does is below.
 
 ### 3.1 Statements
 

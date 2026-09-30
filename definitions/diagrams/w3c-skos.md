@@ -25,7 +25,7 @@ The research behind the drawing rules (old requirements, "How SKOS schemes are v
 
 ## 2. The vocabulary file and the shared engine
 
-DISL's persistence layer describes a file a runtime writes. Here the model file is a foreign RDF serialization that other tools own, which DISL can only name as `format: "plugin:etalii.rdf-turtle"`. SKOS adds no parser, writer or store of its own (old design, "Code Reuse Analysis"): it reuses the family's `IRdfDocumentStore`, `RdfParser`, `RdfModel`, `RdfWriter`, the `RdfEdits` command pattern and the family commands, `RdfValidator`, `RdfDocumentReloader`, the context provider trio, `RdfSelection`, `RdfViewport`, and core's `RegistrationLayout` and `SetRegistrationLayoutCommand` (`Skos/ServiceCollection.AddSkos.cs:18-40`). What that means for SKOS:
+DISL's persistence layer describes a file a runtime writes. Here the model file is a foreign RDF serialization that other tools own, which DISL can only name as `format: "plugin:net.etalii.adp.w3c.turtle"`. SKOS adds no parser, writer or store of its own (old design, "Code Reuse Analysis"): it reuses the family's `IRdfDocumentStore`, `RdfParser`, `RdfModel`, `RdfWriter`, the `RdfEdits` command pattern and the family commands, `RdfValidator`, `RdfDocumentReloader`, the context provider trio, `RdfSelection`, `RdfViewport`, and core's `RegistrationLayout` and `SetRegistrationLayoutCommand` (`Skos/ServiceCollection.AddSkos.cs:18-40`). What that means for SKOS:
 
 - Several readings over one file share one store entry and one undo history (`BothReadings_ShareOneStoreEntry_ForOneFile`, `SkosSession.Tests.cs:123`; R2.5). Opening the same file as `w3c/rdf` and `w3c/skos` side by side is the intended way to get the graph view.
 - Every edit goes through `RdfEdits.Run`: it refuses when the file does not parse ("This file does not parse, so nothing can be edited until it is fixed."), captures the text, applies the writer's splices, saves, and keeps the captured bytes as the inverse (`RestoreDocumentCommand`), so undo is byte-exact, including for LF files (`Commands/RdfEdits.cs:19-43`; `SkosActions.Tests.cs:88, 111, 137, 163`).
@@ -121,7 +121,7 @@ The family budget is 1000 drawn elements (`RdfProjection.DefaultBudget`, `RdfPro
 
 ## 5. Layout
 
-The `.dis` names the layout `plugin:etalii.skos-bands` with a layered fallback. The plugin is `SkosLayout.Layout` (`Skos/SkosLayout.cs:21-247`): pure and deterministic, no physics and no randomness (R4.1). Constants: column width 240, row height 110, region gap 90, region header 60. Coordinates are the top-left of the element, y downward.
+The `.dis` names the layout `plugin:net.etalii.adp.w3c.skosBands` with a layered fallback. The plugin is `SkosLayout.Layout` (`Skos/SkosLayout.cs:21-247`): pure and deterministic, no physics and no randomness (R4.1). Constants: column width 240, row height 110, region gap 90, region header 60. Coordinates are the top-left of the element, y downward.
 
 1. Only hierarchy edges count. Cycles are broken first (below), then each edge gives a broader-to-narrower child link.
 2. Starting at y = 0, each scheme in ordinal IRI order is placed at (0, y), and its band is every drawn concept filed in it that is not yet placed, so a concept filed in several schemes lands in the first by IRI. The band starts 60 below the scheme and the next scheme starts 90 below the band.
@@ -279,7 +279,7 @@ Both are single-rooted, bilingual (German and English) and notated. STW's prefer
 
 ## 13. What DISL 0.1 could not say, in short
 
-- Elements that exist because triples of a given shape exist, and edges that merge several triples in either direction into one (sections 4 and 7). The whole projection is the `etalii.rdf-turtle` plugin's.
+- Elements that exist because triples of a given shape exist, and edges that merge several triples in either direction into one (sections 4 and 7). The whole projection is the `net.etalii.adp.w3c.turtle` plugin's.
 - A model file in a foreign format that other tools own, written only by minimal byte splices with byte-exact undo, and the promise that an inverse is never written.
 - A header in the sidecar registration with its own placement rule (section 3).
 - Offering a tool's gestures and property rows under another specification's reading of the same file (section 6).

@@ -24,7 +24,7 @@ The research behind the drawing rules (requirements, "How OWL ontologies are vis
 
 ## 2. The file and the shared engine
 
-The model file is the ontology's own Turtle or N-Triples, read and written only by the RDF family's shared engine: one parser, one store per file, one history per project root, byte-identical round trips, and edits as minimal splices with byte-restoring undo. That engine, the splice discipline, the drawn-element budget and the reload lifecycle are described once, in [w3c-rdf.md](w3c-rdf.md); this reading owns no parser, store, writer or command class (`Owl/OwlProjection.cs:5-6`; design, "This reading adds zero splice code"). The `.dis` names the engine as the plugin `etalii.rdf-turtle`, declared identically in all four readings; this reading uses three of its CEL functions for its dialogs and messages (`rdfResolveTerm`, `rdfTermRefusal`, `rdfDisplayName`).
+The model file is the ontology's own Turtle or N-Triples, read and written only by the RDF family's shared engine: one parser, one store per file, one history per project root, byte-identical round trips, and edits as minimal splices with byte-restoring undo. That engine, the splice discipline, the drawn-element budget and the reload lifecycle are described once, in [w3c-rdf.md](w3c-rdf.md); this reading owns no parser, store, writer or command class (`Owl/OwlProjection.cs:5-6`; design, "This reading adds zero splice code"). The `.dis` names the engine as the plugin `net.etalii.adp.w3c.turtle`, declared identically in all four readings; this reading uses three of its CEL functions for its dialogs and messages (`rdfResolveTerm`, `rdfTermRefusal`, `rdfDisplayName`).
 
 What this reading uses of the engine: the store's `GetOrLoad` and `Changed` (session and providers), the parsed triples (projection, classification, validator), the family display rule and budget constant, the term compressor (row annotations, the rename dialog's default), the family validator (delegated to, section 8), the family selection ids and truncation test, the dialog term resolver, the gesture ids `new:{x},{y}` and `rel:{from}->{to}`, viewport culling, the reloader, and the `RdfLiteralRow` and `RdfTruncationPayload` wire messages (research notes, section 8). Services registered for this origin alone are the element mapper, validator, toolbox provider, session factory, document factory and a second reloader instance (`ServiceCollection.AddRdf.cs:86-101`); the context resolver, action provider and property provider are registered once for the family and carry the OWL behaviour as extra cases (`ServiceCollection.AddRdf.cs:61-65`).
 
@@ -99,7 +99,7 @@ The property label is the display of the property alone, or `{display} ({words})
 
 ## 5. Layout
 
-DISL names a layout; it does not define one. The `.dis` names `plugin:etalii.owl-depth-columns` with a `layered` fallback directed left, so that subclass edges, which run from subclass to superclass, put the roots on the left. What the plugin does (`Owl/OwlLayout.cs:66-213`; tests `OwlLayout.Tests.cs`):
+DISL names a layout; it does not define one. The `.dis` names `plugin:net.etalii.adp.w3c.owlDepthColumns` with a `layered` fallback directed left, so that subclass edges, which run from subclass to superclass, put the roots on the left. What the plugin does (`Owl/OwlLayout.cs:66-213`; tests `OwlLayout.Tests.cs`):
 
 - Pure and deterministic, no physics, no randomness; positions are top-left corners.
 - The first ontology header sits at (0, 0); classes start below it at the header card's height plus 80, or at 0 without a header.

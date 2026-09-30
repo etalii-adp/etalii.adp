@@ -641,7 +641,7 @@
         "doc": "What a document opens with: variables evenly around a ring, seated by a deterministic depth-first walk of the links, starting at the top and running clockwise. The radius grows with the widest variable and the count, so no two overlap."
       },
       "selfOrganizing": {
-        "algorithm": "plugin:adp_cld",
+        "algorithm": "plugin:net.etalii.adp.systems.cld",
         "scope": "all",
         "options": { "iterations": 2000, "separationRounds": 200, "budget": 1000 },
         "doc": "Meyer's self-organizing graphs with every source of randomness replaced by a function of the document and the iteration index."
@@ -655,7 +655,7 @@
   },
 
   "persistence": {
-    "format": "plugin:adp_cld",
+    "format": "plugin:net.etalii.adp.systems.cld",
     "newline": "crlf",
     "finalNewline": true,
     "files": { "mode": "split", "model": "{name}.cld", "view": "{name}.adp" },
@@ -668,7 +668,7 @@
   },
 
   "plugins": {
-    "adp_cld": {
+    "net.etalii.adp.systems.cld": {
       "version": "^1.0.0",
       "provides": ["celFunctions", "layout", "persistenceFormat"],
       "required": true,

@@ -31,7 +31,7 @@ The abstract types `FdgElement`, `NamedElement`, `FdgRelation` and `Owns` exist 
 
 ## The file format (`.fdg`)
 
-DISL's persistence layer cannot describe this format, so the `.dis` names it `plugin:fdg` and declares an `fdg` plugin that provides `persistenceFormat`. The format itself, from `backend/…/FdgParser.cs`, `FdgWriter.cs`, `FdgDocumentFactory.cs` and the design document:
+DISL's persistence layer cannot describe this format, so the `.dis` names it `plugin:net.etalii.adp.etalii.fdg` and declares a `net.etalii.adp.etalii.fdg` plugin that provides `persistenceFormat`. The format itself, from `backend/…/FdgParser.cs`, `FdgWriter.cs`, `FdgDocumentFactory.cs` and the design document:
 
 - **Shape.** A line-oriented YAML subset: a header line `functional-decomposition-graph: 1`, then an `elements:` list and a `connections:` list. It is ADP's own schema, not DID.
 - **Element keys:** `id`, `type`, `name`, `description`, `text`, `x`, `y`, `width`, `height`. **Connection keys:** `id`, `type`, `from`, `to`, `name`, `description`.

@@ -19,13 +19,13 @@ Paths below are relative to `src/diagrams/causal-loop-diagram/` in the standalon
 | Cycle enumeration | plugin CEL function `elementaryCycles` | Not expressible in CEL; see *Cycles* below. |
 | Ring layout | layout algorithm `ring` (`circular` with `adp.ring.*` options) | Details below. |
 | Arrange diagram | operation `arrange` using layout `selfOrganizing` (plugin) | Details below. |
-| `.cld` + `.adp` files | persistence `format: plugin:adp_cld` | Grammar below. |
+| `.cld` + `.adp` files | persistence `format: plugin:net.etalii.adp.systems.cld` | Grammar below. |
 
 A loop is modelled as a node because DISL has no "claim about a path" construct: it is not a relation (it has no two ends), and a group would imply containment. As a node it has no position of its own; DISL's computed `placement` puts it at the centroid of its members, which is what the standalone does.
 
 ## The document on disk
 
-DISL's `persistence` layer describes a DID definition. The causal loop diagram does not store DID: it stores its own line-oriented format, so the whole file format is documented here, and the plugin `adp_cld` reads and writes it.
+DISL's `persistence` layer describes a DID definition. The causal loop diagram does not store DID: it stores its own line-oriented format, so the whole file format is documented here, and the plugin `net.etalii.adp.systems.cld` reads and writes it.
 
 **Two files.** A diagram is `<name>.adp`, whose first line is the origin `systems/causal-loop-diagram`, plus a sibling body `<name>.cld` (R1.1, R1.4; `Diagram.cs`). Positions the author sets, by dragging or by Arrange diagram, are stored in the `.adp` registration's shared `layout:` block, keyed `variable:<identifier>`, and never in the body (`Commands/ArrangeCausalLoopCommand.cs`; design, *Technical Standards*).
 
@@ -64,7 +64,7 @@ loop R1 "Births beget births" population births
 
 ## Cycles, and why a plugin
 
-DISL's CEL library has `reachable`, `inCycle` and `hasCycle`, but nothing that **enumerates** cycles, and a user-defined function may not recurse. The whole check this tool exists for (R3.1) needs the elementary cycles, so the plugin `adp_cld` declares two CEL functions:
+DISL's CEL library has `reachable`, `inCycle` and `hasCycle`, but nothing that **enumerates** cycles, and a user-defined function may not recurse. The whole check this tool exists for (R3.1) needs the elementary cycles, so the plugin `net.etalii.adp.systems.cld` declares two CEL functions:
 
 - `elementaryCycles(relationType)`: Johnson's elementary-cycles algorithm over the causal links, bounded at **1,000 cycles** (`CycleFinder.cs`, `CycleFinder.DefaultBound`). Self-links are cycles of one variable. The result order must be stable, so that findings and auto-claimed identifiers are the same on every run.
 - `cycleSearchTruncated(relationType)`: whether the search stopped at the bound (R3.5).

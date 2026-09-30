@@ -2,7 +2,7 @@
   "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
   "disl": "0.1",
   "language": {
-    "id": "net.etalii.adp.functional-decomposition-graph",
+    "id": "net.etalii.adp.etalii.functional-decomposition-graph",
     "version": "0.1.0",
     "label": "Functional decomposition graph",
     "doc": {
@@ -540,7 +540,7 @@
   },
 
   "persistence": {
-    "format": "plugin:fdg",
+    "format": "plugin:net.etalii.adp.etalii.fdg",
     "encoding": "utf-8",
     "newline": "crlf",
     "files": { "mode": "single", "model": "{name}.fdg" },
@@ -555,7 +555,7 @@
   },
 
   "plugins": {
-    "fdg": {
+    "net.etalii.adp.etalii.fdg": {
       "version": "^1.0.0",
       "provides": ["persistenceFormat"],
       "required": true,

@@ -535,7 +535,7 @@
     "doc": "Deterministic and bottom-up over the scope tree, with no physics: same file, same picture. Authored positions override computed ones.",
     "algorithms": {
       "scopeGrid": {
-        "algorithm": "plugin:net.etalii.adp.sparql.scopeGrid",
+        "algorithm": "plugin:net.etalii.adp.w3c.sparqlScopeGrid",
         "spacing": { "node": 60, "layer": 48 },
         "options": { "columns": 3, "nodeSize": [170, 64], "regionPadding": 36, "regionLabelBand": 30, "origin": [40, 90] },
         "doc": "Each scope places its own nodes, then its child regions, in rows of three, each row as tall as its tallest member; a child region is one block the size of its own grid. The CONSTRUCT template sits on the root row beside the where clause's items."
@@ -549,7 +549,7 @@
 
   "persistence": {
     "doc": "The `.rq` query text is the model and is never written. Positions a user authors go to the `layout:` block of the `.adp` registration beside it.",
-    "format": "plugin:net.etalii.adp.sparql.query",
+    "format": "plugin:net.etalii.adp.w3c.sparqlQuery",
     "files": { "mode": "split", "model": "{name}.rq", "view": "{name}.adp" },
     "ids": {
       "strategy": "natural",
@@ -572,13 +572,13 @@
   },
 
   "plugins": {
-    "net.etalii.adp.sparql.query": {
+    "net.etalii.adp.w3c.sparqlQuery": {
       "version": "^1.0.0",
       "provides": ["persistenceFormat", "import"],
       "required": true,
       "doc": "Reads a SPARQL 1.1 Query file into the metamodel above and never writes it: the prologue, the four forms, the group-pattern tree, triple patterns with blank-node and collection syntax, solution modifiers and VALUES are parsed; expressions and property paths are kept as written; a SPARQL Update document is refused by name. The element ids, placement at the shallowest scope and the 500-element bound are its work. See sparql-query.md."
     },
-    "net.etalii.adp.sparql.scopeGrid": {
+    "net.etalii.adp.w3c.sparqlScopeGrid": {
       "version": "^1.0.0",
       "provides": ["layout"],
       "required": false,
