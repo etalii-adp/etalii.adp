@@ -64,10 +64,10 @@ Rows follow `specs/004-disl-0-2/contracts/constructs.md` (section | construct). 
 | 6.2 | `theme.contrast` | `functional-decomposition.dis` | `/notation/theme/contrast/0` |
 | 6.5 | `notation.textMetric` | `mindmap.dis` | `/notation/textMetric` |
 | 6.6 | interaction state `filteredOut` | `gartner-hype-cycle.dis` | `/notation/nodes/Trend/states/filteredOut`, `/notation/canvas/filters/find/effect` |
-| 6.6 | a badge with id `problem` replaces the default finding mark (stand-in for azure-devops-pipeline) | `databricks-job.dis` | `/notation/nodes/Task/badges/4` |
+| 6.6 | a badge with id `finding` replaces the default finding mark (stand-in for azure-devops-pipeline) | `databricks-job.dis` | `/notation/nodes/Task/badges/4` |
 | 6.7 | built-in `superellipse` with `exponent` | `functional-decomposition.dis` | `/notation/nodes/UiElement/shape` |
 | 6.8 | a custom shape shadows a built-in; the diode is a custom shape | `functional-decomposition.dis` | `/notation/shapes/diode` |
-| 6.8 | handle `write`, `visible`, `refusals.move` (phase boundaries) | `gartner-hype-cycle.dis` | `/notation/shapes/phasedBanner/handles/0/write`, `/notation/shapes/phasedBanner/handles/0/visible`, `/notation/shapes/phasedBanner/handles/0/refusals/move` |
+| 6.8 | handle `write`, `visible`, `refusals.move`, `label` as a Message (phase boundaries) | `gartner-hype-cycle.dis` | `/notation/shapes/phasedBanner/handles/0/write`, `/notation/shapes/phasedBanner/handles/0/visible`, `/notation/shapes/phasedBanner/handles/0/refusals/move`, `/notation/shapes/phasedBanner/handles/0/label` |
 | 6.9 | `anchors.sides` | `mindmap.dis` | `/notation/nodes/Node/anchors/sides` |
 | 6.9 | `container.nesting` | `mindmap.dis` | `/notation/nodes/Node/container/nesting` |
 | 6.9 | `badgeLayout`, `badges[].pack` (stand-in for azure-devops-pipeline) | `databricks-job.dis` | `/notation/nodes/Task/badgeLayout`, `/notation/nodes/Task/badges/0/pack` |
@@ -82,7 +82,7 @@ Rows follow `specs/004-disl-0-2/contracts/constructs.md` (section | construct). 
 | 6.10 | positive `curvature` bows left; `curved` is one quadratic (text) | `causal-loop.dis` | `/notation/edges/CausalLink/line/curvature`, `/notation/edges/CausalLink/variants/0/line/curvature`, `/notation/edges/CausalLink/doc` |
 | 6.13 | `canvas.title` | `c4-container.dis` | `/notation/canvas/title` |
 | 6.13 | `canvas.header` (stand-in for sparql-query) | `c4-container.dis` | `/notation/canvas/header` |
-| 6.13 | `canvas.notices` (truncation banner) | `rdf-graph.dis` | `/notation/canvas/notices/0` |
+| 6.13 | `canvas.notices` (truncation banner, a declared `budget:cards` notice replacing the built-in one) | `rdf-graph.dis` | `/notation/canvas/notices/0` |
 | 6.13.1 | `canvas.filters` (tag chips) | `gartner-hype-cycle.dis` | `/notation/canvas/filters/tags` |
 | 6.13 | legend `from`, `computed`, `title` | `c4-container.dis` | `/notation/canvas/legend/from`, `/notation/canvas/legend/computed`, `/notation/canvas/legend/title` |
 | 6.13 | `canvas.empty` | `causal-loop.dis` | `/notation/canvas/empty` |
@@ -102,10 +102,10 @@ Rows follow `specs/004-disl-0-2/contracts/constructs.md` (section | construct). 
 | 7.3 | `for: "connection"` and `runSingle` (Relate...) | `rdf-graph.dis` | `/toolbox/contextMenus/2` |
 | 7.5 | form `submitLabel`, `cancelLabel`, `danger` (Rename dialog) | `rdf-graph.dis` | `/forms/renameDialog/submitLabel`, `/forms/renameDialog/cancelLabel`, `/forms/renameDialog/danger` |
 | 7.5 | form item `initial` | `rdf-graph.dis` | `/forms/renameDialog/items/0/initial` |
-| 7.5 | field validation `timing`; `message` as a Message (a month that does not parse) | `gartner-hype-cycle.dis` | `/forms/trend/items/1/validate/0` |
+| 7.5 | field validation `timing`; `message` as a Message (a month that does not parse, tested with `parseYearMonth`) | `gartner-hype-cycle.dis` | `/forms/trend/items/1/validate/0` |
 | 7.5 | form item `readOnlyReasons`, `absentText`, `emptyText`, `showAbsent` | `c4-container.dis` | `/forms/elementInspector/items/3/readOnlyReasons`, `/forms/elementInspector/items/2/absentText`, `/forms/elementInspector/items/1/emptyText`, `/forms/elementInspector/items/2/showAbsent` |
 | 7.5 | form item kind `findings` | `functional-decomposition.dis` | `/forms/namedElement/items/1` |
-| 8.1 | `builtIn.<id>.code`, `.message` (`std.multiplicity`, `std.acyclic`) | `functional-decomposition.dis` | `/constraints/builtIn/std.multiplicity/message`, `/constraints/builtIn/std.acyclic/code` |
+| 8.1 | `builtIn.<id>.code`, `.refusal` (`std.multiplicity`, `std.acyclic`) | `functional-decomposition.dis` | `/constraints/builtIn/std.multiplicity/refusal`, `/constraints/builtIn/std.acyclic/code` |
 | 8.2 | rule `code` (replaces `x-adp-ruleId` and ids in `label`/`tags`) | `databricks-job.dis` | `/constraints/rules/0/code` |
 | 8.2 | rule `code` (replaces `x-adp-ruleId` and ids in `label`/`tags`) | `c4-container.dis` | `/constraints/rules/0/code` |
 | 8.2 | rule `code` (replaces `x-adp-ruleId` and ids in `label`/`tags`) | `gartner-hype-cycle.dis` | `/constraints/rules/0/code` |
@@ -147,7 +147,7 @@ Rows follow `specs/004-disl-0-2/contracts/constructs.md` (section | construct). 
 | 11.5 | `strategy: "derived"` (triple counter, singleton, `edge:<from>-><to>`, relation formula) | `databricks-job.dis` | `/persistence/ids/types/Dependency` |
 | 11.5 | `strategy: "derived"` (triple counter, singleton, `edge:<from>-><to>`, relation formula) | `c4-container.dis` | `/persistence/ids/types/Relationship` |
 | 11.5 | `strategy: "derived"` (triple counter, singleton, `edge:<from>-><to>`, relation formula) | `causal-loop.dis` | `/persistence/ids/types/CausalLink` |
-| 11.5 | `strategy: "derived"`, IRIs (see example-gaps: on a derived type, shown by `derived.id`) | `rdf-graph.dis` | `/metamodel/types/Resource/derived/id` |
+| 11.5 | `strategy: "derived"`, IRIs (on a derived type the id is `derived.id`, 11.5.2) | `rdf-graph.dis` | `/metamodel/types/Resource/derived/id` |
 | 11.5 | `encoding` (`base64url`, `base36`) | `gartner-hype-cycle.dis` | `/persistence/ids/encoding` |
 | 11.5 | `encoding` (`base64url`, `base36`) | `functional-decomposition.dis` | `/persistence/ids/encoding` |
 | 11.5 | `natural` ids; `suffix` with `{n}` | `causal-loop.dis` | `/persistence/ids/strategy` |
@@ -172,7 +172,7 @@ Rows follow `specs/004-disl-0-2/contracts/constructs.md` (section | construct). 
 | 15.2 | a missing plugin function degrades | `rdf-graph.dis` | `/plugins/net.etalii.adp.w3c.turtle/doc` |
 | 15.2 | a runtime lacking a 0.2 feature id degrades (sentence only) | none | - |
 | 16 | file-system facts confined to the subject's root (stand-in for wardley-map) | `mindmap.dis` | `/constraints/rules/1` |
-| 18 | form item kind `problems` deprecated (alias; no example) | none | - |
+| 18 | form item kind `findings` in place of the deprecated `problems` | `statemachine.dis` | `/forms/stateInspector/items/3` |
 | B.2 | default `exponent` 4 for `superellipse` | `functional-decomposition.dis` | `/notation/nodes/UiElement/shape/params/exponent` |
 | B.5 | `decade`/`century`/`millennium`; LDML `u` on `yearMonth` axes | `gartner-hype-cycle.dis` | `/coordinates/axes/time/ruler/levels/4/format` |
 | B.7 | default widget `month` for `yearMonth` | `gartner-hype-cycle.dis` | `/forms/trend/items/2` |

@@ -198,13 +198,13 @@
           { "id": "branch", "pack": true, "text": "⑂", "style": "indicator", "visible": { "cel": "self.type == 'condition'" }, "tooltip": "Branches on a condition." },
           { "id": "runIf", "pack": true, "text": "≠", "style": "indicator", "visible": { "cel": "has(self.runIf) && self.runIf != 'ALL_SUCCESS'" }, "tooltip": { "cel": "'Runs if ' + enumLabel('RunIf', self.runIf).lowerAscii()" } },
           {
-            "id": "problem",
+            "id": "finding",
             "position": "bottom-right",
             "offset": [-10, -10],
             "text": { "cel": "self.findingSeverity() == 'error' ? '✖' : '⚠'" },
             "visible": { "cel": "self.findingSeverity() in ['error', 'warning']" },
             "tooltip": { "cel": "self.findings().map(f, f.message).join('\\n')" },
-            "doc": "Declaring a badge with id `problem` replaces the runtime's default finding mark: ✖ for an error, ⚠ for a warning, an error outranking a warning. A stand-in for azure-devops-pipeline."
+            "doc": "Declaring a badge with id `finding` replaces the runtime's default finding mark: ✖ for an error, ⚠ for a warning, an error outranking a warning. A stand-in for azure-devops-pipeline."
           }
         ],
         "variants": [ { "when": "self.type == 'condition'", "style": { "cornerRadius": 16 } } ],

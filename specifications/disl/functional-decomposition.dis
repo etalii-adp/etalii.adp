@@ -296,13 +296,13 @@
       "std.endpoints": { "severity": "error" },
       "std.multiplicity": {
         "severity": "error",
-        "message": { "cel": "'Refused by the cardinality check: `' + (target.name != '' ? target.name : target.id) + '` already has its `' + violation.relationType + '` parent, and may have ' + string(violation.max) + '.'" },
-        "doc": "Worded for the refused connect gesture (`violation`); covers fdg.second-parent and fdg.second-shows."
+        "refusal": { "cel": "'Refused by the cardinality check: `' + (target.name != '' ? target.name : target.id) + '` already has its `' + violation.relationType + '` parent, and may have ' + string(violation.max) + '.'" },
+        "doc": "The refusal of the connect gesture, which sees `violation`; findings on a stored document keep the runtime's wording. Covers fdg.second-parent and fdg.second-shows."
       },
       "std.acyclic": {
         "severity": "error",
         "code": "fdg.ownership-cycle",
-        "message": { "cel": "'Refused by the cycle check: `' + (target.name != '' ? target.name : target.id) + '` already owns `' + (source.name != '' ? source.name : source.id) + '`, so this link would make an ownership loop.'" },
+        "refusal": { "cel": "'Refused by the cycle check: `' + (target.name != '' ? target.name : target.id) + '` already owns `' + (source.name != '' ? source.name : source.id) + '`, so this link would make an ownership loop.'" },
         "doc": "Over Owns and all four of its subtypes; `violation.cycle` lists the loop."
       },
       "std.references": { "severity": "error", "code": "fdg.dangling-reference" },

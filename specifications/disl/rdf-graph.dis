@@ -13,7 +13,6 @@
           "measure": { "count": ["Resource", "BlankNode"] },
           "max": 1000,
           "order": "[self.isA('Resource') ? 0 : 1, index]",
-          "notice": false,
           "withhold": { "edits": "none", "doc": "The edit gate (behavior.editGate) withholds edits while this budget truncates; moves stay allowed." },
           "finding": { "severity": "info", "message": { "cel": "'This file projects to ' + string(budget('cards').total) + ' cards; the diagram draws the first ' + string(budget('cards').shown) + '.'" } },
           "doc": "At most 1000 cards are drawn, IRI cards before blank nodes, each in document order; a statement is drawn only when both its cards are (w3c-rdf.md, budget)."
@@ -318,12 +317,11 @@
     "canvas": {
       "notices": [
         {
-          "id": "truncation",
+          "id": "budget:cards",
           "severity": "warning",
           "position": "top",
-          "visible": { "cel": "budget('cards').truncated" },
           "text": { "cel": "'Showing ' + string(budget('cards').shown) + ' of ' + string(budget('cards').total) + ' resources — edits are withheld on this truncated view'" },
-          "doc": "The truncation banner outside the drawing, replacing the watermark of w3c-rdf.dis."
+          "doc": "The truncation banner outside the drawing, replacing the watermark of w3c-rdf.dis. Its id replaces the built-in notice of the cards budget, so it is shown only while that budget truncates."
         }
       ]
     }

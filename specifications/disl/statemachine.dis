@@ -1,6 +1,6 @@
 {
-  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
-  "disl": "0.1",
+  "$schema": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Specification",
+  "disl": "0.2",
   "language": {
     "id": "org.example.statemachine",
     "version": "1.2.0",
@@ -367,7 +367,7 @@
           { "attribute": "entry", "widget": "code", "widgetOptions": { "language": "text" } },
           { "attribute": "exit", "widget": "code", "widgetOptions": { "language": "text" } }
         ] },
-        { "kind": "problems" }
+        { "kind": "findings" }
       ]
     },
     "transitionInspector": {

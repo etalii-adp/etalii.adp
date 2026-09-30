@@ -317,7 +317,7 @@
             "snap": { "cel": "snap(value, 1.0 / double(self.stop - self.start), 'away-from-zero')" },
             "write": [ { "set": { "peakEnd": "fractionToMonth(self, value)" } } ],
             "refusals": { "move": "Only a boundary between two visible phases can be moved." },
-            "label": "Peak ends"
+            "label": { "cel": "'Peak ends ' + formatYearMonth(fractionToMonth(self, p.b1), 'MMM u')" }
           },
           {
             "param": "b2", "x": "w * p.b2", "y": "h / 2.0", "axis": "x",
@@ -325,7 +325,7 @@
             "snap": { "cel": "snap(value, 1.0 / double(self.stop - self.start), 'away-from-zero')" },
             "write": [ { "set": { "troughEnd": "fractionToMonth(self, value)" } } ],
             "refusals": { "move": "Only a boundary between two visible phases can be moved." },
-            "label": "Trough ends"
+            "label": { "cel": "'Trough ends ' + formatYearMonth(fractionToMonth(self, p.b2), 'MMM u')" }
           },
           {
             "param": "b3", "x": "w * p.b3", "y": "h / 2.0", "axis": "x",
@@ -333,7 +333,7 @@
             "snap": { "cel": "snap(value, 1.0 / double(self.stop - self.start), 'away-from-zero')" },
             "write": [ { "set": { "slopeEnd": "fractionToMonth(self, value)" } } ],
             "refusals": { "move": "Only a boundary between two visible phases can be moved." },
-            "label": "Slope ends"
+            "label": { "cel": "'Slope ends ' + formatYearMonth(fractionToMonth(self, p.b3), 'MMM u')" }
           }
         ]
       }
@@ -520,7 +520,7 @@
           "attribute": "start",
           "validate": [
             {
-              "rule": "string(value).matches('^(-\\\\d{4,6}|\\\\d{4})-(0[1-9]|1[0-2])$')",
+              "rule": "parseYearMonth(string(value)).hasValue()",
               "message": { "cel": "'\\'' + string(value) + '\\' is not a date; write it as YYYY-MM, such as 2007-06.'" },
               "timing": "commit"
             }
@@ -538,7 +538,7 @@
       "std.facets": { "severity": "warning" },
       "std.endpoints": { "severity": "warning", "doc": "Covers ghg.duplicate-influence, ghg.self-influence and ghg.influence-into-trigger, which the standalone tool reports under their own codes." },
       "std.duplicateId": { "code": "ghg.duplicate-id", "doc": "Ids are unique across all four lists together." },
-      "std.unreadableEntry": { "code": "ghg.unreadable-entry", "message": { "cel": "'This entry could not be read and is not drawn: ' + detail.reason" } },
+      "std.unreadableEntry": { "code": "ghg.unreadable-entry", "message": { "cel": "'This entry could not be read and is not drawn (' + (detail.entry.path != '' ? detail.entry.path : detail.entry.text) + '): ' + detail.reason" } },
       "std.mixedPrecision": { "code": "ghg.mixed-precision", "message": "A trigger's announcement and shipping dates are both dates, or both carry a time." }
     },
     "rules": [

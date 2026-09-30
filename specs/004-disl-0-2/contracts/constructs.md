@@ -112,10 +112,10 @@ Columns:
 | 6.2 `notation.theme.contrast[]`: `foreground`, `background`, `minRatio`, `doc` | New | `Theme`, **`ContrastRequirement`** | FR-070 | `functional-decomposition.dis` | `view-scale-notation-time.md#N15` |
 | 6.5 `notation.textMetric`: `"host"` or `{kind: "average", advance, count, lineHeight}` | New | `Notation`, **`TextMetric`** | FR-070 | `mindmap.dis` | `view-scale-notation-time.md#N16` |
 | 6.6 interaction state `filteredOut` | New | `States` | FR-050 | `gartner-hype-cycle.dis` | `view-scale-notation-time.md#V3` |
-| 6.6 a declared badge with id `problem` replaces the runtime's default finding mark | Text | none | FR-070 | `databricks-job.dis` (stand-in for azure-devops-pipeline) | `view-scale-notation-time.md#N10`, `research.md#R12` |
+| 6.6 a declared badge with id `finding` replaces the runtime's default finding mark | Text | none | FR-070 | `databricks-job.dis` (stand-in for azure-devops-pipeline) | `view-scale-notation-time.md#N10`, `research.md#R12` |
 | 6.7 built-in shape `superellipse` with parameter `exponent` | New | none (shape names are strings; Appendix B.2) | FR-070 | `functional-decomposition.dis` | `view-scale-notation-time.md#N5` |
 | 6.8 a custom shape named like a built-in shadows it; the diode is a custom shape | Text | none | FR-070 | `functional-decomposition.dis` | `view-scale-notation-time.md#N5`, `view-scale-notation-time.md#N6` |
-| 6.8 `handles[].write` (Action[]), `handles[].visible`, `handles[].refusals.move`; a handle on an `{attribute}`-bound parameter writes the attribute | Extended | `Handle` | FR-042 | `gartner-hype-cycle.dis` (phase boundaries) | `reasons-and-gestures.md#8.11` |
+| 6.8 `handles[].write` (Action[]), `handles[].visible`, `handles[].refusals.move`, `handles[].label` as a Message; a handle on an `{attribute}`-bound parameter writes the attribute | Extended | `Handle` | FR-042 | `gartner-hype-cycle.dis` (phase boundaries) | `reasons-and-gestures.md#8.11` |
 | 6.9 `nodes.<T>.anchors.sides` | New | `AnchorSpec` | FR-070 | `mindmap.dis` | `view-scale-notation-time.md#N1` |
 | 6.9 `nodes.<T>.container.nesting`: `inside` or `none` | New | `ContainerSpec` | FR-070 | `mindmap.dis` | `view-scale-notation-time.md#N2` |
 | 6.9 `nodes.<T>.badgeLayout` (`start`, `offset`, `direction`, `spacing`) and `badges[].pack` | New | `NodeNotation`, `NodeVariant`, **`BadgeLayout`**, `Badge` | FR-070 | `databricks-job.dis` (stand-in for azure-devops-pipeline) | `view-scale-notation-time.md#N9` |
@@ -130,7 +130,7 @@ Columns:
 | 6.10 positive `curvature` bows left of the direction of travel; `curved` is one quadratic; `arc` sagitta | Text | none | FR-070 | `causal-loop.dis` | `view-scale-notation-time.md#N7`, `research.md#R12` |
 | 6.13 `canvas.title` (a Label with `self` bound to the diagram) | New | `Canvas` (`Label`) | FR-051 | `c4-container.dis` | `view-scale-notation-time.md#V5` |
 | 6.13 `canvas.header`: `rows`, `style`, `visible`, `doc` | New | `Canvas`, **`ChromeBand`** | FR-051 | `c4-container.dis` (stand-in for sparql-query) | `view-scale-notation-time.md#V6` |
-| 6.13 `canvas.notices[]`: `id`, `text`, `severity`, `position`, `visible`, `actions`, `dismissible`, `style`, `doc`; built-in `budget:<id>` and `unavailable` notices | New | `Canvas`, **`Notice`** | FR-051, FR-060 | `rdf-graph.dis` (truncation banner) | `view-scale-notation-time.md#V7` |
+| 6.13 `canvas.notices[]`: `id`, `text`, `severity`, `position`, `visible`, `actions`, `dismissible`, `style`, `doc`; built-in `budget:<id>` and `unavailable` notices, replaced by a declared notice with that id | New | `Canvas`, **`Notice`** | FR-051, FR-060 | `rdf-graph.dis` (truncation banner) | `view-scale-notation-time.md#V7` |
 | 6.13 (new 6.13.1) `canvas.filters.<id>`: `label`, `control`, `appliesTo`, `options`, `default`, `match`, `keep`, `effect`, `position`, `doc` | New | `Canvas`, **`Filter`** | FR-050 | `gartner-hype-cycle.dis` (tag chips) | `view-scale-notation-time.md#V3` |
 | 6.13 `canvas.legend.from` (`declared` or `drawn`), `canvas.legend.computed` (`key`, `label`, `swatch`, `order`), `canvas.legend.title` | Extended | `Canvas`, **`LegendComputed`** | FR-051 | `c4-container.dis` | `view-scale-notation-time.md#V4` |
 | 6.13 `canvas.empty`: `text`, `when`, `style` | New | `Canvas`, **`EmptyMessage`** | FR-051 | `causal-loop.dis` | `view-scale-notation-time.md#V10` |
@@ -161,7 +161,7 @@ Columns:
 
 | Construct | New or extended | Schema $def | FR | Shown in example | Research ref |
 |---|---|---|---|---|---|
-| 8.1 `constraints.builtIn.<id>.code`, `.message` (with `detail` for findings and `violation` for gesture refusals) | Extended | **`BuiltInSetting`** | FR-024, FR-030 | `functional-decomposition.dis` (`std.multiplicity`, `std.acyclic` messages) | `identity-and-findings.md#B.11`, `reasons-and-gestures.md#7.1` |
+| 8.1 `constraints.builtIn.<id>.code`, `.message` (with `detail`, for findings) and `.refusal` (with `violation`, for gesture refusals) | Extended | **`BuiltInSetting`** | FR-024, FR-030 | `functional-decomposition.dis` (`std.multiplicity`, `std.acyclic` refusals) | `identity-and-findings.md#B.11`, `reasons-and-gestures.md#7.1` |
 | 8.2 `constraints.rules[].code` (replaces `x-adp-ruleId` and rule ids in `label` or `tags`) | New | `Constraint` | FR-004, FR-020 | `databricks-job.dis` | `identity-and-findings.md#B.1`, `identity-and-findings.md#B.11` |
 | 8.2 `constraints.rules[].forEach` (`item`, `index` bound; `rule` optional; `enforcement: report` only) | New | `Constraint` | FR-022 | `causal-loop.dis` (one finding per unclaimed cycle) | `identity-and-findings.md#B.3`, `identity-and-findings.md#B.4` |
 | 8.2 `constraints.rules[].location` (Expression to a SourceLocation) and `.subject` | New | `Constraint` | FR-020 | `rdf-graph.dis` (prefix re-declarations) | `identity-and-findings.md#B.1` |
@@ -293,7 +293,7 @@ The new contexts and functions are in the CEL table below. This table lists what
 | `self.findingSeverity() → string`, `self.findings() → list(map)` | Member | 12.2 | worst open finding; the findings on the element (the detail file's `problems()`, renamed per R3) | FR-070 | `databricks-job.dis` (stand-in for azure-devops-pipeline) | `view-scale-notation-time.md#N10`, `research.md#R3`, `research.md#R12` |
 | `axisRange(axis, value) → string` | Function | 12.4 | id of the axis range holding `value` | FR-070 | `gartner-hype-cycle.dis` (stand-in for wardley-map) | `view-scale-notation-time.md#N11` |
 | `textWidth(text, fontSize)`, `textHeight(lines, fontSize) → double` | Function | 12.4 | with the declared text metric | FR-070 | `mindmap.dis` | `view-scale-notation-time.md#N16` |
-| `yearMonth(y, m)`, `ym.year()`, `ym.month()`, `formatYearMonth(i, pattern)`, `parseYearMonth(s)` | Function | 12.4 | month-index arithmetic and formatting | FR-080 | `gartner-hype-cycle.dis` | `view-scale-notation-time.md#T1` |
+| `yearMonth(y, m)`, `ym.year()`, `ym.month()`, `formatYearMonth(i, pattern)`, `parseYearMonth(s)` (an optional, empty when `s` is not a month) | Function | 12.4 | month-index arithmetic and formatting | FR-080 | `gartner-hype-cycle.dis` | `view-scale-notation-time.md#T1` |
 | `precisionOf(self, attr) → string` | Function | 12.4 | `date`, `minute`, `second`, `millisecond` or `""` | FR-080 | `gartner-hype-cycle.dis` (stand-in for timeline) | `view-scale-notation-time.md#T3` |
 | `snap(v, step, ties)`; `snap(v, step)` rounds halves away from zero | Function | 12.4 | overload with a ties rule | FR-080 | `gartner-hype-cycle.dis` | `view-scale-notation-time.md#T5` |
 

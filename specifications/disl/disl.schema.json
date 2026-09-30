@@ -5170,7 +5170,8 @@
           "$ref": "#/$defs/StyleRef"
         },
         "label": {
-          "$ref": "#/$defs/LocalizedText"
+          "description": "The tooltip while hovering or dragging, in the handle context, where p holds the parameter values under the pointer while dragging. See DISL 0.2, section 6.8.",
+          "$ref": "#/$defs/Message"
         },
         "visible": {
           "description": "Whether the handle is offered, in the element context plus env. See DISL 0.2, section 6.8.",
@@ -8001,8 +8002,16 @@
       "type": "object",
       "properties": {
         "id": {
-          "description": "The notice's id; a declared budget:<id> or unavailable notice replaces the built-in one. See DISL 0.2, section 6.13.",
-          "$ref": "#/$defs/SimpleId"
+          "description": "The notice's id: a simple identifier, or budget:<id> naming a declared budget. A declared notice with the id of a built-in one (budget:<id> or unavailable) replaces it, and is shown only while the built-in one would be. See DISL 0.2, section 6.13.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SimpleId"
+            },
+            {
+              "type": "string",
+              "pattern": "^budget:[A-Za-z_][A-Za-z0-9_]*$"
+            }
+          ]
         },
         "text": {
           "description": "The notice's text, in the chrome context. See DISL 0.2, section 6.13.",
@@ -9948,7 +9957,7 @@
       }
     },
     "BuiltInSetting": {
-      "description": "The settings of one built-in constraint, in constraints.builtIn keyed by its id such as std.references: its severity, whether it is enabled, the code its findings report, and its message, which replaces the runtime's own sentence and may be computed from detail or violation. See DISL 0.2, section 8.1.",
+      "description": "The settings of one built-in constraint, in constraints.builtIn keyed by its id such as std.references: its severity, whether it is enabled, the code its findings report, the message of its findings, which may be computed from detail, and the refusal it shows when it refuses a gesture, which may be computed from violation. See DISL 0.2, section 8.1.",
       "type": "object",
       "properties": {
         "severity": {
@@ -9969,7 +9978,11 @@
           "$ref": "#/$defs/QualifiedId"
         },
         "message": {
-          "description": "The message of this built-in's findings and refusals, in place of the runtime's; a CEL message sees detail (the keys each built-in lists in 8.7) for findings and violation for gesture refusals. See DISL 0.2, section 8.1.",
+          "description": "The message of this built-in's findings, in place of the runtime's, in the constraint context plus detail (the keys each built-in lists in 8.7). See DISL 0.2, section 8.1.",
+          "$ref": "#/$defs/Message"
+        },
+        "refusal": {
+          "description": "The refusal this built-in shows when it refuses a gesture, in place of the runtime's, in that gesture's context plus violation (the keys 8.4 lists per built-in). Without it a refusal is worded by the runtime, never taken from message. See DISL 0.2, section 8.4.",
           "$ref": "#/$defs/Message"
         },
         "doc": {

@@ -25,11 +25,11 @@ Outcomes:
 | 3.3 | Badges from triples | w3c-rdf, w3c-owl | DISL 0.2 construct | 4.11 `derived.attributes`, drawn by an ordinary badge | `rdf-graph.dis` |
 | 3.4 | An `rdf:type` triple as a badge | w3c-rdf, w3c-owl | DISL 0.2 construct | 4.11 `derived.from` keeps the type object off the card keys | `rdf-graph.dis` |
 | 3.5 | One IRI yielding two elements | w3c-owl | DISL 0.2 construct | 4.11: two derived types over the same triples | `rdf-graph.dis` (the pattern; stand-in for w3c-owl) |
-| 3.6 | Edges that merge several triples | w3c-skos, w3c-shacl | DISL 0.2 construct | 4.9 derived relation object form with `key` | `c4-container.dis` (stand-in: same `key` merge) |
+| 3.6 | Edges that merge several triples | w3c-skos, w3c-shacl | DISL 0.2 construct | 4.11.3 derived relation object form with `key` | `c4-container.dis` (stand-in: same `key` merge) |
 | 3.7 | SPARQL: everything from the query, the syntax entries (scopes, patterns, annotations) | sparql-query | FBL | FBL read binding, one stored record per syntax entry | none |
 | 3.8 | SPARQL: everything from the query, the variables and pattern edges | sparql-query | DISL 0.2 construct | 4.11 derived node and relation types | `rdf-graph.dis` (stand-in) |
 | 3.9 | SPARQL: shallowest-scope placement (computed containment) | sparql-query | DISL 0.2 construct | 4.11 `derived.parent`, `derived.slot`; 12.2 `ancestors()` order | `rdf-graph.dis` (stand-in) |
-| 3.10 | SPARQL: edges owned by a scope other than their ends | sparql-query | DISL 0.2 construct | 4.9 `derived.owner`; 12.2 relation `owner` | `c4-container.dis` (stand-in) |
+| 3.10 | SPARQL: edges owned by a scope other than their ends | sparql-query | DISL 0.2 construct | 4.11.3 `derived.owner`; 12.2 relation `owner` | `c4-container.dis` (stand-in) |
 | 3.11 | Ansible: the model derived from a folder | ansible-structure | FBL | FBL folder subject (gap 2) | none |
 | 3.12 | Helm: the model derived from a folder | helm-chart | FBL | FBL folder subject (gap 2) | none |
 | 3.13 | .NET: the model derived from a solution folder | dotnet-dependency-graph | FBL | FBL folder subject (gap 2) | none |
@@ -38,8 +38,8 @@ Outcomes:
 | 3.16 | Databricks: unknown kinds as generic nodes, never written | databricks-bundle | FBL | FBL stored element with no write rule | none |
 | 3.17 | C4: view membership from include and exclude lists | C4 ×6 | DISL 0.2 construct | 3.5 viewpoint `members` | `c4-container.dis` |
 | 3.18 | C4: membership wildcards | C4 ×6 | DISL 0.2 construct | 3.5 `members` using `matchesGlob` (12.4, 0.1) | `c4-container.dis` |
-| 3.19 | C4: relationships lifted to the nearest drawn ancestor | C4 ×6 | DISL 0.2 construct | 4.9 derived relation; 12.2 `ancestors()` order | `c4-container.dis` |
-| 3.20 | C4: lifted relationships merged | C4 ×6 | DISL 0.2 construct | 4.9 `derived.key` | `c4-container.dis` |
+| 3.19 | C4: relationships lifted to the nearest drawn ancestor | C4 ×6 | DISL 0.2 construct | 4.11.3 derived relation; 12.2 `ancestors()` order | `c4-container.dis` |
+| 3.20 | C4: lifted relationships merged | C4 ×6 | DISL 0.2 construct | 4.11.3 `derived.key` | `c4-container.dis` |
 | 3.21 | A recursive text renderer (OWL's expression text) | w3c-owl (w3c-shacl's one-level summary) | DISL 0.2 construct | 3.4 `recursion` | `rdf-graph.dis` (stand-in for w3c-owl) |
 | 3.22 | Cycle enumeration | causal-loop-diagram (w3c-skos) | DISL 0.2 construct | 12.4 `diagram.cycles`, `diagram.cyclesTruncated` | `causal-loop.dis` |
 | 3.23 | How CEL calls a plugin function | W3C ×4, causal-loop-diagram | DISL 0.2 construct | 13.1 `celFunctions` (bare name, `uses`, `fallback`); 15.2 | `rdf-graph.dis` |
@@ -51,12 +51,12 @@ Outcomes:
 | 4.1 | Id strategy: ShortGuid | dependency-graph, gartner-hype-cycle-graph, timeline, functional-decomposition-graph, mindmap | DISL 0.2 construct | 11.5 `encoding` (`base64url`, `base36`) | `gartner-hype-cycle.dis`, `functional-decomposition.dis` |
 | 4.2 | Id strategy: ids built from paths | dotnet-dependency-graph, ansible-structure, helm-chart, databricks-pipeline, azure-devops-pipeline | DISL 0.2 construct | 11.5 `strategy: "derived"` in `types` | `rdf-graph.dis` (same strategy; path ids not excerpted) |
 | 4.3 | Id strategy: natural keys | causal-loop-diagram, databricks-job, databricks-bundle, sparql-query, C4 ×6 | DISL 0.2 construct | 11.5 `natural` composition and `suffix` | `causal-loop.dis`, `c4-container.dis` |
-| 4.4 | Id strategy: IRIs | W3C ×4, sparql-query | DISL 0.2 construct | 11.5 `derived` | `rdf-graph.dis` |
+| 4.4 | Id strategy: IRIs | W3C ×4, sparql-query | DISL 0.2 construct | 11.5 `derived`; for a derived type, its 4.11 `derived.id` (11.5.2) | `rdf-graph.dis` |
 | 4.5 | Id strategy: triples plus a repeat counter | w3c-rdf, w3c-owl, w3c-skos, sparql-query | DISL 0.2 construct | 11.5 `derived`; 12.4 `positionIn` | `rdf-graph.dis` |
 | 4.6 | Id strategy: term forms | sparql-query | DISL 0.2 construct | 11.5 `derived` | `rdf-graph.dis` (stand-in) |
 | 4.7 | Id strategy: scope paths | sparql-query | DISL 0.2 construct | 11.5 `derived` (a scope reads its parent's id) | `rdf-graph.dis` (stand-in) |
 | 4.8 | Id strategy: formula ids for relations | ansible-structure, helm-chart, dotnet-dependency-graph, databricks-job, databricks-pipeline, azure-devops-pipeline, W3C ×4 | DISL 0.2 construct | 11.5 `derived` (`self.source.id`, `self.target.id`) | `databricks-job.dis` |
-| 4.9 | Id strategy: fixed singleton ids (`pipeline`, `chart`, `crds`) | helm-chart, databricks-pipeline, sparql-query, w3c-rdf | DISL 0.2 construct | 11.5 `derived` with a constant | `rdf-graph.dis` (`truncation`) |
+| 4.9 | Id strategy: fixed singleton ids (`pipeline`, `chart`, `crds`) | helm-chart, databricks-pipeline, sparql-query, w3c-rdf | DISL 0.2 construct | 11.5 `derived` with a constant | `rdf-graph.dis` (`base`) |
 | 4.10 | Ids unstable across edits, marked as such | W3C ×4, sparql-query, C4 ×6, azure-devops-pipeline | DISL 0.2 construct | 11.5 `ephemeral` (bool or `{cel}`) and `reason` | `rdf-graph.dis`, `c4-container.dis` |
 | 4.11 | Unstable ids never stored or positioned | W3C ×4, sparql-query, C4 ×6 | DISL 0.2 construct | 11.5, 11.6 (no view data, override or suppression); 8.7 `std.ephemeralViewData`; DID 5 | `rdf-graph.dis` |
 | 4.12 | Unstable ids never related | W3C ×4, sparql-query, C4 ×6 | DISL 0.2 construct | 11.5 `ephemeral`: no parent, relation end or reference attribute by id; gestures refused with `reason` | `rdf-graph.dis` |
@@ -88,11 +88,11 @@ Outcomes:
 
 | # | Item | Needed by | Outcome | Where | Example |
 |---|---|---|---|---|---|
-| 7.1 | A refusal sentence per gesture | C4 ×6, functional-decomposition-graph, dependency-graph, databricks-job, gartner-hype-cycle-graph, w3c-skos, w3c-rdf, timeline, mindmap | DISL 0.2 construct | 8.4 `message` as a Message, `dropTarget` and `tool`, the order of checks; 8.1 built-in `message` | `c4-container.dis`, `functional-decomposition.dis` |
+| 7.1 | A refusal sentence per gesture | C4 ×6, functional-decomposition-graph, dependency-graph, databricks-job, gartner-hype-cycle-graph, w3c-skos, w3c-rdf, timeline, mindmap | DISL 0.2 construct | 8.4 `message` as a Message, `dropTarget` and `tool`, the order of checks; 8.1 built-in `refusal` | `c4-container.dis`, `functional-decomposition.dis` |
 | 7.2 | A refusal sentence per element kind | sparql-query, w3c-owl, w3c-rdf, ansible-structure, helm-chart | DISL 0.2 construct | 6.9, 6.10 `refusals` | `rdf-graph.dis` |
 | 7.3 | A refusal sentence per selection | w3c-rdf, dependency-graph, w3c-shacl | DISL 0.2 construct | 9.1 `behavior.messages` (`std.notApplicable`); 8.4 `selection` | `rdf-graph.dis` |
 | 7.4 | A read-only reason on every property-grid row | ansible-structure, azure-devops-pipeline, C4 ×6, causal-loop-diagram, databricks-job, dotnet-dependency-graph, helm-chart, mindmap, sparql-query, W3C ×4, timeline, wardley-map | DISL 0.2 construct | 4.3, 7.5 `readOnlyReasons` | `c4-container.dis` |
-| 7.5 | Read-only reasons in priority order | w3c-skos, dotnet-dependency-graph | DISL 0.2 construct | 7.5 order: field, attribute, edit gate, with `{reason}` placing a gate reason | `c4-container.dis` |
+| 7.5 | Read-only reasons in priority order | w3c-skos, dotnet-dependency-graph | DISL 0.2 construct | 4.3 order: field (7.5), attribute, edit gate, with `{reason}` placing a gate reason | `c4-container.dis` |
 | 7.6 | "Absent" distinct from "empty" | dotnet-dependency-graph, ansible-structure | DISL 0.2 construct | 4.3, 7.5 `absentText`, `emptyText`, `showAbsent` | `c4-container.dis` (stand-in for dotnet-dependency-graph) |
 | 7.7 | Unavailable-with-reason menu entries instead of hidden ones | causal-loop-diagram, w3c-shacl, w3c-rdf, c4-deployment, gartner-hype-cycle-graph, azure-devops-pipeline, timeline (and mindmap, which hides) | DISL 0.2 construct | 7.2, 7.3, 9.3 `unavailable`; 7.3 `visible` | `causal-loop.dis`, `mindmap.dis` |
 | 7.8 | Confirmations that interpolate a name or count | mindmap, functional-decomposition-graph, gartner-hype-cycle-graph, databricks-job, W3C ×4, wardley-map, causal-loop-diagram | DISL 0.2 construct | 9.5 `Confirmation` with Message texts and `count` | `mindmap.dis`, `functional-decomposition.dis` |
@@ -134,7 +134,7 @@ Outcomes:
 | 9.5 | A legend computed from what is drawn | C4 ×6, gartner-hype-cycle-graph | DISL 0.2 construct | 6.13 `legend.from`, `legend.computed` | `c4-container.dis` |
 | 9.6 | A computed title | C4 ×6 | DISL 0.2 construct | 6.13 `canvas.title` | `c4-container.dis` |
 | 9.7 | A header band outside the canvas | sparql-query | DISL 0.2 construct | 6.13 `canvas.header` | `c4-container.dis` (stand-in for sparql-query) |
-| 9.8 | A truncation banner outside the canvas | W3C ×4, sparql-query | DISL 0.2 construct | 6.13 `canvas.notices` (built-in `budget:<id>`) | `rdf-graph.dis` |
+| 9.8 | A truncation banner outside the canvas | W3C ×4, sparql-query | DISL 0.2 construct | 6.13 `canvas.notices` (built-in `budget:<id>`, replaced by a declared notice of that id) | `rdf-graph.dis` |
 | 9.9 | A status notice with its own buttons | dotnet-dependency-graph | DISL 0.2 construct | 6.13 `canvas.notices[].actions` | `rdf-graph.dis` (stand-in for dotnet-dependency-graph) |
 | 9.10 | A compact-mode toggle | gartner-hype-cycle-graph | DISL 0.2 construct | 3.5 `variantOf`, `toggle` | `gartner-hype-cycle.dis` |
 | 9.11 | A canvas that stretches to the pane | wardley-map | DISL 0.2 construct | 6.13 `canvas.fit: "stretch"`, `margin` | `gartner-hype-cycle.dis` (stand-in for wardley-map) |
@@ -260,9 +260,9 @@ Found with a scan of every `"x-*"` key and every `plugins` entry in `definitions
 | dependency-graph | `net.etalii.adp.generic.dependencyCurve`, `routing` | notation | 6.10 `line.bezier` with `backward: "loop"` | DISL 0.2 construct |
 | azure-devops-pipeline | `net.etalii.adp.azure-devops.pipelineYaml`, `action` `toggleExpansion` (`toggleJobs`, `toggleSteps`) | view state | 9.4 `view` action with `collapsed`; 11.6 `view.viewer` | DISL 0.2 construct |
 | azure-devops-pipeline | `net.etalii.adp.azure-devops.pipelineYaml`, `action` `moveStep` (`moveUp`, `moveDown`) | gestures | 9.4 `reorder`; 7.3 `moveUp`, `moveDown`; 8.4 kind `reorder` | DISL 0.2 construct |
-| W3C ×4 | `net.etalii.adp.w3c.turtle`, the projection of triples onto elements (part of `import` and `persistenceFormat`) | derived | 4.11 derived node types and 4.9 derived relations; the reading itself goes to FBL | DISL 0.2 construct |
-| sparql-query | `net.etalii.adp.w3c.sparqlQuery`, the projection of the query onto elements | derived | 4.11 derived node and relation types, `derived.parent`, `derived.owner`; the reading goes to FBL | DISL 0.2 construct |
-| C4 ×6 | `net.etalii.adp.c4.structurizrDsl`, view membership and relationship lifting (inside `import`) | derived | 3.5 `members`; 4.9 derived relation with `key` | DISL 0.2 construct |
+| W3C ×4 | `net.etalii.adp.w3c.turtle`, the projection of triples onto elements (part of `import` and `persistenceFormat`) | derived | 4.11.2 derived node types and 4.11.3 derived relations; the reading itself goes to FBL | DISL 0.2 construct |
+| sparql-query | `net.etalii.adp.w3c.sparqlQuery`, the projection of the query onto elements | derived | 4.11.2 and 4.11.3 derived node and relation types, `derived.parent`, `derived.owner`; the reading goes to FBL | DISL 0.2 construct |
+| C4 ×6 | `net.etalii.adp.c4.structurizrDsl`, view membership and relationship lifting (inside `import`) | derived | 3.5 `members`; 4.11.3 derived relation with `key` | DISL 0.2 construct |
 | W3C ×4 | `net.etalii.adp.w3c.turtle`, `celFunctions` `rdfLocalName`, `rdfMintIri`, `rdfMintRefusal`, `rdfTermExists`, `rdfCompress`, `rdfDisplayName`, `rdfResolveTerm`, `rdfTermRefusal` | derived (plugin functions in CEL) | stay plugin functions (the term grammar and prefixes are the Turtle format's), now declared with named `params`, `uses` and `fallback` (13.1) | Plugin |
 | W3C ×4 | `net.etalii.adp.w3c.turtle`, `action` (`renameTerm`, `declareTerm`, `addPrefix`, the SHACL write actions) | reading and writing | FBL (edits spliced into the Turtle file) | FBL |
 | All 22 but timeline | the `persistenceFormat` and `import` plugins (`net.etalii.adp.ansible.folder`, `.azure-devops.pipelineYaml`, `.c4.structurizrDsl`, `.systems.cld`, `.databricks.files`, `.generic.dgr`, `.dotnet.solution`, `.etalii.fdg`, `.gartner.ghgYaml`, `.helm.chartFolder`, `.freeplane.mm`, `.w3c.sparqlQuery`, `.w3c.turtle`, `.wardley.owm`) | reading and writing (gaps 1 and 2) | FBL | FBL |
