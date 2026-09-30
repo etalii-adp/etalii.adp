@@ -1,0 +1,404 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
+  "disl": "0.1",
+  "language": {
+    "id": "net.etalii.adp.dotnet.dependency-graph",
+    "version": "0.1.0",
+    "label": ".NET dependency graph",
+    "doc": {
+      "summary": "Which projects a solution builds, which NuGet packages they consume, and every reference between them - read from the project files rather than drawn by hand.",
+      "description": "A derived diagram type. Its elements are a projection of files the user maintains elsewhere: a `.sln` or `.slnx` solution, the project files it names, and the `Directory.Packages.props` files above them. Nothing in the model is authored and nothing in the solution is ever written; the only thing a user changes is where the boxes are. Everything this specification cannot say is in `dotnet-dependency-graph.md` beside it.",
+      "tags": ["dotnet", "nuget", "msbuild", "solution", "dependencies", "software delivery"],
+      "seeAlso": [
+        { "title": "PackageReference in project files", "href": "https://learn.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files" },
+        { "title": "Central Package Management", "href": "https://learn.microsoft.com/en-us/nuget/consume-packages/central-package-management" },
+        { "title": "Standalone implementation", "href": "https://github.com/etalii-adp/etalii.adp.ide.standalone/tree/develop/src/diagrams/dotnet-dependency-graph" }
+      ]
+    },
+    "authors": [{ "name": "Peter Vrenken", "url": "https://github.com/vrenken" }],
+    "license": "Apache-2.0",
+    "homepage": "https://etalii.net/adp",
+    "icon": "mdi:file-tree-outline",
+    "requires": { "conformance": "full" }
+  },
+
+  "metamodel": {
+    "doc": "Two node kinds and two reference kinds. Every attribute is read-only: its value comes from a file the build owns, and the remedy for a wrong value is always to edit that file.",
+    "diagram": {
+      "attributes": {
+        "solution": {
+          "type": "string", "readOnly": true, "label": "Solution",
+          "doc": "The solution this diagram is bound to, relative to the registration - the `body:` header. Stated, never inferred, so a folder holding two solutions is unambiguous."
+        },
+        "showAmbientPackages": {
+          "type": "bool", "default": false, "transient": true, "label": "Show ambient packages",
+          "doc": {
+            "summary": "Whether packages marked ambient are drawn.",
+            "rationale": "Hidden by default: a graph whose readability depends on the reader finding a control is not readable. A way of looking at the solution rather than a fact about it, so it is never persisted."
+          }
+        }
+      }
+    },
+    "types": {
+      "DependencyNode": {
+        "abstract": true,
+        "doc": "Something a project in the solution can depend on, or a project itself.",
+        "attributes": {
+          "name": { "type": "string", "required": true, "readOnly": true, "label": "Name",
+                    "doc": "What the box is labelled: the project file name without its extension, or the package id." }
+        }
+      },
+      "Project": {
+        "extends": "DependencyNode",
+        "label": "Project",
+        "icon": "mdi:language-csharp",
+        "doc": {
+          "summary": "One project the solution names and which is on disk.",
+          "description": "A project the solution names but which is not on disk is not an element: it is reported as a problem instead, and the rest of the graph is still drawn."
+        },
+        "labelAttribute": "name",
+        "attributes": {
+          "path": { "type": "string", "required": true, "readOnly": true, "key": true, "unique": "diagram", "label": "Path", "group": "Identity",
+                    "doc": "The project file's path relative to the solution, forward-slashed on every platform. The element id is built from it, so a stored position survives a rename of the assembly but not a move of the file." },
+          "targetFrameworks": { "type": "string", "many": true, "readOnly": true, "label": "Target frameworks", "group": "Build",
+                                "doc": "Every framework in `TargetFramework` or `TargetFrameworks`. Multi-targeting is ordinary; a value holding an unexpanded `$(...)` property is not a framework and is left out." },
+          "dotNetVersion": { "type": "string", "label": ".NET version", "group": "Build",
+                             "derived": "self.targetFrameworks.filter(f, f.matches('^net[0-9]+\\\\.[0-9]+$')).map(f, f.substring(3)).distinct().sort().join(', ')",
+                             "doc": { "summary": "The .NET version the target frameworks name, where they name one.",
+                                      "description": "Only `net<major>.<minor>` names a .NET version. `netstandard2.0` or `net472` yield nothing, which the inspector shows as *Not discoverable* rather than as a blank. Two versions when multi-targeted across two." } }
+        }
+      },
+      "Package": {
+        "extends": "DependencyNode",
+        "label": "Package",
+        "icon": "mdi:package-variant-closed",
+        "doc": {
+          "summary": "One NuGet package the solution consumes, however many projects consume it.",
+          "description": "One element per package id, **never per version**: a version bump must not change the id and cost the user a stored position. A package asked for at several versions is one element marked as a version conflict."
+        },
+        "labelAttribute": "name",
+        "attributes": {
+          "versions": { "type": "string", "many": true, "label": "Versions", "group": "Identity",
+                        "derived": "self.incomingOf('PackageReference').filter(r, has(r.version)).map(r, r.version).distinct().sort()",
+                        "doc": "Every version the solution's projects ask for, ordered. Empty when no reference's version could be discovered." },
+          "hasVersionConflict": { "type": "bool", "label": "Version conflict", "group": "Identity",
+                                  "derived": "self.versions.size() > 1 || (self.versions.size() > 0 && self.incomingOf('PackageReference').exists(r, !has(r.version)))",
+                                  "doc": { "summary": "The projects disagree about the version: two known versions, or a known one beside a reference whose version could not be discovered.",
+                                           "rationale": "Collapsing loudly: one element, both versions, marked - rather than two disconnected boxes or a silent collapse." } },
+          "dependentProjectCount": { "type": "int", "label": "Dependent projects", "group": "Identity",
+                                     "derived": "self.incomingOf('PackageReference').size()",
+                                     "doc": "How many of the solution's projects reference this package. One reference per project by construction, so counting references counts projects." },
+          "isAmbient": { "type": "bool", "label": "Ambient", "group": "Identity",
+                         "derived": "self.dependentProjectCount >= max(5, int(math.ceil(double(diagram.nodesOfType('Project').size()) * 0.15)))",
+                         "doc": { "summary": "Referenced by so many of the solution's projects that the edge discriminates nothing.",
+                                  "description": "A package referenced by 15% or more of the projects, and by at least five, is ambient. Hidden by default, never removed.",
+                                  "rationale": "Measured on the standalone repository's own solution: 104 projects, 17 packages, four of which carry 97 of the 155 package references. An edge on 26 of 104 projects says *this is a test project*, which the project's name already says. Degree rather than a curated name list, which needs maintaining and is wrong on the next repository. Only packages: the two highest-degree nodes there are projects, and they carry the opposite information." } },
+          "description": { "type": "text", "readOnly": true, "label": "Description", "group": "About",
+                           "doc": { "summary": "The package author's description, from the local NuGet cache only.",
+                                    "rationale": "No feed is queried and no network call is made (the user's recorded decision). A package never restored on this machine shows *Not available* instead; never an error, a wait or an empty diagram." } }
+        }
+      }
+    },
+    "relations": {
+      "ProjectReference": {
+        "label": "Project reference",
+        "doc": "A `ProjectReference`: directed from the referencing project to the referenced one. A reference to a project the solution does not contain is reported, not drawn.",
+        "source": "Project",
+        "target": "Project",
+        "directed": true,
+        "allowSelfLoops": false,
+        "allowParallel": false,
+        "attributes": {
+          "include": { "type": "string", "readOnly": true, "label": "Include",
+                       "doc": "The declaration verbatim, wildcards included - what the user would search the project file for." }
+        }
+      },
+      "PackageReference": {
+        "label": "Package reference",
+        "doc": "A direct `PackageReference`: directed from the project to the package. Transitive packages are never drawn. One project declaring the same package twice is one reference.",
+        "source": "Project",
+        "target": "Package",
+        "directed": true,
+        "allowSelfLoops": false,
+        "allowParallel": false,
+        "attributes": {
+          "version": { "type": "string", "readOnly": true, "label": "Version",
+                       "doc": "The version the project asks for: a `Version` attribute, a `<Version>` child, or the nearest `Directory.Packages.props` naming the package. Unset when none is discoverable; the reference is drawn either way." }
+        }
+      }
+    }
+  },
+
+  "notation": {
+    "doc": "A project is a solid box, a package a lighter dashed one, because a package is consumed rather than built. Project references are solid lines, package references dashed, because they leave the solution.",
+    "theme": {
+      "tokens": {
+        "color.project.fill": "#3b6ea5",
+        "color.project.stroke": "#2b537c",
+        "color.package.fill": "#cbd5e1",
+        "color.package.stroke": "#94a3b8",
+        "color.node.label": "#ffffff",
+        "color.node.sublabel": "#dbe6f2",
+        "color.edge.project": "#64748b",
+        "color.edge.package": "#e2e8f0",
+        "color.warning": "#b45309",
+        "font.body": "system-ui, sans-serif"
+      },
+      "modes": {
+        "dark": {
+          "color.project.stroke": "#7fb0e0",
+          "color.package.fill": "#4a5568",
+          "color.package.stroke": "#6b7280",
+          "color.node.sublabel": "#cbd5e1",
+          "color.edge.project": "#94a3b8",
+          "color.edge.package": "#334155",
+          "color.warning": "#fbbf24"
+        }
+      },
+      "defaultMode": "light",
+      "followSystem": true
+    },
+    "styles": {
+      "node": { "cornerRadius": 6, "font": { "family": { "token": "font.body" } } },
+      "project": { "extends": "node", "fill": { "token": "color.project.fill" },
+                   "stroke": { "color": { "token": "color.project.stroke" }, "width": 1.5 } },
+      "package": { "extends": "node", "fill": { "token": "color.package.fill" },
+                   "stroke": { "color": { "token": "color.package.stroke" }, "width": 1.5, "dash": [4, 3], "dashScale": "absolute" } },
+      "nodeLabel": { "font": { "weight": 600, "color": { "token": "color.node.label" } } },
+      "nodeSubtitle": { "font": { "size": 12, "color": { "token": "color.node.sublabel" } } },
+      "conflict": { "stroke": { "color": { "token": "color.warning" }, "width": 2.5, "dash": "solid" } },
+      "hidden": { "visible": false }
+    },
+    "nodes": {
+      "Project": {
+        "shape": { "type": "roundedRect", "params": { "radius": 6 } },
+        "style": "project",
+        "size": { "fixed": [220, 56] },
+        "labels": [
+          { "id": "name", "text": { "attribute": "name" }, "editable": false, "position": "center",
+            "overflow": "ellipsis", "maxLines": 1, "style": "nodeLabel" },
+          { "id": "subtitle", "text": { "cel": "self.targetFrameworks.join(', ')" },
+            "position": { "anchor": [0.5, 0.5], "offset": [0, 14], "align": "center" },
+            "visible": { "cel": "self.targetFrameworks.size() > 0" }, "style": "nodeSubtitle" }
+        ],
+        "anchors": { "mode": "sides" },
+        "tooltip": { "cel": "'Project ' + self.name" },
+        "accessibility": { "name": { "cel": "'Project ' + self.name" } },
+        "deletable": false,
+        "copyable": false,
+        "connectable": false,
+        "doubleClick": "revealProjectFile",
+        "doc": "Double-click, or activate from the keyboard, reveals the project file."
+      },
+      "Package": {
+        "shape": { "type": "roundedRect", "params": { "radius": 6 } },
+        "style": "package",
+        "size": { "fixed": [220, 56] },
+        "labels": [
+          { "id": "name", "text": { "attribute": "name" }, "editable": false, "position": "center",
+            "overflow": "ellipsis", "maxLines": 1, "style": "nodeLabel" },
+          { "id": "subtitle", "text": { "cel": "self.versions.join(', ')" },
+            "position": { "anchor": [0.5, 0.5], "offset": [0, 14], "align": "center" },
+            "visible": { "cel": "self.versions.size() > 0" }, "style": "nodeSubtitle" }
+        ],
+        "conditions": [
+          { "when": "self.hasVersionConflict", "style": "conflict",
+            "doc": "A package referenced at more than one version is outlined in the warning colour." },
+          { "when": "self.isAmbient && !diagram.showAmbientPackages", "style": "hidden",
+            "doc": "Ambient packages are not drawn until the reader asks for them." }
+        ],
+        "anchors": { "mode": "sides" },
+        "tooltip": { "cel": "'Package ' + self.name + (self.versions.size() > 0 ? ' (' + self.versions.join(', ') + ')' : '') + (self.hasVersionConflict ? ' - referenced at more than one version' : '')" },
+        "accessibility": { "name": { "cel": "'Package ' + self.name + (self.versions.size() > 0 ? ' (' + self.versions.join(', ') + ')' : '') + (self.hasVersionConflict ? ' - referenced at more than one version' : '')" } },
+        "deletable": false,
+        "copyable": false,
+        "connectable": false,
+        "doubleClick": "none"
+      }
+    },
+    "edges": {
+      "ProjectReference": {
+        "line": {
+          "stroke": { "color": { "token": "color.edge.project" }, "width": 1.5 },
+          "routing": "curved",
+          "startDirection": "right",
+          "endDirection": "left",
+          "bendpoints": { "editable": false }
+        },
+        "targetMarker": "arrow",
+        "anchoring": { "source": { "mode": "sides" }, "target": { "mode": "sides" } },
+        "selectable": true,
+        "deletable": false,
+        "reconnectable": false,
+        "tooltip": "ProjectReference"
+      },
+      "PackageReference": {
+        "line": {
+          "stroke": { "color": { "token": "color.edge.package" }, "width": 1.5, "dash": [5, 4], "dashScale": "absolute" },
+          "routing": "curved",
+          "startDirection": "right",
+          "endDirection": "left",
+          "bendpoints": { "editable": false }
+        },
+        "targetMarker": "arrow",
+        "anchoring": { "source": { "mode": "sides" }, "target": { "mode": "sides" } },
+        "conditions": [
+          { "when": "self.target.isAmbient && !diagram.showAmbientPackages", "style": "hidden",
+            "doc": "A reference to a hidden package would be a connector to nothing, so it goes with it." }
+        ],
+        "selectable": true,
+        "deletable": false,
+        "reconnectable": false,
+        "tooltip": "PackageReference"
+      }
+    }
+  },
+
+  "toolbox": {
+    "doc": "Nothing can be created: the graph's shape belongs to the solution. Select and pan only.",
+    "groups": [],
+    "generic": { "select": true, "pan": true, "lasso": false, "text": false, "note": false, "image": false, "freehand": false }
+  },
+
+  "forms": {
+    "projectInspector": {
+      "for": "Project",
+      "usage": ["inspector"],
+      "doc": "Every row is read-only, and every row says where its value is defined: the project file, to be edited in a text editor.",
+      "items": [
+        { "kind": "section", "title": "Identity", "items": [
+          { "attribute": "name", "widget": "readonly", "doc": "Defined in the project file's name; edit it in a text editor." },
+          { "attribute": "path", "widget": "readonly", "doc": "Defined in the solution; edit it in a text editor." }
+        ] },
+        { "kind": "section", "title": "Build", "items": [
+          { "attribute": "targetFrameworks", "widget": "readonly", "placeholder": "Not discoverable",
+            "label": { "cel": "self.targetFrameworks.size() == 1 ? 'Target framework' : 'Target frameworks'" },
+            "doc": "Defined in the project file; edit it in a text editor." },
+          { "attribute": "dotNetVersion", "widget": "readonly", "placeholder": "Not discoverable",
+            "doc": "Defined in the project file; edit it in a text editor." }
+        ] }
+      ]
+    },
+    "packageInspector": {
+      "for": "Package",
+      "usage": ["inspector"],
+      "doc": "Every row is read-only. Identity rows are defined in the project files that reference the package; the description is the package author's.",
+      "items": [
+        { "kind": "section", "title": "Identity", "items": [
+          { "attribute": "name", "widget": "readonly", "label": "Package",
+            "doc": "Defined in the project files that reference it; edit it in a text editor." },
+          { "attribute": "versions", "widget": "readonly", "placeholder": "Not discoverable",
+            "label": { "cel": "self.versions.size() > 1 ? 'Versions' : 'Version'" },
+            "doc": "Defined in the project files that reference it; edit it in a text editor." },
+          { "kind": "computed", "label": "Version conflict",
+            "value": "This solution's projects reference this package at more than one version.",
+            "visible": "self.hasVersionConflict" }
+        ] },
+        { "kind": "section", "title": "About", "items": [
+          { "attribute": "description", "widget": "readonly",
+            "placeholder": "Not available - this package is not in the local NuGet cache",
+            "doc": "Published by the package's author and read from the local NuGet cache; nothing in this workspace defines it." }
+        ] }
+      ]
+    }
+  },
+
+  "behavior": {
+    "doc": "The model is read-only; the three operations are the only commands besides dragging a box.",
+    "operations": {
+      "revealProjectFile": {
+        "label": "Reveal project file",
+        "icon": "mdi:file-find-outline",
+        "for": ["Project"],
+        "doc": "Selects the project file in the workspace explorer. A package is not a file in the workspace, so it reveals nothing.",
+        "plugin": { "name": "dotnet.solution", "args": { "action": "revealProjectFile" } }
+      },
+      "refreshFromSolution": {
+        "label": "Refresh from the solution",
+        "icon": "mdi:refresh",
+        "for": "diagram",
+        "doc": { "summary": "Reads the solution, its projects, the central package versions and the local NuGet cache again.",
+                 "rationale": "The diagram refreshes itself when a file it was derived from changes, but a `dotnet restore` writes into the machine's NuGet cache, which is not watched; this is how a description that has just become available appears." },
+        "plugin": { "name": "dotnet.solution", "args": { "action": "reload" } }
+      },
+      "showAmbientPackages": {
+        "label": "Show them",
+        "for": "diagram",
+        "enabled": "!diagram.showAmbientPackages && diagram.nodesOfType('Package').exists(p, p.isAmbient)",
+        "doc": "Draws every package, including the ambient ones.",
+        "actions": [ { "set": { "showAmbientPackages": "true" }, "target": "diagram" } ]
+      },
+      "hideAmbientPackages": {
+        "label": "Hide ambient packages",
+        "for": "diagram",
+        "enabled": "diagram.showAmbientPackages",
+        "doc": "Hides the ambient packages again, and the references to them.",
+        "actions": [ { "set": { "showAmbientPackages": "false" }, "target": "diagram" } ]
+      }
+    },
+    "deletion": {
+      "Project": { "relations": "forbid", "references": "forbid" },
+      "Package": { "relations": "forbid", "references": "forbid" }
+    },
+    "clipboard": { "relations": "none" }
+  },
+
+  "layout": {
+    "doc": "Projects layered by dependency depth, packages banded beyond them. Positions a user drags are stored and win element by element; everything else follows the computed layout on every render.",
+    "algorithms": {
+      "dependencyDepth": {
+        "algorithm": "plugin:dotnet.dependencyLayers",
+        "direction": "right",
+        "spacing": { "layer": 320, "node": 90 },
+        "edgeRouting": "curved",
+        "doc": "A project that references no other project sits in the first layer; every other project one layer beyond the deepest project it references. A layer of more than twelve wraps into columns 260 apart. Packages form one band 200 beyond the last project column, ordered by id."
+      }
+    },
+    "default": "dependencyDepth",
+    "trigger": "onChange",
+    "respect": "pinned",
+    "animate": false
+  },
+
+  "persistence": {
+    "doc": "The model is not stored by this diagram type: it is read from the solution each time. The registration (`.adp`) holds the binding and the positions the user dragged, nothing else. No `.sln`, `.slnx` or project file is ever written.",
+    "format": "plugin:dotnet.solution",
+    "files": { "mode": "split", "model": "{name}.slnx", "view": "{name}.adp" },
+    "ids": { "strategy": "natural", "prefix": { "Project": "project:", "Package": "package:" }, "stable": true },
+    "view": { "store": ["bounds"], "styleOverrides": "none" }
+  },
+
+  "plugins": {
+    "dotnet.solution": {
+      "version": "^0.1.0",
+      "provides": ["persistenceFormat", "action"],
+      "required": true,
+      "args": {
+        "action": { "type": "string", "doc": "`reload` or `revealProjectFile`." }
+      },
+      "doc": "Reads a `.sln` or `.slnx`, the project files it names, the `Directory.Packages.props` files above them and the local NuGet cache into the model, reports what did not resolve as problems, watches those files, and never writes any of them."
+    },
+    "dotnet.dependencyLayers": {
+      "version": "^0.1.0",
+      "provides": ["layout"],
+      "required": false,
+      "fallback": { "layout": "layered" },
+      "args": {
+        "layerWidth": { "type": "number", "default": 320 },
+        "rowHeight": { "type": "number", "default": 90 },
+        "packageBandGap": { "type": "number", "default": 200 },
+        "layerWrapAt": { "type": "int", "default": 12 },
+        "wrapColumnWidth": { "type": "number", "default": 260 }
+      },
+      "doc": "The depth-layered placement with wrapped layers and a package band. Without it, a generic layered layout is a fair approximation."
+    }
+  },
+
+  "x-adp": {
+    "origin": "dotnet/dependency-graph",
+    "kind": "diagram",
+    "documentExtensions": [".sln", ".slnx"],
+    "sharedExtension": true,
+    "state": "prototype"
+  }
+}
