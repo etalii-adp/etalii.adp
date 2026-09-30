@@ -1,0 +1,141 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Specification",
+  "disl": "0.2",
+  "language": {
+    "id": "org.example.mindmap",
+    "version": "0.1.0",
+    "label": "Mind map",
+    "doc": {
+      "summary": "A trimmed excerpt of the mind map definition (definitions/diagrams/mindmap.dis), used to show DISL 0.2 constructs.",
+      "description": "Ideas branch from one central topic. The excerpt keeps the node type, the derived branch relation, their basic notation and a one-tool toolbox; the Freeplane file format, the two-sided layout and the plugins of the full definition are left out."
+    }
+  },
+
+  "metamodel": {
+    "doc": "One node type, nested to any depth. The tree is containment: every node but the central topic has exactly one parent node, and the order of a node's children is meaningful.",
+    "types": {
+      "Node": {
+        "label": "Node",
+        "doc": "A topic in the map. The one node without a parent is the central topic.",
+        "attributes": {
+          "text": { "type": "string", "label": "Text", "default": "", "order": 1 },
+          "notes": { "type": "text", "markup": "plain", "label": "Notes", "default": "", "order": 2 },
+          "link": { "type": "string", "label": "Link", "doc": "A path relative to the map file, or an absolute URL.", "order": 3 }
+        },
+        "children": { "allowed": ["Node"], "ordered": true },
+        "labelAttribute": "text"
+      }
+    },
+    "relations": {
+      "Branch": {
+        "label": "Branch",
+        "doc": "The line from a node to its parent. Not stored: one branch is derived per node that has a parent.",
+        "source": "Node",
+        "target": "Node",
+        "directed": true,
+        "allowSelfLoops": false,
+        "allowParallel": false,
+        "acyclic": true,
+        "derived": "diagram.nodes.filter(n, n.parent != null).map(n, {'source': n.parent, 'target': n})"
+      }
+    }
+  },
+
+  "coordinates": {
+    "systems": {
+      "canvas": {
+        "kind": "cartesian",
+        "x": { "kind": "linear", "unit": "px" },
+        "y": { "kind": "linear", "unit": "px" },
+        "orientation": "y-down",
+        "grid": { "visible": false }
+      }
+    },
+    "default": "canvas"
+  },
+
+  "notation": {
+    "theme": {
+      "tokens": {
+        "color.surface": "#FFFFFF",
+        "color.border": "#E2E8F0",
+        "color.text": "#0F172A",
+        "font.body": "system-ui, sans-serif"
+      },
+      "modes": {
+        "dark": {
+          "color.surface": "#1E293B",
+          "color.border": "#334155",
+          "color.text": "#F1F5F9"
+        }
+      },
+      "defaultMode": "light",
+      "followSystem": true
+    },
+    "styles": {
+      "node": {
+        "fill": { "token": "color.surface" },
+        "stroke": { "color": { "token": "color.border" }, "width": 1.5 },
+        "font": { "family": { "token": "font.body" }, "size": 12, "color": { "token": "color.text" } },
+        "padding": [6, 10]
+      },
+      "branch": {
+        "stroke": { "color": { "token": "color.border" }, "width": 1.5 }
+      }
+    },
+    "nodes": {
+      "Node": {
+        "shape": "rect",
+        "style": "node",
+        "size": { "min": [32, 31.6], "autoSize": "fitContent", "resizable": false },
+        "labels": [
+          { "id": "text", "text": { "attribute": "text" }, "editable": "inline", "position": "center", "wrap": "none" }
+        ],
+        "anchors": { "mode": "sides" },
+        "deletable": { "cel": "self.parent != null" },
+        "doubleClick": "editLabel",
+        "doc": "A plain box sized to its text, with the text centred."
+      }
+    },
+    "edges": {
+      "Branch": {
+        "line": {
+          "stroke": { "color": { "token": "color.border" }, "width": 1.5 },
+          "routing": "bezier"
+        },
+        "style": "branch",
+        "sourceMarker": "none",
+        "targetMarker": "none",
+        "selectable": false,
+        "deletable": false,
+        "reconnectable": false,
+        "layer": "belowNodes",
+        "doc": "A smooth curve from the parent to the child, under the boxes, with no arrowheads."
+      }
+    },
+    "canvas": {
+      "background": { "token": "color.surface" }
+    }
+  },
+
+  "toolbox": {
+    "generic": { "select": true, "pan": true },
+    "groups": [
+      {
+        "id": "mindmap",
+        "label": "Mind map",
+        "tools": [
+          { "id": "node", "creates": "Node", "label": "Node", "doc": "Drop on a node to add a child under it." }
+        ]
+      }
+    ],
+    "contextTools": [
+      {
+        "for": ["Node"],
+        "tools": [
+          { "kind": "create-child", "creates": "Node", "label": "Add child", "position": "bottom" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Specification",
+  "disl": "0.2",
+  "language": {
+    "id": "org.example.rdf.graph",
+    "version": "0.1.0",
+    "label": "RDF graph",
+    "doc": {
+      "summary": "A trimmed excerpt of the RDF graph definition (definitions/diagrams/w3c-rdf.dis), used to show DISL 0.2 constructs.",
+      "description": "The subjects and objects of an RDF graph as cards and its statements as arrows labelled with their predicate. The excerpt keeps the term types, the statement relation, their basic notation and a small toolbox; literal rows, prefixes, the Turtle file format and the plugins of the full definition are left out."
+    }
+  },
+
+  "metamodel": {
+    "diagram": {
+      "attributes": {
+        "baseIri": { "type": "string", "default": "", "readOnly": true, "doc": "The base IRI relative IRIs are resolved against." }
+      }
+    },
+    "types": {
+      "Term": {
+        "abstract": true,
+        "doc": "A subject or object of a statement.",
+        "attributes": {
+          "types": { "type": "uri", "many": true, "label": "Types", "doc": "The objects of the term's rdf:type statements." }
+        }
+      },
+      "Resource": {
+        "extends": "Term",
+        "label": "Resource",
+        "labelAttribute": "iri",
+        "attributes": {
+          "iri": { "type": "uri", "key": true, "unique": "diagram", "label": "IRI", "group": "Identity" },
+          "rdfsLabel": { "type": "string", "label": "Label", "group": "Documentation" },
+          "rdfsComment": { "type": "text", "label": "Comment", "group": "Documentation" }
+        }
+      },
+      "BlankNode": {
+        "extends": "Term",
+        "label": "Blank node",
+        "labelAttribute": "name",
+        "attributes": {
+          "name": { "type": "string", "default": "", "label": "Node", "group": "Identity", "doc": "The blank node label the file wrote, if any." }
+        }
+      }
+    },
+    "relations": {
+      "Statement": {
+        "label": "Statement",
+        "source": { "types": ["Resource", "BlankNode"] },
+        "target": { "types": ["Resource", "BlankNode"] },
+        "directed": true,
+        "allowSelfLoops": true,
+        "allowParallel": true,
+        "attributes": {
+          "predicateIri": { "type": "uri", "required": true, "label": "Predicate", "group": "Identity" }
+        }
+      }
+    }
+  },
+
+  "notation": {
+    "theme": {
+      "tokens": {
+        "color.surface": "#ffffff",
+        "color.text": "#0f172a",
+        "color.text.muted": "#64748b",
+        "color.border": "#e2e8f0",
+        "color.primary": "limegreen",
+        "font.body": "system-ui, sans-serif"
+      },
+      "modes": {
+        "dark": {
+          "color.surface": "#1e293b",
+          "color.text": "#f1f5f9",
+          "color.text.muted": "#94a3b8",
+          "color.border": "#334155"
+        }
+      },
+      "followSystem": true
+    },
+    "styles": {
+      "card": {
+        "fill": { "token": "color.surface" },
+        "stroke": { "color": { "token": "color.border" }, "width": 1.5 },
+        "font": { "family": { "token": "font.body" }, "size": 12, "color": { "token": "color.text" } }
+      },
+      "badge": { "font": { "size": 11, "color": { "token": "color.primary" } } },
+      "statement": {
+        "stroke": { "color": { "token": "color.text.muted" }, "width": 1.5 },
+        "font": { "size": 11, "color": { "token": "color.text.muted" } }
+      }
+    },
+    "nodes": {
+      "Resource": {
+        "shape": "rect",
+        "style": "card",
+        "size": { "default": [220, 40], "resizable": false, "autoSize": "fitHeight" },
+        "labels": [
+          { "id": "title", "text": { "attribute": "iri" }, "position": "center", "overflow": "ellipsis", "maxLines": 1, "editable": false },
+          { "id": "badges", "text": { "cel": "self.types.join(' · ')" }, "position": "bottom", "style": "badge", "overflow": "ellipsis", "maxLines": 1, "visible": { "cel": "size(self.types) > 0" } }
+        ],
+        "anchors": { "mode": "outline" }
+      },
+      "BlankNode": {
+        "shape": "rect",
+        "style": ["card", { "stroke": { "dash": [5, 3], "dashScale": "absolute" }, "opacity": 0.75 }],
+        "size": { "default": [220, 40], "resizable": false, "autoSize": "fitHeight" },
+        "labels": [
+          { "id": "title", "text": { "cel": "self.name != '' ? '_:' + self.name : '_:'" }, "position": "center", "overflow": "ellipsis", "maxLines": 1, "editable": false }
+        ],
+        "anchors": { "mode": "outline" }
+      }
+    },
+    "edges": {
+      "Statement": {
+        "style": "statement",
+        "line": {
+          "stroke": { "color": { "token": "color.text.muted" }, "width": 1.5 },
+          "routing": "straight"
+        },
+        "sourceMarker": "none",
+        "targetMarker": "arrowFilled",
+        "labels": [
+          { "id": "predicate", "text": { "attribute": "predicateIri" }, "at": "middle", "side": "above", "distance": 6, "editable": false }
+        ],
+        "reconnectable": false
+      }
+    },
+    "canvas": {
+      "background": { "token": "color.surface" }
+    }
+  },
+
+  "toolbox": {
+    "generic": { "select": true, "pan": true },
+    "groups": [
+      {
+        "id": "rdf",
+        "label": "RDF",
+        "tools": [
+          { "id": "resource", "creates": "Resource", "label": "Resource" },
+          { "id": "blankNode", "creates": "BlankNode", "label": "Blank node" },
+          { "id": "statement", "creates": "Statement", "label": "Statement" }
+        ]
+      }
+    ]
+  }
+}

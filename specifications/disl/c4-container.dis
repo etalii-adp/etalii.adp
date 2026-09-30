@@ -1,0 +1,200 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Specification",
+  "disl": "0.2",
+  "language": {
+    "id": "org.example.c4.container",
+    "version": "0.1.0",
+    "label": "C4 container diagram",
+    "doc": {
+      "summary": "A trimmed excerpt of the C4 container diagram definition (definitions/diagrams/c4-container.dis), used to show DISL 0.2 constructs.",
+      "description": "The containers of one software system, the people who use it and the systems around it. The excerpt keeps the element hierarchy, the relationship, their card notation and a small toolbox; components, deployment, views, the Structurizr workspace format and the plugins of the full definition are left out."
+    }
+  },
+
+  "metamodel": {
+    "diagram": {
+      "attributes": {
+        "title": { "type": "string", "order": 1 },
+        "scope": { "type": "SoftwareSystem", "required": true, "order": 2, "doc": "The software system whose containers the diagram shows." }
+      }
+    },
+    "types": {
+      "Element": {
+        "abstract": true,
+        "attributes": {
+          "tags": { "type": "string", "many": true, "order": 4 },
+          "external": {
+            "type": "bool",
+            "label": "External",
+            "derived": "self.tags.exists(t, t.lowerAscii() == 'external' || t.lowerAscii() == 'existing system')"
+          }
+        }
+      },
+      "NamedElement": {
+        "abstract": true,
+        "extends": "Element",
+        "attributes": {
+          "name": { "type": "string", "required": true, "key": true, "order": 1 },
+          "description": { "type": "text", "order": 2 }
+        },
+        "labelAttribute": "name"
+      },
+      "Person": {
+        "extends": "NamedElement",
+        "doc": "A user of the software system."
+      },
+      "SoftwareSystem": {
+        "extends": "NamedElement",
+        "label": "Software system",
+        "children": { "allowed": ["Container"] }
+      },
+      "Container": {
+        "extends": "NamedElement",
+        "doc": "A separately runnable or deployable unit: an application, a service or a data store.",
+        "attributes": {
+          "technology": { "type": "string", "order": 3 }
+        }
+      }
+    },
+    "relations": {
+      "Relationship": {
+        "source": "Element",
+        "target": "Element",
+        "directed": true,
+        "allowSelfLoops": false,
+        "allowParallel": true,
+        "attributes": {
+          "description": { "type": "string", "order": 1 },
+          "technology": { "type": "string", "order": 2 }
+        }
+      }
+    }
+  },
+
+  "notation": {
+    "theme": {
+      "tokens": {
+        "color.person": "#08427b",
+        "color.softwareSystem": "#1168bd",
+        "color.container": "#438dd5",
+        "color.external": "#999999",
+        "color.onDark": "#ffffff",
+        "color.line": "#8A8880",
+        "color.muted": "#6B6A65",
+        "color.canvas": "#FFFFFF",
+        "font.body": "system-ui, sans-serif"
+      },
+      "modes": {
+        "dark": {
+          "color.line": "#B4B2A9",
+          "color.muted": "#A9A79E",
+          "color.canvas": "#1F1E1C"
+        }
+      },
+      "defaultMode": "light",
+      "followSystem": true
+    },
+    "styles": {
+      "card": {
+        "stroke": { "color": "none", "width": 0 },
+        "font": { "family": { "token": "font.body" }, "size": 14, "lineHeight": 1.4, "color": { "token": "color.onDark" } },
+        "padding": [10, 12],
+        "textAlign": "center"
+      },
+      "person": { "extends": "card", "fill": { "token": "color.person" } },
+      "softwareSystem": { "extends": "card", "fill": { "token": "color.softwareSystem" } },
+      "container": { "extends": "card", "fill": { "token": "color.container" } },
+      "external": { "fill": { "token": "color.external" } },
+      "cardName": { "font": { "size": 13, "weight": 600 } },
+      "cardType": { "font": { "size": 10 }, "opacity": 0.9 },
+      "relationshipLabel": { "font": { "size": 10, "color": { "token": "color.muted" } } }
+    },
+    "shapes": {
+      "c4Person": {
+        "label": "Person",
+        "parts": [
+          { "id": "head", "shape": "circle", "box": { "x": "w / 2.0 - 10.0", "y": -28, "w": 20, "h": 20 } },
+          { "id": "body", "shape": { "type": "roundedRect", "params": { "radius": 8 } }, "box": { "x": 0, "y": 0, "w": "w", "h": "h" }, "outline": true }
+        ]
+      }
+    },
+    "nodes": {
+      "Person": {
+        "shape": "c4Person",
+        "style": "person",
+        "size": { "min": [160, 39.6], "max": [240, null], "autoSize": "fitContent", "resizable": false },
+        "labels": [
+          { "id": "name", "text": { "attribute": "name" }, "editable": "inline", "position": "center", "style": "cardName" },
+          { "id": "type", "text": { "cel": "'[Person]'" }, "position": "bottom", "style": "cardType" }
+        ],
+        "conditions": [ { "when": "self.external", "style": "external" } ]
+      },
+      "SoftwareSystem": {
+        "shape": { "type": "roundedRect", "params": { "radius": 8 } },
+        "style": "softwareSystem",
+        "size": { "min": [160, 39.6], "max": [240, null], "autoSize": "fitContent", "resizable": false },
+        "labels": [
+          { "id": "name", "text": { "attribute": "name" }, "editable": "inline", "position": "center", "style": "cardName" },
+          { "id": "type", "text": { "cel": "'[Software System]'" }, "position": "bottom", "style": "cardType" }
+        ],
+        "conditions": [ { "when": "self.external", "style": "external" } ]
+      },
+      "Container": {
+        "shape": { "type": "roundedRect", "params": { "radius": 8 } },
+        "style": "container",
+        "size": { "min": [160, 39.6], "max": [240, null], "autoSize": "fitContent", "resizable": false },
+        "labels": [
+          { "id": "name", "text": { "attribute": "name" }, "editable": "inline", "position": "center", "style": "cardName" },
+          { "id": "type", "text": { "cel": "self.technology != '' ? '[Container: ' + self.technology + ']' : '[Container]'" }, "position": "bottom", "style": "cardType" }
+        ],
+        "conditions": [ { "when": "self.external", "style": "external" } ]
+      }
+    },
+    "edges": {
+      "Relationship": {
+        "line": {
+          "stroke": { "color": { "token": "color.line" }, "width": 1.5, "dash": [6, 4], "dashScale": "absolute" },
+          "routing": "straight"
+        },
+        "sourceMarker": "none",
+        "targetMarker": "arrowFilled",
+        "labels": [
+          {
+            "id": "label",
+            "at": "middle",
+            "text": { "cel": "self.description + (self.technology != '' ? ' [' + self.technology + ']' : '')" },
+            "style": "relationshipLabel",
+            "wrap": "none"
+          }
+        ]
+      }
+    },
+    "canvas": {
+      "background": { "token": "color.canvas" }
+    }
+  },
+
+  "toolbox": {
+    "generic": { "select": true, "pan": true },
+    "groups": [
+      {
+        "id": "elements",
+        "label": "C4 container diagram",
+        "tools": [
+          { "id": "person", "creates": "Person", "label": "Person" },
+          { "id": "softwareSystem", "creates": "SoftwareSystem", "label": "Software System" },
+          { "id": "container", "creates": "Container", "label": "Container", "initial": { "technology": "'Technology'" } },
+          { "id": "relationship", "creates": "Relationship", "label": "Relationship" }
+        ]
+      }
+    ],
+    "contextTools": [
+      {
+        "for": ["SoftwareSystem"],
+        "tools": [
+          { "kind": "create-child", "creates": "Container", "label": "Add Container" }
+        ]
+      }
+    ]
+  }
+}

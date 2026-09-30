@@ -1,0 +1,156 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Specification",
+  "disl": "0.2",
+  "language": {
+    "id": "org.example.causal-loop",
+    "version": "0.1.0",
+    "label": "Causal loop diagram",
+    "doc": {
+      "summary": "A trimmed excerpt of the causal loop diagram definition (definitions/diagrams/causal-loop-diagram.dis), used to show DISL 0.2 constructs.",
+      "description": "Variables connected by causal links, each link marked with whether the effect moves in the same or the opposite direction as its cause. The excerpt keeps the variable, the causal link, their basic notation and a small toolbox; feedback loops, loop polarity, the file format, the ring layout and the plugins of the full definition are left out."
+    }
+  },
+
+  "metamodel": {
+    "enums": {
+      "Polarity": {
+        "values": {
+          "positive": { "label": "Same direction (+)" },
+          "negative": { "label": "Opposite direction (−)" },
+          "unstated": { "label": "Unstated" }
+        }
+      }
+    },
+    "types": {
+      "Variable": {
+        "label": "Variable",
+        "labelAttribute": "label",
+        "attributes": {
+          "name": {
+            "type": "string",
+            "required": true,
+            "key": true,
+            "unique": "diagram",
+            "minLength": 1,
+            "pattern": "^[^\\s\"]+$",
+            "label": "Identifier",
+            "group": "Identity",
+            "order": 2
+          },
+          "label": { "type": "string", "pattern": "^[^\"\\r\\n]*$", "label": "Label", "group": "Identity", "order": 1 },
+          "display": { "type": "string", "derived": "self.label != '' ? self.label : self.name" }
+        }
+      }
+    },
+    "relations": {
+      "CausalLink": {
+        "label": "Causal link",
+        "source": { "types": ["Variable"], "role": "cause" },
+        "target": { "types": ["Variable"], "role": "effect" },
+        "directed": true,
+        "allowSelfLoops": true,
+        "allowParallel": false,
+        "attributes": {
+          "polarity": { "type": "Polarity", "default": "unstated", "label": "Polarity", "group": "Causality", "order": 2 },
+          "delayed": { "type": "bool", "default": false, "label": "Delayed", "group": "Causality", "order": 3 },
+          "weight": { "type": "number", "label": "Weight", "group": "Causality", "order": 4 },
+          "note": { "type": "string", "pattern": "^[^\"\\r\\n]*$", "label": "Note", "group": "Identity", "order": 1 }
+        }
+      }
+    }
+  },
+
+  "coordinates": {
+    "systems": {
+      "canvas": {
+        "kind": "cartesian",
+        "x": { "kind": "linear" },
+        "y": { "kind": "linear" }
+      }
+    }
+  },
+
+  "notation": {
+    "theme": {
+      "tokens": {
+        "color.surface": "#FFFFFF",
+        "color.text": "#0F172A",
+        "color.border": "#94A3B8",
+        "font.body": "system-ui, sans-serif"
+      },
+      "modes": {
+        "dark": {
+          "color.surface": "#1E293B",
+          "color.text": "#F1F5F9",
+          "color.border": "#64748B"
+        }
+      },
+      "followSystem": true
+    },
+    "styles": {
+      "variable": {
+        "fill": { "token": "color.surface" },
+        "stroke": { "color": { "token": "color.border" }, "width": 1 },
+        "font": { "family": { "token": "font.body" }, "size": 14, "color": { "token": "color.text" } }
+      },
+      "link": {
+        "stroke": { "color": { "token": "color.text" }, "width": 1.5 }
+      }
+    },
+    "nodes": {
+      "Variable": {
+        "shape": "pill",
+        "style": "variable",
+        "size": { "default": [90, 39.6], "min": [90, 39.6], "autoSize": "fitWidth", "resizable": false },
+        "labels": [
+          { "id": "display", "text": { "cel": "self.display" }, "position": "center", "wrap": "none", "maxLines": 1 }
+        ],
+        "anchors": { "mode": "outline" }
+      }
+    },
+    "edges": {
+      "CausalLink": {
+        "style": "link",
+        "line": {
+          "stroke": { "color": { "token": "color.text" }, "width": 1.5 },
+          "routing": "arc",
+          "curvature": 0.2
+        },
+        "sourceMarker": "none",
+        "targetMarker": "arrow",
+        "anchoring": { "source": { "mode": "outline" }, "target": { "mode": "outline" } },
+        "midMarkers": [
+          { "marker": { "type": "bar", "params": { "width": 16 } }, "at": 0.5, "orient": "auto", "visible": { "cel": "self.delayed" } }
+        ],
+        "labels": [
+          {
+            "id": "polarity",
+            "text": { "cel": "self.polarity == 'positive' ? '+' : (self.polarity == 'negative' ? '−' : '')" },
+            "at": 0.86,
+            "side": "left",
+            "distance": 11,
+            "orientation": "horizontal",
+            "editable": false,
+            "style": { "font": { "size": 15, "weight": 600 } }
+          }
+        ]
+      }
+    },
+    "canvas": {
+      "background": { "token": "color.surface" }
+    }
+  },
+
+  "toolbox": {
+    "groups": [
+      {
+        "id": "causalLoop",
+        "label": "Causal loop",
+        "tools": [
+          { "id": "variable", "creates": "Variable", "mode": "click", "label": "Variable", "after": "select" },
+          { "id": "link", "creates": "CausalLink", "mode": "drag", "label": "Causal link", "initial": { "polarity": "positive" } }
+        ]
+      }
+    ]
+  }
+}

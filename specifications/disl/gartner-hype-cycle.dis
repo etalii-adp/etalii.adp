@@ -1,0 +1,204 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Specification",
+  "disl": "0.2",
+  "language": {
+    "id": "org.example.gartner.hype-cycle",
+    "version": "0.1.0",
+    "label": "Gartner hype cycle graph",
+    "doc": {
+      "summary": "A trimmed excerpt of the Gartner hype cycle graph definition (definitions/diagrams/gartner-hype-cycle-graph.dis), used to show DISL 0.2 constructs.",
+      "description": "Trends drawn as banners over time, one row each, with the triggers that started them and the influences between them. The excerpt keeps the trend, trigger and note types, the influence relation, their basic notation and a small toolbox; the phased banner shape, the date-to-step mapping functions, viewpoints, the file format and the plugins of the full definition are left out, so positions here are free."
+    }
+  },
+
+  "metamodel": {
+    "diagram": {
+      "attributes": {
+        "unit": { "type": "TimeUnit", "default": "month", "doc": "The step one unit of the time axis stands for." }
+      }
+    },
+    "dataTypes": {
+      "YearMonth": { "base": "string", "pattern": "^(-\\d{4,6}|\\d{4})-(\\d{2})$" }
+    },
+    "enums": {
+      "TimeUnit": {
+        "ordered": true,
+        "values": {
+          "month": { "label": "Month" },
+          "year": { "label": "Year" },
+          "decade": { "label": "Decade" },
+          "century": { "label": "Century" }
+        }
+      },
+      "Phase": {
+        "ordered": true,
+        "values": {
+          "peak": { "label": "Peak", "color": "#f7e7a1" },
+          "trough": { "label": "Trough", "color": "#dfe3e8" },
+          "slope": { "label": "Slope", "color": "#f6c99a" },
+          "plateau": { "label": "Plateau", "color": "#cde8a8" }
+        }
+      }
+    },
+    "types": {
+      "Trend": {
+        "label": "Trend",
+        "labelAttribute": "name",
+        "attributes": {
+          "name": { "type": "string", "required": true, "group": "Identity", "order": 1 },
+          "description": { "type": "text", "group": "Identity", "order": 2 },
+          "start": { "type": "YearMonth", "required": true, "group": "Time", "order": 1 },
+          "stop": { "type": "YearMonth", "required": true, "group": "Time", "order": 2 },
+          "row": { "type": "int", "default": 0 },
+          "phases": { "type": "int", "default": 4, "min": 1, "max": 4, "group": "Phases", "order": 1 }
+        }
+      },
+      "Trigger": {
+        "label": "Trigger",
+        "labelAttribute": "name",
+        "attributes": {
+          "name": { "type": "string", "required": true },
+          "date": { "type": "YearMonth", "required": true },
+          "row": { "type": "int", "default": 0 },
+          "description": { "type": "text" }
+        }
+      },
+      "Note": {
+        "label": "Note",
+        "labelAttribute": "text",
+        "attributes": {
+          "text": { "type": "text", "default": "" },
+          "at": { "type": "YearMonth", "required": true },
+          "row": { "type": "int", "default": 0 }
+        }
+      }
+    },
+    "relations": {
+      "Influence": {
+        "label": "Influence",
+        "source": ["Trend", "Trigger"],
+        "target": "Trend",
+        "directed": true,
+        "allowSelfLoops": false,
+        "allowParallel": false,
+        "attributes": {
+          "toPhase": { "type": "Phase", "required": true, "doc": "The phase of the target trend the influence arrives in." },
+          "description": { "type": "text" }
+        }
+      }
+    }
+  },
+
+  "coordinates": {
+    "axes": {
+      "time": { "kind": "linear", "label": "Time", "unit": "step", "scale": 4, "origin": 0, "ruler": { "visible": true, "position": "bottom" } },
+      "rows": { "kind": "linear", "label": "Rows", "unit": "row", "scale": 56, "origin": 0 }
+    },
+    "systems": {
+      "hypeCycle": {
+        "kind": "cartesian",
+        "x": "time",
+        "y": "rows",
+        "orientation": "y-down",
+        "grid": { "visible": false }
+      }
+    },
+    "default": "hypeCycle"
+  },
+
+  "notation": {
+    "theme": {
+      "tokens": {
+        "ghg.peak": "#f7e7a1",
+        "ghg.chevron": "#475569",
+        "ghg.trigger": "#7c3aed",
+        "ghg.note": "#fef9c3",
+        "ghg.noteText": "#0f172a",
+        "ghg.border": "#e2e8f0"
+      },
+      "modes": {
+        "dark": {
+          "ghg.peak": "#6b5a17",
+          "ghg.chevron": "#e2e8f0",
+          "ghg.trigger": "#c4b5fd",
+          "ghg.note": "#423a10",
+          "ghg.noteText": "#f1f5f9",
+          "ghg.border": "#334155"
+        }
+      },
+      "followSystem": true
+    },
+    "styles": {
+      "banner": {
+        "fill": { "token": "ghg.peak" },
+        "stroke": { "color": { "token": "ghg.chevron" }, "width": 1.5 }
+      }
+    },
+    "nodes": {
+      "Trend": {
+        "shape": "rect",
+        "style": "banner",
+        "size": { "default": [48, 32], "min": [null, 32], "max": [null, 32], "resizable": "horizontal" },
+        "labels": [
+          { "id": "name", "text": { "attribute": "name" }, "position": "outside-left", "editable": "inline", "wrap": "none" }
+        ],
+        "anchors": { "mode": "outline" }
+      },
+      "Trigger": {
+        "shape": "ellipse",
+        "style": { "fill": { "token": "ghg.trigger" }, "stroke": { "width": 0 } },
+        "size": { "fixed": [16, 16] },
+        "labels": [
+          { "id": "name", "text": { "attribute": "name" }, "position": "outside-left", "editable": "inline", "wrap": "none" }
+        ],
+        "anchors": { "mode": "outline" }
+      },
+      "Note": {
+        "shape": "rect",
+        "style": {
+          "fill": { "token": "ghg.note" },
+          "stroke": { "color": { "token": "ghg.border" }, "width": 1 },
+          "font": { "color": { "token": "ghg.noteText" }, "size": 12 },
+          "padding": [4, 6]
+        },
+        "size": { "default": [160, 64], "resizable": true },
+        "labels": [
+          { "id": "text", "text": { "attribute": "text" }, "position": "top-left", "editable": "multiline", "wrap": "word", "maxWidth": "parent", "overflow": "ellipsis" }
+        ],
+        "connectable": false
+      }
+    },
+    "edges": {
+      "Influence": {
+        "line": {
+          "stroke": { "color": { "token": "ghg.chevron" }, "width": 1.5 },
+          "routing": "bezier"
+        },
+        "sourceMarker": "none",
+        "targetMarker": "arrow",
+        "anchoring": { "source": { "mode": "outline" }, "target": { "mode": "outline" } }
+      }
+    }
+  },
+
+  "toolbox": {
+    "groups": [
+      {
+        "id": "hypeCycle",
+        "label": "Hype cycle",
+        "tools": [
+          { "id": "trend", "creates": "Trend", "label": "Trend", "mode": "click", "initial": { "name": "'New trend'", "phases": 4 }, "after": "select" },
+          { "id": "trigger", "creates": "Trigger", "label": "Trigger", "mode": "click", "initial": { "name": "'Trigger'" }, "after": "select" },
+          { "id": "note", "creates": "Note", "label": "Note", "mode": "click", "after": "editLabel" }
+        ]
+      }
+    ],
+    "contextTools": [
+      {
+        "for": ["Trend", "Trigger"],
+        "placement": "around",
+        "tools": [ { "kind": "connect", "via": "Influence", "label": "Influence" } ]
+      }
+    ]
+  }
+}
