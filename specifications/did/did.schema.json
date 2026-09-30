@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://etalii.net/adp/did/schema/0.1/did.schema.json",
+  "$id": "https://etalii.net/adp/did/schema/0.2/did.schema.json",
   "title": "DID 0.1 — Diagram Definition Language",
   "description": "Definitions ($defs/Definition): the diagrams users create of a diagram type specified in DISL. The root validates definitions. Shared primitives are referenced from disl.schema.json by absolute $id.",
   "$ref": "#/$defs/Definition",
@@ -26,10 +26,10 @@
           "type": "object",
           "properties": {
             "id": {
-              "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/QualifiedId"
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/QualifiedId"
             },
             "version": {
-              "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/SemVer"
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SemVer"
             },
             "definition": {
               "type": "string",
@@ -408,7 +408,7 @@
         "waypoints": {
           "type": "array",
           "items": {
-            "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Point"
+            "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Point"
           }
         },
         "sourceAnchor": {
@@ -430,7 +430,7 @@
         "controlPoints": {
           "type": "array",
           "items": {
-            "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Point"
+            "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Point"
           }
         },
         "labels": {

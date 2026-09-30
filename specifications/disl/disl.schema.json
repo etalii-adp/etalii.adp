@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json",
+  "$id": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json",
   "title": "DISL 0.1 — Diagram Specification Language",
   "description": "Specifications of diagram types ($defs/Specification), written by tool engineers. The root validates specifications. Stored diagrams are DID definitions, validated by did.schema.json, which references this schema's QualifiedId, SemVer and Point.",
   "$ref": "#/$defs/Specification",
