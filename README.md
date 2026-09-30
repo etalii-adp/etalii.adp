@@ -6,9 +6,9 @@ The specifications of the formats and languages that the ADP tools implement. A 
 
 | Kind | Specification language | Extension | Definition language | Extension |
 |---|---|---|---|---|
-| Diagram | [DISL, Diagram Specification Language](specifications/disl/DISL-specification.md) | `.disl` | [DID, Diagram Definition Language](specifications/did/DID-specification.md) | `.did` |
-| Designer | [DESL, Designer Specification Language](specifications/desl/DESL-specification.md) | `.desl` | [DED, Designer Definition Language](specifications/ded/DED-specification.md) | `.ded` |
-| Editor | [EDSL, Editor Specification Language](specifications/edsl/EDSL-specification.md) | `.edsl` | [EDD, Editor Definition Language](specifications/edd/EDD-specification.md) | `.edd` |
+| Diagram | [DISL, Diagram Specification Language](specifications/disl/DISL-specification.md) | `.dis` | [DID, Diagram Definition Language](specifications/did/DID-specification.md) | `.did` |
+| Designer | [DESL, Designer Specification Language](specifications/desl/DESL-specification.md) | `.des` | [DED, Designer Definition Language](specifications/ded/DED-specification.md) | `.ded` |
+| Editor | [EDSL, Editor Specification Language](specifications/edsl/EDSL-specification.md) | `.eds` | [EDD, Editor Definition Language](specifications/edd/EDD-specification.md) | `.edd` |
 
 DISL and DID have content; the other four are placeholders. The Build workflow validates every example against its schema. The words used here are defined in [docs/terminology.md](docs/terminology.md).
 

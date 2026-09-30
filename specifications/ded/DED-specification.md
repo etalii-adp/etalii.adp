@@ -7,7 +7,7 @@
 | Kind | designer |
 | Role | definition language |
 | File extension | `.ded` |
-| Paired language | DESL, the Designer Specification Language (`.desl`) |
+| Paired language | DESL, the Designer Specification Language (`.des`) |
 | Schema | none yet |
 
 ---

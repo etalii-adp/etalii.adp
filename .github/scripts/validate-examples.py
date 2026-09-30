@@ -1,13 +1,14 @@
 """Validates every example in specifications/ against its specification's schema (constitution principle II).
 
-An example is a DISL specification (`*.disl`), a DID definition (`*.did`), or a `*.json` file that names its schema
-in `$schema`. The extension decides the schema: `*.disl` against `disl.schema.json#/$defs/Specification`, `*.did`
+An example is a DISL specification (`*.dis`), a DID definition (`*.did`), or a `*.json` file that names its schema
+in `$schema`. The extension decides the schema: `*.dis` against `disl.schema.json#/$defs/Specification`, `*.did`
 against `did.schema.json#/$defs/Definition`. A `$schema` the example names must agree with that; its part before `#`
 is matched against the `$id` of a `*.schema.json` in this repository, so the schemas in the same commit are used,
 never the published ones. All schemas are loaded into one registry, so DID's references to DISL resolve.
 
-The legacy fixtures under `specifications/*/legacy/` keep the identifiers of the earlier combined format, which DISL
-and DID still read as deprecated aliases (DISL section 18, DID section 11). They are validated through the alias
+The legacy fixtures under `specifications/*/legacy/` keep the identifiers of the earlier combined format, and the `.disl`
+extension DISL specifications had before `.dis`, which DISL and DID still read as deprecated aliases (DISL section 18,
+DID section 11). They are validated through the alias
 table below. A file outside a `legacy/` folder that uses a deprecated alias fails: aliases are read, never written.
 
 Prints one line per example and exits 1 when any example is invalid or names an unknown schema.
@@ -23,13 +24,13 @@ root = Path(__file__).resolve().parents[2] / "specifications"
 
 DISL = "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification"
 DID = "https://etalii.net/adp/did/schema/0.1/did.schema.json#/$defs/Definition"
-CURRENT_EXTENSIONS = {".disl": DISL, ".did": DID}
+CURRENT_EXTENSIONS = {".dis": DISL, ".did": DID}
 CURRENT_VERSION_KEYS = {"disl": DISL, "did": DID}
 
 # Alias table: each deprecated identifier and the current schema reference it is read as.
 LEGACY = "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json"
 ALIAS_SCHEMAS = {LEGACY: DISL, LEGACY + "#/$defs/Definition": DISL, LEGACY + "#/$defs/Document": DID}
-ALIAS_EXTENSIONS = {".dedl": DISL}
+ALIAS_EXTENSIONS = {".dedl": DISL, ".disl": DISL}
 ALIAS_VERSION_KEYS = {"dedl": DISL, "dedlDocument": DID}
 
 schemas = {}

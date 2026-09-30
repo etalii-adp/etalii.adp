@@ -7,7 +7,7 @@
 | Kind | editor |
 | Role | definition language |
 | File extension | `.edd` |
-| Paired language | EDSL, the Editor Specification Language (`.edsl`) |
+| Paired language | EDSL, the Editor Specification Language (`.eds`) |
 | Schema | none yet |
 
 ---
