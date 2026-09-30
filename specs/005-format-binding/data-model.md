@@ -41,7 +41,8 @@ Validation: rule names are unique within a binding; every rule a rule refers to 
 | `marker` | Marker | `{rootKey}`, `{firstLine}` (prefix) or `{pattern, lines}` (regular expression over the first `lines` lines, default 20) |
 | `suggest` | `{contains: string[]}` | substrings that make the host propose this reading |
 | `registrationOnly` | bool | never claim a bare file; open only through a registration |
-| `origins` | string[] | extra first-line values of a registration that name this binding's language (legacy media types) |
+| `origins` | string[] | the origins (`language.origin`, DISL 0.2) of the tool types that share this binding |
+| `readings` | map origin → `{bare, suggest}` | for a shared binding: which reading a bare file opens as, and what suggests each |
 
 ## Body
 
@@ -66,7 +67,7 @@ Validation: rule names are unique within a binding; every rule a rule refers to 
 | `within` | rule name[] | `blocks`: the rules whose block encloses the statement |
 | `opens` | bool | `blocks`: the statement may open a `{ … }` block |
 | `when` | CEL | condition over `entry` (and `path` captures) |
-| `id` | *IdBinding* | the *id strategy* and its inputs; an *unstable id* is never stored or positioned |
+| `id` | IdBinding | where the id is stored: a slot (`from`) or the registration's identities block (`sidecar`); the *id strategy*, derived ids and *ephemeral* (unstable) ids are DISL's `persistence.ids`, and an ephemeral id is never stored or positioned |
 | `parent` | `{rules, slot}` | containment: the nearest enclosing entry matched by one of `rules` is the parent, in DISL slot `slot` |
 | `attributes` | map attribute → AttributeBinding | |
 | `source`, `target` | Slot | relations only: where the ends' references are; `{parent: attr}` takes the end from the enclosing entry |

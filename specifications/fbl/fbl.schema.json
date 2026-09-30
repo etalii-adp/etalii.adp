@@ -577,7 +577,7 @@
       }
     },
     "BlockRule": {
-      "description": "blocks: a statement that opens a { } block and produces no element, such as 'model {' or 'views {', so that element rules can say which blocks they may appear in. A block rule with 'view' names a view of the body by the value of that group, which a registration's view header selects. See section 4.6.",
+      "description": "blocks: a statement that opens a { } block and produces no element, such as 'model {' or 'views {', so that element rules can say which blocks they may appear in. A block rule with 'view' names a view of the body by the value of that group, which a registration's view header selects. See section 4.7.",
       "type": "object",
       "properties": {
         "name": {
