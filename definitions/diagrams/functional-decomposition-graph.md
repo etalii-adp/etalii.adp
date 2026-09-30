@@ -69,6 +69,7 @@ The `.dis` states the rules as endpoints, multiplicities, `acyclic` on the abstr
   - "Refused by the cycle check: `X` already owns `Y`, so this link would make an ownership loop." (line 66).
   - "That id is already used in this graph." for a duplicate connection id.
 - **Rule ids** for a document that breaks the rules, typically because it was edited outside ADP (`backend/…/FdgRuleSet.cs:13-20`): `fdg.forbidden-link`, `fdg.self-link`, `fdg.second-parent`, `fdg.second-shows`, `fdg.ownership-cycle`, `fdg.dangling-reference`, `fdg.duplicate-id`, `fdg.unreadable-entry`. Each has a fixture `backend/…Tests/Fixtures/rule-*.fdg`, and `rules-clean.fdg` has none.
+- **Breaches reach the Errors and Warnings panel** through `FdgValidator`, the module's `IDiagramValidator`, registered in `ServiceCollection.AddFunctionalDecompositionGraph.cs` (standalone PR #109, 2026-09-30). `fdg.unreadable-entry` is a warning, because the lines are kept and the document still draws; every other rule id is an error. Each problem is located by its line, counted from 1.
 - **The four ownership relations are acyclic together; Shows is not.** An action may show the UI element that owns it. The `.dis` expresses this with `acyclic: true` on the abstract `Owns`; DISL does not say explicitly whether `acyclic` on an abstract relation type covers the union of its subtypes, so the `.dis` also carries the `ownershipLoop` invariant to state it unambiguously.
 
 ## Notation details DISL approximates
@@ -82,7 +83,6 @@ The `.dis` states the rules as endpoints, multiplicities, `acyclic` on the abstr
 
 ## Known gaps
 
-- **Rule breaches never reach the Errors and Warnings panel.** Requirement 5.5 says a document that breaks a rule SHALL open and its breaches SHALL be reported to that panel. `FdgValidator` is a static class and no `IDiagramValidator` is registered for this module (`ServiceCollection.AddFunctionalDecompositionGraph.cs` registers none; mindmap, databricks and azure-devops-pipeline do). Only the tests call `FdgValidator` and `FdgRuleSet`. The refusals at connect time work; a file edited by hand into a broken state opens silently.
 - **The client readme's "What is not settled yet"** is stale, see *Interaction*.
 - **DISL gaps this diagram exposed:** no drop-from-palette toolbox mode; no inferred relation for a body-to-body drag; no superellipse or rounded-end built-in; no conditional deletion confirmation; no way to mark a fixed attribute as not persisted; no explicit statement of how `acyclic` on an abstract relation type applies to its subtypes.
 
