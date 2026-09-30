@@ -1,0 +1,375 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
+  "disl": "0.1",
+  "language": {
+    "id": "net.etalii.adp.databricks.bundle",
+    "version": "0.1.0",
+    "label": "Databricks bundle",
+    "icon": "mdi-package-variant-closed",
+    "fileExtension": ".yml",
+    "license": "Apache-2.0",
+    "doc": {
+      "summary": "What an asset bundle deploys: its resources, its variables, and the targets each lands on.",
+      "description": "The diagram of one Databricks Asset Bundle, read from its `databricks.yml`. The bundle is one node on top, the jobs and pipelines it declares a row of nodes beneath it, and each deployment target a dashed frame at the bottom, with a dashed arrow to every resource the target overrides. Configuration the tool does not model is drawn as a generic node and never rewritten. The YAML stays Databricks' own file: ADP never writes positions into it. See `databricks-bundle.md` beside this file for everything this specification cannot say.",
+      "seeAlso": [
+        { "title": "Databricks: bundle configuration", "href": "https://docs.databricks.com/aws/en/dev-tools/bundles/settings" },
+        { "title": "Databricks: deployment modes", "href": "https://docs.databricks.com/aws/en/dev-tools/bundles/deployment-modes" }
+      ]
+    },
+    "requires": { "conformance": "standard" }
+  },
+
+  "metamodel": {
+    "diagram": {
+      "doc": "The bundle file. Its includes and variables are read and kept for constraints, but not drawn.",
+      "attributes": {
+        "includes": { "type": "string", "many": true, "readOnly": true, "doc": "The `include:` globs. While any is present, overrides of resources this file does not declare are not reported, because an included file may declare them." },
+        "variables": { "type": "Variable", "many": true, "readOnly": true, "doc": "The `variables:` declarations." }
+      }
+    },
+    "dataTypes": {
+      "Variable": {
+        "label": "Variable",
+        "fields": {
+          "name": { "type": "string", "required": true },
+          "default": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "display": { "cel": "self.name" }
+      }
+    },
+    "enums": {
+      "ResourceKind": {
+        "doc": "The resource kinds the tool models. Every other kind under `resources:` becomes an unknown node.",
+        "values": {
+          "jobs": { "label": "Job", "icon": "mdi-transit-connection-horizontal" },
+          "pipelines": { "label": "Pipeline", "icon": "mdi-pipe" }
+        }
+      },
+      "TargetMode": {
+        "extensible": true,
+        "doc": "A target's `mode`; absent is allowed.",
+        "values": {
+          "development": { "label": "development" },
+          "production": { "label": "production" }
+        }
+      },
+      "SimulatedState": {
+        "doc": "Where an element stands in a simulated deploy. Never stored.",
+        "values": { "pending": {}, "running": {}, "succeeded": {} }
+      }
+    },
+    "types": {
+      "Bundle": {
+        "label": "Bundle",
+        "doc": "The `bundle:` section. There is exactly one.",
+        "multiplicity": { "min": 1, "max": 1 },
+        "labelAttribute": "name",
+        "attributes": {
+          "name": { "type": "string", "required": true, "minLength": 1, "doc": "`bundle.name`." }
+        }
+      },
+      "Resource": {
+        "label": "Resource",
+        "doc": "One entry under `resources.jobs` or `resources.pipelines`.",
+        "labelAttribute": "key",
+        "attributes": {
+          "kind": { "type": "ResourceKind", "required": true, "readOnly": true },
+          "key": { "type": "string", "required": true, "readOnly": true, "minLength": 1, "doc": "The resource's key under its kind." },
+          "simulated": { "type": "SimulatedState", "transient": true, "readOnly": true }
+        }
+      },
+      "Unknown": {
+        "label": "Unmodelled configuration",
+        "doc": "A root key other than bundle, include, variables, resources and targets (for example workspace, sync, permissions), or a resource kind other than jobs and pipelines (for example experiments, models, schemas). Drawn generically, never written.",
+        "labelAttribute": "key",
+        "attributes": {
+          "path": { "type": "string", "required": true, "readOnly": true, "doc": "The key's path: `workspace`, or `resources.experiments`." },
+          "key": { "type": "string", "required": true, "readOnly": true, "doc": "The key itself." },
+          "simulated": { "type": "SimulatedState", "transient": true, "readOnly": true }
+        }
+      },
+      "Target": {
+        "label": "Target",
+        "doc": "One entry under `targets:`, drawn as a frame.",
+        "labelAttribute": "name",
+        "attributes": {
+          "name": { "type": "string", "required": true, "readOnly": true },
+          "mode": { "type": "TargetMode", "readOnly": true, "doc": "`mode`." },
+          "isDefault": { "type": "bool", "default": false, "readOnly": true, "doc": "`default: true`." },
+          "overrides": { "type": "string", "many": true, "readOnly": true, "doc": "Every `<kind>/<key>` the target's own `resources:` section names, declared in this file or not." }
+        }
+      }
+    },
+    "relations": {
+      "Override": {
+        "label": "Overrides",
+        "doc": "The target sets some of the resource's fields for deployments to it. One per `overrides` entry that names a resource this diagram shows; the persistence plugin derives them, the user does not draw them.",
+        "source": "Target",
+        "target": "Resource",
+        "directed": true,
+        "allowSelfLoops": false,
+        "allowParallel": false
+      }
+    }
+  },
+
+  "notation": {
+    "styles": {
+      "box": {
+        "fill": { "token": "color.surface" },
+        "stroke": { "color": { "token": "color.border" }, "width": 1 },
+        "cornerRadius": 4,
+        "font": { "size": 13 }
+      },
+      "badges": { "font": { "size": 10, "color": "#5a6376" } },
+      "simPending": { "opacity": 0.5 },
+      "simRunning": { "stroke": { "color": "limegreen", "width": 2.5 } },
+      "simSucceeded": { "stroke": { "color": "#15803d", "width": 2 } }
+    },
+    "nodes": {
+      "Bundle": {
+        "shape": "rect",
+        "style": "box",
+        "size": { "fixed": [200, 56] },
+        "labels": [
+          { "id": "name", "text": { "attribute": "name" }, "placeholder": "bundle", "position": { "anchor": [0, 0.5], "offset": [8, -4], "align": "start" },
+            "editable": "inline", "overflow": "ellipsis" }
+        ],
+        "connectable": false,
+        "deletable": false
+      },
+      "Resource": {
+        "shape": "rect",
+        "style": "box",
+        "size": { "fixed": [200, 56] },
+        "labels": [
+          { "id": "key", "text": { "attribute": "key" }, "position": { "anchor": [0, 0.5], "offset": [8, -4], "align": "start" }, "editable": false, "overflow": "ellipsis" },
+          { "id": "kind", "text": { "attribute": "kind" }, "position": { "anchor": [0, 1], "offset": [8, -8], "align": "start" }, "style": "badges" }
+        ],
+        "connectable": false,
+        "deletable": false,
+        "conditions": [
+          { "when": "has(self.simulated) && self.simulated == 'pending'", "style": "simPending" },
+          { "when": "has(self.simulated) && self.simulated == 'running'", "style": "simRunning" },
+          { "when": "has(self.simulated) && self.simulated == 'succeeded'", "style": "simSucceeded" }
+        ]
+      },
+      "Unknown": {
+        "shape": "rect",
+        "style": "box",
+        "size": { "fixed": [200, 56] },
+        "labels": [
+          { "id": "key", "text": { "attribute": "key" }, "position": { "anchor": [0, 0.5], "offset": [8, -4], "align": "start" }, "editable": false, "overflow": "ellipsis" },
+          { "id": "path", "text": { "attribute": "path" }, "position": { "anchor": [0, 1], "offset": [8, -8], "align": "start" }, "style": "badges" }
+        ],
+        "tooltip": "Configuration this tool does not model. It is kept exactly as written.",
+        "connectable": false,
+        "deletable": false,
+        "conditions": [
+          { "when": "has(self.simulated) && self.simulated == 'pending'", "style": "simPending" },
+          { "when": "has(self.simulated) && self.simulated == 'running'", "style": "simRunning" },
+          { "when": "has(self.simulated) && self.simulated == 'succeeded'", "style": "simSucceeded" }
+        ]
+      },
+      "Target": {
+        "shape": "rect",
+        "style": { "fill": "transparent", "stroke": { "color": { "token": "color.border" }, "width": 1, "dash": [6, 4] } },
+        "size": { "fixed": [220, 120] },
+        "labels": [
+          { "id": "name", "text": { "attribute": "name" }, "position": "outside-top", "editable": false,
+            "style": { "font": { "size": 12, "color": "#5a6376" } } },
+          { "id": "summary",
+            "text": { "cel": "[has(self.mode) ? self.mode : '', self.isDefault ? 'default' : '', size(self.overrides) == 1 ? '1 override' : (size(self.overrides) > 1 ? string(size(self.overrides)) + ' overrides' : '')].filter(s, s != '').join(' · ')" },
+            "position": { "anchor": [0, 0], "offset": [12, 18], "align": "start" }, "style": "badges" }
+        ],
+        "connectable": false,
+        "deletable": false,
+        "layer": "background"
+      }
+    },
+    "edges": {
+      "Override": {
+        "line": { "stroke": { "color": { "token": "color.border" }, "width": 1, "dash": [3, 3] }, "routing": "straight" },
+        "targetMarker": "arrow",
+        "doc": "An override is a reference, not a flow: straight and dashed."
+      }
+    }
+  },
+
+  "toolbox": {
+    "generic": { "select": true, "pan": true },
+    "groups": [
+      { "id": "resources", "label": "Resources", "tools": [
+        { "id": "jobResource", "kind": "operation", "operation": "addJobResource", "label": "Job", "icon": "mdi-transit-connection-horizontal",
+          "doc": "Adds a job resource skeleton: a name and one notebook task." },
+        { "id": "pipelineResource", "kind": "operation", "operation": "addPipelineResource", "label": "Pipeline", "icon": "mdi-pipe",
+          "doc": "Adds a pipeline resource skeleton: a name and one notebook library." }
+      ] }
+    ],
+    "contextMenus": [
+      { "for": ["Bundle"], "placement": "menu", "standardEntries": false, "tools": [
+        { "kind": "operation", "operation": "renameBundle", "label": "Rename…", "icon": "mdi-pencil-outline", "shortcut": "F2" },
+        { "kind": "operation", "operation": "addJobResource", "label": "Add job resource…", "icon": "mdi-transit-connection-horizontal" },
+        { "kind": "operation", "operation": "addPipelineResource", "label": "Add pipeline resource…", "icon": "mdi-pipe" }
+      ] },
+      { "for": ["Target"], "placement": "menu", "standardEntries": false, "tools": [
+        { "kind": "operation", "operation": "simulateDeploy", "label": "Deploy here (simulated)", "icon": "mdi-rocket-launch-outline" }
+      ] }
+    ]
+  },
+
+  "forms": {
+    "bundle": {
+      "for": "Bundle",
+      "usage": ["inspector"],
+      "items": [
+        { "kind": "section", "label": "Identity", "items": [ { "attribute": "name", "label": "Name" } ] },
+        { "kind": "section", "label": "Workspace", "items": [
+          { "kind": "computed", "label": "Workspace connection", "value": { "cel": "'Not connected'" } },
+          { "kind": "computed", "label": "Last simulated run", "value": { "cel": "''" } }
+        ] }
+      ]
+    },
+    "target": {
+      "for": "Target",
+      "usage": ["inspector"],
+      "items": [
+        { "kind": "section", "label": "Identity", "items": [
+          { "attribute": "name", "label": "Target", "widget": "readonly", "doc": "The target's key is the file's structure." },
+          { "attribute": "mode", "label": "Mode", "widget": "readonly", "doc": "Change the mode in the file." }
+        ] },
+        { "kind": "section", "label": "Workspace", "items": [
+          { "kind": "computed", "label": "Workspace connection", "value": { "cel": "'Not connected'" } },
+          { "kind": "computed", "label": "Last simulated run", "value": { "cel": "''" } }
+        ] }
+      ]
+    },
+    "other": {
+      "for": ["Resource", "Unknown"],
+      "usage": ["inspector"],
+      "items": [
+        { "kind": "section", "label": "Workspace", "items": [
+          { "kind": "computed", "label": "Workspace connection", "value": { "cel": "'Not connected'" } },
+          { "kind": "computed", "label": "Last simulated run", "value": { "cel": "''" } }
+        ] }
+      ]
+    }
+  },
+
+  "constraints": {
+    "rules": [
+      { "id": "no_default_target", "scope": "diagram", "severity": "warning",
+        "rule": "size(diagram.nodesOfType('Target')) == 0 || diagram.nodesOfType('Target').exists(t, t.isDefault)",
+        "message": "No target says default: true, so every deploy must name one. Mark one target as the default.",
+        "x-adp-ruleId": "databricks.no-default-target" },
+      { "id": "multiple_default_targets", "scope": "Target", "when": "self.isDefault",
+        "rule": "diagram.nodesOfType('Target').filter(t, t.isDefault).size() == 1",
+        "message": { "cel": "'\\'' + self.name + '\\' is a second default target; only one target may be the default.'" },
+        "x-adp-ruleId": "databricks.multiple-default-targets" },
+      { "id": "override_of_undeclared", "scope": "Target", "severity": "warning",
+        "when": "size(diagram.includes) == 0",
+        "rule": "self.overrides.all(o, diagram.nodesOfType('Resource').exists(r, r.kind + '/' + r.key == o))",
+        "message": { "cel": "'Target \\'' + self.name + '\\' overrides ' + self.overrides.filter(o, !diagram.nodesOfType('Resource').exists(r, r.kind + '/' + r.key == o))[0] + ', which this bundle does not declare. Declare the resource or drop the override.'" },
+        "x-adp-ruleId": "databricks.override-of-undeclared" },
+      { "id": "unique_resource", "kind": "create", "scope": "Resource", "enforcement": "prevent",
+        "rule": "!diagram.nodesOfType('Resource').exists(r, r.id != self.id && r.kind == self.kind && r.key == self.key)",
+        "message": { "cel": "'A ' + self.kind + ' resource named \\'' + self.key + '\\' is already there.'" } }
+    ]
+  },
+
+  "behavior": {
+    "operations": {
+      "renameBundle": {
+        "label": "Rename…",
+        "for": "Bundle",
+        "params": { "name": { "type": "string", "required": true, "minLength": 1, "label": "Name" } },
+        "actions": [ { "set": { "name": "p.name" } } ]
+      },
+      "addJobResource": {
+        "label": "Add job resource…",
+        "for": "diagram",
+        "params": { "key": { "type": "string", "required": true, "minLength": 1, "label": "Key" } },
+        "actions": [ { "create": { "type": "'Resource'", "attributes": { "kind": "'jobs'", "key": "p.key" } } } ],
+        "doc": "Writes `resources.jobs.<key>` with `name: <key>` and one notebook task `main` at `notebooks/<key>`."
+      },
+      "addPipelineResource": {
+        "label": "Add pipeline resource…",
+        "for": "diagram",
+        "params": { "key": { "type": "string", "required": true, "minLength": 1, "label": "Key" } },
+        "actions": [ { "create": { "type": "'Resource'", "attributes": { "kind": "'pipelines'", "key": "p.key" } } } ],
+        "doc": "Writes `resources.pipelines.<key>` with `name: <key>` and one notebook library at `transformations/<key>`."
+      },
+      "simulateDeploy": {
+        "label": "Deploy here (simulated)",
+        "icon": "mdi-rocket-launch-outline",
+        "for": "Target",
+        "plugin": { "name": "net.etalii.adp.databricks.simulation", "args": { "show": "deploy" } },
+        "doc": "Plays a mock deploy over the bundle's resources on the canvas. Never reaches the file or the undo history."
+      }
+    }
+  },
+
+  "layout": {
+    "algorithms": {
+      "bands": {
+        "algorithm": "plugin:net.etalii.adp.databricks.layout",
+        "options": { "reading": "bundle", "columnWidth": 260, "bundleY": 0, "resourceY": 180, "targetY": 400 },
+        "doc": "Three bands: the bundle, then resources and unmodelled configuration in one row, then target frames."
+      },
+      "grid": { "algorithm": "grid", "doc": "The declarative approximation of bands, for a runtime without the plugin." }
+    },
+    "default": "bands",
+    "trigger": "always",
+    "respect": "all"
+  },
+
+  "persistence": {
+    "format": "plugin:net.etalii.adp.databricks.files",
+    "files": {
+      "mode": "split",
+      "model": "databricks.yml",
+      "view": "{name}.adp",
+      "doc": "The model is the bundle's own databricks.yml, which Databricks owns; the view is the ADP registration file's layout: block."
+    },
+    "ids": {
+      "strategy": "natural",
+      "prefix": { "Resource": "resource:", "Unknown": "unknown:", "Target": "target:", "Override": "override:" },
+      "pattern": "^[^\\r\\n]{1,512}$"
+    },
+    "view": { "store": ["bounds"], "styleOverrides": "none" }
+  },
+
+  "plugins": {
+    "net.etalii.adp.databricks.files": {
+      "version": "^0.1.0",
+      "provides": ["persistenceFormat"],
+      "required": true,
+      "doc": "Reads and writes the bundle inside Databricks' own databricks.yml by line splices, so an untouched file saves byte for byte, and keeps positions in the .adp registration's layout: block."
+    },
+    "net.etalii.adp.databricks.layout": {
+      "version": "^0.1.0",
+      "provides": ["layout"],
+      "required": false,
+      "fallback": { "layout": "grid" },
+      "args": {
+        "reading": { "type": "string", "required": true },
+        "columnWidth": { "type": "number" },
+        "bundleY": { "type": "number" },
+        "resourceY": { "type": "number" },
+        "targetY": { "type": "number" }
+      },
+      "doc": "The family's computed layouts."
+    },
+    "net.etalii.adp.databricks.simulation": {
+      "version": "^0.1.0",
+      "provides": ["action"],
+      "required": false,
+      "args": {
+        "show": { "type": "string", "required": true },
+        "stepMs": { "type": "int", "default": 700 }
+      },
+      "doc": "Client-side mock runs: sets the transient simulated state of elements over time and shows a banner. Never writes a file or the history."
+    }
+  }
+}
