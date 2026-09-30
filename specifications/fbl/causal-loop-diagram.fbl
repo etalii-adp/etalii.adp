@@ -10,12 +10,14 @@
       "reader": "declared",
       "text": { "newline": "crlf", "finalNewline": true },
       "header": { "line": "^causal-loop(\\s|$)" },
+      "comment": "^\\s*#",
+      "unmatched": "report",
       "elements": [
         {
           "name": "variable",
           "type": "Variable",
           "line": "^variable\\s+(?<name>[^\\s\"]+)(?:\\s+\"(?<label>[^\"]*)\")?\\s*$",
-          "id": { "strategy": "natural", "from": { "group": "name" } },
+          "id": { "from": { "group": "name" } },
           "attributes": {
             "name": { "group": "name", "empty": "refuse", "reference": { "to": ["variable"], "by": "name" } },
             "label": { "group": "label", "empty": "remove" }
@@ -27,7 +29,6 @@
           "name": "loop",
           "type": "Loop",
           "line": "^loop\\s+(?<identifier>[^\\s\"]+)\\s+\"(?<title>[^\"]*)\"(?<members>(?:\\s+[^\\s\"]+)+)\\s*$",
-          "id": { "strategy": "natural", "value": "'loop:' + groups.identifier" },
           "attributes": {
             "identifier": { "group": "identifier", "empty": "refuse" },
             "title": { "group": "title", "empty": "keep" },
@@ -42,7 +43,6 @@
           "name": "link",
           "type": "CausalLink",
           "line": "^link\\s+(?<from>[^\\s\"]+)\\s+->\\s+(?<to>[^\\s\"]+)(?<tail>(?:\\s+(?:\"[^\"]*\"|[^\\s\"]+))*)\\s*$",
-          "id": { "strategy": "natural", "value": "'link:' + groups.from + '|' + groups.to" },
           "source": { "group": "from" },
           "target": { "group": "to" },
           "attributes": {

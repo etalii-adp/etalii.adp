@@ -102,6 +102,17 @@
         "header": {
           "$ref": "#/$defs/Header"
         },
+        "comment": {
+          "description": "lines, blocks: a line that matches is a comment, owned by the statement right below it.",
+          "$ref": "#/$defs/Regex"
+        },
+        "unmatched": {
+          "description": "lines, blocks: a statement no rule matches is kept ('keep', the default) or also reported as fbl.unbound-statement ('report').",
+          "enum": [
+            "keep",
+            "report"
+          ]
+        },
         "blocks": {
           "type": "array",
           "items": {
@@ -849,31 +860,14 @@
       ]
     },
     "IdBinding": {
-      "description": "How an element gets its id. 'strategy' names an id strategy DISL defines, with that strategy's inputs; 'from' is the slot the id is read from and written to; 'sidecar' keeps ids outside the body, keyed by a natural key (section 8.6). Whether an id is stable is DISL's; an unstable id is never stored in a registration. See section 5.3.",
+      "description": "Where an element's id is stored, when it is stored: in a slot of the body ('from'), read from it and written to it when the element is created, or in the registration's identities block keyed by a natural key ('sidecar', section 8.6). How ids are made, derived and whether they are ephemeral is the language's (DISL persistence.ids); without an id binding the id is the one DISL derives. See section 5.3.",
       "type": "object",
       "properties": {
-        "strategy": {
-          "type": "string"
-        },
         "from": {
           "$ref": "#/$defs/Slot"
         },
-        "value": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Expression"
-        },
-        "unstable": {
-          "description": "The id is unstable across edits (DISL): always, or when the expression is true.",
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Expression"
-            }
-          ]
-        },
         "sidecar": {
-          "description": "Ids kept in the registration's identities block, keyed by 'key'.",
+          "description": "Ids kept in the registration's identities block, keyed by the value of 'key'.",
           "type": "object",
           "properties": {
             "key": {
@@ -889,7 +883,22 @@
           ]
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-": true
+      },
+      "oneOf": [
+        {
+          "required": [
+            "from"
+          ]
+        },
+        {
+          "required": [
+            "sidecar"
+          ]
+        }
+      ]
     },
     "Slot": {
       "description": "Exactly one place in the body a value is read from and written to: a key of a tree entry, an attribute or the text of an xml element (or of its child selected by 'child'), a named group of a lines or blocks rule, or the matching slot of the enclosing entry. A slot given by 'value' is computed by CEL and read-only. See section 5.2.",
@@ -1113,6 +1122,19 @@
           "type": "object",
           "additionalProperties": {
             "type": "string"
+          }
+        },
+        "absent": {
+          "description": "What setting a value does when its slot is absent from the entry, per family: 'insert' (the default, an insert-key splice) or 'refuse'.",
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/Family"
+          },
+          "additionalProperties": {
+            "enum": [
+              "insert",
+              "refuse"
+            ]
           }
         },
         "override": {

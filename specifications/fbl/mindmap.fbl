@@ -20,7 +20,7 @@
           "type": "Node",
           "at": "/map/**/node",
           "parent": { "rules": ["node"], "slot": "children" },
-          "id": { "strategy": "prefixed-shortguid", "prefix": "ID_", "from": { "attribute": "ID" } },
+          "id": { "from": { "attribute": "ID" } },
           "attributes": {
             "text": {
               "attribute": "TEXT",
@@ -50,7 +50,6 @@
           "name": "branch",
           "type": "Branch",
           "at": "/map/**/node/node",
-          "id": { "strategy": "natural", "value": "'branch:' + parent.ID + '->' + entry.ID" },
           "source": { "parent": "ID" },
           "target": { "attribute": "ID" },
           "readOnly": "A branch is the nesting of one node in another; move or remove the node instead."

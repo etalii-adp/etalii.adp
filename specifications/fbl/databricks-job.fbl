@@ -22,7 +22,6 @@
           "type": "Task",
           "at": "/resources/jobs/{job}/tasks/*",
           "when": "has(entry.task_key)",
-          "id": { "strategy": "natural", "value": "'task:' + entry.task_key" },
           "attributes": {
             "key": { "key": "task_key", "reference": { "to": ["task"], "by": "key" }, "empty": "refuse" },
             "type": {
@@ -45,7 +44,6 @@
           "name": "cluster",
           "type": "JobCluster",
           "at": "/resources/jobs/{job}/job_clusters/*",
-          "id": { "strategy": "natural", "value": "'cluster:' + entry.job_cluster_key" },
           "attributes": {
             "key": { "key": "job_cluster_key", "reference": { "to": ["cluster"], "by": "key" }, "empty": "refuse" },
             "sparkVersion": { "key": "spark_version", "child": "new_cluster" },
@@ -60,7 +58,6 @@
           "name": "dependency",
           "type": "Dependency",
           "at": "/resources/jobs/{job}/tasks/*/depends_on/*",
-          "id": { "strategy": "natural", "value": "'edge:' + entry.task_key + '->' + parent.task_key" },
           "source": { "key": "task_key" },
           "target": { "parent": "task_key" },
           "attributes": {

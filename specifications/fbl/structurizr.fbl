@@ -10,6 +10,7 @@
         "origins": ["c4/context", "c4/container", "c4/component", "c4/deployment", "c4/dynamic", "c4/system-landscape"]
       },
       "body": { "kind": "file", "family": "blocks" },
+      "comment": "^\\s*(#|//)",
       "reader": "declared",
       "text": { "newline": "lf", "indent": 4, "finalNewline": true },
       "registration": {
@@ -37,7 +38,7 @@
           "within": ["model", "group"],
           "opens": true,
           "caseInsensitive": true,
-          "id": { "strategy": "natural", "from": { "group": "id" }, "unstable": "!has(groups.id)" },
+          "id": { "from": { "group": "id" } },
           "attributes": {
             "name": { "group": "name", "empty": "refuse" },
             "description": { "group": "description", "empty": "keep" },
@@ -53,7 +54,7 @@
           "within": ["model", "group"],
           "opens": true,
           "caseInsensitive": true,
-          "id": { "strategy": "natural", "from": { "group": "id" }, "unstable": "!has(groups.id)" },
+          "id": { "from": { "group": "id" } },
           "attributes": {
             "name": { "group": "name", "empty": "refuse" },
             "description": { "group": "description", "empty": "keep" },
@@ -70,7 +71,7 @@
           "opens": true,
           "caseInsensitive": true,
           "parent": { "rules": ["softwareSystem"], "slot": "containers" },
-          "id": { "strategy": "natural", "from": { "group": "id" }, "unstable": "!has(groups.id)" },
+          "id": { "from": { "group": "id" } },
           "attributes": {
             "name": { "group": "name", "empty": "refuse" },
             "description": { "group": "description", "empty": "keep" },
@@ -87,7 +88,6 @@
           "type": "Relationship",
           "line": "^(?<source>[A-Za-z_][A-Za-z0-9_]*)\\s*->\\s*(?<destination>[A-Za-z_][A-Za-z0-9_]*)(?:\\s+\"(?<description>[^\"]*)\")?(?:\\s+\"(?<technology>[^\"]*)\")?(?:\\s+\"(?<tags>[^\"]*)\")?\\s*$",
           "within": ["model", "group", "softwareSystem", "container"],
-          "id": { "strategy": "natural", "value": "groups.source + '->' + groups.destination + '@' + string(line)", "unstable": true },
           "source": { "group": "source" },
           "target": { "group": "destination" },
           "attributes": {

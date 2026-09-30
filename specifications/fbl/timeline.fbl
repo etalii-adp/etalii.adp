@@ -19,7 +19,7 @@
           "type": "Period",
           "at": "/elements/*",
           "when": "has(entry.end)",
-          "id": { "strategy": "shortguid", "from": { "key": "id" } },
+          "id": { "from": { "key": "id" } },
           "attributes": {
             "label": { "key": "label", "empty": "keep" },
             "begin": { "key": "begin", "time": "keep-precision" },
@@ -34,7 +34,7 @@
           "type": "Moment",
           "at": "/elements/*",
           "when": "!has(entry.end)",
-          "id": { "strategy": "shortguid", "from": { "key": "id" } },
+          "id": { "from": { "key": "id" } },
           "attributes": {
             "label": { "key": "label", "empty": "keep" },
             "begin": { "key": "begin", "time": "keep-precision" },
@@ -49,7 +49,7 @@
           "name": "connection",
           "type": "Connection",
           "at": "/connections/*",
-          "id": { "strategy": "shortguid", "from": { "key": "id" } },
+          "id": { "from": { "key": "id" } },
           "source": { "key": "from" },
           "target": { "key": "to" },
           "attributes": {

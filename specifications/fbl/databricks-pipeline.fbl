@@ -21,12 +21,11 @@
           "type": "Pipeline",
           "at": "/",
           "when": "has(entry.name) || has(entry.libraries)",
-          "id": { "strategy": "fixed", "value": "'pipeline'" },
           "attributes": {
             "name": { "key": "name", "empty": "refuse" },
-            "catalog": { "key": "catalog", "empty": "remove" },
-            "schema": { "key": "schema", "empty": "remove" },
-            "channel": { "key": "channel", "empty": "remove" },
+            "catalog": { "key": "catalog", "empty": "remove", "absent": { "json": "refuse" } },
+            "schema": { "key": "schema", "empty": "remove", "absent": { "json": "refuse" } },
+            "channel": { "key": "channel", "empty": "remove", "absent": { "json": "refuse" } },
             "serverless": { "key": "serverless", "readOnly": true },
             "continuous": { "key": "continuous", "readOnly": true },
             "development": { "key": "development", "readOnly": true }
@@ -36,7 +35,6 @@
           "name": "library",
           "type": "Library",
           "at": "/libraries/*",
-          "id": { "strategy": "natural", "value": "'library:' + (has(entry.notebook) ? entry.notebook.path : has(entry.file) ? entry.file.path : has(entry.glob) ? entry.glob.include : '')" },
           "attributes": {
             "kind": {
               "value": "has(entry.notebook) ? 'notebook' : has(entry.file) ? 'file' : has(entry.glob) ? 'glob' : 'other'",
