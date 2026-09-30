@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "Format Binding",
   "branch": "features/005-format-binding",
-  "currentStep": "plan",
-  "status": "planned",
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
   "history": [
     {
       "step": "specify",
@@ -18,6 +18,13 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-09-30T19:24:40.465Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T19:25:40.914Z"
     }
   ],
   "telemetryInstanceId": "16728237-0b1f-41c7-b7e3-28dc0509ce6f"
