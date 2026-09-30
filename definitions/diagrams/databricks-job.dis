@@ -1,0 +1,409 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
+  "disl": "0.1",
+  "language": {
+    "id": "net.etalii.adp.databricks.job",
+    "version": "0.1.0",
+    "label": "Databricks job",
+    "icon": "mdi-transit-connection-horizontal",
+    "fileExtension": ".yml",
+    "license": "Apache-2.0",
+    "doc": {
+      "summary": "A job's tasks and what each waits for - conditions, outcomes and the compute they run on.",
+      "description": "The diagram of one Databricks job, read from the job's own resource YAML (`resources.jobs.<key>`) in a Databricks Asset Bundle. Each task is a node, each `depends_on` entry an edge from the task waited for to the waiting task, and each `job_clusters` entry a compute node in a band beneath the tasks. The YAML stays Databricks' own file: ADP never writes positions into it. See `databricks-job.md` beside this file for everything this specification cannot say.",
+      "seeAlso": [
+        { "title": "Databricks: configure task dependencies", "href": "https://docs.databricks.com/aws/en/jobs/run-if" },
+        { "title": "Databricks: job resource in a bundle", "href": "https://docs.databricks.com/aws/en/dev-tools/bundles/resources#job" }
+      ]
+    },
+    "requires": { "conformance": "standard" }
+  },
+
+  "metamodel": {
+    "diagram": {
+      "doc": "The job itself: the one `resources.jobs.<key>` mapping the diagram reads. Its own scalars are kept for round-tripping and constraints but not drawn.",
+      "attributes": {
+        "jobKey": { "type": "string", "required": true, "readOnly": true, "doc": "The key under `resources.jobs`; chosen by the `.adp` registration's `resource:` header when a file declares several jobs." },
+        "name": { "type": "string", "doc": "The job's `name`." },
+        "schedule": { "type": "string", "doc": "`schedule.quartz_cron_expression`, when the job is scheduled." },
+        "continuous": { "type": "bool", "default": false, "doc": "True when the job has a `continuous:` block." }
+      }
+    },
+    "enums": {
+      "TaskType": {
+        "doc": "Which `*_task` mapping a task carries. The value is fixed by the file; it cannot be changed from the diagram.",
+        "values": {
+          "notebook": { "label": "Notebook", "doc": "`notebook_task`; source is `notebook_path`." },
+          "python": { "label": "Python", "doc": "`spark_python_task`; source is `python_file`." },
+          "wheel": { "label": "Python wheel", "doc": "`python_wheel_task`; source is `entry_point`." },
+          "sql": { "label": "SQL", "doc": "`sql_task`; source is the query, dashboard, alert or file it names." },
+          "dbt": { "label": "dbt", "doc": "`dbt_task`; source is `project_directory`." },
+          "pipeline": { "label": "Pipeline", "doc": "`pipeline_task`; source is `pipeline_id`." },
+          "run_job": { "label": "Run job", "doc": "`run_job_task`; source is `job_id`. The implementation's wire value is `run-job`." },
+          "condition": { "label": "Condition", "doc": "`condition_task`; source is its `op`. Downstream edges carry its true or false outcome." },
+          "for_each": { "label": "For each", "doc": "`for_each_task`; source is `inputs`. The implementation's wire value is `for-each`." },
+          "jar": { "label": "JAR", "doc": "`spark_jar_task`; source is `main_class_name`." },
+          "other": { "label": "Other", "doc": "Any task mapping the reader does not know." }
+        }
+      },
+      "RunIf": {
+        "extensible": true,
+        "doc": "A task's `run_if`. An absent value means Databricks' default, ALL_SUCCESS. Extensible because the dialog accepts any text and Databricks may add conditions.",
+        "values": {
+          "ALL_SUCCESS": { "label": "All succeeded" },
+          "AT_LEAST_ONE_SUCCESS": { "label": "At least one succeeded" },
+          "NONE_FAILED": { "label": "None failed" },
+          "ALL_DONE": { "label": "All done" },
+          "AT_LEAST_ONE_FAILED": { "label": "At least one failed" },
+          "ALL_FAILED": { "label": "All failed" }
+        }
+      },
+      "Outcome": {
+        "doc": "The `outcome` of a `depends_on` entry on a condition task.",
+        "values": {
+          "true": { "label": "true", "color": "#15803d" },
+          "false": { "label": "false", "color": "#dc2626" }
+        }
+      },
+      "SimulatedState": {
+        "doc": "Where a task stands in a simulated run. Never stored.",
+        "values": {
+          "pending": {}, "running": {}, "succeeded": {}, "failed": {}, "skipped": {}
+        }
+      }
+    },
+    "types": {
+      "Task": {
+        "label": "Task",
+        "doc": "One entry of the job's `tasks` list.",
+        "labelAttribute": "key",
+        "attributes": {
+          "key": { "type": "string", "required": true, "key": true, "unique": "diagram", "minLength": 1, "doc": "`task_key`. Renaming it rewrites every `depends_on` reference to it." },
+          "type": { "type": "TaskType", "required": true, "readOnly": true },
+          "source": { "type": "string", "readOnly": true, "doc": "The principal source field of the task's type, in display form." },
+          "clusterKey": { "type": "string", "doc": "`job_cluster_key`; absent means serverless." },
+          "runIf": { "type": "RunIf", "doc": "`run_if`; absent means ALL_SUCCESS. Setting it to empty removes the key from the file." },
+          "simulated": { "type": "SimulatedState", "transient": true, "readOnly": true, "doc": "Set only by a simulated run; never written." }
+        }
+      },
+      "MissingTask": {
+        "label": "Missing task",
+        "doc": "A key a `depends_on` entry names but no task declares. Created on read so the dependency has an end to draw; never written, and gone once the key is fixed.",
+        "labelAttribute": "key",
+        "attributes": {
+          "key": { "type": "string", "required": true, "key": true, "readOnly": true }
+        }
+      },
+      "JobCluster": {
+        "label": "Job cluster",
+        "doc": "One entry of the job's `job_clusters` list, drawn in a band beneath the tasks.",
+        "labelAttribute": "key",
+        "attributes": {
+          "key": { "type": "string", "required": true, "key": true, "readOnly": true, "doc": "`job_cluster_key`." },
+          "sparkVersion": { "type": "string", "readOnly": true, "doc": "`new_cluster.spark_version`." },
+          "nodeType": { "type": "string", "readOnly": true, "doc": "`new_cluster.node_type_id`." },
+          "workers": { "type": "int", "readOnly": true, "min": 0, "default": 0, "doc": "`new_cluster.num_workers`." }
+        }
+      }
+    },
+    "relations": {
+      "Dependency": {
+        "label": "Depends on",
+        "doc": "One `depends_on` entry, stored on the target task: the target waits for the source. Cycles can be drawn and are reported, not prevented.",
+        "source": ["Task", "MissingTask"],
+        "target": "Task",
+        "directed": true,
+        "allowSelfLoops": false,
+        "allowParallel": false,
+        "acyclic": false,
+        "attributes": {
+          "outcome": { "type": "Outcome", "doc": "The condition outcome this dependency follows; only meaningful when the source is a condition task." }
+        }
+      }
+    }
+  },
+
+  "notation": {
+    "styles": {
+      "box": {
+        "fill": { "token": "color.surface" },
+        "stroke": { "color": { "token": "color.border" }, "width": 1 },
+        "cornerRadius": 4,
+        "font": { "size": 13 }
+      },
+      "badges": { "font": { "size": 10, "color": "#5a6376" } },
+      "simPending": { "opacity": 0.5 },
+      "simRunning": { "stroke": { "color": "limegreen", "width": 2.5 } },
+      "simSucceeded": { "stroke": { "color": "#15803d", "width": 2 } },
+      "simFailed": { "stroke": { "color": "#dc2626", "width": 2.5 } },
+      "simSkipped": { "opacity": 0.35, "stroke": { "dash": [3, 3] } }
+    },
+    "nodes": {
+      "Task": {
+        "shape": "rect",
+        "style": "box",
+        "size": { "fixed": [200, 56] },
+        "labels": [
+          { "id": "key", "text": { "attribute": "key" }, "position": { "anchor": [0, 0.5], "offset": [8, -4], "align": "start" },
+            "editable": "inline", "overflow": "ellipsis" },
+          { "id": "badges", "text": { "cel": "(has(self.runIf) ? self.runIf + ' · ' : '') + (has(self.clusterKey) && self.clusterKey != '' ? self.clusterKey : 'serverless')" },
+            "position": { "anchor": [0, 1], "offset": [8, -8], "align": "start" }, "editable": false, "style": "badges" }
+        ],
+        "anchors": { "mode": "fixed", "points": [ { "id": "left", "x": 0, "y": 0.5 }, { "id": "right", "x": 1, "y": 0.5 } ] },
+        "variants": [
+          { "when": "self.type == 'condition'", "style": { "cornerRadius": 16 }, "doc": "Condition tasks read differently at a glance: their outcomes branch." }
+        ],
+        "conditions": [
+          { "when": "has(self.simulated) && self.simulated == 'pending'", "style": "simPending" },
+          { "when": "has(self.simulated) && self.simulated == 'running'", "style": "simRunning" },
+          { "when": "has(self.simulated) && self.simulated == 'succeeded'", "style": "simSucceeded" },
+          { "when": "has(self.simulated) && self.simulated == 'failed'", "style": "simFailed" },
+          { "when": "has(self.simulated) && self.simulated == 'skipped'", "style": "simSkipped" }
+        ]
+      },
+      "MissingTask": {
+        "shape": "rect",
+        "style": { "extends": "box", "fill": "transparent", "opacity": 0.7, "stroke": { "dash": [5, 4] } },
+        "size": { "fixed": [200, 56] },
+        "labels": [
+          { "id": "key", "text": { "attribute": "key" }, "position": { "anchor": [0, 0.5], "offset": [8, -4], "align": "start" }, "editable": false, "overflow": "ellipsis" },
+          { "id": "badges", "text": "serverless", "position": { "anchor": [0, 1], "offset": [8, -8], "align": "start" }, "style": "badges" }
+        ],
+        "tooltip": { "cel": "'No task in this job is called \\'' + self.key + '\\''" },
+        "connectable": false
+      },
+      "JobCluster": {
+        "shape": "rect",
+        "style": "box",
+        "size": { "fixed": [200, 56] },
+        "labels": [
+          { "id": "key", "text": { "attribute": "key" }, "position": { "anchor": [0, 0.5], "offset": [8, -4], "align": "start" }, "editable": false, "overflow": "ellipsis" },
+          { "id": "badges",
+            "text": { "cel": "[self.sparkVersion, self.nodeType, self.workers > 0 ? string(self.workers) + ' workers' : ''].filter(b, b != '').join(' · ')" },
+            "position": { "anchor": [0, 1], "offset": [8, -8], "align": "start" }, "style": "badges" }
+        ],
+        "connectable": false
+      }
+    },
+    "edges": {
+      "Dependency": {
+        "line": { "stroke": { "color": { "token": "color.border" }, "width": 1.5 }, "routing": "bezier", "startDirection": "right", "endDirection": "left" },
+        "anchoring": {
+          "source": { "mode": "fixed", "points": [ { "id": "right", "x": 1, "y": 0.5 } ] },
+          "target": { "mode": "fixed", "points": [ { "id": "left", "x": 0, "y": 0.5 } ] }
+        },
+        "targetMarker": "arrow",
+        "labels": [ { "id": "outcome", "text": { "cel": "has(self.outcome) ? self.outcome : ''" }, "at": "middle", "offset": -6, "editable": false } ],
+        "conditions": [
+          { "when": "has(self.outcome) && self.outcome == 'true'", "style": { "stroke": { "color": "#15803d" } }, "doc": "Outcome edges wear their answer." },
+          { "when": "has(self.outcome) && self.outcome == 'false'", "style": { "stroke": { "color": "#dc2626" } } }
+        ]
+      }
+    }
+  },
+
+  "toolbox": {
+    "generic": { "select": true, "pan": true },
+    "groups": [
+      { "id": "tasks", "label": "Tasks", "tools": [
+        { "id": "notebookTask", "label": "Notebook task", "icon": "mdi-notebook-outline", "creates": "Task", "mode": "click", "after": "none",
+          "doc": "Runs a notebook. Drop on the canvas where it should sit.",
+          "initial": {
+            "type": "'notebook'",
+            "key": "'notebook_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'notebook').size() + 1)",
+            "source": "'notebooks/notebook_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'notebook').size() + 1)"
+          } },
+        { "id": "pythonTask", "label": "Python task", "icon": "mdi-language-python", "creates": "Task", "mode": "click", "after": "none",
+          "doc": "Runs a Python file. Drop on the canvas where it should sit.",
+          "initial": {
+            "type": "'python'",
+            "key": "'python_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'python').size() + 1)",
+            "source": "'scripts/python_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'python').size() + 1) + '.py'"
+          } },
+        { "id": "conditionTask", "label": "Condition task", "icon": "mdi-call-split", "creates": "Task", "mode": "click", "after": "none",
+          "doc": "Branches on a condition; downstream edges follow its true or false outcome.",
+          "initial": {
+            "type": "'condition'",
+            "key": "'condition_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'condition').size() + 1)",
+            "source": "'EQUAL_TO'"
+          } }
+      ] }
+    ],
+    "contextMenus": [
+      { "for": ["Task"], "placement": "menu", "standardEntries": false, "tools": [
+        { "kind": "operation", "operation": "renameTask", "label": "Rename…", "icon": "mdi-pencil-outline", "shortcut": "F2" },
+        { "kind": "operation", "operation": "setRunIf", "label": "Set run if…", "icon": "mdi-filter-outline" },
+        { "kind": "operation", "operation": "assignCluster", "label": "Assign cluster…", "icon": "mdi-server" },
+        { "kind": "delete", "label": "Remove", "icon": "mdi-delete-outline", "shortcut": "Delete" },
+        { "kind": "operation", "operation": "simulateRun", "label": "Run job (simulated)", "icon": "mdi-play-outline" }
+      ] },
+      { "for": ["Dependency"], "placement": "menu", "standardEntries": false, "tools": [
+        { "kind": "delete", "label": "Remove dependency", "icon": "mdi-vector-polyline-remove", "shortcut": "Delete" }
+      ] }
+    ]
+  },
+
+  "forms": {
+    "task": {
+      "for": "Task",
+      "usage": ["inspector"],
+      "items": [
+        { "kind": "section", "label": "Identity", "items": [
+          { "attribute": "key", "label": "Key", "widget": "readonly", "doc": "Rename through the context menu, so every depends_on reference follows the key." },
+          { "attribute": "type", "label": "Type", "widget": "readonly", "doc": "The type is which *_task mapping the file carries; change it in the file." },
+          { "attribute": "source", "label": "Source", "widget": "readonly", "doc": "The type is which *_task mapping the file carries; change it in the file." }
+        ] },
+        { "kind": "section", "label": "Execution", "items": [
+          { "attribute": "runIf", "label": "Run if", "widget": "combobox", "placeholder": "ALL_SUCCESS" },
+          { "attribute": "clusterKey", "label": "Cluster", "widget": "combobox", "placeholder": "serverless",
+            "options": { "cel": "diagram.nodesOfType('JobCluster').map(c, c.key)" } }
+        ] },
+        { "kind": "section", "label": "Workspace", "items": [
+          { "kind": "computed", "label": "Workspace connection", "value": { "cel": "'Not connected'" },
+            "doc": "Not connected - a placeholder for the real workspace connection." },
+          { "kind": "computed", "label": "Last simulated run", "value": { "cel": "''" },
+            "doc": "Simulated runs play on the canvas and never touch the file." }
+        ] }
+      ]
+    }
+  },
+
+  "constraints": {
+    "rules": [
+      { "id": "task_key_missing", "scope": "Task", "rule": "size(self.key) > 0",
+        "message": "A task has no task_key. Give it one, or nothing can depend on it.",
+        "x-adp-ruleId": "databricks.task-key-missing" },
+      { "id": "missing_task", "scope": "Dependency", "rule": "self.source.isA('Task')",
+        "message": { "cel": "'\\'' + self.target.key + '\\' depends on \\'' + self.source.key + '\\', which is not a task in this job. Fix the key or remove the dependency.'" },
+        "x-adp-ruleId": "databricks.missing-task" },
+      { "id": "dangling_cluster", "scope": "Task", "when": "has(self.clusterKey) && self.clusterKey != ''",
+        "rule": "diagram.nodesOfType('JobCluster').exists(c, c.key == self.clusterKey)",
+        "message": { "cel": "'\\'' + self.key + '\\' runs on cluster \\'' + self.clusterKey + '\\', which this job does not declare. Declare it under job_clusters, or clear the binding for serverless.'" },
+        "x-adp-ruleId": "databricks.dangling-cluster" },
+      { "id": "duplicate_task_key", "scope": "Task",
+        "rule": "diagram.nodesOfType('Task').filter(t, t.key == self.key).size() == 1",
+        "message": { "cel": "'The task key \\'' + self.key + '\\' is used more than once. Every task needs its own.'" },
+        "x-adp-ruleId": "databricks.duplicate-task-key" },
+      { "id": "cycle", "scope": "Task", "rule": "!self.inCycle('Dependency')",
+        "message": { "cel": "'\\'' + self.key + '\\' is part of a dependency circle, so it can never run. Break the circle.'" },
+        "x-adp-ruleId": "databricks.cycle" },
+      { "id": "no_self_dependency", "kind": "connect", "scope": "Dependency", "enforcement": "prevent",
+        "rule": "self.source.id != self.target.id", "message": "A task cannot depend on itself." }
+    ]
+  },
+
+  "behavior": {
+    "operations": {
+      "renameTask": {
+        "label": "Rename…",
+        "for": "Task",
+        "params": { "newKey": { "type": "string", "required": true, "minLength": 1, "label": "Key" } },
+        "actions": [
+          { "abort": { "message": "'A task named \\'' + p.newKey + '\\' is already there.'" },
+            "when": "p.newKey != self.key && diagram.nodesOfType('Task').exists(t, t.key == p.newKey)" },
+          { "set": { "key": "p.newKey" } }
+        ],
+        "doc": "Renames the task; the file's own task_key and every depends_on reference to it are rewritten in the same undoable step."
+      },
+      "setRunIf": {
+        "label": "Set run if…",
+        "for": "Task",
+        "params": { "runIf": { "type": "RunIf", "label": "Run if (empty = ALL_SUCCESS)" } },
+        "actions": [
+          { "unset": ["runIf"], "when": "!has(p.runIf)" },
+          { "set": { "runIf": "p.runIf" }, "when": "has(p.runIf)" }
+        ]
+      },
+      "assignCluster": {
+        "label": "Assign cluster…",
+        "for": "Task",
+        "params": { "clusterKey": { "type": "string", "label": "Cluster key (empty = serverless)" } },
+        "actions": [
+          { "abort": { "message": "'There is no cluster named \\'' + p.clusterKey + '\\' in this job.'" },
+            "when": "has(p.clusterKey) && p.clusterKey != '' && !diagram.nodesOfType('JobCluster').exists(c, c.key == p.clusterKey)" },
+          { "unset": ["clusterKey"], "when": "!has(p.clusterKey) || p.clusterKey == ''" },
+          { "set": { "clusterKey": "p.clusterKey" }, "when": "has(p.clusterKey) && p.clusterKey != ''" }
+        ]
+      },
+      "simulateRun": {
+        "label": "Run job (simulated)",
+        "icon": "mdi-play-outline",
+        "for": "Task",
+        "plugin": { "name": "net.etalii.adp.databricks.simulation", "args": { "show": "run-job" } },
+        "doc": "Plays a mock run over the DAG on the canvas, honouring run_if and condition outcomes. Never reaches the file or the undo history."
+      }
+    },
+    "deletion": {
+      "Task": { "relations": "delete", "confirm": "Removing this task also removes the dependencies touching it." }
+    }
+  },
+
+  "layout": {
+    "algorithms": {
+      "jobColumns": {
+        "algorithm": "plugin:net.etalii.adp.databricks.layout",
+        "direction": "right",
+        "options": { "reading": "job", "columnWidth": 260, "rowHeight": 120, "clusterBandGap": 80 },
+        "doc": "Longest-path layering left to right, cycle-tolerant, with job clusters in a band beneath the deepest task row."
+      },
+      "layered": {
+        "algorithm": "layered",
+        "direction": "right",
+        "doc": "The declarative approximation of jobColumns, for a runtime without the plugin."
+      }
+    },
+    "default": "jobColumns",
+    "trigger": "always",
+    "respect": "all"
+  },
+
+  "persistence": {
+    "format": "plugin:net.etalii.adp.databricks.files",
+    "files": {
+      "mode": "split",
+      "model": "{name}.yml",
+      "view": "{name}.adp",
+      "doc": "The model is the job's own resource YAML, which Databricks owns; the view is the ADP registration file's layout: block."
+    },
+    "ids": {
+      "strategy": "natural",
+      "prefix": { "Task": "task:", "MissingTask": "task:", "JobCluster": "cluster:", "Dependency": "edge:" },
+      "pattern": "^[^\\r\\n]{1,512}$"
+    },
+    "view": { "store": ["bounds"], "styleOverrides": "none" }
+  },
+
+  "plugins": {
+    "net.etalii.adp.databricks.files": {
+      "version": "^0.1.0",
+      "provides": ["persistenceFormat"],
+      "required": true,
+      "doc": "Reads and writes the job inside Databricks' own resource YAML by line splices, so an untouched file saves byte for byte, and keeps positions in the .adp registration's layout: block."
+    },
+    "net.etalii.adp.databricks.layout": {
+      "version": "^0.1.0",
+      "provides": ["layout"],
+      "required": false,
+      "fallback": { "layout": "layered" },
+      "args": {
+        "reading": { "type": "string", "required": true },
+        "columnWidth": { "type": "number" },
+        "rowHeight": { "type": "number" },
+        "clusterBandGap": { "type": "number" }
+      },
+      "doc": "The family's computed layouts."
+    },
+    "net.etalii.adp.databricks.simulation": {
+      "version": "^0.1.0",
+      "provides": ["action"],
+      "required": false,
+      "args": {
+        "show": { "type": "string", "required": true },
+        "stepMs": { "type": "int", "default": 700 },
+        "failTaskId": { "type": "string" },
+        "conditionOutcome": { "type": "Outcome", "default": "true" }
+      },
+      "doc": "Client-side mock runs: sets the transient simulated state of elements over time and shows a banner. Never writes a file or the history."
+    }
+  }
+}

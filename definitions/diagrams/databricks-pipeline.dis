@@ -1,0 +1,378 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
+  "disl": "0.1",
+  "language": {
+    "id": "net.etalii.adp.databricks.pipeline",
+    "version": "0.1.0",
+    "label": "Databricks pipeline",
+    "icon": "mdi-pipe",
+    "fileExtension": ".json",
+    "license": "Apache-2.0",
+    "doc": {
+      "summary": "A declarative pipeline's flow: source libraries through the pipeline into its catalog target.",
+      "description": "The diagram of one Lakeflow Declarative Pipeline (formerly Delta Live Tables), read from its settings: either a bare pipeline settings JSON file, or a `resources.pipelines.<key>` mapping in a Databricks Asset Bundle's YAML. The source libraries sit on the left, each flowing into the pipeline node, which flows into the catalog and schema it publishes to; the compute and the notifications sit beneath. This is the settings view, not the graph of datasets the pipeline defines. The settings stay Databricks' own file: ADP never writes positions into it. See `databricks-pipeline.md` beside this file for everything this specification cannot say.",
+      "seeAlso": [
+        { "title": "Databricks: pipeline settings", "href": "https://docs.databricks.com/aws/en/dlt/configure-pipeline" },
+        { "title": "Databricks: pipeline resource in a bundle", "href": "https://docs.databricks.com/aws/en/dev-tools/bundles/resources#pipeline" }
+      ]
+    },
+    "requires": { "conformance": "standard" }
+  },
+
+  "metamodel": {
+    "diagram": {
+      "attributes": {
+        "pipelineKey": { "type": "string", "readOnly": true, "doc": "The key under `resources.pipelines` when the pipeline lives in a bundle; empty for a bare settings file. Chosen by the `.adp` registration's `resource:` header when a file declares several." }
+      }
+    },
+    "dataTypes": {
+      "Notification": {
+        "label": "Notification",
+        "fields": {
+          "recipients": { "type": "string", "many": true, "doc": "`email_recipients`." },
+          "alerts": { "type": "string", "many": true, "doc": "`alerts`, the events that send it." }
+        }
+      }
+    },
+    "enums": {
+      "LibraryKind": {
+        "values": {
+          "notebook": { "label": "Notebook", "icon": "mdi-notebook-outline", "doc": "`{ notebook: { path } }`." },
+          "file": { "label": "File", "icon": "mdi-file-code-outline", "doc": "`{ file: { path } }`." },
+          "glob": { "label": "Glob", "doc": "`{ glob: { include } }`." },
+          "other": { "label": "Other", "doc": "Any other library entry (for example a jar, whl or maven entry). Its path is empty." }
+        }
+      },
+      "Channel": {
+        "extensible": true,
+        "values": { "CURRENT": { "label": "CURRENT" }, "PREVIEW": { "label": "PREVIEW" } }
+      },
+      "SimulatedState": {
+        "doc": "Where an element stands in a simulated update. Never stored.",
+        "values": { "pending": {}, "running": {}, "succeeded": {} }
+      }
+    },
+    "types": {
+      "Library": {
+        "label": "Library",
+        "doc": "One entry of the pipeline's `libraries` list: a source its transformations come from.",
+        "labelAttribute": "path",
+        "attributes": {
+          "kind": { "type": "LibraryKind", "required": true, "readOnly": true },
+          "path": { "type": "string", "required": true, "readOnly": true, "minLength": 1, "doc": "`path`, or `include` for a glob." },
+          "simulated": { "type": "SimulatedState", "transient": true, "readOnly": true }
+        }
+      },
+      "Pipeline": {
+        "label": "Pipeline",
+        "doc": "The pipeline's own settings. There is exactly one.",
+        "multiplicity": { "min": 1, "max": 1 },
+        "labelAttribute": "name",
+        "attributes": {
+          "name": { "type": "string", "required": true, "minLength": 1, "doc": "`name`." },
+          "catalog": { "type": "string", "doc": "`catalog`, the Unity Catalog the pipeline publishes to." },
+          "schema": { "type": "string", "doc": "`schema`, or the legacy `target` when there is no `schema`." },
+          "serverless": { "type": "bool", "default": false, "readOnly": true },
+          "continuous": { "type": "bool", "default": false, "readOnly": true },
+          "development": { "type": "bool", "default": false, "readOnly": true },
+          "channel": { "type": "Channel", "doc": "`channel`." },
+          "simulated": { "type": "SimulatedState", "transient": true, "readOnly": true }
+        }
+      },
+      "Destination": {
+        "label": "Target",
+        "doc": "Where the pipeline publishes: its catalog and schema. Drawn from the pipeline's own settings; it has no settings of its own.",
+        "viewOnly": true,
+        "multiplicity": { "min": 1, "max": 1 },
+        "attributes": {
+          "simulated": { "type": "SimulatedState", "transient": true, "readOnly": true }
+        }
+      },
+      "Compute": {
+        "label": "Compute",
+        "doc": "What the pipeline runs on: serverless, or clusters. Drawn from `serverless`.",
+        "viewOnly": true,
+        "multiplicity": { "min": 1, "max": 1 }
+      },
+      "Notifications": {
+        "label": "Notifications",
+        "doc": "The `notifications` list. Present only when the pipeline has notifications.",
+        "multiplicity": { "min": 0, "max": 1 },
+        "attributes": {
+          "entries": { "type": "Notification", "many": true, "readOnly": true, "minItems": 1 }
+        }
+      }
+    },
+    "relations": {
+      "Flow": {
+        "label": "Flows into",
+        "doc": "Drawn from every library into the pipeline, and from the pipeline into its target. Not stored: it follows from the libraries list.",
+        "viewOnly": true,
+        "source": ["Library", "Pipeline"],
+        "target": ["Pipeline", "Destination"],
+        "directed": true,
+        "allowSelfLoops": false
+      }
+    }
+  },
+
+  "notation": {
+    "styles": {
+      "box": {
+        "fill": { "token": "color.surface" },
+        "stroke": { "color": { "token": "color.border" }, "width": 1 },
+        "cornerRadius": 4,
+        "font": { "size": 13 }
+      },
+      "badges": { "font": { "size": 10, "color": "#5a6376" } },
+      "simPending": { "opacity": 0.5 },
+      "simRunning": { "stroke": { "color": "limegreen", "width": 2.5 } },
+      "simSucceeded": { "stroke": { "color": "#15803d", "width": 2 } }
+    },
+    "nodes": {
+      "Library": {
+        "shape": "rect",
+        "style": "box",
+        "size": { "fixed": [200, 56] },
+        "labels": [
+          { "id": "path", "text": { "attribute": "path" }, "position": { "anchor": [0, 0.5], "offset": [8, -4], "align": "start" }, "editable": false, "overflow": "ellipsis" },
+          { "id": "kind", "text": { "attribute": "kind" }, "position": { "anchor": [0, 1], "offset": [8, -8], "align": "start" }, "style": "badges" }
+        ],
+        "connectable": false,
+        "conditions": [
+          { "when": "has(self.simulated) && self.simulated == 'pending'", "style": "simPending" },
+          { "when": "has(self.simulated) && self.simulated == 'running'", "style": "simRunning" },
+          { "when": "has(self.simulated) && self.simulated == 'succeeded'", "style": "simSucceeded" }
+        ]
+      },
+      "Pipeline": {
+        "shape": "rect",
+        "style": "box",
+        "size": { "fixed": [200, 56] },
+        "labels": [
+          { "id": "name", "text": { "attribute": "name" }, "position": { "anchor": [0, 0.5], "offset": [8, -4], "align": "start" }, "editable": false, "overflow": "ellipsis" },
+          { "id": "badges",
+            "text": { "cel": "[self.serverless ? 'serverless' : '', self.continuous ? 'continuous' : '', self.development ? 'development' : '', has(self.channel) ? self.channel : ''].filter(b, b != '').join(' · ')" },
+            "position": { "anchor": [0, 1], "offset": [8, -8], "align": "start" }, "style": "badges" }
+        ],
+        "connectable": false,
+        "deletable": false,
+        "conditions": [
+          { "when": "has(self.simulated) && self.simulated == 'pending'", "style": "simPending" },
+          { "when": "has(self.simulated) && self.simulated == 'running'", "style": "simRunning" },
+          { "when": "has(self.simulated) && self.simulated == 'succeeded'", "style": "simSucceeded" }
+        ]
+      },
+      "Destination": {
+        "shape": "rect",
+        "style": "box",
+        "size": { "fixed": [200, 56] },
+        "labels": [
+          { "id": "name",
+            "text": { "cel": "diagram.nodesOfType('Pipeline').map(p, has(p.catalog) && p.catalog != '' && has(p.schema) && p.schema != '' ? p.catalog + '.' + p.schema : (has(p.catalog) && p.catalog != '' ? p.catalog : (has(p.schema) ? p.schema : '')))[0]" },
+            "position": { "anchor": [0, 0.5], "offset": [8, -4], "align": "start" }, "editable": false, "overflow": "ellipsis" }
+        ],
+        "connectable": false,
+        "deletable": false,
+        "conditions": [
+          { "when": "has(self.simulated) && self.simulated == 'pending'", "style": "simPending" },
+          { "when": "has(self.simulated) && self.simulated == 'running'", "style": "simRunning" },
+          { "when": "has(self.simulated) && self.simulated == 'succeeded'", "style": "simSucceeded" }
+        ]
+      },
+      "Compute": {
+        "shape": "rect",
+        "style": "box",
+        "size": { "fixed": [200, 56] },
+        "labels": [
+          { "id": "name", "text": { "cel": "diagram.nodesOfType('Pipeline').exists(p, p.serverless) ? 'serverless' : 'cluster'" },
+            "position": { "anchor": [0, 0.5], "offset": [8, -4], "align": "start" }, "editable": false }
+        ],
+        "connectable": false,
+        "deletable": false
+      },
+      "Notifications": {
+        "shape": "rect",
+        "style": "box",
+        "size": { "fixed": [200, 56] },
+        "labels": [
+          { "id": "recipients", "text": { "cel": "self.entries.map(e, e.recipients.join(', ')).filter(r, r != '').join(', ')" },
+            "position": { "anchor": [0, 0.5], "offset": [8, -4], "align": "start" }, "editable": false, "overflow": "ellipsis" }
+        ],
+        "connectable": false,
+        "deletable": false
+      }
+    },
+    "edges": {
+      "Flow": {
+        "line": { "stroke": { "color": { "token": "color.border" }, "width": 1.5 }, "routing": "bezier", "startDirection": "right", "endDirection": "left" },
+        "anchoring": {
+          "source": { "mode": "fixed", "points": [ { "id": "right", "x": 1, "y": 0.5 } ] },
+          "target": { "mode": "fixed", "points": [ { "id": "left", "x": 0, "y": 0.5 } ] }
+        },
+        "targetMarker": "arrow"
+      }
+    }
+  },
+
+  "toolbox": {
+    "generic": { "select": true, "pan": true },
+    "groups": [
+      { "id": "libraries", "label": "Libraries", "tools": [
+        { "id": "notebookLibrary", "kind": "operation", "operation": "addNotebookLibrary", "label": "Notebook library", "icon": "mdi-notebook-outline",
+          "doc": "A notebook the pipeline's transformations come from." },
+        { "id": "fileLibrary", "kind": "operation", "operation": "addFileLibrary", "label": "File library", "icon": "mdi-file-code-outline",
+          "doc": "A source file the pipeline's transformations come from." }
+      ] }
+    ],
+    "contextMenus": [
+      { "for": ["Pipeline"], "placement": "menu", "standardEntries": false, "tools": [
+        { "kind": "operation", "operation": "addNotebookLibrary", "label": "Add notebook library…", "icon": "mdi-notebook-outline" },
+        { "kind": "operation", "operation": "addFileLibrary", "label": "Add file library…", "icon": "mdi-file-code-outline" },
+        { "kind": "operation", "operation": "simulateUpdate", "label": "Start update (simulated)", "icon": "mdi-play-outline" }
+      ] },
+      { "for": ["Library"], "placement": "menu", "standardEntries": false, "tools": [
+        { "kind": "delete", "label": "Remove library", "icon": "mdi-delete-outline", "shortcut": "Delete" }
+      ] }
+    ]
+  },
+
+  "forms": {
+    "pipeline": {
+      "for": "Pipeline",
+      "usage": ["inspector"],
+      "items": [
+        { "kind": "section", "label": "Identity", "items": [
+          { "attribute": "name", "label": "Name" },
+          { "attribute": "catalog", "label": "Catalog" },
+          { "attribute": "schema", "label": "Schema" }
+        ] },
+        { "kind": "section", "label": "Execution", "items": [
+          { "attribute": "channel", "label": "Channel", "widget": "combobox" }
+        ] },
+        { "kind": "section", "label": "Workspace", "items": [
+          { "kind": "computed", "label": "Workspace connection", "value": { "cel": "'Not connected'" } },
+          { "kind": "computed", "label": "Last simulated run", "value": { "cel": "''" } }
+        ] }
+      ]
+    },
+    "other": {
+      "for": ["Library", "Destination", "Compute", "Notifications"],
+      "usage": ["inspector"],
+      "items": [
+        { "kind": "section", "label": "Workspace", "items": [
+          { "kind": "computed", "label": "Workspace connection", "value": { "cel": "'Not connected'" } },
+          { "kind": "computed", "label": "Last simulated run", "value": { "cel": "''" } }
+        ] }
+      ]
+    }
+  },
+
+  "constraints": {
+    "rules": [
+      { "id": "no_libraries", "scope": "Pipeline",
+        "rule": "size(diagram.nodesOfType('Library')) > 0",
+        "message": { "cel": "'The pipeline' + (self.name != '' ? ' \\'' + self.name + '\\'' : '') + ' has no libraries, so it has nothing to run. Add at least one notebook, file or glob.'" },
+        "x-adp-ruleId": "databricks.no-libraries" },
+      { "id": "schema_without_catalog", "scope": "Pipeline", "severity": "warning",
+        "rule": "!(has(self.schema) && self.schema != '' && (!has(self.catalog) || self.catalog == ''))",
+        "message": { "cel": "'The pipeline' + (self.name != '' ? ' \\'' + self.name + '\\'' : '') + ' sets a schema but no catalog, so the schema has nowhere to live. Set catalog too.'" },
+        "x-adp-ruleId": "databricks.schema-without-catalog" },
+      { "id": "keep_one_library", "kind": "delete", "scope": "Library", "enforcement": "prevent",
+        "rule": "size(diagram.nodesOfType('Library')) > 1",
+        "message": "A pipeline needs at least one library; removing the last one is not allowed." },
+      { "id": "unique_library", "kind": "create", "scope": "Library", "enforcement": "prevent",
+        "rule": "!diagram.nodesOfType('Library').exists(l, l.id != self.id && l.kind == self.kind && l.path == self.path)",
+        "message": { "cel": "'The ' + self.kind + ' library \\'' + self.path + '\\' is already there.'" } }
+    ]
+  },
+
+  "behavior": {
+    "operations": {
+      "addNotebookLibrary": {
+        "label": "Add notebook library…",
+        "for": "diagram",
+        "params": { "path": { "type": "string", "required": true, "minLength": 1, "label": "Path" } },
+        "actions": [ { "create": { "type": "'Library'", "attributes": { "kind": "'notebook'", "path": "p.path" } } } ]
+      },
+      "addFileLibrary": {
+        "label": "Add file library…",
+        "for": "diagram",
+        "params": { "path": { "type": "string", "required": true, "minLength": 1, "label": "Path" } },
+        "actions": [ { "create": { "type": "'Library'", "attributes": { "kind": "'file'", "path": "p.path" } } } ]
+      },
+      "simulateUpdate": {
+        "label": "Start update (simulated)",
+        "icon": "mdi-play-outline",
+        "for": "Pipeline",
+        "plugin": { "name": "net.etalii.adp.databricks.simulation", "args": { "show": "pipeline-update" } },
+        "doc": "Plays a mock update over the sources, the pipeline and its target on the canvas. Never reaches the file or the undo history."
+      }
+    }
+  },
+
+  "layout": {
+    "algorithms": {
+      "flow": {
+        "algorithm": "plugin:net.etalii.adp.databricks.layout",
+        "direction": "right",
+        "options": { "reading": "pipeline", "sourceX": 0, "pipelineX": 320, "targetX": 640, "rowHeight": 120, "satelliteBandGap": 80 },
+        "doc": "Sources stacked on the left, the pipeline and its target level with their middle, compute and notifications in a band beneath."
+      },
+      "layered": { "algorithm": "layered", "direction": "right", "doc": "The declarative approximation of flow, for a runtime without the plugin." }
+    },
+    "default": "flow",
+    "trigger": "always",
+    "respect": "all"
+  },
+
+  "persistence": {
+    "format": "plugin:net.etalii.adp.databricks.files",
+    "files": {
+      "mode": "split",
+      "model": "{name}.json",
+      "view": "{name}.adp",
+      "doc": "The model is the pipeline's own settings, a bare JSON settings file or a pipeline resource in a bundle's YAML, which Databricks owns; the view is the ADP registration file's layout: block."
+    },
+    "ids": {
+      "strategy": "natural",
+      "prefix": { "Library": "library:", "Flow": "flow:" },
+      "pattern": "^[^\\r\\n]{1,512}$"
+    },
+    "view": { "store": ["bounds"], "styleOverrides": "none" }
+  },
+
+  "plugins": {
+    "net.etalii.adp.databricks.files": {
+      "version": "^0.1.0",
+      "provides": ["persistenceFormat"],
+      "required": true,
+      "doc": "Reads and writes the pipeline inside Databricks' own settings file (JSON or YAML) by line splices, so an untouched file saves byte for byte, and keeps positions in the .adp registration's layout: block."
+    },
+    "net.etalii.adp.databricks.layout": {
+      "version": "^0.1.0",
+      "provides": ["layout"],
+      "required": false,
+      "fallback": { "layout": "layered" },
+      "args": {
+        "reading": { "type": "string", "required": true },
+        "sourceX": { "type": "number" },
+        "pipelineX": { "type": "number" },
+        "targetX": { "type": "number" },
+        "rowHeight": { "type": "number" },
+        "satelliteBandGap": { "type": "number" }
+      },
+      "doc": "The family's computed layouts."
+    },
+    "net.etalii.adp.databricks.simulation": {
+      "version": "^0.1.0",
+      "provides": ["action"],
+      "required": false,
+      "args": {
+        "show": { "type": "string", "required": true },
+        "stepMs": { "type": "int", "default": 700 }
+      },
+      "doc": "Client-side mock runs: sets the transient simulated state of elements over time and shows a banner. Never writes a file or the history."
+    }
+  }
+}
