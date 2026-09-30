@@ -4,6 +4,7 @@ Files kept byte-for-byte as they were written before an identifier changed: `erd
 
 | Legacy fixture | Migrated counterpart |
 |---|---|
-| `erd.dedl` | [`specifications/disl/erd.disl`](../erd.disl) |
+| `erd.dedl` | [`specifications/disl/erd.dis`](../erd.dis) |
+| `erd.disl` | [`specifications/disl/erd.dis`](../erd.dis) |
 
 They are removed when DISL drops the aliases, no earlier than DISL 1.0.
