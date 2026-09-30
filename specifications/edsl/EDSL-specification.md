@@ -6,7 +6,7 @@
 |---|---|
 | Kind | editor |
 | Role | specification language |
-| File extension | `.edsl` |
+| File extension | `.eds` |
 | Paired language | EDD, the Editor Definition Language (`.edd`) |
 | Schema | none yet |
 
@@ -18,6 +18,6 @@ This is a placeholder. It holds nothing normative: no construct, no schema and n
 
 ## Purpose
 
-In EDSL a tool engineer will specify one editor type: a way of working in which typing text is the core interaction. An EDSL file (`.edsl`) will hold one editor type, as a DISL file holds one diagram type. The editors users create of such a type are stored in EDD.
+In EDSL a tool engineer will specify one editor type: a way of working in which typing text is the core interaction. An EDSL file (`.eds`) will hold one editor type, as a DISL file holds one diagram type. The editors users create of such a type are stored in EDD.
 
-When content arrives, it follows the pattern of [DISL](../disl/DISL-specification.md) and [DID](../did/DID-specification.md): this document, the schema `edsl.schema.json` with `$id` `https://etalii.net/adp/edsl/schema/<version>/edsl.schema.json`, the version key `"edsl": "<version>"`, and examples with the extension `.edsl`, side by side in `specifications/edsl/`.
+When content arrives, it follows the pattern of [DISL](../disl/DISL-specification.md) and [DID](../did/DID-specification.md): this document, the schema `edsl.schema.json` with `$id` `https://etalii.net/adp/edsl/schema/<version>/edsl.schema.json`, the version key `"edsl": "<version>"`, and examples with the extension `.eds`, side by side in `specifications/edsl/`.
