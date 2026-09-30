@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://etalii.net/adp/did/schema/0.2/did.schema.json",
-  "title": "DID 0.1 — Diagram Definition Language",
+  "title": "DID 0.2 — Diagram Definition Language",
   "description": "Definitions ($defs/Definition): the diagrams users create of a diagram type specified in DISL. The root validates definitions. Shared primitives are referenced from disl.schema.json by absolute $id.",
   "$ref": "#/$defs/Definition",
   "$defs": {
     "Definition": {
-      "description": "A complete DID definition: one diagram model as a user created it, stored with the DISL specification it was made with. It carries the DID version, the required language object naming the specification by id and version (plus its URI and hash when referenced), metadata, the diagram root's attributes, flat lists of element and relation records, view records, constraint suppressions and extensions. Its structure is the same whatever the format and file split. See section 3.",
+      "description": "A complete DID definition: one diagram model as a user created it, stored with the DISL specification it was made with. It carries the DID version, the required language object naming the specification by id and version (plus its URI and hash when referenced), metadata, the diagram root's attributes, flat lists of element and relation records, view records, suppressions of findings and extensions. Its structure is the same whatever the format and file split. See section 3.",
       "type": "object",
       "properties": {
         "$schema": {
@@ -14,7 +14,8 @@
         },
         "did": {
           "type": "string",
-          "pattern": "^\\d+\\.\\d+$"
+          "pattern": "^\\d+\\.\\d+$",
+          "description": "The DID version the definition targets, as major.minor. Writers of DID 0.2 write \"0.2\"; readers accept \"0.1\" and \"0.2\", because every valid 0.1 definition is a valid 0.2 definition (DID specification, section 2)."
         },
         "dedlDocument": {
           "type": "string",
@@ -84,13 +85,19 @@
         "suppressions": {
           "type": "array",
           "items": {
+            "description": "A suppressed finding: the constraint it came from and exactly one of the element it targets or its subject, with why, by whom and when it was suppressed. See section 3.",
             "type": "object",
             "properties": {
               "constraint": {
                 "type": "string"
               },
               "element": {
-                "type": "string"
+                "type": "string",
+                "description": "The id of the element or relation the finding targets. Never an ephemeral id."
+              },
+              "subject": {
+                "type": "string",
+                "description": "The subject of a finding that names no element, for a finding about something that is not drawn (DISL 8.6)."
               },
               "reason": {
                 "type": "string"
@@ -104,8 +111,19 @@
             },
             "additionalProperties": false,
             "required": [
-              "constraint",
-              "element"
+              "constraint"
+            ],
+            "oneOf": [
+              {
+                "required": [
+                  "element"
+                ]
+              },
+              {
+                "required": [
+                  "subject"
+                ]
+              }
             ],
             "patternProperties": {
               "^x-": true
@@ -137,7 +155,7 @@
       }
     },
     "ElementRecord": {
-      "description": "One stored element of a DID definition, listed in its elements, and also used for view-only elements of a view. It has a required id, unique within the definition, and a concrete node type, plus stored attribute values in which references are ids. Nesting is expressed by the parent id and slot rather than by physical nesting, so moving an element changes one line; order positions it among ordered siblings, and ports lists its port instances. See section 3.",
+      "description": "One stored element of a DID definition, listed in its elements, and also used for view-only elements of a view. It has a required id, unique within the definition, and a concrete node type, plus stored attribute values in which references are ids. Nesting is expressed by the parent id and slot rather than by physical nesting, so moving an element changes one line; order positions it among ordered siblings, and ports lists its port instances. See section 3. Records of derived types are never written.",
       "type": "object",
       "properties": {
         "id": {
@@ -201,7 +219,7 @@
       }
     },
     "RelationRecord": {
-      "description": "One stored relation of a DID definition, listed in its relations. It has a required id, a relation type, and a source and target given as element or port ids; a port id is written as the element id and port id joined by a hash sign when port ids are only unique per element. Its attributes hold the relation's stored attribute values. See section 3.",
+      "description": "One stored relation of a DID definition, listed in its relations. It has a required id, a relation type, and a source and target given as element or port ids; a port id is written as the element id and port id joined by a hash sign when port ids are only unique per element. The target is absent only for a relation without a target yet, when its relation type declares the target end optional. Its attributes hold the relation's stored attribute values. See section 3.",
       "type": "object",
       "properties": {
         "id": {
@@ -224,8 +242,7 @@
       "required": [
         "id",
         "type",
-        "source",
-        "target"
+        "source"
       ],
       "patternProperties": {
         "^x-": true
