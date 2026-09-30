@@ -7,9 +7,9 @@
 
 ## Context
 
-The DISL gaps summary (project file `disl-gaps/disl-gaps-summary.md`, 2026-09-30) read the 23 diagram specifications in `definitions/diagrams/` against DISL 0.1. Its headline: only the timeline can in principle run on a generic DISL runtime. The other 22 each declare a **required** persistence plugin, so by DISL section 13.1 a runtime without that plugin refuses to open them for editing. The `.dis` files describe metamodel, notation, toolbox, forms and rules well; what they cannot carry is where the model comes from and how it is written back.
+The DISL gaps summary (project file `disl-gaps/disl-gaps-summary.md`, 2026-09-30) read the 23 diagram specifications in `definitions/diagrams/` against DISL 0.1. Its headline: only the timeline can in principle run on a generic DISL runtime. The other 22 each declare a **required** persistence plugin, so by DISL section 13.1 a runtime without that plugin refuses to open them for editing. (Counted on `develop` at `e908a19`, the folder holds 25 definitions; 24 of them name a persistence plugin as their format, and only the timeline uses DISL's built-in `yaml`.) The `.dis` files describe metamodel, notation, toolbox, forms and rules well; what they cannot carry is where the model comes from and how it is written back.
 
-That matters because ADP runs in four hosts written in four languages (the standalone host, IntelliJ, VS Code, Eclipse). A persistence plugin is code, so each of the 22 is written, tested and kept in step four times. "Defined, not coded" holds for these tools only if their persistence can be declared.
+That matters because ADP runs in four hosts written in four languages (the standalone host, IntelliJ, VS Code, Eclipse). A persistence plugin is code, so each of the 24 is written, tested and kept in step four times. "Defined, not coded" holds for these tools only if their persistence can be declared.
 
 The two gaps this feature takes on, as the summary ranks them:
 
@@ -118,7 +118,7 @@ A user opens an Ansible project, a Helm chart or a .NET solution folder as a dia
 
 Some formats are too clever to declare: projecting Turtle triples into cards and rows, or evaluating MSBuild with its imports, wildcards and central package management. A host developer implements a persistence plugin for such a format against one written contract, the same in every host, instead of reverse-engineering what the other hosts' plugins do. The contract lets a plugin report findings, which the .NET notes say a plugin cannot do today.
 
-**Why this priority**: it does not remove a plugin, but it turns 22 implicit contracts into one explicit one, and it is the fallback for anything FBL leaves out.
+**Why this priority**: it does not remove a plugin, but it turns 24 implicit contracts into one explicit one, and it is the fallback for anything FBL leaves out.
 
 **Independent Test**: take the contract and an existing plugin's notes (for example the Turtle or .NET one), and check that every capability the notes rely on is a named part of the contract, and that the plugin's outputs (model, findings, splices, undo) are the same kinds FBL produces.
 
@@ -242,7 +242,7 @@ A user browses a repository in any host. A file with an extension only one tool 
 #### Proof against the definitions
 
 - **FR-090**: The FBL examples MUST include working bindings for at least one format of each family in FR-010, drawn from the existing definitions (for example the timeline YAML, an Azure Pipelines or Databricks YAML, Freeplane `.mm`, `.owm`, and the Structurizr DSL), each with round-trip fixtures.
-- **FR-091**: The feature MUST record, for each of the 23 definitions, whether its persistence becomes an FBL binding, stays a plugin under the contract, or is out of reach and why. Rewriting the definitions themselves to use FBL is follow-up work, not part of this feature.
+- **FR-091**: The feature MUST record, for each of the 25 definitions in `definitions/diagrams/`, whether its persistence becomes an FBL binding, stays a plugin under the contract, or is out of reach and why. Rewriting the definitions themselves to use FBL is follow-up work, not part of this feature.
 
 ### Key Entities
 
@@ -261,7 +261,7 @@ A user browses a repository in any host. A file with an extension only one tool 
 
 - **SC-001**: Every FBL example validates against the FBL schema in the Build workflow, and every round-trip fixture passes: 100% of no-edit saves are byte-identical, and 100% of edit-then-undo sequences restore the original bytes.
 - **SC-002**: For every splice operation in the catalogue there is at least one fixture, and in every fixture the bytes that change are only those inside the splices of the edit.
-- **SC-003**: Of the 22 definitions that today declare a required persistence plugin, the record of FR-091 shows at least half able to replace it with an FBL binding, and every remaining one covered by the written plugin contract.
+- **SC-003**: Of the 24 definitions that today declare a persistence plugin as their format, the record of FR-091 shows at least half able to replace it with an FBL binding, and every remaining one covered by the written plugin contract.
 - **SC-004**: A host developer can implement a reader and writer for one bound format from the FBL document, schema and examples alone, and pass its fixtures, without reading any host's code (principle II).
 - **SC-005**: Every registration and routing construct used in today's definitions (their `x-adp` keys and registration headers) has a named FBL equivalent.
 - **SC-006**: The boundary with DISL 0.2 holds: FBL defines no id strategy, finding, source location or derived-node construct of its own, and every reference to one points at DISL.
@@ -275,4 +275,4 @@ A user browses a repository in any host. A file with an extension only one tool 
 - A host's file watching and debounce delays are host concerns; FBL declares the delay a folder binding wants, and hosts honour it as closely as their platform allows.
 - Collaboration (DISL 11.10) over foreign files is out of scope; a bound body is edited by one host at a time, and changes from outside arrive as external changes (FR-031, FR-062).
 - Structurizr DSL constructs beyond the model and views (`!script`, `!plugin`, `!include` of remote files) are read as unbound content and preserved, not evaluated.
-- Rewriting the 23 definitions to use FBL, and implementing FBL in the hosts, are follow-up features in this repository and the host repositories.
+- Rewriting the 25 definitions to use FBL, and implementing FBL in the hosts, are follow-up features in this repository and the host repositories.
