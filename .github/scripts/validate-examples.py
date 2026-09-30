@@ -1,4 +1,5 @@
-"""Validates every example in specifications/ against its specification's schema (constitution principle II).
+"""Validates every example in specifications/, and every tool definition in definitions/, against its specification's
+schema (constitution principle II).
 
 An example is a DISL specification (`*.dis`), a DID definition (`*.did`), or a `*.json` file that names its schema
 in `$schema`. The extension decides the schema: `*.dis` against `disl.schema.json#/$defs/Specification`, `*.did`
@@ -20,7 +21,10 @@ from pathlib import Path
 from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
-root = Path(__file__).resolve().parents[2] / "specifications"
+repository = Path(__file__).resolve().parents[2]
+root = repository / "specifications"
+# The tool definitions (definitions/diagrams/*.dis and, later, designers and editors) are checked the same way.
+folders = [root, repository / "definitions"]
 
 DISL = "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification"
 DID = "https://etalii.net/adp/did/schema/0.1/did.schema.json#/$defs/Definition"
@@ -81,10 +85,10 @@ def expected_reference(path: Path, document) -> tuple[str | None, list[str], str
 
 
 failures = 0
-examples = [p for p in sorted(root.rglob("*")) if is_example(p)]
+examples = [p for folder in folders for p in sorted(folder.rglob("*")) if is_example(p)]
 for path in examples:
-    name = path.relative_to(root.parent).as_posix()
-    legacy = "legacy" in path.relative_to(root).parts
+    name = path.relative_to(repository).as_posix()
+    legacy = "legacy" in path.relative_to(repository).parts
     try:
         document = json.loads(path.read_text(encoding="utf-8"))
     except ValueError as error:

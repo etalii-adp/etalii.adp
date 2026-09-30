@@ -36,5 +36,5 @@ Specs say *what* and *why*; plans say *how*. Do not put implementation choices i
 
 - Normative text uses the RFC 2119 and RFC 8174 key words in bold capitals, as the DISL specification does.
 - Each specification lives in its own folder under `specifications/<name>/`, with its prose `<NAME>-specification.md`, its JSON Schema `<name>.schema.json` and its examples `*.<name>` side by side; `<name>` is the language's acronym in lowercase (`disl`, `did`, `desl`, `ded`, `edsl`, `edd`).
-- `python .github/scripts/validate-examples.py` validates every `*.dis` and `*.did` example, and the legacy fixtures under `specifications/*/legacy/`, against their schemas; the Build workflow runs it on every pull request.
+- `python .github/scripts/validate-examples.py` validates every `*.dis` and `*.did` example, the legacy fixtures under `specifications/*/legacy/` and the tool definitions under `definitions/` against their schemas; the Build workflow runs it on every pull request.
 - When writing markdown files do not split lines to ensure a maximum line length is honored.

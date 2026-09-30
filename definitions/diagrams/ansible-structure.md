@@ -211,7 +211,7 @@ layout:
 
 ## 11. Problems
 
-`AnsibleRuleSet.cs` and `AnsibleValidator.cs` (Requirement 9). The `.dis` rules carry DISL-shaped ids, because a DISL constraint id is a simple identifier; the ids a runtime reports are in `x-adp-rule-id` and below.
+`AnsibleRuleSet.cs` and `AnsibleValidator.cs` (Requirement 9). The `.dis` rules carry DISL-shaped ids, because a DISL constraint id is a simple identifier; the ids a runtime reports are in `x-adp-ruleId` and below.
 
 | `.dis` rule | Reported id | Severity | Location |
 |---|---|---|---|
