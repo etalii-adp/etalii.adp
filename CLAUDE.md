@@ -1,6 +1,6 @@
 # etalii.adp
 
-The specifications for ADP ("A Different Perspective"): the formats and languages that the ADP tools in the `etalii.adp.ide.*` repositories implement. Every tool is a diagram, a designer or an editor, and each kind has a specification language, in which a tool engineer specifies a tool type, and a definition language, in which the tools users create of that type are stored. The six live under `specifications/`: DISL, the Diagram Specification Language (`specifications/disl/`), and DID, the Diagram Definition Language (`specifications/did/`), have content; DESL and DED (designers) and EDSL and EDD (editors) are placeholders.
+The specifications for ADP ("A Different Perspective"): the formats and languages that the ADP tools in the `etalii.adp.ide.*` repositories implement. Every tool is a diagram, a designer or an editor, and each kind has a specification language, in which a tool engineer specifies a tool type, and a definition language, in which the tools users create of that type are stored. The six live under `specifications/`: DISL, the Diagram Specification Language (`specifications/disl/`), and DID, the Diagram Definition Language (`specifications/did/`), have content; DESL and DED (designers) and EDSL and EDD (editors) are placeholders. Beside them, FBL, the Format Binding Language (`specifications/fbl/`), serves every kind: it declares how a tool reads and writes a model that lives in another tool's file (Structurizr DSL, YAML, `.mm` and so on), with byte-preserving splices, and defines the `.adp` registration.
 
 The vocabulary (tool, diagram, designer, editor, tool engineer, specification, definition, runtime) is defined in [docs/terminology.md](docs/terminology.md). Use its words in every file, name and message, and change a definition there first.
 
@@ -35,6 +35,6 @@ Specs say *what* and *why*; plans say *how*. Do not put implementation choices i
 ## Writing specifications
 
 - Normative text uses the RFC 2119 and RFC 8174 key words in bold capitals, as the DISL specification does.
-- Each specification lives in its own folder under `specifications/<name>/`, with its prose `<NAME>-specification.md`, its JSON Schema `<name>.schema.json` and its examples `*.<name>` side by side; `<name>` is the language's acronym in lowercase (`disl`, `did`, `desl`, `ded`, `edsl`, `edd`).
-- `python .github/scripts/validate-examples.py` validates every `*.dis` and `*.did` example, the legacy fixtures under `specifications/*/legacy/` and the tool definitions under `definitions/` against their schemas; the Build workflow runs it on every pull request.
+- Each specification lives in its own folder under `specifications/<name>/`, with its prose `<NAME>-specification.md`, its JSON Schema `<name>.schema.json` and its examples `*.<name>` side by side; `<name>` is the language's acronym in lowercase (`disl`, `did`, `desl`, `ded`, `edsl`, `edd`, `fbl`).
+- `python .github/scripts/validate-examples.py` validates every `*.dis`, `*.did` and `*.fbl` example, the `.adp` registrations and round-trip fixtures under `specifications/fbl/`, the legacy fixtures under `specifications/*/legacy/` and the tool definitions under `definitions/` against their schemas; the Build workflow runs it on every pull request.
 - When writing markdown files do not split lines to ensure a maximum line length is honored.

@@ -10,7 +10,9 @@ The specifications of the formats and languages that the ADP tools implement. A 
 | Designer | [DESL, Designer Specification Language](specifications/desl/DESL-specification.md) | `.des` | [DED, Designer Definition Language](specifications/ded/DED-specification.md) | `.ded` |
 | Editor | [EDSL, Editor Specification Language](specifications/edsl/EDSL-specification.md) | `.eds` | [EDD, Editor Definition Language](specifications/edd/EDD-specification.md) | `.edd` |
 
-DISL and DID have content; the other four are placeholders. The Build workflow validates every example against its schema. The words used here are defined in [docs/terminology.md](docs/terminology.md).
+When a tool's model lives in another tool's file, such as a Structurizr workspace, a Freeplane mind map or an Azure Pipelines YAML file, the tool's specification points at a binding in [FBL, the Format Binding Language](specifications/fbl/FBL-specification.md) (`.fbl`), which says how that file is read and how edits are written back into it without disturbing the rest.
+
+DISL, DID and FBL have content; the other four are placeholders. The Build workflow validates every example against its schema. The words used here are defined in [docs/terminology.md](docs/terminology.md).
 
 ADP, A Different Perspective, is a range of task-focused tools: diagrams, designers and editors. The site is at <https://etalii.net/adp/>.
 
