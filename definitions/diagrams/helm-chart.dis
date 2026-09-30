@@ -1,0 +1,726 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
+  "disl": "0.1",
+  "x-adp-origin": "helm/chart",
+  "language": {
+    "id": "net.etalii.adp.helm.chart",
+    "version": "0.1.0",
+    "label": "Helm chart",
+    "doc": {
+      "summary": "What a Helm chart is made of and how it hangs together, drawn from the chart folder as it is.",
+      "description": "A read-only diagram over a Helm chart directory (the folder holding `Chart.yaml`). It shows the chart's metadata, the values layering, the templates and the Kubernetes kinds they literally render, the declared dependencies and whether `charts/` actually answers them.\n\nThe chart folder is the source of truth and is never written. The one thing a user authors is where the boxes sit; those positions are stored beside the chart, never in a chart file. Everything this specification cannot express (reading the folder, scanning templates, the banded layout, navigation) is described in `helm-chart.md` next to this file.",
+      "tags": ["helm", "kubernetes", "software delivery", "read-only", "folder"],
+      "seeAlso": [
+        { "title": "Helm charts guide", "href": "https://helm.sh/docs/topics/charts/" },
+        { "title": "Chart template guide", "href": "https://helm.sh/docs/chart_template_guide/" },
+        { "title": "Helm-Visualizer (insight, not copied)", "href": "https://github.com/unrealandychan/Helm-Visualizer" }
+      ]
+    },
+    "authors": [ { "name": "Peter Vrenken" } ],
+    "license": "Apache-2.0",
+    "icon": "mdi-ship-wheel",
+    "requires": { "conformance": "standard" }
+  },
+
+  "functions": {
+    "fileName": {
+      "params": [ { "name": "path", "type": "string" } ],
+      "returns": "string",
+      "cel": "path.split('/').last().orValue(path)",
+      "doc": "The last segment of a chart-root-relative path: what a template node is called on the canvas."
+    },
+    "matchesDependency": {
+      "params": [ { "name": "d", "type": "Dependency" }, { "name": "v", "type": "Vendored" } ],
+      "returns": "bool",
+      "cel": "v.entryName == d.chartName || (d.alias != '' && v.entryName == d.alias)",
+      "doc": {
+        "summary": "Whether a vendored entry in charts/ answers a declared dependency.",
+        "rationale": "Helm vendors under the dependency's chart name even when an alias is set (the alias renames the mount, not the folder), so the name is matched first and the alias as well. No version or range is ever evaluated."
+      }
+    }
+  },
+
+  "metamodel": {
+    "doc": "Every node is a real file, folder or declaration of the chart. Nothing is created, renamed or deleted through the diagram: the model is read from the folder by the `adp.helm.chartFolder` plugin, and every relation is derived from what was read.",
+    "diagram": {
+      "doc": "The registered chart folder. With nothing selected, these are the rows the property panel shows.",
+      "attributes": {
+        "templateCount": { "type": "int", "label": "Templates", "group": "Summary", "derived": "diagram.nodesOfType('Template').size()" },
+        "dependencyCount": { "type": "int", "label": "Dependencies", "group": "Summary", "derived": "diagram.nodesOfType('Dependency').size()" },
+        "valuesLayerCount": { "type": "int", "label": "Values layers", "group": "Summary", "derived": "diagram.nodesOfType('Values').size()" }
+      }
+    },
+
+    "dataTypes": {
+      "YamlFailure": {
+        "doc": "A chart-owned YAML file that did not parse, in the parser's own words.",
+        "fields": {
+          "path": { "type": "string", "doc": "Chart-root-relative." },
+          "message": { "type": "text", "doc": "The parser's message, verbatim." },
+          "line": { "type": "int", "min": 0, "doc": "1-based line the parser blamed; 0 when it named none." }
+        },
+        "display": { "cel": "value.path + ' (line ' + string(value.line) + '): ' + value.message" }
+      },
+      "LockEntry": {
+        "doc": "One dependency pinned by `helm dependency update`.",
+        "fields": {
+          "name": { "type": "string", "doc": "The chart name the lock records (never the alias)." },
+          "version": { "type": "string", "doc": "The exact pinned version: display data, never evaluated against the declared constraint." },
+          "line": { "type": "int", "min": 0 }
+        },
+        "display": { "cel": "value.name + ' ' + value.version" }
+      }
+    },
+
+    "enums": {
+      "ChartType": {
+        "doc": "What `type:` in Chart.yaml says; absent reads as application.",
+        "values": {
+          "application": { "label": "Application", "doc": "Renders manifests and can be installed." },
+          "library": { "label": "Library", "doc": "Provides named templates to other charts and renders nothing itself; exempt from the empty-templates rule." }
+        }
+      },
+      "TemplateRole": {
+        "doc": "What a file under templates/ is to Helm, decided by its name and place.",
+        "values": {
+          "manifest": { "label": "Manifest template", "doc": "Renders to Kubernetes manifests: the ordinary case." },
+          "partial": { "label": "Partial", "doc": "A file whose name starts with `_`: defines named templates and renders nothing itself." },
+          "notes": { "label": "Install notes", "doc": "`NOTES.txt`: renders to install notes, not to a manifest." },
+          "test": { "label": "Test hook", "doc": "Lives under `templates/tests/`: a `helm test` hook." }
+        }
+      },
+      "ConditionState": {
+        "doc": "A dependency's `condition`, resolved against the default values.yaml when the chart was read.",
+        "values": {
+          "none": { "label": "No condition" },
+          "on": { "label": "Currently on", "doc": "The path exists and reads true." },
+          "off": { "label": "Currently off", "doc": "The path exists and reads false." },
+          "missing": { "label": "Path not in values.yaml", "doc": "The path does not exist in the default values; the conditionMissing rule warns." },
+          "unknown": { "label": "Not resolvable", "doc": "The path exists but is not a boolean, or the default values did not parse." }
+        }
+      }
+    },
+
+    "types": {
+      "ChartFile": {
+        "abstract": true,
+        "doc": "Anything that stands for a file or folder of the chart. Activating it reveals that artifact in the project explorer.",
+        "attributes": {
+          "path": { "type": "string", "key": true, "readOnly": true, "label": "Path", "group": "Identity",
+                    "doc": "Chart-root-relative, `/`-separated; what activation reveals." },
+          "unreadable": { "type": "bool", "readOnly": true, "label": "Unreadable", "group": "Identity",
+                          "doc": "The artifact did not parse; the node is drawn marked and the rest of the chart still renders." },
+          "failureMessage": { "type": "text", "readOnly": true, "label": "Parser message", "group": "Identity" },
+          "failureLine": { "type": "int", "readOnly": true, "min": 0, "label": "Parser line", "group": "Identity" }
+        }
+      },
+
+      "Chart": {
+        "extends": "ChartFile",
+        "label": "Chart",
+        "doc": "The chart itself: the facts of Chart.yaml.",
+        "labelAttribute": "name",
+        "multiplicity": { "max": 1 },
+        "attributes": {
+          "path": { "type": "string", "key": true, "readOnly": true, "default": "Chart.yaml", "group": "Identity" },
+          "name": { "type": "string", "readOnly": true, "label": "Name", "group": "Identity", "doc": "Required by Helm." },
+          "version": { "type": "string", "readOnly": true, "label": "Version", "group": "Identity", "doc": "Required by Helm; SemVer-shaped." },
+          "appVersion": { "type": "string", "readOnly": true, "label": "App version", "group": "Identity", "doc": "The packaged application's version, free-form." },
+          "apiVersion": { "type": "string", "readOnly": true, "label": "API version", "group": "Identity", "doc": "`v2` for Helm 3 charts, `v1` for legacy Helm 2 charts." },
+          "chartType": { "type": "ChartType", "readOnly": true, "default": "application", "label": "Type", "group": "Identity" },
+          "description": { "type": "text", "readOnly": true, "label": "Description", "group": "Identity" },
+          "deprecated": { "type": "bool", "readOnly": true, "label": "Deprecated", "group": "Identity", "doc": "The upstream marked the chart deprecated." },
+          "legacy": { "type": "bool", "label": "Legacy", "group": "Identity",
+                      "derived": "self.apiVersion.lowerAscii() == 'v1'",
+                      "doc": "A Helm 2 chart: its dependencies are declared in requirements.yaml and pinned in requirements.lock." },
+          "dependenciesFailure": { "type": "YamlFailure", "readOnly": true, "label": "requirements.yaml", "group": "Identity",
+                                   "doc": "Set when a legacy chart's requirements.yaml did not parse; that file has no node of its own." }
+        }
+      },
+
+      "Values": {
+        "extends": "ChartFile",
+        "label": "Values",
+        "doc": "One layer of the values stack: `values.yaml` itself, or an override sibling whose name starts with `values` (`values-dev.yaml`, `values.prod.yml`).",
+        "labelAttribute": "path",
+        "attributes": {
+          "isDefault": { "type": "bool", "readOnly": true, "label": "Default layer", "group": "Identity",
+                         "doc": "True only for values.yaml (or values.yml); every other layer overrides it." },
+          "hasGlobal": { "type": "bool", "readOnly": true, "label": "Global", "group": "Contents",
+                         "doc": "The file has a top-level `global:` key, visible to every subchart. The node is marked instead of fanning out one edge per dependency." },
+          "topLevelKeys": { "type": "string", "many": true, "readOnly": true, "label": "Top-level keys", "group": "Contents",
+                            "doc": "Sorted ordinally; what configures edges are matched against." },
+          "keyCount": { "type": "int", "label": "Top-level keys", "group": "Contents", "derived": "self.topLevelKeys.size()" }
+        }
+      },
+
+      "Schema": {
+        "extends": "ChartFile",
+        "label": "Values schema",
+        "doc": "`values.schema.json`: represented, never evaluated.",
+        "labelAttribute": "path",
+        "multiplicity": { "max": 1 }
+      },
+
+      "Template": {
+        "extends": "ChartFile",
+        "label": "Template",
+        "doc": "One file under templates/, scanned line by line and never parsed as YAML: a Go-templated manifest is not YAML until rendered.",
+        "labelAttribute": "path",
+        "attributes": {
+          "role": { "type": "TemplateRole", "readOnly": true, "default": "manifest", "label": "Role", "group": "Identity" },
+          "renders": { "type": "string", "many": true, "readOnly": true, "label": "Renders", "group": "Contents",
+                       "doc": "Literal values of column-zero `kind:` lines: the Kubernetes kinds this file renders. A templated kind is unknown, never guessed." },
+          "apiVersions": { "type": "string", "many": true, "readOnly": true, "label": "API versions", "group": "Contents",
+                           "doc": "Literal values of column-zero `apiVersion:` lines." },
+          "defines": { "type": "string", "many": true, "readOnly": true, "label": "Defines", "group": "Contents",
+                       "doc": "Names defined by `{{ define \"name\" }}` blocks: a partial's exports." },
+          "references": { "type": "string", "many": true, "readOnly": true, "label": "Includes", "group": "Contents",
+                          "doc": "Names referenced by `{{ include \"name\" }}` or `{{ template \"name\" }}` with a literal double-quoted name." },
+          "rendersUndetermined": { "type": "bool", "label": "Kinds undetermined", "group": "Contents",
+                                   "derived": "self.role == 'manifest' && self.renders.size() == 0",
+                                   "doc": "A manifest whose kind could not be read literally: still a node, never dropped." },
+          "unresolvedIncludes": { "type": "string", "many": true, "label": "Not defined here", "group": "Contents",
+                                  "derived": "self.references.filter(r, !diagram.nodesOfType('Template').exists(p, p.role == 'partial' && r in p.defines))",
+                                  "doc": "Included names no local partial defines: a library chart provides them at render time, so they are a marked unknown and never a finding." }
+        }
+      },
+
+      "Crds": {
+        "extends": "ChartFile",
+        "label": "CRDs",
+        "doc": "The crds/ folder, summarized as one node: plain, untemplated YAML that Helm installs before anything renders.",
+        "labelAttribute": "path",
+        "multiplicity": { "max": 1 },
+        "attributes": {
+          "path": { "type": "string", "key": true, "readOnly": true, "default": "crds", "group": "Identity" },
+          "fileCount": { "type": "int", "readOnly": true, "min": 0, "label": "Files", "group": "Contents" },
+          "failures": { "type": "YamlFailure", "many": true, "readOnly": true, "label": "Unreadable files", "group": "Contents" }
+        }
+      },
+
+      "Dependency": {
+        "label": "Dependency",
+        "doc": "One entry of `dependencies:` in Chart.yaml (or in requirements.yaml for a legacy chart). A fact of the declaring file, not a file of its own.",
+        "labelAttribute": "name",
+        "attributes": {
+          "name": { "type": "string", "key": true, "readOnly": true, "label": "Mounted as", "group": "Identity",
+                    "doc": "The effective name: the alias when set, else the chart name. What charts/ content and parent values are matched against." },
+          "chartName": { "type": "string", "readOnly": true, "label": "Chart", "group": "Identity" },
+          "alias": { "type": "string", "readOnly": true, "label": "Alias", "group": "Identity" },
+          "constraint": { "type": "string", "readOnly": true, "label": "Version constraint", "group": "Identity",
+                          "doc": "Verbatim; never evaluated." },
+          "repository": { "type": "string", "readOnly": true, "label": "Repository", "group": "Identity",
+                          "doc": "An https or oci reference, verbatim. Never contacted." },
+          "condition": { "type": "string", "readOnly": true, "label": "Condition", "group": "Wiring",
+                         "doc": "A dotted path into the parent's values that switches the subchart on and off." },
+          "conditionState": { "type": "ConditionState", "readOnly": true, "default": "none", "label": "Condition state", "group": "Wiring" },
+          "declaredIn": { "type": "string", "readOnly": true, "default": "Chart.yaml", "label": "Declared in", "group": "Identity",
+                          "doc": "Chart.yaml, or requirements.yaml for a legacy chart." },
+          "line": { "type": "int", "readOnly": true, "min": 0, "label": "Line", "group": "Identity" },
+          "pinnedVersion": { "type": "string", "label": "Pinned", "group": "Wiring",
+                             "derived": "diagram.nodesOfType('Lock').exists(l, !l.unreadable && l.entries.exists(e, e.name == self.chartName)) ? diagram.nodesOfType('Lock')[0].entries.filter(e, e.name == self.chartName)[0].version : ''",
+                             "doc": "The version the lock pins, shown beside the declared constraint and never checked against it." },
+          "resolved": { "type": "bool", "label": "Resolved", "group": "Wiring",
+                        "derived": "self.outgoingOf('Resolves').size() > 0",
+                        "doc": "Something in charts/ answers this declaration. Unvendored (false) is the common case and never a finding: helm dependency build fetches it at deploy time." }
+        }
+      },
+
+      "Vendored": {
+        "extends": "ChartFile",
+        "abstract": true,
+        "doc": "Something actually sitting in charts/, whether or not anything declares it.",
+        "labelAttribute": "entryName",
+        "attributes": {
+          "entryName": { "type": "string", "readOnly": true, "label": "Entry", "group": "Identity",
+                         "doc": "The directory name, or the archive's file name without its `-<version>.tgz` tail: what dependency matching compares." },
+          "chartName": { "type": "string", "readOnly": true, "label": "Chart", "group": "Identity" },
+          "chartVersion": { "type": "string", "readOnly": true, "label": "Version", "group": "Identity" },
+          "chartType": { "type": "ChartType", "readOnly": true, "default": "application", "label": "Type", "group": "Identity" },
+          "declared": { "type": "bool", "label": "Declared", "group": "Wiring",
+                        "derived": "self.incomingOf('Resolves').size() > 0",
+                        "doc": "Some dependency claims it. Undeclared content is drawn and warned about." }
+        }
+      },
+
+      "Subchart": {
+        "extends": "Vendored",
+        "label": "Subchart",
+        "doc": "An unpacked chart directory under charts/, read one level deep and summarized.",
+        "attributes": {
+          "templateCount": { "type": "int", "readOnly": true, "min": 0, "label": "Templates", "group": "Contents" },
+          "deeperCount": { "type": "int", "readOnly": true, "min": 0, "label": "Deeper charts/", "group": "Contents",
+                           "doc": "Entries in the subchart's own charts/: summarized by count, never recursed." }
+        }
+      },
+
+      "Archive": {
+        "extends": "Vendored",
+        "label": "Archive",
+        "doc": "A sealed `.tgz` under charts/: labeled by its file name and never unpacked, so it has no interior and no file to open."
+      },
+
+      "Lock": {
+        "extends": "ChartFile",
+        "label": "Lock",
+        "doc": "Chart.lock (requirements.lock for a legacy chart): what `helm dependency update` pinned.",
+        "labelAttribute": "path",
+        "multiplicity": { "max": 1 },
+        "attributes": {
+          "entries": { "type": "LockEntry", "many": true, "readOnly": true, "label": "Pinned dependencies", "group": "Contents" }
+        }
+      }
+    },
+
+    "relations": {
+      "Declares": {
+        "label": "declares",
+        "doc": "The chart declares a dependency; labeled with its version constraint.",
+        "source": "Chart",
+        "target": "Dependency",
+        "allowParallel": false,
+        "derived": "diagram.nodesOfType('Chart').size() == 1 ? diagram.nodesOfType('Dependency').map(d, {'source': diagram.nodesOfType('Chart')[0], 'target': d}) : []"
+      },
+      "Resolves": {
+        "label": "resolves to",
+        "doc": "A declared dependency and the charts/ entry that answers it. A dependency without one is Unvendored and drawn as an open end, not an error.",
+        "source": "Dependency",
+        "target": { "types": ["Vendored"], "max": 1 },
+        "allowParallel": false,
+        "derived": "diagram.nodesOfType('Dependency').filter(d, diagram.nodesOfType('Vendored').exists(v, matchesDependency(d, v))).map(d, {'source': d, 'target': diagram.nodesOfType('Vendored').filter(v, matchesDependency(d, v))[0]})"
+      },
+      "Overrides": {
+        "label": "overrides",
+        "doc": "An override values layer stacked onto the default values.yaml. The diagram shows the layering; it never merges values.",
+        "source": "Values",
+        "target": "Values",
+        "allowParallel": false,
+        "derived": "diagram.nodesOfType('Values').exists(v, v.isDefault) ? diagram.nodesOfType('Values').filter(v, !v.isDefault).map(v, {'source': v, 'target': diagram.nodesOfType('Values').filter(d, d.isDefault)[0]}) : []"
+      },
+      "Configures": {
+        "label": "configures",
+        "doc": "A top-level key of the default values.yaml equal to a dependency's effective name configures that subchart. `global:` marks the values node instead.",
+        "source": "Values",
+        "target": "Dependency",
+        "allowParallel": false,
+        "derived": "diagram.nodesOfType('Values').filter(v, v.isDefault).map(v, diagram.nodesOfType('Dependency').filter(d, d.name in v.topLevelKeys).map(d, {'source': v, 'target': d})).flatten()"
+      },
+      "Includes": {
+        "label": "includes",
+        "doc": "A template includes a named template that a partial of the same chart defines. Names no local partial defines are open ends (see Template.unresolvedIncludes).",
+        "source": "Template",
+        "target": "Template",
+        "allowSelfLoops": true,
+        "allowParallel": false,
+        "derived": "diagram.nodesOfType('Template').map(t, diagram.nodesOfType('Template').filter(p, p.role == 'partial' && t.references.exists(r, r in p.defines)).map(p, {'source': t, 'target': p})).flatten()"
+      }
+    }
+  },
+
+  "notation": {
+    "doc": "One hue per kind: whole for the outline, mixed into a muted fill so labels stay readable. Relations run out of the source's right side into the target's left, because the bands run left to right.",
+    "theme": {
+      "tokens": {
+        "color.surface": "#FFFFFF",
+        "color.text": "#0F172A",
+        "color.text.muted": "#64748B",
+        "color.border": "#E2E8F0",
+        "color.danger": "#DC2626",
+        "color.helm.chart": "#3D7BD9",
+        "color.helm.chart.fill": "#3D7BD924",
+        "color.helm.values": "#2EA064",
+        "color.helm.values.fill": "#2EA06424",
+        "color.helm.template": "#C48220",
+        "color.helm.template.fill": "#C4822024",
+        "color.helm.dependency": "#8E54C4",
+        "color.helm.dependency.fill": "#8E54C424",
+        "color.helm.subchart": "#3498A0",
+        "color.helm.subchart.fill": "#3498A024",
+        "color.helm.plain.fill": "#64748B1F",
+        "font.body": "system-ui, sans-serif"
+      },
+      "modes": {
+        "dark": {
+          "color.surface": "#1E293B",
+          "color.text": "#F1F5F9",
+          "color.text.muted": "#94A3B8",
+          "color.border": "#334155",
+          "color.danger": "#F87171",
+          "color.helm.chart": "#7DB4F0",
+          "color.helm.chart.fill": "#7DB4F024",
+          "color.helm.values": "#6ECD96",
+          "color.helm.values.fill": "#6ECD9624",
+          "color.helm.template": "#E8B05A",
+          "color.helm.template.fill": "#E8B05A24",
+          "color.helm.dependency": "#B88CE4",
+          "color.helm.dependency.fill": "#B88CE424",
+          "color.helm.subchart": "#6ECDD4",
+          "color.helm.subchart.fill": "#6ECDD424",
+          "color.helm.plain.fill": "#94A3B81F"
+        }
+      },
+      "defaultMode": "light",
+      "followSystem": true
+    },
+
+    "styles": {
+      "node": {
+        "fill": { "token": "color.surface" },
+        "stroke": { "color": { "token": "color.border" }, "width": 1.5 },
+        "font": { "family": { "token": "font.body" }, "size": 13, "color": { "token": "color.text" } },
+        "cursor": "pointer"
+      },
+      "chart": { "extends": "node", "fill": { "token": "color.helm.chart.fill" }, "stroke": { "color": { "token": "color.helm.chart" }, "width": 1.5 } },
+      "values": { "extends": "node", "fill": { "token": "color.helm.values.fill" }, "stroke": { "color": { "token": "color.helm.values" }, "width": 1.5 } },
+      "template": { "extends": "node", "fill": { "token": "color.helm.template.fill" }, "stroke": { "color": { "token": "color.helm.template" }, "width": 1.5 } },
+      "dependency": { "extends": "node", "fill": { "token": "color.helm.dependency.fill" }, "stroke": { "color": { "token": "color.helm.dependency" }, "width": 1.5 } },
+      "vendored": { "extends": "node", "fill": { "token": "color.helm.subchart.fill" }, "stroke": { "color": { "token": "color.helm.subchart" }, "width": 1.5 } },
+      "plain": { "extends": "node", "fill": { "token": "color.helm.plain.fill" }, "stroke": { "color": { "token": "color.text.muted" }, "width": 1.5 } },
+      "unreadable": { "stroke": { "color": { "token": "color.danger" }, "dash": [4, 3], "dashScale": "absolute" } },
+      "edge": {
+        "stroke": { "color": { "token": "color.text.muted" }, "width": 1.5 },
+        "font": { "family": { "token": "font.body" }, "size": 11, "color": { "token": "color.text.muted" } }
+      },
+      "openEnd": {
+        "fill": "none",
+        "stroke": { "color": { "token": "color.text.muted" }, "width": 1.5, "dash": [3, 3], "dashScale": "absolute", "opacity": 0.7 },
+        "font": { "family": { "token": "font.body" }, "size": 11, "color": { "token": "color.text.muted" } }
+      }
+    },
+
+    "nodes": {
+      "Chart": {
+        "shape": "rect",
+        "style": "chart",
+        "size": { "fixed": [220, 110] },
+        "labels": [ { "id": "name", "text": { "cel": "self.name != '' ? self.name : '(chart)'" }, "position": "center", "maxLines": 1, "overflow": "ellipsis", "editable": false } ],
+        "conditions": [ { "when": "self.unreadable", "style": "unreadable", "doc": "Chart.yaml did not parse: marked, never hidden." } ],
+        "tooltip": { "cel": "'Chart ' + (self.name != '' ? self.name : '(chart)')" },
+        "deletable": false, "copyable": false, "connectable": false,
+        "doubleClick": "openArtifact"
+      },
+      "Values": {
+        "shape": "rect",
+        "style": "values",
+        "size": { "fixed": [200, 72] },
+        "labels": [ { "id": "name", "text": { "cel": "self.path" }, "position": "center", "maxLines": 1, "overflow": "ellipsis", "editable": false } ],
+        "conditions": [ { "when": "self.unreadable", "style": "unreadable" } ],
+        "tooltip": { "cel": "'Values ' + self.path" },
+        "deletable": false, "copyable": false, "connectable": false,
+        "doubleClick": "openArtifact"
+      },
+      "Schema": {
+        "shape": "rect",
+        "style": "plain",
+        "size": { "fixed": [200, 48] },
+        "labels": [ { "id": "name", "text": { "cel": "self.path" }, "position": "center", "maxLines": 1, "overflow": "ellipsis", "editable": false } ],
+        "tooltip": { "cel": "'Values schema ' + self.path" },
+        "deletable": false, "copyable": false, "connectable": false,
+        "doubleClick": "openArtifact"
+      },
+      "Template": {
+        "shape": "rect",
+        "style": "template",
+        "size": { "fixed": [240, 60] },
+        "labels": [ { "id": "name", "text": { "cel": "fileName(self.path)" }, "position": "center", "maxLines": 1, "overflow": "ellipsis", "editable": false } ],
+        "badges": [
+          { "id": "notDefinedHere", "position": "outside-right",
+            "text": { "cel": "self.unresolvedIncludes.join(', ') + ' (not defined here)'" },
+            "style": "openEnd",
+            "visible": { "cel": "self.unresolvedIncludes.size() > 0" },
+            "tooltip": "No local partial defines this name; a library chart provides it at render time.",
+            "doc": "The open end of an include: a short dashed stub out of the template with the name that is not defined here." }
+        ],
+        "tooltip": { "cel": "'Template ' + fileName(self.path)" },
+        "deletable": false, "copyable": false, "connectable": false,
+        "doubleClick": "openArtifact"
+      },
+      "Crds": {
+        "shape": "rect",
+        "style": "plain",
+        "size": { "fixed": [200, 48] },
+        "labels": [ { "id": "name", "text": { "cel": "self.path" }, "position": "center", "maxLines": 1, "overflow": "ellipsis", "editable": false } ],
+        "tooltip": { "cel": "'CRDs ' + self.path" },
+        "deletable": false, "copyable": false, "connectable": false,
+        "doubleClick": "openArtifact"
+      },
+      "Dependency": {
+        "shape": "rect",
+        "style": "dependency",
+        "size": { "fixed": [210, 96] },
+        "labels": [ { "id": "name", "text": { "cel": "self.name" }, "position": "center", "maxLines": 1, "overflow": "ellipsis", "editable": false } ],
+        "badges": [
+          { "id": "unvendored", "position": "outside-right",
+            "text": { "cel": "self.name + ' (unvendored)'" },
+            "style": "openEnd",
+            "visible": { "cel": "!self.resolved" },
+            "tooltip": "Nothing vendored answers this dependency; helm dependency build fetches it at deploy time.",
+            "doc": "The open end of an Unvendored dependency: a short dashed stub with the dependency's name. A state, never a finding." }
+        ],
+        "tooltip": { "cel": "'Dependency ' + self.name" },
+        "deletable": false, "copyable": false, "connectable": false,
+        "doubleClick": "none"
+      },
+      "Subchart": {
+        "shape": "rect",
+        "style": "vendored",
+        "size": { "fixed": [210, 84] },
+        "labels": [ { "id": "name", "text": { "cel": "self.entryName" }, "position": "center", "maxLines": 1, "overflow": "ellipsis", "editable": false } ],
+        "conditions": [ { "when": "self.unreadable", "style": "unreadable" } ],
+        "tooltip": { "cel": "'Subchart ' + self.entryName" },
+        "deletable": false, "copyable": false, "connectable": false,
+        "doubleClick": "openArtifact"
+      },
+      "Archive": {
+        "shape": "rect",
+        "style": { "extends": "vendored", "stroke": { "color": { "token": "color.helm.subchart" }, "width": 1.5, "dash": [6, 3], "dashScale": "absolute" } },
+        "size": { "fixed": [210, 52] },
+        "labels": [ { "id": "name", "text": { "cel": "self.entryName" }, "position": "center", "maxLines": 1, "overflow": "ellipsis", "editable": false } ],
+        "tooltip": { "cel": "'Archive ' + self.entryName" },
+        "doc": "Hatched outline: sealed, so its difference from an unpacked subchart is visible.",
+        "deletable": false, "copyable": false, "connectable": false,
+        "doubleClick": "openArtifact"
+      },
+      "Lock": {
+        "shape": "rect",
+        "style": "plain",
+        "size": { "fixed": [200, 56] },
+        "labels": [ { "id": "name", "text": { "cel": "self.path" }, "position": "center", "maxLines": 1, "overflow": "ellipsis", "editable": false } ],
+        "conditions": [ { "when": "self.unreadable", "style": "unreadable" } ],
+        "tooltip": { "cel": "'Lock ' + self.path" },
+        "deletable": false, "copyable": false, "connectable": false,
+        "doubleClick": "openArtifact"
+      }
+    },
+
+    "edges": {
+      "Declares": {
+        "style": { "extends": "edge", "stroke": { "color": { "token": "color.helm.dependency" }, "width": 1.5 } },
+        "line": { "routing": "bezier", "startDirection": "right", "endDirection": "right" },
+        "anchoring": { "source": { "mode": "fixed", "points": [ { "id": "out", "x": 1, "y": 0.5 } ] },
+                       "target": { "mode": "fixed", "points": [ { "id": "in", "x": 0, "y": 0.5 } ] } },
+        "targetMarker": "arrow",
+        "labels": [ { "id": "constraint", "text": { "cel": "self.target.constraint" }, "at": "middle", "side": "above", "distance": 6, "draggable": false } ],
+        "deletable": false, "reconnectable": false
+      },
+      "Resolves": {
+        "style": { "extends": "edge", "stroke": { "color": { "token": "color.helm.subchart" }, "width": 1.5 } },
+        "line": { "routing": "bezier", "startDirection": "right", "endDirection": "right" },
+        "anchoring": { "source": { "mode": "fixed", "points": [ { "id": "out", "x": 1, "y": 0.5 } ] },
+                       "target": { "mode": "fixed", "points": [ { "id": "in", "x": 0, "y": 0.5 } ] } },
+        "targetMarker": "arrow",
+        "deletable": false, "reconnectable": false
+      },
+      "Overrides": {
+        "style": { "extends": "edge", "stroke": { "color": { "token": "color.helm.values" }, "width": 1.5, "dash": [5, 4], "dashScale": "absolute" } },
+        "line": { "routing": "bezier", "startDirection": "right", "endDirection": "right" },
+        "anchoring": { "source": { "mode": "fixed", "points": [ { "id": "out", "x": 1, "y": 0.5 } ] },
+                       "target": { "mode": "fixed", "points": [ { "id": "in", "x": 0, "y": 0.5 } ] } },
+        "targetMarker": "arrow",
+        "doc": "Dashed: layering rather than use.",
+        "deletable": false, "reconnectable": false
+      },
+      "Configures": {
+        "style": { "extends": "edge", "stroke": { "color": { "token": "color.helm.values" }, "width": 1.5, "dash": [5, 4], "dashScale": "absolute" } },
+        "line": { "routing": "bezier", "startDirection": "right", "endDirection": "right" },
+        "anchoring": { "source": { "mode": "fixed", "points": [ { "id": "out", "x": 1, "y": 0.5 } ] },
+                       "target": { "mode": "fixed", "points": [ { "id": "in", "x": 0, "y": 0.5 } ] } },
+        "targetMarker": "arrow",
+        "labels": [ { "id": "key", "text": { "cel": "self.target.name" }, "at": "middle", "side": "above", "distance": 6, "draggable": false } ],
+        "deletable": false, "reconnectable": false
+      },
+      "Includes": {
+        "style": { "extends": "edge", "stroke": { "color": { "token": "color.helm.template" }, "width": 1.5, "dash": [2, 3], "dashScale": "absolute" } },
+        "line": { "routing": "bezier", "startDirection": "right", "endDirection": "right" },
+        "anchoring": { "source": { "mode": "fixed", "points": [ { "id": "out", "x": 1, "y": 0.5 } ] },
+                       "target": { "mode": "fixed", "points": [ { "id": "in", "x": 0, "y": 0.5 } ] } },
+        "targetMarker": "arrow",
+        "labels": [ { "id": "names", "text": { "cel": "self.source.references.filter(r, r in self.target.defines).join(', ')" }, "at": "middle", "side": "above", "distance": 6, "draggable": false } ],
+        "deletable": false, "reconnectable": false
+      }
+    },
+
+    "canvas": { "background": { "token": "color.surface" } }
+  },
+
+  "toolbox": {
+    "doc": {
+      "summary": "This diagram offers no creation tools.",
+      "rationale": "Elements mirror what exists on disk, and chart content is created by Helm tooling and text editors, not by dropping shapes. The one edit is dragging a box to a new place."
+    },
+    "groups": [],
+    "generic": { "select": true, "pan": true, "lasso": false, "text": false, "note": false, "image": false, "freehand": false }
+  },
+
+  "constraints": {
+    "doc": "Structural findings about the chart, reported with the file and line they concern. Unvendored dependencies and a missing lock are deliberately never findings: both are ordinary states of a chart.",
+    "groups": {
+      "chart": { "label": "Chart structure", "doc": "What Helm itself requires or would trip over." },
+      "readOnly": { "label": "Read-only diagram", "doc": "Gestures this diagram refuses, with the reason." }
+    },
+    "rules": [
+      { "id": "notAChart", "group": "chart", "label": "Not a chart", "scope": "diagram",
+        "rule": "diagram.nodesOfType('Chart').size() == 1",
+        "severity": "warning",
+        "message": "This folder is not a Helm chart: it has no Chart.yaml.",
+        "doc": { "summary": "Exactly one finding, attributed to the folder itself; the canvas shows an empty state rather than an error." } },
+
+      { "id": "unreadableYaml", "group": "chart", "label": "Unreadable YAML", "scope": "ChartFile",
+        "rule": "!self.unreadable",
+        "severity": "error",
+        "message": { "cel": "\"'\" + self.path + \"' is not readable YAML: \" + self.failureMessage" },
+        "doc": { "summary": "Chart-owned YAML that does not parse, in the parser's own words, at the line it blamed. The rest of the chart still renders." } },
+
+      { "id": "unreadableCrd", "group": "chart", "label": "Unreadable CRD", "scope": "Crds",
+        "rule": "self.failures.size() == 0",
+        "severity": "error",
+        "message": { "cel": "'Not readable YAML: ' + self.failures.map(f, f.path + ' (line ' + string(f.line) + '): ' + f.message).join('; ')" } },
+
+      { "id": "unreadableRequirements", "group": "chart", "label": "Unreadable requirements.yaml", "scope": "Chart",
+        "rule": "!has(self.dependenciesFailure)",
+        "severity": "error",
+        "message": { "cel": "\"'requirements.yaml' is not readable YAML: \" + self.dependenciesFailure.message" } },
+
+      { "id": "missingName", "group": "chart", "label": "Missing name", "scope": "Chart",
+        "when": "!self.unreadable",
+        "rule": "self.name != ''",
+        "severity": "error", "attribute": "name",
+        "message": "Chart.yaml declares no name; Helm requires one." },
+
+      { "id": "missingVersion", "group": "chart", "label": "Missing version", "scope": "Chart",
+        "when": "!self.unreadable",
+        "rule": "self.version != ''",
+        "severity": "error", "attribute": "version",
+        "message": "Chart.yaml declares no version; Helm requires one." },
+
+      { "id": "versionNotSemver", "group": "chart", "label": "Version not SemVer", "scope": "Chart",
+        "when": "!self.unreadable && self.version != ''",
+        "rule": "self.version.matches('^[0-9]+[.][0-9]+[.][0-9]+(-[0-9A-Za-z.-]+)?([+][0-9A-Za-z.-]+)?$')",
+        "severity": "warning", "attribute": "version",
+        "message": { "cel": "\"'\" + self.version + \"' is not a SemVer version; Helm expects MAJOR.MINOR.PATCH.\"" },
+        "doc": { "rationale": "SemVer's shape is checked, not its algebra." } },
+
+      { "id": "legacyChart", "group": "chart", "label": "Legacy chart", "scope": "Chart",
+        "when": "!self.unreadable",
+        "rule": "!self.legacy",
+        "severity": "info",
+        "message": "This is a legacy Helm 2 chart (apiVersion: v1); dependencies live in requirements.yaml." },
+
+      { "id": "undeclaredVendored", "group": "chart", "label": "Undeclared vendored content", "scope": "Vendored",
+        "rule": "self.declared",
+        "severity": "warning",
+        "message": { "cel": "\"'\" + self.path + \"' sits in charts/ but no dependency declares it.\"" } },
+
+      { "id": "lockMissingDependency", "group": "chart", "label": "Lock is stale", "scope": "Dependency",
+        "when": "diagram.nodesOfType('Lock').exists(l, !l.unreadable)",
+        "rule": "diagram.nodesOfType('Lock')[0].entries.exists(e, e.name == self.chartName)",
+        "severity": "warning",
+        "message": { "cel": "\"The dependency '\" + self.chartName + \"' is declared but not in \" + diagram.nodesOfType('Lock')[0].path + '; run helm dependency update.'" },
+        "doc": { "rationale": "Only when a lock exists at all: its absence before the first helm dependency update is a state, not a mistake." } },
+
+      { "id": "lockStaleEntry", "group": "chart", "label": "Lock pins an undeclared dependency", "scope": "Lock",
+        "when": "!self.unreadable",
+        "rule": "self.entries.all(e, diagram.nodesOfType('Dependency').exists(d, d.chartName == e.name))",
+        "severity": "warning",
+        "message": { "cel": "self.path + ' pins ' + self.entries.filter(e, !diagram.nodesOfType('Dependency').exists(d, d.chartName == e.name)).map(e, \"'\" + e.name + \"'\").join(', ') + ', which no dependency declares; the lock is stale.'" } },
+
+      { "id": "emptyTemplates", "group": "chart", "label": "No templates", "scope": "Chart",
+        "when": "!self.unreadable && self.chartType == 'application'",
+        "rule": "diagram.nodesOfType('Template').size() > 0",
+        "severity": "warning",
+        "message": "This application chart has no templates; helm install would render nothing.",
+        "doc": { "rationale": "Library charts are exempt: rendering nothing is what a library chart is for." } },
+
+      { "id": "conditionMissing", "group": "chart", "label": "Condition path missing", "scope": "Dependency",
+        "rule": "self.conditionState != 'missing'",
+        "severity": "warning", "attribute": "condition",
+        "message": { "cel": "\"The condition '\" + self.condition + \"' of dependency '\" + self.name + \"' names a path that is not in values.yaml.\"" } },
+
+      { "id": "nameCollision", "group": "chart", "label": "Effective name collision", "scope": "Dependency",
+        "rule": "diagram.nodesOfType('Dependency').filter(d, d.name == self.name).size() == 1",
+        "severity": "error", "attribute": "alias",
+        "message": { "cel": "\"Two dependencies resolve to the effective name '\" + self.name + \"'; give one an alias.\"" } },
+
+      { "id": "noCreate", "group": "readOnly", "kind": "create", "rule": "false",
+        "message": "A Helm chart diagram shows the folder as it is; chart content is created by Helm tooling and text editors." },
+      { "id": "noDelete", "group": "readOnly", "kind": "delete", "scope": "*", "rule": "false",
+        "message": "A Helm chart diagram changes nothing in the chart folder." },
+      { "id": "noConnect", "group": "readOnly", "kind": "connect", "rule": "false",
+        "message": "Every relation is read from the chart; there is nothing to connect by hand." },
+      { "id": "noChange", "group": "readOnly", "kind": "change", "scope": "*", "rule": "false",
+        "message": "Edit the file this value comes from in a text editor." },
+      { "id": "noReparent", "group": "readOnly", "kind": "containment", "rule": "false",
+        "message": "A chart element has no parent to move it under; dragging changes where it sits on the canvas." }
+    ]
+  },
+
+  "behavior": {
+    "doc": "The only edit is a reposition, which is one undoable step that writes the authored position beside the chart. Double-clicking a file-backed node reveals its artifact.",
+    "operations": {
+      "openArtifact": {
+        "label": "Reveal",
+        "doc": "Reveals the node's file or folder in the IDE host's project explorer, from where it opens in a text editor. A dependency has no artifact of its own, so it has nothing to reveal.",
+        "for": ["ChartFile"],
+        "enabled": "self.path != ''",
+        "plugin": { "name": "adp.ide.revealPath", "args": { "path": "self.path" } }
+      }
+    }
+  },
+
+  "layout": {
+    "doc": "Five bands left to right: metadata (chart, lock, schema, crds), the values stack (default first), templates (manifests, partials, notes, test hooks), dependencies, and what charts/ holds. A stored position wins over the computed one element by element.",
+    "algorithms": {
+      "anatomy": {
+        "algorithm": "plugin:adp.helm.anatomyBands",
+        "direction": "right",
+        "spacing": { "node": 24, "layer": 60 },
+        "doc": "Deterministic banded columns; see helm-chart.md for the ordering within each band."
+      }
+    },
+    "default": "anatomy",
+    "trigger": "always",
+    "respect": "all",
+    "incremental": true,
+    "animate": false
+  },
+
+  "persistence": {
+    "doc": "The chart folder is the model and is never written. The only stored data is each element's authored position, in the registration beside the chart (see helm-chart.md for the exact format).",
+    "format": "plugin:adp.helm.chartFolder",
+    "files": { "mode": "single" },
+    "ids": {
+      "strategy": "natural",
+      "stable": false,
+      "prefix": { "Values": "values:", "Schema": "schema:", "Template": "tpl:", "Dependency": "dep:", "Subchart": "sub:", "Archive": "tgz:", "Lock": "lock:" },
+      "doc": "Content-derived ids, because stored positions are keyed by them across sessions: a renamed file intentionally forfeits its position."
+    },
+    "ordering": { "elements": "id" },
+    "precision": { "canvas": 3 },
+    "view": { "store": ["bounds"], "styleOverrides": "none" },
+    "newline": "crlf"
+  },
+
+  "plugins": {
+    "adp.helm.chartFolder": {
+      "version": "^0.1.0",
+      "provides": ["import", "persistenceFormat"],
+      "required": true,
+      "doc": "Reads the chart folder into the model (tolerantly, line-scanning templates, never writing) and stores authored positions in the registration. Behaviour in helm-chart.md, sections 'Reading the chart folder' and 'Persistence'."
+    },
+    "adp.helm.anatomyBands": {
+      "version": "^0.1.0",
+      "provides": ["layout"],
+      "required": false,
+      "fallback": { "layout": "layered" },
+      "doc": "The banded column layout; helm-chart.md, section 'Layout'."
+    },
+    "adp.ide.revealPath": {
+      "version": "^0.1.0",
+      "provides": ["action"],
+      "required": false,
+      "args": { "path": { "type": "string" } },
+      "doc": "Asks the IDE host to reveal a chart-root-relative file or folder in its project explorer."
+    }
+  }
+}
