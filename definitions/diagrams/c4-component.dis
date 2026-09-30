@@ -1,0 +1,2341 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
+  "disl": "0.1",
+  "language": {
+    "id": "net.etalii.adp.c4.component",
+    "version": "0.1.0",
+    "label": "C4 component diagram",
+    "license": "Apache-2.0",
+    "homepage": "https://etalii.net/adp",
+    "icon": "mdi:puzzle-outline",
+    "fileExtension": "dsl",
+    "authors": [
+      {
+        "name": "Peter Vrenken"
+      }
+    ],
+    "requires": {
+      "conformance": "standard"
+    },
+    "doc": {
+      "summary": "The components inside one container and how they work together.",
+      "description": "A C4 component diagram zooms into one container and shows the components inside it, their responsibilities and their technology, with the containers, people and systems they interact with. C4 calls it optional: create one only when it adds value. It is one view of a C4 model kept in a Structurizr DSL document.\n\nIn the ADP catalogue this diagram type is `c4/component`. Everything this specification cannot express is written down in `c4-component.md` beside it.",
+      "helpUrl": "https://c4model.com/diagrams/component",
+      "seeAlso": [
+        {
+          "title": "The C4 model",
+          "href": "https://c4model.com"
+        },
+        {
+          "title": "Structurizr DSL",
+          "href": "https://docs.structurizr.com/dsl"
+        }
+      ],
+      "tags": [
+        "c4",
+        "architecture",
+        "software delivery",
+        "systems and strategy"
+      ]
+    }
+  },
+  "metamodel": {
+    "diagram": {
+      "attributes": {
+        "viewKey": {
+          "type": "string",
+          "label": "View key",
+          "required": true,
+          "readOnly": true,
+          "order": 1,
+          "default": "component",
+          "doc": {
+            "summary": "The key of the Structurizr view this diagram shows.",
+            "description": "Named on the `view:` line of the `.adp` registration. Without one, the diagram shows the document's first view."
+          }
+        },
+        "title": {
+          "type": "string",
+          "order": 2,
+          "doc": {
+            "summary": "The title the view declares with a `title` line.",
+            "description": "When the view declares none, the diagram is titled by `heading`, which follows C4's advice that a title names the diagram type and its scope."
+          }
+        },
+        "heading": {
+          "type": "string",
+          "order": 3,
+          "derived": "self.title != '' ? self.title : 'Component diagram for ' + (self.scope != null ? self.scope.name : '')",
+          "doc": "The title drawn above the diagram: the declared title, or one derived from the diagram type and its scope."
+        },
+        "includes": {
+          "type": "string",
+          "many": true,
+          "readOnly": true,
+          "order": 10,
+          "group": "View",
+          "doc": {
+            "summary": "The view's `include` expressions: element identifiers, or `*` for every element of a kind this diagram type permits.",
+            "description": "ADP reads identifiers and `*`. `*` is not narrowed by the view's scope: it includes every element of a permitted kind in the whole model."
+          }
+        },
+        "excludes": {
+          "type": "string",
+          "many": true,
+          "readOnly": true,
+          "order": 11,
+          "group": "View",
+          "doc": "The view's `exclude` identifiers, removed from what `includes` selects."
+        },
+        "autoLayout": {
+          "type": "RankDirection",
+          "label": "Automatic layout",
+          "readOnly": true,
+          "order": 12,
+          "group": "View",
+          "doc": {
+            "summary": "The view's `autoLayout` direction. When it is set, positions dragged on the canvas are not used.",
+            "description": "`autoLayout` with no direction means top to bottom. Unset means the view declares no `autoLayout`."
+          }
+        },
+        "rankSeparation": {
+          "type": "int",
+          "min": 0,
+          "unit": "px",
+          "default": 120,
+          "readOnly": true,
+          "order": 13,
+          "group": "View",
+          "doc": "The distance between ranks, the second argument of `autoLayout`."
+        },
+        "nodeSeparation": {
+          "type": "int",
+          "min": 0,
+          "unit": "px",
+          "default": 60,
+          "readOnly": true,
+          "order": 14,
+          "group": "View",
+          "doc": "The distance between elements of one rank, the third argument of `autoLayout`."
+        },
+        "workspaceName": {
+          "type": "string",
+          "label": "Workspace",
+          "readOnly": true,
+          "order": 20,
+          "group": "Model",
+          "doc": "The name of the Structurizr workspace, the first argument of `workspace`."
+        },
+        "scope": {
+          "type": "Container",
+          "readOnly": true,
+          "order": 5,
+          "required": true,
+          "doc": {
+            "summary": "The container whose components this view shows, drawn as a dashed boundary around them.",
+            "description": "The first argument of the `component` view."
+          }
+        }
+      },
+      "doc": "One view of a Structurizr workspace: which view, how it is titled, what it includes and how it is laid out."
+    },
+    "enums": {
+      "RankDirection": {
+        "values": {
+          "tb": {
+            "label": "Top to bottom"
+          },
+          "bt": {
+            "label": "Bottom to top"
+          },
+          "lr": {
+            "label": "Left to right"
+          },
+          "rl": {
+            "label": "Right to left"
+          }
+        },
+        "doc": "The directions `autoLayout` accepts."
+      }
+    },
+    "types": {
+      "Element": {
+        "abstract": true,
+        "attributes": {
+          "tags": {
+            "type": "string",
+            "many": true,
+            "order": 4,
+            "readOnly": true,
+            "group": "Model",
+            "doc": {
+              "summary": "Structurizr tags, such as External, Database or Queue.",
+              "description": "Comma-separated in the declaration's tags argument, or listed on a `tags` line inside the element's block. The tags `External` and `Existing System` mark an element as outside the scope being described; `Database` draws it as a cylinder. Tags are edited in the DSL document; ADP offers no action for them yet."
+            }
+          },
+          "external": {
+            "type": "bool",
+            "label": "External",
+            "derived": "self.tags.exists(t, t.lowerAscii() == 'external' || t.lowerAscii() == 'existing system')",
+            "doc": {
+              "summary": "Outside the scope being described, and drawn muted grey.",
+              "description": "True when the element carries the tag `External` or `Existing System` (case-insensitive). Being external is decided by tags only."
+            }
+          }
+        },
+        "doc": "Anything a C4 model declares: a person, a software system, a container, a component or one of the deployment elements."
+      },
+      "NamedElement": {
+        "abstract": true,
+        "extends": "Element",
+        "attributes": {
+          "name": {
+            "type": "string",
+            "required": true,
+            "key": true,
+            "order": 1,
+            "doc": {
+              "summary": "What the element is called, as a reader of the diagram would say it.",
+              "description": "The first quoted argument of the element's Structurizr DSL declaration. A name may be an acronym, but then the description has to say what it stands for."
+            }
+          },
+          "description": {
+            "type": "text",
+            "order": 2,
+            "doc": {
+              "summary": "One or two sentences on what this element is responsible for.",
+              "rationale": "C4 asks for a short description on every element, so a reader can tell at a glance what it does without asking anyone."
+            }
+          }
+        },
+        "doc": "An element with its own name and description, which is every element except a deployed instance."
+      },
+      "Person": {
+        "extends": "NamedElement",
+        "doc": {
+          "summary": "Someone who uses the software: a human user, a role, an actor or a persona.",
+          "helpUrl": "https://c4model.com/abstractions/person"
+        }
+      },
+      "SoftwareSystem": {
+        "extends": "NamedElement",
+        "label": "Software system",
+        "children": {
+          "allowed": [
+            "Container"
+          ],
+          "acrossViews": true
+        },
+        "doc": {
+          "summary": "Something that delivers value to its users, whether you build it or not.",
+          "description": "The highest level of abstraction in C4. Its containers are nested inside its block in the DSL.",
+          "helpUrl": "https://c4model.com/abstractions/software-system"
+        }
+      },
+      "Container": {
+        "extends": "NamedElement",
+        "attributes": {
+          "technology": {
+            "type": "string",
+            "order": 3,
+            "doc": {
+              "summary": "The technology it is built with or runs on, for example \"Java and Spring MVC\" or \"PostgreSQL 16\".",
+              "rationale": "C4 asks for an explicitly specified technology on every container and component; it is what tells a reader how the thing is built."
+            }
+          }
+        },
+        "children": {
+          "allowed": [
+            "Component"
+          ],
+          "acrossViews": true
+        },
+        "doc": {
+          "summary": "An application or a data store - not a Docker container.",
+          "description": "Something that needs to be running for the software system to work: a server-side web application, a single-page application, a mobile app, a database schema, a folder on a file system, a serverless function. A container belongs to exactly one software system.",
+          "helpUrl": "https://c4model.com/abstractions/container"
+        }
+      },
+      "Component": {
+        "extends": "NamedElement",
+        "attributes": {
+          "technology": {
+            "type": "string",
+            "order": 3,
+            "doc": {
+              "summary": "The technology it is built with or runs on, for example \"Java and Spring MVC\" or \"PostgreSQL 16\".",
+              "rationale": "C4 asks for an explicitly specified technology on every container and component; it is what tells a reader how the thing is built."
+            }
+          }
+        },
+        "doc": {
+          "summary": "A grouping of related functionality inside a container.",
+          "description": "A component belongs to exactly one container. It is not a separately deployable unit.",
+          "helpUrl": "https://c4model.com/abstractions/component"
+        }
+      },
+      "DeploymentNode": {
+        "extends": "NamedElement",
+        "label": "Deployment node",
+        "attributes": {
+          "technology": {
+            "type": "string",
+            "order": 3,
+            "doc": {
+              "summary": "The technology it is built with or runs on, for example \"Java and Spring MVC\" or \"PostgreSQL 16\".",
+              "rationale": "C4 asks for an explicitly specified technology on every container and component; it is what tells a reader how the thing is built."
+            }
+          }
+        },
+        "children": {
+          "allowed": [
+            "DeploymentNode",
+            "InfrastructureNode",
+            "ContainerInstance",
+            "SoftwareSystemInstance"
+          ]
+        },
+        "doc": {
+          "summary": "Where things run: a server, a cluster, an execution environment.",
+          "description": "Physical or virtual infrastructure, a containerised environment or an execution context. Deployment nodes nest to any depth.",
+          "helpUrl": "https://c4model.com/diagrams/deployment"
+        }
+      },
+      "InfrastructureNode": {
+        "extends": "NamedElement",
+        "label": "Infrastructure node",
+        "attributes": {
+          "technology": {
+            "type": "string",
+            "order": 3,
+            "doc": {
+              "summary": "The technology it is built with or runs on, for example \"Java and Spring MVC\" or \"PostgreSQL 16\".",
+              "rationale": "C4 asks for an explicitly specified technology on every container and component; it is what tells a reader how the thing is built."
+            }
+          }
+        },
+        "doc": "Supporting infrastructure: DNS, a load balancer, a firewall."
+      },
+      "ContainerInstance": {
+        "extends": "Element",
+        "label": "Container instance",
+        "labelAttribute": "container",
+        "attributes": {
+          "container": {
+            "type": "Container",
+            "required": true,
+            "order": 1,
+            "doc": "The container this is a deployed copy of. The instance has no name of its own; it shows the container's."
+          }
+        },
+        "doc": "A container, deployed onto a deployment node. It refers to the container in the model rather than duplicating it, so one container can have several instances."
+      },
+      "SoftwareSystemInstance": {
+        "extends": "Element",
+        "label": "Software system instance",
+        "labelAttribute": "softwareSystem",
+        "attributes": {
+          "softwareSystem": {
+            "type": "SoftwareSystem",
+            "required": true,
+            "order": 1,
+            "label": "Software system",
+            "doc": "The software system this is a deployed copy of."
+          }
+        },
+        "doc": "A software system, deployed onto a deployment node."
+      }
+    },
+    "relations": {
+      "Relationship": {
+        "source": "Element",
+        "target": "Element",
+        "directed": true,
+        "allowSelfLoops": false,
+        "allowParallel": true,
+        "attributes": {
+          "description": {
+            "type": "string",
+            "order": 1,
+            "doc": {
+              "summary": "What the relationship is for, read in the direction of the arrow, for example \"Sends e-mails using\".",
+              "rationale": "C4 asks for every relationship to be labelled and unidirectional."
+            }
+          },
+          "technology": {
+            "type": "string",
+            "order": 2,
+            "doc": {
+              "summary": "How the two communicate: a protocol, a library, a call, for example \"JSON/HTTPS\".",
+              "rationale": "The technology of a relationship is what tells a reader where a boundary really is."
+            }
+          },
+          "tags": {
+            "type": "string",
+            "many": true,
+            "readOnly": true,
+            "order": 3,
+            "doc": "The relationship's Structurizr tags, as one string (they are not split on commas)."
+          }
+        },
+        "doc": {
+          "summary": "A unidirectional dependency or interaction between two elements of the model.",
+          "description": "Written `source -> destination \"description\" \"technology\" \"tags\"` in the model, or `-> destination \"description\" \"technology\"` inside the source's block. A view shows a relationship between the nearest ancestors of its ends that the view draws (an implied relationship), once per pair."
+        }
+      }
+    },
+    "doc": "The C4 model as the Structurizr DSL declares it: one model shared by every C4 diagram type, of which this diagram type shows one view."
+  },
+  "notation": {
+    "theme": {
+      "tokens": {
+        "color.person": "#08427b",
+        "color.softwareSystem": "#1168bd",
+        "color.container": "#438dd5",
+        "color.component": "#85bbf0",
+        "color.deploymentNode": "#ffffff",
+        "color.external": "#999999",
+        "color.onDark": "#ffffff",
+        "color.onLight": "#000000",
+        "color.line": "#8A8880",
+        "color.muted": "#6B6A65",
+        "color.canvas": "#FFFFFF",
+        "font.body": "system-ui, sans-serif"
+      },
+      "modes": {
+        "dark": {
+          "color.line": "#B4B2A9",
+          "color.muted": "#A9A79E",
+          "color.canvas": "#1F1E1C"
+        }
+      },
+      "defaultMode": "light",
+      "followSystem": true
+    },
+    "shapes": {
+      "c4Person": {
+        "label": "Person",
+        "doc": "A rounded box with a round head of radius 10 above its top edge, as the Structurizr default theme draws a person.",
+        "parts": [
+          {
+            "id": "head",
+            "shape": "circle",
+            "box": {
+              "x": "w / 2.0 - 10.0",
+              "y": -28,
+              "w": 20,
+              "h": 20
+            }
+          },
+          {
+            "id": "body",
+            "shape": {
+              "type": "roundedRect",
+              "params": {
+                "radius": 8
+              }
+            },
+            "box": {
+              "x": 0,
+              "y": 0,
+              "w": "w",
+              "h": "h"
+            },
+            "outline": true
+          }
+        ]
+      },
+      "c4Cylinder": {
+        "label": "Cylinder",
+        "doc": "A data store: a box with an elliptical cap of height 12 at the top and bottom.",
+        "parts": [
+          {
+            "id": "side",
+            "shape": "rect",
+            "box": {
+              "x": 0,
+              "y": 6,
+              "w": "w",
+              "h": "h - 12.0"
+            },
+            "outline": true
+          },
+          {
+            "id": "bottom",
+            "shape": "ellipse",
+            "box": {
+              "x": 0,
+              "y": "h - 12.0",
+              "w": "w",
+              "h": 12
+            }
+          },
+          {
+            "id": "top",
+            "shape": "ellipse",
+            "box": {
+              "x": 0,
+              "y": 0,
+              "w": "w",
+              "h": 12
+            }
+          }
+        ]
+      }
+    },
+    "styles": {
+      "card": {
+        "stroke": {
+          "color": "none",
+          "width": 0
+        },
+        "font": {
+          "family": {
+            "token": "font.body"
+          },
+          "size": 14,
+          "lineHeight": 1.4
+        },
+        "padding": [
+          10,
+          12
+        ],
+        "textAlign": "center",
+        "cursor": "grab"
+      },
+      "person": {
+        "extends": "card",
+        "fill": {
+          "token": "color.person"
+        },
+        "font": {
+          "color": {
+            "token": "color.onDark"
+          }
+        }
+      },
+      "softwareSystem": {
+        "extends": "card",
+        "fill": {
+          "token": "color.softwareSystem"
+        },
+        "font": {
+          "color": {
+            "token": "color.onDark"
+          }
+        }
+      },
+      "container": {
+        "extends": "card",
+        "fill": {
+          "token": "color.container"
+        },
+        "font": {
+          "color": {
+            "token": "color.onDark"
+          }
+        }
+      },
+      "component": {
+        "extends": "card",
+        "fill": {
+          "token": "color.component"
+        },
+        "font": {
+          "color": {
+            "token": "color.onLight"
+          }
+        }
+      },
+      "deploymentNode": {
+        "extends": "card",
+        "fill": {
+          "token": "color.deploymentNode"
+        },
+        "font": {
+          "color": {
+            "token": "color.onLight"
+          }
+        }
+      },
+      "external": {
+        "fill": {
+          "token": "color.external"
+        },
+        "font": {
+          "color": {
+            "token": "color.onDark"
+          }
+        }
+      },
+      "cardName": {
+        "font": {
+          "size": 13,
+          "weight": 600
+        }
+      },
+      "cardType": {
+        "font": {
+          "size": 10
+        },
+        "opacity": 0.9
+      },
+      "cardDescription": {
+        "font": {
+          "size": 10,
+          "lineHeight": 1.4
+        },
+        "opacity": 0.9
+      },
+      "boundary": {
+        "fill": "none",
+        "stroke": {
+          "color": {
+            "token": "color.muted"
+          },
+          "width": 1.5,
+          "dash": [
+            8,
+            6
+          ],
+          "dashScale": "absolute"
+        },
+        "cornerRadius": 0,
+        "cursor": "default"
+      },
+      "boundaryLabel": {
+        "font": {
+          "size": 11,
+          "color": {
+            "token": "color.muted"
+          }
+        }
+      },
+      "relationshipLabel": {
+        "font": {
+          "size": 10,
+          "color": {
+            "token": "color.muted"
+          }
+        }
+      }
+    },
+    "nodes": {
+      "Person": {
+        "shape": "c4Person",
+        "style": "person",
+        "size": {
+          "min": [
+            160,
+            39.6
+          ],
+          "max": [
+            240,
+            null
+          ],
+          "autoSize": "fitContent",
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "name",
+            "text": {
+              "attribute": "name"
+            },
+            "editable": "inline",
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                22
+              ],
+              "align": "center"
+            },
+            "style": "cardName",
+            "wrap": "none",
+            "overflow": "visible"
+          },
+          {
+            "id": "type",
+            "text": {
+              "cel": "'[Person]'"
+            },
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                38
+              ],
+              "align": "center"
+            },
+            "style": "cardType",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "description",
+            "text": {
+              "attribute": "description"
+            },
+            "editable": false,
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                58
+              ],
+              "align": "center"
+            },
+            "style": "cardDescription",
+            "wrap": "word",
+            "maxWidth": "parent"
+          }
+        ],
+        "conditions": [
+          {
+            "when": "self.external",
+            "style": "external",
+            "doc": "An element outside the scope being described is muted grey, so scope is readable at a glance."
+          }
+        ],
+        "doubleClick": "editLabel",
+        "deletable": false,
+        "connectable": false,
+        "placement": {
+          "x": "free",
+          "y": "free",
+          "anchor": "center",
+          "resizable": false
+        },
+        "doc": "A rounded box with a head above it, as the c4model.com reference diagrams draw a person.",
+        "tooltip": {
+          "cel": "self.name + (self.description != '' ? ': ' + self.description : '')"
+        },
+        "accessibility": {
+          "role": "button",
+          "name": {
+            "cel": "self.label()"
+          }
+        }
+      },
+      "SoftwareSystem": {
+        "shape": {
+          "type": "roundedRect",
+          "params": {
+            "radius": 8
+          }
+        },
+        "style": "softwareSystem",
+        "size": {
+          "min": [
+            160,
+            39.6
+          ],
+          "max": [
+            240,
+            null
+          ],
+          "autoSize": "fitContent",
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "name",
+            "text": {
+              "attribute": "name"
+            },
+            "editable": "inline",
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                22
+              ],
+              "align": "center"
+            },
+            "style": "cardName",
+            "wrap": "none",
+            "overflow": "visible"
+          },
+          {
+            "id": "type",
+            "text": {
+              "cel": "'[Software System]'"
+            },
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                38
+              ],
+              "align": "center"
+            },
+            "style": "cardType",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "description",
+            "text": {
+              "attribute": "description"
+            },
+            "editable": false,
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                58
+              ],
+              "align": "center"
+            },
+            "style": "cardDescription",
+            "wrap": "word",
+            "maxWidth": "parent"
+          }
+        ],
+        "conditions": [
+          {
+            "when": "self.external",
+            "style": "external",
+            "doc": "An element outside the scope being described is muted grey, so scope is readable at a glance."
+          }
+        ],
+        "variants": [
+          {
+            "when": "self.tags.exists(t, t.lowerAscii() == 'database')",
+            "shape": "c4Cylinder",
+            "doc": "An element tagged Database is drawn as a cylinder."
+          }
+        ],
+        "deletable": false,
+        "connectable": false,
+        "placement": {
+          "x": "free",
+          "y": "free",
+          "anchor": "center",
+          "resizable": false
+        },
+        "tooltip": {
+          "cel": "self.name + (self.description != '' ? ': ' + self.description : '')"
+        },
+        "accessibility": {
+          "role": "button",
+          "name": {
+            "cel": "self.label()"
+          }
+        }
+      },
+      "Container": {
+        "shape": {
+          "type": "roundedRect",
+          "params": {
+            "radius": 8
+          }
+        },
+        "style": "container",
+        "size": {
+          "min": [
+            160,
+            39.6
+          ],
+          "max": [
+            240,
+            null
+          ],
+          "autoSize": "fitContent",
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "name",
+            "text": {
+              "attribute": "name"
+            },
+            "editable": "inline",
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                22
+              ],
+              "align": "center"
+            },
+            "style": "cardName",
+            "wrap": "none",
+            "overflow": "visible"
+          },
+          {
+            "id": "type",
+            "text": {
+              "cel": "self.technology != '' ? '[Container: ' + self.technology + ']' : '[Container]'"
+            },
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                38
+              ],
+              "align": "center"
+            },
+            "style": "cardType",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "description",
+            "text": {
+              "attribute": "description"
+            },
+            "editable": false,
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                58
+              ],
+              "align": "center"
+            },
+            "style": "cardDescription",
+            "wrap": "word",
+            "maxWidth": "parent"
+          }
+        ],
+        "conditions": [
+          {
+            "when": "self.external",
+            "style": "external",
+            "doc": "An element outside the scope being described is muted grey, so scope is readable at a glance."
+          }
+        ],
+        "variants": [
+          {
+            "when": "self.tags.exists(t, t.lowerAscii() == 'database')",
+            "shape": "c4Cylinder",
+            "doc": "An element tagged Database is drawn as a cylinder."
+          },
+          {
+            "when": "diagram.scope != null && self.id == diagram.scope.id",
+            "doc": "The container the view is scoped to is not drawn as a box but as a dashed boundary around what it contains.",
+            "shape": "rect",
+            "style": "boundary",
+            "labels": [
+              {
+                "id": "boundary",
+                "text": {
+                  "cel": "self.name + ' [Container]'"
+                },
+                "position": "outside-top-left",
+                "style": "boundaryLabel",
+                "editable": false,
+                "wrap": "none"
+              }
+            ],
+            "container": {
+              "layout": "free",
+              "padding": [
+                32,
+                32,
+                51.6,
+                32
+              ],
+              "autoGrow": true,
+              "clip": false
+            },
+            "size": {
+              "autoSize": "fitContent",
+              "resizable": false
+            },
+            "selectable": false,
+            "layer": "background",
+            "conditions": []
+          }
+        ],
+        "deletable": false,
+        "connectable": false,
+        "placement": {
+          "x": "free",
+          "y": "free",
+          "anchor": "center",
+          "resizable": false
+        },
+        "tooltip": {
+          "cel": "self.name + (self.description != '' ? ': ' + self.description : '')"
+        },
+        "accessibility": {
+          "role": "button",
+          "name": {
+            "cel": "self.label()"
+          }
+        }
+      },
+      "Component": {
+        "shape": {
+          "type": "roundedRect",
+          "params": {
+            "radius": 8
+          }
+        },
+        "style": "component",
+        "size": {
+          "min": [
+            160,
+            39.6
+          ],
+          "max": [
+            240,
+            null
+          ],
+          "autoSize": "fitContent",
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "name",
+            "text": {
+              "attribute": "name"
+            },
+            "editable": "inline",
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                22
+              ],
+              "align": "center"
+            },
+            "style": "cardName",
+            "wrap": "none",
+            "overflow": "visible"
+          },
+          {
+            "id": "type",
+            "text": {
+              "cel": "self.technology != '' ? '[Component: ' + self.technology + ']' : '[Component]'"
+            },
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                38
+              ],
+              "align": "center"
+            },
+            "style": "cardType",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "description",
+            "text": {
+              "attribute": "description"
+            },
+            "editable": false,
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                58
+              ],
+              "align": "center"
+            },
+            "style": "cardDescription",
+            "wrap": "word",
+            "maxWidth": "parent"
+          }
+        ],
+        "conditions": [
+          {
+            "when": "self.external",
+            "style": "external",
+            "doc": "An element outside the scope being described is muted grey, so scope is readable at a glance."
+          }
+        ],
+        "variants": [
+          {
+            "when": "self.tags.exists(t, t.lowerAscii() == 'database')",
+            "shape": "c4Cylinder",
+            "doc": "An element tagged Database is drawn as a cylinder."
+          }
+        ],
+        "deletable": false,
+        "connectable": false,
+        "placement": {
+          "x": "free",
+          "y": "free",
+          "anchor": "center",
+          "resizable": false
+        },
+        "tooltip": {
+          "cel": "self.name + (self.description != '' ? ': ' + self.description : '')"
+        },
+        "accessibility": {
+          "role": "button",
+          "name": {
+            "cel": "self.label()"
+          }
+        }
+      },
+      "DeploymentNode": {
+        "shape": "rect",
+        "style": "deploymentNode",
+        "size": {
+          "min": [
+            160,
+            39.6
+          ],
+          "max": [
+            240,
+            null
+          ],
+          "autoSize": "fitContent",
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "name",
+            "text": {
+              "attribute": "name"
+            },
+            "editable": "inline",
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                22
+              ],
+              "align": "center"
+            },
+            "style": "cardName",
+            "wrap": "none",
+            "overflow": "visible"
+          },
+          {
+            "id": "type",
+            "text": {
+              "cel": "self.technology != '' ? '[Deployment Node: ' + self.technology + ']' : '[Deployment Node]'"
+            },
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                38
+              ],
+              "align": "center"
+            },
+            "style": "cardType",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "description",
+            "text": {
+              "attribute": "description"
+            },
+            "editable": false,
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                58
+              ],
+              "align": "center"
+            },
+            "style": "cardDescription",
+            "wrap": "word",
+            "maxWidth": "parent"
+          }
+        ],
+        "conditions": [
+          {
+            "when": "self.external",
+            "style": "external",
+            "doc": "An element outside the scope being described is muted grey, so scope is readable at a glance."
+          }
+        ],
+        "variants": [
+          {
+            "when": "self.tags.exists(t, t.lowerAscii() == 'database')",
+            "shape": "c4Cylinder",
+            "doc": "An element tagged Database is drawn as a cylinder."
+          }
+        ],
+        "deletable": false,
+        "connectable": false,
+        "placement": {
+          "x": "free",
+          "y": "free",
+          "anchor": "center",
+          "resizable": false
+        },
+        "doc": "Drawn as a square-cornered box beside the other nodes. ADP does not yet draw deployment nodes as nested boundaries.",
+        "tooltip": {
+          "cel": "self.name + (self.description != '' ? ': ' + self.description : '')"
+        },
+        "accessibility": {
+          "role": "button",
+          "name": {
+            "cel": "self.label()"
+          }
+        }
+      },
+      "InfrastructureNode": {
+        "shape": "rect",
+        "style": "deploymentNode",
+        "size": {
+          "min": [
+            160,
+            39.6
+          ],
+          "max": [
+            240,
+            null
+          ],
+          "autoSize": "fitContent",
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "name",
+            "text": {
+              "attribute": "name"
+            },
+            "editable": "inline",
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                22
+              ],
+              "align": "center"
+            },
+            "style": "cardName",
+            "wrap": "none",
+            "overflow": "visible"
+          },
+          {
+            "id": "type",
+            "text": {
+              "cel": "self.technology != '' ? '[Infrastructure Node: ' + self.technology + ']' : '[Infrastructure Node]'"
+            },
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                38
+              ],
+              "align": "center"
+            },
+            "style": "cardType",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "description",
+            "text": {
+              "attribute": "description"
+            },
+            "editable": false,
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                58
+              ],
+              "align": "center"
+            },
+            "style": "cardDescription",
+            "wrap": "word",
+            "maxWidth": "parent"
+          }
+        ],
+        "conditions": [
+          {
+            "when": "self.external",
+            "style": "external",
+            "doc": "An element outside the scope being described is muted grey, so scope is readable at a glance."
+          }
+        ],
+        "variants": [
+          {
+            "when": "self.tags.exists(t, t.lowerAscii() == 'database')",
+            "shape": "c4Cylinder",
+            "doc": "An element tagged Database is drawn as a cylinder."
+          }
+        ],
+        "deletable": false,
+        "connectable": false,
+        "placement": {
+          "x": "free",
+          "y": "free",
+          "anchor": "center",
+          "resizable": false
+        },
+        "tooltip": {
+          "cel": "self.name + (self.description != '' ? ': ' + self.description : '')"
+        },
+        "accessibility": {
+          "role": "button",
+          "name": {
+            "cel": "self.label()"
+          }
+        }
+      },
+      "ContainerInstance": {
+        "shape": {
+          "type": "roundedRect",
+          "params": {
+            "radius": 8
+          }
+        },
+        "style": "container",
+        "size": {
+          "min": [
+            160,
+            39.6
+          ],
+          "max": [
+            240,
+            null
+          ],
+          "autoSize": "fitContent",
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "name",
+            "text": {
+              "cel": "self.container != null ? self.container.name : ''"
+            },
+            "editable": false,
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                22
+              ],
+              "align": "center"
+            },
+            "style": "cardName",
+            "wrap": "none",
+            "overflow": "visible"
+          },
+          {
+            "id": "type",
+            "text": {
+              "cel": "self.container != null && self.container.technology != '' ? '[Container: ' + self.container.technology + ']' : '[Container]'"
+            },
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                38
+              ],
+              "align": "center"
+            },
+            "style": "cardType",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          }
+        ],
+        "conditions": [
+          {
+            "when": "self.external",
+            "style": "external",
+            "doc": "An element outside the scope being described is muted grey, so scope is readable at a glance."
+          }
+        ],
+        "variants": [
+          {
+            "when": "self.tags.exists(t, t.lowerAscii() == 'database')",
+            "shape": "c4Cylinder",
+            "doc": "An element tagged Database is drawn as a cylinder."
+          }
+        ],
+        "deletable": false,
+        "connectable": false,
+        "placement": {
+          "x": "free",
+          "y": "free",
+          "anchor": "center",
+          "resizable": false
+        },
+        "doc": "Drawn in the colours of a container. The Structurizr DSL gives an instance no name, and ADP does not yet show the name of the container it deploys, so its name line is empty in the standalone implementation.",
+        "tooltip": {
+          "cel": "self.label()"
+        },
+        "accessibility": {
+          "role": "button",
+          "name": {
+            "cel": "self.label()"
+          }
+        }
+      },
+      "SoftwareSystemInstance": {
+        "shape": {
+          "type": "roundedRect",
+          "params": {
+            "radius": 8
+          }
+        },
+        "style": "softwareSystem",
+        "size": {
+          "min": [
+            160,
+            39.6
+          ],
+          "max": [
+            240,
+            null
+          ],
+          "autoSize": "fitContent",
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "name",
+            "text": {
+              "cel": "self.softwareSystem != null ? self.softwareSystem.name : ''"
+            },
+            "editable": false,
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                22
+              ],
+              "align": "center"
+            },
+            "style": "cardName",
+            "wrap": "none",
+            "overflow": "visible"
+          },
+          {
+            "id": "type",
+            "text": {
+              "cel": "'[Software System]'"
+            },
+            "position": {
+              "anchor": [
+                0.5,
+                0
+              ],
+              "offset": [
+                0,
+                38
+              ],
+              "align": "center"
+            },
+            "style": "cardType",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          }
+        ],
+        "conditions": [
+          {
+            "when": "self.external",
+            "style": "external",
+            "doc": "An element outside the scope being described is muted grey, so scope is readable at a glance."
+          }
+        ],
+        "variants": [
+          {
+            "when": "self.tags.exists(t, t.lowerAscii() == 'database')",
+            "shape": "c4Cylinder",
+            "doc": "An element tagged Database is drawn as a cylinder."
+          }
+        ],
+        "deletable": false,
+        "connectable": false,
+        "placement": {
+          "x": "free",
+          "y": "free",
+          "anchor": "center",
+          "resizable": false
+        },
+        "tooltip": {
+          "cel": "self.label()"
+        },
+        "accessibility": {
+          "role": "button",
+          "name": {
+            "cel": "self.label()"
+          }
+        }
+      }
+    },
+    "edges": {
+      "Relationship": {
+        "line": {
+          "stroke": {
+            "color": {
+              "token": "color.line"
+            },
+            "width": 1.5,
+            "dash": [
+              6,
+              4
+            ],
+            "dashScale": "absolute"
+          },
+          "routing": "straight"
+        },
+        "sourceMarker": "none",
+        "targetMarker": "arrowFilled",
+        "labels": [
+          {
+            "id": "label",
+            "at": "middle",
+            "side": "above",
+            "distance": 6,
+            "orientation": "horizontal",
+            "text": {
+              "cel": "self.description + (self.technology != '' ? ' [' + self.technology + ']' : '')"
+            },
+            "editable": "inline",
+            "parse": {
+              "cel": "value",
+              "write": [
+                {
+                  "set": {
+                    "description": "value"
+                  }
+                }
+              ]
+            },
+            "style": "relationshipLabel",
+            "wrap": "none"
+          }
+        ],
+        "anchoring": {
+          "source": {
+            "mode": "outline"
+          },
+          "target": {
+            "mode": "outline"
+          }
+        },
+        "deletable": false,
+        "reconnectable": false,
+        "doc": "A dashed, unidirectional arrow labelled with what the relationship is for and, in brackets, its technology."
+      }
+    },
+    "canvas": {
+      "background": {
+        "token": "color.canvas"
+      },
+      "legend": {
+        "visible": true,
+        "position": "bottom"
+      },
+      "doc": "The diagram's heading is drawn above the canvas and a key of the element kinds below it, because C4 asks every diagram to have a title and a key."
+    },
+    "doc": "The Structurizr default theme, which is what the c4model.com reference diagrams show. C4 itself is notation independent, so these colours are ADP's default and not a rule: no constraint is expressed in terms of colour."
+  },
+  "toolbox": {
+    "groups": [
+      {
+        "id": "elements",
+        "label": "C4 component diagram",
+        "tools": [
+          {
+            "id": "person",
+            "creates": "Person",
+            "label": "Person",
+            "icon": "mdi:account-outline",
+            "mode": "click",
+            "after": "editLabel",
+            "doc": "Someone who uses the software."
+          },
+          {
+            "id": "softwareSystem",
+            "creates": "SoftwareSystem",
+            "label": "Software System",
+            "icon": "mdi:application-outline",
+            "mode": "click",
+            "after": "editLabel",
+            "doc": "A software system."
+          },
+          {
+            "id": "container",
+            "creates": "Container",
+            "label": "Container",
+            "icon": "mdi:package-variant-closed",
+            "mode": "click",
+            "after": "editLabel",
+            "doc": "An application or a data store - not a Docker container.",
+            "initial": {
+              "technology": "'Technology'"
+            }
+          },
+          {
+            "id": "component",
+            "creates": "Component",
+            "label": "Component",
+            "icon": "mdi:puzzle-outline",
+            "mode": "click",
+            "after": "editLabel",
+            "doc": "A grouping of related functionality inside a container.",
+            "initial": {
+              "technology": "'Technology'"
+            }
+          }
+        ],
+        "doc": "Exactly the element kinds a Component view permits, so the toolbox never offers something the view would refuse."
+      }
+    ],
+    "generic": {
+      "select": true,
+      "pan": true,
+      "lasso": false,
+      "text": false,
+      "note": false,
+      "image": false,
+      "freehand": false
+    },
+    "searchable": false,
+    "contextTools": [
+      {
+        "for": [
+          "NamedElement"
+        ],
+        "placement": "menu",
+        "tools": [
+          {
+            "kind": "editLabel",
+            "label": "Rename…",
+            "icon": "mdi:pencil-outline",
+            "shortcut": "F2"
+          },
+          {
+            "kind": "operation",
+            "operation": "editDescription",
+            "icon": "mdi:text-box-outline"
+          }
+        ]
+      },
+      {
+        "for": [
+          "Container",
+          "Component",
+          "DeploymentNode",
+          "InfrastructureNode"
+        ],
+        "placement": "menu",
+        "tools": [
+          {
+            "kind": "operation",
+            "operation": "setTechnology",
+            "icon": "mdi:tools"
+          }
+        ]
+      },
+      {
+        "for": [
+          "Relationship"
+        ],
+        "placement": "menu",
+        "tools": [
+          {
+            "kind": "editLabel",
+            "label": "Relabel…",
+            "icon": "mdi:pencil-outline",
+            "shortcut": "F2"
+          },
+          {
+            "kind": "operation",
+            "operation": "setProtocol",
+            "icon": "mdi:transit-connection-variant"
+          }
+        ]
+      },
+      {
+        "for": [
+          "SoftwareSystem"
+        ],
+        "placement": "menu",
+        "tools": [
+          {
+            "kind": "create-child",
+            "creates": "Container",
+            "label": "Add Container",
+            "icon": "mdi:package-variant-closed"
+          }
+        ]
+      },
+      {
+        "for": [
+          "Container"
+        ],
+        "placement": "menu",
+        "tools": [
+          {
+            "kind": "create-child",
+            "creates": "Component",
+            "label": "Add Component",
+            "icon": "mdi:puzzle-outline"
+          }
+        ]
+      }
+    ],
+    "doc": "Dropping an element on the canvas adds it to the model in the DSL document. People and software systems always go to the top of the model; a container goes inside the software system it is dropped on, a component inside the container."
+  },
+  "forms": {
+    "elementInspector": {
+      "for": [
+        "NamedElement"
+      ],
+      "usage": [
+        "inspector"
+      ],
+      "commit": "onBlur",
+      "items": [
+        {
+          "attribute": "name",
+          "widget": "text"
+        },
+        {
+          "attribute": "description",
+          "widget": "textarea",
+          "rows": 3
+        },
+        {
+          "attribute": "technology",
+          "widget": "text",
+          "visible": "self.isA('Container') || self.isA('Component') || self.isA('DeploymentNode') || self.isA('InfrastructureNode')"
+        },
+        {
+          "attribute": "tags",
+          "widget": "tags",
+          "readOnly": true,
+          "doc": "Tags are edited in the document until an action exists for them."
+        },
+        {
+          "kind": "section",
+          "title": "Model",
+          "items": [
+            {
+              "kind": "computed",
+              "label": "Kind",
+              "value": {
+                "cel": "self.type"
+              },
+              "doc": "Changing this changes the shape of the model rather than a value, so it is done from the diagram rather than here."
+            },
+            {
+              "kind": "computed",
+              "label": "Identifier",
+              "value": {
+                "cel": "self.id"
+              },
+              "doc": "Changing this changes the shape of the model rather than a value, so it is done from the diagram rather than here."
+            }
+          ]
+        }
+      ],
+      "doc": "The property grid of an element."
+    },
+    "relationshipInspector": {
+      "for": [
+        "Relationship"
+      ],
+      "usage": [
+        "inspector"
+      ],
+      "commit": "onBlur",
+      "items": [
+        {
+          "attribute": "description",
+          "widget": "text"
+        },
+        {
+          "attribute": "technology",
+          "widget": "text"
+        },
+        {
+          "kind": "computed",
+          "label": "From",
+          "value": {
+            "cel": "self.source.label()"
+          },
+          "doc": "The ends of a relationship are what it is. Draw a different relationship to connect something else."
+        },
+        {
+          "kind": "computed",
+          "label": "To",
+          "value": {
+            "cel": "self.target.label()"
+          },
+          "doc": "The ends of a relationship are what it is. Draw a different relationship to connect something else."
+        }
+      ],
+      "doc": "The property grid of a relationship."
+    }
+  },
+  "constraints": {
+    "groups": {
+      "c4": {
+        "label": "C4 rules",
+        "doc": "The rules of the C4 model, reported as warnings: a model mid-edit is routinely incomplete, and saving is never blocked."
+      }
+    },
+    "defaults": {
+      "severity": "warning",
+      "timing": [
+        "live",
+        "save"
+      ]
+    },
+    "blockSaveOn": "never",
+    "builtIn": {
+      "std.required": {
+        "severity": "warning"
+      },
+      "std.containment": {
+        "severity": "warning"
+      },
+      "std.references": {
+        "severity": "warning"
+      }
+    },
+    "rules": [
+      {
+        "id": "missingDescription",
+        "label": "Missing description",
+        "scope": [
+          "Person",
+          "SoftwareSystem",
+          "Container",
+          "Component"
+        ],
+        "rule": "self.description.trim() != ''",
+        "severity": "warning",
+        "message": {
+          "cel": "\"'\" + (self.name != '' ? self.name : self.id) + \"' has no description. C4 asks for a short description on every element, so a reader can tell at a glance what it is responsible for.\""
+        },
+        "tags": [
+          "c4.missing-description",
+          "structurizr:model.person.description",
+          "structurizr:model.softwaresystem.description",
+          "structurizr:model.container.description",
+          "structurizr:model.component.description"
+        ],
+        "attribute": "description"
+      },
+      {
+        "id": "missingDeploymentDescription",
+        "label": "Missing description",
+        "scope": [
+          "DeploymentNode"
+        ],
+        "rule": "self.description.trim() != ''",
+        "severity": "warning",
+        "message": {
+          "cel": "\"'\" + (self.name != '' ? self.name : self.id) + \"' has no description. C4 asks for a short description on every element, so a reader can tell at a glance what it is responsible for.\""
+        },
+        "tags": [
+          "c4.missing-deployment-description",
+          "structurizr:model.deploymentnode.description"
+        ],
+        "attribute": "description"
+      },
+      {
+        "id": "missingInfrastructureDescription",
+        "label": "Missing description",
+        "scope": [
+          "InfrastructureNode"
+        ],
+        "rule": "self.description.trim() != ''",
+        "severity": "warning",
+        "message": {
+          "cel": "\"'\" + (self.name != '' ? self.name : self.id) + \"' has no description. C4 asks for a short description on every element, so a reader can tell at a glance what it is responsible for.\""
+        },
+        "tags": [
+          "c4.missing-infrastructure-description",
+          "structurizr:model.infrastructurenode.description"
+        ],
+        "attribute": "description"
+      },
+      {
+        "id": "missingTechnology",
+        "label": "Missing technology",
+        "scope": [
+          "Container",
+          "Component"
+        ],
+        "rule": "self.technology.trim() != ''",
+        "severity": "warning",
+        "message": {
+          "cel": "\"'\" + (self.name != '' ? self.name : self.id) + \"' has no technology. C4 asks for one explicitly on every \" + (self.isA('Container') ? 'container' : 'component') + \".\""
+        },
+        "tags": [
+          "c4.missing-technology",
+          "structurizr:model.container.technology"
+        ],
+        "attribute": "technology"
+      },
+      {
+        "id": "missingDeploymentTechnology",
+        "label": "Missing technology",
+        "scope": [
+          "DeploymentNode"
+        ],
+        "rule": "self.technology.trim() != ''",
+        "severity": "warning",
+        "message": {
+          "cel": "\"'\" + (self.name != '' ? self.name : self.id) + \"' names no technology. A deployment diagram is read to find out what actually runs where, so say what this node is.\""
+        },
+        "tags": [
+          "c4.missing-deployment-technology",
+          "structurizr:model.deploymentnode.technology"
+        ],
+        "attribute": "technology"
+      },
+      {
+        "id": "missingInfrastructureTechnology",
+        "label": "Missing technology",
+        "scope": [
+          "InfrastructureNode"
+        ],
+        "rule": "self.technology.trim() != ''",
+        "severity": "warning",
+        "message": {
+          "cel": "\"'\" + (self.name != '' ? self.name : self.id) + \"' names no technology. A deployment diagram is read to find out what actually runs where, so say what this node is.\""
+        },
+        "tags": [
+          "c4.missing-infrastructure-technology",
+          "structurizr:model.infrastructurenode.technology"
+        ],
+        "attribute": "technology"
+      },
+      {
+        "id": "disconnectedElement",
+        "label": "Disconnected element",
+        "scope": [
+          "Person",
+          "SoftwareSystem",
+          "Container",
+          "Component"
+        ],
+        "rule": "diagram.relationsOfType('Relationship').exists(r, (r.source.id == self.id || r.source.ancestors().exists(a, a.id == self.id)) != (r.target.id == self.id || r.target.ancestors().exists(a, a.id == self.id)))",
+        "severity": "warning",
+        "message": {
+          "cel": "\"'\" + (self.name != '' ? self.name : self.id) + \"' is in no relationship at all. An element nothing reaches and that reaches nothing is either unfinished or left over.\""
+        },
+        "tags": [
+          "c4.disconnected-element",
+          "structurizr:model.element.disconnected"
+        ],
+        "doc": {
+          "summary": "Every person, system, container and component takes part in at least one relationship.",
+          "description": "A relationship connects every element on the ancestor chain of one end that is not also on the ancestor chain of the other, so a relationship between two containers also connects their systems when they differ."
+        }
+      },
+      {
+        "id": "misplacedContainer",
+        "label": "Misplaced container",
+        "scope": [
+          "Container"
+        ],
+        "rule": "self.parent != null && self.parent.isA('SoftwareSystem')",
+        "severity": "warning",
+        "message": {
+          "cel": "self.parent == null ? \"'\" + (self.name != '' ? self.name : self.id) + \"' is a container declared outside any software system. In C4 a container is part of a software system.\" : \"'\" + (self.name != '' ? self.name : self.id) + \"' is a container inside a \" + self.parent.type + \". In C4 a container is part of a software system.\""
+        },
+        "tags": [
+          "c4.misplaced-element"
+        ]
+      },
+      {
+        "id": "misplacedComponent",
+        "label": "Misplaced component",
+        "scope": [
+          "Component"
+        ],
+        "rule": "self.parent != null && self.parent.isA('Container')",
+        "severity": "warning",
+        "message": {
+          "cel": "self.parent == null ? \"'\" + (self.name != '' ? self.name : self.id) + \"' is a component declared outside any container. In C4 a component is part of a container.\" : \"'\" + (self.name != '' ? self.name : self.id) + \"' is a component inside a \" + self.parent.type + \". In C4 a component is part of a container.\""
+        },
+        "tags": [
+          "c4.misplaced-element"
+        ]
+      },
+      {
+        "id": "unlabelledRelationship",
+        "label": "Unlabelled relationship",
+        "scope": "Relationship",
+        "rule": "self.description.trim() != ''",
+        "severity": "warning",
+        "message": {
+          "cel": "\"The relationship from '\" + (self.source.name != '' ? self.source.name : self.source.id) + \"' to '\" + (self.target.name != '' ? self.target.name : self.target.id) + \"' has no label. C4 asks what the relationship is for, in the direction of the arrow.\""
+        },
+        "tags": [
+          "c4.unlabelled-relationship"
+        ],
+        "attribute": "description"
+      },
+      {
+        "id": "missingProtocol",
+        "label": "Missing technology",
+        "scope": "Relationship",
+        "rule": "self.technology.trim() != ''",
+        "severity": "warning",
+        "message": {
+          "cel": "\"The relationship from '\" + (self.source.name != '' ? self.source.name : self.source.id) + \"' to '\" + (self.target.name != '' ? self.target.name : self.target.id) + \"' names no technology. How two elements communicate - a protocol, a library, a call - is what tells a reader where a boundary really is.\""
+        },
+        "tags": [
+          "c4.missing-protocol",
+          "structurizr:model.relationship.technology"
+        ],
+        "attribute": "technology"
+      },
+      {
+        "id": "kindNotPermittedOnView",
+        "label": "Kind not permitted on this view",
+        "scope": "diagram",
+        "rule": "!diagram.nodes.exists(n, n.id in diagram.includes && !(n.isA('Person') || n.isA('SoftwareSystem') || n.isA('Container') || n.isA('Component')))",
+        "severity": "warning",
+        "message": {
+          "cel": "\"The '\" + diagram.viewKey + \"' view includes an element this kind of view does not show. A Component view shows people, software systems, containers and components.\""
+        },
+        "tags": [
+          "c4.kind-not-permitted-on-view"
+        ],
+        "target": "diagram.nodes.filter(n, n.id in diagram.includes && !(n.isA('Person') || n.isA('SoftwareSystem') || n.isA('Container') || n.isA('Component')))"
+      },
+      {
+        "id": "emptyView",
+        "label": "Empty view",
+        "scope": "diagram",
+        "rule": "diagram.nodes.exists(n, (('*' in diagram.includes) || n.id in diagram.includes) && !(n.id in diagram.excludes) && (n.isA('Person') || n.isA('SoftwareSystem') || n.isA('Container') || n.isA('Component')))",
+        "severity": "warning",
+        "message": {
+          "cel": "\"The '\" + diagram.viewKey + \"' view is empty.\""
+        },
+        "tags": [
+          "c4.empty-view"
+        ]
+      },
+      {
+        "id": "unknownViewScope",
+        "label": "Unknown view scope",
+        "scope": "diagram",
+        "rule": "!has(diagram.scope) || diagram.scope != null",
+        "severity": "warning",
+        "message": {
+          "cel": "\"The '\" + diagram.viewKey + \"' view is scoped to an element the model does not declare.\""
+        },
+        "tags": [
+          "c4.unknown-view-scope"
+        ]
+      },
+      {
+        "id": "containerNeedsSystem",
+        "kind": "create",
+        "label": "A container lives inside a software system",
+        "when": "elementType == 'Container'",
+        "rule": "parent != null && parent.isA('SoftwareSystem')",
+        "message": {
+          "cel": "parent == null ? 'A container lives inside a software system. Drop it on one.' : 'A container lives inside a software system, not inside a ' + parent.type + '.'"
+        },
+        "enforcement": "prevent",
+        "severity": "error",
+        "tags": [
+          "c4.placement"
+        ]
+      },
+      {
+        "id": "componentNeedsContainer",
+        "kind": "create",
+        "label": "A component lives inside a container",
+        "when": "elementType == 'Component'",
+        "rule": "parent != null && parent.isA('Container')",
+        "message": {
+          "cel": "parent == null ? 'A component lives inside a container. Drop it on one.' : 'A component lives inside a container, not inside a ' + parent.type + '.'"
+        },
+        "enforcement": "prevent",
+        "severity": "error",
+        "tags": [
+          "c4.placement"
+        ]
+      },
+      {
+        "id": "nameRequired",
+        "kind": "change",
+        "label": "Every C4 element needs a name",
+        "when": "attribute == 'name'",
+        "rule": "string(newValue).trim() != ''",
+        "message": "Every C4 element needs a name.",
+        "enforcement": "prevent",
+        "severity": "error"
+      },
+      {
+        "id": "dragDoesNotReparent",
+        "kind": "placement",
+        "label": "Dragging does not change containment",
+        "rule": "newParent == self.parent",
+        "message": "Dragging changes where an element is drawn, not what contains it.",
+        "enforcement": "prevent",
+        "severity": "error"
+      }
+    ]
+  },
+  "behavior": {
+    "hooks": [
+      {
+        "id": "placeholderDescription",
+        "on": "create",
+        "for": "NamedElement",
+        "when": "!has(self.description)",
+        "actions": [
+          {
+            "set": {
+              "description": "'Describe ' + self.name + '.'"
+            }
+          }
+        ],
+        "doc": "A new element is written with a placeholder description, so it does not greet its author with a warning they did not cause."
+      },
+      {
+        "id": "topLevelOnly",
+        "on": "create",
+        "for": [
+          "Person",
+          "SoftwareSystem"
+        ],
+        "when": "self.parent != null",
+        "actions": [
+          {
+            "reparent": {
+              "target": "self",
+              "parent": "null"
+            }
+          }
+        ],
+        "doc": "People and software systems always go to the top of the model, even when dropped on another element."
+      }
+    ],
+    "operations": {
+      "editDescription": {
+        "label": "Edit description…",
+        "for": [
+          "NamedElement"
+        ],
+        "params": {
+          "description": {
+            "type": "text",
+            "label": "Description"
+          }
+        },
+        "actions": [
+          {
+            "set": {
+              "description": "p.description"
+            }
+          }
+        ],
+        "doc": "Opens a prompt titled \"Describe element\"; offered as \"Add description…\" when the element has none."
+      },
+      "setTechnology": {
+        "label": "Set technology…",
+        "for": [
+          "Container",
+          "Component",
+          "DeploymentNode",
+          "InfrastructureNode"
+        ],
+        "params": {
+          "technology": {
+            "type": "string",
+            "label": "Technology"
+          }
+        },
+        "actions": [
+          {
+            "set": {
+              "technology": "p.technology"
+            }
+          }
+        ],
+        "doc": "Offered as \"Change technology…\" when the element already names one."
+      },
+      "setProtocol": {
+        "label": "Set technology…",
+        "for": [
+          "Relationship"
+        ],
+        "params": {
+          "technology": {
+            "type": "string",
+            "label": "Technology"
+          }
+        },
+        "actions": [
+          {
+            "set": {
+              "technology": "p.technology"
+            }
+          }
+        ]
+      }
+    },
+    "clipboard": {
+      "relations": "none",
+      "crossDocument": false,
+      "formats": []
+    },
+    "doc": "Every edit is one undoable command. Elements and relationships cannot yet be deleted, connected or reversed from the diagram; they are removed or drawn in the DSL."
+  },
+  "layout": {
+    "algorithms": {
+      "c4Ranks": {
+        "algorithm": "layered",
+        "direction": "down",
+        "spacing": {
+          "layer": 120,
+          "node": 60
+        },
+        "edgeRouting": "straight",
+        "scope": "all",
+        "doc": "Longest-path ranks along the view's relationships, one row per rank centred on the axis, in the direction the view's `autoLayout` names (top to bottom when it names none), with the view's own rank and node separation when it declares them. DISL has no way to bind an algorithm's direction or spacing to a diagram attribute, so the values here are the defaults; see the companion .md."
+      }
+    },
+    "default": "c4Ranks",
+    "trigger": "always",
+    "respect": "pinned",
+    "animate": false,
+    "doc": "Every view is laid out by ADP. A position dragged on the canvas is kept for that view and replaces the computed one, except in a view that declares `autoLayout`, where the DSL wins."
+  },
+  "persistence": {
+    "format": "plugin:structurizrDsl",
+    "encoding": "utf-8",
+    "files": {
+      "mode": "split",
+      "model": "{name}.dsl",
+      "view": "{name}.layout.json"
+    },
+    "ids": {
+      "strategy": "natural",
+      "stable": true,
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "doc": "Structurizr DSL identifiers: the identifier of `id = keyword ...`, or one ADP derives from the name for a new element."
+    },
+    "view": {
+      "store": [
+        "bounds"
+      ],
+      "styleOverrides": "none"
+    },
+    "omitDefaults": true,
+    "precision": {
+      "canvas": 2
+    },
+    "doc": "The model is a Structurizr DSL document ADP edits in place, line by line, so an unedited document is byte-identical after a save. Positions dragged on the canvas go in a JSON sidecar beside it, keyed by view and element."
+  },
+  "viewpoints": {
+    "component": {
+      "label": "Component view",
+      "include": [
+        "Person",
+        "SoftwareSystem",
+        "Container",
+        "Component"
+      ],
+      "exclude": [
+        "DeploymentNode",
+        "InfrastructureNode",
+        "ContainerInstance",
+        "SoftwareSystemInstance"
+      ],
+      "layout": "c4Ranks",
+      "default": true,
+      "doc": "A Component view shows people, software systems, containers and components. The model behind it holds every other kind too, for the other C4 diagram types to show."
+    }
+  },
+  "plugins": {
+    "structurizrDsl": {
+      "version": "^0.1.0",
+      "provides": [
+        "persistenceFormat",
+        "import"
+      ],
+      "required": true,
+      "doc": {
+        "summary": "Reads a Structurizr DSL workspace into the C4 model and writes edits back into the same text.",
+        "description": "A forgiving, line-based reader of the DSL subset ADP models, and a writer that replaces only the quoted argument an edit changes.",
+        "seeAlso": [
+          {
+            "title": "Structurizr DSL language reference",
+            "href": "https://docs.structurizr.com/dsl/language"
+          }
+        ]
+      },
+      "source": {
+        "url": "https://github.com/etalii-adp/etalii.adp.ide.standalone/tree/develop/src/diagrams/c4/backend/EtAlii.Adp.Diagram.C4"
+      }
+    }
+  }
+}
