@@ -1,10 +1,10 @@
 # DISL — Diagram Specification Language
 
-**Specification, version 0.1 (Working Draft)**
+**Specification, version 0.2 (Working Draft)**
 
 |                           |                                                                              |
 |---------------------------|------------------------------------------------------------------------------|
-| Date                      | 2026-09-29                                                                   |
+| Date                      | 2026-09-30                                                                   |
 | Specification schema      | `disl.schema.json` (JSON Schema, draft 2020-12), `$defs/Specification`       |
 | Definition language       | DID, the Diagram Definition Language, in [`../did/`](../did/DID-specification.md) |
 | Expression language       | CEL — Common Expression Language (https://cel.dev)                           |
@@ -15,7 +15,7 @@
 
 ## Status of this document
 
-This is a working draft. It is complete enough to implement a conforming validator, a documentation generator and a reference runtime, but individual constructs may still change before version 1.0. DISL 0.1 continues the earlier combined format (DEDL became DISL and DID); section 18 lists the old identifiers that runtimes still read. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
+This is a working draft, version 0.2. It is complete enough to implement a conforming validator, a documentation generator and a reference runtime, but individual constructs may still change before version 1.0. DISL 0.1 continued the earlier combined format (DEDL became DISL and DID); section 18 lists the old identifiers that runtimes still read. DISL 0.2 adds declarative constructs to 0.1 (declared identity, findings that point at files, reasons the tool gives, derived elements, gestures and menus, view state, budgets, notation and time details). Every valid 0.1 specification is a valid 0.2 specification and keeps its meaning, except in the places listed in [Changes from 0.1](#changes-from-01), where 0.1 was silent or ambiguous and 0.2 now says what it means. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
 
 The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY** and **OPTIONAL** are to be interpreted as described in RFC 2119 and RFC 8174 when, and only when, they appear in bold capitals.
 
@@ -40,6 +40,7 @@ The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **
 15. [Conformance](#15-conformance)
 16. [Security, privacy and robustness](#16-security-privacy-and-robustness)
 17. [Complete examples](#17-complete-examples)
+- [Changes from 0.1](#changes-from-01)
 18. [Deprecated aliases](#18-deprecated-aliases)
 - [Appendix A — JSON Schema](#appendix-a--json-schema)
 - [Appendix B — Built-in catalogues](#appendix-b--built-in-catalogues)
@@ -58,7 +59,7 @@ DISL (Diagram Specification Language) is a declarative, JSON-based language in w
 - **where** things can be placed: coordinate systems whose axes may be numeric, temporal (dates and timestamps) or categorical, how element positions relate to model data, and the snapping rules that make positions discrete on one axis, the other, or both (*coordinates*);
 - **how** everything looks: shapes from elementary primitives to finely parameterised paths and composites, labels, compartments, embedded form widgets, and edges with arbitrary line styles, arrowheads and labels at their start, middle and end (*notation*);
 - **which tools** users get: toolbox groups, context tools, templates and property forms (*toolbox and forms*);
-- **what is allowed**: rules written in CEL, with severities, messages, quick fixes and the choice between preventing a gesture and flagging a problem afterwards (*constraints*);
+- **what is allowed**: rules written in CEL, with severities, messages, quick fixes and the choice between preventing a gesture and reporting a finding afterwards (*constraints*);
 - **what happens** when users act: hooks and operations (*behavior*);
 - **how** diagrams are arranged automatically (*layout*);
 - and **how** a diagram is stored: format, identifiers, file split, ordering, precision, migrations and collaboration (*persistence*). The stored diagrams themselves are DID definitions, specified by DID, the Diagram Definition Language ([DID-specification.md](../did/DID-specification.md)).
@@ -87,9 +88,9 @@ flowchart TB
 A typical workflow:
 
 1. **Write a specification.** A tool engineer writes `my-lang.dis` by hand with IDE support from the JSON Schema (validation, completion, hover help), or generates it from an existing source such as a class model, an ontology or an older tool configuration. Specifications can import shared libraries of shapes, markers, styles and types (section 3.3).
-2. **Validate it.** A validator checks the specification against the JSON Schema, resolves names and imports, flattens inheritance, and type-checks every CEL expression in the context in which it will be evaluated (section 12). Problems are reported with the JSON Pointer of the offending node.
+2. **Validate it.** A validator checks the specification against the JSON Schema, resolves names and imports, flattens inheritance, and type-checks every CEL expression in the context in which it will be evaluated (section 12). Errors and warnings are reported with the JSON Pointer of the offending node.
 3. **Load it into a runtime.** A conforming runtime needs no language-specific code: palette, canvas, rendering, snapping, property forms, validation and saving all come from the specification. Whatever the declarative core cannot express is delegated to named, versioned plugins (section 13) rather than to embedded scripts.
-4. **Draw.** End users create diagrams of the type, stored as **DID definitions**, that conform to the specification. The runtime surfaces the specification's documentation as tooltips, field help, problem explanations and a help view, so users learn the language while using it.
+4. **Draw.** End users create diagrams of the type, stored as **DID definitions**, that conform to the specification. The runtime surfaces the specification's documentation as tooltips, field help, explanations of findings and a help view, so users learn the language while using it.
 5. **Persist and evolve.** DID definitions are written exactly as the persistence layer prescribes, so they are deterministic, diff-friendly and readable by any other conforming runtime. When the language evolves, declared migrations upgrade old DID definitions automatically.
 
 The same specification serves other consumers too:
@@ -157,8 +158,8 @@ A specification **SHOULD** declare the schema it conforms to, and MUST declare t
 
 ```json
 {
-  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
-  "disl": "0.1",
+  "$schema": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Specification",
+  "disl": "0.2",
   "language": { "id": "org.example.statemachine", "version": "1.0.0" },
   "metamodel": { "types": {} }
 }
@@ -181,9 +182,9 @@ Identifiers name types, attributes, styles, shapes, tools, constraints and all o
 
 **Namespaces.** Each of the following is a separate namespace: types (node types and relation types share one namespace), enums and data types (share one namespace, which must also not clash with types), axes, coordinate systems, snapping profiles, styles, shapes, markers, icons, forms, tools, templates, constraints, operations, functions, layouts and viewpoints. Imported specifications contribute names prefixed with their alias (`alias.Name`).
 
-**Reserved names.** The following MUST NOT be used as attribute names, because they are built-in fields of elements in CEL (section 12.2): `id`, `type`, `kind`, `parent`, `children`, `descendants`, `ancestors`, `incoming`, `outgoing`, `source`, `target`, `sourcePort`, `targetPort`, `ports`, `owner`, `view`, `diagram`, `self`, `value`, `item`, `index`, `env`, `old`, `event`, and any name beginning with `_` or `$`. CEL keywords (`in`, `as`, `break`, `const`, `continue`, `else`, `for`, `function`, `if`, `import`, `let`, `loop`, `package`, `namespace`, `return`, `var`, `void`, `while`, `true`, `false`, `null`) are also excluded.
+**Reserved names.** The following MUST NOT be used as attribute names, because they are built-in fields of elements in CEL (section 12.2): `id`, `type`, `kind`, `parent`, `children`, `descendants`, `ancestors`, `incoming`, `outgoing`, `source`, `target`, `sourcePort`, `targetPort`, `ports`, `owner`, `view`, `diagram`, `self`, `value`, `item`, `index`, `env`, `old`, `event`, `detail`, and any name beginning with `_` or `$`. CEL keywords (`in`, `as`, `break`, `const`, `continue`, `else`, `for`, `function`, `if`, `import`, `let`, `loop`, `package`, `namespace`, `return`, `var`, `void`, `while`, `true`, `false`, `null`) are also excluded.
 
-### 2.3 Localized text
+### 2.3 Localized text, messages and reasons
 
 Any human-facing string (labels, messages, descriptions, placeholders) is a **LocalizedText**: either a plain string or an object mapping BCP 47 language tags to strings.
 
@@ -197,6 +198,40 @@ Any human-facing string (labels, messages, descriptions, placeholders) is a **Lo
 When a map is given, it **SHOULD** include the locale declared in `language.defaultLocale` (default `"en"`). Runtimes select the best match for the user's locale (RFC 4647 lookup) and fall back to the default locale, then to the first entry in the map.
 
 Where a human-facing string must contain computed values (constraint messages, dynamic tooltips), the object form `{ "cel": "..." }` returning a `string` (or a `map(string, string)` keyed by locale) is used instead. DISL deliberately has no second template syntax.
+
+**Message.** A **Message** is a LocalizedText or a CEL value `{ "cel": …, "resultType"?, "doc"? }` that returns a `string` or a `map(string, string)` keyed by locale (`$defs/Message`). It is the one shape of every sentence and label a runtime shows to the user. The positions this document types as Message are: constraint and field validation messages (8.2, 7.5); quick-fix labels (8.5); notation tooltips (6.9, 6.10); the labels of tools, context tools, operations, forms, form items and sections (7.2, 7.3, 7.5, 9.3); form placeholders, button labels and the texts of absent and empty values (7.5, 4.3); confirmations (9.5); refusals and every Reason (below); built-in messages (8.1) and standard messages (9.1); and every human-facing text property added in 0.2. Metamodel labels (of the language, types, attributes, enums and enum values) and `doc` objects stay LocalizedText, because they name things independently of any element and are read where no CEL context exists.
+
+- In a Message position, an object that has a `cel` property **MUST** be read as CEL, never as a LocalizedText map. A LocalizedText map **MUST NOT** use `cel` as a language tag, and `cel` is not a BCP 47 tag.
+- A CEL Message is type-checked in the context of the property that holds it; each property names that context. It **MUST** return `string` or `map(string, string)`. When it fails to evaluate, the runtime **MUST** show the position's default text instead (for a label, the label derived from the identifier, 2.4; for a refusal or reason, a runtime-worded sentence naming the rule or reason id) and log a diagnostic, as for visual properties in 2.5.
+- Messages are evaluated against the model, not against what is drawn: a Message **MAY** name an element that is filtered out, truncated or otherwise not drawn.
+- A runtime **MUST** evaluate a CEL Message each time it presents it, for the target it is presented for, so a label or reason always describes the current state.
+
+```json
+{ "kind": "operation", "operation": "toggleFold",
+  "label": { "cel": "self.view.collapsed ? 'Expand' : 'Collapse'" } }
+```
+
+**Reason.** A **Reason** says why something is refused, read-only or unavailable (`$defs/Reason`). It is one of:
+
+| Form                                    | Applies                                            |
+|-----------------------------------------|----------------------------------------------------|
+| a Message                               | always                                             |
+| `{ "when": Expression, "message": Message, "id"?: SimpleId, "doc"?: Doc }` | when `when` holds; without `when`, always |
+| `{ "reason": "<id>" }`                  | when the named reason of `behavior.reasons` (9.1) applies |
+
+Reasons are used as ordered lists, `Reason[]`: refusals (6.9, 6.10, 8.4), read-only reasons (4.3, 7.5), unavailable entries (7.2, 7.3, 9.3), the diagram-wide edit gate (9.1), budgets (3.2) and ephemeral ids (11.5). `when` and a CEL `message` are evaluated in the context of the property that holds the list.
+
+- The **applicable** reason of a list is the first one that applies. A runtime **MUST** show the applicable reason, and only that one, as the explanation; it **MAY** offer the others on request.
+- A `{reason}` entry **MUST** name a reason declared in `behavior.reasons`; a reference to an undeclared reason is a specification error.
+- A runtime **MUST** show a refusal or unavailability sentence where the user is looking (the refusal line or cursor tooltip, a tooltip on a disabled entry, beside the property row), and **MUST** show the same sentence wherever the same reason applies, whatever the surface (canvas, menu, toolbar, form, keyboard shortcut).
+
+```json
+"readOnlyReasons": [
+  { "when": "self.labelledThroughXl", "message": "This concept's labels are stated through SKOS-XL, which this reading does not resolve. Edit them as triples instead." },
+  { "reason": "truncated" },
+  "Alternate and hidden labels are edited as triples."
+]
+```
 
 ### 2.4 Documentation objects
 
@@ -233,7 +268,7 @@ Every object in a specification MAY carry a `doc` property — the language itse
 
 - show a tool's `doc.summary` as its tooltip, and match `label`, `doc.summary` and `doc.tags` in toolbox search;
 - show an attribute's or field's `doc.summary` beneath or beside the form field, and `doc.description` on demand;
-- show a constraint's `label`, `doc.summary` and `doc.rationale` alongside every problem it reports, and list its quick fixes;
+- show a constraint's `label`, `doc.summary` and `doc.rationale` alongside every finding it reports, and list its quick fixes;
 - show the `doc` of axes, coordinate systems and snapping rules in canvas settings, ruler tooltips or a status bar while dragging (for example "Snapping to working days: tasks start at the beginning of a working day");
 - show a node or edge type's `doc` in a hover card on the canvas when a help mode is active;
 - offer a help view that renders the whole specification's documentation, including rendered samples of shapes and markers.
@@ -274,7 +309,7 @@ Because literals may be strings, **a bare string in a Bindable position is alway
 
 | Context                            | On evaluation error                                                                                                      |
 |------------------------------------|--------------------------------------------------------------------------------------------------------------------------|
-| Constraint rule                    | Reported as a problem with the constraint's severity and the message "could not be evaluated: …"; never silently passes. |
+| Constraint rule                    | Reported as a finding with the constraint's severity and the message "could not be evaluated: …"; never silently passes. |
 | Visual property, label, visibility | The property falls back to its default; a diagnostic is logged; rendering continues.                                     |
 | Placement binding                  | The element is drawn at its last valid position and marked as invalid.                                                   |
 | Snapping function                  | The unsnapped value is used.                                                                                             |
@@ -311,7 +346,8 @@ Any object in a specification or DID definition MAY contain properties whose nam
 
 ### 2.9 Versioning
 
-- `disl` (required) is the version of DISL the specification targets, as `"major.minor"`. A runtime MUST refuse a specification with a higher major version than it supports and SHOULD warn for a higher minor version. The deprecated alias of section 18 is still read.
+- `disl` (required) is the version of DISL the specification targets, as `"major.minor"`: `"0.1"` or `"0.2"`. A runtime MUST refuse a specification with a higher major version than it supports and SHOULD warn for a higher minor version. The deprecated alias of section 18 is still read.
+- DISL 0.2 is a superset of 0.1. A 0.2 runtime **MUST** read a specification that declares `"disl": "0.1"`, or whose `$schema` names the 0.1 schema (`https://etalii.net/adp/disl/schema/0.1/disl.schema.json`), as a 0.2 specification with the same meaning, apart from the clarifications listed in [Changes from 0.1](#changes-from-01). A validator **MUST** validate such a specification against the 0.2 schema and **MUST NOT** report its 0.1 version or schema address as deprecated.
 - `language.version` (required) is the semantic version (SemVer 2.0.0) of the defined language. DID definitions record the language version they were written with; this drives migrations (section 11.9).
 - A change that can make previously valid DID definitions invalid or change their meaning is a **major** change; adding optional constructs is a **minor** change; documentation, visual and toolbox-only changes are **patch** changes. Validators MAY warn when a version increment does not match the observed difference to a previous specification.
 
@@ -325,7 +361,7 @@ Any object in a specification or DID definition MAY contain properties whose nam
 | Property      | Type            | Req. | Layer | Description                                                                                                          |
 |---------------|-----------------|------|-------|----------------------------------------------------------------------------------------------------------------------|
 | `$schema`     | string          | –    | –     | URI of the DISL JSON Schema.                                                                                         |
-| `disl`        | string          | ✓   | –     | Targeted DISL version, `"0.1"`.                                                                                      |
+| `disl`        | string          | ✓   | –     | Targeted DISL version, `"0.1"` or `"0.2"` (2.9).                                                                     |
 | `language`    | Language        | ✓   | –     | Identity, version, locales and limits (3.2).                                                                         |
 | `imports`     | Import[]        | –    | –     | Reused specifications and libraries (3.3).                                                                            |
 | `functions`   | map → Function  | –    | –     | Reusable CEL functions (3.4).                                                                                        |
@@ -347,7 +383,7 @@ Only `disl`, `language` and `metamodel` are required. Every other layer has a do
 
 ```json
 {
-  "disl": "0.1",
+  "disl": "0.2",
   "language": { "id": "org.example.mindmap", "version": "0.1.0", "label": "Mind map" },
   "metamodel": {
     "types": { "Idea": { "attributes": { "text": { "type": "string", "required": true } } } },
@@ -364,6 +400,7 @@ This five-line language already yields a usable diagram type: a palette with an 
 |-----------------|------------------------|------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `id`            | qualified identifier   | ✓   | Globally unique language id; reverse-DNS style is RECOMMENDED. Recorded in every DID definition.                                                                          |
 | `version`       | SemVer string          | ✓   | Version of this language.                                                                                                                                              |
+| `origin`        | string `<vendor>/<type>` | –  | The origin of the tool type this specification implements, matching `^[a-z0-9-]+/[a-z0-9-]+$` (for example `"w3c/rdf"`, `"wardley/map"`). A document's registration names its tool type by origin, and FBL, the Format Binding Language, refers to it; a host maps an origin to the specification that implements it. Successive versions of one tool type keep the same origin. Supersedes the extension property `x-adp-origin`, which stays valid (2.8) but **SHOULD NOT** be written beside `origin`; when both are present, `origin` wins. |
 | `label`         | LocalizedText          | –    | Display name ("State machine").                                                                                                                                        |
 | `doc`           | Doc                    | –    | Language documentation, shown in the runtime's help view.                                                                                                              |
 | `defaultLocale` | BCP 47 tag             | –    | Default `"en"`.                                                                                                                                                        |
@@ -535,9 +572,13 @@ An attribute describes one named value on a node, relation, port or the diagram.
 | `many`                                | bool                              | The attribute holds a list. Default `false`.                                                                         |
 | `minItems`, `maxItems`, `uniqueItems` | int, int, bool                    | List facets when `many`.                                                                                             |
 | `readOnly`                            | bool                              | Not editable by users (may still be set by behavior).                                                                |
+| `readOnlyReasons`                     | Reason[]                          | Why the attribute cannot be edited, in priority order; context `element`. While one applies the attribute is read-only for users (below). |
+| `absentText`                          | Message                           | Shown instead of a value when the attribute is absent (below); context `element`.                                    |
+| `emptyText`                           | Message                           | Shown instead of a value when the attribute is empty (below); context `element`.                                     |
 | `derived`                             | Expression                        | Computed, never stored; evaluated in the `element` context. Implies `readOnly`.                                      |
 | `transient`                           | bool                              | Editable but not persisted (for example UI-only flags).                                                              |
 | `unique`                              | `"diagram"`, `"parent"`, `"type"` | Value must be unique within the scope. Enforced as a built-in constraint.                                            |
+| `samePrecisionAs`                     | attribute name                    | The value must be written with the same precision as the named attribute of the same element (both dates, or both with a time); checked by `std.mixedPrecision` (8.7). |
 | `key`                                 | bool                              | Part of the element's natural key (used for `natural` ids, 11.5, and for display).                                   |
 | `secret`                              | bool                              | Masked in forms and excluded from exports and logs.                                                                  |
 | `facets`                              | object                            | Primitive facets from 4.2 (`min`, `max`, `pattern`, …); may also be written directly on the attribute.               |
@@ -558,6 +599,16 @@ An attribute describes one named value on a node, relation, port or the diagram.
     "createdAt": { "type": "datetime", "readOnly": true, "default": { "cel": "env.now" } }
   }
 }
+```
+
+**Read-only reasons.** A user cannot edit an attribute when it is `readOnly` or `derived`, when it is bound to a computed placement, or when a reason of its `readOnlyReasons` or of `behavior.editGate` (9.1) applies. The reason a runtime shows is the first applicable one in this order: the form field's `readOnlyReasons` (7.5), the attribute's `readOnlyReasons`, then the edit gate; a `{reason}` entry that names a gate reason places that reason where it is listed instead of last. A runtime at level Standard or above **MUST** show the applicable reason with the field (beside it, or as its explanation), and **MUST** refuse a write to a read-only attribute by a user with the same reason, whatever the write's origin (a form, an inline label edit, a paste, a plugin). When an attribute is read-only and no reason applies, the runtime **SHOULD** show its `doc.summary`.
+
+**Absent and empty.** An attribute is **absent** for an element when it has no stored value and no `default` (DID omits it); it is **empty** when its stored value is `""`, `[]` or `{}`. A runtime **MUST** show `absentText` for an absent value and `emptyText` for an empty one, and **MUST NOT** show the two the same way unless neither is set. In CEL, absence stays `!has(self.attr)`. A validator **SHOULD** warn about `absentText` on an attribute that has a `default`, which is never absent.
+
+```json
+"description": { "type": "text", "readOnly": true,
+  "readOnlyReasons": [ "Published by the package's author and read from the local NuGet cache; nothing in this workspace defines it." ],
+  "absentText": "Not available - this package is not in the local NuGet cache" }
 ```
 
 **Unset values.** Reading an attribute that has no stored value yields its `default` when one is declared, otherwise the zero value of its CEL type (`''`, `0`, `0.0`, `false`, `[]`, `{}`, `null` for references, the Unix epoch for timestamps, `0s` for durations). The CEL macro `has(self.attr)` tests whether a value is explicitly stored. Persistence omits unset values (11.8).
@@ -633,7 +684,7 @@ A node type describes a kind of element that is drawn as a node.
 | `children`             | Containment          | What may be nested inside (4.8).                                                                                                                                                                                                           |
 | `multiplicity`         | `{min, max}`         | Number of instances allowed per diagram (for example exactly one `Start`). Enforced as a built-in constraint.                                                                                                                              |
 | `viewOnly`             | bool                 | The element has no model meaning and lives only in a view: notes, free text, frames, images, annotations. View-only elements are stored in view data (11.6) and are excluded from `diagram.nodes` unless `includeViewOnly` is used (12.4). |
-| `labelAttribute`       | attribute name       | The attribute used as the element's name in lists, problem messages, reference pickers and default labels. Default: the first `key` attribute, else the first required `string` attribute, else the first `string` attribute.              |
+| `labelAttribute`       | attribute name       | The attribute used as the element's name in lists, finding messages, reference pickers and default labels. Default: the first `key` attribute, else the first required `string` attribute, else the first `string` attribute.              |
 | `tags`                 | string[]             | Free classification, usable in CEL as `self.isTagged('x')`.                                                                                                                                                                                |
 | `x-*`                  |                      | Extensions.                                                                                                                                                                                                                                |
 
@@ -1249,6 +1300,16 @@ The notation layer defines the concrete syntax: how every node, edge, port and l
 
 Properties merge per key: a state style that only sets `stroke.color` keeps the resolved `stroke.width`.
 
+**What is drawn.** Which elements of the model a view draws is decided in one order, and filters, budgets, legends, notices and the empty-canvas message all read its result. A runtime **MUST** compute the drawn elements of a view in these steps, each working on what the previous step left:
+
+1. **Viewpoint membership**: the elements whose type the viewpoint includes and does not exclude, narrowed by its `members` when it declares them (3.5).
+2. **Derived elements**: the derived nodes and relations (4.11) computed from the model are added.
+3. **Viewer filters**: elements hidden by viewer state, such as the children of a collapsed container and elements a canvas filter (6.13) filters out, are removed.
+4. **Budgets**: when a hard budget (3.2) is exceeded, the elements it cuts are removed, so a budget applies to what the filters leave.
+5. **Visibility**: elements whose resolved notation has `visible: false` are removed.
+
+A relation **MUST** be drawn only when both of its ends are drawn, or as a stub where its notation declares one (6.10); a relation with an undrawn end is otherwise not drawn. The result, in model order, is the Diagram member `diagram.drawn` (12.2). Because steps 3 and 4 depend on the viewer, `diagram.drawn` **MUST NOT** be read in the deterministic contexts of 12.5; a constraint about what a view shows uses `over: "view"` and `view.members` instead (8.2). Undrawn elements still exist in the model, are still validated, and may still be named in messages and reasons (2.3).
+
 ### 6.2 Theme and tokens
 
 Tokens give colors, fonts and sizes semantic names so that one specification renders correctly in light mode, dark mode, high contrast and the brand palette of an organisation.
@@ -1424,15 +1485,15 @@ A **Style** bundles visual properties. Styles are declared in `notation.styles` 
 | `selected`    | Element is in the selection.                                                                         |
 | `focused`     | Element has keyboard focus.                                                                          |
 | `dragging`    | Element is being moved or resized.                                                                   |
-| `highlighted` | Highlighted by search, a problem link, a hook action or a related selection.                         |
+| `highlighted` | Highlighted by search, a finding link, a hook action or a related selection.                         |
 | `dropTarget`  | A dragged element can be dropped into this container or connected to this element.                   |
 | `dropReject`  | A dragged element cannot be dropped or connected here (a `connect`/`containment` constraint failed). |
-| `invalid`     | The element has at least one problem with severity `error`.                                          |
-| `warning`     | The element has at least one problem with severity `warning` (and none with `error`).                |
+| `invalid`     | The element has at least one finding with severity `error`.                                          |
+| `warning`     | The element has at least one finding with severity `warning` (and none with `error`).                |
 | `disabled`    | The element is read-only (locked, or `enabled` of its notation is false).                            |
 | `editing`     | A label of the element is being edited inline.                                                       |
 
-Runtimes provide sensible defaults for `hover`, `selected`, `dropTarget`, `dropReject`, `invalid` and `warning` (for example a selection outline and a red problem badge) that apply when the specification declares none.
+Runtimes provide sensible defaults for `hover`, `selected`, `dropTarget`, `dropReject`, `invalid` and `warning` (for example a selection outline and a red finding badge) that apply when the specification declares none.
 
 **Conditional styles** apply when an expression holds:
 
@@ -1687,14 +1748,24 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 | `lod`                                                | LodRule[]                                                               | Level of detail by zoom (below).                                                        |
 | `states`                                             | map state → Style                                                       | Interaction states (6.6).                                                               |
 | `conditions`                                         | `{when, style, doc}`[]                                                  | Conditional styles (6.6).                                                               |
-| `tooltip`                                            | LocalizedText or `{cel}`                                                | Hover text. Default: the type's `doc.summary`.                                          |
+| `tooltip`                                            | Message                                                                 | Hover text; context `element`. Default: the type's `doc.summary`.                       |
 | `layer`                                              | `"background"`, `"default"`, `"foreground"`, or int                     | Rendering layer (6.16).                                                                 |
 | `selectable`, `deletable`, `copyable`, `connectable` | Bindable bool                                                           | Interaction permissions (default `true`).                                               |
+| `refusals`                                           | GestureRefusals                                                         | Why a gesture this notation switches off is refused, per gesture (below).               |
 | `hitPaddingScreenPx`                                 | number                                                                  | Extra hit area around the outline.                                                      |
 | `doubleClick`                                        | `"editLabel"`, `"openForm"`, `"drillDown"`, `"none"`, or operation name | Double-click action. Default `"editLabel"`.                                             |
 | `drillDown`                                          | `{viewpoint, filter}`                                                   | Open a sub-diagram (for example a sub-process) when drilling down.                      |
 | `accessibility`                                      | `{role, name, description}`                                             | Accessible name and description (6.15).                                                 |
 | `doc`                                                | Doc                                                                     | Documents the notation itself ("Rounded corners mark states, circles pseudo-states").   |
+
+**GestureRefusals** (`$defs/GestureRefusals`) maps a gesture to the Reason[] shown when a user attempts it on an element of this kind and the notation, placement or metamodel switches it off. Its keys are `move` (placement `movable: false`, any edge, a derived or layout-placed element), `resize`, `reparent`, `delete` (`deletable: false`), `connect` (`connectable: false`), `reconnect` (`reconnectable: false`), `copy` (`copyable: false`) and `editLabel` (a label with `editable: false`). Reasons are evaluated in the `element` context. A runtime **MUST** show the applicable refusal when a user attempts that gesture on an element of that kind, and **MUST NOT** refuse silently when one is declared. A refusal here comes first in the order of gesture checks (8.4).
+
+```json
+"nodes": {
+  "Annotation": { "refusals": { "move": [ "An annotation stays with what it constrains; move that instead." ] } },
+  "Variable":   { "refusals": { "reparent": [ "A query's structure comes from its text, so nothing here can be moved into a different group. Dragging changes where an element sits on the canvas." ] } }
+}
+```
 
 **SizeSpec**
 
@@ -1730,7 +1801,7 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 | `visible`                  | Bindable bool                                              |                                                                                                                              |
 | `padding`, `style`         |                                                            |                                                                                                                              |
 
-**NodeIcon**: `{ "icon": IconRef, "position": Position, "size": 16, "color": Paint, "visible": Bindable }`. **Badge**: `{ "id", "position": Position, "offset": [dx, dy], "shape": ShapeRef, "text": Bindable string, "icon": IconRef, "style": StyleRef, "size", "visible": Bindable bool, "tooltip", "onClick": operation }` — for example a problem counter, a lock, a stereotype glyph, a progress ring.
+**NodeIcon**: `{ "icon": IconRef, "position": Position, "size": 16, "color": Paint, "visible": Bindable }`. **Badge**: `{ "id", "position": Position, "offset": [dx, dy], "shape": ShapeRef, "text": Bindable string, "icon": IconRef, "style": StyleRef, "size", "visible": Bindable bool, "tooltip", "onClick": operation }` — for example a finding counter, a lock, a stereotype glyph, a progress ring.
 
 **Positions** inside a node are one of `"center"`, `"top"`, `"bottom"`, `"left"`, `"right"`, `"top-left"`, `"top-right"`, `"bottom-left"`, `"bottom-right"`, the same prefixed with `outside-` (for example `"outside-bottom"` below the node, as for actors and events), or an object `{ "anchor": [fx, fy], "offset": [dx, dy], "align": "center" }`.
 
@@ -1810,7 +1881,8 @@ A Variant may contain any NodeNotation property except `placement`; matching var
 | `hitWidthScreenPx`                                    | number                              | Width of the hit area. Default 8.                                                                                          |
 | `layer`                                               | `"belowNodes"`, `"aboveNodes"`, int | Rendering layer (6.16). Default `"belowNodes"`.                                                                            |
 | `states`, `conditions`, `variants`                    |                                     | As for nodes; variants may replace line, markers and labels.                                                               |
-| `tooltip`, `selectable`, `deletable`, `reconnectable` |                                     | `reconnectable` controls whether users may drag an end to another element.                                                 |
+| `tooltip`, `selectable`, `deletable`, `reconnectable` |                                     | `tooltip` is a Message (context `element`). `reconnectable` controls whether users may drag an end to another element.     |
+| `refusals`                                            | GestureRefusals                     | As for nodes (6.9); for example `"move": ["An edge is drawn between its endpoints; move one of those instead."]`.          |
 | `accessibility`, `doc`                                |                                     |                                                                                                                            |
 
 **LineSpec**
@@ -2092,7 +2164,8 @@ If `toolbox` is absent, the runtime generates one group per 10 concrete types, a
 |------------------------|---------------------------------------------------|------------------------------------------------------------------------------------------------------|
 | `id`                   | identifier                                        | **Required**.                                                                                        |
 | `kind`                 | ToolKind                                          | Default: `"create-node"` or `"create-edge"` depending on `creates`; otherwise required.              |
-| `label`, `doc`, `icon` |                                                   | Default: from the created type. `doc.summary` is the tooltip.                                        |
+| `label`                | Message                                           | Palette text; context `element` with `self` bound to the diagram. Default: from the created type.    |
+| `doc`, `icon`          |                                                   | Default: from the created type. `doc.summary` is the tooltip.                                        |
 | `creates`              | TypeRef                                           | Type to create.                                                                                      |
 | `initial`              | map attribute → value or `{cel}`                  | Initial attribute values, overriding metamodel defaults. CEL values use the `create` context (12.3). |
 | `size`                 | Size                                              | Initial size overriding the notation default.                                                        |
@@ -2101,11 +2174,14 @@ If `toolbox` is absent, the runtime generates one group per 10 concrete types, a
 | `sticky`               | bool                                              | Tool stays active after use until Escape. Default `false`; shift-click MAY toggle.                   |
 | `shortcut`             | string                                            | Keyboard shortcut (`"S"`, `"Ctrl+Shift+E"`). Conflicts are a validator warning.                      |
 | `enabled`, `visible`   | Expression                                        | Context `diagram`.                                                                                   |
+| `unavailable`          | Reason[]                                          | Why the tool cannot be used now; context `element` with `self` bound to the diagram. A tool of kind `operation` also inherits its operation's reasons (9.3). |
 | `preview`              | `{style, shape}`                                  | Ghost appearance while placing.                                                                      |
 | `after`                | `"select"`, `"editLabel"`, `"openForm"`, `"none"` | What happens after creation. Default `"editLabel"` when the type has an editable label.              |
 | `template`             | template id                                       | For `kind: "template"`.                                                                              |
 | `operation`            | operation id                                      | For `kind: "operation"`.                                                                             |
 | `plugin`               | `{name, args}`                                    | For `kind: "plugin"`.                                                                                |
+
+A runtime **MUST** evaluate a CEL label each time it presents the entry, for the entry's current target. Where an entry is listed without a target (a list of keyboard shortcuts, toolbox search), a runtime **MUST** use its `doc.summary`, or else its label evaluated with no target if that evaluates, or else the label derived from its id (2.4); toolbox search **MUST** match the evaluated label and `doc.summary`. A tool that is visible but unavailable **MUST** be shown disabled with the applicable reason, as 9.3 describes for operations; a tool whose `visible` is false is not shown.
 
 **ToolKind**: `create-node`, `create-edge`, `template` (inserts a fragment), `operation` (runs an operation on the selection or diagram), `select`, `pan`, `lasso`, `text`, `note`, `image`, `freehand`, `plugin`.
 
@@ -2140,7 +2216,21 @@ Context tools appear next to the selected element (a "quick bar" or radial menu)
 | `placement` | `"around"`, `"toolbar"`, `"menu"`, `"radial"` | Presentation.                             |
 | `tools`     | ContextTool[]                                 | Items.                                    |
 
-ContextTool kinds: `create-connected` (create a node of type `creates` connected via relation `via`, placed at `position` using the layout's spacing; `direction` `outgoing` or `incoming`), `connect` (start an edge of type `via` from this element), `create-child` (create a child of `creates` in `slot`), `operation`, `delete`, `duplicate`, `editLabel`, `openForm`, `plugin`. All kinds accept `label`, `doc`, `icon`, `shortcut`, `enabled`, `position`.
+ContextTool kinds: `create-connected` (create a node of type `creates` connected via relation `via`, placed at `position` using the layout's spacing; `direction` `outgoing` or `incoming`), `connect` (start an edge of type `via` from this element), `create-child` (create a child of `creates` in `slot`), `operation`, `delete`, `duplicate`, `editLabel`, `openForm`, `plugin`. All kinds accept `label`, `doc`, `icon`, `shortcut`, `enabled`, `position`, `visible` and `unavailable`:
+
+| Property      | Type       | Description                                                                                                                                  |
+|---------------|------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| `label`       | Message    | Entry text, evaluated for the element the entry is on; context `element`.                                                                    |
+| `enabled`     | Expression | Whether the entry can run; context `element`. False shows the entry disabled.                                                                |
+| `visible`     | Expression | Whether the entry is offered at all; context `element`. False hides the entry instead of disabling it. Default `true`.                      |
+| `unavailable` | Reason[]   | Why the entry cannot run now; context `element`. An entry of kind `operation` also inherits the operation's `enabled` and `unavailable` (9.3). |
+
+An entry whose `visible` is false, or whose operation's `for` does not admit the target, **MUST NOT** be shown. A visible entry that is unavailable **MUST** be shown disabled with the applicable reason and **MUST NOT** run (9.3). Actions that do not apply are either not offered or shown disabled with their reason, never silently absent where the specification declares a reason:
+
+```json
+{ "kind": "operation", "operation": "addSibling", "label": "Add sibling", "visible": "self.parent != null" },
+{ "kind": "operation", "operation": "editNotes", "label": { "cel": "self.notes != '' ? 'Edit notes…' : 'Add notes…'" } }
+```
 
 Right-click **context menus** are defined the same way under `toolbox.contextMenus` with `placement: "menu"`; runtimes add standard entries (cut, copy, paste, delete, arrange) unless `standardEntries: false`.
 
@@ -2219,7 +2309,11 @@ If no form is defined for a type, runtimes generate one: one field per non-deriv
 | `layout`               | `"vertical"`, `"horizontal"`, `{columns, labelPosition, density}`  | `labelPosition`: `"top"`, `"left"`, `"inline"`, `"none"`; `density`: `"comfortable"`, `"compact"`.                                                                              |
 | `items`                | FormItem[]                                                         | Fields and containers.                                                                                                                                                          |
 | `commit`               | `"immediate"`, `"onBlur"`, `"explicit"`                            | When edits become model changes (each commit is one undoable transaction). Default `"immediate"` for inspectors, `"explicit"` for create dialogs.                               |
-| `label`, `doc`, `icon` |                                                                    | Title and help of the form.                                                                                                                                                     |
+| `label`                | Message                                                            | Title of the form or dialog; context `form` with `self` bound to the target.                                                                                                    |
+| `doc`, `icon`          |                                                                    | Help and icon of the form.                                                                                                                                                      |
+| `submitLabel`          | Message                                                            | Label of the confirming button of a dialog (`create`, `popover`, and an operation's `paramsForm`). Default: the runtime's "OK".                                                  |
+| `cancelLabel`          | Message                                                            | Label of the cancelling button of a dialog. Default: the runtime's "Cancel".                                                                                                    |
+| `danger`               | bool                                                               | Styles the confirming button as destructive. Default `false`.                                                                                                                   |
 
 **Field** (an item with `attribute`, or `kind: "field"`):
 
@@ -2227,12 +2321,13 @@ If no form is defined for a type, runtimes generate one: one field per non-deriv
 |----------------------------|-------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
 | `attribute`                | path                                | Attribute edited (dotted path into structs). **Required** for fields.                                                      |
 | `widget`                   | Widget                              | Default by type (Appendix B.7).                                                                                            |
-| `label`                    | LocalizedText                       | Default: attribute label.                                                                                                  |
+| `label`                    | Message                             | Default: attribute label. Context `form`.                                                                                  |
 | `doc`                      | Doc                                 | Field help. Default: attribute `doc`. Shown below the field (`summary`) and via an info icon (`description`, `rationale`). |
-| `placeholder`              | LocalizedText                       | Hint text inside empty inputs.                                                                                             |
+| `placeholder`              | Message                             | Hint text inside empty inputs. Context `form`.                                                                             |
+| `initial`                  | Expression                          | The value the field is pre-filled with when a dialog opens, evaluated once in the `form` context with `self` bound to the operation's target (the element, or the diagram) and `position` to the point the operation was invoked at, or `null`; for a `create` form, in the `create` context. |
 | `visible`, `enabled`       | Expression                          | Context `form` (12.3): `self`, `value`, `diagram`.                                                                         |
 | `required`                 | bool                                | Visual required marker; may tighten but not loosen the attribute.                                                          |
-| `validate`                 | `{rule, message, severity}`[]       | Field-local validation shown immediately; does not replace constraints.                                                    |
+| `validate`                 | FieldValidation[]                   | Field-local validation; does not replace constraints (below).                                                              |
 | `options`                  | `{cel}` or `{enum}` or literal list | Choices for select-like widgets: values or `{value, label, icon, doc}` maps, or elements for `reference`.                  |
 | `widgetOptions`            | object                              | Widget-specific settings (below).                                                                                          |
 | `colSpan`, `width`         | int, length                         | Grid layout.                                                                                                               |
@@ -2240,11 +2335,33 @@ If no form is defined for a type, runtimes generate one: one field per non-deriv
 | `format`                   | string                              | Display format for numbers and dates.                                                                                      |
 | `rows`                     | int                                 | For multi-line widgets.                                                                                                    |
 | `readOnly`                 | Bindable bool                       |                                                                                                                            |
+| `readOnlyReasons`          | Reason[]                            | Why the field cannot be edited, in priority order; context `form`. Shown before the attribute's own reasons (4.3).         |
+| `absentText`, `emptyText`  | Message                             | Override the attribute's texts for an absent or empty value (4.3). Context `form`.                                         |
+| `showAbsent`               | bool                                | Whether the field is shown while its value is absent. Default `true`.                                                      |
 | `onChange`                 | Action[]                            | Actions run after the value is committed (9.4).                                                                            |
+
+**FieldValidation** (`$defs/FieldValidation`): `rule` (Expression → bool, context `form`), `message` (Message, context `form`), `severity` (default `"error"`), and `timing`: `"input"` (default, as in 0.1: checked and shown as the user types) or `"commit"` (checked when the value is committed or the dialog is submitted, for input that is only judged complete). A validation message may call a declared function or a plugin's CEL function, so a format's own term grammar can word the refusal.
+
+**Dialogs.** A form used as a dialog (`usage` `create` or `popover`, or an operation's `paramsForm`) **MUST** show `placeholder` in an empty input, **MUST** pre-fill `initial`, and **MUST** label its confirming button with `submitLabel`. It **MUST NOT** submit while a validation of severity `error` fails, and **MUST** show that validation's message beside the field. When the invoking entry supplies every parameter of the operation, the dialog **MUST NOT** open.
+
+```json
+"renameDialog": {
+  "for": [ "Resource" ], "usage": [ "popover" ],
+  "label": "Rename resource", "icon": "mdi:pencil-outline", "submitLabel": "Rename",
+  "items": [ {
+    "attribute": "newName", "placeholder": "New IRI or prefixed name",
+    "initial": "rdfCompress(self.iri)",
+    "validate": [
+      { "rule": "rdfResolveTerm(value) != ''", "message": { "cel": "rdfTermRefusal(value)" }, "timing": "commit" },
+      { "rule": "!diagram.nodesOfType('Resource').exists(r, r.iri == rdfResolveTerm(value) && r != self)",
+        "message": { "cel": "rdfResolveTerm(value) + ' already names something in this document; renaming onto it would silently merge two resources.'" } }
+    ] } ]
+}
+```
 
 **Widgets**: `text`, `textarea`, `markdown`, `code` (with `widgetOptions.language`: `"cel"`, `"json"`, `"sql"`, …; the `cel` language is type-checked in the attribute's `context`), `number`, `slider` (`min`, `max`, `step`, `marks`), `spinner`, `rating` (`max`, `icon`), `checkbox`, `switch`, `select`, `combobox` (free entry allowed), `radio`, `segmented` (button group), `multiselect`, `tags`, `date`, `datetime`, `time`, `duration`, `daterange` (edits two attributes: `attribute` and `widgetOptions.endAttribute`), `color` (`palette`, `alpha`), `icon` (icon picker), `reference` (element picker, with `widgetOptions.pickOnCanvas: true` to select by clicking), `references` (for `many` references), `list` (editable list of primitives), `table` (list of structs, with `widgetOptions.columns`), `struct` (nested sub-form), `file` (binary or URI, `mediaTypes`), `image`, `link`, `progress` (read-only bar), `readonly` (plain text), `plugin`.
 
-**Containers and other items** (by `kind`): `section` (`title`, `collapsible`, `collapsed`, `items`), `row` (horizontal group), `tabs` (`tabs: [{title, icon, items}]`), `group` (a bordered box with `title`), `text` (static help text, Markdown), `divider`, `computed` (read-only `value` Bindable), `button` (`label`, `icon`, `operation` or `actions`, `enabled`, `confirm`), `problems` (list of the element's current constraint problems with quick fixes), `plugin`.
+**Containers and other items** (by `kind`): `section` (`title` as a Message, `collapsible`, `collapsed`, `items`), `row` (horizontal group), `tabs` (`tabs: [{title, icon, items}]`), `group` (a bordered box with `title`), `text` (static help text, Markdown), `divider`, `computed` (read-only `value` Bindable), `button` (`label` as a Message, `icon`, `operation` or `actions`, `enabled`, `unavailable` as Reason[], `confirm` as a Message or Confirmation (9.5); a button that runs an operation inherits its reasons, 9.3), `findings` (list of the element's current findings with quick fixes; `problems` is its deprecated alias, section 18), `plugin`.
 
 ### 7.6 Embedded forms (widgets inside nodes)
 
@@ -2313,32 +2430,93 @@ Constraints state what makes a diagram valid. They are written in CEL, evaluated
 | `rules`       | Constraint[]                                             | Ordered list of constraints.                                                                                                                |
 | `groups`      | map → `{label, doc, enabledByDefault, severityOverride}` | Groups users can enable, disable or re-rate as a unit ("rule sets").                                                                        |
 | `defaults`    | `{severity, timing}`                                     | Defaults for rules.                                                                                                                         |
-| `blockSaveOn` | `"never"`, `"error"`                                     | Whether saving is prevented while errors exist. Default `"never"` (never lose work); DID definitions are saved with problems and remain loadable. |
-| `builtIn`     | map built-in id → `{severity, enabled}`                  | Tune the built-in constraints (8.7).                                                                                                        |
+| `blockSaveOn` | `"never"`, `"error"`                                     | Whether saving is prevented while errors exist. Default `"never"` (never lose work); DID definitions are saved with findings and remain loadable. |
+| `builtIn`     | map built-in id → BuiltInSetting                         | Tune the built-in constraints (8.7).                                                                                                        |
+
+**BuiltInSetting** (`$defs/BuiltInSetting`), the value of each `constraints.builtIn` entry:
+
+| Property   | Type                                                   | Description                                                                                                                                                                                                 |
+|------------|--------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `severity` | `"error"`, `"warning"`, `"info"`, `"hint"`             | Re-rates the built-in.                                                                                                                                                                                      |
+| `enabled`  | bool                                                   | Switches the built-in off. Default `true`.                                                                                                                                                                  |
+| `code`     | QualifiedId (hyphens allowed)                          | The code reported with its findings (8.6), for example `"dependencies.duplicate-id"`.                                                                                                                      |
+| `message`  | Message                                                | Replaces the runtime's own wording. As a finding's text it is evaluated in the `constraint` context plus `detail`; as the refusal of a gesture (8.4) in that gesture's context plus `violation`.           |
+| `doc`      | Doc                                                    |                                                                                                                                                                                                             |
+
+`detail` is a map whose keys each built-in lists in 8.7; `violation` is a map with `rule` (the built-in id) and the keys 8.4 lists per built-in. `detail` **MUST** be bound only in built-in messages. Without `message`, the runtime words and localises the text itself, as in 0.1.
+
+```json
+"builtIn": {
+  "std.multiplicity": { "message": { "cel": "'Refused by the cardinality check: ' + target.name + ' already has its ' + violation.relationType + ' parent, and may have ' + string(violation.max) + '.'" } },
+  "std.acyclic":      { "message": { "cel": "'Refused by the cycle check: ' + target.name + ' already owns ' + source.name + ', so this link would make an ownership loop.'" } },
+  "std.unparseable":  { "code": "rdf.unparseable", "message": { "cel": "'This is not RDF that can be read: ' + detail.reason" } }
+}
+```
 
 ### 8.2 Constraint object
 
 | Property       | Type                                                                       | Description                                                                                                                                                                                   |
 |----------------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `id`           | identifier                                                                 | **Required**, unique. Stored with suppressions and reported in problems.                                                                                                                      |
+| `id`           | identifier                                                                 | **Required**, unique. Stored with suppressions and reported in findings.                                                                                                                      |
+| `code`         | QualifiedId (hyphens allowed)                                              | The code reported to users and tools with every finding of this rule, for example `"databricks.duplicate-task-key"`. Supersedes the extension property `x-adp-ruleId` and rule ids kept in `label` or `tags`. Suppressions stay keyed by `id`. |
 | `label`        | LocalizedText                                                              | Short name ("Single initial state").                                                                                                                                                          |
-| `doc`          | Doc                                                                        | `summary` explains the rule; `rationale` why it exists; `description` how to comply; `examples` valid and invalid snippets. Runtimes show it with every reported problem.                     |
+| `doc`          | Doc                                                                        | `summary` explains the rule; `rationale` why it exists; `description` how to comply; `examples` valid and invalid snippets. Runtimes show it with every reported finding.                     |
 | `kind`         | ConstraintKind                                                             | Default `"invariant"` (8.3, 8.4).                                                                                                                                                             |
 | `scope`        | `"diagram"`, `"node"`, `"relation"`, `"port"`, `"*"`, TypeRef or TypeRef[] | Which elements the rule is evaluated for; `self` is bound to each. `diagram` evaluates once. Default `"diagram"`.                                                                             |
+| `over`         | `"model"`, `"view"`                                                          | What the rule is evaluated over. `model` (default, the 0.1 meaning): once per model, however many views or readings of it are open. `view`: once per view, with `view` bound. |
+| `forEach`      | Expression → list                                                          | Items to judge one by one: evaluated once for each scope element, and `when`, `rule`, `severity`, `message`, `target`, `location`, `subject` and `attribute` are then evaluated per item with `item` and `index` bound. One finding per failing item. |
 | `when`         | Expression                                                                 | Precondition; the rule is only evaluated where it holds.                                                                                                                                      |
-| `rule`         | Expression → bool                                                          | The condition that MUST hold. **Required.**                                                                                                                                                   |
+| `rule`         | Expression → bool                                                          | The condition that MUST hold. **Required** unless `forEach` is present; with `forEach` the default is `false`, so every item yielded is a finding.                                           |
 | `severity`     | `"error"`, `"warning"`, `"info"`, `"hint"`, or `{cel}`                     | Default `"error"`.                                                                                                                                                                            |
-| `message`      | LocalizedText or `{cel}`                                                   | Problem text. CEL messages may interpolate values: `{ "cel": "'State ' + self.name + ' is unreachable'" }`.                                                                                   |
-| `target`       | `"self"` or Expression                                                     | Element(s) the problem is attached to; an expression returning an element or list (for example all duplicates). Default `self`.                                                               |
+| `message`      | Message                                                                    | Finding text. CEL messages may interpolate values: `{ "cel": "'State ' + self.name + ' is unreachable'" }`.                                                                                   |
+| `target`       | `"self"` or Expression                                                     | Element(s) the finding is attached to; an expression returning an element or list (for example all duplicates). Default `self`; with `forEach`, `item` when the item is an element, else `self`. |
+| `location`     | Expression → SourceLocation map or `null`                                  | Where in the files the finding is (8.6), when that is not the target's own location or is more precise. Default: the target's `location()` (12.2). |
+| `subject`      | Expression → string                                                        | A display string naming what the finding is about when that is not drawn: a triple, a key path, a prefix (8.6). |
 | `attribute`    | path                                                                       | Attribute to mark in forms.                                                                                                                                                                   |
 | `timing`       | (`"live"`, `"save"`, `"explicit"`, `"export"`)[]                           | When evaluated. `live`: after each transaction (debounced); `save`: before saving; `explicit`: on "Validate" command; `export`: before export. Default `["live", "save"]`.                    |
 | `enforcement`  | `"report"`, `"prevent"`, `"prevent-and-report"`                            | `prevent`: a transaction that would make the rule false (for elements it was true for before) is rejected with the message. Default `"report"` for invariants, `"prevent"` for gesture kinds. |
 | `fixes`        | QuickFix[]                                                                 | Suggested corrections.                                                                                                                                                                        |
-| `suppressible` | bool                                                                       | Users may suppress the problem for a specific element; suppressions are stored in the DID definition (11.7). Default `true` for warnings and below, `false` for errors.                             |
+| `suppressible` | bool                                                                       | Users may suppress the finding for a specific element, or for its subject when it has no element; suppressions are stored in the DID definition (11.7). Default `true` for warnings and below, `false` for errors. |
 | `enabled`      | bool                                                                       | Default `true` (subject to group).                                                                                                                                                            |
 | `group`        | group id                                                                   |                                                                                                                                                                                               |
 | `tags`         | string[]                                                                   |                                                                                                                                                                                               |
 | `cost`         | `"cheap"`, `"expensive"`                                                   | Hint: expensive rules (graph traversals) MAY be evaluated with lower frequency or off the main thread.                                                                                        |
+
+**One finding per item.** A constraint with `forEach` **MUST** produce one finding for each item for which `when` holds and `rule` does not, in list order, and none when the list is empty. A constraint with `forEach` **MUST** have `enforcement: "report"`; a validator **MUST** reject any other enforcement, so `prevent` stays defined over elements only. With `positionIn` (12.4) and the graph functions `diagram.cycles` and `diagram.knots` (12.4), `forEach` reports one finding per cycle, naming its members in loop order, and flags only the second and later of a group of duplicates:
+
+```json
+{ "id": "unlabelledLoop", "code": "causal-loop.unlabelled-loop", "scope": "diagram", "severity": "info", "cost": "expensive",
+  "forEach": "diagram.cycles('CausalLink', 500).filter(c, !diagram.nodesOfType('Loop').exists(l, signature(l.members) == signature(c)))",
+  "target": "item",
+  "message": { "cel": "'The links form a feedback loop through ' + item.map(v, v.name).join(' → ') + ' that no loop statement names.'" } }
+```
+
+```json
+{ "id": "duplicateTaskKey", "code": "databricks.duplicate-task-key", "scope": "Task", "severity": "error",
+  "rule": "self.positionIn(diagram.nodesOfType('Task').filter(t, t.key == self.key)) == 0",
+  "message": { "cel": "'The task key \\'' + self.key + '\\' is used more than once. Every task needs its own.'" } }
+```
+
+**Model or view.** `diagram` **MUST** always denote the whole model. A constraint with `over: "model"` **MUST** be evaluated once per model, however many views or readings of it are open, and its findings **MUST** be shared by all of them. A constraint with `over: "view"` **MUST** be evaluated once per view, with `view` bound to that view (members `id`, `viewpoint`, `name` and `members → list(Element)`), and each of its findings **MUST** carry that view's id. A rule about the views of the model as a whole reads `diagram.views` (12.2):
+
+```json
+{ "id": "elementNotOnAnyView", "code": "c4.element-not-on-any-view", "over": "model",
+  "scope": ["Person", "SoftwareSystem", "Container", "Component"],
+  "when": "diagram.views.size() > 0",
+  "rule": "diagram.views.exists(v, v.members.exists(m, m.id == self.id))",
+  "severity": "warning",
+  "message": { "cel": "\"'\" + self.name + \"' is on no view.\"" } }
+```
+
+**Location and subject.** When a finding targets an element and the constraint declares no `location`, the runtime **MUST** use the target's `location()` when it has one. `location` returns a SourceLocation map (8.6) or `null`; `subject` returns a string that is shown, never resolved as an id. A rule about something the model does not hold as an element locates it itself:
+
+```json
+{ "id": "unusedPrefix", "code": "sparql.unused-prefix", "scope": "diagram", "severity": "info",
+  "forEach": "diagram.prefixes.filter(p, !p.used)",
+  "location": "{'file': diagram.file, 'line': item.line}",
+  "subject": "'PREFIX ' + item.prefix + ':'",
+  "message": { "cel": "\"The prefix '\" + item.prefix + \":' is declared but never used.\"" } }
+```
 
 ### 8.3 Invariants
 
@@ -2376,9 +2554,9 @@ Gesture constraints are evaluated **before** a user action is applied, while the
 |---------------|----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
 | `connect`     | Creating or reconnecting an edge                   | `relationType` (string), `source`, `target` (elements or ports), `sourcePort`, `targetPort`, `self` (the edge when reconnecting, else `null`) |
 | `containment` | Dropping or creating an element inside a container | `child` (element or `{type}` for new elements), `parent`, `slot`                                                                              |
-| `create`      | Creating an element with a tool or operation       | `elementType` (string), `parent`, `position`                                                                                                  |
+| `create`      | Creating an element with a tool or operation       | `elementType` (string), `parent`, `position`, `dropTarget` (the topmost element under the pointer, which may differ from `parent` when it is not a container; `null` on empty canvas), `tool` (the id of the tool used, or `null`) |
 | `delete`      | Deleting elements                                  | `self`, `selection` (all elements being deleted)                                                                                              |
-| `placement`   | Moving or resizing                                 | `self`, `oldBounds`, `newBounds` (in domain values: `newBounds.x` is a timestamp on time axes), `newParent`                                   |
+| `placement`   | Moving or resizing                                 | `self`, `oldBounds`, `newBounds` (in domain values: `newBounds.x` is a timestamp on time axes), `newParent`, `gesture` (`"move"`, `"resize"` or `"reparent"`) |
 | `change`      | Changing an attribute in a form or label           | `self`, `attribute`, `oldValue`, `newValue`                                                                                                   |
 
 ```json
@@ -2398,27 +2576,112 @@ Gesture constraints are evaluated **before** a user action is applied, while the
 ]
 ```
 
-When enforcement is `report` on a gesture kind, the gesture is allowed and a problem is reported afterwards if the corresponding state still violates the rule.
+When enforcement is `report` on a gesture kind, the gesture is allowed and a finding is reported afterwards if the corresponding state still violates the rule.
+
+A gesture constraint with enforcement `prevent` **MUST** refuse the gesture before it is applied and **MUST** show its `message`, evaluated in the gesture's context, as the refusal (2.3).
+
+**Order of gesture checks.** When several checks would refuse one gesture, a runtime **MUST** show the refusal of the first one in this order, and **MAY** list the others on request:
+
+1. the notation's refusal for a gesture it switches off for the element's kind (`refusals`, 6.9, 6.10);
+2. the diagram-wide edit gate (`behavior.editGate`, 9.1), for a gesture that changes the model;
+3. the built-in constraints, in the order `std.endpoints`, `std.containment`, `std.multiplicity`, `std.acyclic`, `std.axisBounds`, `std.facets` (8.7);
+4. the declared gesture constraints, in the order of `rules`.
+
+A refused gesture changes nothing. A refusal about a selection of several elements **MUST** be evaluated once for the gesture, with `selection` bound to all of them and `self` bound to the element under the pointer (or the first of the selection).
+
+A built-in's `message` (8.1) used as a refusal sees the gesture's variables plus `violation`, a map with `rule` (the built-in id) and:
+
+| Built-in           | Keys of `violation`                                           |
+|--------------------|---------------------------------------------------------------|
+| `std.endpoints`    | `relationType`, `end` (`"source"` or `"target"`)             |
+| `std.containment`  | `parentType`, `childType`, `slot`                             |
+| `std.multiplicity` | `min`, `max`, `count`, `relationType` or `type`, `end`        |
+| `std.acyclic`      | `relationType`, `cycle` (list of elements, in loop order)     |
+| `std.axisBounds`   | `axis`, `min`, `max`                                          |
+| `std.facets`       | `attribute`, `facet`, `limit`                                 |
 
 ### 8.5 Quick fixes
 
 | Property     | Type                     | Description                                                                                    |
 |--------------|--------------------------|------------------------------------------------------------------------------------------------|
-| `label`      | LocalizedText or `{cel}` | Menu text ("Rename to 'Idle 2'").                                                              |
+| `label`      | Message                  | Menu text ("Rename to 'Idle 2'"), in the `constraint` context.                                 |
 | `doc`        | Doc                      | What the fix does.                                                                             |
 | `when`       | Expression               | Offer the fix only if true.                                                                    |
-| `actions`    | Action[]                 | Behavior actions (9.4) executed as one transaction with `self` bound to the problem's element. |
+| `actions`    | Action[]                 | Behavior actions (9.4) executed as one transaction with `self` bound to the finding's element. |
 | `operation`  | operation id             | Alternatively run a declared operation.                                                        |
 | `preferred`  | bool                     | The fix offered by "fix all" and keyboard shortcut.                                            |
-| `applyToAll` | bool                     | May be applied to all problems of this constraint at once.                                     |
+| `applyToAll` | bool                     | May be applied to all findings of this constraint at once.                                     |
 
-### 8.6 Problems
+### 8.6 Findings
 
-Evaluation produces **problems**: `{ constraint, severity, message, target, attribute, fixes }`. Runtimes MUST present problems on the canvas (the `invalid`/`warning` states and a badge), in a problems list (sortable, filterable, clicking reveals the element), and in forms (next to `attribute`). A headless validator reports problems as JSON (an array of `{constraintId, severity, message, elementId, attribute, pointer}`) and exits non-zero if errors exist.
+Evaluating constraints, and reading a model, produce **findings**: each is the result of one rule or of the reader, with a severity, a message and where it applies. DISL 0.1 called them problems; many findings are `info` or `hint`, so 0.2 uses the wider word. A host **MAY** keep its platform's own name for the panel that lists them.
+
+**The finding.** A finding carries:
+
+| Property     | Type                                           | Description                                                                                                                                  |
+|--------------|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| `constraint` | constraint id or built-in id                   | The rule that raised it. **Required.** Suppressions are keyed by it.                                                                         |
+| `code`       | QualifiedId                                    | The rule's `code` (8.1, 8.2). When the rule has one, the finding **MUST** report it.                                                         |
+| `severity`   | `"error"`, `"warning"`, `"info"`, `"hint"`     | **Required.**                                                                                                                                |
+| `message`    | string                                         | The rule's Message, evaluated. **Required.**                                                                                                 |
+| `target`     | element or elements                            | What the finding is attached to; the diagram itself for a rule with `scope: "diagram"` and no other target.                                   |
+| `attribute`  | path                                           | The attribute to mark in forms.                                                                                                              |
+| `location`   | SourceLocation                                 | Where in the files the finding is (below).                                                                                                   |
+| `subject`    | string                                         | A display string naming something not drawn: a triple, a key path such as `resources.jobs.x`, a prefix. It is not an id, and runtimes **MUST NOT** resolve it as one. |
+| `view`       | view id                                        | The view it was found in, for a rule with `over: "view"` (8.2).                                                                               |
+| `fixes`      | QuickFix[]                                     | The rule's quick fixes whose `when` holds (8.5).                                                                                             |
+
+Every finding **MUST** carry a rule, a severity and a message, and at least one of `target`, `location` and `subject`; it **MAY** carry several. Runtimes **MUST** present findings on the canvas (the `invalid`/`warning` states and a badge), in a list of findings (sortable, filterable, where choosing one reveals its element or goes to its location), and in forms (next to `attribute`). A runtime **MUST** present a finding with a location so that the user can go to that place in the file, and a finding with a subject with the subject shown, and **MUST NOT** fail to present a finding because it has no element.
+
+**SourceLocation** (`$defs/SourceLocation`) says where in a file something is:
+
+| Property | Type            | Description                                                                                          |
+|----------|-----------------|------------------------------------------------------------------------------------------------------|
+| `file`   | string          | The file, as a relative path with `/` separators, relative to the diagram's subject (below). **Required.** |
+| `line`   | integer ≥ 1     | The 1-based line. Absent: the finding is about the whole file.                                       |
+| `column` | integer ≥ 1     | The 1-based column, counted in Unicode code points. Requires `line`.                                 |
+| `length` | integer ≥ 0     | The length of the span, counted in Unicode code points. Requires `column`.                           |
+
+`line` and `column` **MUST** be 1-based, and `column` and `length` **MUST** count Unicode code points, not UTF-16 code units or bytes. `file` **MAY** name a file other than the model's own (an included file, a sibling in a folder, a lock file). A host **MAY** rebase `file` for display, for example relative to its project, but **MUST NOT** write a rebased path into a finding it passes on.
+
+**Subject, primary file and reading order.** These three are defined by FBL, the Format Binding Language, which reads foreign files into a model; DISL uses them as FBL defines them and defines none of its own:
+
+- The **subject** of a diagram is the file or folder it shows. For a diagram stored as a DID definition, the subject is the DID definition file. For a file subject, `file` is that file's own name; for a folder subject, it is the path of a file inside the folder.
+- The **primary file** is the subject when the subject is a file. A folder subject has no primary file.
+- **Reading order** is the order in which the reader produced the elements: record order for a DID definition; for a model read through FBL, document order within a file and, for a folder, its files in ordinal order of their relative paths, each in document order. `positionIn` (12.4), repeat counters in derived ids (11.5) and "the second and later duplicates" (8.7) rely on it.
+
+**Parse failure.** A reader that cannot parse a file of the model **MUST** report exactly one `std.unparseable` finding for that file, located at the file, and at the parser's line and column when it has them. A runtime **MUST NOT** report any other finding whose location names a file for which `std.unparseable` was reported. When that file is the primary file, the runtime **MUST NOT** evaluate any constraint over the model. When the subject is a folder, `std.unparseable` on one of its files never stops rule evaluation: the model read from the remaining files is validated as usual. A runtime **MUST NOT** crash, hide the diagram, or report a parse failure in any other way than this finding; whether the diagram then opens empty or read-only is for the reader to say (FBL, or DID section 8.1).
+
+**Order of findings.** Findings **MUST** be ordered as follows:
+
+1. findings raised by the reader (`std.unparseable`, `std.unreadableEntry`, `std.missingId`, `std.duplicateId`), in reading order;
+2. the other built-in constraints, in the order of the table in 8.7;
+3. declared constraints, in the order of `rules`;
+4. within one constraint, by scope element in model order (12.5), then by `forEach` item order.
+
+The headless validator's output and a runtime's default presentation **MUST** use this order; a runtime **MAY** let the user sort differently.
+
+**Suppressions.** A user may suppress a finding of a suppressible rule for an element, or, for a finding without an element, for its subject; suppressions are stored in the DID definition (DID, section 3) and are keyed by the rule's `id`, never by its `code`. A suppression **MUST NOT** name an ephemeral id (11.5).
+
+**Headless validator output.** A headless validator **MUST** write its findings as a JSON array valid against `$defs/ValidatorOutput`, in the order above, and **MUST** exit with a non-zero status when any finding has severity `error`. Each item keeps the 0.1 keys `constraintId` (the finding's `constraint`), `severity`, `message`, `elementId`, `attribute` and `pointer`, and may add `code`, `elementIds`, `location`, `subject` and `view`. `elementId` **MUST** equal the first of `elementIds` when both are present. `pointer` (a JSON Pointer) **MUST** be present for a finding about a record of a DID definition, and **MUST** be absent when `location` names a file that is not a DID definition. A headless validator **MUST** be given, or **MUST** derive from its input, the subject that `location.file` and the file-system facts (12.4) are relative to.
+
+```json
+[
+  { "constraintId": "std.duplicateId", "code": "dependencies.duplicate-id", "severity": "warning",
+    "message": "The id 'api-gateway' is declared more than once, which makes every reference to it ambiguous.",
+    "elementIds": ["api-gateway"], "location": { "file": "shop.dgr", "line": 14 } },
+  { "constraintId": "std.unparseable", "code": "sparql.unparseable", "severity": "error",
+    "message": "This query does not parse: a closing brace is missing.",
+    "location": { "file": "q.rq", "line": 3, "column": 17 } },
+  { "constraintId": "nonConceptTarget", "code": "skos.nonconcept-target", "severity": "warning",
+    "message": "ex:Widget is the object of skos:broader but is not a concept.",
+    "subject": "ex:Widget", "location": { "file": "stw.ttl", "line": 812 } }
+]
+```
 
 ### 8.7 Built-in constraints
 
-Metamodel declarations generate built-in constraints automatically. They behave like declared constraints, can be re-rated in `constraints.builtIn`, and their messages are localised by the runtime.
+Metamodel declarations generate built-in constraints automatically, and the reader and the runtime raise the others in the situations below. They behave like declared constraints, can be re-rated, switched off, given a `code` and given a `message` in `constraints.builtIn` (8.1); without a `message`, their messages are worded and localised by the runtime.
 
 | Id                 | Generated from                                                                             | Default severity / enforcement                                |
 |--------------------|--------------------------------------------------------------------------------------------|---------------------------------------------------------------|
@@ -2432,6 +2695,25 @@ Metamodel declarations generate built-in constraints automatically. They behave 
 | `std.references`   | references to missing elements                                                             | error / report                                                |
 | `std.axisBounds`   | axis `min`/`max`, system `bounds`                                                          | error / prevent                                               |
 | `std.typeExists`   | unknown types in loaded DID definitions                                                     | error / report (element preserved, 14.3)                      |
+| `std.unparseable`  | the reader, once per file of the model that cannot be parsed; replaces every other finding located in that file (8.6) | error / report                                                |
+| `std.unreadableEntry` | the reader, per entry of a parsed file that cannot become an element (an unknown key, a malformed value, a line in no known form); the entry is kept and not drawn | warning / report                                              |
+| `std.missingId`    | the reader or runtime, per element without a usable id, or whose derived id cannot be computed (11.5) | warning / report                                              |
+| `std.duplicateId`  | the reader or runtime, per element whose id, compared as `persistence.ids.compare` says, equals that of an element earlier in reading order; only the second and later are flagged (11.5) | warning / report                                              |
+| `std.mixedPrecision` | the runtime, when attributes of one element tied by `samePrecisionAs` (4.3) hold values written with different precisions (`precisionOf`, 12.4) | warning / report (and prevent in forms)                       |
+| `std.ephemeralViewData` | the runtime, per stored view data, style override or suppression keyed by an ephemeral id (11.5) | info / report                                                 |
+
+Each built-in binds `detail` in its `message` (8.1) with the keys below; the built-ins of 0.1 bind the keys that name what failed (`attribute`, `facet`, `limit`, `min`, `max`, `count`, `relationType`, `missingId`).
+
+| Built-in                | Keys of `detail`                                                     | Location and target                                                                  |
+|-------------------------|----------------------------------------------------------------------|--------------------------------------------------------------------------------------|
+| `std.unparseable`       | `reason` (the parser's message)                                      | the file, at the parser's line and column when known; no element                     |
+| `std.unreadableEntry`   | `reason`, `entry` (a display string naming the entry)                | the entry's location; `subject` names the entry                                      |
+| `std.missingId`         | `reason` (`"absent"`, `"empty"`, `"pattern"` or `"derived"`)         | the element, with its new or ephemeral id, and its location                          |
+| `std.duplicateId`       | `id`, `first` (the element that keeps the id)                        | each second and later element, and its location                                      |
+| `std.mixedPrecision`    | `attribute`, `other`, `precision`, `otherPrecision`                  | the element and the attribute                                                        |
+| `std.ephemeralViewData` | `key` (the stored id)                                                | the element when present; otherwise `subject` is the stored key                      |
+
+A reader **MUST** report `std.unparseable`, `std.unreadableEntry`, `std.missingId` and `std.duplicateId` as they occur, and **MUST NOT** fail to open a model because of any of them. Each built-in is raised only from a situation that 0.1 rejected or from a declaration that 0.2 adds, so a valid 0.1 diagram reports nothing new.
 
 ---
 
@@ -2463,6 +2745,26 @@ Behavior declares what happens in response to user actions, beyond the direct ma
 }
 ```
 
+Besides hooks (9.2), operations (9.3) and the policies of 9.5, `behavior` holds the reasons a runtime gives:
+
+| Property   | Type                              | Description                                                                                                                                                                                     |
+|------------|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `reasons`  | map id → NamedReason              | A library of named reasons (`$defs/NamedReason`: `{when, message, doc}`), so one sentence is declared once and referred to as `{ "reason": "<id>" }` wherever a Reason is accepted (2.3). `when` is evaluated in the context of the position that refers to it; absent, the reason always applies. |
+| `editGate` | Reason[]                          | Diagram-wide reasons that withhold every model change while one applies. Context `element`, with `self` bound to the diagram.                                                                  |
+| `messages` | map standard message id → Message | Replaces the sentences a runtime otherwise words itself: `std.notApplicable` (an action invoked on a selection it does not apply to; context `operation`, plus `operationId`), `std.readOnly` (the diagram is opened read-only; context `element` on the diagram), `std.atStart` and `std.atEnd` (a move up or down at the first or last position). |
+
+**The edit gate.** While any reason of `behavior.editGate` applies, a runtime **MUST** treat every model-changing tool, context tool, operation, form field and gesture as unavailable or refused, with the applicable reason. Gestures that write only view data (moving, resizing, folding) are not model changes and **MUST NOT** be withheld by the gate. The gate is checked after a notation refusal and before every constraint (8.4).
+
+```json
+"behavior": {
+  "reasons": {
+    "truncated": { "when": "budget('cards').truncated",
+      "message": "The diagram shows only the first part of this file, so edits through it are withheld: an edit through a partial view could touch what the view does not show. Edit the file as text instead." }
+  },
+  "editGate": [ { "reason": "truncated" } ]
+}
+```
+
 ### 9.2 Hooks
 
 | Property    | Type                  | Description                                                                                                                                                                                       |
@@ -2489,14 +2791,27 @@ Operations are named, documented commands, invoked from tools, context tools, fo
 
 | Property                           | Type                                  | Description                                                                                                            |
 |------------------------------------|---------------------------------------|------------------------------------------------------------------------------------------------------------------------|
-| `label`, `doc`, `icon`, `shortcut` |                                       |                                                                                                                        |
+| `label`                            | Message                               | Menu and button text; context `operation` without `p`. Evaluated for each target it is offered for (2.3).              |
+| `doc`, `icon`, `shortcut`          |                                       |                                                                                                                        |
 | `for`                              | TypeRef[], `"selection"`, `"diagram"` | What the operation applies to. For type lists, `self` is the target element; for `selection`, `selection` is the list. |
 | `params`                           | map → Attribute                       | Parameters; if present, the runtime shows a generated dialog (or `paramsForm`). Available as `p` in actions.           |
 | `paramsForm`                       | form id                               | Custom dialog.                                                                                                         |
 | `enabled`                          | Expression                            | Whether available.                                                                                                     |
-| `confirm`                          | LocalizedText                         | Confirmation question before running.                                                                                  |
+| `unavailable`                      | Reason[]                              | Why the operation cannot run now; context `operation` without `p`. While one applies, it is unavailable with that reason (below). |
+| `confirm`                          | Message or Confirmation               | Question asked before running (9.5).                                                                                   |
 | `actions`                          | Action[]                              | Body, executed as one transaction.                                                                                     |
 | `plugin`                           | `{name, args}`                        | Alternatively implemented by a plugin.                                                                                 |
+
+**Available, unavailable, not offered.** An operation is **unavailable** when its `enabled` is false, or when a reason in its `unavailable` list or in `behavior.editGate` (9.1) applies. Every entry that invokes an operation (a tool, context tool, menu entry, form button, quick fix or shortcut) inherits the operation's `enabled` and `unavailable`, so a reason is declared once. A runtime **MUST** show an unavailable entry disabled with the applicable reason (a tooltip, inline text or a status line), **MUST NOT** run it, and **MUST** refuse it with the same reason when it is invoked anyway, by a shortcut or from another surface. An entry that is disabled only by `enabled`, with no reason applying, is disabled as in 0.1, and the runtime **MAY** show a generic reason. Whether an entry is offered at all is decided by its own `visible` (7.2, 7.3) and, for operations, by `for`: an entry that is not offered is not shown.
+
+```json
+"arrange": {
+  "label": "Arrange diagram", "for": "diagram",
+  "unavailable": [ { "when": "diagram.nodesOfType('Variable').size() < 2",
+                     "message": "There is nothing to arrange until this diagram has two variables." } ],
+  "actions": [ { "layout": { "scope": "diagram.nodes", "algorithm": "selfOrganizing" } } ]
+}
+```
 
 ### 9.4 Actions
 
@@ -2523,7 +2838,7 @@ Actions are a small, closed set of declarative steps. **All values in actions ar
 | `openForm`  | `{ "openForm": { "target": expr, "form": "id" } }`                                                                        |                                                                              |
 | `notify`    | `{ "notify": { "message": expr, "severity": "info" } }`                                                                   | Toast message.                                                               |
 | `layout`    | `{ "layout": { "scope": expr, "algorithm": "id" } }`                                                                      | Run a layout (section 10).                                                   |
-| `abort`     | `{ "abort": { "message": expr } }`                                                                                        | Cancel the transaction (only in `before` hooks and operations).              |
+| `abort`     | `{ "abort": { "message": expr } }`                                                                                        | Cancel the transaction (only in `before` hooks and operations). A runtime **MUST** show the message to the user as the refusal of the gesture or command, in the words given. |
 | `call`      | `{ "call": "operationId", "args": { … } }`                                                                                | Run another operation.                                                       |
 | `plugin`    | `{ "plugin": "name", "args": { … } }`                                                                                     | Delegate to a plugin action.                                                 |
 
@@ -2538,7 +2853,38 @@ Every action MAY carry `when` (skip unless true) and `doc`.
 | `children`   | `"delete"` (default), `"reparent"`, `"forbid"`          | What happens to contained elements. `reparent` moves them to the deleted node's parent.                         |
 | `relations`  | `"delete"` (default), `"forbid"`, `"reconnect"`         | Attached edges. `reconnect` bridges incoming to outgoing edges of the same type (removing a step from a chain). |
 | `references` | `"unset"` (default), `"delete-referencing"`, `"forbid"` | Reference attributes pointing at the element.                                                                   |
-| `confirm`    | LocalizedText                                           | Ask before deleting.                                                                                            |
+| `confirm`    | Message or Confirmation                                 | Ask before deleting (below).                                                                                    |
+
+**Confirmation** (`$defs/Confirmation`). A `confirm` in a deletion policy, an operation (9.3) or a form button (7.5) is a Message, the 0.1 form, or a Confirmation:
+
+| Property       | Type              | Default                                            | Description                                                                 |
+|----------------|-------------------|----------------------------------------------------|-----------------------------------------------------------------------------|
+| `message`      | Message           | **required**                                       | The question.                                                               |
+| `title`        | Message           | the operation's label, or "Delete" for a deletion   | Title of the dialog.                                                        |
+| `confirmLabel` | Message           | the runtime's "OK", or "Delete" for a deletion      | Label of the confirming button.                                             |
+| `cancelLabel`  | Message           | the runtime's "Cancel"                             | Label of the cancelling button.                                             |
+| `danger`       | bool              | `true` for a deletion, `false` otherwise           | Styles the confirming button as destructive.                                |
+| `when`         | Expression → bool | `true`                                             | Ask only when it holds.                                                     |
+| `count`        | Expression → int  | absent                                             | A number the confirmation is about, bound as `count` in the texts and in `when`. |
+| `threshold`    | int               | `0`                                                | Ask only when `count >= threshold`. Ignored without `count`.                |
+| `doc`          | Doc               |                                                    |                                                                             |
+
+Its expressions are evaluated in the context of what is confirmed, plus `count`: for a deletion, the `delete` gesture context (`self`, `selection`, `diagram`, `env`); for an operation, the `operation` context (with `p` once the parameter dialog is answered); for a form button, the `form` context.
+
+- A runtime **MUST** ask for confirmation before the transaction when `when` holds and, if `count` is given, `count >= threshold`; otherwise it **MUST** proceed without asking. A threshold of `0` asks every time.
+- A plain Message in `confirm` is a Confirmation with only `message`, and asks every time, as in 0.1.
+- One deletion transaction asks at most once. With several elements selected, the runtime uses the confirmation of the first element, in selection order, whose confirmation asks, with `selection` bound to all of them.
+
+```json
+"deletion": { "Node": { "children": "delete", "relations": "delete",
+  "confirm": {
+    "count": "self.descendants().size()", "threshold": 1,
+    "title": "Delete branch?",
+    "message": { "cel": "'Delete \\'' + self.text + '\\' and the ' + string(count) + ' nodes under it? You can undo this.'" },
+    "confirmLabel": "Delete", "danger": true } } }
+```
+
+A leaf has no descendants, so deleting it asks nothing; a branch asks with its count. Asking only when a deleted element still has connections is the same pattern with `"count": "self.incoming.size() + self.outgoing.size()"`.
 
 **Clipboard** (`behavior.clipboard`): `relations` (`"internal"` — only edges between copied elements, `"all"`, `"none"`), `ids` (`"regenerate"`), `names` (`"keep"`, `"suffix"` — adds " (copy)" to the label attribute), `offset` (canvas offset on paste; on time axes a duration), `crossDocument` (bool), `formats` (clipboard MIME types offered: `application/vnd.did.fragment+json` (DID, section 7), `image/svg+xml`, `text/plain`).
 
@@ -2658,19 +3004,108 @@ What a stored diagram looks like, independently of format and file split, is spe
 
 ### 11.5 Identifiers
 
+`persistence.ids` (`$defs/IdStrategy`) says how the elements of a diagram are identified: a rule that applies to every type, and, in `types`, rules for single types that override it. Each rule is an **IdRule** (`$defs/IdRule`); `types`, `missing` and `compare` are allowed only at the top level.
+
 | Property     | Type                                                                                           | Description                                                                                                                                                                                                                                                                                                                         |
 |--------------|------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `strategy`   | `"uuid-v4"`, `"uuid-v7"` (default), `"ulid"`, `"nanoid"`, `"sequential"`, `"natural"`, `"cel"` | How new ids are generated (DID, section 4). `uuid-v7` and `ulid` are time-ordered, which keeps `id`-sorted files in creation order and helps merges. `sequential` uses per-type counters (`State_1`) and is only suitable for single-user editing. `natural` derives ids from `key` attributes (unique by constraint). `cel` evaluates `expression`. |
-| `prefix`     | string or map TypeRef → string                                                                 | Type prefixes (`"st_"`), making ids self-describing in diffs.                                                                                                                                                                                                                                                                       |
-| `expression` | Expression                                                                                     | For `cel`: context `create`, must return a string; uniqueness is enforced by appending `-2`, `-3`, …                                                                                                                                                                                                                                |
-| `stable`     | bool                                                                                           | Ids never change once assigned, even if `natural` keys change (the first derived id is kept). Default `true`.                                                                                                                                                                                                                       |
+| `strategy`   | `"uuid-v4"`, `"uuid-v7"` (default), `"ulid"`, `"nanoid"`, `"sequential"`, `"natural"`, `"cel"`, `"derived"` | How ids are made (DID, section 4). `uuid-v7` and `ulid` are time-ordered, which keeps `id`-sorted files in creation order and helps merges. `sequential` uses per-type counters (`State_1`) and is only suitable for single-user editing. `natural` derives ids from `key` attributes (unique by constraint). `cel` evaluates `expression` once, on creation. `derived` computes the id from the model with `expression`, whenever the model is read or changed (11.5.2). |
+| `encoding`   | `"hex"` (default), `"base64url"`, `"base36"`                                                   | Text form of `uuid-v4` and `uuid-v7` ids (11.5.1).                                                                                                                                                                                                                                                                                   |
+| `prefix`     | string or map TypeRef → string                                                                 | Type prefixes (`"st_"`), making ids self-describing in diffs. A map is allowed only at the top level. Not applied to the results of `cel` and `derived`, whose expression writes any prefix itself.                                                                                                                                  |
+| `expression` | Expression                                                                                     | **Required** for `cel` and `derived`. For `cel`: context `create`, must return a string. For `derived`: context `identity` (12.3), must return a string.                                                                                                                                                                             |
+| `stable`     | bool                                                                                           | Ids never change once assigned, even if `natural` keys change (the first derived id is kept). Default `true`. Has no effect on `derived` ids, which always follow their expression.                                                                                                                                                  |
 | `pattern`    | regex                                                                                          | Allowed id syntax; default `^[A-Za-z0-9_.:#-]{1,128}$`.                                                                                                                                                                                                                                                                             |
+| `suffix`     | string containing `{n}`                                                                        | How a generated `natural` or `cel` id is made unique. Default `"-{n}"`, the 0.1 behaviour (`-2`, `-3`, …).                                                                                                                                                                                                                          |
+| `ephemeral`  | bool or Expression → bool                                                                      | The id identifies the element within one reading of the model only (11.5.3). An Expression is evaluated in the `identity` context. Default `false`.                                                                                                                                                                                 |
+| `reason`     | Reason                                                                                         | The refusal shown when a gesture would store an ephemeral id (11.5.3); context `element`, with `self` bound to the ephemeral element.                                                                                                                                                                                              |
+| `types`      | map TypeRef → IdRule                                                                           | Per-type rules (11.5.2). Top level only.                                                                                                                                                                                                                                                                                            |
+| `missing`    | `"assign"` (default), `"ephemeral"`                                                            | What a runtime does with an element read without a usable id (11.5.4). Top level only.                                                                                                                                                                                                                                              |
+| `compare`    | `"exact"` (default), `"ignore-case"`                                                           | How ids are compared (11.5.4). Top level only.                                                                                                                                                                                                                                                                                      |
+| `doc`        | Doc                                                                                            |                                                                                                                                                                                                                                                                                                                                     |
+
+#### 11.5.1 Generation
+
+- Ids **MUST** be treated as opaque strings. A runtime **MUST NOT** decode an id to recover a UUID, a time or a key.
+- A hand-written id that matches `pattern` **MUST** be accepted whatever the strategy; the strategy governs only the ids the runtime makes.
+- `encoding` gives the text form of `uuid-v4` and `uuid-v7` ids. `hex` is the RFC 9562 hyphenated lowercase form (the 0.1 form). `base64url` is the 16 bytes in RFC 9562 byte order encoded with base64url (RFC 4648, section 5) without padding: 22 characters. `base36` is the 128-bit value as an unsigned integer in lowercase base 36, left-padded with `0` to 25 characters.
+- A `natural` id **MUST** be the type's `prefix` followed by the string forms of its `key` attributes, in declaration order after inheritance is flattened, joined by `|`.
+- When a generated `natural` or `cel` id is already in use, the runtime **MUST** append `suffix` with `{n}` replaced by the smallest integer n ≥ 2 that makes the id unique.
+- An id generated for a new element **MUST** be generated once, when the transaction is first applied. Redoing the transaction **MUST** re-create the element with the same id, and a redo that would create a duplicate id **MUST** be refused.
+
+```json
+"ids": { "strategy": "uuid-v4", "encoding": "base36", "stable": true }
+```
+
+```json
+"ids": { "strategy": "natural", "stable": true, "pattern": "^[A-Za-z_][A-Za-z0-9_]*$", "suffix": "{n}", "compare": "ignore-case" }
+```
+
+The first is the functional decomposition graph's ShortGuid, 25 base-36 characters; the second gives new C4 elements the identifiers `web`, `web2`, `web3`, compared without regard to case as the DSL does.
+
+#### 11.5.2 Per-type rules and derived ids
+
+- A rule in `types` **MUST** apply to the named type and to every subtype that has no rule of its own; where two inherited rules apply, the one nearest in the type's linearisation (4.7) wins. Properties a rule leaves out are taken from the top-level rule.
+- For the `derived` strategy, the id of an element **MUST** be the value of `expression`, evaluated in the `identity` context (12.3). It **MUST** be recomputed after the model is read and in the "recompute derived" step of every transaction, before invariants are checked (14.4).
+- A runtime **MUST** compute ids in this order: nodes, ancestors before descendants, then relations. An `identity` expression **MUST NOT** read the id of an element other than an ancestor of `self` or, for a relation, its ends and their ancestors; a validator **MUST** reject one that visibly does. A runtime **MUST** report an expression that fails, or that reads an id not yet computed, as `std.missingId` on `self` (8.7).
+- A derived id **MUST NOT** be altered to make it unique; two elements with the same derived id are reported by `std.duplicateId` (11.5.4).
+- When a derived id changes in a transaction, the runtime **MUST** rewrite every stored reference to it (parent, relation ends, reference attributes, view keys) in the same transaction. When an id read from storage differs from its recomputed value, the element takes the computed id, every reference follows, and the change is written with the next save; it is not an undo step.
+- A rename or move that changes what a derived id is computed from changes the id, so stored view data keyed by the old id no longer applies (*informative*: that is intended for path ids).
+
+Paths, IRIs, triples with a repeat counter, term forms, scope paths, relation formula ids and fixed singleton ids are all written as `derived` rules; they differ only in the expression:
+
+```json
+"ids": {
+  "strategy": "natural", "pattern": "^(res:.+|blank:[0-9]+|edge:.+|truncation)$",
+  "types": {
+    "Resource":   { "strategy": "derived", "expression": "'res:' + self.iri" },
+    "BlankNode":  { "strategy": "derived", "expression": "'blank:' + string(self.ordinal)", "ephemeral": true,
+                    "reason": "That is a blank node, whose identity does not survive a reparse, so a stored position could not be trusted. Name it with an IRI to arrange it." },
+    "Statement":  { "strategy": "derived",
+                    "expression": "cel.bind(n, self.positionIn(diagram.relationsOfType('Statement').filter(r, r.source.id == self.source.id && r.predicateIri == self.predicateIri && r.target.id == self.target.id)), 'edge:' + self.source.id + '|' + self.predicateIri + '|' + self.target.id + (n > 0 ? '|' + string(n) : ''))" },
+    "Truncation": { "strategy": "derived", "expression": "'truncation'" }
+  }
+}
+```
+
+A relation formula id reads its ends, for example `"expression": "'depends:' + self.source.id + '->' + self.target.id"` for a .NET project reference, and a path id reads the attribute the reader filled, for example `"expression": "'playbook:' + self.path"`.
+
+#### 11.5.3 Ephemeral ids
+
+An element is **ephemeral** when the rule that applies to its type has `ephemeral` true, or an `ephemeral` expression that evaluates to true for it. Its id identifies it within one reading of the model only: blank nodes, anonymous terms, elements numbered by their position in the file. The word `ephemeral` is used because `stable` already has its 0.1 meaning.
+
+- A runtime **MUST NOT** store, for an ephemeral element, view data (11.6; DID, section 5; or a registration's layout, which is FBL's), a style override, a suppression (8.6), or a reference by its id (a parent, a relation end, or a reference attribute).
+- A gesture whose effect would be one of those writes (moving, resizing or pinning an ephemeral node, connecting to it where the relation would be stored by id, suppressing one of its findings) **MUST** be refused before it is applied, with the rule's `reason` or, without one, a runtime sentence saying that the element's identity does not survive re-reading.
+- An ephemeral element **MAY** be selected, shown in forms, and targeted by findings and operations within the session.
+- Stored view data, style overrides and suppressions keyed by an id that the current reading makes ephemeral **MUST** be ignored, **MUST** be reported by `std.ephemeralViewData` (8.7), and **MUST** be dropped when they are next written.
+- A relation read from the model that ends at an ephemeral node is not a reference by id; the reader writes it back in the model's own syntax (FBL). DISL forbids only storage keyed by an ephemeral id.
+- A specification whose stored elements are referred to by id (a DID definition, 11.4) **SHOULD NOT** declare a stored type's ids ephemeral, and a validator **SHOULD** warn when it does.
+
+```json
+"Shape": { "strategy": "derived", "expression": "self.blank ? 'blank:' + string(self.ordinal) : 'res:' + self.iri",
+           "ephemeral": { "cel": "self.blank" } }
+```
+
+#### 11.5.4 Missing and duplicate ids
+
+- Nodes, relations and views of one diagram **MUST** share one id space. Ports are in the id space of their element when ids are written as `element#port`.
+- A runtime **MUST** open a model in which ids are missing or duplicated, and **MUST** report each case through `std.missingId` or `std.duplicateId` (8.7). It **MUST NOT** refuse the model for it.
+- Of the elements that share an id, the first in reading order (8.6) **MUST** keep it: every lookup and reference resolves to it. The second and later **MUST** be drawn, and **MUST** be treated as ephemeral (11.5.3) until the duplication is resolved.
+- With `missing: "assign"`, an element without a usable id (absent, empty, or not matching `pattern`) **MUST** receive a new id from the rule that applies to its type. The new id **MUST NOT** be written when the model is opened or validated, and **MUST** be written with the next save that writes the model. With `missing: "ephemeral"`, such an element **MUST** be drawn and treated as ephemeral.
+- A runtime **MUST NOT** change an id in order to resolve a duplicate, except through a user action such as a quick fix of `std.duplicateId`.
+- With `compare: "ignore-case"`, ids **MUST** be compared using Unicode default case folding for lookups, references, duplicate detection and view keys, and the spelling of the first occurrence in reading order **MUST** be kept. With `compare: "exact"`, ids compare as code-point sequences, as in 0.1.
+
+```json
+"ids": { "strategy": "uuid-v4", "prefix": "ID_", "missing": "assign" }
+```
+
+A mind map node without an id gets `ID_` and a new id in memory, written with the next save and never by opening the file or by the headless validator.
 
 ### 11.6 View data and style overrides
 
 `view.store` lists which kinds of view data are persisted: `bounds`, `waypoints`, `anchors`, `labelOffsets`, `collapsed`, `zIndex`, `rotation`, `params`, `ports`, `viewport`, `guides`, `pinned`, `settings`. Anything not listed is recomputed on load (by layout or defaults). A pure layout-driven language stores nothing but the model. DID, section 5, specifies the stored form.
 
 `view.styleOverrides` is `"none"` (default), `"all"`, or a list of style property paths users may override per element (`"fill"`, `"stroke.color"`, `"stroke.dash"`, `"font.size"`). Overrides are stored in `NodeView.style` / `EdgeView.style` and have the highest precedence (6.1).
+
+No view data or style override is stored for an element with an ephemeral id (11.5.3); stored data keyed by one is ignored, reported by `std.ephemeralViewData` and dropped on the next write.
 
 ### 11.7 Ordering, precision and canonical form
 
@@ -2684,7 +3119,7 @@ What a stored diagram looks like, independently of format and file split, is spe
 | `timestamps`        | `{format, timezone}`                                      | `format`: `"rfc3339"` (default) or `"epoch-ms"`; `timezone`: `"utc"` (normalise to `Z`) or `"preserve"` (keep the offset entered).                                                          |
 | `canonical`         | bool                                                      | Follow RFC 8785 (JSON Canonicalization Scheme) number and string serialization. Default `true`.                                                                                             |
 
-A conforming writer applies these settings as DID, section 6, specifies, including its determinism requirement: the same logical DID definition and specification MUST produce byte-identical output. Suppressions of constraint problems are stored as DID, section 3, describes.
+A conforming writer applies these settings as DID, section 6, specifies, including its determinism requirement: the same logical DID definition and specification MUST produce byte-identical output. Suppressions of findings are stored as DID, section 3, describes.
 
 ### 11.8 Metadata and specification embedding
 
@@ -2748,7 +3183,7 @@ DID definitions with a **newer** minor or patch language version than the loaded
 | `text`        | `"replace"`, `"merge"`                         | Concurrent edits of `text`/`string` attributes: last writer wins or character-level merge.                                    |
 | `ordering`    | `"fractional-index"`                           | Order keys for ordered children and lists that merge without renumbering.                                                     |
 | `presence`    | bool                                           | Share cursors and selections.                                                                                                 |
-| `conflicts`   | `"last-writer-wins"`, `"report"`               | Whether semantic conflicts (both sides valid, the merge invalid) are reported as constraint problems attributed to the merge. |
+| `conflicts`   | `"last-writer-wins"`, `"report"`               | Whether semantic conflicts (both sides valid, the merge invalid) are reported as findings attributed to the merge.    |
 
 The CRDT state is a transport concern; the persisted DID definition remains the canonical form (DID, section 6). Constraints are re-evaluated after merges.
 
@@ -2768,11 +3203,12 @@ DISL uses CEL as specified at https://github.com/google/cel-spec, with these sta
 
 | CEL type                                     | Fields and methods                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 |----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Element` (nodes, relations, ports, diagram) | `id` (string), `type` (string), `kind` (`"node"`, `"relation"`, `"port"`, `"diagram"`), every attribute as a field (typed from the metamodel; references resolve to `Element` or `null`), `isA(typeName) → bool`, `isTagged(tag) → bool`, `view → ViewData` (placement of the element in the current view, `null` in headless contexts), `label() → string` (value of `labelAttribute`).                                                                                                                                                           |
+| `Element` (nodes, relations, ports, diagram) | `id` (string), `type` (string), `kind` (`"node"`, `"relation"`, `"port"`, `"diagram"`), every attribute as a field (typed from the metamodel; references resolve to `Element` or `null`), `isA(typeName) → bool`, `isTagged(tag) → bool`, `view → ViewData` (placement of the element in the current view, `null` in headless contexts), `label() → string` (value of `labelAttribute`), `location() → optional(map)` (the SourceLocation (8.6) the reader recorded for the start of the element's declaration; `optional.none()` when it recorded none, as for every element of a DID definition), `location(attr) → optional(map)` (the same for one attribute's value).                                                                                                                                                           |
 | Node-specific                                | `parent → Element?`, `owner → Element` (parent or diagram), `slot → string`, `children → list(Element)`, `childrenOfType(t)`, `descendants()`, `ancestors()`, `ancestorsOfType(t)`, `depth() → int`, `ports → list(Element)`, `portsOfType(name)`, `incoming → list(Element)`, `outgoing → list(Element)`, `incomingOf(relType)`, `outgoingOf(relType)`, `neighbors()`, `successors(relType)`, `predecessors(relType)`, `reachable(relType) → list(Element)` (transitive successors, excluding self unless on a cycle), `inCycle(relType) → bool`. |
 | Relation-specific                            | `source → Element`, `target → Element`, `sourcePort`, `targetPort` (`Element?`), `other(e) → Element` (the opposite end).                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | Port-specific                                | `owner → Element`, `connections → list(Element)`, `direction → string`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| Diagram                                      | `nodes → list(Element)` (model nodes, not view-only), `relations`, `elements` (both), `nodesOfType(t)`, `relationsOfType(t)`, `elementById(id) → Element?`, `hasCycle(relType) → bool`, `viewOnly → list(Element)` (in the current view), diagram attributes as fields.                                                                                                                                                                                                                                                                            |
+| Diagram                                      | `nodes → list(Element)` (model nodes, not view-only), `relations`, `elements` (both), `nodesOfType(t)`, `relationsOfType(t)`, `elementById(id) → Element?`, `hasCycle(relType) → bool`, `viewOnly → list(Element)` (in the current view), `file → string` (the model's file relative to the diagram's subject, 8.6), `views → list(View)` (the views of the model: those a DID definition stores, or those the model's readings define), `drawn → list(Element)` (the elements the current view draws, after the five steps of 6.1, in model order; `[]` in headless contexts; not readable in the deterministic contexts of 12.5), diagram attributes as fields.                                                                                                                                                                                                                                                                            |
+| `View`                                       | `id` (string), `viewpoint` (string), `name` (string), `members → list(Element)` (the elements of the model the view shows). Bound as `view` in constraints with `over: "view"` (8.2).                                                                                                                                                                                                                                                                                                  |
 | `ViewData`                                   | `x`, `y`, `x2`, `y2`, `width`, `height` (domain values, `dyn`: `double`, `timestamp`, `duration` or band id), `bounds → Bounds` (canvas units), `collapsed`, `rotation`, `z`, `pinned`, `params` (map).                                                                                                                                                                                                                                                                                                                                            |
 | `Bounds`                                     | `x`, `y`, `width`, `height`, `x2`, `y2` (canvas or domain units depending on the context, as documented there), `center() → list(double)`, `intersects(Bounds) → bool`, `contains(Bounds) → bool`.                                                                                                                                                                                                                                                                                                                                                 |
 | `Env`                                        | `now → timestamp`, `locale → string`, `mode → string` (theme mode), `zoom → double`, `user → map` (`id`, `name`; empty unless the runtime is configured to expose it), `viewpoint → string`, `readOnly → bool`.                                                                                                                                                                                                                                                                                                                                    |
@@ -2793,12 +3229,13 @@ The context of an expression determines its variables. Validators type-check eac
 | `placementWrite`  | placement `write` actions                                                                                                                    | as `placement`, plus `value` (snapped domain value)                                       |
 | `snap`            | CEL snap rules                                                                                                                               | `value`, `axis`, `zoom`, `self`, `parent`, `diagram`                                      |
 | `categories`      | ordinal `categories` expressions                                                                                                             | `diagram`, `env`                                                                          |
-| `constraint`      | invariant `when`, `rule`, `message`, `target`, `severity`, fix `when`                                                                        | `self`, `diagram`, `env` (`env.now` is fixed at the start of a validation run)            |
-| `gesture:<kind>`  | gesture constraints                                                                                                                          | per 8.4                                                                                   |
-| `create`          | attribute CEL defaults, tool `initial`, id `expression`                                                                                      | `diagram`, `env`, `parent`, `elementType`, `position`                                     |
-| `form`            | form `visible`, `enabled`, `validate`, `options`                                                                                             | `self`, `value` (current field value), `diagram`, `env`                                   |
+| `constraint`      | invariant `when`, `rule`, `message`, `target`, `severity`, `forEach`, `location`, `subject`, fix `when` and `label`, built-in `message`       | `self`, `diagram`, `env` (`env.now` is fixed at the start of a validation run); `item`, `index` with `forEach`; `view` with `over: "view"`; `detail` in built-in messages (8.7) |
+| `identity`        | id `expression` and `ephemeral` of the `derived` strategy (11.5.2)                                                                           | `self`, `diagram`; no `env`, so an id never depends on locale, user or time. `self.id` is not readable; the ids readable are those of `self`'s ancestors and, for a relation, of its ends and their ancestors |
+| `gesture:<kind>`  | gesture constraints; a built-in's `message` used as a refusal                                                                                | per 8.4; `violation` in built-in messages; `count` in deletion confirmations (9.5)        |
+| `create`          | attribute CEL defaults, tool `initial`, id `expression` of the `cel` strategy                                                                | `diagram`, `env`, `parent`, `elementType`, `position`                                     |
+| `form`            | form `visible`, `enabled`, `validate`, `options`, `label`, `placeholder`, `initial`, `readOnlyReasons`, `absentText`, `emptyText`, button `confirm` | `self`, `value` (current field value), `diagram`, `env`; `position` in `initial` (7.5); `count` in confirmations (9.5) |
 | `hook`            | hook `when` and actions                                                                                                                      | `self`, `old`, `event`, `diagram`, `env`, plus `let`/`as` bindings                        |
-| `operation`       | operation `enabled` and actions                                                                                                              | `self` or `selection`, `p`, `diagram`, `env`, plus bindings                               |
+| `operation`       | operation `enabled`, `label`, `unavailable`, `confirm` and actions                                                                           | `self` or `selection`, `p` (not in `label`, `unavailable` and `enabled`), `diagram`, `env`, plus bindings; `count` in confirmations (9.5); `operationId` in `behavior.messages.std.notApplicable` |
 | `template`        | template attribute and position expressions                                                                                                  | `p`, `diagram`, `env`, `refs` (map of created elements by ref)                            |
 | `migration`       | migration steps                                                                                                                              | `element` (raw record map), `value`, `document` (raw map), `from`, `to` (version strings) |
 | `function`        | user functions                                                                                                                               | parameters, plus `diagram`/`env` if declared in `uses`                                    |
@@ -2834,12 +3271,30 @@ In addition to the members listed in 12.2, these global functions are available 
 | `lower(s)`, `upper(s)`                                                                                                       | Aliases of `lowerAscii`/`upperAscii` with Unicode case mapping.                                                        |
 | `matchesGlob(s, glob) → bool`                                                                                                | Glob matching (safer than regex for users).                                                                            |
 | `diagram.nodesOfType(t, includeViewOnly)`                                                                                    | Include view-only elements.                                                                                            |
+| `e.positionIn(l) → int`                                                                                                      | The zero-based position of element `e` in list `l`, comparing elements by identity, never by id, or −1. Lists of elements are in reading order (8.6), so `positionIn` works while ids are being computed and when ids are duplicated: `self.positionIn(group) == 0` holds for the first of a group only. |
+| `diagram.cycles(relType, max) → list(list(Element))`                                                                         | The elementary cycles over relations of `relType` (including its subtypes), at most `max` of them. Each cycle is in loop order and starts at its member that comes first in model order; the cycles are ordered by their first member, then lexicographically by member order. A self-loop is a cycle of one. |
+| `diagram.cyclesTruncated(relType, max) → bool`                                                                               | Whether `max` cut the list `diagram.cycles(relType, max)` returns.                                                     |
+| `diagram.knots(relType) → list(list(Element))`                                                                               | The strongly connected components over relations of `relType` that have more than one member or a self-loop; members in model order, components ordered by their first member. |
+| `fs.exists(path) → optional(bool)`, `fs.isDirectory(path) → optional(bool)`                                                  | File-system facts, `constraint` context only (below).                                                                  |
 
-Implementations MUST provide cost estimates for all library functions; graph traversals (`reachable`, `hasCycle`, `inCycle`) have cost proportional to the number of relations of the given type and SHOULD be memoised per validation run.
+Implementations MUST provide cost estimates for all library functions; graph traversals (`reachable`, `hasCycle`, `inCycle`, `knots`) have cost proportional to the number of relations of the given type and SHOULD be memoised per validation run. `diagram.cycles` and `diagram.cyclesTruncated` **MUST NOT** return or consider more than `max` cycles, and their cost **MUST** be estimated as proportional to (nodes + relations) × (`max` + 1), which keeps CEL's termination guarantee. All three graph functions **MUST** be deterministic given the model and the reading order.
+
+**File-system facts.** `fs.exists(path)` and `fs.isDirectory(path)` are the only file-system facts DISL defines, and they are available in the `constraint` context only.
+
+- `path` **MUST** be resolved relative to the folder of the diagram's subject (8.6), with `/` separators. The result **MUST** be `optional.none()` when the path is absolute, carries a URI scheme, resolves outside the root the runtime was given (the host's project, or the headless validator's root), or when the runtime has no file-system access; a rule then stays silent through `orValue`.
+- The functions **MUST** reveal only whether a path exists and whether it is a folder, never a file's content, size or time, and **MUST NOT** follow network paths (section 16).
+- The facts **MUST** be taken once per validation run, as `env.now` is (12.5). A runtime **MUST** re-evaluate the constraints that use them on explicit validation and on save, and **SHOULD** re-evaluate them when the file system changes.
+
+```json
+{ "id": "submapMissing", "code": "wardley.submap-missing", "scope": "Submap", "severity": "warning",
+  "when": "self.url != '' && !self.url.contains(':')",
+  "rule": "fs.exists(self.url).orValue(true)",
+  "message": { "cel": "\"The submap '\" + self.name + \"' points at '\" + self.url + \"', which is not in this project.\"" } }
+```
 
 ### 12.5 Determinism
 
-Expressions in the contexts `constraint`, `migration`, `create` (except `env.now`), `placement` and `snap` MUST be deterministic given the DID definition. `env.now` is the only source of time and is fixed per evaluation run. Random functions do not exist. Iteration order of `diagram.nodes` and similar lists is the persistence order (11.7), so results are reproducible across tools.
+Expressions in the contexts `constraint`, `identity`, `migration`, `create` (except `env.now`), `placement` and `snap` MUST be deterministic given the DID definition. `env.now` is the only source of time and is fixed per evaluation run; the file-system facts of 12.4 are likewise taken once per run. Members that depend on the viewer, such as `diagram.drawn`, **MUST NOT** be used in these contexts, and a validator **MUST** reject an expression there that uses one. Random functions do not exist. Iteration order of `diagram.nodes` and similar lists is the persistence order (11.7), so results are reproducible across tools.
 
 ---
 
@@ -2899,11 +3354,20 @@ Every plugin use (`{ "plugin": "acme.bpmnRouter", "args": {…} }`) references a
 9. **Check semantic rules** not expressible in JSON Schema: reserved attribute names, placement attribute types compatible with axes, snapping rules compatible with axis kinds, `x2` vs `width` exclusivity, handle parameters exist, label `editable` requires attribute binding, exactly one of `path`/`parts`/`svg`/`plugin` in shapes, and all other MUST statements of this document.
 10. **Build** the runtime model.
 
-Validators report every problem with the JSON Pointer of its location, a severity (`error` makes the specification unusable; `warning` does not) and a message.
+Validators report every error or warning in a specification with the JSON Pointer of its location, a severity (`error` makes the specification unusable; `warning` does not) and a message.
 
 ### 14.2 Loading a DID definition
 
 A runtime loads a stored diagram as DID specifies ([DID-specification.md](../did/DID-specification.md), section 8.1): it checks the language id and version against the specification's, runs this specification's migrations (11.9), validates, resolves view data, evaluates `live` constraints and renders.
+
+Loading is tolerant of ids (11.5.4). A runtime **MUST** load a model in which ids are missing or duplicated rather than refuse it, and **MUST** in this order:
+
+1. read the elements in reading order (8.6), reporting `std.missingId` for each element without a usable id and, following `persistence.ids.compare`, `std.duplicateId` for each second and later element with an id already used;
+2. give an element without a usable id a new id under `missing: "assign"` (held in memory and written with the next save, never on open) or treat it as ephemeral under `missing: "ephemeral"`, and treat every second and later holder of a duplicated id as ephemeral;
+3. compute the `derived` ids (11.5.2), nodes before relations, letting references follow a computed id that differs from the stored one;
+4. resolve view data, ignoring and reporting by `std.ephemeralViewData` any view data, style override or suppression keyed by an ephemeral id (11.5.3).
+
+A model read through FBL is loaded in the same order, with FBL's reading order and FBL raising the reader findings.
 
 ### 14.3 Unknown content
 
@@ -2934,6 +3398,8 @@ flowchart TB
 
 Transactions are atomic: either all effects apply or none. Remote changes from collaborators apply as transactions without hooks but with constraint evaluation.
 
+The "recompute derived values & bindings" step also recomputes `derived` ids (11.5.2) and rewrites references to any id that changed. Ids the transaction generates for new elements are generated once, when it is first applied; redo re-creates the elements with the same ids and is refused when that would duplicate an id (11.5.1).
+
 ### 14.5 Saving
 
 1. Evaluate constraints with `save` timing. If `blockSaveOn: "error"` and errors exist, ask the user (saving MUST remain possible under a different name or as a draft if the runtime supports drafts).
@@ -2949,7 +3415,7 @@ Transactions are atomic: either all effects apply or none. Remote changes from c
 |------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Specification**      | A specification is conforming if it validates against the JSON Schema, passes all checks of 14.1 without errors, and uses only declared plugins.                                                                                                                                                                                                                                                                                                             |
 | **DID definition**     | Conformance of a stored diagram to a specification is defined by DID ([DID-specification.md](../did/DID-specification.md), section 9).                                                                                                                                                                                                                                                                                                                       |
-| **Validator**          | Implements 14.1 and DID's loading rules (without rendering), reports problems with JSON Pointers, and evaluates constraints headlessly.                                                                                                                                                                                                                                                                                                                                      |
+| **Validator**          | Implements 14.1 and DID's loading rules (without rendering), reports findings with JSON Pointers and locations (8.6), and evaluates constraints headlessly.                                                                                                                                                                                                                                                                                                                                      |
 | **Runtime — Core**     | Metamodel, persistence (including migrations, determinism), constraints, behavior, CEL environment, one cartesian numeric coordinate system with grid snapping, built-in shapes `rect`, `roundedRect`, `ellipse`, `diamond`, `text`, straight and polyline edges, markers `none`, `arrow`, `arrowFilled`, generated forms and toolbox.                                                                                                                        |
 | **Runtime — Standard** | Core, plus: all built-in shapes and markers, styles with states and conditions, labels at all positions, compartments, ports, containers, custom path shapes, orthogonal and curved routing, all snap rules for numeric axes, per-axis snapping, time axes with calendar snapping, ordinal axes with bands, bound and computed placement, explicit forms and all standard widgets, context tools, templates, documentation surfaces (2.4), themes with modes. |
 | **Runtime — Full**     | Standard, plus: composite shapes with handles, nine-slice scaling, line effects, jump-overs, stacked and custom markers, embedded forms, nested coordinate systems, polar systems, level of detail, variants, collaboration, all export formats, plugins.                                                                                                                                                                                                     |
@@ -2967,6 +3433,7 @@ Runtimes that do not support a visual feature SHOULD degrade visually rather tha
 - **No code execution.** Specifications contain no executable code other than CEL, which is sandboxed, side-effect free and terminating. Plugins are code and MUST be installed through an explicit trust decision.
 - **Resource limits.** Runtimes MUST enforce CEL cost limits (2.5), limits on stored diagram size and element count (`language.limits`), hook depth (9.2), import depth (default 16) and path segment counts in custom shapes (default 10 000).
 - **Sanitisation.** Inline SVG (shapes, icons) MUST be sanitised: no `<script>`, no event handler attributes, no `<foreignObject>`, no external references except data URIs of images. Markdown in labels and docs MUST be rendered without raw HTML. URIs in labels and links MUST be restricted to `http`, `https`, `mailto` and internal references unless the specification allows more.
+- **File-system facts.** CEL reads nothing from the file system except through `fs.exists` and `fs.isDirectory` (12.4), which are confined to the root the runtime was given, answer only whether a path exists and is a folder, never follow network paths, and return `optional.none()` for anything outside that root. No other expression, context or function reads a file.
 - **Remote resources.** Imports, fonts, images and icons from remote URIs SHOULD carry integrity hashes; runtimes MAY block remote loading and SHOULD cache with integrity verification.
 - **Privacy.** `env.user` is empty unless the runtime is configured to expose it; DID definitions store user names in metadata only with consent (11.8). Attributes marked `secret` are excluded from exports, logs, telemetry and AI assistant context.
 - **Integrity of stored diagrams.** Unknown content is preserved (14.3); failed migrations never overwrite originals; saves are atomic.
@@ -2987,7 +3454,7 @@ This example shows a classic node-and-edge diagram type:
 - **Coordinates:** one pixel system with a 10 px grid applied to both axes, 10 px size snapping with a minimum of 20, 15° rotation steps and object snapping, all documented for users.
 - **Notation:** theme tokens with a dark mode; a composite `bullseye` shape with a handle that adjusts the ring gap; the parameterised `speech` bubble from 6.8 used for comments; a compartment computed from attributes; curved transitions with a casing, a label whose inline edit is parsed back into `trigger`, `guard` and `effect`, a priority label at the start of the edge, and dashed lines for guarded transitions.
 - **Toolbox:** grouped tools, a disabled tool once an initial state exists, context tools and a parameterised template.
-- **Constraints:** structural rules (one initial state, reachability, determinism), a `connect` gesture rule, and style rules with quick fixes that apply to all problems at once.
+- **Constraints:** structural rules (one initial state, reachability, determinism), a `connect` gesture rule, and style rules with quick fixes that apply to all findings at once.
 - **Behavior:** automatic naming, an operation that groups the selection into a composite state, and deletion and clipboard policies.
 - **Persistence:** split model and view files, prefixed UUIDv7 ids, tree ordering and a chain of migrations.
 
@@ -4097,7 +4564,13 @@ When the timeline DID definition is loaded (14.2), the runtime:
 5. evaluates constraints: `dependencyRespected` holds for all three dependencies — *Visual design* starts on Monday 12 October, the first working day after *Wireframes* ends on Friday 9 October; *Build pages* starts on Tuesday 3 November, the second working day after *Visual design* ends on Friday 30 October, as its lag of one day requires;
 6. renders the three-level ruler, and today's line if `env.now` falls inside the visible range.
 
-If a user then drags *Build pages* one working day to the left, the calendar snap rule keeps both ends on working days. Because the whole bar moves, the bindings write `start = 2026-11-02` and `end = 2026-11-26`. The `keepDuration` hook also fires (the user changed `start`), and it computes the same end date, so the transaction stays consistent. The `dependencyRespected` constraint now fails, because the task starts before the one-day lag has elapsed. The edge turns red through its conditional style, and the problem offers the quick fix *Move successor after predecessor*, which shifts the task back by exactly one working day.
+If a user then drags *Build pages* one working day to the left, the calendar snap rule keeps both ends on working days. Because the whole bar moves, the bindings write `start = 2026-11-02` and `end = 2026-11-26`. The `keepDuration` hook also fires (the user changed `start`), and it computes the same end date, so the transaction stays consistent. The `dependencyRespected` constraint now fails, because the task starts before the one-day lag has elapsed. The edge turns red through its conditional style, and the finding offers the quick fix *Move successor after predecessor*, which shifts the task back by exactly one working day.
+
+---
+
+## Changes from 0.1
+
+This section lists every place where DISL 0.2 gives a meaning that DISL 0.1 left open or ambiguous, with the reason. Everything not listed keeps its 0.1 meaning, and no valid 0.1 specification becomes invalid.
 
 ---
 
@@ -4105,21 +4578,22 @@ If a user then drags *Build pages* one working day to the left, the calendar sna
 
 DISL 0.1 continues the combined format it came from: DEDL became DISL and DID, and the constructs did not change. What that format called a definition is a DISL specification, and what it called a document is a DID definition (DID, section 11). Runtimes of DISL 0.x **MUST** accept the following identifiers as deprecated aliases (those of the earlier format, version 0.1, and the extension `.disl` that DISL 0.1 specification files had before they took `.dis`), read them as their DISL form, and never write them:
 
-| Deprecated alias                                                              | DISL 0.1                                                                       |
+| Deprecated alias                                                              | Current form                                                                   |
 |-------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
 | file extension `.dedl`                                                        | `.dis`                                                                         |
 | file extension `.disl` (DISL 0.1 before 2026-09-30)                           | `.dis`                                                                         |
 | `$schema` `https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json#/$defs/Definition` | `https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification` |
 | media type `application/vnd.dedl.definition+json`                             | `application/vnd.disl.specification+json`                                      |
 | version key `"dedl": "0.1"`                                                   | `"disl": "0.1"`                                                                |
+| form item kind `"problems"` (DISL 0.1)                                        | `"findings"` (7.5, 8.6; DISL 0.2)                                              |
 
-A specification carries exactly one of the two version keys; the schema accepts either and marks the old one `deprecated`. The old schema address stays published unchanged, so files that name it keep validating. The legacy fixtures in `specifications/disl/legacy/`, one in the earlier form and one with the old `.disl` extension, are validated through these aliases on every change to this repository. The aliases are removed no earlier than DISL 1.0.
+A specification carries exactly one of the two version keys; the schema accepts either and marks the old one `deprecated`. The old schema address stays published unchanged, so files that name it keep validating. The legacy fixtures in `specifications/disl/legacy/`, one in the earlier form and one with the old `.disl` extension, are validated through these aliases on every change to this repository. The form item kind `problems` is read as `findings` and means the same list; writers of 0.2 specifications **SHOULD** write `findings`. The aliases are removed no earlier than DISL 1.0.
 
 ---
 
 ## Appendix A — JSON Schema
 
-The normative JSON Schema is published as `disl.schema.json` (JSON Schema draft 2020-12), `$id` `https://etalii.net/adp/disl/schema/0.1/disl.schema.json`. Its root, `#/$defs/Specification`, validates **specifications**. Stored diagrams are validated by DID's schema, `did.schema.json`, which references this schema's `QualifiedId`, `SemVer` and `Point`. The schema is kept together with this document, and every specification example in section 17 validates against it.
+The normative JSON Schema is published as `disl.schema.json` (JSON Schema draft 2020-12), `$id` `https://etalii.net/adp/disl/schema/0.2/disl.schema.json`. The 0.1 schema address stays published, and a document that names it is read against the 0.2 schema (2.9). Its root, `#/$defs/Specification`, validates **specifications**. Stored diagrams are validated by DID's schema, `did.schema.json`, which references this schema's `QualifiedId`, `SemVer` and `Point`. The schema is kept together with this document, and every specification example in section 17 validates against it.
 
 ### A.1 Structure
 
@@ -4802,7 +5276,7 @@ The following excerpt shows how per-axis snapping is encoded. A snap rule is eit
 | Relation (undirected)       | as directed, without markers                                                                                                                                                               |
 | Port                        | 8 × 8 `rect`, fill `color.surface`, sides by direction                                                                                                                                     |
 | Selection                   | 1.5 px outline in token `color.accent` (`#534AB7`), 8 screen-px square handles                                                                                                             |
-| `invalid` state             | stroke token `color.danger` (`#E24B4A`), problem badge top-right                                                                                                                           |
+| `invalid` state             | stroke token `color.danger` (`#E24B4A`), finding badge top-right                                                                                                                           |
 | `warning` state             | stroke token `color.warning` (`#BA7517`), warning badge top-right                                                                                                                          |
 | `dropTarget` / `dropReject` | fill token `color.accent.soft` / stroke `color.danger` dashed                                                                                                                              |
 
