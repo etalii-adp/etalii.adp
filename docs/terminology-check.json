@@ -77,7 +77,7 @@
     },
     {
       "id": "specification-extensions",
-      "regex": "\\.(disl|desl|edsl)\\b(?!\\.)",
+      "regex": "(?<!\\.\\.)\\.(disl|desl|edsl)\\b(?!\\.)",
       "severity": "error",
       "entry": "a specification file holds a specification, not the language",
       "replacement": ".dis, .des, .eds"
