@@ -116,7 +116,7 @@ A user folds, expands and filters a diagram without changing the model: that sta
 
 **Why this priority**: about 12 specifications need it; each host otherwise draws its own chrome.
 
-**Independent Test**: express the mindmap's fold state, the C4 tag-chip filter and legend, and the Databricks empty-canvas message in DISL 0.2 and validate them.
+**Independent Test**: express the mindmap's fold state, the C4 tag-chip filter and legend, and the causal loop diagram's empty-canvas message in DISL 0.2 and validate them.
 
 **Acceptance Scenarios**:
 
@@ -263,7 +263,7 @@ Derived nodes (from gap 3)
 
 Smaller items (gap 13)
 
-- **FR-100**: DISL **MUST** offer a simulated, animated action that plays over time and never enters undo; a hook `forEach` that sees the claims of earlier iterations; enum wire values that are not identifiers; a statement of whether `acyclic` on an abstract relation type covers its subtypes; a fixed attribute that is not persisted; and a defined ordering for CEL `sort()` on strings.
+- **FR-100**: DISL **MUST** offer a simulated, animated action that plays over time and never enters undo; a hook `forEach` that sees the claims of earlier iterations; enum wire values that are not identifiers; a statement of whether `acyclic` on an abstract relation type covers its subtypes; a fixed attribute that is not persisted; a defined ordering for CEL `sort()` on strings; and a language's origin (`<vendor>/<type>`), which FBL's registration names.
 
 ### Key Entities
 

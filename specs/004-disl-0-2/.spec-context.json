@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "DISL 0.2, the declarative additions",
   "branch": "features/004-disl-0-2",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "plan",
+  "status": "planned",
   "history": [
     {
       "step": "specify",
@@ -11,6 +11,13 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-09-30T19:11:03.926Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-09-30T19:55:56.538Z"
     }
   ],
   "telemetryInstanceId": "3640920f-162f-40e3-b137-2c6a2a929e98"
