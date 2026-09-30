@@ -22,7 +22,7 @@
       "regex": "\\.dedl\\b",
       "severity": "error",
       "entry": "DEDL is retired",
-      "replacement": ".disl"
+      "replacement": ".dis"
     },
     {
       "id": "dedl-schema",
@@ -74,6 +74,13 @@
       "severity": "error",
       "entry": "earlier drafts' terms",
       "replacement": ".did, .ded, .edd; disl.schema.json"
+    },
+    {
+      "id": "specification-extensions",
+      "regex": "\\.(disl|desl|edsl)\\b(?!\\.)",
+      "severity": "error",
+      "entry": "a specification file holds a specification, not the language",
+      "replacement": ".dis, .des, .eds"
     },
     {
       "id": "language-designer",
