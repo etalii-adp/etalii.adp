@@ -125,7 +125,7 @@ The same specification serves other consumers too:
 
 - DISL is not a general-purpose UI framework. It specifies diagram types, including forms embedded in diagram elements and property inspectors, but not arbitrary application screens.
 - DISL does not prescribe a rendering technology. SVG, Canvas 2D, WebGL, native toolkits and print pipelines are all valid targets.
-- DISL does not define execution or simulation semantics of the modelled language (for example, how a state machine runs). Such information MAY be carried in extensions.
+- DISL does not define execution or simulation semantics of the modelled language (for example, how a state machine runs). Such information MAY be carried in extensions. A specification **MAY** play a simulated run of its own, stepwise and outside the model's history (9.6); DISL defines how such a run is declared and played, not what the modelled language means.
 - DID definitions are not a lingua franca for unrelated software; a DID definition is always interpreted relative to its specification.
 
 ### 1.6 Relation to prior art *(informative)*
@@ -315,6 +315,8 @@ Because literals may be strings, **a bare string in a Bindable position is alway
 | Snapping function                  | The unsnapped value is used.                                                                                             |
 | Behavior action, hook, operation   | The whole transaction is rolled back and the error reported to the user.                                                 |
 | Migration                          | Loading the DID definition fails with a descriptive error; the original file is left untouched.                          |
+| Derived element (4.11)             | A failing `from` yields no elements of that type and one finding `std.derivedFailed` naming the type and the error; a failing per-item expression drops that item, with one finding per type and error message. The rest of the diagram is drawn. |
+| Plugin function call (13.1)        | When the plugin is absent, the call evaluates the declared `fallback`; without one, the call fails and is handled by the row of the context it appears in (a constraint reports "could not be evaluated", never passes). One `std.pluginMissing` finding is reported per missing plugin, not per call. |
 
 **Static checking.** Every expression is evaluated in a well-defined *context* that determines which variables exist and what types they have (section 12.3). Validators MUST type-check every expression in its context, using attribute types from the metamodel. Expressions whose type cannot be determined statically (for example because they use `dyn`) are permitted but SHOULD produce a validator warning.
 
@@ -410,8 +412,49 @@ This five-line language already yields a usable diagram type: a palette with an 
 | `homepage`      | URI                    | –    | Project page.                                                                                                                                                          |
 | `icon`          | IconRef                | –    | Icon of the language (file type icon, window title).                                                                                                                   |
 | `fileExtension` | string                 | –    | Preferred extension of stored diagrams without dot, for example `"sm.json"`.                                                                                                   |
-| `limits`        | object                 | –    | `celCost` (per-expression cost limit), `maxElements` (soft limit, runtimes SHOULD warn beyond it), `maxDocumentBytes`.                                                 |
+| `limits`        | object                 | –    | `celCost` (per-expression cost limit), `maxElements` (soft limit, runtimes SHOULD warn beyond it), `maxDocumentBytes`, `budgets` (map id → Budget, hard budgets, 3.2.1).                                                 |
 | `requires`      | object                 | –    | `conformance`: minimum runtime conformance level (`"core"`, `"standard"`, `"full"`); `features`: list of optional feature ids (Appendix B.8) the specification relies on. |
+
+#### 3.2.1 Budgets
+
+A **budget** caps how much of a model a view draws, and says what the tool withholds while the cap is reached. `language.limits.budgets` maps a budget id (a simple identifier) to a **Budget** (`$defs/Budget`):
+
+| Property   | Type                                             | Default                              | Description |
+|------------|--------------------------------------------------|--------------------------------------|-------------|
+| `measure`  | `{ "count": TypeRef[] }` or `{ "cel": … }`       | **required**                         | What is counted. `count`: the drawn candidates of these node and relation types after steps 1 to 3 of the drawing order (6.1). `cel`: an `int` in the `budget` context, for a measure that is not a count of drawn elements (for example a count of RDF nodes a declared function supplies). |
+| `max`      | int ≥ 0                                          | **required**                         | The limit. The budget is **exceeded** while the measure is greater than `max`. |
+| `truncate` | bool                                             | `true` for `count`, `false` for `cel` | Whether the budget cuts what is drawn. A budget that does not truncate only gates edits and shows its notice and finding. |
+| `order`    | Expression                                       | persistence order                    | Sort key per candidate, ascending, in the `budget` context; ties keep persistence order. It **MAY** return a list, compared element by element. |
+| `unit`     | Expression                                       | each element its own unit            | A group key in the `budget` context: the candidates with one key are kept or cut together. |
+| `notice`   | bool or `{text, severity, position}`             | `true`                               | The built-in notice `budget:<id>` (6.13) shown while the budget truncates. `text` is a Message in the `chrome` context; its default names `budget('<id>').shown` and `budget('<id>').total` and says that edits are withheld when they are. |
+| `withhold` | `{ "edits": "model" \| "all" \| "none", "reason": Reason }` (`$defs/BudgetWithhold`) | `{ "edits": "model" }` with the runtime's sentence | What is refused while the budget is exceeded: `model`, every change to the model (property writes, operations with model actions, model-changing gestures, paste, delete); `all`, also stored view data such as positions; `none`, nothing. |
+| `finding`  | `{severity, message}`                            | none                                 | A diagram-level finding reported while the budget is exceeded; `severity` defaults to `info`, `message` is a Message in the `constraint` context. Because findings never depend on a viewer, the finding is judged on the measure taken without viewer filters (after steps 1 and 2 of 6.1). |
+| `doc`      | Doc                                              |                                      | |
+
+The `budget` context binds `self` (the candidate), `index` (its position in persistence order), `diagram` and `env` (12.3). A budget's state is read in CEL with `budget(id)` (12.4), which returns `shown`, `total`, `truncated` and `withheld`; it is a function rather than a Diagram member so that diagram attributes named `shown`, `total` or `truncated`, which existing specifications declare, keep their meaning.
+
+- Budgets **MUST** be applied at step 4 of the drawing order (6.1), after viewer filters, and deterministically: the same model, viewer filters and specification **MUST** give the same kept set in every runtime.
+- For a truncating budget, candidates **MUST** be sorted by `order`; with `unit`, units are kept whole in the order of their first candidate while they fit, and the first unit that does not fit ends the cut. A truncating `count` budget **MUST** draw exactly the kept candidates. A relation **MUST** be drawn only when both its ends are kept, and a counted relation only when it is itself within the budget.
+- While a budget with `withhold.edits` other than `none` is exceeded, a runtime **MUST** refuse the withheld edits with `withhold.reason`, **MUST** show that reason as the read-only reason of every property row (4.3) and as the reason of every unavailable entry (9.3), and **MUST NOT** apply an edit partly. The withheld reason is checked with the edit gate (9.1), after a notation refusal and before every constraint (8.4).
+- A budget **MUST NOT** remove model data, or stored view data of the elements it leaves undrawn. Selecting, revealing or navigating to an undrawn element (for example from a finding) **MAY** be refused; the finding still names it (2.3).
+- `limits.maxElements` keeps its 0.1 meaning: a soft limit beyond which runtimes **SHOULD** warn. It is independent of budgets.
+
+```json
+"limits": {
+  "maxElements": 1000,
+  "budgets": {
+    "cards": {
+      "measure": { "count": ["NodeShape"] }, "max": 1000,
+      "notice": { "text": { "cel": "'Showing ' + string(budget('cards').shown) + ' of ' + string(budget('cards').total) + ' shapes.'" } },
+      "withhold": { "edits": "none" } },
+    "rdfNodes": {
+      "measure": { "cel": "rdfNodeCount()" }, "max": 1000, "notice": false,
+      "withhold": { "edits": "model", "reason": "The diagram shows only the first part of this file, so edits through it are withheld: an edit through a partial view could touch what the view does not show. Edit the file as text instead." } }
+  }
+}
+```
+
+The SHACL shapes graph above draws at most 1000 cards, in discovery order, and withholds edits by a second measure, the RDF nodes of the file. A budget over several types keeps them in a given order with a list key, for example `"order": "[typeRank(self), index]"` for a SPARQL query's regions, variables, pattern edges and annotations, and a budget that must keep whole groups declares `unit`, for example `"unit": "unitOf(self)"` for an OWL axiom and its expressions.
 
 ### 3.3 Imports
 
@@ -458,9 +501,23 @@ User-defined functions make repeated CEL logic reusable and documented.
 | `returns` | string                | ✓   | CEL result type.                                                                                                                                                                                      |
 | `cel`     | string                | ✓   | Body; may reference parameters, globally available variables of the calling context are **not** visible (functions are pure over their parameters, plus `diagram` and `env` when declared in `uses`). |
 | `uses`    | string[]              | –    | Context variables the function may read: `"diagram"`, `"env"`.                                                                                                                                        |
+| `recursion` | `{maxDepth, atMaxDepth}` | – | Lets the function call itself (below). `maxDepth` is an int ≥ 1; `atMaxDepth` is CEL source over the same parameters.                                                                            |
 | `doc`     | Doc                   | –    | Documentation.                                                                                                                                                                                        |
 
-Functions are called as `displayName(self)`. A function MAY call functions declared before it in the specification order; recursion (direct or indirect) is a specification error. This preserves CEL's termination guarantee.
+Functions are called as `displayName(self)`. A function **MAY** call functions declared before it in the specification order. A function without `recursion` **MUST NOT** call itself, and indirect recursion (a function reached again through others) is a specification error in every case. This preserves CEL's termination guarantee.
+
+**Bounded recursion.** A function with `recursion` **MAY** call itself. Recursion depth counts the nested calls of the same function within one top-level call, the top-level call being depth 1. A call that would be nested deeper than `maxDepth` **MUST NOT** evaluate the body; it returns the value of `atMaxDepth`, evaluated over that call's parameters. The run-time cost limit of 2.5 applies to the whole evaluation, including every nested call, and validators **SHOULD** warn when they cannot bound the estimated cost statically. A guard against cycles in the model is a parameter the function passes down (a list of visited ids), not a construct.
+
+```json
+"expressionText": {
+  "params": [ { "name": "n", "type": "string" }, { "name": "visited", "type": "list(string)" } ],
+  "returns": "string", "uses": ["diagram"],
+  "recursion": { "maxDepth": 2, "atMaxDepth": "'…'" },
+  "cel": "n in visited ? '…' : cel.bind(ts, diagram.nodesOfType('Triple').filter(t, t.s == n), ts.exists(t, t.p == OWL_SOME) ? '∃ ' + owlShort(ts.filter(t, t.p == OWL_ON_PROPERTY)[0].o) + '.' + expressionText(ts.filter(t, t.p == OWL_SOME)[0].o, visited + [n]) : owlShort(n))"
+}
+```
+
+This is the text of an OWL class expression on a canvas card, two levels deep; the grid's full text is a second function with a larger `maxDepth`.
 
 ### 3.5 Viewpoints
 
@@ -472,13 +529,38 @@ A language may offer several diagram kinds over the same model — for example a
 | `coordinateSystem`     | name                 | Coordinate system of diagrams of this kind (section 5).                                            |
 | `include`              | TypeRef[]            | Types shown. Default: all.                                                                         |
 | `exclude`              | TypeRef[]            | Types hidden.                                                                                      |
+| `members`              | Expression → bool    | Whether an element whose type passes `include` and `exclude` belongs to views of this viewpoint; context `element`. Default `true`. |
 | `toolbox`              | string[]             | Toolbox group ids offered. Default: all groups.                                                    |
 | `layout`               | name or LayoutConfig | Layout used (section 10).                                                                          |
 | `notation`             | object               | Per-viewpoint notation overrides: `nodes`, `edges`, `styles` maps merged over the global notation. |
 | `canvas`               | Canvas               | Background, bounds and page settings (6.13).                                                       |
+| `variantOf`            | viewpoint name       | This viewpoint is an alternative presentation of the named one, offered as a toggle on its views and not as a diagram kind of its own (below). |
+| `toggle`               | `{label, icon, position}` | The switch of a variant: `label` a Message (default: this viewpoint's label), `icon` an IconRef, `position` a Position outside the drawing surface. |
 | `default`              | boolean              | The viewpoint used for new diagrams. Exactly one viewpoint SHOULD be default.                      |
 
-Elements appear in a view only if their type is included; model elements not shown in any view still exist in the model and are still validated.
+**Membership.** An element belongs to a view when its type passes `include` and `exclude` and, where the viewpoint declares `members`, the expression holds for it; this is step 1 of what is drawn (6.1). A relation is drawn only when both its ends are drawn. Model elements not shown in any view still exist in the model and are still validated. Membership is computed from the model and never stored. Include and exclude lists written with wildcards are matched with `matchesGlob` (12.4):
+
+```json
+"functions": {
+  "inView": {
+    "params": [{ "name": "e", "type": "Element" }], "returns": "bool", "uses": ["diagram"],
+    "cel": "diagram.includes.exists(i, i == '*' || matchesGlob(e.id, i)) && !diagram.excludes.exists(x, matchesGlob(e.id, x))"
+  }
+},
+"viewpoints": {
+  "container": { "include": ["Person", "SoftwareSystem", "Container"], "members": "inView(self)", "default": true }
+}
+```
+
+A C4 container view draws the people, systems and containers its `include` and `exclude` statements name; relationships between members that are not drawn are lifted by a derived relation (4.11).
+
+**Variants.** A viewpoint with `variantOf` is a **variant** of its base viewpoint, such as a compact presentation of the same diagram. A view whose viewpoint has variants **MUST** open in the base viewpoint, and the runtime **MUST** offer each variant as its `toggle`. Which of them a viewer sees is viewer state (the view-data kind `viewpoint`, 11.6): it **MUST NOT** be persisted and **MUST NOT** enter the undo history. A DID view **MUST NOT** name a variant as its viewpoint, and a new diagram **MUST NOT** be created in one. Edits made while a variant is shown are ordinary edits of the model. A variant **MUST NOT** itself have variants.
+
+```json
+"compact": { "label": "Compact", "variantOf": "trueTime",
+             "toggle": { "label": "Compact", "position": "outside-top-left" },
+             "coordinateSystem": "hypeCycle" }
+```
 
 ### 3.6 Layer overview *(informative)*
 
@@ -547,7 +629,8 @@ The metamodel defines the abstract syntax of the language: the kinds of elements
 | `number`     | `double`                  | number              | `min`, `max`, `exclusiveMin`, `exclusiveMax`, `step`, `precision`, `unit`       |
 | `bool`       | `bool`                    | boolean             | –                                                                               |
 | `date`       | `timestamp`               | `"YYYY-MM-DD"`      | `min`, `max` (as dates)                                                         |
-| `datetime`   | `timestamp`               | RFC 3339 string     | `min`, `max`, `timezone` (stored zone policy: `"utc"`, `"preserve"`, IANA name) |
+| `datetime`   | `timestamp`               | RFC 3339 string     | `min`, `max`, `timezone` (stored zone policy: `"utc"`, `"preserve"`, IANA name), `writtenPrecision`, `newPrecision` (below) |
+| `yearMonth`  | `int` (month index)       | `"±YYYY-MM"`        | `min`, `max` (as `yearMonth` strings)                                           |
 | `time`       | `duration` since midnight | `"HH:MM[:SS]"`      | `min`, `max`, `step`                                                            |
 | `duration`   | `duration`                | ISO 8601 duration   | `min`, `max`, `calendar` (allow `P1M`/`P1Y`)                                    |
 | `color`      | `string`                  | CSS color string    | `palette` (list of allowed colors), `alpha` (bool)                              |
@@ -557,6 +640,23 @@ The metamodel defines the abstract syntax of the language: the kinds of elements
 | `binary`     | `bytes`                   | base64 string       | `mediaTypes`, `maxBytes`                                                        |
 
 Unit facets (`unit`) are informational strings (`"h"`, `"kg"`, `"EUR"`); runtimes SHOULD show them as field suffixes.
+
+**Year and month.** A `yearMonth` value is a month without a day, in astronomical year numbering: year `0000` is 1 BCE and `-3200` is 3201 BCE. Its JSON form is an ISO 8601 expanded year of four to six digits, with a leading `-` for years before `0000`, a hyphen and a two-digit month (`"2026-09"`, `"-3200-01"`). In CEL it is an `int`, the **month index** `year × 12 + (month − 1)`, so `"0000-01"` is 0 and `"-0001-12"` is −1; arithmetic on it is integer arithmetic, and `yearMonth()`, `formatYearMonth()` and `parseYearMonth()` (12.4) convert. A `timestamp` cannot hold these values, because CEL timestamps span the years 0001 to 9999. Writers **MUST** write at least four year digits and a `-` for negative years (DID, section 3).
+
+**Written precision.** Two facets of `datetime` attributes govern the precision a value is written with:
+
+| Facet              | Values                                                          | Default                     | Description |
+|--------------------|-----------------------------------------------------------------|-----------------------------|-------------|
+| `writtenPrecision` | `"preserve"`, `"date"`, `"minute"`, `"second"`, `"millisecond"` | none (0.1: the writer's precision) | The precision values are written with. `preserve` keeps, per value, the precision it was read with. |
+| `newPrecision`     | `"date"`, `"minute"`, `"second"`, `"millisecond"`               | `"second"`                  | The precision of values the tool creates. |
+
+With `writtenPrecision: "preserve"`, a runtime **MUST** record for each stored value the precision it was read with (`date` when it has no time part, otherwise the finest written field that is not zero) and **MUST** write a changed value in that precision, rounding half away from zero; a date-only value is the start of that day. `precisionOf(self, attr)` (12.4) reads the recorded precision, so a snap rule can depend on it, and `samePrecisionAs` (4.3) with `std.mixedPrecision` (8.7) keeps two attributes of one element alike.
+
+```json
+"begin": { "type": "datetime", "required": true, "timezone": "floating", "writtenPrecision": "preserve", "newPrecision": "date" }
+```
+
+A timeline bar read as `2026-01-05` is written back as `2026-01-05` after a drag, and one read as `2026-01-05T09:30` keeps its minutes.
 
 ### 4.3 Attributes
 
@@ -576,7 +676,9 @@ An attribute describes one named value on a node, relation, port or the diagram.
 | `absentText`                          | Message                           | Shown instead of a value when the attribute is absent (below); context `element`.                                    |
 | `emptyText`                           | Message                           | Shown instead of a value when the attribute is empty (below); context `element`.                                     |
 | `derived`                             | Expression                        | Computed, never stored; evaluated in the `element` context. Implies `readOnly`.                                      |
-| `transient`                           | bool                              | Editable but not persisted (for example UI-only flags).                                                              |
+| `fixed`                               | literal                           | The attribute always has this value: read-only, never persisted (below). Exclusive with `derived` and `default`.     |
+| `transient`                           | bool or `"viewer"`                | `true`: editable but not persisted (for example UI-only flags). `"viewer"`: held per viewer (below).                  |
+| `outOfRange`                          | OutOfRange                        | Whether a value past `min` or `max` is clamped or refused, per kind of edit (below).                                  |
 | `unique`                              | `"diagram"`, `"parent"`, `"type"` | Value must be unique within the scope. Enforced as a built-in constraint.                                            |
 | `samePrecisionAs`                     | attribute name                    | The value must be written with the same precision as the named attribute of the same element (both dates, or both with a time); checked by `std.mixedPrecision` (8.7). |
 | `key`                                 | bool                              | Part of the element's natural key (used for `natural` ids, 11.5, and for display).                                   |
@@ -609,6 +711,39 @@ An attribute describes one named value on a node, relation, port or the diagram.
 "description": { "type": "text", "readOnly": true,
   "readOnlyReasons": [ "Published by the package's author and read from the local NuGet cache; nothing in this workspace defines it." ],
   "absentText": "Not available - this package is not in the local NuGet cache" }
+```
+
+**Viewer attributes.** An attribute with `transient: true` keeps its 0.1 meaning: editable, not persisted, and with undo behaviour left to the runtime. An attribute with `transient: "viewer"` is viewer state (11.6): its value is held per viewer and starts at `default` each time a viewer opens the view; it **MUST NOT** be persisted, **MUST NOT** enter the undo history, **MUST** be settable in read-only mode, and **MUST NOT** be read in the deterministic contexts of 12.5, where a validator **MUST** reject such a read. A `set` action on it is a viewer-state change, with the rules of the `view` action (9.4).
+
+```json
+"showAmbientPackages": { "type": "bool", "default": false, "transient": "viewer", "label": "Show ambient packages" }
+```
+
+**Fixed attributes.** An attribute with `fixed` always has that value, which **MUST** be a valid value of its type. It is read-only, and it is never persisted: a writer (DID or a format binding) **MUST NOT** write it, and a reader that finds a stored value **MUST** ignore it and **SHOULD** report a warning when it differs from the fixed value. In CEL, `self.attr` reads the fixed value and `has(self.attr)` is false. A subtype **MAY** narrow an inherited attribute to a fixed one (4.7).
+
+```json
+"FdgElement": { "abstract": true, "attributes": { "height": { "type": "number", "min": 1 } } },
+"UiElement":  { "extends": "FdgElement", "attributes": { "height": { "type": "number", "fixed": 48 } } }
+```
+
+A functional decomposition graph stores a height only for comments; every other element is 48 high and writes nothing.
+
+**Out of range.** `min` and `max` of an attribute **MAY** be a `{cel}` value evaluated in the `element` context (a timeline bar's end bounded by its begin: `"min": { "cel": "self.begin" }`). **OutOfRange** (`$defs/OutOfRange`) chooses what happens to an edit that would put the value past them:
+
+| Property  | Values                  | Default    | Description |
+|-----------|-------------------------|------------|-------------|
+| `drag`    | `"clamp"`, `"refuse"`   | `"refuse"` | A gesture (move, resize, handle drag) that would put the value past the bound. |
+| `typed`   | `"refuse"`, `"clamp"`   | `"refuse"` | A value entered in a form, an inline label or pasted. |
+| `message` | Message                 | the runtime's `std.facets` or `std.axisBounds` sentence | The refusal; context `gesture:change` (`self`, `attribute`, `oldValue`, `newValue`) plus `min` and `max`. |
+
+- With `clamp`, a runtime **MUST** stop the value at the bound and **MUST NOT** refuse the edit. The bound **MUST** be applied after snapping: when the snapped value lies past the bound, the bound wins, even when it is not on the snap grid.
+- With `refuse`, a runtime **MUST** refuse the edit with `message`, for a drag before it is released (8.4).
+- `std.facets` and `std.axisBounds` (8.7) keep their severity and enforcement; `outOfRange` only chooses between clamping and refusing a prevented edit. The defaults are those of 0.1.
+
+```json
+"maturity": { "type": "Fraction", "required": true, "step": 0.01,
+  "outOfRange": { "drag": "clamp", "typed": "refuse",
+                  "message": { "cel": "string(newValue) + ' is off the map; maturity runs from 0 to 1.'" } } }
 ```
 
 **Unset values.** Reading an attribute that has no stored value yields its `default` when one is declared, otherwise the zero value of its CEL type (`''`, `0`, `0.0`, `false`, `[]`, `{}`, `null` for references, the Unix epoch for timestamps, `0s` for durations). The CEL macro `has(self.attr)` tests whether a value is explicitly stored. Persistence omits unset values (11.8).
@@ -668,7 +803,18 @@ Struct values are CEL maps; fields are accessed as `self.budget.amount`.
 | `extensible`   | bool                      | Users may enter values not listed (combobox).                                                 |
 | `label`, `doc` |                           |                                                                                               |
 
-EnumValue: `label`, `doc`, `color`, `icon`, `deprecated`. The optional `color` and `icon` are hints that notations may use (`{ "cel": "enumColor('Priority', self.priority)" }`).
+EnumValue: `value`, `label`, `doc`, `color`, `icon`, `deprecated`. The optional `color` and `icon` are hints that notations may use (`{ "cel": "enumColor('Priority', self.priority)" }`).
+
+**Stored form.** An enum value's key is its name in the specification and in CEL; `value` (a non-empty string, default: the key) is its **stored form**, how it is written in a DID definition and the spelling a format binding maps it to by default. Stored forms **MUST** be unique within an enumeration. A reader **MUST** map a stored form back to its key; an unknown stored form is kept as written for an `extensible` enum and reported by `std.facets` otherwise. CEL always sees the key, so a stored form need not be an identifier:
+
+```json
+"TaskType": { "values": {
+  "notebook": { "label": "Notebook" },
+  "run_job":  { "label": "Run job",  "value": "run-job" },
+  "for_each": { "label": "For each", "value": "for-each" } } }
+```
+
+A Databricks task of type `run-job` is read as `run_job`, compared in CEL as `self.type == 'run_job'`, and written back as `run-job`.
 
 ### 4.6 Node types
 
@@ -683,6 +829,7 @@ A node type describes a kind of element that is drawn as a node.
 | `ports`                | map → PortType       | Connection points (4.10).                                                                                                                                                                                                                  |
 | `children`             | Containment          | What may be nested inside (4.8).                                                                                                                                                                                                           |
 | `multiplicity`         | `{min, max}`         | Number of instances allowed per diagram (for example exactly one `Start`). Enforced as a built-in constraint.                                                                                                                              |
+| `derived`              | DerivedNode          | The type's elements are computed from the model and never stored (4.11).                                                                                                                                                                   |
 | `viewOnly`             | bool                 | The element has no model meaning and lives only in a view: notes, free text, frames, images, annotations. View-only elements are stored in view data (11.6) and are excluded from `diagram.nodes` unless `includeViewOnly` is used (12.4). |
 | `labelAttribute`       | attribute name       | The attribute used as the element's name in lists, finding messages, reference pickers and default labels. Default: the first `key` attribute, else the first required `string` attribute, else the first `string` attribute.              |
 | `tags`                 | string[]             | Free classification, usable in CEL as `self.isTagged('x')`.                                                                                                                                                                                |
@@ -693,7 +840,7 @@ A node type describes a kind of element that is drawn as a node.
 A type inherits all attributes, ports, containment rules and tags from its supertypes, and is accepted wherever a supertype is expected (in relation ends, containment, references, constraint scopes, notation lookups).
 
 - Multiple inheritance is allowed. The set of supertypes MUST form a directed acyclic graph.
-- A subtype MAY redeclare an inherited attribute to *narrow* it: tighten facets, change `default`, `label` or `doc`, set `required: true`, or narrow a reference type to a subtype. It MUST NOT change the base type or relax facets. Conflicting inherited declarations of the same attribute from two supertypes are a specification error unless the subtype redeclares it.
+- A subtype MAY redeclare an inherited attribute to *narrow* it: tighten facets, change `default`, `label` or `doc`, set `required: true`, narrow a reference type to a subtype, or set `fixed` (a constant is the tightest facet; `default` is then dropped). It MUST NOT change the base type or relax facets. Conflicting inherited declarations of the same attribute from two supertypes are a specification error unless the subtype redeclares it.
 - Notation, forms and constraints are looked up along the linearised supertype chain (C3 linearisation, as in Python): the most specific declaration wins, and a node type without its own notation uses its nearest supertype's notation.
 - Relation types inherit from relation types only; node types from node types only.
 
@@ -763,10 +910,10 @@ A relation type describes a kind of connection, drawn as an edge.
 | `directed`             | bool                              | Default `true`. Undirected relations treat `source`/`target` as unordered for `allowParallel` and cycle checks.                   |
 | `allowSelfLoops`       | bool                              | Source and target may be the same element. Default `false`.                                                                       |
 | `allowParallel`        | bool                              | More than one relation of this type between the same pair. Default `true`.                                                        |
-| `acyclic`              | bool                              | Shorthand for a built-in constraint forbidding cycles over this relation type.                                                    |
+| `acyclic`              | bool                              | Shorthand for a built-in constraint (`std.acyclic`) forbidding cycles in the graph formed by all relations whose type is this type or one of its subtypes (below).                                                    |
 | `attributes`           | map → Attribute                   | Relation attributes.                                                                                                              |
 | `connectsRelations`    | bool                              | Endpoints may be relations, not only nodes (for example UML association classes, annotations pointing at edges). Default `false`. |
-| `derived`              | Expression                        | Derived relations are computed (list of `{source, target}` maps) and drawn read-only.                                             |
+| `derived`              | Expression or DerivedRelation     | Derived relations are computed and drawn read-only: an Expression returning a list of maps (below), or the object form of 4.11.3. |
 | `viewOnly`             | bool                              | As for node types — connectors between notes, for instance.                                                                       |
 
 **RelationEnd**
@@ -778,9 +925,30 @@ A relation type describes a kind of connection, drawn as an edge.
 | `ports`      | string[]   | Port types the end must attach to (4.10). If set, the end MUST be a port of that type.                          |
 | `min`, `max` | int / null | How many relations of this type an element may have at this end (outgoing for `source`, incoming for `target`). |
 | `role`       | string     | Role name, usable in CEL and labels (for example `"parent"` / `"child"`).                                       |
+| `optional`   | bool       | On the `target` end only: a relation of this type **MAY** have no target. Default `false`.                       |
 | `doc`        | Doc        |                                                                                                                 |
 
 Connectivity rules that depend on attributes or on the pair of endpoints are written as `connect` constraints (8.4).
+
+**Acyclic over subtypes.** `acyclic` forbids cycles in the graph formed by all relations whose type is this type or one of its subtypes; on an abstract relation type it therefore covers any mix of its subtypes. A subtype of an acyclic type is acyclic and **MUST NOT** set `acyclic: false`. This is the 0.1 meaning made explicit, since a subtype is accepted wherever its supertype is (4.7).
+
+```json
+"Owns":     { "abstract": true, "extends": "FdgRelation", "acyclic": true },
+"UiChild":  { "extends": "Owns", "source": "UiElement", "target": { "types": ["UiElement"], "max": 1 } },
+"OwnsData": { "extends": "Owns", "source": ["UiElement", "Action", "DataElement"], "target": { "types": ["DataElement"], "max": 1 } }
+```
+
+In a functional decomposition graph, no mix of `UiChild`, `OwnsData` and the other ownership relations may close a loop.
+
+**Relations without a target.** When the `target` end is `optional`, a relation of the type **MAY** be stored without a target; `self.target` is then `null`, the relation is drawn as its edge notation's `stub` (6.10), and `std.endpoints` (8.7) **MUST NOT** report the missing target. A `connect` gesture never creates a relation without a target; reconnecting the free end to an element is a `connect` gesture. DID stores such a relation without its `target` (DID, section 3).
+
+```json
+"UsesRole": { "source": "Play", "target": { "types": ["Role"], "optional": true } }
+```
+
+An Ansible play that names a role the folder does not contain keeps its relation, drawn as a short stub labelled with the role as written.
+
+**Derived relations, expression form.** The 0.1 form of `derived` is an Expression, in the `derive` context (12.3), returning a list of maps. Each map **MUST** have `source` and `target` (elements) and yields one relation. Any other key that names an attribute of the relation type gives that attribute's value, and the keys `id`, `sources` and `owner` have the meanings of the object form (4.11.3); other keys are a specification error where statically known and are otherwise ignored. When `id` is absent, the id **MUST** be `<Type>:<source.id>-><target.id>`, where `<Type>` is the relation type's name, with `#2`, `#3`, … appended to the second and later maps that give the same id, in list order. The 0.1 meaning of the form is unchanged: this only fills what 0.1 left open (Changes from 0.1). The object form of 4.11.3 adds merging, provenance, ownership and edits.
 
 ### 4.10 Ports
 
@@ -810,6 +978,139 @@ Ports are named connection points on nodes: pins of a circuit component, input/o
 | `attributes`     | map → Attribute            | Attributes of each port instance.                                                            |
 
 Port instances are elements with `kind == "port"`, an `id`, a `type` of the form `Block.in`, and an `owner` (the node). They are persisted with their owner (11.4).
+
+### 4.11 Derived elements
+
+A **derived element** is an element the runtime computes from other elements of the model: it groups, merges, splits, lifts or filters them, or its ends or parent are themselves derived. It has no stored record of its own and is never written. A **stored element** is one that is read from storage: a record of a DID definition, or an element a format binding reads from one entry of a foreign file. A node type becomes derived with `derived` (4.6, a DerivedNode); a relation type with `derived` in the object form of 4.11.3, or in the 0.1 expression form (4.9).
+
+#### 4.11.1 Stored and derived elements *(informative)*
+
+FBL, the Format Binding Language, reads a foreign file into **stored** elements, one per entry of the file (a triple, a list entry, a statement, a project reference), each with its source location and with or without a rule to write it back. DISL computes everything else. The line between them is drawn by the entry: an element that corresponds to exactly one entry, and whose ends and parent are stored, is a stored element of the binding; an element that groups several entries (an RDF resource card is every triple sharing a subject), merges them (one SKOS hierarchy edge stated by both `broader` and `narrower`), splits one (an OWL IRI that is both a class and an individual), lifts or filters them for a view (C4 membership and lifted relationships), or whose ends or parent are derived (a SPARQL variable placed in its shallowest scope) is a DISL derived element.
+
+So a format binding produces the fine-grained stored records and leaves the drawn projection to DISL. Stored records that are never drawn are ordinary node types that the viewpoint excludes (3.5): they stay in the model and are validated. Elements that the binding reads but cannot write back, such as unknown kinds or unresolved template references, are FBL's "not written back" elements; they are stored, not derived, and differ from DISL's `fixed` attributes (4.3), which are never written at all.
+
+A derived element **MUST NOT** have a source entry of its own; where it needs a source location, it borrows that of its first source (4.11.4). An element that corresponds to exactly one source entry, and whose ends and parent are stored, **SHOULD** be a stored element produced by the format binding rather than a derived element.
+
+#### 4.11.2 Derived node types
+
+**DerivedNode** (`$defs/DerivedNode`):
+
+| Property     | Type                                     | Req. | Context      | Description |
+|--------------|------------------------------------------|------|--------------|-------------|
+| `from`       | Expression → `list`                      | ✓    | `derive`     | The items. One element is derived per item, or per distinct `key`. |
+| `key`        | Expression                               | –    | `deriveItem` | Items with equal keys (CEL `==`) yield one element, with `group` bound to all of them. Default: every item is its own element. |
+| `id`         | Expression → `string`                    | ✓    | `deriveItem` | The element's id. It **MUST** be unique among all elements of the diagram (4.11.5). |
+| `attributes` | map attribute → Expression               | –    | `deriveItem` | Values of the type's attributes. An attribute not listed has its default. |
+| `parent`     | Expression → `Element?`                  | –    | `deriveItem` | Computed containment (below). Default `null`: top level. |
+| `slot`       | Expression → `string`                    | –    | `deriveItem` | The slot in the parent (4.8). |
+| `sources`    | Expression → `list(Element)`             | –    | `deriveItem` | The provenance (4.11.4). Default: `group` when the items are elements, else `[]`. |
+| `reason`     | Reason                                   | –    | `element`    | Why a gesture on the element is refused (4.11.4). Default: the runtime's sentence saying that the element is computed from the model and cannot be edited here. |
+| `edits`      | map gesture → operation id               | –    | –            | Gestures carried out by an operation instead of being refused (4.11.4). Keys: `delete`, `reparent`, `move`, `connect`, `rename`, `attribute:<name>`. |
+| `doc`        | Doc                                      | –    | –            | |
+
+The `derive` context binds `diagram` and `env`; the `deriveItem` context binds `item` (the first item of the group), `group` (all items with this key, in `from` order), `index` (the position of the group in `from` order), `diagram` and `env` (12.3). A key **MUST** be a string, number, bool or list of those; any other key is a specification error where it is statically known.
+
+- A node type with `derived` **MUST NOT** be instantiated by a user, a tool, a template or an action. `create`, `delete`, `retype` and `reparent` actions whose target is a derived element are a specification error where that is statically known, and a run-time error that rolls the transaction back otherwise.
+- Every attribute of a derived node type is read-only. An attribute with its own `derived` expression (4.3) is evaluated on the derived element in the `element` context, as for stored elements.
+- A derived node type **MAY** extend stored or abstract node types, and inherits their notation, forms and constraints (4.7). A stored type **MUST NOT** extend a derived one. A derived type **MUST NOT** declare attributes named `derived` or `sources`, which name its provenance in CEL (12.2).
+- One stored element **MAY** be a source of any number of derived elements, of one type or several; an IRI that is both an OWL class and an individual is two derived types over the same triples, whose ids differ by prefix.
+
+**Computed containment.** The parent of a derived node is the value of `parent`. It **MAY** be a stored node or a derived node of a type computed earlier (4.11.5), and **MUST** be allowed by that type's `children` (4.8); otherwise the element is drawn at top level and one `std.containment` finding is reported. A stored node's parent is always stored: DISL does not compute containment for stored nodes.
+
+```json
+"Triple": {
+  "doc": "One triple of the file, as the format binding reads it. Never drawn.",
+  "attributes": { "s": { "type": "string" }, "p": { "type": "uri" }, "o": { "type": "string" }, "oKind": { "type": "TermKind" } }
+},
+"Resource": {
+  "extends": "Term",
+  "attributes": { "iri": { "type": "uri" }, "types": { "type": "uri", "many": true } },
+  "derived": {
+    "from": "diagram.nodesOfType('Triple').map(t, t.oKind == 'iri' && t.p != RDF_TYPE ? [[t.s, t], [t.o, t]] : [[t.s, t]]).flatten()",
+    "key": "item[0]",
+    "id": "'res:' + item[0]",
+    "attributes": {
+      "iri":   "item[0]",
+      "types": "group.map(g, g[1]).filter(t, t.s == item[0] && t.p == RDF_TYPE && t.oKind == 'iri').map(t, t.o)"
+    },
+    "sources": "group.map(g, g[1]).distinct()",
+    "reason": "Resources are read from the triples; add, rename or remove them through the context menu.",
+    "edits": { "delete": "removeResource", "rename": "renameResource" }
+  }
+}
+```
+
+An RDF graph derives one resource card per IRI, from every triple that names it as subject or as the object of a non-type triple; the `Triple` records are excluded from the viewpoint (`"exclude": ["Triple"]`). `RDF_TYPE` stands for the IRI of `rdf:type`, so a class used only as a type is a badge on its instances, not a card.
+
+#### 4.11.3 Derived relations
+
+**DerivedRelation** (`$defs/DerivedRelation`) is the object form of a relation type's `derived`. It has the properties of DerivedNode except `parent` and `slot`, with `id` optional, plus:
+
+| Property | Type                     | Req. | Context      | Description |
+|----------|--------------------------|------|--------------|-------------|
+| `source` | Expression → `Element`   | ✓    | `deriveItem` | The source end. |
+| `target` | Expression → `Element`   | ✓    | `deriveItem` | The target end. |
+| `owner`  | Expression → `Element?`  | –    | `deriveItem` | The element the relation belongs to (below). |
+
+- When `id` is absent, the id **MUST** be `<Type>:<source.id>-><target.id>`, with `#2`, `#3`, … appended to repeats in `from` order, as for the expression form (4.9).
+- The ends **MUST** satisfy the relation type's `source` and `target` declarations (4.9). An item whose ends do not is dropped, and one `std.derivedEnds` finding is reported per relation type, not per item.
+- The ends **MAY** be stored or derived elements of types computed earlier (4.11.5).
+
+**Owner.** The owner of a relation is the element it belongs to: it is drawn in the owner's layer (6.16), hidden when the owner is collapsed or not drawn, and counted among the owner's contents by layout. Without `owner`, and for every stored relation, the owner is the nearest common ancestor of its two ends, or the diagram when they have none. CEL reads it as `self.owner` (12.2).
+
+```json
+"functions": {
+  "liftTo": {
+    "params": [{ "name": "e", "type": "Element" }], "returns": "Element", "uses": ["diagram"],
+    "cel": "([e] + e.ancestors()).filter(a, inView(a)).first().orValue(null)"
+  }
+},
+"relations": {
+  "DrawnRelationship": {
+    "source": "Element", "target": "Element",
+    "attributes": { "description": { "type": "string" }, "technology": { "type": "string" } },
+    "derived": {
+      "from": "diagram.relationsOfType('Relationship').filter(r, liftTo(r.source) != null && liftTo(r.target) != null && liftTo(r.source) != liftTo(r.target))",
+      "key": "[liftTo(item.source).id, liftTo(item.target).id]",
+      "id": "'rel:' + liftTo(item.source).id + '->' + liftTo(item.target).id",
+      "source": "liftTo(item.source)",
+      "target": "liftTo(item.target)",
+      "attributes": { "description": "item.description", "technology": "item.technology" },
+      "edits": { "attribute:description": "describeRelationship", "delete": "deleteRelationships" }
+    }
+  }
+}
+```
+
+A C4 view lifts each stored relationship to the nearest ancestor of each end that the view draws (`ancestors()` lists the parent first, 12.2), and draws several relationships that land on one pair as one line carrying the first one's description; the stored `Relationship` type is excluded from the viewpoint, so every drawn line is the derived one.
+
+#### 4.11.4 Provenance, findings and edits
+
+- Every derived element has `derived == true` and a list of `sources` in CEL (12.2); a stored element has `derived == false` and no sources.
+- Constraints **MAY** scope derived types. A finding on a derived element is keyed by its id, and its location, where the constraint declares none, **MUST** be that of the first of its sources that has one (8.6).
+- A suppression **MUST NOT** name a derived element whose id is ephemeral (11.5.3); one with a stable id **MAY** be suppressed like any element.
+- Hooks (9.2) **MUST NOT** fire for derived elements appearing, changing or disappearing.
+- A gesture that would change a derived element in the model (delete, reparent, connect, a rename, an attribute write) **MUST** be refused with `reason`, as the refusal of 8.4, unless `edits` maps the gesture to an operation. A mapped gesture **MUST** run that operation, as one transaction, with `self` bound to the derived element; the operation reaches the stored elements through `self.sources`, and the derived element then follows from recomputation. `rename` is the inline edit of the label, and `attribute:<name>` a write of that attribute from a form or label.
+- Moving or resizing a derived node writes view data like any node's, when its id is not ephemeral; `edits.move` instead carries the move out by an operation (for example one that writes a bound attribute of the sources).
+
+```json
+"removeResource": {
+  "for": ["Resource"],
+  "label": { "cel": "self.sources.size() > 1 ? 'Remove (with ' + string(self.sources.size()) + ' statements)' : 'Remove'" },
+  "actions": [ { "delete": "self.sources" } ]
+}
+```
+
+#### 4.11.5 Computation
+
+- A runtime **MUST** compute derived elements when a model is loaded (14.2) and in the "recompute derived" step of every transaction (14.4), in declaration order: first the derived node types, in the order of `metamodel.types`, then the derived relation types, in the order of `metamodel.relations`. Each `from` sees the stored elements and the derived elements of every type computed before it. A reference to a derived type computed later is a specification error.
+- The elements of one derived type are ordered by the position of their group's first item in `from`; that order is the type's order in `diagram.nodes`, `nodesOfType` and the other lists of 12.2 (12.5).
+- Two derived elements with the same id, or a derived id equal to a stored id, are a run-time error: the later one in computation order **MUST NOT** be drawn, and one `std.derivedId` finding names both.
+- Derived elements **MUST NOT** be written, to a DID definition or by a format binding, and **MUST NOT** enter the undo history; undoing a change to their sources recomputes them. A runtime **MAY** recompute incrementally, but the result **MUST** equal a full recomputation.
+- A failing `from` yields no elements of its type and one `std.derivedFailed` finding; a failing per-item expression drops that item, with one finding per type and error message (2.5). The rest of the diagram is drawn.
+- Derived ids are stable unless the id rule of their type makes them ephemeral (11.5.3). View data and style overrides **MAY** be stored for derived elements with stable ids and **MUST NOT** be stored for the others; a stored view key that names no element once derived elements are computed is kept and ignored, not reported as an unresolved reference (DID, section 5).
+- Derived elements are drawn at step 2 of the drawing order (6.1) and count toward budgets (3.2.1) in their computation order.
+- `from` is subject to `language.limits.celCost` per evaluation; every other derived expression per item.
 
 
 ---
@@ -881,6 +1182,26 @@ If `coordinates` is absent, the default is a single cartesian system `canvas` wi
 | `origin`     | domain value                                            | The domain value mapped to canvas coordinate 0.                                                                      |
 | `ruler`      | Ruler                                                   | Ruler or header display (5.13).                                                                                      |
 | `expand`     | `"none"`, `"auto"`                                      | Whether the axis domain grows automatically when elements are placed beyond it. Default `"auto"` for unbounded axes. |
+| `outOfRange` | OutOfRange                                              | Whether a gesture or typed value past `min` or `max` is clamped or refused (4.3). Default: refused both ways, as in 0.1. |
+| `ranges`     | AxisRange[]                                             | Named ranges of the domain, drawn as bands (below).                                                                   |
+| `endLabels`  | `{min, max}` of Message                                 | Labels at the two ends of the axis line or ruler, by domain end.                                                      |
+
+**Out of range on an axis.** An axis `outOfRange` works as on an attribute (4.3), with `std.axisBounds` in place of `std.facets`: with `drag: "clamp"`, a dragged element stops at the bound, and the bound is applied after snapping, so it wins over the snap grid.
+
+**Axis ranges.** An **AxisRange** (`$defs/AxisRange`) names a part of the domain: `id` (**required**), `label` (Message), `from` and `to` (**required**, domain values, `from` included and `to` excluded except at the axis maximum), `fill` (Paint), `style` (StyleRef), `separator` (Stroke, the line drawn at `from`) and `labelPosition` (`"start"`, `"center"` (default) or `"end"`). Ranges **MAY** be unequal and need not be contiguous. They are drawn with the grid (6.16), under every element, and are not elements: they cannot be selected, and take no part in layout or findings. `axisRange(axis, value)` (12.4) returns the id of the range holding a value, so an attribute can derive a stage from the axis instead of repeating its numbers.
+
+```json
+"maturity": { "kind": "linear", "label": "Evolution", "min": 0, "max": 1,
+  "ranges": [
+    { "id": "genesis",   "label": "Genesis",              "from": 0,     "to": 0.175, "style": { "fillOpacity": 0.35 } },
+    { "id": "custom",    "label": "Custom Built",         "from": 0.175, "to": 0.4,   "style": { "fillOpacity": 0.5 },  "separator": { "dash": [6, 6], "dashScale": "absolute" } },
+    { "id": "product",   "label": "Product (+rental)",    "from": 0.4,   "to": 0.7,   "style": { "fillOpacity": 0.65 }, "separator": { "dash": [6, 6], "dashScale": "absolute" } },
+    { "id": "commodity", "label": "Commodity (+utility)", "from": 0.7,   "to": 1,     "style": { "fillOpacity": 0.8 },  "separator": { "dash": [6, 6], "dashScale": "absolute" } } ] },
+"visibility": { "kind": "linear", "label": "Value chain", "min": 0, "max": 1, "reversed": true,
+  "endLabels": { "min": "Visible", "max": "Invisible" } }
+```
+
+A Wardley map divides evolution into its four unequal stages and labels the ends of the value chain.
 
 ### 5.4 Numeric axes (`linear`, `log`)
 
@@ -905,9 +1226,9 @@ Time axes place elements by date or timestamp. They are used for Gantt charts, r
 
 | Property     | Type                                              | Description                                                                                                                                                                                                                                                                                                                 |
 |--------------|---------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `valueType`  | `"date"`, `"datetime"`, `"epoch-ms"`, `"epoch-s"` | Stored representation of positions on this axis. Default `"datetime"`.                                                                                                                                                                                                                                                      |
+| `valueType`  | `"date"`, `"datetime"`, `"epoch-ms"`, `"epoch-s"`, `"yearMonth"` | Stored representation of positions on this axis. Default `"datetime"`. `yearMonth` places by month index (below).                                                                                                                                                                                                                                                      |
 | `timezone`   | IANA name, `"UTC"`, `"floating"`                  | Zone in which dates are interpreted and calendar snapping is computed. `"floating"` means local wall-clock time without zone. Default `"UTC"`. A bindable form `{ "attribute": "timezone" }` refers to a diagram attribute.                                                                                                 |
-| `scale`      | `{unit, size}`                                    | How much canvas distance one unit of time occupies at zoom 1, for example `{ "unit": "day", "size": 40 }` (40 canvas units per day). Units: `millisecond`, `second`, `minute`, `hour`, `day`, `week`, `month`, `quarter`, `year`. For `month` and larger units the scale is the average length (a month is 30.436875 days). |
+| `scale`      | `{unit, size}`                                    | How much canvas distance one unit of time occupies at zoom 1, for example `{ "unit": "day", "size": 40 }` (40 canvas units per day). Units (`$defs/TimeUnit`): `millisecond`, `second`, `minute`, `hour`, `day`, `week`, `month`, `quarter`, `year`, `decade`, `century`, `millennium`. For `month` and larger units the scale is the average length (a month is 30.436875 days). `unit` **MAY** be bound to a diagram attribute, `{ "attribute": "unit" }` (below). |
 | `calendar`   | Calendar                                          | Working time definition (below).                                                                                                                                                                                                                                                                                            |
 | `collapse`   | `"none"`, `"non-working"`                         | If `"non-working"`, non-working time takes no canvas space (a *compressed* timeline in which weekends vanish). Default `"none"`.                                                                                                                                                                                            |
 | `min`, `max` | timestamp or `{cel}`                              | Bounds; may be bound to diagram attributes such as project start and end.                                                                                                                                                                                                                                                   |
@@ -940,6 +1261,21 @@ Time axes place elements by date or timestamp. They are used for Gantt charts, r
 | `firstDayOfWeek` | int                      | For week snapping and headers. Default 1 (ISO).                       |
 
 The grid and header of time axes show non-working time shaded by default; the style is set in `ruler.nonWorkingStyle`.
+
+**Units coarser than a year.** `decade`, `century` and `millennium` are accepted wherever a time unit is (`scale.unit`, `zoomLevels`, ruler levels and ticks, calendar snap rules, grid `spacing`, and the CEL functions `startOf`, `endOf` and `addUnits`). Their boundaries are the years divisible by 10, 100 and 1000 in astronomical numbering, so year 0 starts a decade, a century and a millennium.
+
+**Month axes.** With `valueType: "yearMonth"`, the axis domain is the month index of the `yearMonth` primitive (4.2): `origin`, `min` and `max` are `yearMonth` strings, positions are stored as `yearMonth` values, and the scale's unit is `month` or coarser. `timezone`, `calendar` and `collapse` do not apply, and a validator **MUST** reject units finer than `month` on such an axis. In its formats, LDML `u` **MUST** be read as the signed astronomical year; a validator **MUST** reject `y`, whose era is ambiguous before year 1.
+
+**Bound unit.** `scale.unit` and the `unit` of a calendar snap rule (5.10) **MAY** be `{ "attribute": name }`, naming a diagram attribute whose values are time units (an enum whose keys or stored forms are unit names, 4.5). Changing the attribute is a model edit that rescales the axis.
+
+```json
+"time": { "kind": "time", "valueType": "yearMonth", "origin": "1900-01",
+  "scale": { "unit": { "attribute": "unit" }, "size": 4 },
+  "ruler": { "visible": true, "position": "bottom",
+             "levels": [ { "unit": "decade", "format": "u", "minSpacingPx": 64 } ] } }
+```
+
+A hype cycle's time axis runs over months from any year, before or after the common era, at four canvas units per step of the unit the diagram chooses.
 
 ### 5.6 Ordinal axes (`ordinal`) and angular axes
 
@@ -1101,9 +1437,22 @@ Snapping is defined **per axis**. Each axis of a coordinate system can have its 
 | `applyToProgrammatic` | bool                                             | Whether changes made by operations, hooks and templates are snapped too. Default `false`.                                                                                                                                                               |
 | `bypassModifier`      | `"Alt"`, `"Shift"`, `"Ctrl"`, `"Meta"`, `"none"` | Holding this key temporarily disables snapping. Default `"Alt"`.                                                                                                                                                                                        |
 | `feedback`            | object                                           | `showGhost` (preview of snapped position), `showValue` (tooltip with the snapped domain value, formatted by the axis), `highlightBand` (for ordinal axes), `style` (StyleRef for snap indicator lines).                                                 |
+| `byGesture`           | map gesture → Snapping                           | Snapping for one kind of gesture, merged over this level (below). Keys: `move`, `resize`, `drop`, `paste`, `handle`.                                                                                                                                   |
 | `doc`                 | Doc                                              | Explains the snapping to users; runtimes SHOULD show `summary` when snapping is toggled or while dragging.                                                                                                                                              |
 
 **Where snapping is declared, and precedence.** Snapping can be declared in a snap profile, on a coordinate system, on a viewpoint's canvas, on a node or edge notation (`snapping` property, 6.9 and 6.10), and on a placement. The most specific declaration wins **per property and per axis**: a node notation that only declares `x` keeps the system's `y` rule. `"inherit"` explicitly refers to the next level.
+
+**Snapping per gesture.** An entry of `byGesture` applies to that gesture only and is more specific than the level it is declared on: it **MUST** be merged over that level per property and per axis, with the rule above. `move` covers dragging an element, `resize` dragging its extent, `drop` a toolbox drop, a create at the pointer (7.2) and a context-menu entry run at a point (7.3), `paste` pasting, and `handle` dragging a shape handle (6.8). `reference` **MAY** differ per gesture.
+
+```json
+"snapping": {
+  "x": { "grid": { "spacing": 1 }, "ties": "away-from-zero" },
+  "y": { "grid": { "spacing": 1 }, "ties": "away-from-zero" },
+  "byGesture": { "drop": { "x": { "grid": { "spacing": 1 }, "direction": "floor" }, "reference": "center" } }
+}
+```
+
+On a hype cycle a move or resize snaps to the nearest step, while a toolbox drop lands in the step that contains the drop point and finds its row from the element's middle.
 
 ### 5.10 Snap rules
 
@@ -1128,14 +1477,17 @@ Common properties of snap rules are written next to the rule key, not inside it 
 |--------------|----------------------------------|------------------------------------------------------------------|
 | `min`, `max` | domain value                     | Clamp the snapped value (for sizes: minimum and maximum extent). |
 | `direction`  | `"nearest"`, `"floor"`, `"ceil"` | Rounding direction. Default `"nearest"`.                         |
+| `ties`       | `"away-from-zero"`, `"toward-zero"`, `"up"`, `"down"`, `"even"` | How a value exactly halfway between two allowed values rounds when `direction` is `nearest`. Default `"away-from-zero"`. |
 | `mode`       | `"always"`, `"magnetic"`         | Overrides the snapping-level mode for this rule.                 |
 | `doc`        | Doc                              | Explanation for this axis.                                       |
+
+**Ties.** With `direction: "nearest"`, a value exactly halfway between two allowed values **MUST** round as `ties` says: `away-from-zero` to the one farther from zero (on both sides of the origin, as CEL `math.round` does), `toward-zero` to the one nearer zero, `up` to the greater, `down` to the smaller, `even` to the one that is an even multiple of the step from the rule's offset. The default makes declared snapping and CEL snapping (`snap`, 12.4) agree.
 
 **Calendar rules** snap timestamps using the axis's time zone and calendar:
 
 | Property      | Type                            | Description                                                                                                                                                                        |
 |---------------|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `unit`        | `millisecond` … `year`          | Snapping unit. `week` respects `firstDayOfWeek`; `month`, `quarter`, `year` snap to calendar boundaries (not to fixed durations).                                                  |
+| `unit`        | `millisecond` … `millennium`, or `{attribute}` | Snapping unit (`$defs/TimeUnit`, 5.5). `week` respects `firstDayOfWeek`; `month` and coarser units snap to calendar boundaries (not to fixed durations). May be bound to a diagram attribute, as `scale.unit` (5.5). |
 | `step`        | int                             | Multiples of the unit (for example 15 minutes: `{ "unit": "minute", "step": 15 }`). Steps are counted from the start of the next larger unit (15-minute steps restart every hour). |
 | `align`       | `"start"`, `"end"`, `"nearest"` | Snap to the start of the unit, its end, or whichever boundary is closer. Default `"nearest"`.                                                                                      |
 | `workingTime` | bool                            | Only working time of `calendar` is allowed; values in non-working time move to the nearest working boundary (in `direction`).                                                      |
@@ -1261,6 +1613,27 @@ A **Ruler** (axis property `ruler`) configures rulers and headers: `visible`, `p
 
 Formats use Unicode LDML date patterns for time axes and number patterns for numeric axes; ordinal axes show category labels.
 
+A ruler level also accepts `minSpacingPx`, which shows the level only while its adjacent labels are at least that many screen pixels apart (an alternative to `minZoom` and `maxZoom`), and `step`, a multiple of `unit` (default 1). A Ruler gains:
+
+| Property          | Type                                     | Default   | Description |
+|-------------------|------------------------------------------|-----------|-------------|
+| `ticks`           | `{minSpacingPx, steps: [{unit, step, format}]}` (`$defs/RulerTicks`) | – | A single adaptive row: of `steps`, listed from finest to coarsest, the finest whose labels are at least `minSpacingPx` apart on screen is used. `ticks` and `levels` **MUST NOT** both be set. |
+| `boundaryFormats` | map unit → format                        | –         | A tick that falls exactly on the start of a listed unit uses that unit's format; when several apply, the coarsest unit wins. |
+| `attach`          | `"view"`, `"canvas"`                     | `"view"`  | `view`: the ruler stays at its edge of the pane whatever is scrolled; `canvas`: it scrolls with the drawing. |
+
+Ticks and level boundaries **MUST** fall on round boundaries of their unit in the axis's time zone, never on offsets from the edge of the viewport; on a `yearMonth` axis, on month indices divisible by the step's number of months, counted from year 0.
+
+```json
+"ruler": { "visible": true, "position": "bottom", "size": 24,
+  "ticks": { "minSpacingPx": 80, "steps": [
+    { "unit": "hour", "step": 1, "format": "HH:mm" }, { "unit": "hour", "step": 6, "format": "HH:mm" },
+    { "unit": "day", "step": 1, "format": "MMM d" }, { "unit": "week", "step": 1, "format": "MMM d" },
+    { "unit": "month", "step": 1, "format": "MMM yyyy" }, { "unit": "year", "step": 1, "format": "yyyy" } ] },
+  "boundaryFormats": { "month": "MMM yyyy", "year": "yyyy" } }
+```
+
+A timeline's one ruler row chooses the finest step that leaves 80 pixels per label, and writes the bare year on the first of January.
+
 
 ---
 
@@ -1351,6 +1724,13 @@ Tokens give colors, fonts and sizes semantic names so that one specification ren
 | `defaultMode`  | string                   | Initial mode.                                                                                            |
 | `followSystem` | bool                     | Follow the operating system's light/dark preference.                                                     |
 | `extends`      | string                   | Name of an imported theme to extend (`"corp.theme"`).                                                    |
+| `contrast`     | ContrastRequirement[]    | Pairs of tokens whose contrast ratio a validator checks (below).                                         |
+
+**Contrast requirements.** A **ContrastRequirement** (`$defs/ContrastRequirement`) is `{ "foreground": token, "background": token or token[], "minRatio": number ≥ 1, "doc": Doc }`. A specification validator **MUST** compute the WCAG 2.x contrast ratio of every foreground and background pair in every theme mode (the mode's tokens merged over `tokens`) and **MUST** report each pair below `minRatio` as a specification warning. Runtimes are unaffected. 6.15 recommends 4.5 for text.
+
+```json
+"contrast": [ { "foreground": "color.text", "background": ["fdg.ui", "fdg.data", "fdg.action", "fdg.function"], "minRatio": 4.5 } ]
+```
 
 Tokens are referenced with `{ "token": "color.accent" }` in any Bindable position, and from CEL with `token('color.accent')`. Runtimes MAY let users switch modes; DID definitions never store resolved token values unless a user explicitly overrides a style.
 
@@ -1443,6 +1823,14 @@ A **Font** object:
 
 Font files MAY be declared in `notation.fonts`: `{ "Inter": { "src": ["fonts/Inter.woff2"], "weights": [400, 600] } }`. Runtimes that cannot load a font use the next family in the stack.
 
+**Text metric.** `notation.textMetric` (`$defs/TextMetric`) says how text is measured wherever a measurement affects geometry. It is `"host"` (default, the 0.1 behaviour: the host's font metrics) or `{ "kind": "average", "advance": number, "count": "utf16" | "codepoint" | "grapheme", "lineHeight": number }`: every counted character advances by `advance` times the font size, and a line is `lineHeight` times the font size high. When a metric other than `host` is declared, runtimes and headless layout **MUST** use it for every measurement that affects geometry (`autoSize`, wrapping at `maxWidth`, `overflow: "ellipsis"` and `"shrink"`, and the inputs of layout), so that every host draws the same geometry; the glyphs themselves are still drawn in the real font. CEL reads the metric with `textWidth` and `textHeight` (12.4).
+
+```json
+"textMetric": { "kind": "average", "advance": 0.55, "count": "utf16", "lineHeight": 1.4 }
+```
+
+A mind map sizes its topic boxes from `textWidth(self.text, 14.0)`, so two hosts lay out the same map the same way.
+
 ### 6.6 Styles
 
 A **Style** bundles visual properties. Styles are declared in `notation.styles` and referenced by name, or written inline.
@@ -1492,8 +1880,15 @@ A **Style** bundles visual properties. Styles are declared in `notation.styles` 
 | `warning`     | The element has at least one finding with severity `warning` (and none with `error`).                |
 | `disabled`    | The element is read-only (locked, or `enabled` of its notation is false).                            |
 | `editing`     | A label of the element is being edited inline.                                                       |
+| `filteredOut` | A canvas filter with `effect: "dim"` filters the element out (6.13.1).                               |
 
-Runtimes provide sensible defaults for `hover`, `selected`, `dropTarget`, `dropReject`, `invalid` and `warning` (for example a selection outline and a red finding badge) that apply when the specification declares none.
+Runtimes provide sensible defaults for `hover`, `selected`, `dropTarget`, `dropReject`, `invalid` and `warning` (for example a selection outline and a red finding badge) that apply when the specification declares none. A notation that declares a badge with the id `problem` (6.9) replaces the runtime's default finding badge on that kind of element, so a specification can place its own glyph, driven by `self.findingSeverity()` (12.2):
+
+```json
+{ "id": "problem", "position": "bottom-right", "offset": [-10, -10],
+  "text": { "cel": "self.findingSeverity() == 'error' ? '✖' : '⚠'" },
+  "visible": { "cel": "self.findingSeverity() in ['error', 'warning']" } }
+```
 
 **Conditional styles** apply when an expression holds:
 
@@ -1528,6 +1923,7 @@ The standard library offers these primitives (all parameters optional; defaults 
 | `roundedRect`   | `radius`, `radii` `[tl,tr,br,bl]`                                                 |                                                                  |
 | `pill`          | –                                                                                 | Stadium; radius = half the smaller side.                         |
 | `ellipse`       | –                                                                                 | Circle when width = height.                                      |
+| `superellipse`  | `exponent` (≥ 2)                                                                  | The curve \|2x/w − 1\|ⁿ + \|2y/h − 1\|ⁿ = 1 with n = `exponent`; outline and text area as for `ellipse`, the text area inset where the curve crosses the diagonals. |
 | `circle`        | –                                                                                 | Always circular; size is min(width, height).                     |
 | `diamond`       | –                                                                                 | Rhombus touching the bounds' midpoints.                          |
 | `triangle`      | `apex` (fraction along top edge), `direction` (`up`, `down`, `left`, `right`)     |                                                                  |
@@ -1564,6 +1960,12 @@ The standard library offers these primitives (all parameters optional; defaults 
 
 Every built-in shape defines its **outline** (for edge anchoring and hit testing) and its **text area** (where the main label goes). For example, a cylinder's text area excludes its top cap; an actor's text area lies below the figure.
 
+```json
+"shape": { "type": "superellipse", "params": { "exponent": 4 } }
+```
+
+A functional decomposition graph draws its UI elements as a squircle with exponent 4, exactly rather than approximated by curves.
+
 ### 6.8 Custom shapes
 
 When no primitive fits, a specification declares its own shapes in `notation.shapes`. A custom shape can be as simple as a static SVG path, or a fully parameterised, handle-editable shape whose geometry is computed with CEL.
@@ -1584,6 +1986,8 @@ When no primitive fits, a specification declares its own shapes in `notation.sha
 | `scaling`      | ScaleMode                                  | How static geometry maps into bounds (below).                                                                      |
 
 Exactly one of `path`, `parts`, `svg` or `plugin` MUST be present.
+
+A custom shape whose name equals a built-in shape's name shadows the built-in within the specification, so a specification written before a built-in was added keeps drawing its own shape. Shapes that are neither a primitive nor worth one, such as a diode whose ends are rounded by `min(w, h)`, are custom shapes with GeomExpr geometry, which is exact up to sampling.
 
 **Shape coordinate context.** Geometry expressions (GeomExpr, 2.5c) are evaluated with these variables:
 
@@ -1672,6 +2076,27 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 | `snap`             | SnapRule                           | Snapping of the parameter value (for example `{ "grid": { "spacing": 2 } }` or `{ "values": [0, 0.25, 0.5] }`).                                                                   |
 | `cursor`, `style`  |                                    | Handle appearance.                                                                                                                                                                |
 | `label`, `doc`     |                                    | Tooltip while hovering or dragging ("Fold size: 14 px").                                                                                                                          |
+| `visible`          | Expression                         | Whether the handle is offered; context `element`. Default `true`.                                                                                                                 |
+| `write`            | Action[]                           | For a parameter bound with `{cel}`: the inverse, run with `value` (and `yValue`) bound to the new, snapped parameter value; context `handleWrite` (12.3).                         |
+| `refusals`         | `{ "move": Reason }`               | Shown when the user tries to drag the handle while it is not offered.                                                                                                             |
+
+**Handles that write the model.** Where the shape instance binds a handle's parameter with `{ "attribute": path }` (2.5b), dragging the handle **MUST** write that attribute, as the two-way binding of 2.5b says, and not view data. Where it binds the parameter with `{cel}`, the handle's `write` actions are run instead, like a computed placement's inverse (5.8); without `write`, the handle behaves as in 0.1 and its value is overridden by the binding, so a validator **SHOULD** warn about it. A handle on a free or `{param}` parameter keeps writing view data, as in 0.1.
+
+- A handle drag that writes the model **MUST** be one transaction, one undo step, of the gesture kind `change`, with `attribute` bound for each written attribute: `change` gesture constraints, `outOfRange` (4.3), hooks and invariants apply as to any other attribute change. A refused drag **MUST** return the handle to its previous position and show the refusal.
+- A parameter written through the model **MUST NOT** also be stored in view data; its `persist` is ignored.
+- A handle whose `visible` is false is not drawn. A runtime that lets the user try it anyway **MUST** refuse with `refusals.move` when it is declared.
+- The handle's `snap` **MAY** be a CEL snap rule in the `handle` context, which lets a handle land a step away from its neighbours.
+
+```json
+"handles": [
+  { "param": "b1", "x": "w * p.b1", "y": "h / 2", "axis": "x",
+    "visible": "self.view.selected && env.viewpoint == 'trueTime' && visiblePhases(self) >= 2",
+    "snap": { "cel": "boundaryLanding(self, 1, value)" },
+    "write": [ { "set": { "peakEnd": "fractionToMonth(self, value)" } } ] }
+]
+```
+
+A hype cycle's phase boundary is a handle on its banner that writes the month the peak ends, as a model edit, and is offered only between two visible phases.
 
 **Example — a callout with a draggable tail and adjustable radius.**
 
@@ -1741,6 +2166,7 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 | `form`                                               | EmbeddedForm                                                            | Form widgets drawn inside the node (7.6).                                               |
 | `icon`                                               | NodeIcon                                                                | Icon placement (below).                                                                 |
 | `badges`                                             | Badge[]                                                                 | Small indicators at corners or edges (below).                                           |
+| `badgeLayout`                                        | BadgeLayout                                                             | Slots that packed badges fill in order (below).                                         |
 | `ports`                                              | map port name → PortNotation                                            | Port visuals (below).                                                                   |
 | `anchors`                                            | AnchorSpec                                                              | Where edges attach when no port is used (below).                                        |
 | `container`                                          | ContainerSpec                                                           | How children are laid out and clipped (below).                                          |
@@ -1758,7 +2184,7 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 | `accessibility`                                      | `{role, name, description}`                                             | Accessible name and description (6.15).                                                 |
 | `doc`                                                | Doc                                                                     | Documents the notation itself ("Rounded corners mark states, circles pseudo-states").   |
 
-**GestureRefusals** (`$defs/GestureRefusals`) maps a gesture to the Reason[] shown when a user attempts it on an element of this kind and the notation, placement or metamodel switches it off. Its keys are `move` (placement `movable: false`, any edge, a derived or layout-placed element), `resize`, `reparent`, `delete` (`deletable: false`), `connect` (`connectable: false`), `reconnect` (`reconnectable: false`), `copy` (`copyable: false`) and `editLabel` (a label with `editable: false`). Reasons are evaluated in the `element` context. A runtime **MUST** show the applicable refusal when a user attempts that gesture on an element of that kind, and **MUST NOT** refuse silently when one is declared. A refusal here comes first in the order of gesture checks (8.4).
+**GestureRefusals** (`$defs/GestureRefusals`) maps a gesture to the Reason[] shown when a user attempts it on an element of this kind and the notation, placement or metamodel switches it off. Its keys are `move` (placement `movable: false`, any edge, a layout-placed element), `resize`, `reparent`, `delete` (`deletable: false`), `connect` (`connectable: false`), `reconnect` (`reconnectable: false`), `copy` (`copyable: false`) and `editLabel` (a label with `editable: false`). Reasons are evaluated in the `element` context. A runtime **MUST** show the applicable refusal when a user attempts that gesture on an element of that kind, and **MUST NOT** refuse silently when one is declared. A refusal here comes first in the order of gesture checks (8.4).
 
 ```json
 "nodes": {
@@ -1801,9 +2227,21 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 | `visible`                  | Bindable bool                                              |                                                                                                                              |
 | `padding`, `style`         |                                                            |                                                                                                                              |
 
-**NodeIcon**: `{ "icon": IconRef, "position": Position, "size": 16, "color": Paint, "visible": Bindable }`. **Badge**: `{ "id", "position": Position, "offset": [dx, dy], "shape": ShapeRef, "text": Bindable string, "icon": IconRef, "style": StyleRef, "size", "visible": Bindable bool, "tooltip", "onClick": operation }` — for example a finding counter, a lock, a stereotype glyph, a progress ring.
+**NodeIcon**: `{ "icon": IconRef, "position": Position, "size": 16, "color": Paint, "flip": Bindable, "visible": Bindable }`. **Badge**: `{ "id", "pack": bool, "position": Position, "offset": [dx, dy], "shape": ShapeRef, "text": Bindable string, "icon": IconRef, "flip": Bindable, "style": StyleRef, "size", "visible": Bindable bool, "tooltip", "onClick": operation }` — for example a finding counter, a lock, a stereotype glyph, a progress ring. `flip` mirrors the icon: `"none"` (default), `"horizontal"`, `"vertical"` or `"both"`; hit testing is unchanged.
 
-**Positions** inside a node are one of `"center"`, `"top"`, `"bottom"`, `"left"`, `"right"`, `"top-left"`, `"top-right"`, `"bottom-left"`, `"bottom-right"`, the same prefixed with `outside-` (for example `"outside-bottom"` below the node, as for actors and events), or an object `{ "anchor": [fx, fy], "offset": [dx, dy], "align": "center" }`.
+**Packed badges.** **BadgeLayout** (`$defs/BadgeLayout`) is `{ "start": Position, "offset": [dx, dy], "direction": "left" | "right" | "up" | "down", "spacing": number }`. Badges with `pack: true` whose `visible` holds **MUST** take consecutive slots in declaration order, the first at `start` moved by `offset`, each next one `spacing` canvas units further in `direction`; a badge that is not visible takes no slot. The `position` and `offset` of a packed badge are ignored. `badgeLayout` **MAY** also be set in a variant.
+
+```json
+"badgeLayout": { "start": "top-right", "offset": [-12, 12], "direction": "left", "spacing": 16 },
+"badges": [
+  { "id": "disabled", "pack": true, "text": "⊘", "visible": { "cel": "!self.enabled" }, "tooltip": "Disabled: this will not run." },
+  { "id": "manual",   "pack": true, "text": "▶", "visible": { "cel": "self.manual" } }
+]
+```
+
+A pipeline step shows only the indicators that apply, leftward from its top-right corner, without gaps.
+
+**Positions** inside a node are one of `"center"`, `"top"`, `"bottom"`, `"left"`, `"right"`, `"top-left"`, `"top-right"`, `"bottom-left"`, `"bottom-right"`, the same prefixed with `outside-` (for example `"outside-bottom"` below the node, as for actors and events), or an object `{ "anchor": [fx, fy], "offset": [dx, dy], "align": "center" }`. The `offset` of the object form **MAY** be bound: `{ "attribute": path }`, naming an attribute that holds `[dx, dy]` or a struct with `dx` and `dy`, or `{ "cel": … }` returning `[dx, dy]`. An absent attribute value falls back to the notation's default position. A label whose offset is bound to an attribute writes that attribute when it is dragged (6.12).
 
 **Ports notation**
 
@@ -1827,6 +2265,13 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 | `points` | `{id, x, y}`[]                                | Fixed anchor points as fractions of the bounds.                                                                                                                                                                               |
 | `gap`    | number                                        | Distance between the outline and the edge end.                                                                                                                                                                                |
 | `spread` | bool                                          | Distribute several edges arriving on the same side instead of converging on one point.                                                                                                                                        |
+| `sides`  | (`"top"`, `"right"`, `"bottom"`, `"left"`)[]  | The sides edges may attach to. Default: all four. With `sides` mode, the midpoint of the nearest allowed side is used; with `outline`, the attachment point is clamped to the allowed sides; `fixed` and `center` ignore it. |
+
+```json
+"anchors": { "mode": "sides", "sides": ["left", "right"] }
+```
+
+A mind map's branches leave a topic at the middle of its left or right side, never at the top or bottom.
 
 **ContainerSpec** — for nodes whose type has `children`:
 
@@ -1843,6 +2288,13 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 | `collapsible`     | bool                                                                  | Collapsing hides children and optionally switches to a `collapsed` variant.                                                                    |
 | `dropZones`       | `{slot, box, style}`[]                                                | Explicit regions that accept children of a slot (4.8).                                                                                         |
 | `highlightOnDrop` | bool                                                                  | Apply the `dropTarget` state while a valid child is dragged over.                                                                              |
+| `nesting`         | `"inside"`, `"none"`                                                  | Whether children are drawn inside the container. Default `"inside"`, the 0.1 behaviour.                                                        |
+
+With `nesting: "none"`, children **MUST NOT** be drawn inside the parent's bounds: the parent does not grow to enclose them (`autoGrow`, `clip`, `contentArea`, `header` and `dropZones` are ignored), child positions are not relative to the parent, and moving the parent does not move its children unless the layout does. Containment still governs `parent`, `children`, deletion (9.5), the clipboard and `collapsible`. The lines that show the containment are drawn by a derived relation (4.9), as a mind map draws its branches:
+
+```json
+"container": { "layout": "layout:mindmap", "nesting": "none", "collapsible": true, "highlightOnDrop": true }
+```
 
 **Variants** switch whole parts of a notation based on model state — for example a collapsed sub-process, an event rendered differently when interrupting, a gateway symbol that depends on its kind:
 
@@ -1883,6 +2335,8 @@ A Variant may contain any NodeNotation property except `placement`; matching var
 | `states`, `conditions`, `variants`                    |                                     | As for nodes; variants may replace line, markers and labels.                                                               |
 | `tooltip`, `selectable`, `deletable`, `reconnectable` |                                     | `tooltip` is a Message (context `element`). `reconnectable` controls whether users may drag an end to another element.     |
 | `refusals`                                            | GestureRefusals                     | As for nodes (6.9); for example `"move": ["An edge is drawn between its endpoints; move one of those instead."]`.          |
+| `connect`                                             | ConnectGesture                      | The anchors a connect gesture of this relation type starts from, and which end each one makes (below).                     |
+| `stub`                                                | Stub                                | How a relation without a target is drawn (below). Also allowed in variants.                                                |
 | `accessibility`, `doc`                                |                                     |                                                                                                                            |
 
 **LineSpec**
@@ -1899,10 +2353,67 @@ A Variant may contain any NodeNotation property except `placement`; matching var
 | `segments`                       | `{editable, keepOrthogonal}`                                | Dragging whole segments of orthogonal edges.                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | `minSegmentLength`               | number                                                      | Minimum length of the first and last segment (so markers do not sit on a corner).                                                                                                                                                                                                                                                                                                                                                                                   |
 | `startDirection`, `endDirection` | `"auto"`, `"up"`, `"down"`, `"left"`, `"right"`, `"normal"` | Direction the line leaves or enters its node; `normal` is perpendicular to the outline.                                                                                                                                                                                                                                                                                                                                                                             |
+| `bezier`                         | BezierSpec                                                  | Control points of a `bezier` route (below).                                                                                                                                                                                                                                                                                                                                                                                                                         |
+
+**Curvature.** For `arc`, and for `curved` without bendpoints, a positive `curvature` **MUST** bow the line to the left of the direction from source to target as drawn on screen (y down), and a negative one to the right, so that A → B and B → A with the same curvature bow to opposite sides. `curved` without bendpoints is one quadratic Bézier whose control point lies `curvature` × the chord's length from the chord's midpoint, perpendicular to the chord. `arc` is a circular arc whose sagitta is `curvature` × the chord's length / 2, so 1 is a semicircle.
+
+```json
+"line": { "routing": "curved", "curvature": 0.2 },
+"variants": [ { "when": "self.flipped", "line": { "curvature": -0.2 } } ]
+```
+
+**Bézier reach.** **BezierSpec** (`$defs/BezierSpec`) is `{ "reach": number | "auto", "backward": "direct" | "loop", "maxReach": number }`. With `routing: "bezier"`, the two control points **MUST** lie on the start and end directions (`startDirection`, `endDirection`), `reach` canvas units from each end; `auto` is half the distance between the ends along the start direction, and at least 30. With `backward: "loop"`, when the end lies behind the start along the start direction (for `right`, the target anchor lies left of the source anchor), the reach becomes the larger of `reach` and half that distance plus the larger of the two nodes' heights (their widths, for `up` and `down`), capped by `maxReach`, so the curve leaves forward and comes back from behind instead of doubling over itself. Without `bezier`, the control points stay runtime-defined, as in 0.1.
+
+```json
+"line": { "routing": "bezier", "startDirection": "right", "endDirection": "right", "bezier": { "reach": "auto", "backward": "loop" } }
+```
 
 **JumpSpec**: `{ "style": "none" | "arc" | "gap" | "square" | "sharp", "size": 6, "over": "later" | "horizontal" | "all" }` — draws a small bridge where this edge crosses another. `over` decides which of two crossing edges jumps: the later-drawn one (default), always the horizontal one, or both.
 
-**EndAnchor**: `{ "mode": "outline" | "center" | "port" | "fixed" | "sides", "gap": 2, "points": [...] }` overrides the node's AnchorSpec for this edge type; `gap` leaves space between the node outline and the marker.
+**EndAnchor**: `{ "mode": "outline" | "center" | "port" | "fixed" | "sides" | "part", "gap": 2, "points": [...], "sides": [...] }` overrides the node's AnchorSpec for this edge type; `gap` leaves space between the node outline and the marker, and `sides` restricts the sides as in AnchorSpec (6.9).
+
+**Ends bound to the model.** With `mode: "part"`, the end is a point on a side of a named part of the end node's shape (6.8), and the three values that say where can be bound to attributes of the relation:
+
+| Property  | Type                                              | Description |
+|-----------|---------------------------------------------------|-------------|
+| `part`    | Bindable string                                   | The id of a ShapePart of the end node's shape. |
+| `side`    | Bindable `"top"`, `"right"`, `"bottom"`, `"left"` | The side of that part's box. |
+| `at`      | Bindable fraction                                 | The position along that side, from its start (its left or top end). |
+| `movable` | bool                                              | The user may drag the end along the node's parts and sides. Default `true` when all three are attribute bindings. |
+| `default` | `{part, side, at}`                                | The values written when a connect gesture does not determine them. |
+
+The end point **MUST** be the point at `at` along `side` of the part's current box, so resizing the node or changing its parameters moves the end in proportion. A connect gesture **MUST** write the bound attributes of both ends in the same transaction as the relation, and dragging an end **MUST** write them as one model edit, subject to constraints. When the named part is not drawn (its `when` is false), the edge **MUST NOT** be drawn; it stays in the model. The anchors of such an end are not written to `EdgeView` (DID, section 5).
+
+```json
+"anchoring": {
+  "source": { "mode": "part", "part": { "attribute": "fromPhase" }, "side": { "attribute": "fromEdge" }, "at": { "attribute": "fromAt" },
+              "default": { "part": { "cel": "lastVisiblePhase(source)" }, "side": "bottom", "at": 0.5 } },
+  "target": { "mode": "part", "part": { "attribute": "toPhase" }, "side": { "attribute": "toEdge" }, "at": { "attribute": "toAt" },
+              "default": { "part": "peak", "side": "top", "at": 0.5 } }
+}
+```
+
+An influence on a hype cycle ends at a phase, an edge of that phase and a fraction along it, all stored on the influence.
+
+**Direction chosen by the anchor.** **ConnectGesture** (`$defs/ConnectGesture`) is `{ "from": map anchor id → "source" | "target", "tool": tool id }`. `from` lists the anchors of the node notation (AnchorSpec `points[].id`) from which a connect gesture of this relation type starts, and which end the node dragged from becomes; without `connect`, every anchor starts one, as `source` (0.1). `tool` names a library tool (7.1) whose `mode`, `initial`, `createSource` and `createTarget` apply to a gesture started from an anchor.
+
+- A connect gesture started from an anchor listed in `from` **MUST** make the node dragged from the end named there, and the node it lands on the other end; `connect` gesture constraints (8.4) see `source` and `target` after this assignment.
+- `createSource` and `createTarget` (7.2) keep their meaning by role: when the gesture lands on empty canvas, the runtime creates the missing end, so a gesture from a `"target"` anchor uses `createSource`.
+- An anchor not listed in `from` **MUST NOT** start a connect gesture of this relation type.
+
+```json
+"DependsOn": { "connect": { "from": { "right": "source", "left": "target" }, "tool": "dependsOn" } }
+```
+
+In a dependency graph, dragging from a node's right anchor makes it depend on the node dropped on; dragging from its left anchor makes that node depend on it.
+
+**Stubs.** **Stub** (`$defs/Stub`) is `{ "length": number, "side": "right" | "left" | "top" | "bottom" | "auto", "style": StyleRef, "label": Label }`. A relation whose target is absent (an `optional` target end, 4.9) **MUST** be drawn as a stub: a line of `length` canvas units leaving the source at the middle of `side`, with its `style` and `label`. The stub is the relation: selecting it selects the relation, and dragging its free end onto an element is a `connect` gesture. A relation without a target and without a stub is not drawn.
+
+```json
+"UsesRole": { "stub": { "length": 48, "side": "right",
+  "style": { "stroke": { "color": { "token": "color.warning" }, "dash": [3, 3], "dashScale": "absolute" } },
+  "label": { "id": "asWritten", "text": { "cel": "self.targetAsWritten + ' (missing)'" }, "side": "above" } } }
+```
 
 **SelfLoopSpec**: `{ "shape": "arc" | "rect" | "circle", "size": 30, "side": "top" | "right" | "bottom" | "left" | "auto", "spread": 10 }`.
 
@@ -2044,6 +2555,16 @@ Labels display text on nodes, edges, ports and compartments. The same **Label** 
 | `layer`          | `"top"`                                         | Draw the label above all elements (6.16) so it is never covered.                                                                                      |
 | `tooltip`, `doc` |                                                 |                                                                                                                                                       |
 
+**Label offsets in the model.** When a node label's `position` has an `offset` bound to an attribute (6.9), dragging the label (where it is `draggable`) **MUST** write that attribute as a model edit, with undo and constraints, instead of view data; a label whose offset is bound to a `readOnly` or `fixed` attribute is not draggable.
+
+```json
+"labels": [ { "id": "name", "text": { "attribute": "name" },
+  "position": { "anchor": [1, 0.5], "offset": { "cel": "has(self.labelOffset) ? [self.labelOffset.dx, self.labelOffset.dy] : [15.0, 4.0]" } },
+  "draggable": false } ]
+```
+
+A Wardley map reads each component's label offset from the map text, and draws the label at the default offset where the text gives none.
+
 **Edge label positioning** — for labels in `EdgeNotation.labels`:
 
 | Property        | Type                                              | Description                                                                                                            |
@@ -2079,12 +2600,81 @@ block-beta
 | `background` | Paint                                      | Canvas background (default token `color.canvas`).                                   |
 | `page`       | `{size, orientation, margins, showBreaks}` | Paged canvas for printing: size `"A4"`, `"Letter"`, `[w, h]` in mm.                 |
 | `bounds`     | Box                                        | Fixed drawing area.                                                                 |
-| `zoom`       | `{min, max, default, steps}`               | Zoom limits and presets.                                                            |
+| `fit`        | `"none"`, `"stretch"`                      | Whether the drawing area is stretched to the pane (below). Default `"none"`.         |
+| `margin`     | Insets                                     | Space kept around the stretched `bounds`. Default 0.                                 |
+| `zoom`       | `{min, max, default, steps, initial, fitPadding, fitWhen}` | Zoom limits and presets, and the zoom a viewer starts with (below).  |
 | `watermark`  | Label                                      | Text drawn under everything (for example "DRAFT" when `diagram.status == 'draft'`). |
-| `legend`     | `{visible, position, entries}`             | Auto-generated legend of types, markers and conditional styles that carry `doc`.    |
+| `legend`     | `{visible, position, entries, title, from, computed}` | Auto-generated legend of types, markers and conditional styles that carry `doc` (below). |
 | `minimap`    | bool                                       | Show an overview map.                                                               |
 | `selection`  | `{style, handles}`                         | Selection outline and resize handle appearance.                                     |
+| `title`      | Label                                      | A title above the drawing surface (below).                                          |
+| `header`     | ChromeBand                                 | A band of rows between the title and the drawing surface (below).                   |
+| `notices`    | Notice[]                                   | Status notices outside the drawing (below).                                         |
+| `filters`    | map id → Filter                            | User filters, whose values are viewer state (6.13.1).                               |
+| `empty`      | EmptyMessage                               | The message shown on an empty canvas (below).                                       |
 
+**Chrome.** The title, the header, notices, filter controls, variant toggles (3.5), a legend at an `outside-` position and the empty-canvas message are **chrome**: they are drawn outside the drawing surface, are not zoomed or panned, and are not elements. A runtime **MUST NOT** let them be selected, moved, deleted or included in layout or in the model's export. Their texts are Messages evaluated in the `chrome` context (12.3), which binds `diagram` and `env` and may read `diagram.drawn`, `budget()` and `filterValue()`; the title and header rows are Labels evaluated with `self` bound to the diagram.
+
+- **Title.** `title` is drawn above the drawing surface. `editable` works as for any label, and defaults to `false` when the text is bound to a derived attribute.
+- **Header.** `header` (`$defs/ChromeBand`) is `{ "rows": Label[], "style": StyleRef, "visible": Bindable bool }`, drawn between the title and the drawing surface; the surface's coordinate origin lies below it.
+- **Notices.** A **Notice** (`$defs/Notice`) is `{ "id", "text": Message, "severity": "info" | "warning" | "error", "position": "top" | "bottom" | "top-left" | "top-right" | "bottom-left" | "bottom-right", "visible": Bindable bool, "actions": [{label, operation, args}], "dismissible": bool, "style" }`, with `severity` `info` and `position` `top` by default. Visible notices **MUST** stack in declaration order per position, and **MUST** be exposed to assistive technology as a status region. Each button runs its operation (9.3) with `args` evaluated in the `chrome` context. A dismissal is viewer state. Two notices are built in: each truncating budget contributes `budget:<id>` (3.2.1) while it truncates, and a parse failure of the primary file (8.6) contributes `unavailable`, whose text is the finding's message; a declared notice with the same id replaces the built-in one. The 0.1 `watermark` keeps its meaning.
+- **Empty canvas.** `empty` (`$defs/EmptyMessage`) is `{ "text": Message, "when": Expression, "style": StyleRef }`, drawn centred on the surface while `when` holds. The default `when` is that the view draws no element after steps 1 and 2 of the drawing order (6.1), before viewer filters and budgets, so a canvas emptied by a filter does not claim that the model is empty. The toolbox and empty-canvas gestures stay available.
+- **Stretching.** With `fit: "stretch"`, `bounds` **MUST** be set, and the runtime **MUST** scale x and y independently so that `bounds` fills the pane minus `margin`, again when the pane is resized. Node sizes, strokes, fonts and label offsets are not stretched: they stay in canvas units at zoom 1, placed at their stretched anchor. User zoom and pan **MAY** be disabled. Stored positions are domain values and are unaffected.
+- **Initial zoom.** `zoom.initial` is a number or `"fit"`; default: `zoom.default`, as in 0.1. With `"fit"`, the runtime **MUST** fit zoom and pan to the drawn content once per viewer and view, keeping `fitPadding` (a fraction of the content's extent, default 0.05) on each side, when the view opens or, with `fitWhen: "firstContent"` (default), the first time it has content; afterwards a model change **MUST NOT** change zoom or pan. A stored `viewport` (11.6) takes precedence, and an empty view uses `default`. The fitted value is viewer state.
+- **Legend.** With `legend.from: "drawn"`, an entry **MUST** be shown only while at least one element of `diagram.drawn` matches it: a string entry of `entries` matches when a drawn element has that type, takes that enum value, uses that marker or satisfies that conditional style. With `from: "declared"` (default), every entry is shown, as in 0.1. `legend.computed` (`$defs/LegendComputed`) computes entries from the drawn elements: `key` (Expression, `legend` context) groups them into one entry each; `label` (Message) and `swatch` (`{shape, fill, stroke, icon}`) are evaluated on the first element of each group; `order` sorts the entries (default: first appearance in model order). `legend.title` is a Message heading the legend.
+
+```json
+"canvas": {
+  "title": { "id": "heading", "text": { "attribute": "heading" }, "style": "diagramTitle" },
+  "legend": { "visible": true, "position": "outside-bottom", "from": "drawn",
+    "computed": { "key": "self.kindTag + (self.external ? ' (external)' : '')",
+                  "label": { "cel": "self.kindTag + (self.external ? ' (external)' : '')" },
+                  "swatch": { "shape": "roundedRect", "fill": { "cel": "kindBackground(self)" } } } },
+  "notices": [ { "id": "ambientHidden", "position": "bottom-left",
+    "visible": { "cel": "!filterValue('ambient') && diagram.nodesOfType('Package').exists(p, p.isAmbient)" },
+    "text": { "cel": "string(diagram.nodesOfType('Package').filter(p, p.isAmbient).size()) + ' ambient packages are hidden.'" },
+    "actions": [ { "label": "Show them", "operation": "showAmbient" } ] } ],
+  "empty": { "text": "This causal loop diagram states no variables yet." },
+  "zoom": { "default": 1, "initial": "fit", "fitPadding": 0.1 }
+}
+```
+
+The title and key of a C4 view, the ambient-package notice of a .NET dependency graph, the empty message of a causal loop diagram and a timeline's fit-once zoom, together in one canvas.
+
+#### 6.13.1 Filters
+
+`canvas.filters` maps a filter id to a **Filter** (`$defs/Filter`), a control on the canvas chrome with which a viewer hides or dims elements. Its value is viewer state (the view-data kind `filters`, 11.6), whatever `persistence.view.viewer` lists.
+
+| Property    | Type                                            | Default                  | Description |
+|-------------|-------------------------------------------------|--------------------------|-------------|
+| `label`     | Message                                         | the id                   | Shown on the control. |
+| `control`   | `"chips"`, `"switch"`, `"select"`, `"search"`   | **required**             | `chips`: a list of chosen values; `switch`: a bool; `select`: one of `options`; `search`: free text. |
+| `appliesTo` | TypeRef[]                                       | every node type          | The types the filter can hide; others always stay. |
+| `options`   | `{cel}`                                         | –                        | The values offered by `chips` and `select`; context `filter`, without `self`. |
+| `default`   | literal or `{cel}`                              | `[]`, `false` or `''`    | The value a viewer starts with. |
+| `match`     | `{ "default": "any" \| "all", "userToggle": bool }` | `{ "default": "any", "userToggle": true }` | For `chips`: whether an element must match any or all chosen values, and whether the viewer may switch. |
+| `keep`      | Expression → bool                               | **required**             | True when `self` stays drawn; context `filter`. |
+| `effect`    | `"hide"`, `"dim"`                               | `"hide"`                 | `dim` applies the `filteredOut` state (6.6) instead of hiding. |
+| `position`  | Position                                        | the runtime's            | Where the control sits, outside the drawing surface. |
+| `doc`       | Doc                                             |                          | |
+
+The `filter` context binds `self`, `value` (the filter's current value), `match` (`"any"` or `"all"`), `diagram` and `env` (12.3); `filterValue(id)` (12.4) reads a filter's value in the `element` and `chrome` contexts.
+
+- An element of a type in `appliesTo` for which `keep` is false **MUST NOT** be drawn, or, with `effect: "dim"`, **MUST** take the `filteredOut` state. A relation with an end that is not drawn is not drawn (6.1).
+- Filtering **MUST NOT** change the model, the findings or the undo history. Filtered-out elements are excluded from `diagram.drawn` and from a legend with `from: "drawn"`; a message or reason that names a filtered-out element still names it (2.3).
+
+```json
+"filters": {
+  "tags": {
+    "label": "Filter by tags", "control": "chips", "appliesTo": ["Trend", "Trigger"],
+    "options": { "cel": "diagram.nodes.filter(n, n.isA('Trend') || n.isA('Trigger')).map(n, n.tags).flatten().map(t, lower(t)).distinct()" },
+    "match": { "default": "any", "userToggle": true },
+    "keep": "value.size() == 0 || (match == 'any' ? value.exists(t, self.tags.exists(s, lower(s) == lower(t))) : value.all(t, self.tags.exists(s, lower(s) == lower(t))))"
+  }
+}
+```
+
+A hype cycle's tag chips hide the trends and triggers without the chosen tags, and every influence to or from them; notes always stay.
 ### 6.14 Icons
 
 `notation.icons` declares icons used by tools, nodes, badges and labels.
@@ -2099,6 +2689,14 @@ block-beta
 
 Icons are monochrome by default and take `currentColor`, so they follow the theme; `colored: true` keeps their own colors.
 
+Wherever an IconRef is accepted, `{ "icon": IconRef, "flip": "none" | "horizontal" | "vertical" | "both" }` mirrors the icon; `flip` is Bindable and does not change hit testing.
+
+```json
+"icon": { "icon": "mdi-sync", "position": "top", "size": 26, "flip": { "cel": "self.kind == 'reinforcing' ? 'none' : 'horizontal'" } }
+```
+
+A causal loop turns its loop arrow clockwise for a reinforcing loop and anticlockwise for a balancing one.
+
 ### 6.15 Accessibility
 
 Notations SHOULD make diagrams accessible:
@@ -2108,6 +2706,7 @@ Notations SHOULD make diagrams accessible:
 - Runtimes SHOULD provide keyboard navigation between elements and along edges, and expose the model as an accessible tree.
 - Color MUST NOT be the only carrier of meaning in built-in defaults; specifications SHOULD pair color with shape, pattern, dash, icon or text. Validators MAY warn when two types differ only in fill color.
 - Themes SHOULD provide a `high-contrast` mode; runtimes SHOULD honour reduced-motion settings (disable `flow` animations).
+- Specifications **SHOULD** state the contrast their text needs with `theme.contrast` (6.2), with a `minRatio` of at least 4.5 for text against the fills it is drawn on.
 
 ### 6.16 Rendering order
 
@@ -2180,12 +2779,50 @@ If `toolbox` is absent, the runtime generates one group per 10 concrete types, a
 | `template`             | template id                                       | For `kind: "template"`.                                                                              |
 | `operation`            | operation id                                      | For `kind: "operation"`.                                                                             |
 | `plugin`               | `{name, args}`                                    | For `kind: "plugin"`.                                                                                |
+| `drop`                 | DropSpec                                          | What a drop of the tool does, by what lies under it (below).                                         |
+| `createSource`, `createTarget` | TypeRef or CreateEnd; `createTarget` also `"ask"` | For edge tools: the node created when the gesture starts or ends on empty canvas (below).   |
 
 A runtime **MUST** evaluate a CEL label each time it presents the entry, for the entry's current target. Where an entry is listed without a target (a list of keyboard shortcuts, toolbox search), a runtime **MUST** use its `doc.summary`, or else its label evaluated with no target if that evaluates, or else the label derived from its id (2.4); toolbox search **MUST** match the evaluated label and `doc.summary`. A tool that is visible but unavailable **MUST** be shown disabled with the applicable reason, as 9.3 describes for operations; a tool whose `visible` is false is not shown.
 
 **ToolKind**: `create-node`, `create-edge`, `template` (inserts a fragment), `operation` (runs an operation on the selection or diagram), `select`, `pan`, `lasso`, `text`, `note`, `image`, `freehand`, `plugin`.
 
-**Modes.** For node tools: `"click"` (place at default size), `"drag"` (drag out the size; default), `"stamp"` (click repeatedly, implies sticky). For edge tools: `"drag"` (drag from source to target; default), `"click-click"` (click source, then target, with intermediate clicks adding bendpoints), `"chain"` (each click continues from the last target), `"auto"` (drag between nodes or start from a port). When a node tool is dragged on a coordinate system with bound placement, the dragged extent is written to the bound attributes: dragging across five days of a time axis creates a task with `start` and `end` set to those days, dropped into a lane it sets the lane attribute. Edge tools that start on empty canvas may create the source node when `createSource: TypeRef` is set; ending on empty canvas may create the target when `createTarget: TypeRef` is set (or offer a context menu of valid targets when `createTarget: "ask"`).
+**Modes.** For node tools: `"click"` (place at default size), `"drag"` (drag out the size; default), `"stamp"` (click repeatedly, implies sticky). For edge tools: `"drag"` (drag from source to target; default), `"click-click"` (click source, then target, with intermediate clicks adding bendpoints), `"chain"` (each click continues from the last target), `"auto"` (drag between nodes or start from a port). When a node tool is dragged on a coordinate system with bound placement, the dragged extent is written to the bound attributes: dragging across five days of a time axis creates a task with `start` and `end` set to those days, dropped into a lane it sets the lane attribute. Edge tools that start on empty canvas may create the source node when `createSource: TypeRef` is set; ending on empty canvas may create the target when `createTarget: TypeRef` is set (or offer a context menu of valid targets when `createTarget: "ask"`). For every tool, `"drop"` means the user drags the palette entry and releases it (below).
+
+**Creating an end with the relation.** `createSource` and `createTarget` also accept a **CreateEnd** (`$defs/CreateEnd`), `{ "type": TypeRef, "initial": map attribute → value or {cel}, "size": Size }`. `initial` is evaluated in the `create` context (12.3), where `position` is the release point in domain values (a timestamp on a time axis) and `parent` the container under it, with `other` (the existing end) and `relationType` also bound. Creating the missing end, the relation, their hooks and their snapping **MUST** be one transaction and one undo step, and the created node **MUST** be placed at the release point through its placement, snapped as a drop (5.9).
+
+```json
+{ "id": "relate", "creates": "Relation", "mode": "drag",
+  "createTarget": { "type": "Element", "initial": {
+      "label": "New element",
+      "begin": { "cel": "position.x.startOf('day')" },
+      "end":   { "cel": "position.x.startOf('day') + duration('336h')" } } } }
+```
+
+A timeline relation dragged to empty canvas creates a two-week element starting on the day under the pointer and relates it, in one undo step.
+
+**Drops.** With `mode: "drop"`, the user drags the palette entry and releases it: the release point is the **drop point**, and the topmost element under it is the **drop target** (`null` on empty canvas). For the `click` mode, the click point and the element under it play the same roles. **DropSpec** (`$defs/DropSpec`) is:
+
+| Property    | Type                                          | Default    | Description |
+|-------------|-----------------------------------------------|------------|-------------|
+| `targets`   | DropTarget[]                                  | `[]`       | Tried in order; the first whose `on` matches runs. |
+| `elsewhere` | `"create"`, `"ignore"`, `"refuse"`, `"menu"`  | `"create"` | What happens when no target matches: `create`, the tool's own creation at the drop point; `ignore`, nothing and no message; `refuse`, the `refusal` is shown; `menu`, the context menu of the empty canvas (7.3) opens at the drop point. |
+| `refusal`   | Reason                                        | the runtime's sentence | For `refuse`; context `create` plus `dropTarget`. |
+
+A **DropTarget** (`$defs/DropTarget`) is a context tool (7.3) of any kind plus `on`, a list of TypeRefs and the keyword `"canvas"`; its `self` is the drop target (the diagram for `"canvas"`), and `position` is the drop point.
+
+- A runtime **MUST** resolve a drop by trying `targets` in order against the drop target's type (`on` matches subtypes, 2.7) and **MUST** run the first match as one transaction; with no match it **MUST** apply `elsewhere`.
+- A matching target that is unavailable (9.3) **MUST** refuse the drop with its reason and **MUST NOT** fall through to `elsewhere`.
+- While the entry is dragged, a runtime at level Standard or above **SHOULD** apply the `dropTarget` state to an element a target accepts and the `dropReject` state otherwise, and **SHOULD** show the refusal before the release.
+- A `create-node` tool without `drop` behaves as in 0.1: it creates at the point, inside a container under it when containment allows. An `operation` tool without `drop` runs on the drop target when the operation's `for` admits it, else on the diagram.
+- `"canvas"` is a reserved word in `on`; a type named `canvas` cannot be listed there.
+
+The `create` gesture context (8.4) binds `dropTarget` and `tool`, so a `create` constraint can refuse per target with a sentence that names what lies under the pointer.
+
+```json
+{ "id": "link", "label": "Causal link", "icon": "mdi-arrow-right-thin", "mode": "drop", "creates": "CausalLink",
+  "drop": { "targets": [ { "on": ["Variable"], "kind": "connect", "via": "CausalLink" } ],
+            "elsewhere": "refuse", "refusal": "Drop a link or a loop onto a variable." } }
+```
 
 ### 7.3 Context tools
 
@@ -2211,12 +2848,13 @@ Context tools appear next to the selected element (a "quick bar" or radial menu)
 
 | Property    | Type                                          | Description                               |
 |-------------|-----------------------------------------------|-------------------------------------------|
-| `for`       | TypeRef[]                                     | Element types the context tools apply to. |
-| `when`      | Expression                                    | Additional condition (`element` context). |
+| `for`       | TypeRef[], or the keywords `"diagram"` and `"connection"` | Element types the context tools apply to; `"diagram"` is the empty canvas and `"connection"` a pending connection (below). |
+| `when`      | Expression                                    | Additional condition (`element` context; `connection` context for a pending connection). |
 | `placement` | `"around"`, `"toolbar"`, `"menu"`, `"radial"` | Presentation.                             |
 | `tools`     | ContextTool[]                                 | Items.                                    |
+| `runSingle` | bool                                          | When exactly one entry is available, run it without showing the set. Default `false`. |
 
-ContextTool kinds: `create-connected` (create a node of type `creates` connected via relation `via`, placed at `position` using the layout's spacing; `direction` `outgoing` or `incoming`), `connect` (start an edge of type `via` from this element), `create-child` (create a child of `creates` in `slot`), `operation`, `delete`, `duplicate`, `editLabel`, `openForm`, `plugin`. All kinds accept `label`, `doc`, `icon`, `shortcut`, `enabled`, `position`, `visible` and `unavailable`:
+ContextTool kinds: `create-connected` (create a node of type `creates` connected via relation `via`, placed at `position` using the layout's spacing; `direction` `outgoing` or `incoming`), `connect` (start an edge of type `via` from this element), `create-child` (create a child of `creates` in `slot`), `operation`, `delete`, `duplicate`, `editLabel`, `openForm`, `plugin`, `moveUp` and `moveDown` (move the element one place earlier or later among its siblings with the `reorder` action, 9.4). All kinds accept `label`, `doc`, `icon`, `shortcut`, `enabled`, `position`, `visible` and `unavailable`:
 
 | Property      | Type       | Description                                                                                                                                  |
 |---------------|------------|----------------------------------------------------------------------------------------------------------------------------------------------|
@@ -2233,6 +2871,59 @@ An entry whose `visible` is false, or whose operation's `for` does not admit the
 ```
 
 Right-click **context menus** are defined the same way under `toolbox.contextMenus` with `placement: "menu"`; runtimes add standard entries (cut, copy, paste, delete, arrange) unless `standardEntries: false`.
+
+**Move up and move down.** `moveUp` at the first position among the siblings and `moveDown` at the last **MUST** be unavailable, with the reason `behavior.messages` gives for `std.atStart` or `std.atEnd` (9.1), or else the runtime's sentence. They are refused like any reorder by `reorder` gesture constraints (8.4).
+
+**Choosing the other end from a list.** A `connect` or `create-connected` entry chooses the other end by `target`:
+
+| Property         | Type                              | Default                        | Description |
+|------------------|-----------------------------------|--------------------------------|-------------|
+| `target`         | `"drag"`, `"pick"`, `"either"`    | `"drag"`                       | `drag`: the user drags to the other end (0.1); `pick`: a picker lists the candidates; `either`: both are offered. |
+| `candidates`     | Expression → list(Element)        | every element the relation's ends and gesture constraints admit | The elements the picker offers; context `element`. |
+| `candidateLabel` | Message                           | `item.label()`                 | The text of each row; context `element` plus `item`. |
+| `pickerTitle`    | Message                           | the entry's label              | The picker's title. |
+| `emptyText`      | Message                           | the runtime's sentence         | Shown when there are no candidates; the entry is then unavailable with it as its reason. |
+
+With `pick`, a runtime **MUST** list only the candidates for which the `connect` gesture checks (8.4) would pass, in the order the expression returns them, and **MUST** make the entry unavailable with `emptyText` when none remain. Choosing a candidate **MUST** run the same transaction a drag to that element would.
+
+```json
+{ "kind": "connect", "via": "Dependency", "label": "Link to…", "target": "pick",
+  "candidates": "diagram.nodesOfType('Positioned').filter(n, n != self)",
+  "candidateLabel": { "cel": "item.name" }, "emptyText": "There is nothing else on this map to link to." }
+```
+
+**One entry per item.** Any entry **MAY** carry `forEach` (Expression → list), `as` (the name the item is bound to, default `item`), `args` (map parameter → Expression, the invoked operation's parameters, usable without `forEach` too) and `submenu` (a Message).
+
+- An entry with `forEach` **MUST** produce one entry per list item, in list order, with the item (under its `as` name) and `index` bound in its `label`, `visible`, `enabled`, `unavailable`, `args` and `icon`; an empty list produces no entry.
+- When `args` gives every required parameter of the operation, the runtime **MUST NOT** open the parameter dialog.
+- The entries **MAY** be grouped under one submenu labelled `submenu`, and a runtime **MAY** collapse more generated entries than it can show into the submenu or a picker.
+
+```json
+{ "kind": "operation", "operation": "disconnect", "forEach": "self.incomingOf('Dependency')", "as": "dep",
+  "label": { "cel": "'Disconnect from \\'' + dep.source.key + '\\''" }, "args": { "dependency": "dep" } }
+```
+
+A Databricks task offers one "Disconnect from" entry per task it depends on.
+
+**The empty canvas.** A set whose `for` includes `"diagram"` is the context menu of the canvas background. A right-click (or the platform's context gesture) on empty canvas **MUST** open the sets whose `for` includes `"diagram"` and whose `when` holds, with `self` bound to the diagram, plus the standard entries unless `standardEntries: false`. Its entries see `position`, the clicked point in domain values, snapped as a drop would be (5.9); the `operation` context binds `position` too, `null` when an operation is not invoked at a point, so the operation can ask for the value instead (`initial`, 7.5).
+
+```json
+{ "for": ["diagram"], "placement": "menu", "when": "self.ontologyDeclared", "tools": [
+  { "kind": "operation", "operation": "addClass", "label": "Add class here…", "icon": "mdi:shape-circle-plus" } ] }
+```
+
+**Pending connections.** A set whose `for` includes `"connection"` is offered for a **pending connection**: a connect gesture that ends on an element when no relation type's `connect` (6.10) claims the anchor it started from. Its `when` and entries are evaluated in the `connection` context (12.3), which binds `source` and `target` (after the anchor assignment of 6.10), `sourceAnchor`, `position`, `diagram` and `env`; entries are typically operations that take `source` and `target` through `args`.
+
+- A pending connection **MUST NOT** create any model element until an entry runs; cancelling the menu **MUST** leave the model unchanged and record nothing.
+- The entry that runs **MUST** see `source` and `target` as they were when the gesture ended.
+- With `runSingle: true`, when exactly one entry is available it **MUST** run without the menu being shown.
+
+A drop whose `elsewhere` is `"menu"` (7.2) opens the empty-canvas menu at the drop point, the other transient target. `"diagram"` and `"connection"` are reserved words in `for`: a type with one of these names cannot be listed there.
+
+```json
+{ "for": ["connection"], "placement": "menu", "when": "source.isA('Resource') && target.isA('Resource')",
+  "tools": [ { "kind": "operation", "operation": "relate", "label": "Relate…", "args": { "from": "source", "to": "target" } } ] }
+```
 
 ### 7.4 Templates
 
@@ -2359,7 +3050,7 @@ If no form is defined for a type, runtimes generate one: one field per non-deriv
 }
 ```
 
-**Widgets**: `text`, `textarea`, `markdown`, `code` (with `widgetOptions.language`: `"cel"`, `"json"`, `"sql"`, …; the `cel` language is type-checked in the attribute's `context`), `number`, `slider` (`min`, `max`, `step`, `marks`), `spinner`, `rating` (`max`, `icon`), `checkbox`, `switch`, `select`, `combobox` (free entry allowed), `radio`, `segmented` (button group), `multiselect`, `tags`, `date`, `datetime`, `time`, `duration`, `daterange` (edits two attributes: `attribute` and `widgetOptions.endAttribute`), `color` (`palette`, `alpha`), `icon` (icon picker), `reference` (element picker, with `widgetOptions.pickOnCanvas: true` to select by clicking), `references` (for `many` references), `list` (editable list of primitives), `table` (list of structs, with `widgetOptions.columns`), `struct` (nested sub-form), `file` (binary or URI, `mediaTypes`), `image`, `link`, `progress` (read-only bar), `readonly` (plain text), `plugin`.
+**Widgets**: `text`, `textarea`, `markdown`, `code` (with `widgetOptions.language`: `"cel"`, `"json"`, `"sql"`, …; the `cel` language is type-checked in the attribute's `context`), `number`, `slider` (`min`, `max`, `step`, `marks`), `spinner`, `rating` (`max`, `icon`), `checkbox`, `switch`, `select`, `combobox` (free entry allowed), `radio`, `segmented` (button group), `multiselect`, `tags`, `date`, `datetime`, `time`, `duration`, `month` (a `yearMonth` value), `daterange` (edits two attributes: `attribute` and `widgetOptions.endAttribute`), `color` (`palette`, `alpha`), `icon` (icon picker), `reference` (element picker, with `widgetOptions.pickOnCanvas: true` to select by clicking), `references` (for `many` references), `list` (editable list of primitives), `table` (list of structs, with `widgetOptions.columns`), `struct` (nested sub-form), `file` (binary or URI, `mediaTypes`), `image`, `link`, `progress` (read-only bar), `readonly` (plain text), `plugin`.
 
 **Containers and other items** (by `kind`): `section` (`title` as a Message, `collapsible`, `collapsed`, `items`), `row` (horizontal group), `tabs` (`tabs: [{title, icon, items}]`), `group` (a bordered box with `title`), `text` (static help text, Markdown), `divider`, `computed` (read-only `value` Bindable), `button` (`label` as a Message, `icon`, `operation` or `actions`, `enabled`, `unavailable` as Reason[], `confirm` as a Message or Confirmation (9.5); a button that runs an operation inherits its reasons, 9.3), `findings` (list of the element's current findings with quick fixes; `problems` is its deprecated alias, section 18), `plugin`.
 
@@ -2558,6 +3249,7 @@ Gesture constraints are evaluated **before** a user action is applied, while the
 | `delete`      | Deleting elements                                  | `self`, `selection` (all elements being deleted)                                                                                              |
 | `placement`   | Moving or resizing                                 | `self`, `oldBounds`, `newBounds` (in domain values: `newBounds.x` is a timestamp on time axes), `newParent`, `gesture` (`"move"`, `"resize"` or `"reparent"`) |
 | `change`      | Changing an attribute in a form or label           | `self`, `attribute`, `oldValue`, `newValue`                                                                                                   |
+| `reorder`     | Changing an element's place among its siblings (`moveUp`, `moveDown`, a `reorder` action, or dragging a child along an ordered stack or flow) | `self`, `parent`, `oldIndex`, `newIndex`, `siblings` (the siblings in their current order) |
 
 ```json
 [
@@ -2578,12 +3270,20 @@ Gesture constraints are evaluated **before** a user action is applied, while the
 
 When enforcement is `report` on a gesture kind, the gesture is allowed and a finding is reported afterwards if the corresponding state still violates the rule.
 
+**Reorder.** A reorder **MUST** change only the order among siblings, as one transaction, and is refused by `reorder` constraints with their message. Dragging a child along the direction of a container whose layout is `stack` or `flow` (6.9) is a reorder gesture.
+
+```json
+{ "id": "templateStepsKeepOrder", "kind": "reorder", "scope": "Step",
+  "rule": "!siblings.exists(s, s.fromTemplate)",
+  "message": "Some of this job's steps come from a template, so their order cannot be changed here." }
+```
+
 A gesture constraint with enforcement `prevent` **MUST** refuse the gesture before it is applied and **MUST** show its `message`, evaluated in the gesture's context, as the refusal (2.3).
 
 **Order of gesture checks.** When several checks would refuse one gesture, a runtime **MUST** show the refusal of the first one in this order, and **MAY** list the others on request:
 
-1. the notation's refusal for a gesture it switches off for the element's kind (`refusals`, 6.9, 6.10);
-2. the diagram-wide edit gate (`behavior.editGate`, 9.1), for a gesture that changes the model;
+1. the notation's refusal for a gesture it switches off for the element's kind (`refusals`, 6.9, 6.10), then the refusal of a gesture on a derived element that `edits` does not map (4.11.4), then that of a gesture that would store an ephemeral id (11.5.3);
+2. the diagram-wide edit gate (`behavior.editGate`, 9.1), then the edits withheld by an exceeded budget (3.2.1), for a gesture that changes the model;
 3. the built-in constraints, in the order `std.endpoints`, `std.containment`, `std.multiplicity`, `std.acyclic`, `std.axisBounds`, `std.facets` (8.7);
 4. the declared gesture constraints, in the order of `rules`.
 
@@ -2689,9 +3389,9 @@ Metamodel declarations generate built-in constraints automatically, and the read
 | `std.facets`       | `min`, `max`, `pattern`, `minLength`, …                                                    | error / report (and prevent in forms)                         |
 | `std.unique`       | `unique`                                                                                   | error / report                                                |
 | `std.multiplicity` | `multiplicity`, `children.min/max`, `perType`, relation end `min/max`, port `multiplicity` | lower bounds: warning / report; upper bounds: error / prevent |
-| `std.endpoints`    | relation `source`/`target`, `ports`, `accepts`, `allowSelfLoops`, `allowParallel`          | error / prevent                                               |
+| `std.endpoints`    | relation `source`/`target`, `ports`, `accepts`, `allowSelfLoops`, `allowParallel`; silent on a missing target of an `optional` target end (4.9) | error / prevent                                               |
 | `std.containment`  | `children.allowed`, `slots`                                                                | error / prevent                                               |
-| `std.acyclic`      | `acyclic: true`                                                                            | error / prevent                                               |
+| `std.acyclic`      | `acyclic: true`, over the type and all its subtypes (4.9)                                  | error / prevent                                               |
 | `std.references`   | references to missing elements                                                             | error / report                                                |
 | `std.axisBounds`   | axis `min`/`max`, system `bounds`                                                          | error / prevent                                               |
 | `std.typeExists`   | unknown types in loaded DID definitions                                                     | error / report (element preserved, 14.3)                      |
@@ -2701,6 +3401,10 @@ Metamodel declarations generate built-in constraints automatically, and the read
 | `std.duplicateId`  | the reader or runtime, per element whose id, compared as `persistence.ids.compare` says, equals that of an element earlier in reading order; only the second and later are flagged (11.5) | warning / report                                              |
 | `std.mixedPrecision` | the runtime, when attributes of one element tied by `samePrecisionAs` (4.3) hold values written with different precisions (`precisionOf`, 12.4) | warning / report (and prevent in forms)                       |
 | `std.ephemeralViewData` | the runtime, per stored view data, style override or suppression keyed by an ephemeral id (11.5) | info / report                                                 |
+| `std.pluginMissing` | the runtime, once per declared plugin that is absent and whose CEL functions are called (13.1) | warning / report                                              |
+| `std.derivedFailed` | the runtime, per derived type whose `from` fails, and per derived type and error message for items whose other expressions fail (4.11.5) | warning / report                                              |
+| `std.derivedId`    | the runtime, when a derived id equals another derived or a stored id; the later one in computation order is not drawn (4.11.5) | warning / report                                              |
+| `std.derivedEnds`  | the runtime, once per derived relation type some of whose items have ends that do not satisfy its `source` or `target` (4.11.3) | warning / report                                              |
 
 Each built-in binds `detail` in its `message` (8.1) with the keys below; the built-ins of 0.1 bind the keys that name what failed (`attribute`, `facet`, `limit`, `min`, `max`, `count`, `relationType`, `missingId`).
 
@@ -2712,8 +3416,14 @@ Each built-in binds `detail` in its `message` (8.1) with the keys below; the bui
 | `std.duplicateId`       | `id`, `first` (the element that keeps the id)                        | each second and later element, and its location                                      |
 | `std.mixedPrecision`    | `attribute`, `other`, `precision`, `otherPrecision`                  | the element and the attribute                                                        |
 | `std.ephemeralViewData` | `key` (the stored id)                                                | the element when present; otherwise `subject` is the stored key                      |
+| `std.pluginMissing`     | `plugin` (the plugin id), `functions` (the names of its functions that were called) | the diagram; no location                                                   |
+| `std.derivedFailed`     | `type`, `reason` (the evaluation error), `property` (the failing property, such as `from` or `id`), `count` (the items dropped) | the diagram; `subject` names the type                    |
+| `std.derivedId`         | `id`, `first` (the element that keeps the id), `type`               | the element that is not drawn is named by `subject`; the finding targets `first`     |
+| `std.derivedEnds`       | `type`, `end` (`"source"` or `"target"`), `count` (the items dropped) | the diagram; `subject` names the type                                              |
 
-A reader **MUST** report `std.unparseable`, `std.unreadableEntry`, `std.missingId` and `std.duplicateId` as they occur, and **MUST NOT** fail to open a model because of any of them. Each built-in is raised only from a situation that 0.1 rejected or from a declaration that 0.2 adds, so a valid 0.1 diagram reports nothing new.
+A reader **MUST** report `std.unparseable`, `std.unreadableEntry`, `std.missingId` and `std.duplicateId` as they occur, and **MUST NOT** fail to open a model because of any of them. Each built-in is raised only from a situation that 0.1 rejected or from a declaration that 0.2 adds, so a valid 0.1 diagram reports nothing new. `std.pluginMissing` defaults to `warning` because an absent plugin degrades the diagram without making it unusable (15.2); a specification that cannot work without the plugin declares it `required` (13.1) instead.
+
+A finding on a derived element (4.11) is located, where the constraint declares no `location`, at the first of its sources that has a location; one about a model element that is not drawn (filtered out, cut by a budget, excluded by the viewpoint) is still reported and still names it.
 
 ---
 
@@ -2785,6 +3495,8 @@ Hook context variables: `self` (the element after the change), `old` (a snapshot
 
 **Remote changes.** Hooks do not run for changes received from collaborators (`event.source == "remote"`); those changes were already processed on the originating client.
 
+**Derived elements.** Hooks **MUST NOT** fire for derived elements (4.11) appearing, changing or disappearing; a hook on a derived type fires only for an event no recomputation causes, such as `viewpointOpen`. Changes of viewer state (11.6) are not model events and fire no hook.
+
 ### 9.3 Operations
 
 Operations are named, documented commands, invoked from tools, context tools, form buttons, quick fixes, keyboard shortcuts or menus.
@@ -2801,6 +3513,7 @@ Operations are named, documented commands, invoked from tools, context tools, fo
 | `confirm`                          | Message or Confirmation               | Question asked before running (9.5).                                                                                   |
 | `actions`                          | Action[]                              | Body, executed as one transaction.                                                                                     |
 | `plugin`                           | `{name, args}`                        | Alternatively implemented by a plugin.                                                                                 |
+| `simulate`                         | Simulation                            | Alternatively a simulated run (9.6). Exactly one of `actions`, `plugin` and `simulate` **MUST** be present.            |
 
 **Available, unavailable, not offered.** An operation is **unavailable** when its `enabled` is false, or when a reason in its `unavailable` list or in `behavior.editGate` (9.1) applies. Every entry that invokes an operation (a tool, context tool, menu entry, form button, quick fix or shortcut) inherits the operation's `enabled` and `unavailable`, so a reason is declared once. A runtime **MUST** show an unavailable entry disabled with the applicable reason (a tooltip, inline text or a status line), **MUST NOT** run it, and **MUST** refuse it with the same reason when it is invoked anyway, by a shortcut or from another surface. An entry that is disabled only by `enabled`, with no reason applying, is disabled as in 0.1, and the runtime **MAY** show a generic reason. Whether an entry is offered at all is decided by its own `visible` (7.2, 7.3) and, for operations, by `for`: an entry that is not offered is not shown.
 
@@ -2821,13 +3534,15 @@ Actions are a small, closed set of declarative steps. **All values in actions ar
 |-------------|---------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
 | `set`       | `{ "set": { "attr": expr, … }, "target": expr }`                                                                          | Assign attributes of `target` (default `self`).                              |
 | `unset`     | `{ "unset": ["attr"], "target": expr }`                                                                                   | Remove stored values.                                                        |
-| `create`    | `{ "create": { "type": expr, "attributes": {…}, "parent": expr, "slot": expr, "at": expr, "size": expr }, "as": "name" }` | Create a node; the new element is available as `name` in subsequent actions. |
+| `create`    | `{ "create": { "type": expr, "attributes": {…}, "parent": expr, "slot": expr, "at": expr, "size": expr, "after": expr, "before": expr }, "as": "name" }` | Create a node; the new element is available as `name` in subsequent actions. `after` or `before` places it next to a sibling (below). |
 | `connect`   | `{ "connect": { "type": expr, "source": expr, "target": expr, "attributes": {…} }, "as": "name" }`                        | Create a relation.                                                           |
 | `delete`    | `{ "delete": expr }`                                                                                                      | Delete an element or list.                                                   |
 | `move`      | `{ "move": { "target": expr, "x": expr, "y": expr, "parent": expr } }`                                                    | Change placement (domain values, snapped if `applyToProgrammatic`).          |
 | `resize`    | `{ "resize": { "target": expr, "width": expr, "height": expr } }`                                                         |                                                                              |
 | `retype`    | `{ "retype": { "to": expr, "target": expr } }`                                                                            | Change the type, keeping compatible attributes and relations.                |
-| `reparent`  | `{ "reparent": { "target": expr, "parent": expr, "slot": expr } }`                                                        |                                                                              |
+| `reparent`  | `{ "reparent": { "target": expr, "parent": expr, "slot": expr, "after": expr, "before": expr } }`                          | `after` or `before` places it next to a sibling (below).                     |
+| `reorder`   | `{ "reorder": { "target": expr, "by": expr } }`, or with `after` or `before` in place of `by`                             | Change only the element's place among its siblings: `by` a signed number of places (−1 is one earlier), or directly after or before a sibling. |
+| `view`      | `{ "view": { "collapsed": expr, "filters": { "<id>": expr }, "viewpoint": expr }, "target": expr }`                        | Change viewer state (11.6) of `target` (default `self`): its collapsed state, the canvas filters' values (6.13.1), or the viewpoint variant shown (3.5). |
 | `let`       | `{ "let": { "name": expr } }`                                                                                             | Bind a variable for later actions.                                           |
 | `if`        | `{ "if": expr, "then": [ … ], "else": [ … ] }`                                                                            | Conditional.                                                                 |
 | `forEach`   | `{ "forEach": expr, "as": "item", "do": [ … ] }`                                                                          | Iterate a list (bounded: lists are finite).                                  |
@@ -2843,6 +3558,28 @@ Actions are a small, closed set of declarative steps. **All values in actions ar
 | `plugin`    | `{ "plugin": "name", "args": { … } }`                                                                                     | Delegate to a plugin action.                                                 |
 
 Every action MAY carry `when` (skip unless true) and `doc`.
+
+**Order of evaluation.** Actions **MUST** run in order against the transaction's working state. Every expression of an action, including its `when`, **MUST** see the effects of every action run before it in the same transaction, including those of earlier iterations of an enclosing `forEach`. The list of a `forEach` **MUST** be evaluated once, before its first iteration, and a `let` value once, where it appears. So a hook that claims closed loops one by one sees, in each iteration, the loops the earlier iterations created: the second loop takes the identifier after the first one's.
+
+**Positional create.** `after` and `before` (at most one of the two) name a sibling element. With either, the new or reparented element **MUST** be placed directly after or before that sibling in its parent's child order, and the sibling **MUST** have the same parent (or both be top level); otherwise the transaction is rolled back with an error. The parent's type **MUST** declare `children.ordered: true` (4.8), or for top-level elements the diagram's children are ordered: a validator **SHOULD** warn where it cannot prove this, and a runtime **MUST** roll back a positional create into an unordered parent. The runtime assigns the stored `order` between the neighbours in the same transaction (a fractional index under `persistence.collaboration.ordering: "fractional-index"`, otherwise by renumbering the following siblings). Without `after` or `before`, a new child is appended last, as in 0.1.
+
+```json
+"addSibling": { "label": "Add sibling", "for": ["Node"], "shortcut": "Enter",
+  "actions": [
+    { "create": { "type": "'Node'", "parent": "self.parent", "after": "self",
+                  "attributes": { "text": "siblingName(self.parent.children.map(c, c.text))" } }, "as": "added" },
+    { "select": "added" }, { "editLabel": { "target": "added" } } ] }
+```
+
+**Reorder.** A `reorder` action **MUST** change only the order among siblings and is a `reorder` gesture (8.4), refused by `reorder` constraints. A `by` that would move the element past the first or last place is an error that rolls the transaction back; `moveUp` and `moveDown` (7.3) are unavailable at the ends instead.
+
+**View actions.** A `view` action **MUST** change viewer state only. It is allowed in read-only mode, is never persisted and never enters the undo history. An operation whose actions are all `view`, `select`, `reveal` and `highlight` actions **MUST** be offered in read-only mode and **MUST NOT** create an undo step. A `set` action on a `transient: "viewer"` attribute (4.3) follows the same rules.
+
+```json
+"toggleFold": { "label": { "cel": "self.view.collapsed ? 'Expand' : 'Collapse'" }, "for": ["Node"],
+  "enabled": "self.children.size() > 0",
+  "actions": [ { "view": { "collapsed": "!self.view.collapsed" } } ] }
+```
 
 ### 9.5 Deletion, clipboard, retyping and undo policies
 
@@ -2891,6 +3628,45 @@ A leaf has no descendants, so deleting it asks nothing; a branch asks with its c
 **Retyping** (`behavior.retype`): map of type → allowed target types, with `attributeMapping` (target attr → Expression over `old`).
 
 **Undo** (`behavior.undo`): `mergeWindowMs` (typing in a label merges into one step), `maxSteps`, `persistHistory` (bool, stores history in the DID definition for collaborative review, default `false`).
+
+### 9.6 Simulations
+
+A **simulation** plays a run of the diagram over time, step by step, without changing the model: a job's tasks turning from pending to running to succeeded, a change rippling through a bundle. It is the body of an operation, `simulate`, in place of `actions` or `plugin`. **Simulation** (`$defs/Simulation`):
+
+| Property   | Type                             | Req. | Description |
+|------------|----------------------------------|------|-------------|
+| `for`      | TypeRef or TypeRef[]             | ✓    | The element types that take part. |
+| `state`    | attribute name                   | ✓    | An attribute declared on each of those types with `transient: true` or `transient: "viewer"` (4.3); the only thing a simulation writes. |
+| `initial`  | Expression                       | ✓    | Each taking-part element's state at step 0. |
+| `next`     | Expression                       | ✓    | Each element's state at the next step. |
+| `until`    | Expression → bool                | ✓    | Evaluated after each step, once, with `self` bound to the diagram; the run finishes when it holds. |
+| `stepMs`   | int ≥ 0                          | –    | The time between steps, in milliseconds. Default 700. |
+| `maxSteps` | int ≥ 1                          | –    | A hard stop. Default 1000. |
+| `notice`   | `{ "running": Message, "finished": Message }` | – | The status notice (6.13) shown while the run plays and after it finishes. |
+
+Its expressions are evaluated in the `simulation` context (12.3), which binds `self`, `state` (a map from element id to that element's state at the previous step), `step` (the number of the step being computed, from 1), `p` (the operation's parameters), `diagram` and `env`.
+
+- A simulation **MUST** run outside any transaction. Its writes to `state` **MUST NOT** enter the undo history, mark the diagram modified, be persisted, fire hooks or be seen by constraints.
+- Every element's `next` **MUST** be evaluated against the previous step's states, all elements at once (a simultaneous update), and the new states applied together.
+- Committing any transaction, changing the viewpoint, closing the view or dismissing the notice **MUST** end the run and clear the states.
+- A runtime that honours reduced-motion settings **MAY** run the steps without delay. Headless validators never run simulations.
+- A simulation is offered in read-only mode, like an operation whose actions change only viewer state (9.4).
+
+```json
+"simulateRun": {
+  "label": "Run job (simulated)", "icon": "mdi-play-outline", "for": "diagram",
+  "params": { "failTaskId": { "type": "string" } },
+  "simulate": {
+    "for": ["Task"], "state": "simulated", "stepMs": 700,
+    "initial": "'pending'",
+    "next": "state[self.id] == 'running' ? (self.key == p.failTaskId ? 'failed' : 'succeeded') : state[self.id] == 'pending' && upstreamSettled(self, state) ? (mayRun(self, state, p) ? 'running' : 'skipped') : state[self.id]",
+    "until": "state.all(id, state[id] in ['succeeded', 'failed', 'skipped'])",
+    "notice": { "running": "Simulated: job run", "finished": "Simulated: job run, finished" }
+  }
+}
+```
+
+A Databricks job plays a mock run wave by wave: a task starts once its upstream tasks have settled and its `run_if` condition allows, and one chosen task fails. `upstreamSettled` and `mayRun` are user functions (3.4).
 
 ---
 
@@ -3107,6 +3883,31 @@ A mind map node without an id gets `ID_` and a new id in memory, written with th
 
 No view data or style override is stored for an element with an ephemeral id (11.5.3); stored data keyed by one is ignored, reported by `std.ephemeralViewData` and dropped on the next write.
 
+**Viewer state.** Some view data belongs to the person looking, not to the diagram: which branches of a mind map are folded, which filters are set, whether the compact variant is shown. `persistence.view` gains:
+
+| Property        | Type                   | Default | Description |
+|-----------------|------------------------|---------|-------------|
+| `viewer`        | ViewKind[]             | `[]`    | The view-data kinds each viewer holds for themselves. Kinds (`$defs/ViewKind`): those of `store`, plus `selection`, `filters` and `viewpoint`. |
+| `initial`       | map kind → value or `{cel}` | the kind's default | The value a viewer starts with, evaluated in the `element` context when a viewer first opens the view; `collapsed` without one starts `false`. |
+| `revealExpands` | bool                   | `true`  | Revealing or selecting an element inside a collapsed container expands its collapsed ancestors. |
+
+**Viewer state** is the value of every kind in `view.viewer`, of every `transient: "viewer"` attribute (4.3), of canvas filters (6.13.1), of the variant shown (3.5), of dismissed notices and of a fitted zoom (6.13).
+
+- A kind **MUST NOT** appear in both `view.store` and `view.viewer`.
+- Viewer state **MUST NOT** be written to a DID definition or by a format binding, **MUST NOT** enter the undo or redo history, **MUST** be changeable in read-only mode, and **MUST NOT** be shared with another viewer. A runtime **MAY** keep it for the viewer's session; it **MUST NOT** outlive the view unless the host keeps it as a per-user preference, which DISL does not define.
+- Viewer state **MUST NOT** be read in the deterministic contexts of 12.5: `self.view` for a kind in `view.viewer`, a viewer attribute, `filterValue()` and `diagram.drawn` are rejected there by validators. Findings never depend on a viewer.
+- `self.view.collapsed` (12.2) reads the viewer's value, and a `view` action (9.4) sets it.
+
+```json
+"persistence": {
+  "view": { "store": [], "viewer": ["collapsed", "viewport"],
+            "initial": { "collapsed": { "cel": "self.folded" } },
+            "doc": "Folding belongs to each viewer: FOLDED in the file seeds it once." }
+}
+```
+
+A mind map's folds are each viewer's own, seeded from the file's folded flags the first time a viewer opens it; folding is allowed in read-only mode and is never undone. Without `viewer`, kinds not in `store` are recomputed on load, as in 0.1.
+
 ### 11.7 Ordering, precision and canonical form
 
 | Property            | Type                                                      | Description                                                                                                                                                                                 |
@@ -3199,21 +4000,25 @@ The CRDT state is a transport concern; the persisted DID definition remains the 
 
 DISL uses CEL as specified at https://github.com/google/cel-spec, with these standard extensions REQUIRED: **strings** (`charAt`, `indexOf`, `lowerAscii`, `replace`, `split`, `substring`, `trim`, `upperAscii`, `format`, `join`, `reverse`, `quote`), **math** (`math.greatest`, `math.least`, `math.ceil`, `math.floor`, `math.round`, `math.abs`, `math.sqrt`, …), **lists** (`distinct`, `flatten`, `range`, `slice`, `sort`, `sortBy`), **sets** (`sets.contains`, `sets.intersects`, `sets.equivalent`), **optional types** (`?.`, `.?`, `optional.of`, `orValue`), and the `cel.bind` macro. Comprehension macros `all`, `exists`, `exists_one`, `map`, `filter` and `has` are available as in core CEL.
 
+**String order.** `<`, `sort()` and `sortBy()` **MUST** order strings by Unicode code point, comparing code point by code point, which is CEL's own string order; a runtime on a platform whose strings are UTF-16 **MUST NOT** compare UTF-16 code units directly, which orders characters beyond U+FFFF differently. `sort()` and `sortBy()` **MUST** be stable. DISL has no locale-dependent sort.
+
 ### 12.2 DISL types
 
 | CEL type                                     | Fields and methods                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 |----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Element` (nodes, relations, ports, diagram) | `id` (string), `type` (string), `kind` (`"node"`, `"relation"`, `"port"`, `"diagram"`), every attribute as a field (typed from the metamodel; references resolve to `Element` or `null`), `isA(typeName) → bool`, `isTagged(tag) → bool`, `view → ViewData` (placement of the element in the current view, `null` in headless contexts), `label() → string` (value of `labelAttribute`), `location() → optional(map)` (the SourceLocation (8.6) the reader recorded for the start of the element's declaration; `optional.none()` when it recorded none, as for every element of a DID definition), `location(attr) → optional(map)` (the same for one attribute's value).                                                                                                                                                           |
-| Node-specific                                | `parent → Element?`, `owner → Element` (parent or diagram), `slot → string`, `children → list(Element)`, `childrenOfType(t)`, `descendants()`, `ancestors()`, `ancestorsOfType(t)`, `depth() → int`, `ports → list(Element)`, `portsOfType(name)`, `incoming → list(Element)`, `outgoing → list(Element)`, `incomingOf(relType)`, `outgoingOf(relType)`, `neighbors()`, `successors(relType)`, `predecessors(relType)`, `reachable(relType) → list(Element)` (transitive successors, excluding self unless on a cycle), `inCycle(relType) → bool`. |
-| Relation-specific                            | `source → Element`, `target → Element`, `sourcePort`, `targetPort` (`Element?`), `other(e) → Element` (the opposite end).                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| `Element` (nodes, relations, ports, diagram) | `id` (string), `type` (string), `kind` (`"node"`, `"relation"`, `"port"`, `"diagram"`), every attribute as a field (typed from the metamodel; references resolve to `Element` or `null`), `isA(typeName) → bool`, `isTagged(tag) → bool`, `view → ViewData` (placement of the element in the current view, `null` in headless contexts), `label() → string` (value of `labelAttribute`), `location() → optional(map)` (the SourceLocation (8.6) the reader recorded for the start of the element's declaration; `optional.none()` when it recorded none, as for every element of a DID definition), `location(attr) → optional(map)` (the same for one attribute's value), `derived → bool` (whether the element is derived, 4.11), `sources → list(Element)` (a derived element's sources, 4.11.4; `[]` for a stored element), `findingSeverity() → string` (the severity of the worst open, unsuppressed finding on the element: `"error"`, `"warning"`, `"info"`, `"hint"` or `""`), `findings() → list(map)` (the open findings on the element, each with `constraint`, `code`, `severity` and `message`), `drawn() → bool` (whether the current view draws the element, 6.1). `findingSeverity()`, `findings()` and `drawn()` are not readable in the deterministic contexts of 12.5. An attribute named `derived` or `sources`, which a 0.1 specification may declare, shadows the member for its type. |
+| Node-specific                                | `parent → Element?`, `owner → Element` (parent or diagram), `slot → string`, `children → list(Element)`, `childrenOfType(t)`, `descendants()`, `ancestors()` (the parent first and the top-level ancestor last), `ancestorsOfType(t)` (in the same order), `depth() → int`, `ports → list(Element)`, `portsOfType(name)`, `incoming → list(Element)`, `outgoing → list(Element)`, `incomingOf(relType)`, `outgoingOf(relType)`, `neighbors()`, `successors(relType)`, `predecessors(relType)`, `reachable(relType) → list(Element)` (transitive successors, excluding self unless on a cycle), `inCycle(relType) → bool`. |
+| Relation-specific                            | `source → Element`, `target → Element` (`null` for a relation without a target, 4.9), `sourcePort`, `targetPort` (`Element?`), `other(e) → Element` (the opposite end), `owner → Element` (the element the relation belongs to: its derived `owner`, else the nearest common ancestor of its ends, else the diagram, 4.11.3).                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | Port-specific                                | `owner → Element`, `connections → list(Element)`, `direction → string`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | Diagram                                      | `nodes → list(Element)` (model nodes, not view-only), `relations`, `elements` (both), `nodesOfType(t)`, `relationsOfType(t)`, `elementById(id) → Element?`, `hasCycle(relType) → bool`, `viewOnly → list(Element)` (in the current view), `file → string` (the model's file relative to the diagram's subject, 8.6), `views → list(View)` (the views of the model: those a DID definition stores, or those the model's readings define), `drawn → list(Element)` (the elements the current view draws, after the five steps of 6.1, in model order; `[]` in headless contexts; not readable in the deterministic contexts of 12.5), diagram attributes as fields.                                                                                                                                                                                                                                                                            |
 | `View`                                       | `id` (string), `viewpoint` (string), `name` (string), `members → list(Element)` (the elements of the model the view shows). Bound as `view` in constraints with `over: "view"` (8.2).                                                                                                                                                                                                                                                                                                  |
-| `ViewData`                                   | `x`, `y`, `x2`, `y2`, `width`, `height` (domain values, `dyn`: `double`, `timestamp`, `duration` or band id), `bounds → Bounds` (canvas units), `collapsed`, `rotation`, `z`, `pinned`, `params` (map).                                                                                                                                                                                                                                                                                                                                            |
+| `ViewData`                                   | `x`, `y`, `x2`, `y2`, `width`, `height` (domain values, `dyn`: `double`, `timestamp`, `duration`, month index or band id), `bounds → Bounds` (canvas units), `collapsed` (the viewer's value when `collapsed` is viewer state, 11.6), `rotation`, `z`, `pinned`, `params` (map), `selected → bool` (whether the element is selected; viewer state).                                                                                                                                                                                                                                                                                                                                            |
 | `Bounds`                                     | `x`, `y`, `width`, `height`, `x2`, `y2` (canvas or domain units depending on the context, as documented there), `center() → list(double)`, `intersects(Bounds) → bool`, `contains(Bounds) → bool`.                                                                                                                                                                                                                                                                                                                                                 |
 | `Env`                                        | `now → timestamp`, `locale → string`, `mode → string` (theme mode), `zoom → double`, `user → map` (`id`, `name`; empty unless the runtime is configured to expose it), `viewpoint → string`, `readOnly → bool`.                                                                                                                                                                                                                                                                                                                                    |
 
-Attribute types map to CEL types per 4.2; enum values are strings; structs are `map(string, dyn)` with statically known fields; `many` attributes are lists.
+Attribute types map to CEL types per 4.2; enum values are strings (their keys, never their stored forms, 4.5); `yearMonth` values are `int` month indices; structs are `map(string, dyn)` with statically known fields; `many` attributes are lists.
+
+**Type names include subtypes.** Wherever a function or member takes a type name — `nodesOfType`, `relationsOfType`, `childrenOfType`, `ancestorsOfType`, `incomingOf`, `outgoingOf`, `successors`, `predecessors`, `reachable`, `inCycle`, `hasCycle`, `cycles`, `cyclesTruncated`, `knots` and `isA` — the name **MUST** include every subtype of the type (2.7), so a query over an abstract relation type covers any mix of its subtypes.
 
 ### 12.3 Contexts
 
@@ -3232,13 +4037,24 @@ The context of an expression determines its variables. Validators type-check eac
 | `constraint`      | invariant `when`, `rule`, `message`, `target`, `severity`, `forEach`, `location`, `subject`, fix `when` and `label`, built-in `message`       | `self`, `diagram`, `env` (`env.now` is fixed at the start of a validation run); `item`, `index` with `forEach`; `view` with `over: "view"`; `detail` in built-in messages (8.7) |
 | `identity`        | id `expression` and `ephemeral` of the `derived` strategy (11.5.2)                                                                           | `self`, `diagram`; no `env`, so an id never depends on locale, user or time. `self.id` is not readable; the ids readable are those of `self`'s ancestors and, for a relation, of its ends and their ancestors |
 | `gesture:<kind>`  | gesture constraints; a built-in's `message` used as a refusal                                                                                | per 8.4; `violation` in built-in messages; `count` in deletion confirmations (9.5)        |
-| `create`          | attribute CEL defaults, tool `initial`, id `expression` of the `cel` strategy                                                                | `diagram`, `env`, `parent`, `elementType`, `position`                                     |
+| `create`          | attribute CEL defaults, tool `initial`, CreateEnd `initial` (7.2), a drop's `refusal`, id `expression` of the `cel` strategy                  | `diagram`, `env`, `parent`, `elementType`, `position`; `dropTarget` and `tool` for a drop (7.2); `other` and `relationType` in a CreateEnd |
 | `form`            | form `visible`, `enabled`, `validate`, `options`, `label`, `placeholder`, `initial`, `readOnlyReasons`, `absentText`, `emptyText`, button `confirm` | `self`, `value` (current field value), `diagram`, `env`; `position` in `initial` (7.5); `count` in confirmations (9.5) |
 | `hook`            | hook `when` and actions                                                                                                                      | `self`, `old`, `event`, `diagram`, `env`, plus `let`/`as` bindings                        |
-| `operation`       | operation `enabled`, `label`, `unavailable`, `confirm` and actions                                                                           | `self` or `selection`, `p` (not in `label`, `unavailable` and `enabled`), `diagram`, `env`, plus bindings; `count` in confirmations (9.5); `operationId` in `behavior.messages.std.notApplicable` |
+| `operation`       | operation `enabled`, `label`, `unavailable`, `confirm` and actions                                                                           | `self` or `selection`, `p` (not in `label`, `unavailable` and `enabled`), `diagram`, `env`, `position` (the point it was invoked at, 7.3, or `null`), plus bindings; `count` in confirmations (9.5); `operationId` in `behavior.messages.std.notApplicable` |
+| `derive`          | a derived type's `from` (4.11)                                                                                                               | `diagram`, `env`                                                                          |
+| `deriveItem`      | every other expression of a derived type (4.11)                                                                                              | `item` (the group's first item), `group` (its items in `from` order), `index` (the group's position), `diagram`, `env` |
+| `filter`          | a canvas filter's `keep` and `options` (6.13.1)                                                                                              | `self` (not in `options`), `value`, `match`, `diagram`, `env`                             |
+| `legend`          | `legend.computed` (6.13)                                                                                                                     | `self`, `diagram`, `env`                                                                  |
+| `chrome`          | notice, empty-canvas and notice-button texts and conditions, a budget notice's text (6.13, 3.2.1)                                            | `diagram`, `env`; `diagram.drawn`, `budget()` and `filterValue()` are readable            |
+| `budget`          | a budget's `measure`, `order` and `unit` (3.2.1)                                                                                             | `self` (the candidate; absent in `measure`), `index` (its position in persistence order), `diagram`, `env` |
+| `connection`      | a `connection` context-menu set's `when` and entries (7.3)                                                                                   | `source`, `target`, `sourceAnchor`, `position`, `diagram`, `env`                          |
+| `handleWrite`     | a handle's `write` actions (6.8)                                                                                                             | `self`, `diagram`, `env`, `p`, `w`, `h`, `value`, `yValue` (the new, snapped parameter values) |
+| `simulation`      | a simulation's `initial`, `next` and `until` (9.6)                                                                                           | `self`, `state`, `step`, `p`, `diagram`, `env`                                            |
 | `template`        | template attribute and position expressions                                                                                                  | `p`, `diagram`, `env`, `refs` (map of created elements by ref)                            |
 | `migration`       | migration steps                                                                                                                              | `element` (raw record map), `value`, `document` (raw map), `from`, `to` (version strings) |
 | `function`        | user functions                                                                                                                               | parameters, plus `diagram`/`env` if declared in `uses`                                    |
+
+Entries generated by a context tool's `forEach` (7.3) see `item` (or the `as` name) and `index` in addition to the variables of their context. The `gesture:reorder` context of 8.4 binds `self`, `parent`, `oldIndex`, `newIndex` and `siblings`.
 
 ### 12.4 DISL function library
 
@@ -3251,7 +4067,7 @@ In addition to the members listed in 12.2, these global functions are available 
 | `l.count(x, pred)`                                                                                                           | Macro: number of elements satisfying `pred`.                                                                           |
 | `l.indexOf(v) → int`                                                                                                         | First index or −1.                                                                                                     |
 | `l.first()`, `l.last()`                                                                                                      | `optional` element.                                                                                                    |
-| `snap(v, step) → double`                                                                                                     | Round to the nearest multiple. `snapFloor`, `snapCeil`.                                                                |
+| `snap(v, step) → double`                                                                                                     | Round to the nearest multiple, halves away from zero. `snap(v, step, ties)` rounds halves as the snap rule `ties` of 5.10 says. `snapFloor`, `snapCeil`. |
 | `snapTo(v, list) → double`                                                                                                   | Nearest value from a list.                                                                                             |
 | `clamp(v, lo, hi)`                                                                                                           | Clamp a number.                                                                                                        |
 | `min(a, b, …)`, `max(a, b, …)`                                                                                               | Smallest or largest of two to four numbers (aliases of `math.least` / `math.greatest`, convenient in geometry).        |
@@ -3259,7 +4075,7 @@ In addition to the members listed in 12.2, these global functions are available 
 | `ordinal(value, enumName) → int`                                                                                             | Position of an enum value.                                                                                             |
 | `enumLabel(enumName, value) → string`, `enumColor(...)`, `enumIcon(...)`                                                     | Enum metadata.                                                                                                         |
 | `token(name) → string`                                                                                                       | Resolved theme token (element, shape contexts).                                                                        |
-| `color(c).lighten(f)`, `.darken(f)`, `.alpha(f)`, `.mix(c2, f)`, `.contrastText() → string`                                  | Color manipulation; `contrastText` returns a readable text color for a background.                                     |
+| `color(c).lighten(f)`, `.darken(f)`, `.alpha(f)`, `.mix(c2, f)`, `.contrastText() → string`                                  | Color manipulation; `contrastText` returns a readable text color for a background. `mix` and `alpha` are pinned below. |
 | `formatNumber(n, pattern) → string`                                                                                          | ICU number formatting in `env.locale`.                                                                                 |
 | `formatDate(t, pattern) → string`, `formatDate(t, pattern, tz)`                                                              | LDML date formatting.                                                                                                  |
 | `formatDuration(d, style) → string`                                                                                          | `"short"` (`3d 4h`), `"long"`, `"iso"`.                                                                                |
@@ -3269,15 +4085,30 @@ In addition to the members listed in 12.2, these global functions are available 
 | `daysBetween(a, b) → int`                                                                                                    | Calendar days.                                                                                                         |
 | `distance(p1, p2) → double`                                                                                                  | Euclidean distance of points.                                                                                          |
 | `lower(s)`, `upper(s)`                                                                                                       | Aliases of `lowerAscii`/`upperAscii` with Unicode case mapping.                                                        |
-| `matchesGlob(s, glob) → bool`                                                                                                | Glob matching (safer than regex for users).                                                                            |
+| `matchesGlob(s, glob) → bool`                                                                                                | Glob matching (safer than regex for users): `*` matches any run of characters, including none, `?` exactly one character, and every other character itself; the whole of `s` must match, and case matters. |
 | `diagram.nodesOfType(t, includeViewOnly)`                                                                                    | Include view-only elements.                                                                                            |
 | `e.positionIn(l) → int`                                                                                                      | The zero-based position of element `e` in list `l`, comparing elements by identity, never by id, or −1. Lists of elements are in reading order (8.6), so `positionIn` works while ids are being computed and when ids are duplicated: `self.positionIn(group) == 0` holds for the first of a group only. |
 | `diagram.cycles(relType, max) → list(list(Element))`                                                                         | The elementary cycles over relations of `relType` (including its subtypes), at most `max` of them. Each cycle is in loop order and starts at its member that comes first in model order; the cycles are ordered by their first member, then lexicographically by member order. A self-loop is a cycle of one. |
 | `diagram.cyclesTruncated(relType, max) → bool`                                                                               | Whether `max` cut the list `diagram.cycles(relType, max)` returns.                                                     |
 | `diagram.knots(relType) → list(list(Element))`                                                                               | The strongly connected components over relations of `relType` that have more than one member or a self-loop; members in model order, components ordered by their first member. |
 | `fs.exists(path) → optional(bool)`, `fs.isDirectory(path) → optional(bool)`                                                  | File-system facts, `constraint` context only (below).                                                                  |
+| `budget(id) → map`, `budget() → map`                                                                                         | The state of a budget (3.2.1): `shown` (int), `total` (int), `truncated` (bool) and `withheld` (bool, whether edits are withheld now). `budget()` aggregates every budget: `truncated` and `withheld` are true when they are for any. Not in the deterministic contexts of 12.5. |
+| `filterValue(id) → dyn`                                                                                                      | The viewer's value of a canvas filter (6.13.1); `element` and `chrome` contexts only.                                   |
+| `axisRange(axis, value) → string`                                                                                            | The id of the range of axis `axis` (5.3) that holds `value`, or `''` when none does.                                  |
+| `textWidth(text, fontSize) → double`, `textHeight(lines, fontSize) → double`                                                 | The width of `text` and the height of `lines` lines at `fontSize`, under the declared text metric (6.5). With the `host` metric, not in the deterministic contexts of 12.5. |
+| `yearMonth(y, m) → int`, `ym.year() → int`, `ym.month() → int`                                                               | Build a month index from an astronomical year and a month 1–12, and take it apart (4.2).                               |
+| `formatYearMonth(i, pattern) → string`, `parseYearMonth(s) → int`                                                            | Format a month index with an LDML pattern, where `u` is the signed astronomical year, and parse the `"±YYYY-MM"` form. |
+| `precisionOf(self, attr) → string`                                                                                           | The precision a `datetime` value was written with (4.2): `"date"`, `"minute"`, `"second"`, `"millisecond"`, or `""` when unset; `element`, `snap` and `placementWrite` contexts. |
 
 Implementations MUST provide cost estimates for all library functions; graph traversals (`reachable`, `hasCycle`, `inCycle`, `knots`) have cost proportional to the number of relations of the given type and SHOULD be memoised per validation run. `diagram.cycles` and `diagram.cyclesTruncated` **MUST NOT** return or consider more than `max` cycles, and their cost **MUST** be estimated as proportional to (nodes + relations) × (`max` + 1), which keeps CEL's termination guarantee. All three graph functions **MUST** be deterministic given the model and the reading order.
+
+**Colour mixing.** `color(c).mix(c2, f)`, with `f` from 0 to 1, **MUST** return CSS Color 5 `color-mix(in srgb, c (1 − f) × 100%, c2 f × 100%)`: interpolated on gamma-encoded sRGB with premultiplied alpha. `color(c).alpha(f)` **MUST** multiply the colour's alpha by `f`. Both results **MUST** be written as `#RRGGBBAA`. A Paint string **MAY** also be a CSS `color-mix()` literal whose arguments are colour literals, not tokens:
+
+```json
+"fill": { "cel": "color(token('ansible.play')).mix(token('color.surface.raised'), 0.82)" }
+```
+
+An Ansible play's fill is its hue mixed 18 % into the raised surface colour, in every theme mode.
 
 **File-system facts.** `fs.exists(path)` and `fs.isDirectory(path)` are the only file-system facts DISL defines, and they are available in the `constraint` context only.
 
@@ -3294,7 +4125,9 @@ Implementations MUST provide cost estimates for all library functions; graph tra
 
 ### 12.5 Determinism
 
-Expressions in the contexts `constraint`, `identity`, `migration`, `create` (except `env.now`), `placement` and `snap` MUST be deterministic given the DID definition. `env.now` is the only source of time and is fixed per evaluation run; the file-system facts of 12.4 are likewise taken once per run. Members that depend on the viewer, such as `diagram.drawn`, **MUST NOT** be used in these contexts, and a validator **MUST** reject an expression there that uses one. Random functions do not exist. Iteration order of `diagram.nodes` and similar lists is the persistence order (11.7), so results are reproducible across tools.
+Expressions in the contexts `constraint`, `identity`, `migration`, `create` (except `env.now`), `placement`, `snap`, `derive`, `deriveItem` and `budget` MUST be deterministic given the DID definition. `env.now` is the only source of time and is fixed per evaluation run; the file-system facts of 12.4 are likewise taken once per run. Members that depend on the viewer, on findings or on budgets **MUST NOT** be used in these contexts, and a validator **MUST** reject an expression there that uses one: `diagram.drawn`, `e.drawn()`, `filterValue()`, `self.view` for a kind of viewer state (11.6), a `transient: "viewer"` attribute (4.3), `findingSeverity()`, `findings()` and `budget()`, and `textWidth()` and `textHeight()` under the `host` text metric (6.5). The `budget` context **MAY** read what viewer filters leave, since budgets apply after them (3.2.1), but nothing else a viewer sets. A plugin function declared `deterministic: false` (13.1) **MUST NOT** be called in these contexts. Random functions do not exist. Iteration order of `diagram.nodes` and similar lists is the persistence order (11.7), with derived elements after the stored ones in their computation order (4.11.5), so results are reproducible across tools.
+
+Sorting is deterministic too: strings order by code point and sorts are stable (12.1).
 
 ---
 
@@ -3328,10 +4161,39 @@ Plugins provide what the declarative core does not: exotic shapes, special route
 | `fallback`     | map extension point → built-in name    | Declarative fallbacks.                                                                                                                                                                          |
 | `args`         | map → Attribute                        | Declared arguments with types, so uses of the plugin are validated.                                                                                                                             |
 | `source`       | object                                 | Hints where implementations can be obtained (`npm`, `maven`, `url`, …) with integrity hashes. Runtimes MUST NOT download and execute code automatically without user or administrator approval. |
-| `celFunctions` | `{name, params, returns, cost, doc}`[] | Declarations of CEL functions the plugin adds, so validators can type-check expressions that use them.                                                                                          |
+| `celFunctions` | `{name, params, returns, cost, uses, deterministic, fallback, doc}`[] | Declarations of CEL functions the plugin adds, so validators can type-check expressions that use them (13.1.1).                                                             |
 | `doc`          | Doc                                    |                                                                                                                                                                                                 |
 
 Every plugin use (`{ "plugin": "acme.bpmnRouter", "args": {…} }`) references a declared plugin; `args` are validated against the declaration.
+
+#### 13.1.1 Plugin functions in CEL
+
+A `celFunctions` entry declares one function:
+
+| Property        | Type                                     | Description |
+|-----------------|------------------------------------------|-------------|
+| `name`          | simple identifier                        | The function's name. **Required.** |
+| `params`        | (string or `{name, type, doc}`)[]        | The parameters in order: a CEL type (the 0.1 form), or an object that also names the parameter, for `fallback`. |
+| `returns`       | string                                   | The CEL result type. |
+| `cost`          | int                                      | The cost a validator charges per call (2.5). |
+| `uses`          | (`"diagram"`, `"env"`)[]                 | As for user functions (3.4): the implementation receives a read-only view of the working state, `env`, or both. Without it, the result **MUST** depend on the arguments only. |
+| `deterministic` | bool                                     | Whether the result depends only on the arguments and what `uses` names. Default `true`; `false` forbids calls in the deterministic contexts of 12.5. |
+| `fallback`      | CEL source                               | Evaluated in place of the call when the plugin is absent, over the named parameters. |
+| `doc`           | Doc                                      | |
+
+- A plugin function **MUST** be called by its bare name, like a user function. Its name **MUST NOT** equal a function of 12.4, a user function (3.4) or another declared plugin function; a clash is a specification error.
+- Validators **MUST** type-check calls against the declaration (14.1, step 8) and charge its `cost` per call.
+- A plugin function **MUST NOT** change the model or any state visible to CEL.
+- When the plugin is absent, a call **MUST** evaluate `fallback` when one is declared; otherwise the call is an evaluation error, handled per the table of 2.5, so a constraint reports that it could not be evaluated and never passes. The runtime **MUST** report one `std.pluginMissing` finding (8.7) per missing plugin, not per call.
+- The rule for `required: true` is unchanged: a diagram whose required plugin is absent is not opened for editing, and read-only viewing follows the rules above.
+
+```json
+{ "name": "rdfDisplayName", "params": [ { "name": "iri", "type": "string" } ], "returns": "string",
+  "cost": 10, "uses": ["diagram"], "fallback": "rdfLocalName(iri) != '' ? rdfLocalName(iri) : iri",
+  "doc": "An IRI as drawn: prefixed name under the file's prefixes, else the local name, else the IRI." }
+```
+
+An RDF graph shows prefixed names through its Turtle plugin, which knows the file's prefixes; without the plugin, its cards fall back to local names.
 
 ### 13.2 Extension properties and profiles
 
@@ -3350,7 +4212,7 @@ Every plugin use (`{ "plugin": "acme.bpmnRouter", "args": {…} }`) references a
 5. **Resolve names**: every type, style, shape, marker, icon, form, tool, snap profile, layout, operation, function and plugin reference must resolve.
 6. **Flatten inheritance**: compute C3 linearisations; merge attributes, ports, containment; check narrowing rules (4.7).
 7. **Derive built-ins**: generate built-in constraints (8.7), default notations, default forms and the default toolbox where absent.
-8. **Compile CEL**: parse and type-check every expression in its context (12.3); estimate costs against `language.limits.celCost`; check user functions for recursion.
+8. **Compile CEL**: parse and type-check every expression in its context (12.3); estimate costs against `language.limits.celCost`; check user functions for recursion other than the bounded self-recursion of 3.4, and plugin function names for clashes (13.1.1).
 9. **Check semantic rules** not expressible in JSON Schema: reserved attribute names, placement attribute types compatible with axes, snapping rules compatible with axis kinds, `x2` vs `width` exclusivity, handle parameters exist, label `editable` requires attribute binding, exactly one of `path`/`parts`/`svg`/`plugin` in shapes, and all other MUST statements of this document.
 10. **Build** the runtime model.
 
@@ -3365,7 +4227,8 @@ Loading is tolerant of ids (11.5.4). A runtime **MUST** load a model in which id
 1. read the elements in reading order (8.6), reporting `std.missingId` for each element without a usable id and, following `persistence.ids.compare`, `std.duplicateId` for each second and later element with an id already used;
 2. give an element without a usable id a new id under `missing: "assign"` (held in memory and written with the next save, never on open) or treat it as ephemeral under `missing: "ephemeral"`, and treat every second and later holder of a duplicated id as ephemeral;
 3. compute the `derived` ids (11.5.2), nodes before relations, letting references follow a computed id that differs from the stored one;
-4. resolve view data, ignoring and reporting by `std.ephemeralViewData` any view data, style override or suppression keyed by an ephemeral id (11.5.3).
+4. compute the derived elements (4.11.5), derived node types then derived relation types, each in declaration order;
+5. resolve view data, ignoring and reporting by `std.ephemeralViewData` any view data, style override or suppression keyed by an ephemeral id (11.5.3); a view key that names no element once derived elements are computed is kept and ignored.
 
 A model read through FBL is loaded in the same order, with FBL's reading order and FBL raising the reader findings.
 
@@ -3396,9 +4259,9 @@ flowchart TB
   commit --> live["live constraints<br/>(debounced)"] --> render([render])
 ```
 
-Transactions are atomic: either all effects apply or none. Remote changes from collaborators apply as transactions without hooks but with constraint evaluation.
+Transactions are atomic: either all effects apply or none. Remote changes from collaborators apply as transactions without hooks but with constraint evaluation. Changes of viewer state (11.6) and the steps of a simulation (9.6) are not transactions: they change no model, run no hook or constraint, and create no undo step.
 
-The "recompute derived values & bindings" step also recomputes `derived` ids (11.5.2) and rewrites references to any id that changed. Ids the transaction generates for new elements are generated once, when it is first applied; redo re-creates the elements with the same ids and is refused when that would duplicate an id (11.5.1).
+The "recompute derived values & bindings" step also recomputes `derived` ids (11.5.2) and rewrites references to any id that changed, and then recomputes the derived elements (4.11.5), all before invariants are checked. Expressions evaluated later in the transaction see derived elements as of the working state. A runtime **MAY** recompute incrementally, but the result **MUST** equal a full recomputation. Derived elements are never part of the undo step: undo and redo restore the stored elements and recompute the derived ones, and the selection and stored view data follow them by id. Ids the transaction generates for new elements are generated once, when it is first applied; redo re-creates the elements with the same ids and is refused when that would duplicate an id (11.5.1).
 
 ### 14.5 Saving
 
@@ -3425,6 +4288,9 @@ A runtime MUST state its conformance class and list unsupported optional feature
 ### 15.2 Graceful degradation
 
 Runtimes that do not support a visual feature SHOULD degrade visually rather than refuse: a `sketch` stroke renders as solid, a `wave` effect as a straight line, an unsupported marker as `arrowFilled` (target) or `none` (source), an unsupported shape as `rect` with its label, an embedded form as its `fallback`. Semantic features — metamodel, constraints, persistence — MUST NOT degrade.
+
+- **Missing plugin functions.** A call to a function of an absent plugin **MUST** degrade through its `fallback` (13.1.1). Without one, its semantic uses (constraints, derived elements, ids) report findings as evaluation errors (2.5), and its visual uses fall back to their defaults; the runtime **MUST NOT** crash, and reports one `std.pluginMissing` per plugin.
+- **Missing 0.2 features.** A runtime that lacks an optional feature of Appendix B.8 **SHOULD** degrade as that feature's absence implies: without `canvas.filters`, nothing is filtered out; without `canvas.notices` or `canvas.chrome`, notices, the title, the header and the empty message are not drawn; without `view.viewer`, viewer kinds are recomputed on load; without `limits.budgets`, a budget does not cut the view and the runtime warns beyond `maxElements` instead, which draws everything, so a specification whose budgets gate edits **SHOULD** list `limits.budgets` in `language.requires.features`; without `anchor.part`, `anchor.sides`, `edge.stub` or `edge.bezierLoop`, edges attach and route as in 0.1. When a specification requires a feature the runtime lacks, 15.1 applies.
 
 ---
 
@@ -4570,7 +5436,27 @@ If a user then drags *Build pages* one working day to the left, the calendar sna
 
 ## Changes from 0.1
 
-This section lists every place where DISL 0.2 gives a meaning that DISL 0.1 left open or ambiguous, with the reason. Everything not listed keeps its 0.1 meaning, and no valid 0.1 specification becomes invalid.
+This section lists every place where DISL 0.2 gives a meaning that DISL 0.1 left open or ambiguous, with the reason. Everything not listed keeps its 0.1 meaning, and no valid 0.1 specification becomes invalid. The constructs 0.2 adds are optional, and their absence is the 0.1 behaviour; they are not listed here.
+
+| #  | Change | 0.1 said | 0.2 says | Reason | Section |
+|----|--------|----------|----------|--------|---------|
+| 1  | `{cel}` in a LocalizedText position | Read as a locale map with the language tag `cel`, so the CEL source is shown as text. | Every user-facing text position is a Message; an object with a `cel` key is CEL, and `cel` may not be a language tag. | Specifications write `{cel}` in label positions meaning CEL; none means a locale called `cel`. | 2.3 |
+| 2  | Order of gesture checks | Constraint order is significant, but not what it means for gestures. | Notation refusals, then the edit gate, then the built-ins in the order endpoints, containment, multiplicity, acyclic, axis bounds, facets, then declared rules in array order; the first refusal is shown. | Hosts must show the same first refusal. | 8.4 |
+| 3  | Reserved words in menus and drops | Unstated. | `diagram` and `connection` are reserved in `contextMenus[].for`, and `canvas` in a drop's `on`. | New keywords for the empty-canvas and pending-connection menus and for drops. | 7.2, 7.3 |
+| 4  | Handles on `{attribute}`-bound shape parameters | 2.5 (two-way bindings) and 6.8 (handles write view data) disagree. | The handle writes the attribute. | Settles the contradiction the way a handle that edits the model needs. | 6.8 |
+| 5  | Order of findings | Unstated. | Reader findings, then built-ins, then declared rules in array order; within a rule, model order, then `forEach` order. | Findings are compared across hosts. | 8.6 |
+| 6  | "Problems" | The word for the results of rules. | "Findings"; `problems` in forms is a deprecated alias of `findings`; the validator's JSON keys are unchanged. | Many results are information or hints, and FBL uses "finding". | 7.5, 8.6, 18 |
+| 7  | Natural id composition; `prefix` with `cel` | Unstated. | The composition is pinned (prefix, then the key attributes joined by `\|`), and `prefix` does not apply to `cel` or `derived` results. | Hosts must make the same id. | 11.5, 11.5.1 |
+| 8  | Results of a derived relation expression | Extra keys and default ids unstated. | Extra keys are attribute values, `id`, `sources` and `owner` have defined meanings, and the default id is `<Type>:<source.id>-><target.id>` with `#2`, `#3` for repeats. | Needed for merging and lifting. | 4.9 |
+| 9  | `ancestors()` order; a relation's `owner` | Unstated. | Nearest first; a relation's owner defaults to the nearest common ancestor of its ends, or the diagram. | Lifting relationships to drawn ancestors, and edges owned by a scope. | 12.2, 4.11.3 |
+| 10 | `forEach` in actions | Unstated whether iterations see each other. | Iterations run in order on the working state; the list is evaluated once. | A hook that claims loops one by one. | 9.4 |
+| 11 | String order | Unstated. | Unicode code point order; sorts are stable. | Orderings must match across hosts. | 12.1 |
+| 12 | `acyclic` on an abstract relation type; `*OfType` | Unstated for subtypes. | Covers the union of the type and its subtypes; a type name in `*OfType` and the graph functions includes subtypes. | Ownership split over several relation types. | 4.9, 8.7, 12.2 |
+| 13 | Arc bow side; `curved` without bendpoints | Unstated. | A positive curvature bows left of the direction of travel; `curved` without bendpoints is one quadratic curve. | Arcs drew mirrored in two hosts. | 6.10 |
+| 14 | Snap ties | Unstated. | Away from zero by default, as CEL `math.round`; the snap rule's `ties` overrides it. | Timelines and hype cycles round halves away from zero. | 5.10, 12.4 |
+| 15 | `color().mix()` and `.alpha()` | Named, not defined. | Defined as CSS Color 5 `color-mix()` in sRGB, written as `#RRGGBBAA`. | Paints mixed from tokens must look alike everywhere. | 12.4 |
+| 16 | Rulers | How they are attached is unstated. | Attached to the view by default (`attach: "view"`). | Rulers stay at the edge of the pane. | 5.13 |
+| 17 | What is drawn | No single order. | Viewpoint membership, derived elements, viewer filters, budgets, `visible: false`, in that order, exposed as `diagram.drawn`; a relation with an undrawn end is not drawn. | Budgets, filters and legends must agree. | 6.1 |
 
 ---
 
@@ -4609,19 +5495,19 @@ Rules that JSON Schema cannot express — name resolution, CEL type checking, in
 
 | Layer                 | `$defs`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 |-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Common                | `SimpleId`, `QualifiedId`, `TypeRef`, `TypeRefs`, `SemVer`, `LocalizedText`, `Doc`, `CelSource`, `Expression`, `CelValue`, `AttrBinding`, `TokenRef`, `ParamRef`, `Dynamic`, `BString`, `BNumber`, `BBool`, `GeomExpr`, `Length`, `Color`, `Size`, `Insets`, `Point`, `Box`, `MinMax`, `PluginUse`, `PluginCall`, `Modifier`                                                                                                                                                                                                                                                                                                            |
-| Top level             | `Specification`, `Language`, `Import`, `Function`, `Viewpoint`, `Plugin`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| 1 · Metamodel         | `Metamodel`, `Attribute`, `DataType`, `Enum`, `EnumValue`, `NodeType`, `Containment`, `PortType`, `RelationType`, `RelationEnd`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| 2 · Coordinates       | `Coordinates`, `Axis`, `AxisRef`, `Calendar`, `Category`, `Ruler`, `ZoomLevel`, `CoordinateSystem`, `GridDisplay`, `Guides`, `Placement`, `PlacementSource`, `Anchor`, `Snapping`, `SnappingRef`, `SnapRule`, `SnapRuleObject`, `AxisRules`                                                                                                                                                                                                                                                                                                                                                                                             |
-| 3 · Notation          | `Notation`, `Theme`, `Paint`, `Gradient`, `Pattern`, `ImagePaint`, `Stroke`, `DashStyle`, `LineEffect`, `Font`, `Style`, `StyleRef`, `StyleRefs`, `States`, `Conditions`, `IconDef`, `IconRef`, `ShapeRef`, `ShapeInstance`, `ShapeDef`, `ShapeParam`, `PathDef`, `PathSegment`, `ShapePart`, `Handle`, `ScaleMode`, `Position`, `Label`, `Compartment`, `NodeIcon`, `Badge`, `PortNotation`, `AnchorSpec`, `ContainerSpec`, `SizeSpec`, `EmbeddedForm`, `LodRule`, `NodeNotation`, `NodeVariant`, `MarkerDef`, `MarkerInstance`, `MarkerRef`, `MidMarker`, `Routing`, `LineSpec`, `EndAnchor`, `EdgeNotation`, `EdgeVariant`, `Canvas` |
-| 4 · Toolbox and forms | `Toolbox`, `ToolGroup`, `Tool`, `ContextToolSet`, `ContextTool`, `Template`, `FragmentNode`, `FragmentRelation`, `Form`, `FormItem`, `FieldValidation`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| 5 · Constraints       | `Constraints`, `Constraint`, `QuickFix`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| 6 · Behavior          | `Behavior`, `Hook`, `Operation`, `Action`, `DeletionPolicy`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| Common                | `SimpleId`, `QualifiedId`, `TypeRef`, `TypeRefs`, `SemVer`, `LocalizedText`, `Doc`, `CelSource`, `Expression`, `CelValue`, `AttrBinding`, `TokenRef`, `ParamRef`, `Dynamic`, `BString`, `BNumber`, `BBool`, `GeomExpr`, `Length`, `Color`, `Size`, `Insets`, `Point`, `Box`, `MinMax`, `PluginUse`, `PluginCall`, `Modifier`, **`Message`**, **`Reason`**, **`NamedReason`**, **`TimeUnit`**                                                                                                                                                                                                                                                                                                            |
+| Top level             | `Specification`, `Language`, `Import`, `Function`, `Viewpoint`, `Plugin`, **`Budget`**, **`BudgetWithhold`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| 1 · Metamodel         | `Metamodel`, `Attribute`, `DataType`, `Enum`, `EnumValue`, `NodeType`, `Containment`, `PortType`, `RelationType`, `RelationEnd`, **`OutOfRange`**, **`DerivedNode`**, **`DerivedRelation`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| 2 · Coordinates       | `Coordinates`, `Axis`, `AxisRef`, `Calendar`, `Category`, `Ruler`, `ZoomLevel`, `CoordinateSystem`, `GridDisplay`, `Guides`, `Placement`, `PlacementSource`, `Anchor`, `Snapping`, `SnappingRef`, `SnapRule`, `SnapRuleObject`, `AxisRules`, **`AxisRange`**, **`RulerTicks`**                                                                                                                                                                                                                                                                                                                                                                                             |
+| 3 · Notation          | `Notation`, `Theme`, `Paint`, `Gradient`, `Pattern`, `ImagePaint`, `Stroke`, `DashStyle`, `LineEffect`, `Font`, `Style`, `StyleRef`, `StyleRefs`, `States`, `Conditions`, `IconDef`, `IconRef`, `ShapeRef`, `ShapeInstance`, `ShapeDef`, `ShapeParam`, `PathDef`, `PathSegment`, `ShapePart`, `Handle`, `ScaleMode`, `Position`, `Label`, `Compartment`, `NodeIcon`, `Badge`, `PortNotation`, `AnchorSpec`, `ContainerSpec`, `SizeSpec`, `EmbeddedForm`, `LodRule`, `NodeNotation`, `NodeVariant`, `MarkerDef`, `MarkerInstance`, `MarkerRef`, `MidMarker`, `Routing`, `LineSpec`, `EndAnchor`, `EdgeNotation`, `EdgeVariant`, `Canvas`, **`ContrastRequirement`**, **`TextMetric`**, **`BadgeLayout`**, **`GestureRefusals`**, **`ConnectGesture`**, **`BezierSpec`**, **`Stub`**, **`ChromeBand`**, **`Notice`**, **`Filter`**, **`EmptyMessage`**, **`LegendComputed`** |
+| 4 · Toolbox and forms | `Toolbox`, `ToolGroup`, `Tool`, `ContextToolSet`, `ContextTool`, `Template`, `FragmentNode`, `FragmentRelation`, `Form`, `FormItem`, `FieldValidation`, **`CreateEnd`**, **`DropSpec`**, **`DropTarget`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| 5 · Constraints       | `Constraints`, `Constraint`, `QuickFix`, **`BuiltInSetting`**, **`SourceLocation`**, **`Finding`**, **`ValidatorOutput`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| 6 · Behavior          | `Behavior`, `Hook`, `Operation`, `Action`, `DeletionPolicy`, **`Confirmation`**, **`Simulation`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | 7 · Layout            | `Layout`, `LayoutConfig`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| 8 · Persistence       | `Persistence`, `Migration`, `MigrationStep`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| 8 · Persistence       | `Persistence`, `Migration`, `MigrationStep`, **`IdStrategy`**, **`IdRule`**, **`ViewKind`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | Documents             | `Document`, `ElementRecord`, `RelationRecord`, `ViewRecord`, `NodeView`, `EdgeView`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
-In total the schema has 135 `$defs` entries. The stored-diagram structures `Document`, `ElementRecord`, `RelationRecord`, `ViewRecord`, `NodeView` and `EdgeView` of the earlier combined schema moved to DID's schema.
+In total the schema has 170 `$defs` entries; the 35 in bold are new in 0.2, and `Finding` and `ValidatorOutput` describe what a headless validator prints (8.6), not a specification. The stored-diagram structures `Document`, `ElementRecord`, `RelationRecord`, `ViewRecord`, `NodeView` and `EdgeView` of the earlier combined schema moved to DID's schema.
 
 ### A.3 Excerpt: snapping
 
@@ -5309,6 +6195,7 @@ The following excerpt shows how per-axis snapping is encoded. A snap rule is eit
 | `blockArrow`    | `direction`: `right`, `headLength`: 0.35, `shaftThickness`: 0.5, `doubleHeaded`: false |
 | `chevron`       | `depth`: 0.25, `direction`: `right`                                                    |
 | `bracket`       | `side`: `left`, `curl`: 0.15                                                           |
+| `superellipse`  | `exponent`: 4 (at least 2; 2 is an ellipse)                                            |
 | `image`         | `fit`: `contain`                                                                       |
 
 Fractions refer to the bounds' width (horizontal parameters) or height (vertical parameters).
@@ -5365,7 +6252,7 @@ Sizes are for a line width of 1 and scale with the stroke unless `scaleWithStrok
 
 ### B.5 Time units and formats
 
-Units: `millisecond`, `second`, `minute`, `hour`, `day`, `week` (starts on `firstDayOfWeek`), `month`, `quarter`, `year`. Date format patterns follow Unicode LDML (`yyyy`, `MM`, `MMM`, `MMMM`, `d`, `EEE`, `w`, `HH:mm`). Number patterns follow ICU (`#,##0.00`, `#0%`).
+Units (`$defs/TimeUnit`): `millisecond`, `second`, `minute`, `hour`, `day`, `week` (starts on `firstDayOfWeek`), `month`, `quarter`, `year`, `decade`, `century`, `millennium` (the last three start on years divisible by 10, 100 and 1000 in astronomical numbering, 5.5). Date format patterns follow Unicode LDML (`yyyy`, `MM`, `MMM`, `MMMM`, `d`, `EEE`, `w`, `HH:mm`); on `yearMonth` axes `u` is the signed astronomical year and `y` is not allowed (5.5). Number patterns follow ICU (`#,##0.00`, `#0%`).
 
 ### B.6 Standard icons
 
@@ -5380,6 +6267,7 @@ Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`,
 | `int`, `number`                        | `number` (`slider` if both `min` and `max` are set and the range is at most 100 steps) |
 | `bool`                                 | `checkbox`                                                                             |
 | `date`, `datetime`, `time`, `duration` | `date`, `datetime`, `time`, `duration`                                                 |
+| `yearMonth`                            | `month`                                                                                |
 | `color`                                | `color`                                                                                |
 | `uri`                                  | `link`                                                                                 |
 | `expression`                           | `code` with `language: "cel"`                                                          |
@@ -5397,6 +6285,35 @@ Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`,
 
 `language.requires.features` uses these identifiers: `axis.log`, `axis.time`, `axis.time.collapse`, `axis.ordinal`, `axis.angular`, `system.polar`, `system.nested`, `placement.bound`, `placement.computed`, `placement.stack`, `snap.calendar`, `snap.byZoom`, `snap.objects`, `shape.custom`, `shape.composite`, `shape.handles`, `shape.nineSlice`, `stroke.effect`, `stroke.sketch`, `stroke.flow`, `edge.jumps`, `edge.bezier`, `edge.metro`, `marker.custom`, `marker.stack`, `label.rich`, `label.parse`, `node.variants`, `node.lod`, `form.embedded`, `layout.elk`, `collab.crdt`, `persist.yaml`, `persist.split`, `persist.perElement`, `export.pdf`.
 
+DISL 0.2 adds: `view.viewer` (viewer state, 11.6), `canvas.filters` (6.13.1), `canvas.notices` (6.13), `canvas.chrome` (title, header, empty message and a legend from what is drawn, 6.13), `canvas.stretch` (6.13), `viewpoint.variants` (3.5), `limits.budgets` (3.2.1), `anchor.part` and `anchor.sides` (6.9, 6.10), `edge.stub` (6.10), `edge.bezierLoop` (6.10), `node.badgeLayout` (6.9), `axis.ranges` (5.3), `axis.yearMonth` (5.5), `ruler.adaptive` (5.13), `snap.byGesture` (5.9) and `text.metric` (6.5). A runtime that lacks one degrades as 15.2 says.
+
+### B.9 Built-in constraints
+
+The built-in constraints of 8.7, in the order of its table, with who raises them. Findings of the four the reader raises come first, in reading order; the others follow in this order (8.6). Each can be re-rated, switched off, and given a `code` and a `message` in `constraints.builtIn` (8.1).
+
+| Id                      | Raised by                                   | Default severity / enforcement      | Since |
+|-------------------------|---------------------------------------------|-------------------------------------|-------|
+| `std.required`          | the metamodel (`required`)                  | error / report                      | 0.1   |
+| `std.facets`            | the metamodel (facets)                      | error / report, prevent in forms    | 0.1   |
+| `std.unique`            | the metamodel (`unique`)                    | error / report                      | 0.1   |
+| `std.multiplicity`      | the metamodel (bounds)                      | warning / report below, error / prevent above | 0.1 |
+| `std.endpoints`         | the metamodel (relation ends)               | error / prevent                     | 0.1   |
+| `std.containment`       | the metamodel (`children`, `slots`)         | error / prevent                     | 0.1   |
+| `std.acyclic`           | the metamodel (`acyclic`, with subtypes)    | error / prevent                     | 0.1   |
+| `std.references`        | references to missing elements              | error / report                      | 0.1   |
+| `std.axisBounds`        | axis and system bounds                      | error / prevent                     | 0.1   |
+| `std.typeExists`        | unknown types in a stored diagram           | error / report                      | 0.1   |
+| `std.unparseable`       | the reader, per file that does not parse    | error / report                      | 0.2   |
+| `std.unreadableEntry`   | the reader, per entry that cannot become an element | warning / report            | 0.2   |
+| `std.missingId`         | the reader or runtime, per element without a usable id | warning / report         | 0.2   |
+| `std.duplicateId`       | the reader or runtime, per second and later holder of an id | warning / report    | 0.2   |
+| `std.mixedPrecision`    | the runtime (`samePrecisionAs`)             | warning / report, prevent in forms  | 0.2   |
+| `std.ephemeralViewData` | the runtime, per stored data keyed by an ephemeral id | info / report             | 0.2   |
+| `std.pluginMissing`     | the runtime, per absent plugin whose functions are called | warning / report      | 0.2   |
+| `std.derivedFailed`     | the runtime, per derived type that fails to compute | warning / report            | 0.2   |
+| `std.derivedId`         | the runtime, per derived id already in use  | warning / report                    | 0.2   |
+| `std.derivedEnds`       | the runtime, per derived relation type with ends that do not fit | warning / report | 0.2   |
+
 ---
 
 ## Appendix C — Glossary
@@ -5407,21 +6324,27 @@ Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`,
 | **Band**               | One category of an ordinal axis, drawn as a lane, row or column.                                             |
 | **Bindable**           | A property that accepts a literal or a dynamic value (`cel`, `attribute`, `token`, `param`).                 |
 | **Bound placement**    | A coordinate read from and written to a model attribute.                                                     |
+| **Budget**             | A hard limit on how much of a model a view draws, with what is withheld while it is reached (3.2.1).       |
 | **Canvas units**       | Rendering units at zoom 1; pixels for the default axis.                                                      |
 | **CEL**                | Common Expression Language, the only expression language of DISL.                                            |
 | **Compartment**        | A stacked region inside a node listing items.                                                                |
 | **Context (CEL)**      | The set of variables available to an expression, determined by where it appears.                             |
+| **Derived element**    | An element computed from other elements of the model, never stored or written (4.11).                         |
 | **DID definition**     | A diagram a user created of a diagram type, stored as a `.did` file (DID, the Diagram Definition Language).   |
 | **Document**           | The content a user works on in a host; for a diagram, its stored form is a DID definition.                   |
 | **Domain value**       | A position in the units of its axis: a number, a timestamp or a band reference.                              |
+| **Ephemeral id**       | An id that identifies an element within one reading of the model only; nothing is stored keyed by it (11.5.3). |
+| **Finding**            | The result of a rule or of reading a model: a severity, a message and what it is about (8.6).                |
 | **Gesture constraint** | A constraint evaluated before a user action is applied (connect, contain, create, delete, place, change).    |
 | **Handle**             | An interactive point on a shape that edits a shape parameter.                                                |
 | **Invariant**          | A constraint on the current state of the diagram.                                                            |
 | **Marker**             | A decoration at an edge end or along an edge, such as an arrowhead.                                          |
+| **Message**            | A text a runtime shows to users: a LocalizedText or a CEL value returning one (2.3).                         |
 | **Metamodel**          | The abstract syntax: types, attributes, relations, containment and ports.                                    |
 | **Notation**           | The concrete syntax: shapes, styles, labels and markers.                                                     |
 | **Plugin**             | Named, declared, versioned code that extends a runtime.                                                      |
 | **Port**               | A named connection point on a node.                                                                          |
+| **Reason**             | Why something is refused, read-only or unavailable: a Message, a conditional Message or a named reason (2.3). |
 | **Runtime**            | Software in a host that loads a specification and lets users create and change DID definitions with it.      |
 | **Specification**      | A DISL file (`.dis`) in which a tool engineer specifies one diagram type.                                    |
 | **Tool engineer**      | The person who specifies a diagram type in DISL.                                                             |
@@ -5430,6 +6353,7 @@ Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`,
 | **Transaction**        | An atomic, undoable unit of change.                                                                          |
 | **Variant**            | An alternative notation applied when a condition holds.                                                      |
 | **View data**          | Per-diagram placement and presentation data stored separately from the model.                                |
+| **Viewer state**       | View data that belongs to one viewer (folds, filters, the variant shown): never stored, never undone (11.6).  |
 | **View-only element**  | An element that exists only in a view (a note or frame) and has no model meaning.                            |
 | **Viewpoint**          | A kind of diagram over the model, with its own types, coordinates, toolbox and layout.                       |
 
@@ -5441,7 +6365,7 @@ Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`,
 
 **Why JSON rather than YAML as the normative form?** JSON has a single, unambiguous data model, universal parser support, and first-class JSON Schema tooling. It also avoids YAML's implicit typing pitfalls. Tool engineers who prefer YAML can write it and convert, because the logical content is identical, and persistence may still write DID definitions as YAML (11.2).
 
-**Why CEL?** DISL needs expressions everywhere, but it must stay safe to load specifications from untrusted sources and must guarantee termination for live evaluation on every keystroke. CEL is non-Turing-complete, side-effect free, has a static type checker and cost estimation, and runs in all major ecosystems. User functions are allowed but may not recurse, which preserves those guarantees. OCL was considered too heavy, and JavaScript too powerful.
+**Why CEL?** DISL needs expressions everywhere, but it must stay safe to load specifications from untrusted sources and must guarantee termination for live evaluation on every keystroke. CEL is non-Turing-complete, side-effect free, has a static type checker and cost estimation, and runs in all major ecosystems. User functions are allowed, but may recurse only into themselves and only to a declared depth (3.4), which preserves those guarantees. OCL was considered too heavy, and JavaScript too powerful.
 
 **Why coordinate systems as a separate layer?** Coordinates carry meaning in many diagram kinds (schedules, lanes, sequences, floor plans), and snapping only makes sense in domain units ("snap to working days"). Binding coordinates to attributes removes the classic duplication between a task's date field and its position on the canvas, along with the bugs that duplication causes.
 
@@ -5451,13 +6375,16 @@ Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`,
 
 **Why so much documentation structure?** A diagram type is also a teaching tool. When every type, field, rule and snapping behavior can explain itself, users learn the language while working, and documentation cannot drift from the implementation because both come from the same source.
 
-### D.2 Open questions for 0.2
+### D.2 Open questions
+
+The questions 0.1 left open, and what 0.2 did with them. Items marked *answered* or *partly answered* say where.
 
 1. **Diagram-to-diagram links:** references across DID definitions (a sub-process defined in another file) and their persistence and integrity rules.
 2. **Typed CEL for view-only data:** stronger static typing for `self.view` fields per coordinate system (currently `dyn`).
-3. **Animation and simulation:** a standard extension profile for token-flow animation (Petri nets, BPMN simulation) driven by CEL.
+3. **Animation and simulation:** a standard extension profile for token-flow animation (Petri nets, BPMN simulation) driven by CEL. *Answered in 0.2* by simulated runs (9.6): stepwise states computed in CEL, played outside the model's history; a token-flow profile can be written with them.
 4. **Responsive notation:** notation variants driven by available screen size (mobile editing).
 5. **Standard library packaging:** a registry of shareable DISL libraries (shapes, markers, themes) with semantic versioning and signatures.
 6. **Bidirectional text formats:** declaring a textual syntax (grammar) alongside the graphical one, to support round-tripping with textual DSLs such as PlantUML or Mermaid.
-7. **Accessibility conformance:** measurable requirements (contrast ratios of built-in tokens, keyboard coverage) as a conformance class of its own.
-8. **Constraint explanations:** machine-generated explanations of why a CEL rule failed (counterexample elements), beyond the declared `target`.
+7. **Accessibility conformance:** measurable requirements (contrast ratios of built-in tokens, keyboard coverage) as a conformance class of its own. *Partly answered in 0.2*: a specification can state and have validated the contrast of its own tokens (6.2); a conformance class is still open.
+8. **Constraint explanations:** machine-generated explanations of why a CEL rule failed (counterexample elements), beyond the declared `target`. *Partly answered in 0.2*: one finding per failing item with `forEach` (8.2), cycles named in loop order (12.4), `violation` and `detail` in built-in messages (8.1), and reasons for every refusal (2.3); machine-generated counterexamples are still open.
+9. **Layouts:** declaring layout algorithms themselves (layered, banded, row-packed, compact, radial) rather than naming them for a plugin to supply (section 10), so that every host arranges a diagram the same way. The next open question after 0.2.

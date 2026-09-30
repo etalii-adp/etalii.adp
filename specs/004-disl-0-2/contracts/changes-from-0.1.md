@@ -14,7 +14,7 @@ DISL 0.2 and DID 0.2 each gain a section "Changes from 0.1" (FR-002). It lists e
 | 6 | "Problems" | The word for rule results. | "Findings"; `problems` in forms is a deprecated alias of `findings`; the validator's JSON keys are unchanged. | Many results are info or hints; FBL uses "finding". | identity-and-findings.md, B.0 |
 | 7 | Natural id composition; `prefix` with `cel` | Unstated. | The composition is pinned; `prefix` does not apply to `cel`. | Hosts must derive the same id. | identity-and-findings.md, A.0, A.3 |
 | 8 | Derived relation results | Extra keys and default ids unstated. | Extra keys are attribute values; the default id is defined. | Needed for merging and lifting. | derived-and-small.md, B2 |
-| 9 | `ancestors()` order; relation `owner` | Unstated. | Nearest first; a relation's owner defaults to its source's parent. | C4 lifting and SPARQL scope ownership. | derived-and-small.md, B3, B4 |
+| 9 | `ancestors()` order; relation `owner` | Unstated. | Nearest first; a relation's owner defaults to the nearest common ancestor of its ends. | C4 lifting and SPARQL scope ownership. | derived-and-small.md, B3, B4 |
 | 10 | `forEach` in actions | Unstated whether iterations see each other. | Iterations run in order on the working state; the list is evaluated once. | CLD claims. | derived-and-small.md, E2 |
 | 11 | String order | Unstated. | Unicode code point order; sorts are stable. | SKOS ordering must match across hosts. | derived-and-small.md, E3 |
 | 12 | `acyclic` on an abstract relation type; `*OfType` | Unstated for subtypes. | Covers the union of the type and its subtypes; `*OfType` includes subtypes. | FDG. | derived-and-small.md, E5 |

@@ -40,3 +40,37 @@ Names and details the construct map did not fix, with what was chosen and why.
 36. **Appendix A**: the `$id` sentence moved to 0.2 and notes that the 0.1 address is read against the 0.2 schema (the rest of Appendix A is T083's).
 37. **2.1 and 3.1 examples** now declare `"disl": "0.2"` (and the 0.2 `$schema`).
 38. **Reserved names (2.2)** gained `detail` (construct map section 2).
+
+## P2 and P3
+
+Choices made while writing US4 to US10, the "Changes from 0.1" table and the appendices (T042 to T083).
+
+39. **`derived` and `sources` members (12.2)**: not added to the reserved names of 2.2, because a 0.1 specification may have an attribute called `derived` (the 6.10 example reads `self.derived`); an attribute of that name shadows the member for its type, and a derived type **MUST NOT** declare either name (4.11.2).
+40. **Moving derived nodes**: a derived node with a stable, non-ephemeral id may be moved and resized as view data (4.11.4), since DID lets view keys name derived elements. So "a derived" was dropped from the `move` key of GestureRefusals in 6.9 (written by the P1 agent); model-changing gestures on derived elements are refused with `derived.reason` unless `edits` maps them.
+41. **Order of gesture checks (8.4)**: the derived element's `reason` and the ephemeral id's `reason` come in step 1, after the notation's refusal; the edits withheld by a budget come in step 2, after the edit gate.
+42. **Budget `finding` (3.2.1)**: judged on the measure without viewer filters (after drawing steps 1 and 2), because findings never depend on a viewer; everything else about a budget applies after filters.
+43. **Budget notice default text**: stated as naming `budget('<id>').shown` and `.total`; the example uses a CEL text, since a plain string with `{shown}` would be a literal.
+44. **`detail` keys of the new built-ins (8.7)**: `std.pluginMissing` {plugin, functions}; `std.derivedFailed` {type, reason, property, count}; `std.derivedId` {id, first, type}, targeting `first` with the undrawn one named by `subject`; `std.derivedEnds` {type, end, count}. None were fixed by the research.
+45. **Relation `owner` default**: the nearest common ancestor of the ends, or the diagram (research B4 and the schema). contracts/changes-from-0.1.md row 9 says "its source's parent"; the Changes from 0.1 table follows B4 instead.
+46. **0.1 derived-relation maps with other keys (4.9)**: a key that is neither `source`, `target`, `id`, `sources`, `owner` nor an attribute is a specification error where statically known, and ignored otherwise.
+47. **`matchesGlob` (12.4)**: pinned as `*` any run (including none), `?` one character, whole-string match, case-sensitive.
+48. **`e.drawn()` (12.2)**: added as an Element member but, with `findingSeverity()`, `findings()`, `filterValue()`, `budget()` and host-metric `textWidth()`, rejected in the deterministic contexts of 12.5 (research note 3). `derive`, `deriveItem` and `budget` were added to those contexts; `budget` may read what viewer filters leave.
+49. **`ViewData.selected`**: added (viewer state), because the gartner handle example in 6.8 reads `self.view.selected`.
+50. **Handle on a `{cel}`-bound parameter without `write` (6.8)**: behaves as in 0.1 and a validator SHOULD warn, rather than not being offered, so no 0.1 handle changes meaning. Handle `refusals` is `{move: Reason}` and handle `label` stays LocalizedText, as the schema has them.
+51. **Simulation (9.6)**: `until` is evaluated once per step with `self` bound to the diagram; `step` counts from 1; the `state` attribute may be `transient: true` or `"viewer"`; a simulation is offered in read-only mode. The notice example uses plain strings (schema choice 61).
+52. **Viewpoint variants (3.5)**: a variant **MUST NOT** itself have variants.
+53. **Enum stored forms (4.5)**: an unknown stored form of a non-extensible enum is reported by `std.facets`.
+54. **`fixed` in a subtype (4.7)**: narrowing to `fixed` drops the inherited `default`.
+55. **Ties `even` (5.10)**: the allowed value that is an even multiple of the step from the rule's offset.
+56. **`yearMonth` axes (5.5)**: units finer than `month` and the LDML `y` letter are rejected by validators.
+57. **`createSource`/`createTarget` as CreateEnd**: written in 7.2 (they are Tool properties), though T053 names 7.3. The timeline example uses `position.x.startOf('day')` (12.4) rather than the research's undefined `startOfDay()`.
+58. **DropSpec `elsewhere`** default `create` (the schema's), so a tool without targets behaves as in 0.1.
+59. **Chrome (6.13)**: title, header, notices, filter controls, toggles, outside legends and the empty message are defined once as "chrome" (not elements, not zoomed). The built-in `unavailable` notice is raised by a parse failure of the primary file only.
+60. **Transactions (14.4)**: viewer-state changes and simulation steps are stated not to be transactions.
+61. **Graceful degradation (15.2)**: one sentence per 0.2 feature group; a specification whose budgets gate edits SHOULD require `limits.budgets`.
+62. **Changes from 0.1**: the contract's "Research" column became "Section" (research files are feature artefacts, not part of the specification); row 2 names the full order of 8.4 (notation refusals, edit gate, six built-ins, declared rules); a sentence says that optional additions are not listed.
+63. **Appendix B.9**: a new "Built-in constraints" table (T083 names built-ins among the catalogues; B had no such section), in the order of 8.7 with a "Since" column.
+64. **Appendix A**: new `$defs` are in bold in the A.2 table and counted (170, 35 new).
+65. **Appendix D.2**: renamed "Open questions"; question 3 marked answered (9.6), 7 and 8 partly answered, and 9 (layouts) added as the next open question.
+66. **Table of contents**: unchanged, since it lists top-level sections only and 0.2 added only subsections (3.2.1, 4.11, 6.13.1, 9.6, 13.1.1, B.9).
+67. **B.7**: `yearMonth` gets the widget `month`, which was also added to the widget list of 7.5.
