@@ -2,7 +2,7 @@
   "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
   "disl": "0.1",
   "language": {
-    "id": "net.etalii.adp.c4.systemlandscape",
+    "id": "net.etalii.adp.c4.system-landscape",
     "version": "0.1.0",
     "label": "C4 system landscape diagram",
     "license": "Apache-2.0",
@@ -2159,7 +2159,7 @@
     "doc": "Every view is laid out by ADP. A position dragged on the canvas is kept for that view and replaces the computed one, except in a view that declares `autoLayout`, where the DSL wins."
   },
   "persistence": {
-    "format": "plugin:structurizrDsl",
+    "format": "plugin:net.etalii.adp.c4.structurizrDsl",
     "encoding": "utf-8",
     "files": {
       "mode": "split",
@@ -2205,7 +2205,7 @@
     }
   },
   "plugins": {
-    "structurizrDsl": {
+    "net.etalii.adp.c4.structurizrDsl": {
       "version": "^0.1.0",
       "provides": [
         "persistenceFormat",

@@ -24,7 +24,7 @@ The research behind the drawing rules (requirements, "How SHACL shapes are visua
 
 ## 2. The file and the shared engine
 
-The tool is one of four readings over one engine in `src/diagrams/rdf/`: the anchor `w3c/rdf` and the siblings `w3c/owl`, `w3c/skos` and `w3c/shacl` (`Diagram.cs:98-104`). The store, the Turtle and N-Triples parser, the line-level document, the writer with its splice discipline and byte-identical round trips, the term-input resolver, the family rename, the drawn-element budget and the reloader are the family's and are described in [w3c-rdf.md](w3c-rdf.md) beside this file. The `.dis` names all of it as the plugin `etalii.rdf-turtle`, the same declaration the sibling specifications carry. SHACL owns only a projection, a layout, a toolbox, context cases, a property grid, a validator, two writer operations and seven commands (`Shacl/ServiceCollection.AddShacl.cs:18-55`).
+The tool is one of four readings over one engine in `src/diagrams/rdf/`: the anchor `w3c/rdf` and the siblings `w3c/owl`, `w3c/skos` and `w3c/shacl` (`Diagram.cs:98-104`). The store, the Turtle and N-Triples parser, the line-level document, the writer with its splice discipline and byte-identical round trips, the term-input resolver, the family rename, the drawn-element budget and the reloader are the family's and are described in [w3c-rdf.md](w3c-rdf.md) beside this file. The `.dis` names all of it as the plugin `net.etalii.adp.w3c.turtle`, the same declaration the sibling specifications carry. SHACL owns only a projection, a layout, a toolbox, context cases, a property grid, a validator, two writer operations and seven commands (`Shacl/ServiceCollection.AddShacl.cs:18-55`).
 
 **Routing.** The type declares `.ttl` with `.nt` as its alternate extension and `SharedExtension: true` (`Diagram.cs:84-86`): it never claims a bare body, which the anchor keeps, so a file becomes a shapes diagram only through Add. Add offers it when the body passes a textual marker test, "not whether the file is valid SHACL" (`Diagram.cs:87-93`):
 
@@ -147,7 +147,7 @@ A class is claimed by a drawn card through `sh:targetClass` or its implicit targ
 
 ## 5. Layout
 
-DISL names a layout; it does not define one. The `.dis` names `plugin:etalii.shacl-grid` with a built-in `grid` fallback. DISL's `grid` has no rule for which card goes where, and this layout's order is the discovery order of section 4, so the plugin is what carries it. What it does (`Shacl/ShaclLayout.cs:11-43`):
+DISL names a layout; it does not define one. The `.dis` names `plugin:net.etalii.adp.w3c.shaclGrid` with a built-in `grid` fallback. DISL's `grid` has no rule for which card goes where, and this layout's order is the discovery order of section 4, so the plugin is what carries it. What it does (`Shacl/ShaclLayout.cs:11-43`):
 
 - Pure and deterministic, no physics, no randomness.
 - Cards in projection order fill three columns left to right: card `i` sits at `x = (i mod 3) × 320`.
@@ -204,7 +204,7 @@ Deactivate, Reactivate, Remove shape and Remove target run at once, with no dial
 
 A prefix is never invented; the family's "Declare prefix…" entry is offered on a placement beneath the SHACL one (`RdfContextActionProvider.cs:146-167`). A commit that finds no shape IRI answers "'{actionId}' does not apply to this selection." (`RdfContextActionProvider.cs:376`).
 
-**Writes.** Every command runs through the family's `RdfEdits.Run`: load, refuse an unparseable file with "This file does not parse, so nothing can be edited until it is fixed.", snapshot, run one writer operation (a refusal leaves the document untouched), save; the inverse restores the whole document's bytes and redo re-runs the command (`Commands/RdfEdits.cs:5-43`). Commands are keyed by shape IRI, never by element id. The `.dis` names each write as an `etalii.rdf-turtle` plugin action; `appendPropertyShape` and `removeShapeWithSubtrees` are SHACL's own operations in `Shacl/ShaclWriter.cs`, the rest are the family writer's.
+**Writes.** Every command runs through the family's `RdfEdits.Run`: load, refuse an unparseable file with "This file does not parse, so nothing can be edited until it is fixed.", snapshot, run one writer operation (a refusal leaves the document untouched), save; the inverse restores the whole document's bytes and redo re-runs the command (`Commands/RdfEdits.cs:5-43`). Commands are keyed by shape IRI, never by element id. The `.dis` names each write as an `net.etalii.adp.w3c.turtle` plugin action; `appendPropertyShape` and `removeShapeWithSubtrees` are SHACL's own operations in `Shacl/ShaclWriter.cs`, the rest are the family writer's.
 
 | Command | What it writes | Where |
 | --- | --- | --- |

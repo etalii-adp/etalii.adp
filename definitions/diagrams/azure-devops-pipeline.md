@@ -12,7 +12,7 @@ Sources: `backend/Diagram.cs`; the Notion "Tools" row "Azure DevOps pipeline" (K
 
 ## 1. The file is an Azure Pipelines YAML file, not a DID definition
 
-DISL assumes the diagram is stored as a DID definition (or in a format a persistence plugin provides). Here the document is the pipeline file itself, so everything about reading and writing it lives in the `azure-devops.pipeline` plugin the `.dis` declares as `persistence.format`.
+DISL assumes the diagram is stored as a DID definition (or in a format a persistence plugin provides). Here the document is the pipeline file itself, so everything about reading and writing it lives in the `net.etalii.adp.azure-devops.pipelineYaml` plugin the `.dis` declares as `persistence.format`.
 
 - **Registration.** The extension is `.yml`, shared with every other YAML file (`SharedExtension: true`). A `.yml` becomes this diagram only when the user registers it, which writes an `.adp` file beside it naming `azure-devops/pipeline`. DISL has one `fileExtension` and no notion of a shared extension or an opt-in marker file; the `.dis` records them as `x-adp-origin` and `x-adp-shared-extension`. (`backend/Diagram.cs`)
 - **`.yaml` is not registered.** Archived requirement 2.1 named `.yml` and `.yaml`; the code declares only `.yml`. A discrepancy between spec and code, not a DISL gap.

@@ -821,7 +821,7 @@
         "shortcut": "Space",
         "for": "Stage",
         "enabled": "self.jobCount > 0",
-        "plugin": { "name": "azure-devops.pipeline", "args": { "action": "toggleExpansion" } },
+        "plugin": { "name": "net.etalii.adp.azure-devops.pipelineYaml", "args": { "action": "toggleExpansion" } },
         "doc": "Label reads Hide jobs while open. View state only: not written, not on the undo history."
       },
       "toggleSteps": {
@@ -829,7 +829,7 @@
         "shortcut": "Space",
         "for": "JobBase",
         "enabled": "self.children.size() > 0",
-        "plugin": { "name": "azure-devops.pipeline", "args": { "action": "toggleExpansion" } },
+        "plugin": { "name": "net.etalii.adp.azure-devops.pipelineYaml", "args": { "action": "toggleExpansion" } },
         "doc": "Label reads Hide steps while open. View state only: not written, not on the undo history."
       },
       "moveUp": {
@@ -837,7 +837,7 @@
         "shortcut": "Alt+Up",
         "for": "Step",
         "enabled": "self.editable && self.parent.children.indexOf(self) > 0 && !self.parent.children.exists(s, has(s.template))",
-        "plugin": { "name": "azure-devops.pipeline", "args": { "action": "moveStep", "by": -1 } },
+        "plugin": { "name": "net.etalii.adp.azure-devops.pipelineYaml", "args": { "action": "moveStep", "by": -1 } },
         "doc": "Refused when any of the job's steps come from a template: \"Some of this job's steps come from a template, so their order cannot be changed here.\""
       },
       "moveDown": {
@@ -845,7 +845,7 @@
         "shortcut": "Alt+Down",
         "for": "Step",
         "enabled": "self.editable && self.parent.children.indexOf(self) < self.parent.children.size() - 1 && !self.parent.children.exists(s, has(s.template))",
-        "plugin": { "name": "azure-devops.pipeline", "args": { "action": "moveStep", "by": 1 } }
+        "plugin": { "name": "net.etalii.adp.azure-devops.pipelineYaml", "args": { "action": "moveStep", "by": 1 } }
       }
     },
     "deletion": {
@@ -888,7 +888,7 @@
   },
 
   "persistence": {
-    "format": "plugin:azure-devops.pipeline",
+    "format": "plugin:net.etalii.adp.azure-devops.pipelineYaml",
     "encoding": "utf-8",
     "mediaType": "application/yaml",
     "omitDefaults": true,
@@ -902,7 +902,7 @@
   },
 
   "plugins": {
-    "azure-devops.pipeline": {
+    "net.etalii.adp.azure-devops.pipelineYaml": {
       "version": "^0.1",
       "provides": ["persistenceFormat", "action"],
       "required": true,

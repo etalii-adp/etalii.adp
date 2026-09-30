@@ -26,7 +26,7 @@ The research behind the drawing rules (requirements, "How RDF graphs are visuali
 
 ## 2. The file and the shared engine
 
-DISL's persistence layer describes a file a runtime writes in its own format. Here the model file is a foreign format other tools own, which DISL can only name as `format: "plugin:etalii.rdf-turtle"`. What that engine does:
+DISL's persistence layer describes a file a runtime writes in its own format. Here the model file is a foreign format other tools own, which DISL can only name as `format: "plugin:net.etalii.adp.w3c.turtle"`. What that engine does:
 
 **The parser** (`backend/RdfTokenizer.cs`, `backend/RdfParser.cs`) is hand-written recursive descent, "because the splice discipline needs spans … and no available library reports positions at that grain" (`backend/RdfParser.cs:13-18`). It reads:
 
@@ -126,7 +126,7 @@ Titles, badges and edge labels use this chain; row annotations and dialog pre-fi
 
 ## 5. Layout
 
-DISL names a layout; it does not define one. The `.dis` names `plugin:etalii.rdf-type-bands` with the built-in `lanes` as fallback, keyed by the derived `band` attribute. What the plugin does (`backend/RdfLayout.cs`; R3.3, R4.4):
+DISL names a layout; it does not define one. The `.dis` names `plugin:net.etalii.adp.w3c.rdfTypeBands` with the built-in `lanes` as fallback, keyed by the derived `band` attribute. What the plugin does (`backend/RdfLayout.cs`; R3.3, R4.4):
 
 - Pure and deterministic, no physics and no randomness: the same file always opens the same way (`backend/RdfLayout.cs:5-10`).
 - Cards are grouped in bands by their **first** type badge's display text; untyped cards share the band keyed "" (`backend/RdfLayout.cs:36`). Blank-node cards are banded the same way.

@@ -19,7 +19,7 @@ DISL assumes the diagram is stored as a DID definition. This diagram has no DID 
 
 - **The subject is a folder.** A small registration file (`.adp`) inside the chart root, beside `Chart.yaml`, makes that folder a diagram. Its first line is the type's MIME-style origin `helm/chart`. There is no document extension, no `body:` header and no sibling body file (`Diagram.cs`: `Subject: DiagramSubject.Folder`, no extension; R2.1, R2.2). That is why the `.dis` declares no `language.fileExtension`.
 - **Add flow.** Adding a diagram on a folder that contains `Chart.yaml` suggests `helm/chart`, as a suggestion and never an automatic claim; Add also works on a folder without one, which then shows the not-a-chart state (R2.3). Creating the registration writes only the `.adp`; the diagram never scaffolds a chart, which is `helm create`'s job (R2.4).
-- **The model is read, never written.** The whole model is produced by reading the folder (the `adp.helm.chartFolder` plugin in the `.dis`). Nothing in the chart folder is ever created, modified or deleted: the module has no writer for chart content at all (R7.1). `ZeroWrites.Tests.cs` pins it by opening, browsing, validating and closing a fixture chart and comparing every file byte for byte, including that no file was created or deleted.
+- **The model is read, never written.** The whole model is produced by reading the folder (the `net.etalii.adp.helm.chartFolder` plugin in the `.dis`). Nothing in the chart folder is ever created, modified or deleted: the module has no writer for chart content at all (R7.1). `ZeroWrites.Tests.cs` pins it by opening, browsing, validating and closing a fixture chart and comparing every file byte for byte, including that no file was created or deleted.
 - **Live update.** Every file under the chart root is watched. A burst of changes (for example `helm dependency build` rewriting `charts/`) settles for 400 ms and becomes one re-read of the whole chart (`HelmChartStore.DefaultSettleDelay`, `HelmWatchedFolder`). Open diagrams update without a refresh (R1.4). The session compares the new model with the last delivery and sends removes and adds for what differs; nothing folds, so no group or ungroup change is ever sent (`HelmElementMapper`).
 - **Whole diagram at once.** A chart is bounded (dozens of nodes), so every element is delivered when the diagram opens and a viewport change brings nothing new (`HelmSession`, design "Whole diagram at open").
 
@@ -79,7 +79,7 @@ layout:
 
 ## Layout
 
-The `.dis` names the `adp.helm.anatomyBands` plugin with `layered` as fallback. The plugin is `HelmLayout.cs`, which is pure and deterministic:
+The `.dis` names the `net.etalii.adp.helm.anatomyBands` plugin with `layered` as fallback. The plugin is `HelmLayout.cs`, which is pure and deterministic:
 
 - Five columns, left to right, starting at (40, 40), with 60 between columns and 24 between rows. A column is as wide as its widest node; an empty column takes no room.
   1. Metadata: chart, lock, schema, crds, in that order.

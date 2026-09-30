@@ -23,8 +23,8 @@ Everything here was read from these, on `develop` as of 2026-09-30:
 | `PackageNode` (`PackageId`, `Versions`, `HasVersionConflict`, `Description`, `DependentProjectCount`, `IsAmbient`) | node type `Package` (`name`, derived `versions`, `hasVersionConflict`, `dependentProjectCount`, `isAmbient`, read `description`) |
 | `DependsOnEdge` with `Kind = Project` / `Package` | relation types `ProjectReference` / `PackageReference` |
 | `PackageReferenceReading.Version` (per declaration) | attribute `version` on `PackageReference` |
-| The readers, the store and the watcher | the required plugin `dotnet.solution` as persistence format |
-| `DotNetDependencyGraphLayout` | the optional layout plugin `dotnet.dependencyLayers`, falling back to `layered` |
+| The readers, the store and the watcher | the required plugin `net.etalii.adp.dotnet.solution` as persistence format |
+| `DotNetDependencyGraphLayout` | the optional layout plugin `net.etalii.adp.dotnet.dependencyLayers`, falling back to `layered` |
 | `DotNetContextPropertyProvider` | the forms `projectInspector` and `packageInspector` |
 | The canvas' activate gesture and `revealPath` | operation `revealProjectFile`, the double-click of a project |
 | `DotNetDependencyGraphSession.Refresh` | operation `refreshFromSolution` |
@@ -60,7 +60,7 @@ layout:
 
 ## Reading the model
 
-What the `dotnet.solution` plugin does, which DISL has no vocabulary for. Nothing in this section writes a file.
+What the `net.etalii.adp.dotnet.solution` plugin does, which DISL has no vocabulary for. Nothing in this section writes a file.
 
 ### The solution
 
@@ -110,7 +110,7 @@ A stored position is bound to an id, so the id scheme is the module's load-beari
 
 ## Layout
 
-The `dotnet.dependencyLayers` plugin computes, for every element without a stored position (`DotNetDependencyGraphLayout.Compute`):
+The `net.etalii.adp.dotnet.dependencyLayers` plugin computes, for every element without a stored position (`DotNetDependencyGraphLayout.Compute`):
 
 1. **Depth.** Over `ProjectReference` edges only, a project that references no other project has depth 0; any other project has one more than the deepest project it references. A cycle cannot hang it: a node reached again while being visited counts as depth 0. (MSBuild refuses cyclic references, but the files may be wrong.)
 2. **Layers.** Layers in ascending depth, left to right. Inside a layer, projects are ordered by name (case-insensitive) and stacked 90 apart from y = 0; after twelve, the layer **wraps** into a further column 260 to the right (the 13th project starts column two at the top). Each layer starts 320 to the right of where the previous one began, plus 260 per extra column the previous layer used, so a wrapped layer never draws over the next.

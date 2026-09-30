@@ -798,16 +798,16 @@
   },
 
   "persistence": {
-    "format": "plugin:etalii.adp.owm",
+    "format": "plugin:net.etalii.adp.wardley.owm",
     "encoding": "utf-8",
     "files": { "mode": "single", "model": "{name}.owm", "doc": "The `.owm` body only. A sidecar `{name}.identities.json` keeps element ids stable across edits; see `wardley-map.md`." },
     "ids": { "strategy": "uuid-v4" },
     "view": { "store": ["viewport", "labelOffsets"] },
-    "doc": "The Online Wardley Maps text format, read and written by the `etalii.adp.owm` plugin. A document ADP did not change is written back byte for byte; an edit replaces only the text it changes; statements ADP does not model are kept as they are. The per-component label offset `label [dx, dy]` is kept as view data."
+    "doc": "The Online Wardley Maps text format, read and written by the `net.etalii.adp.wardley.owm` plugin. A document ADP did not change is written back byte for byte; an edit replaces only the text it changes; statements ADP does not model are kept as they are. The per-component label offset `label [dx, dy]` is kept as view data."
   },
 
   "plugins": {
-    "etalii.adp.owm": {
+    "net.etalii.adp.wardley.owm": {
       "version": "^0.1.0",
       "provides": ["persistenceFormat"],
       "required": true,

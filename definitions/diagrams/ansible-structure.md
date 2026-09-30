@@ -24,7 +24,7 @@ Sources read for this document, all on `develop` as of 2026-09-30:
 
 Every other diagram type reads a document. This one reads a **folder**, and it is **read-only with respect to that folder** (Requirement 1.1). Three consequences shape everything below:
 
-1. **There is no diagram document.** The `.adp` registration is the whole of what ADP contributes. The model is derived from Ansible's files every time they change, so DISL's persistence layer (which describes how a drawn diagram is written as DID) has nothing to write. The `.dis` declares `persistence.format: "plugin:ansible-folder"` and a required plugin to say so; this file says what that plugin does.
+1. **There is no diagram document.** The `.adp` registration is the whole of what ADP contributes. The model is derived from Ansible's files every time they change, so DISL's persistence layer (which describes how a drawn diagram is written as DID) has nothing to write. The `.dis` declares `persistence.format: "plugin:net.etalii.adp.ansible.folder"` and a required plugin to say so; this file says what that plugin does.
 2. **The only authored data is a node's position.** It is stored in the `layout:` block of the `.adp`, never inside the registered folder (refinements Requirements 1 and 2).
 3. **Nothing is created, connected, renamed or deleted from the diagram.** The `.dis` expresses this as an empty toolbox, `deletable`/`connectable: false` notations, read-only attributes and five `prevent` gesture constraints (`noCreate`, `noDelete`, `noConnect`, `noChange`, `noReparent`). The standalone module expresses it by registering no document factory, no toolbox provider, no context action provider and no command handlers (`ServiceCollection.AddAnsibleStructure.cs`).
 
@@ -37,7 +37,7 @@ Every other diagram type reads a document. This one reads a **folder**, and it i
 
 ## 3. Reading the folder
 
-All of this is `AnsibleProjectReader.cs` and `AnsibleYaml.cs`. It is the behaviour of the `ansible-folder` plugin's persistence and import extension points.
+All of this is `AnsibleProjectReader.cs` and `AnsibleYaml.cs`. It is the behaviour of the `net.etalii.adp.ansible.folder` plugin's persistence and import extension points.
 
 **Recognition is by Ansible's conventions, never by a list ADP invented** (Requirement 3.1). Anything not recognised is ignored without complaint (Requirement 1.3): a `Makefile`, `docs/`, scripts, and a YAML file whose top level is a mapping.
 
@@ -122,7 +122,7 @@ All of this is `AnsibleProjectReader.cs` and `AnsibleYaml.cs`. It is the behavio
 
 ## 5. Layout
 
-`AnsibleLayout.cs` with `AnsibleMetrics.cs`. Pure and deterministic: the same tree gives the same picture for everyone (Requirement 6.1). This is the `ansible-folder` plugin's `layout` extension point; the `.dis` falls back to `layered`, right, which keeps the reading direction but not the columns or the band.
+`AnsibleLayout.cs` with `AnsibleMetrics.cs`. Pure and deterministic: the same tree gives the same picture for everyone (Requirement 6.1). This is the `net.etalii.adp.ansible.folder` plugin's `layout` extension point; the `.dis` falls back to `layered`, right, which keeps the reading direction but not the columns or the band.
 
 **Metrics** (canvas units, CSS pixels): font size 14, horizontal padding 12 each side, node height 32 (every node is one line), minimum width 72, rank gap 96, row gap 24, band gap 96. A node's width is `max(72, text width of its name + 24)`, with the text width from the shared `TextMetric`. The backend computes each box and sends its width and height; the client draws the box it is given rather than re-measuring, the lesson of wide mindmap nodes overlapping.
 
@@ -141,7 +141,7 @@ All of this is `AnsibleProjectReader.cs` and `AnsibleYaml.cs`. It is the behavio
 
 ## 6. Where positions are stored
 
-`AnsibleSession.cs` and core `RegistrationLayout.cs`. This is the `ansible-folder` plugin's persistence of view data; DISL's `view.store: ["bounds"]` is the nearest statement, but only the top-left x and y are stored, never a size.
+`AnsibleSession.cs` and core `RegistrationLayout.cs`. This is the `net.etalii.adp.ansible.folder` plugin's persistence of view data; DISL's `view.store: ["bounds"]` is the nearest statement, but only the top-left x and y are stored, never a size.
 
 ```
 ansible/structure

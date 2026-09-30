@@ -32,7 +32,7 @@ The tool it describes is the standalone module `src/diagrams/gartner-hype-cycle-
 
 ## The document
 
-DISL's persistence layer describes JSON-like records keyed by id; the `.ghg` document is a hand-editable YAML file with its own shape and its own writing discipline. The specification names it `plugin:etalii.ghgYaml` and declares that plugin required. What the plugin does:
+DISL's persistence layer describes JSON-like records keyed by id; the `.ghg` document is a hand-editable YAML file with its own shape and its own writing discipline. The specification names it `plugin:net.etalii.adp.gartner.ghgYaml` and declares that plugin required. What the plugin does:
 
 **Shape.** (`backend/GhgParser.cs`, `backend/GhgWriter.cs`, the examples under `examples/`)
 
@@ -144,7 +144,7 @@ An influence end is not an anchor point of a node: it is a phase, an edge and a 
 
 ## Compact mode
 
-The specification's `compact` viewpoint states the static part: trends 24 canvas units per visible phase (96 for all four, twice a new true-time trend), even phases, nothing moved or resized, no ruler, and a row-packed layout declared as the plugin `etalii.rowPacked`. What the tool adds (`client/GhgCanvas.tsx`, `layout`; `.spec-workflow/specs/ghg-compact-mode/requirements.md`):
+The specification's `compact` viewpoint states the static part: trends 24 canvas units per visible phase (96 for all four, twice a new true-time trend), even phases, nothing moved or resized, no ruler, and a row-packed layout declared as the plugin `net.etalii.adp.gartner.rowPacked`. What the tool adds (`client/GhgCanvas.tsx`, `layout`; `.spec-workflow/specs/ghg-compact-mode/requirements.md`):
 
 - **A toggle, not a viewpoint picker.** A "Compact" switch below the legend. It is not remembered: every diagram opens in true-time.
 - **The layout.** Every element keeps its stored row; within a row, elements keep the order of their start dates and are placed as far left as they fit, 4 canvas units apart. An influence's target starts after the middle of its source, so causes read to the left of their effects (`followConnections`). Only trends take the compact width; triggers keep their circle and notes their box, and a note two rows tall keeps both rows clear.

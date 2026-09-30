@@ -37,7 +37,7 @@ DISL's `persistence.files` describes the files of one diagram, but not the stand
 
 ## 3. The `.mm` format
 
-`mindmap.dis` names the format `plugin:net.etalii.adp.freeplaneMm`, because DISL's persistence layer describes JSON-family DID definitions and a mind map is stored in Freeplane's own XML instead. The plugin's contract is this section.
+`mindmap.dis` names the format `plugin:net.etalii.adp.freeplane.mm`, because DISL's persistence layer describes JSON-family DID definitions and a mind map is stored in Freeplane's own XML instead. The plugin's contract is this section.
 
 ### 3.1 The principle: the XML is the model
 
@@ -99,7 +99,7 @@ Other 1.11-to-1.12 differences the writer tolerates by not rewriting anything: `
 
 ## 4. Layout
 
-`mindmap.dis` names `plugin:net.etalii.adp.mindmapLayout` with an `mrtree` fallback, sets `trigger: always` (users never place nodes) and passes the metrics as options. The algorithm is `MindmapLayout.Compute` (Req 5.1):
+`mindmap.dis` names `plugin:net.etalii.adp.freeplane.mindmapLayout` with an `mrtree` fallback, sets `trigger: always` (users never place nodes) and passes the metrics as options. The algorithm is `MindmapLayout.Compute` (Req 5.1):
 
 1. Measure every node (below). Place the central topic with its centre at the origin (0, 0).
 2. If the central topic is collapsed, stop.
@@ -139,7 +139,7 @@ IntelliJ lays out the same files with its own framework; after Peter's 2026-09-2
 - A collapsed branch is drawn as its node with the ⊕ glyph; its descendants disappear and the rest of the map re-lays out (`MindmapSession.OnFoldToggled`).
 - Revealing a node inside a collapsed branch - by a selection from elsewhere - expands its collapsed ancestors (`FoldedAncestorsOf`; Req 10.5).
 
-DISL has `collapsed` view data, but storing it would write fold state into the diagram; the `.dis` therefore stores no view data and models the file's `FOLDED` as a read-only `folded` attribute, with the toggle as a plugin operation (`net.etalii.adp.mindmapFold`).
+DISL has `collapsed` view data, but storing it would write fold state into the diagram; the `.dis` therefore stores no view data and models the file's `FOLDED` as a read-only `folded` attribute, with the toggle as a plugin operation (`net.etalii.adp.freeplane.mindmapFold`).
 
 ## 6. Notation details DISL does not pin down
 

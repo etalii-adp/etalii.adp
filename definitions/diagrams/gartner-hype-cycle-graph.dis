@@ -927,7 +927,7 @@
   "layout": {
     "algorithms": {
       "rowPacked": {
-        "algorithm": "etalii.rowPacked",
+        "algorithm": "plugin:net.etalii.adp.gartner.rowPacked",
         "direction": "right",
         "spacing": { "node": 4 },
         "options": { "keepRows": true, "keepTimeOrder": true, "followConnections": "Influence" },
@@ -998,13 +998,13 @@
   },
 
   "plugins": {
-    "etalii.ghgYaml": {
+    "net.etalii.adp.gartner.ghgYaml": {
       "version": "^1.0.0",
       "provides": [ "persistenceFormat" ],
       "required": true,
       "doc": "Reads and writes the `.ghg` YAML document by splicing lines, so an unchanged document stays byte-identical and unknown keys survive. See the companion document, *The document*."
     },
-    "etalii.rowPacked": {
+    "net.etalii.adp.gartner.rowPacked": {
       "version": "^1.0.0",
       "provides": [ "layout" ],
       "required": false,
@@ -1014,7 +1014,7 @@
   },
 
   "persistence": {
-    "format": "plugin:etalii.ghgYaml",
+    "format": "plugin:net.etalii.adp.gartner.ghgYaml",
     "encoding": "utf-8",
     "mediaType": "application/yaml",
     "files": { "mode": "single" },

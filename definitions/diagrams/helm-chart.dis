@@ -41,7 +41,7 @@
   },
 
   "metamodel": {
-    "doc": "Every node is a real file, folder or declaration of the chart. Nothing is created, renamed or deleted through the diagram: the model is read from the folder by the `adp.helm.chartFolder` plugin, and every relation is derived from what was read.",
+    "doc": "Every node is a real file, folder or declaration of the chart. Nothing is created, renamed or deleted through the diagram: the model is read from the folder by the `net.etalii.adp.helm.chartFolder` plugin, and every relation is derived from what was read.",
     "diagram": {
       "doc": "The registered chart folder. With nothing selected, these are the rows the property panel shows.",
       "attributes": {
@@ -663,7 +663,7 @@
         "doc": "Reveals the node's file or folder in the IDE host's project explorer, from where it opens in a text editor. A dependency has no artifact of its own, so it has nothing to reveal.",
         "for": ["ChartFile"],
         "enabled": "self.path != ''",
-        "plugin": { "name": "adp.ide.revealPath", "args": { "path": "self.path" } }
+        "plugin": { "name": "net.etalii.adp.ide.revealPath", "args": { "path": "self.path" } }
       }
     }
   },
@@ -672,7 +672,7 @@
     "doc": "Five bands left to right: metadata (chart, lock, schema, crds), the values stack (default first), templates (manifests, partials, notes, test hooks), dependencies, and what charts/ holds. A stored position wins over the computed one element by element.",
     "algorithms": {
       "anatomy": {
-        "algorithm": "plugin:adp.helm.anatomyBands",
+        "algorithm": "plugin:net.etalii.adp.helm.anatomyBands",
         "direction": "right",
         "spacing": { "node": 24, "layer": 60 },
         "doc": "Deterministic banded columns; see helm-chart.md for the ordering within each band."
@@ -687,7 +687,7 @@
 
   "persistence": {
     "doc": "The chart folder is the model and is never written. The only stored data is each element's authored position, in the registration beside the chart (see helm-chart.md for the exact format).",
-    "format": "plugin:adp.helm.chartFolder",
+    "format": "plugin:net.etalii.adp.helm.chartFolder",
     "files": { "mode": "single" },
     "ids": {
       "strategy": "natural",
@@ -702,20 +702,20 @@
   },
 
   "plugins": {
-    "adp.helm.chartFolder": {
+    "net.etalii.adp.helm.chartFolder": {
       "version": "^0.1.0",
       "provides": ["import", "persistenceFormat"],
       "required": true,
       "doc": "Reads the chart folder into the model (tolerantly, line-scanning templates, never writing) and stores authored positions in the registration. Behaviour in helm-chart.md, sections 'Reading the chart folder' and 'Persistence'."
     },
-    "adp.helm.anatomyBands": {
+    "net.etalii.adp.helm.anatomyBands": {
       "version": "^0.1.0",
       "provides": ["layout"],
       "required": false,
       "fallback": { "layout": "layered" },
       "doc": "The banded column layout; helm-chart.md, section 'Layout'."
     },
-    "adp.ide.revealPath": {
+    "net.etalii.adp.ide.revealPath": {
       "version": "^0.1.0",
       "provides": ["action"],
       "required": false,

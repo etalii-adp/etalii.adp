@@ -203,7 +203,7 @@
       "DependsOn": {
         "style": "dependency",
         "line": {
-          "routing": { "plugin": "adp.dependencyCurve" },
+          "routing": { "plugin": "net.etalii.adp.generic.dependencyCurve" },
           "startDirection": "right",
           "endDirection": "auto"
         },
@@ -357,7 +357,7 @@
 
   "persistence": {
     "doc": "Stored as a `.dgr` file: ADP's own YAML schema, owned outright by this type. The file is not a DID definition; the format plugin maps it to and from one (see dependency-graph.md).",
-    "format": "plugin:adp.dgr",
+    "format": "plugin:net.etalii.adp.generic.dgr",
     "encoding": "utf-8",
     "newline": "crlf",
     "finalNewline": true,
@@ -374,13 +374,13 @@
   },
 
   "plugins": {
-    "adp.dgr": {
+    "net.etalii.adp.generic.dgr": {
       "version": "^1.0.0",
       "provides": ["persistenceFormat"],
       "required": true,
       "doc": "Reads and writes the `.dgr` YAML document: the version marker `dependencies: 1`, an `elements` list and a `relations` list. Writes are line splices, so an unchanged file round-trips byte-identically and an edit changes only the lines it affects."
     },
-    "adp.dependencyCurve": {
+    "net.etalii.adp.generic.dependencyCurve": {
       "version": "^1.0.0",
       "provides": ["routing"],
       "required": false,

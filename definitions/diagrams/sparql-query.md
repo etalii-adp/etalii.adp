@@ -23,7 +23,7 @@ The research behind the drawing rules (requirements, "How SPARQL queries are vis
 
 ## 2. The query file: read, never written
 
-DISL's persistence layer describes a file a runtime writes. Here the model file is a foreign format that is only ever read, which DISL can only name as `format: "plugin:net.etalii.adp.sparql.query"`. What that reader does:
+DISL's persistence layer describes a file a runtime writes. Here the model file is a foreign format that is only ever read, which DISL can only name as `format: "plugin:net.etalii.adp.w3c.sparqlQuery"`. What that reader does:
 
 **Three tiers of the SPARQL 1.1 Query grammar** (`SparqlParser.cs` header; design "Backend: the document and its parser"). The parser is hand-written recursive descent, with keywords matched case-insensitively and variables written `?name` or `$name`; `#` starts a comment.
 
@@ -97,7 +97,7 @@ DISL's metamodel describes elements a user creates. Here every element is derive
 
 ## 5. Layout
 
-DISL names a layout; it does not define one. The `.dis` names `plugin:net.etalii.adp.sparql.scopeGrid` with a `grid` fallback. What the plugin does (`SparqlLayout.cs`; R5.5):
+DISL names a layout; it does not define one. The `.dis` names `plugin:net.etalii.adp.w3c.sparqlScopeGrid` with a `grid` fallback. What the plugin does (`SparqlLayout.cs`; R5.5):
 
 - Pure and deterministic, recursive bottom-up over the scope tree, no physics.
 - A node is 170 by 64. Items are placed in rows of three columns with 60 horizontally and 48 vertically between them; each row is as tall as its tallest item.

@@ -426,7 +426,7 @@
         "doc": "Inserts `@prefix p: <iri> .` after the last prefix declaration, else after the base, else at the top. The default (empty) prefix cannot be declared this way.",
         "params": { "declaration": { "type": "string", "label": "Declaration, e.g. ex: http://example.org/", "required": true } },
         "enabled": "!diagram.truncated",
-        "plugin": { "name": "etalii.rdf-turtle", "args": { "action": "addPrefix" } }
+        "plugin": { "name": "net.etalii.adp.w3c.turtle", "args": { "action": "addPrefix" } }
       },
       "rename": {
         "label": "Rename…",
@@ -436,7 +436,7 @@
         "enabled": "!diagram.truncated",
         "params": { "newName": { "type": "string", "label": "New IRI or prefixed name", "required": true } },
         "doc": "Rewrites every token naming the IRI - subject, predicate, object and datatype positions, prefixed or bracketed - as one command; a collision is refused before anything is written.",
-        "plugin": { "name": "etalii.rdf-turtle", "args": { "action": "renameTerm" } }
+        "plugin": { "name": "net.etalii.adp.w3c.turtle", "args": { "action": "renameTerm" } }
       }
     },
     "deletion": {
@@ -449,7 +449,7 @@
     "doc": "Pure and deterministic, no physics: the same file always opens the same way. Authored positions from the registration override computed ones element by element.",
     "algorithms": {
       "typeBands": {
-        "algorithm": "plugin:etalii.rdf-type-bands",
+        "algorithm": "plugin:net.etalii.adp.w3c.rdfTypeBands",
         "direction": "down",
         "spacing": { "node": 60, "layer": 160, "component": 80 },
         "options": { "columns": 4, "columnWidth": 280, "rowHeight": 160, "bandGap": 80 },
@@ -471,15 +471,15 @@
 
   "persistence": {
     "doc": "The RDF file itself is the model; ADP writes only minimal splices into it. Positions live in the `.adp` registration's `layout:` block, keyed by element id, and nothing of ADP's is ever written into the RDF.",
-    "format": "plugin:etalii.rdf-turtle",
+    "format": "plugin:net.etalii.adp.w3c.turtle",
     "files": { "mode": "split", "model": "{name}.ttl", "view": "{name}.adp" },
     "ids": { "strategy": "natural", "stable": false, "pattern": "^(res:.+|blank:[0-9]+|edge:.+|truncation)$" },
     "view": { "store": [ "bounds" ], "styleOverrides": "none" },
-    "import": [ { "format": "plugin:etalii.rdf-turtle", "label": "N-Triples (.nt)" } ]
+    "import": [ { "format": "plugin:net.etalii.adp.w3c.turtle", "label": "N-Triples (.nt)" } ]
   },
 
   "plugins": {
-    "etalii.rdf-turtle": {
+    "net.etalii.adp.w3c.turtle": {
       "version": "^0.1.0",
       "provides": [ "persistenceFormat", "import", "action", "celFunctions" ],
       "required": true,
@@ -495,7 +495,7 @@
         { "name": "rdfTermRefusal", "params": [ "string" ], "returns": "string", "cost": 10, "doc": "The sentence explaining why rdfResolveTerm returned ''." }
       ]
     },
-    "etalii.rdf-type-bands": {
+    "net.etalii.adp.w3c.rdfTypeBands": {
       "version": "^0.1.0",
       "provides": [ "layout" ],
       "required": false,

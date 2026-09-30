@@ -454,7 +454,7 @@
         "actions": [
           { "let": { "term": "rdfResolveTerm(p.term.trim())" } },
           { "if": "term == ''", "then": [ { "abort": { "message": "rdfTermRefusal(p.term.trim())" } } ] },
-          { "plugin": "etalii.rdf-turtle", "args": { "action": "'addTarget'", "shape": "self.iri", "predicate": "'http://www.w3.org/ns/shacl#targetClass'", "term": "term" } }
+          { "plugin": "net.etalii.adp.w3c.turtle", "args": { "action": "'addTarget'", "shape": "self.iri", "predicate": "'http://www.w3.org/ns/shacl#targetClass'", "term": "term" } }
         ]
       },
       "addTargetNode": {
@@ -468,7 +468,7 @@
         "actions": [
           { "let": { "term": "rdfResolveTerm(p.term.trim())" } },
           { "if": "term == ''", "then": [ { "abort": { "message": "rdfTermRefusal(p.term.trim())" } } ] },
-          { "plugin": "etalii.rdf-turtle", "args": { "action": "'addTarget'", "shape": "self.iri", "predicate": "'http://www.w3.org/ns/shacl#targetNode'", "term": "term" } }
+          { "plugin": "net.etalii.adp.w3c.turtle", "args": { "action": "'addTarget'", "shape": "self.iri", "predicate": "'http://www.w3.org/ns/shacl#targetNode'", "term": "term" } }
         ]
       },
       "addPropertyRow": {
@@ -482,7 +482,7 @@
         "actions": [
           { "let": { "path": "rdfResolveTerm(p.path.trim())" } },
           { "if": "path == ''", "then": [ { "abort": { "message": "rdfTermRefusal(p.path.trim())" } } ] },
-          { "plugin": "etalii.rdf-turtle", "args": { "action": "'appendPropertyShape'", "shape": "self.iri", "path": "path" } }
+          { "plugin": "net.etalii.adp.w3c.turtle", "args": { "action": "'appendPropertyShape'", "shape": "self.iri", "path": "path" } }
         ]
       },
       "deactivate": {
@@ -491,7 +491,7 @@
         "for": [ "Shape" ],
         "doc": "Adds `sh:deactivated \"true\"^^xsd:boolean`; a no-op when any `sh:deactivated` triple already exists.",
         "enabled": "!self.deactivated && !self.blank && !diagram.editsWithheld",
-        "actions": [ { "plugin": "etalii.rdf-turtle", "args": { "action": "'setDeactivated'", "shape": "self.iri", "deactivated": "true" } } ]
+        "actions": [ { "plugin": "net.etalii.adp.w3c.turtle", "args": { "action": "'setDeactivated'", "shape": "self.iri", "deactivated": "true" } } ]
       },
       "reactivate": {
         "label": "Reactivate shape",
@@ -499,7 +499,7 @@
         "for": [ "Shape" ],
         "doc": "Removes the first `sh:deactivated` triple, whatever its value; a no-op when there is none.",
         "enabled": "self.deactivated && !self.blank && !diagram.editsWithheld",
-        "actions": [ { "plugin": "etalii.rdf-turtle", "args": { "action": "'setDeactivated'", "shape": "self.iri", "deactivated": "false" } } ]
+        "actions": [ { "plugin": "net.etalii.adp.w3c.turtle", "args": { "action": "'setDeactivated'", "shape": "self.iri", "deactivated": "false" } } ]
       },
       "removeTarget": {
         "label": "Remove target",
@@ -511,7 +511,7 @@
         "enabled": "!self.blank && !diagram.editsWithheld && self.targets.exists(t, t.predicateIri != '' && t.termIri != '')",
         "actions": [
           { "if": "p.target.predicateIri == ''", "then": [ { "abort": { "message": "'This shape targets its own instances because the file states it to be a class, not through a target triple, so there is no declaration to remove. Remove the class typing instead, as text.'" } } ] },
-          { "plugin": "etalii.rdf-turtle", "args": { "action": "'removeTarget'", "shape": "self.iri", "predicate": "p.target.predicateIri", "term": "p.target.termIri" } }
+          { "plugin": "net.etalii.adp.w3c.turtle", "args": { "action": "'removeTarget'", "shape": "self.iri", "predicate": "p.target.predicateIri", "term": "p.target.termIri" } }
         ]
       },
       "removeShape": {
@@ -521,7 +521,7 @@
         "for": [ "Shape" ],
         "doc": "Removes the shape's own subject triples and every blank subtree reachable only from it, as one undo. Triples naming the shape as their object stay.",
         "enabled": "!self.blank && !diagram.editsWithheld",
-        "actions": [ { "plugin": "etalii.rdf-turtle", "args": { "action": "'removeShapeWithSubtrees'", "shape": "self.iri" } } ]
+        "actions": [ { "plugin": "net.etalii.adp.w3c.turtle", "args": { "action": "'removeShapeWithSubtrees'", "shape": "self.iri" } } ]
       },
       "rename": {
         "label": "Rename…",
@@ -531,7 +531,7 @@
         "enabled": "!self.blank && !diagram.editsWithheld",
         "params": { "newName": { "type": "string", "label": "New IRI or prefixed name", "required": true } },
         "doc": "The family rename: rewrites every occurrence of the IRI - subject, predicate and object positions, prefixed or full - as one command; a collision is refused before anything is written.",
-        "plugin": { "name": "etalii.rdf-turtle", "args": { "action": "renameTerm" } }
+        "plugin": { "name": "net.etalii.adp.w3c.turtle", "args": { "action": "renameTerm" } }
       }
     },
     "deletion": {
@@ -544,7 +544,7 @@
     "doc": "Pure and deterministic, no physics: the same file always opens the same way. Authored positions from the registration override computed ones card by card; anonymous cards always take their computed place.",
     "algorithms": {
       "shapeGrid": {
-        "algorithm": "plugin:etalii.shacl-grid",
+        "algorithm": "plugin:net.etalii.adp.w3c.shaclGrid",
         "spacing": { "node": 60, "layer": 48 },
         "options": { "columns": 3, "columnPitch": 320, "headerHeight": 64, "lineHeight": 22, "rowGap": 48 },
         "doc": "Cards in discovery order fill three columns left to right; each grid row is as tall as its tallest card."
@@ -563,15 +563,15 @@
 
   "persistence": {
     "doc": "The shapes graph's own Turtle or N-Triples file is the model; ADP writes only minimal splices into it. Positions live in the `.adp` registration's `layout:` block, keyed by element id, and nothing of ADP's is ever written into the RDF.",
-    "format": "plugin:etalii.rdf-turtle",
+    "format": "plugin:net.etalii.adp.w3c.turtle",
     "files": { "mode": "split", "model": "{name}.ttl", "view": "{name}.adp" },
     "ids": { "strategy": "natural", "stable": false, "pattern": "^(res:.+|blank:[0-9]+|shacl-edge:.+)$" },
     "view": { "store": [ "bounds" ], "styleOverrides": "none" },
-    "import": [ { "format": "plugin:etalii.rdf-turtle", "label": "N-Triples (.nt)" } ]
+    "import": [ { "format": "plugin:net.etalii.adp.w3c.turtle", "label": "N-Triples (.nt)" } ]
   },
 
   "plugins": {
-    "etalii.rdf-turtle": {
+    "net.etalii.adp.w3c.turtle": {
       "version": "^0.1.0",
       "provides": [ "persistenceFormat", "import", "action", "celFunctions" ],
       "required": true,
@@ -587,7 +587,7 @@
         {"name": "rdfTermRefusal", "params": ["string"], "returns": "string", "cost": 10, "doc": "The sentence explaining why rdfResolveTerm returned ''."}
       ]
     },
-    "etalii.shacl-grid": {
+    "net.etalii.adp.w3c.shaclGrid": {
       "version": "^1.0.0",
       "provides": [ "layout" ],
       "required": false,

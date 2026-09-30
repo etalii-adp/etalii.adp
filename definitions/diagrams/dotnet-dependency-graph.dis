@@ -311,7 +311,7 @@
         "icon": "mdi:file-find-outline",
         "for": ["Project"],
         "doc": "Selects the project file in the workspace explorer. A package is not a file in the workspace, so it reveals nothing.",
-        "plugin": { "name": "dotnet.solution", "args": { "action": "revealProjectFile" } }
+        "plugin": { "name": "net.etalii.adp.dotnet.solution", "args": { "action": "revealProjectFile" } }
       },
       "refreshFromSolution": {
         "label": "Refresh from the solution",
@@ -319,7 +319,7 @@
         "for": "diagram",
         "doc": { "summary": "Reads the solution, its projects, the central package versions and the local NuGet cache again.",
                  "rationale": "The diagram refreshes itself when a file it was derived from changes, but a `dotnet restore` writes into the machine's NuGet cache, which is not watched; this is how a description that has just become available appears." },
-        "plugin": { "name": "dotnet.solution", "args": { "action": "reload" } }
+        "plugin": { "name": "net.etalii.adp.dotnet.solution", "args": { "action": "reload" } }
       },
       "showAmbientPackages": {
         "label": "Show them",
@@ -347,7 +347,7 @@
     "doc": "Projects layered by dependency depth, packages banded beyond them. Positions a user drags are stored and win element by element; everything else follows the computed layout on every render.",
     "algorithms": {
       "dependencyDepth": {
-        "algorithm": "plugin:dotnet.dependencyLayers",
+        "algorithm": "plugin:net.etalii.adp.dotnet.dependencyLayers",
         "direction": "right",
         "spacing": { "layer": 320, "node": 90 },
         "edgeRouting": "curved",
@@ -362,14 +362,14 @@
 
   "persistence": {
     "doc": "The model is not stored by this diagram type: it is read from the solution each time. The registration (`.adp`) holds the binding and the positions the user dragged, nothing else. No `.sln`, `.slnx` or project file is ever written.",
-    "format": "plugin:dotnet.solution",
+    "format": "plugin:net.etalii.adp.dotnet.solution",
     "files": { "mode": "split", "model": "{name}.slnx", "view": "{name}.adp" },
     "ids": { "strategy": "natural", "prefix": { "Project": "project:", "Package": "package:" }, "stable": true },
     "view": { "store": ["bounds"], "styleOverrides": "none" }
   },
 
   "plugins": {
-    "dotnet.solution": {
+    "net.etalii.adp.dotnet.solution": {
       "version": "^0.1.0",
       "provides": ["persistenceFormat", "action"],
       "required": true,
@@ -378,7 +378,7 @@
       },
       "doc": "Reads a `.sln` or `.slnx`, the project files it names, the `Directory.Packages.props` files above them and the local NuGet cache into the model, reports what did not resolve as problems, watches those files, and never writes any of them."
     },
-    "dotnet.dependencyLayers": {
+    "net.etalii.adp.dotnet.dependencyLayers": {
       "version": "^0.1.0",
       "provides": ["layout"],
       "required": false,

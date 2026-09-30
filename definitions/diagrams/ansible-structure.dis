@@ -649,7 +649,7 @@
         "label": "Reveal file",
         "for": ["Playbook", "Play", "Role", "TaskFile", "Inventory", "VariableFolder"],
         "shortcut": "Enter",
-        "plugin": { "name": "ansible-folder", "args": { "action": "reveal" } },
+        "plugin": { "name": "net.etalii.adp.ansible.folder", "args": { "action": "reveal" } },
         "doc": "The jump from a node to its file or folder in the explorer, which is most of the diagram's value. Also bound to double-click, and to Space."
       }
     },
@@ -660,7 +660,7 @@
   "layout": {
     "algorithms": {
       "ranks": {
-        "algorithm": "plugin:ansible-folder",
+        "algorithm": "plugin:net.etalii.adp.ansible.folder",
         "direction": "right",
         "spacing": { "node": 24, "layer": 96 },
         "edgeRouting": "bezier",
@@ -672,7 +672,7 @@
         "direction": "right",
         "spacing": { "node": 24, "layer": 96 },
         "edgeRouting": "bezier",
-        "doc": "What a runtime without the ansible-folder plugin uses. It keeps the reading direction, not the exact columns or the band."
+        "doc": "What a runtime without the net.etalii.adp.ansible.folder plugin uses. It keeps the reading direction, not the exact columns or the band."
       }
     },
     "default": "ranks",
@@ -683,7 +683,7 @@
   },
 
   "persistence": {
-    "format": "plugin:ansible-folder",
+    "format": "plugin:net.etalii.adp.ansible.folder",
     "encoding": "utf-8",
     "ids": {
       "strategy": "natural",
@@ -701,11 +701,11 @@
     },
     "view": { "store": ["bounds"], "styleOverrides": "none" },
     "metadata": [],
-    "doc": "There is no diagram document. The model is read from the registered folder by the ansible-folder plugin every time it changes; the only stored data is the position of each node a user dragged, in the layout: block of the .adp registration beside the folder. Nothing inside the folder is ever written."
+    "doc": "There is no diagram document. The model is read from the registered folder by the net.etalii.adp.ansible.folder plugin every time it changes; the only stored data is the position of each node a user dragged, in the layout: block of the .adp registration beside the folder. Nothing inside the folder is ever written."
   },
 
   "plugins": {
-    "ansible-folder": {
+    "net.etalii.adp.ansible.folder": {
       "version": "^0.1.0",
       "provides": ["persistenceFormat", "import", "layout", "action"],
       "required": true,

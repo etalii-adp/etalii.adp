@@ -724,7 +724,7 @@
         "doc": "Writes exactly one triple, `<iri> a owl:ObjectProperty`, as one undo. With no domain or range it draws between two Thing anchors of its own.",
         "params": { "iri": { "type": "string", "label": "IRI or prefixed name", "required": true } },
         "enabled": "diagram.usable && !diagram.truncated",
-        "plugin": { "name": "etalii.rdf-turtle", "args": { "action": "declareTerm", "type": "http://www.w3.org/2002/07/owl#ObjectProperty" } }
+        "plugin": { "name": "net.etalii.adp.w3c.turtle", "args": { "action": "declareTerm", "type": "http://www.w3.org/2002/07/owl#ObjectProperty" } }
       },
       "addDatatypeProperty": {
         "label": "Add datatype property…",
@@ -733,7 +733,7 @@
         "doc": "Writes exactly one triple, `<iri> a owl:DatatypeProperty`, as one undo. With no domain or range it draws from a Thing anchor to a Literal anchor.",
         "params": { "iri": { "type": "string", "label": "IRI or prefixed name", "required": true } },
         "enabled": "diagram.usable && !diagram.truncated",
-        "plugin": { "name": "etalii.rdf-turtle", "args": { "action": "declareTerm", "type": "http://www.w3.org/2002/07/owl#DatatypeProperty" } }
+        "plugin": { "name": "net.etalii.adp.w3c.turtle", "args": { "action": "declareTerm", "type": "http://www.w3.org/2002/07/owl#DatatypeProperty" } }
       },
       "rename": {
         "label": "Rename…",
@@ -743,7 +743,7 @@
         "enabled": "diagram.usable && !diagram.truncated",
         "params": { "newName": { "type": "string", "label": "New IRI or prefixed name", "required": true } },
         "doc": "Rewrites every occurrence of the IRI - subject, predicate and object positions, prefixed or full - as one command; a target that already names something is refused before anything is written.",
-        "plugin": { "name": "etalii.rdf-turtle", "args": { "action": "renameTerm" } }
+        "plugin": { "name": "net.etalii.adp.w3c.turtle", "args": { "action": "renameTerm" } }
       }
     },
     "deletion": {
@@ -756,7 +756,7 @@
     "doc": "Pure and deterministic, no physics: the same file always opens the same way. Authored positions from the registration override computed ones for named terms only; expressions and anchors always take their computed place.",
     "algorithms": {
       "depthColumns": {
-        "algorithm": "plugin:etalii.owl-depth-columns",
+        "algorithm": "plugin:net.etalii.adp.w3c.owlDepthColumns",
         "direction": "right",
         "spacing": { "node": 60, "layer": 90, "component": 140 },
         "options": {
@@ -780,15 +780,15 @@
 
   "persistence": {
     "doc": "The ontology's own Turtle or N-Triples file is the model; ADP writes only minimal splices into it. Positions live in the `.adp` registration's `layout:` block, keyed by element id, and nothing of ADP's is ever written into the RDF.",
-    "format": "plugin:etalii.rdf-turtle",
+    "format": "plugin:net.etalii.adp.w3c.turtle",
     "files": { "mode": "split", "model": "{name}.ttl", "view": "{name}.adp" },
     "ids": { "strategy": "natural", "stable": false, "pattern": "^(res:.+|ind:.+|expr:.+|thing:.+\\|(domain|range)|dt:.+|edge:.+)$" },
     "view": { "store": [ "bounds" ], "styleOverrides": "none" },
-    "import": [ { "format": "plugin:etalii.rdf-turtle", "label": "N-Triples (.nt)" } ]
+    "import": [ { "format": "plugin:net.etalii.adp.w3c.turtle", "label": "N-Triples (.nt)" } ]
   },
 
   "plugins": {
-    "etalii.rdf-turtle": {
+    "net.etalii.adp.w3c.turtle": {
       "version": "^0.1.0",
       "provides": [ "persistenceFormat", "import", "action", "celFunctions" ],
       "required": true,
@@ -804,7 +804,7 @@
         {"name": "rdfTermRefusal", "params": ["string"], "returns": "string", "cost": 10, "doc": "The sentence explaining why rdfResolveTerm returned ''."}
       ]
     },
-    "etalii.owl-depth-columns": {
+    "net.etalii.adp.w3c.owlDepthColumns": {
       "version": "^1.0.0",
       "provides": [ "layout" ],
       "required": false,
