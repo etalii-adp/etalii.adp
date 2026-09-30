@@ -1,0 +1,728 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
+  "disl": "0.1",
+  "language": {
+    "id": "net.etalii.adp.ansible.structure",
+    "version": "0.1.0",
+    "label": "Ansible project structure",
+    "doc": {
+      "summary": "What runs what, and where a value comes from: playbooks, roles, inventories and the include, import and dependency edges between them, drawn from the folder as it is.",
+      "description": "A read-only diagram of an Ansible project. Its subject is a **folder**, not a document: every element and relation is derived from Ansible's own files (playbooks, `roles/`, `inventories/`, `meta/main.yml`), and nothing in that folder is ever written. The only thing a user authors is where a node sits, and that is stored beside the folder in the ADP registration, never in Ansible's files.\n\nOrigin `ansible/structure`. Everything this specification cannot express (how the folder is read, how targets resolve, the computed layout, the read-only property reasons) is written down in `ansible-structure.md` beside it.",
+      "tags": ["ansible", "infrastructure", "software delivery", "read-only", "folder"],
+      "seeAlso": [
+        { "title": "Ansible directory layout", "href": "https://charlesreid1.com/wiki/Ansible/Directory_Layout/Details" },
+        { "title": "Role dependencies", "href": "https://oneuptime.com/blog/post/2026-01-24-ansible-roles-dependencies/view" },
+        { "title": "ansible-playbook-grapher", "href": "https://github.com/haidaraM/ansible-playbook-grapher" },
+        { "title": "ansible-viz", "href": "https://github.com/aspiers/ansible-viz" }
+      ]
+    },
+    "authors": [ { "name": "Peter Vrenken", "url": "https://github.com/vrenken" } ],
+    "license": "Apache-2.0",
+    "homepage": "https://etalii.net/adp",
+    "icon": "mdi:sitemap",
+    "requires": { "conformance": "standard" }
+  },
+
+  "functions": {
+    "isImplicitHosts": {
+      "params": [ { "name": "pattern", "type": "string" } ],
+      "returns": "bool",
+      "cel": "pattern.matches('(?i)^[\\\\s:,]*(all|\\\\*|localhost|127\\\\.0\\\\.0\\\\.1)([\\\\s]*[:,][\\\\s:,]*(all|\\\\*|localhost|127\\\\.0\\\\.0\\\\.1))*[\\\\s:,]*$')",
+      "doc": "Whether every token of a hosts pattern (split on ':' and ',') names something Ansible resolves without an inventory entry: all, *, localhost or 127.0.0.1. Such a play is never reported as unmatched."
+    },
+    "directiveText": {
+      "params": [ { "name": "d", "type": "string" } ],
+      "returns": "string",
+      "cel": "d == 'roles' ? 'roles:' : d == 'importRole' ? 'import_role' : d == 'includeRole' ? 'include_role' : d == 'importPlaybook' ? 'import_playbook' : d == 'importTasks' ? 'import_tasks' : d == 'includeTasks' ? 'include_tasks' : 'dependencies'",
+      "doc": "The directive as the file spells it, which is what an edge label and the property grid show."
+    }
+  },
+
+  "metamodel": {
+    "doc": "Ansible's own vocabulary. Every element is derived from the registered folder; none is created, edited or deleted from the diagram.",
+    "diagram": {
+      "attributes": {
+        "unreadableFiles": { "type": "YamlFailure", "many": true, "readOnly": true, "label": "Unreadable files",
+                             "doc": "Files the reader could not parse. Kept on the model rather than thrown, so the rest of the diagram still renders and each failure is reported at its own file and line." }
+      },
+      "doc": "The diagram root is the registered folder: the folder the `.adp` registration sits in."
+    },
+    "dataTypes": {
+      "ProjectPath": { "base": "string", "minLength": 1,
+                       "doc": "A path relative to the diagram's folder, with '/' separators. Never absolute: two viewers of one project read the same locator." },
+      "RoleContents": {
+        "doc": "Which of a role's canonical subfolders exist and how full they are, so a role that does the work reads differently from one that is a name and nothing else.",
+        "fields": {
+          "taskFiles": { "type": "int", "min": 0, "default": 0, "label": "Task files", "doc": "YAML files in tasks/." },
+          "handlers":  { "type": "int", "min": 0, "default": 0, "doc": "Files in handlers/." },
+          "templates": { "type": "int", "min": 0, "default": 0, "doc": "Files in templates/." },
+          "files":     { "type": "int", "min": 0, "default": 0, "doc": "Files in files/." },
+          "defaults":  { "type": "int", "min": 0, "default": 0, "doc": "Files in defaults/." },
+          "vars":      { "type": "int", "min": 0, "default": 0, "doc": "Files in vars/." },
+          "hasMeta":   { "type": "bool", "default": false, "label": "Meta", "doc": "A meta/ folder exists." },
+          "hasLibrary":{ "type": "bool", "default": false, "label": "Library", "doc": "A library/ folder exists." }
+        }
+      },
+      "InventoryGroup": {
+        "doc": "One group an inventory defines, and how many hosts it names. What a play's hosts: pattern is matched against.",
+        "fields": {
+          "name":      { "type": "string", "required": true },
+          "hostCount": { "type": "int", "min": 0, "default": 0, "label": "Hosts" }
+        },
+        "display": { "cel": "value.name + ' (' + (value.hostCount == 1 ? '1 host' : string(value.hostCount) + ' hosts') + ')'" }
+      },
+      "YamlFailure": {
+        "doc": "One YAML file the reader could not read, in the parser's own words.",
+        "fields": {
+          "path":    { "type": "ProjectPath", "required": true },
+          "message": { "type": "string", "doc": "The parser's own message, without its position prefix." },
+          "line":    { "type": "int", "min": 0, "doc": "The 1-based line the parser blamed, or 0 when it named none." }
+        },
+        "display": { "cel": "value.path + (value.line > 0 ? ':' + string(value.line) : '') + ': ' + value.message" }
+      }
+    },
+    "enums": {
+      "Directive": {
+        "doc": "Which Ansible directive declared a relationship. They mean different things to Ansible, so they are kept apart.",
+        "values": {
+          "roles":          { "label": "roles:",          "doc": "A play's roles: list. Static: resolved before the run." },
+          "importRole":     { "label": "import_role",     "doc": "Static." },
+          "includeRole":    { "label": "include_role",    "doc": "Dynamic: resolved during the run." },
+          "importPlaybook": { "label": "import_playbook", "doc": "At a playbook's top level, a sibling of its plays. Static." },
+          "importTasks":    { "label": "import_tasks",    "doc": "Within a role's tasks. Static." },
+          "includeTasks":   { "label": "include_tasks",   "doc": "Within a role's tasks. Dynamic." },
+          "dependencies":   { "label": "dependencies",    "doc": "A meta/main.yml dependencies: entry. Role to role." }
+        }
+      },
+      "Resolution": {
+        "doc": "What became of a relationship's target. Three states rather than two: collapsing 'expression' into 'missing' would report a missing role for every parameterised role in every real repository.",
+        "values": {
+          "resolved":   { "label": "Resolved",   "doc": "The thing it names is in the folder." },
+          "missing":    { "label": "Missing",    "doc": "The thing it names is not in the folder, and could have been. A problem." },
+          "expression": { "label": "Expression", "doc": "The target is a Jinja expression ({{ ... }}), so what it names is not knowable without running Ansible. Shown as written, never guessed at, never reported." }
+        }
+      },
+      "VariableFolderKind": {
+        "values": { "group_vars": { "label": "group_vars" }, "host_vars": { "label": "host_vars" } }
+      }
+    },
+
+    "types": {
+      "AnsibleNode": {
+        "abstract": true,
+        "doc": "Everything drawn as a box. Each one stands for a file or folder in the project, and activating it reveals that file or folder.",
+        "attributes": {
+          "name": { "type": "string", "required": true, "readOnly": true, "order": 1, "group": "Identity",
+                    "doc": "What a reader calls it." },
+          "path": { "type": "ProjectPath", "required": true, "readOnly": true, "order": 2, "group": "Identity",
+                    "doc": "The file or folder it stands for, relative to the diagram's folder." }
+        }
+      },
+      "Playbook": {
+        "extends": "AnsibleNode",
+        "label": "Playbook",
+        "doc": {
+          "summary": "A playbook file: a root-level or playbooks/ YAML file whose top level is a list of plays.",
+          "description": "Its name is the file name. When the file holds exactly one play, that play is not drawn as a box of its own: the playbook stands for it, carries its hosts pattern and is the source of its role and target edges."
+        },
+        "labelAttribute": "name",
+        "attributes": {
+          "path":        { "type": "ProjectPath", "required": true, "readOnly": true, "key": true, "group": "Identity" },
+          "hosts":       { "type": "string", "readOnly": true, "group": "Targets",
+                           "doc": "The hosts: pattern as written. Set only when the playbook holds exactly one play." },
+          "playCount":   { "type": "int", "min": 0, "readOnly": true, "group": "Runs", "label": "Plays" },
+          "firstPlayName": { "type": "string", "readOnly": true, "group": "Runs",
+                             "doc": "The name: of the single play, when there is exactly one." },
+          "playLine":    { "type": "int", "min": 0, "readOnly": true,
+                           "doc": "The 1-based line of the single play, when there is exactly one; where an unmatched-hosts problem points." },
+          "annotations": { "type": "ProjectPath", "many": true, "readOnly": true, "group": "Identity",
+                           "doc": "ansible.cfg, requirements.yml and collections/requirements.yml, when present. Carried on every playbook and play box rather than drawn as boxes of their own." }
+        }
+      },
+      "Play": {
+        "extends": "AnsibleNode",
+        "label": "Play",
+        "doc": {
+          "summary": "One play within a playbook, drawn only when its playbook holds more than one.",
+          "description": "Its name is its name:, or 'play N' (1-based) when it has none. Its path is its playbook's file. Its identity is positional: plays run in file order, may be unnamed and may share names."
+        },
+        "attributes": {
+          "playbook":        { "type": "Playbook", "required": true, "readOnly": true, "doc": "The playbook that declares it. Not drawn as an edge." },
+          "indexInPlaybook": { "type": "int", "min": 0, "required": true, "readOnly": true, "key": true,
+                               "doc": "Its 0-based position among the playbook's plays (import_playbook entries do not count)." },
+          "hosts":           { "type": "string", "readOnly": true, "group": "Targets", "doc": "Its hosts: pattern as written." },
+          "line":            { "type": "int", "min": 0, "readOnly": true, "doc": "The 1-based line the play starts on." },
+          "playIndex":       { "type": "int", "min": 0, "readOnly": true,
+                               "doc": "Its position in declaration order across the whole project, so two playbooks' plays never share a colour. An index, never a colour." },
+          "annotations":     { "type": "ProjectPath", "many": true, "readOnly": true, "group": "Identity" }
+        }
+      },
+      "Role": {
+        "extends": "AnsibleNode",
+        "label": "Role",
+        "doc": "A folder under roles/. Its name is the folder name, which is what a playbook writes to use it.",
+        "attributes": {
+          "name":     { "type": "string", "required": true, "readOnly": true, "key": true, "unique": "diagram", "group": "Identity" },
+          "contents": { "type": "RoleContents", "readOnly": true, "group": "Contents" },
+          "hollow":   { "type": "bool", "group": "Contents",
+                        "derived": "self.contents.taskFiles == 0 && self.contents.handlers == 0 && self.contents.templates == 0 && self.contents.files == 0 && self.contents.defaults == 0 && self.contents.vars == 0 && !self.contents.hasMeta && !self.contents.hasLibrary",
+                        "doc": "The folder holds none of the canonical content, so Ansible would find nothing to run in it." }
+        }
+      },
+      "TaskFile": {
+        "extends": "AnsibleNode",
+        "label": "Task file",
+        "doc": "One of a role's task files, drawn only when an include_tasks or import_tasks names it. The others are only counted in the role's contents.",
+        "attributes": {
+          "path": { "type": "ProjectPath", "required": true, "readOnly": true, "key": true, "group": "Identity" },
+          "role": { "type": "Role", "required": true, "readOnly": true, "doc": "The role it belongs to." }
+        }
+      },
+      "Inventory": {
+        "extends": "AnsibleNode",
+        "label": "Inventory",
+        "doc": "An environment under inventories/, or a root inventory file (inventory, hosts, and their .yml/.yaml forms). Drawn in a band beneath the execution flow.",
+        "attributes": {
+          "name":   { "type": "string", "required": true, "readOnly": true, "label": "Environment", "group": "Identity" },
+          "path":   { "type": "ProjectPath", "required": true, "readOnly": true, "key": true, "group": "Identity" },
+          "groups": { "type": "InventoryGroup", "many": true, "readOnly": true, "group": "Groups",
+                      "doc": "The groups it defines, from YAML (all -> children -> group, or a top-level group with hosts) or INI ([group], [group:children]) files." }
+        }
+      },
+      "VariableFolder": {
+        "extends": "AnsibleNode",
+        "label": "Variable folder",
+        "doc": "A group_vars or host_vars folder. That these files exist and feed an inventory is a fact; which variable a play reads is an inference, so no per-variable edge is ever drawn.",
+        "attributes": {
+          "name":      { "type": "VariableFolderKind", "required": true, "readOnly": true, "group": "Identity" },
+          "path":      { "type": "ProjectPath", "required": true, "readOnly": true, "key": true, "group": "Identity" },
+          "inventory": { "type": "Inventory", "required": true, "readOnly": true, "doc": "The inventory it belongs to. Not drawn as an edge." },
+          "fileCount": { "type": "int", "min": 0, "readOnly": true, "label": "Files", "group": "Variables" }
+        }
+      },
+      "UnresolvedTarget": {
+        "label": "Unresolved target",
+        "doc": {
+          "summary": "The far end of a relationship whose target is not in the folder, or is an expression.",
+          "description": "Not a file: a stand-in so that a relationship that names nothing still draws, as a short stub out of its source with the target's own words beside it. A reader has to see that a playbook names something that is not there."
+        },
+        "attributes": {
+          "targetAsWritten": { "type": "string", "required": true, "readOnly": true, "label": "Target",
+                               "doc": "The target exactly as the file wrote it, including a {{ expression }}." },
+          "resolution":      { "type": "Resolution", "required": true, "readOnly": true }
+        }
+      }
+    },
+
+    "relations": {
+      "AnsibleRelation": {
+        "abstract": true,
+        "source": ["AnsibleNode"],
+        "target": ["AnsibleNode", "UnresolvedTarget"],
+        "allowSelfLoops": false,
+        "doc": "Every relationship is declared by a directive in a file. Its properties answer 'why is this here'.",
+        "attributes": {
+          "directive":       { "type": "Directive", "required": true, "readOnly": true, "group": "Declaration" },
+          "targetAsWritten": { "type": "string", "required": true, "readOnly": true, "label": "Target", "group": "Declaration",
+                               "doc": "Never evaluated and never normalised: the text a reader will find in the file." },
+          "condition":       { "type": "string", "readOnly": true, "label": "When", "group": "Declaration",
+                               "doc": "The when: guarding it, as written. A list of conditions is joined with ' and '. Never evaluated." },
+          "declaredIn":      { "type": "ProjectPath", "required": true, "readOnly": true, "label": "Declared in", "group": "Declaration" },
+          "declaredAtLine":  { "type": "int", "min": 0, "readOnly": true, "group": "Declaration" },
+          "resolution":      { "type": "Resolution", "required": true, "readOnly": true, "default": "resolved", "label": "Resolves to", "group": "Declaration" },
+          "dynamic":         { "type": "bool", "derived": "self.directive == 'includeRole' || self.directive == 'includeTasks'",
+                               "doc": "Resolved during the run (include_*) rather than before it: drawn dashed where the static kinds are solid." }
+        }
+      },
+      "UsesRole": {
+        "extends": "AnsibleRelation",
+        "label": "Uses role",
+        "source": ["Playbook", "Play", "Role"],
+        "target": ["Role", "UnresolvedTarget"],
+        "doc": "A play lists a role through roles:, import_role or include_role; or a role's tasks reach for another role through import_role or include_role."
+      },
+      "ImportsPlaybook": {
+        "extends": "AnsibleRelation",
+        "label": "Imports playbook",
+        "source": ["Playbook"],
+        "target": ["Playbook", "UnresolvedTarget"],
+        "doc": "A playbook's top-level import_playbook entry, resolved relative to the importing file."
+      },
+      "IncludesTasks": {
+        "extends": "AnsibleRelation",
+        "label": "Includes tasks",
+        "source": ["Role"],
+        "target": ["TaskFile", "UnresolvedTarget"],
+        "doc": "A role's tasks include_tasks or import_tasks another of its task files, resolved relative to the including file."
+      },
+      "DependsOn": {
+        "extends": "AnsibleRelation",
+        "label": "Depends on",
+        "source": ["Role"],
+        "target": ["Role", "UnresolvedTarget"],
+        "doc": "A role's meta/main.yml declares another role as a dependency. Its own style, distinct from being listed by a playbook."
+      },
+      "Targets": {
+        "extends": "AnsibleRelation",
+        "label": "Targets",
+        "source": ["Playbook", "Play"],
+        "target": ["Inventory"],
+        "doc": "A play's hosts: pattern matches a group an inventory defines: one relation per inventory that matches. A pattern nothing defines yields no relation; the unmatchedHosts rule reports it instead. Exclusions (!group) and intersections (&group) never create one."
+      }
+    }
+  },
+
+  "coordinates": {
+    "systems": {
+      "canvas": { "kind": "cartesian", "x": { "kind": "linear" }, "y": { "kind": "linear" },
+                  "doc": "One free canvas in CSS pixels, without snapping. Positions are computed by the layout; the ones a user drags are the only ones stored." }
+    }
+  },
+
+  "notation": {
+    "doc": "Every visual distinction is carried by more than colour: each node kind has its own outline weight or dash, and each relation kind its own line.",
+    "theme": {
+      "tokens": {
+        "color.surface": "#FFFFFF",
+        "color.surface.raised": "rgb(0 0 0 / 6%)",
+        "color.text": "#1F1E1C",
+        "color.text.muted": "#6B6A65",
+        "color.border": "#8A8880",
+        "color.primary": "#2F6FB2",
+        "color.warning": "#B7791F",
+        "color.play.hue0": "#4F8CC9",
+        "color.play.hue1": "#57A773",
+        "color.play.hue2": "#C96F4F",
+        "color.play.hue3": "#8A6FC9",
+        "color.play.hue4": "#C9A84F",
+        "color.play.hue5": "#4FB5C9",
+        "font.body": "system-ui, sans-serif",
+        "font.mono": "ui-monospace, monospace"
+      },
+      "modes": {
+        "dark": {
+          "color.surface": "#1F1E1C",
+          "color.surface.raised": "rgb(255 255 255 / 6%)",
+          "color.text": "#F1EFE8",
+          "color.text.muted": "#A9A79F",
+          "color.border": "#B4B2A9",
+          "color.play.hue0": "#7FB0E0",
+          "color.play.hue1": "#7FC79A",
+          "color.play.hue2": "#E0947A",
+          "color.play.hue3": "#AB96E0",
+          "color.play.hue4": "#E0C87F",
+          "color.play.hue5": "#7FD0E0"
+        }
+      },
+      "followSystem": true
+    },
+    "styles": {
+      "node": {
+        "fill": { "token": "color.surface.raised" },
+        "stroke": { "color": { "token": "color.border" }, "width": 1.5 },
+        "font": { "family": { "token": "font.body" }, "size": 13, "color": { "token": "color.text" } },
+        "cursor": "pointer"
+      },
+      "band": {
+        "extends": "node",
+        "fill": { "token": "color.surface" },
+        "stroke": { "color": { "token": "color.text.muted" }, "width": 1.5 }
+      },
+      "edgeLabel": {
+        "font": { "family": { "token": "font.mono" }, "size": 10, "color": { "token": "color.text.muted" } }
+      }
+    },
+    "nodes": {
+      "AnsibleNode": {
+        "shape": "rect",
+        "style": "node",
+        "size": { "default": [72, 32], "min": [72, 32], "autoSize": "fitWidth", "resizable": false },
+        "labels": [
+          { "id": "name", "text": { "attribute": "name" }, "position": "center", "editable": false,
+            "wrap": "none", "overflow": "ellipsis" }
+        ],
+        "anchors": { "mode": "sides" },
+        "tooltip": { "cel": "self.name" },
+        "states": { "hover": { "stroke": { "width": 2 } } },
+        "deletable": false,
+        "copyable": false,
+        "connectable": false,
+        "doubleClick": "revealFile",
+        "accessibility": { "role": "button" }
+      },
+      "Playbook": {
+        "style": { "extends": "node", "stroke": { "color": { "token": "color.primary" }, "width": 2 } },
+        "tooltip": { "cel": "has(self.hosts) && self.hosts != '' ? 'Playbook ' + self.name + ' — hosts: ' + self.hosts : 'Playbook ' + self.name" }
+      },
+      "Play": {
+        "style": { "extends": "node", "stroke": { "color": { "token": "color.primary" }, "width": 1.5, "dash": [6, 3], "dashScale": "absolute" } },
+        "tooltip": { "cel": "has(self.hosts) && self.hosts != '' ? 'Play ' + self.name + ' — hosts: ' + self.hosts : 'Play ' + self.name" },
+        "conditions": [
+          { "when": "self.playIndex % 6 == 0", "style": { "fill": { "token": "color.play.hue0" }, "fillOpacity": 0.18, "stroke": { "color": { "token": "color.play.hue0" } } } },
+          { "when": "self.playIndex % 6 == 1", "style": { "fill": { "token": "color.play.hue1" }, "fillOpacity": 0.18, "stroke": { "color": { "token": "color.play.hue1" } } } },
+          { "when": "self.playIndex % 6 == 2", "style": { "fill": { "token": "color.play.hue2" }, "fillOpacity": 0.18, "stroke": { "color": { "token": "color.play.hue2" } } } },
+          { "when": "self.playIndex % 6 == 3", "style": { "fill": { "token": "color.play.hue3" }, "fillOpacity": 0.18, "stroke": { "color": { "token": "color.play.hue3" } } } },
+          { "when": "self.playIndex % 6 == 4", "style": { "fill": { "token": "color.play.hue4" }, "fillOpacity": 0.18, "stroke": { "color": { "token": "color.play.hue4" } } } },
+          { "when": "self.playIndex % 6 == 5", "style": { "fill": { "token": "color.play.hue5" }, "fillOpacity": 0.18, "stroke": { "color": { "token": "color.play.hue5" } } },
+            "doc": "Six palette slots, wrapped: a play's tint is its project-wide play index modulo six." }
+        ]
+      },
+      "Role": {
+        "shape": { "type": "roundedRect", "params": { "radius": 10 } },
+        "tooltip": { "cel": "'Role ' + self.name" },
+        "conditions": [
+          { "when": "self.hollow", "style": { "stroke": { "dash": [4, 4], "dashScale": "absolute" }, "opacity": 0.6 },
+            "doc": "A role folder with nothing Ansible would run in it looks unfinished, because it is." }
+        ]
+      },
+      "TaskFile": {
+        "style": { "extends": "node", "fill": { "token": "color.surface" }, "stroke": { "color": { "token": "color.border" }, "width": 1.5, "dash": [2, 2], "dashScale": "absolute" } },
+        "tooltip": { "cel": "'Task file ' + self.name" }
+      },
+      "Inventory": {
+        "style": "band",
+        "tooltip": { "cel": "'Inventory ' + self.name" }
+      },
+      "VariableFolder": {
+        "style": "band",
+        "tooltip": { "cel": "'Variables ' + self.name" }
+      },
+      "UnresolvedTarget": {
+        "shape": "text",
+        "size": { "fixed": [48, 12] },
+        "labels": [
+          { "id": "text", "text": { "cel": "self.targetAsWritten + (self.resolution == 'expression' ? ' (expression)' : ' (missing)')" },
+            "position": "left", "editable": false, "wrap": "none",
+            "style": { "font": { "family": { "token": "font.mono" }, "size": 10, "color": { "token": "color.warning" } } } }
+        ],
+        "selectable": false,
+        "deletable": false,
+        "copyable": false,
+        "connectable": false,
+        "doubleClick": "none",
+        "doc": "Drawn as the target's own words at the end of a short stub, never as a box: there is no file to stand for."
+      }
+    },
+    "edges": {
+      "AnsibleRelation": {
+        "line": {
+          "stroke": { "color": { "token": "color.text.muted" }, "width": 1.5,
+                      "dash": { "cel": "self.dynamic ? 'dashed' : 'solid'" } },
+          "routing": "bezier",
+          "startDirection": "right",
+          "endDirection": "right",
+          "bendpoints": { "editable": false }
+        },
+        "anchoring": {
+          "source": { "mode": "fixed", "points": [ { "id": "right", "x": 1, "y": 0.5 } ] },
+          "target": { "mode": "fixed", "points": [ { "id": "left", "x": 0, "y": 0.5 } ] }
+        },
+        "targetMarker": "arrow",
+        "labels": [
+          { "id": "directive", "at": "middle", "side": "above", "editable": false, "draggable": false, "style": "edgeLabel",
+            "text": { "cel": "has(self.condition) && self.condition != '' ? directiveText(self.directive) + ' when ' + self.condition : directiveText(self.directive)" } }
+        ],
+        "conditions": [
+          { "when": "self.target.isA('UnresolvedTarget')",
+            "style": { "stroke": { "color": { "token": "color.warning" }, "dash": [3, 3], "dashScale": "absolute" } },
+            "doc": "A target that is missing or unknowable draws as a warning-coloured stub rather than not at all." }
+        ],
+        "selectable": true,
+        "deletable": false,
+        "reconnectable": false,
+        "doc": "Out of the source's right side, into the target's left side, curving horizontally through the corridor between columns."
+      },
+      "DependsOn": {
+        "line": {
+          "stroke": { "color": { "token": "color.primary" }, "width": 2, "dash": "dotted", "cap": "round" },
+          "routing": "bezier",
+          "bendpoints": { "editable": false }
+        },
+        "doc": "A role depending on a role is not the same as a playbook listing one, so it is not drawn alike."
+      },
+      "Targets": {
+        "line": {
+          "stroke": { "color": { "token": "color.text.muted" }, "width": 1, "opacity": 0.55 },
+          "routing": "bezier",
+          "bendpoints": { "editable": false }
+        },
+        "doc": "A play reaching an inventory leaves the execution story, and reads as an aside."
+      }
+    }
+  },
+
+  "toolbox": {
+    "groups": [],
+    "searchable": false,
+    "generic": { "select": true, "pan": true, "lasso": false, "text": false, "note": false, "image": false, "freehand": false },
+    "doc": "Empty by design: nothing can be created on a diagram that writes nothing, and the toolbox says so."
+  },
+
+  "forms": {
+    "playbookProperties": {
+      "for": ["Playbook", "Play"],
+      "usage": ["inspector"],
+      "label": "Playbook",
+      "doc": "Everything shown, nothing editable: every value is defined in the playbook file and edited in a text editor.",
+      "items": [
+        { "kind": "section", "title": "Identity", "items": [
+          { "attribute": "name", "widget": "readonly", "readOnly": true },
+          { "attribute": "path", "widget": "readonly", "readOnly": true }
+        ] },
+        { "kind": "section", "title": "Runs", "items": [
+          { "kind": "computed", "label": "Roles",
+            "value": { "cel": "self.outgoingOf('UsesRole').map(r, r.targetAsWritten).join(', ')" },
+            "visible": "self.outgoingOf('UsesRole').size() > 0" },
+          { "kind": "computed", "label": "Imports",
+            "value": { "cel": "self.outgoingOf('ImportsPlaybook').map(r, r.targetAsWritten).join(', ')" },
+            "visible": "self.outgoingOf('ImportsPlaybook').size() > 0" }
+        ] },
+        { "kind": "section", "title": "Targets", "items": [
+          { "attribute": "hosts", "widget": "readonly", "readOnly": true, "visible": "has(self.hosts) && self.hosts != ''" },
+          { "kind": "computed", "label": "Reaches",
+            "value": { "cel": "self.outgoingOf('Targets').map(r, r.target.name).join(', ')" },
+            "visible": "self.outgoingOf('Targets').size() > 0" }
+        ] }
+      ]
+    },
+    "roleProperties": {
+      "for": "Role",
+      "usage": ["inspector"],
+      "label": "Role",
+      "items": [
+        { "kind": "section", "title": "Identity", "items": [
+          { "attribute": "name", "widget": "readonly", "readOnly": true },
+          { "attribute": "path", "widget": "readonly", "readOnly": true }
+        ] },
+        { "kind": "section", "title": "Contents", "items": [
+          { "attribute": "contents.taskFiles", "widget": "readonly", "readOnly": true, "visible": "self.contents.taskFiles > 0" },
+          { "attribute": "contents.handlers",  "widget": "readonly", "readOnly": true, "visible": "self.contents.handlers > 0" },
+          { "attribute": "contents.templates", "widget": "readonly", "readOnly": true, "visible": "self.contents.templates > 0" },
+          { "attribute": "contents.files",     "widget": "readonly", "readOnly": true, "visible": "self.contents.files > 0" },
+          { "attribute": "contents.defaults",  "widget": "readonly", "readOnly": true, "visible": "self.contents.defaults > 0" },
+          { "attribute": "contents.vars",      "widget": "readonly", "readOnly": true, "visible": "self.contents.vars > 0" },
+          { "kind": "computed", "label": "Meta", "value": "yes", "visible": "self.contents.hasMeta" },
+          { "kind": "computed", "label": "Hollow", "value": "yes - Ansible would find nothing to run here", "visible": "self.hollow" }
+        ] },
+        { "kind": "section", "title": "Relationships", "items": [
+          { "kind": "computed", "label": "Depends on",
+            "value": { "cel": "self.outgoingOf('DependsOn').map(r, r.targetAsWritten).join(', ')" },
+            "visible": "self.outgoingOf('DependsOn').size() > 0" },
+          { "kind": "computed", "label": "Used by",
+            "value": { "cel": "self.incomingOf('UsesRole').map(r, r.declaredIn).filter(p, true).join(', ')" },
+            "visible": "self.incomingOf('UsesRole').size() > 0" }
+        ] }
+      ]
+    },
+    "inventoryProperties": {
+      "for": "Inventory",
+      "usage": ["inspector"],
+      "label": "Inventory",
+      "items": [
+        { "kind": "section", "title": "Identity", "items": [
+          { "attribute": "name", "widget": "readonly", "readOnly": true },
+          { "attribute": "path", "widget": "readonly", "readOnly": true }
+        ] },
+        { "kind": "section", "title": "Groups", "items": [
+          { "attribute": "groups", "widget": "table", "readOnly": true, "visible": "self.groups.size() > 0" }
+        ] },
+        { "kind": "section", "title": "Variables", "items": [
+          { "kind": "computed", "label": "Folders",
+            "value": { "cel": "diagram.nodesOfType('VariableFolder').filter(v, v.inventory == self).map(v, v.name + ' (' + string(v.fileCount) + ')').join(', ')" },
+            "visible": "diagram.nodesOfType('VariableFolder').exists(v, v.inventory == self)" }
+        ] }
+      ]
+    },
+    "variableFolderProperties": {
+      "for": "VariableFolder",
+      "usage": ["inspector"],
+      "label": "Variable folder",
+      "items": [
+        { "kind": "section", "title": "Identity", "items": [
+          { "attribute": "name", "widget": "readonly", "readOnly": true },
+          { "attribute": "path", "widget": "readonly", "readOnly": true }
+        ] },
+        { "kind": "section", "title": "Variables", "items": [
+          { "attribute": "fileCount", "widget": "readonly", "readOnly": true }
+        ] }
+      ]
+    },
+    "taskFileProperties": {
+      "for": "TaskFile",
+      "usage": ["inspector"],
+      "label": "Task file",
+      "items": [
+        { "kind": "section", "title": "Identity", "items": [
+          { "attribute": "name", "widget": "readonly", "readOnly": true },
+          { "attribute": "path", "widget": "readonly", "readOnly": true }
+        ] }
+      ]
+    },
+    "relationProperties": {
+      "for": ["UsesRole", "ImportsPlaybook", "IncludesTasks", "DependsOn", "Targets"],
+      "usage": ["inspector"],
+      "label": "Relationship",
+      "doc": "What declared this relationship, and what it says as written: the answer to 'why is this here'.",
+      "items": [
+        { "kind": "section", "title": "Declaration", "items": [
+          { "kind": "computed", "label": "Declared in", "value": { "cel": "self.declaredIn + ':' + string(self.declaredAtLine)" } },
+          { "kind": "computed", "label": "Directive", "value": { "cel": "directiveText(self.directive)" } },
+          { "attribute": "targetAsWritten", "widget": "readonly", "readOnly": true },
+          { "attribute": "condition", "widget": "readonly", "readOnly": true, "visible": "has(self.condition) && self.condition != ''" },
+          { "kind": "computed", "label": "Resolves to",
+            "value": { "cel": "self.resolution == 'missing' ? 'nothing in this folder' : 'an expression, so it is not knowable without running Ansible'" },
+            "visible": "self.resolution != 'resolved'" }
+        ] }
+      ]
+    }
+  },
+
+  "constraints": {
+    "doc": "Read-only does not mean silent: the structural mistakes the diagram can see are the ones that bite at deploy time. Every rule fires on a mistake somebody made, never on a convention nobody agreed to.",
+    "rules": [
+      { "id": "roleMissing", "label": "Role missing",
+        "scope": ["UsesRole", "DependsOn"],
+        "rule": "self.resolution != 'missing'",
+        "severity": "error",
+        "message": { "cel": "self.isA('DependsOn') ? \"The role '\" + self.targetAsWritten + \"' is declared as a dependency but has no folder under roles/.\" : \"The role '\" + self.targetAsWritten + \"' has no folder under roles/.\"" },
+        "doc": { "summary": "A playbook or a meta/main.yml names a role with no folder under roles/.",
+                 "rationale": "A missing role means writing a role or correcting a name. An expression target is never reported: unknown is not wrong." },
+        "suppressible": false,
+        "x-adp-rule-id": "ansible.role-missing" },
+      { "id": "danglingImport", "label": "Dangling import",
+        "scope": ["ImportsPlaybook", "IncludesTasks"],
+        "rule": "self.resolution != 'missing'",
+        "severity": "error",
+        "message": { "cel": "\"'\" + self.targetAsWritten + \"' is \" + (self.directive == 'includeTasks' ? 'included' : 'imported') + ' here, but there is no such file.'" },
+        "doc": { "summary": "An import_playbook, import_tasks or include_tasks names a file that is not there.",
+                 "rationale": "A dangling import means a file that moved or was never added." },
+        "suppressible": false,
+        "x-adp-rule-id": "ansible.dangling-import" },
+      { "id": "unmatchedHosts", "label": "Unmatched hosts",
+        "scope": ["Playbook", "Play"],
+        "when": "has(self.hosts) && self.hosts != '' && diagram.nodesOfType('Inventory').size() > 0 && !isImplicitHosts(self.hosts)",
+        "rule": "self.outgoingOf('Targets').size() > 0",
+        "severity": "warning",
+        "message": { "cel": "(self.isA('Play') && !self.name.startsWith('play ') ? \"The play '\" + self.name + \"'\" : (self.isA('Playbook') && has(self.firstPlayName) && self.firstPlayName != '' ? \"The play '\" + self.firstPlayName + \"'\" : 'A play')) + \" targets '\" + self.hosts + \"', which no inventory defines.\"" },
+        "doc": { "summary": "A play's hosts: pattern matches no group any inventory defines.",
+                 "rationale": "The mistake that deploys nothing and says so only at run time. Silent when the folder has no inventory at all, and for patterns Ansible resolves without one (all, *, localhost, 127.0.0.1)." },
+        "x-adp-rule-id": "ansible.unmatched-hosts" },
+      { "id": "unreadableYaml", "label": "Unreadable YAML",
+        "scope": "diagram",
+        "rule": "diagram.unreadableFiles.size() == 0",
+        "severity": "error",
+        "message": { "cel": "diagram.unreadableFiles.map(f, \"'\" + f.path + \"' is not readable YAML: \" + f.message).join('\\n')" },
+        "doc": { "summary": "A file in the model does not parse, reported in the parser's own words and at its own line.",
+                 "rationale": "One unreadable file costs only its own detail, never the diagram." },
+        "suppressible": false,
+        "x-adp-rule-id": "ansible.unreadable-yaml" },
+      { "id": "emptyRole", "label": "Empty role",
+        "scope": "Role",
+        "rule": "!self.hollow",
+        "severity": "warning",
+        "message": { "cel": "\"The role '\" + self.name + \"' has none of the folders Ansible looks in, so it does nothing.\"" },
+        "doc": { "summary": "A folder under roles/ holds no canonical content at all.",
+                 "rationale": "Ansible would find nothing to run in it, so a playbook naming it does less than its author thinks." },
+        "x-adp-rule-id": "ansible.empty-role" },
+
+      { "id": "noCreate", "kind": "create", "rule": "false",
+        "message": "An Ansible structure diagram shows the folder as it is and changes nothing in it. Add a playbook, role or inventory in a text editor.",
+        "doc": "Read-only: nothing is created from the diagram." },
+      { "id": "noDelete", "kind": "delete", "scope": "*", "rule": "false",
+        "message": "An Ansible structure diagram shows the folder as it is and changes nothing in it. Delete the file or folder itself.",
+        "doc": "Read-only: nothing is deleted from the diagram." },
+      { "id": "noConnect", "kind": "connect", "rule": "false",
+        "message": "Relationships come from the files' own directives. Edit the file that should declare it in a text editor.",
+        "doc": "Read-only: no relationship is drawn by hand." },
+      { "id": "noChange", "kind": "change", "scope": "*", "rule": "false",
+        "message": "An Ansible structure diagram shows the folder as it is and changes nothing in it. Edit the file this value comes from in a text editor.",
+        "doc": "Read-only: every property is shown and none is editable." },
+      { "id": "noReparent", "kind": "containment", "rule": "false",
+        "message": "An Ansible structure diagram is drawn from the folder's own files, so nothing on it can be moved from here. Move a role by moving its folder.",
+        "doc": "Nothing nests by dragging. Repositioning a node is allowed; moving it into another is not." }
+    ]
+  },
+
+  "behavior": {
+    "operations": {
+      "revealFile": {
+        "label": "Reveal file",
+        "for": ["Playbook", "Play", "Role", "TaskFile", "Inventory", "VariableFolder"],
+        "shortcut": "Enter",
+        "plugin": { "name": "ansible-folder", "args": { "action": "reveal" } },
+        "doc": "The jump from a node to its file or folder in the explorer, which is most of the diagram's value. Also bound to double-click, and to Space."
+      }
+    },
+    "clipboard": { "relations": "none", "crossDocument": false },
+    "doc": "No hooks: nothing on this diagram changes the model. The one user edit is a node's position, which is view data."
+  },
+
+  "layout": {
+    "algorithms": {
+      "ranks": {
+        "algorithm": "plugin:ansible-folder",
+        "direction": "right",
+        "spacing": { "node": 24, "layer": 96 },
+        "edgeRouting": "bezier",
+        "options": { "nodeHeight": 32, "minimumWidth": 72, "horizontalPadding": 12, "fontSize": 14, "bandGap": 96 },
+        "doc": "Entry playbooks, then what they import, then plays, then roles, then task files, left to right; inventories and variable folders in a band beneath."
+      },
+      "fallback": {
+        "algorithm": "layered",
+        "direction": "right",
+        "spacing": { "node": 24, "layer": 96 },
+        "edgeRouting": "bezier",
+        "doc": "What a runtime without the ansible-folder plugin uses. It keeps the reading direction, not the exact columns or the band."
+      }
+    },
+    "default": "ranks",
+    "trigger": "onChange",
+    "respect": "all",
+    "animate": false,
+    "doc": "Positions are computed, deterministically, every time the folder changes. A position a user drags a node to is stored and wins over the computed one; every other node stays where the layout puts it."
+  },
+
+  "persistence": {
+    "format": "plugin:ansible-folder",
+    "encoding": "utf-8",
+    "ids": {
+      "strategy": "natural",
+      "stable": false,
+      "prefix": {
+        "Playbook": "playbook:",
+        "Play": "play:",
+        "Role": "role:",
+        "TaskFile": "taskfile:",
+        "Inventory": "inventory:",
+        "VariableFolder": "vars:"
+      },
+      "pattern": "^\\S.{0,1023}$",
+      "doc": "Derived from the folder, never generated: a discriminator and the folder-relative path or name, so a selection and a stored position survive every edit that does not move the thing itself."
+    },
+    "view": { "store": ["bounds"], "styleOverrides": "none" },
+    "metadata": [],
+    "doc": "There is no diagram document. The model is read from the registered folder by the ansible-folder plugin every time it changes; the only stored data is the position of each node a user dragged, in the layout: block of the .adp registration beside the folder. Nothing inside the folder is ever written."
+  },
+
+  "plugins": {
+    "ansible-folder": {
+      "version": "^0.1.0",
+      "provides": ["persistenceFormat", "import", "layout", "action"],
+      "required": true,
+      "fallback": { "layout": "layered" },
+      "args": {
+        "action": { "type": "string", "doc": "For the action extension point: 'reveal' reveals the selected node's file or folder." }
+      },
+      "doc": "Reads an Ansible project folder into this metamodel (recognising Ansible's own layout and directives, tolerating unreadable files), keeps it true as the folder changes, computes the ranked layout, stores dragged positions in the .adp registration's layout: block, and reveals a node's file. Its behaviour is specified in ansible-structure.md."
+    }
+  },
+
+  "x-adp": {
+    "origin": "ansible/structure",
+    "kind": "diagram",
+    "subject": "folder",
+    "state": "prototype",
+    "standaloneModule": "src/diagrams/ansible-structure",
+    "companion": "ansible-structure.md"
+  }
+}

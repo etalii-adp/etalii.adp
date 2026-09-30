@@ -1,11 +1,10 @@
 <!--
 Sync Impact Report
-- Version: 1.0.1 → 1.1.0 (MINOR)
-- Modified: preamble (ADP is a family of tools: diagrams, designers and editors; readers are tool engineers, who write specifications and definitions; link to docs/terminology.md); II. Implementable from the Document Alone ("runtime" for the running software); V. Simplicity ("a current tool's need"); IV. Versioned Specifications (rationale names tool engineers); Structure and Naming (the model is DISL in `specifications/disl/`, and the six languages DISL, DID, DESL, DED, EDSL and EDD follow its pattern, placeholders included).
-- Added or removed sections: none; the principles keep their titles.
-- Rationale for MINOR: Structure and Naming is materially expanded (six languages and their shared pattern instead of one model); no principle is removed or redefined.
+- Version: 1.1.0 → 1.1.1 (PATCH)
+- Modified: Structure and Naming (the DISL examples and the example extension are `*.dis` and `.dis`, after the rename of specification files).
+- Added or removed sections: none.
+- Rationale for PATCH: a specification file's extension names what it holds, a specification, rather than the language (Peter, 2026-09-30); the rule itself (lowercase and short) is unchanged.
 - Templates: plan, spec and tasks templates unchanged; no follow-ups.
-- Source: spec 002-naming-convention-alignment, task T018 (FR-004).
 --># etalii.adp Constitution
 
 ADP ("A Different Perspective") is a family of task-focused tools: diagrams, designers and editors. They serve (constructive) technology assessment, collaboration between humans and agents, and bringing clarity to textual data. ADP tools are hosted in several IDEs, each in its own repository (`etalii.adp.ide.standalone`, `etalii.adp.ide.intellij`, `etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse`). This repository holds what those hosts share: the specifications of the formats and languages a tool is built from. Its readers are the developers of the ADP hosts, who implement the specifications; tool engineers, who write specifications and definitions in these formats; and agents working in any ADP repository, who need one place to read what a format means. The words used here (tool, diagram, designer, editor, tool engineer, specification, definition, runtime) are defined in [docs/terminology.md](../../docs/terminology.md).
@@ -51,11 +50,11 @@ A construct, format or dependency MUST be justified by a current tool's need, no
 
 ## Structure and Naming
 
-- `specifications/<name>/` holds one specification: its document `<NAME>-specification.md`, its schema `<name>.schema.json`, and its examples beside them. DISL, the Diagram Specification Language, in `specifications/disl/` (`DISL-specification.md`, `disl.schema.json`, examples `*.disl`), is the model.
+- `specifications/<name>/` holds one specification: its document `<NAME>-specification.md`, its schema `<name>.schema.json`, and its examples beside them. DISL, the Diagram Specification Language, in `specifications/disl/` (`DISL-specification.md`, `disl.schema.json`, examples `*.dis`), is the model.
 - Each kind of tool has one specification language and one definition language, and all six follow the model's pattern: DISL and DID (the Diagram Definition Language) for diagrams, DESL and DED for designers, EDSL and EDD for editors, in `specifications/disl/`, `did/`, `desl/`, `ded/`, `edsl/` and `edd/`. For each, `<name>` is the acronym in lowercase and is used alike for the folder, the schema, its `$id` (`https://etalii.net/adp/<name>/schema/<version>/<name>.schema.json`), the version key (`"<name>": "<version>"`) and the file extension (`.<name>`). A language without content yet is a placeholder document with status *Placeholder*, stating its purpose and extension and nothing normative.
 - `docs/` holds documentation about the organization and its repositories rather than a format, such as `new-repository.md`.
 - The organization is 'EtAlii' in prose and `etalii-adp` on GitHub; the product is 'ADP', 'A Different Perspective'.
-- A specification folder is the format's short name in lowercase (`disl`); its document takes the name in capitals (`DISL-specification.md`). A file extension a specification defines is lowercase and short (`.disl`).
+- A specification folder is the format's short name in lowercase (`disl`); its document takes the name in capitals (`DISL-specification.md`). A file extension a specification defines is lowercase and short (`.dis`).
 - A change that renames or moves a specification's files MUST update every reference to them in the same pull request.
 
 ## Development Workflow
@@ -70,4 +69,4 @@ A construct, format or dependency MUST be justified by a current tool's need, no
 
 This constitution supersedes other practices in this repository. Amendments are made through `/speckit-constitution`, recorded in version control, and versioned semantically: MAJOR for removing or redefining a principle, MINOR for adding a principle or materially expanding guidance, PATCH for clarifications. Reviews of plans and changes MUST verify compliance with the principles above; runtime guidance for agents lives in `CLAUDE.md`.
 
-**Version**: 1.1.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-09-29
+**Version**: 1.1.1 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-09-30
