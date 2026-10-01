@@ -579,7 +579,7 @@ A registration is written with the splice rules of section 6, so a user's hand e
 
 ### 8.5 Stale and ephemeral ids
 
-A layout entry whose id is not in the model is **stale**: it is not applied to any other element, it is reported as `fbl.stale-view-data`, and it is removed at the next write of the registration, as part of that edit. A host **MUST NOT** store a position for an element whose id DISL marks ephemeral; dragging such an element moves it for the current session only, and the host tells the user why the position will not be kept.
+A layout entry whose id is not in the model is **stale**: it is not applied to any other element, it is reported as `fbl.stale-view-data`, and it is removed at the next write of the registration, as part of that edit. A host **MUST NOT** store a position for an element whose id DISL marks ephemeral; dragging such an element moves it for the current session only, and the host tells the user why the position will not be kept. A layout entry found for an ephemeral id is ignored and reported by DISL's `std.ephemeralViewData` (DISL §11.5.3).
 
 ### 8.6 Identities
 

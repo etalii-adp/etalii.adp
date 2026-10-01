@@ -6,7 +6,8 @@ file that names its schema in `$schema`. The extension decides the schema: `*.di
 `disl.schema.json#/$defs/Specification`, `*.did` against `did.schema.json#/$defs/Definition`, `*.fbl` against
 `fbl.schema.json#/$defs/Document`. A `$schema` the example names must agree with that; its part before `#`
 is matched against the `$id` of a `*.schema.json` in this repository, so the schemas in the same commit are used,
-never the published ones. All schemas are loaded into one registry, so DID's references to DISL resolve.
+never the published ones. All schemas are loaded into one registry, so DID's references to DISL resolve. A `$schema`
+naming an earlier version of DISL or DID (0.1) is read against the current schema, because 0.2 keeps every 0.1 document valid.
 
 The legacy fixtures under `specifications/*/legacy/` keep the identifiers of the earlier combined format, and the `.disl`
 extension DISL specifications had before `.dis`, which DISL and DID still read as deprecated aliases (DISL section 18,
@@ -33,8 +34,8 @@ root = repository / "specifications"
 # The tool definitions (definitions/diagrams/*.dis and, later, designers and editors) are checked the same way.
 folders = [root, repository / "definitions"]
 
-DISL = "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification"
-DID = "https://etalii.net/adp/did/schema/0.1/did.schema.json#/$defs/Definition"
+DISL = "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Specification"
+DID = "https://etalii.net/adp/did/schema/0.2/did.schema.json#/$defs/Definition"
 FBL = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Document"
 FBL_REGISTRATION = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Registration"
 FBL_FIXTURE = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Fixture"
@@ -46,6 +47,13 @@ LEGACY = "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json"
 ALIAS_SCHEMAS = {LEGACY: DISL, LEGACY + "#/$defs/Definition": DISL, LEGACY + "#/$defs/Document": DID}
 ALIAS_EXTENSIONS = {".dedl": DISL, ".disl": DISL}
 ALIAS_VERSION_KEYS = {"dedl": DISL, "dedlDocument": DID}
+
+# Earlier versions: every 0.1 document is a valid 0.2 document (DISL and DID, "Changes from 0.1"), so a document that
+# names a 0.1 schema is read against the current one. These are versions, not deprecated aliases, and are allowed anywhere.
+PREVIOUS_SCHEMA_IDS = {
+    "https://etalii.net/adp/disl/schema/0.1/disl.schema.json": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json",
+    "https://etalii.net/adp/did/schema/0.1/did.schema.json": "https://etalii.net/adp/did/schema/0.2/did.schema.json",
+}
 
 schemas = {}
 for path in sorted(root.rglob("*.schema.json")):
@@ -194,7 +202,9 @@ def expected_reference(path: Path, document) -> tuple[str | None, list[str], str
     declared = fields.get("$schema")
     by_schema = None
     if declared:
-        by_schema = ALIAS_SCHEMAS.get(declared, declared)
+        base, hash_, fragment = declared.partition("#")
+        current = PREVIOUS_SCHEMA_IDS.get(base, base) + hash_ + fragment
+        by_schema = ALIAS_SCHEMAS.get(declared, current)
         if declared in ALIAS_SCHEMAS:
             aliases.append(f"$schema {declared}")
     by_version = None

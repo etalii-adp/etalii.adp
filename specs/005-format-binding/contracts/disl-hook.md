@@ -1,6 +1,6 @@
 # Contract: the DISL persistence hook
 
-The only change this feature makes to DISL (FR-003, research R2). Owned by feature 005; agreed with feature 004 (DISL 0.2), which does not touch §11 except §11.5 Identifiers.
+The only change this feature makes to DISL (FR-003, research R2). Owned by feature 005; agreed with feature 004 (DISL 0.2), which does not touch §11 except §11.5 Identifiers. DISL 0.2 merged first (pull request 42), so the hook is carried in the 0.2 document and schema.
 
 ## Document (`DISL-specification.md`, §11.2)
 

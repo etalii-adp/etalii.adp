@@ -53,6 +53,7 @@ Many tools do not store their model in a definition file of their own: the model
 - **Host**: an IDE that ADP's tools run in: standalone, IntelliJ, VS Code or Eclipse.
 - **Runtime**: the software in a host that loads a specification file and lets users create and change definition files with it.
 - **Canvas**: the surface a diagram or a designer is drawn on.
+- **Finding**: the result of evaluating a rule or reading a model, such as a broken constraint, an unreadable entry or a duplicate id. It has a severity (error, warning, info or hint) and says where it is: an element, a source location in a file, or a subject that is not drawn. DISL 0.1 called it a *problem*.
 - **Display name**: the one name of a tool type, spelled and capitalised the same in every host, the catalogue, the site and Notion. It is a name, not a description: "Mind map", not "Mind map (radial/hierarchical, single central topic)".
 
 ## Retired uses

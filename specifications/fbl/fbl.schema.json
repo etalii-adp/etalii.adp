@@ -36,7 +36,7 @@
           "const": "0.1"
         },
         "doc": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Doc"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
         },
         "bindings": {
           "type": "object",
@@ -63,10 +63,10 @@
       "type": "object",
       "properties": {
         "title": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/LocalizedText"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/LocalizedText"
         },
         "doc": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Doc"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
         },
         "claims": {
           "$ref": "#/$defs/Claims"
@@ -92,7 +92,7 @@
               "type": "boolean"
             },
             {
-              "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/LocalizedText"
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/LocalizedText"
             }
           ]
         },
@@ -477,7 +477,7 @@
               "type": "boolean"
             },
             {
-              "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/LocalizedText"
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/LocalizedText"
             }
           ]
         }
@@ -584,7 +584,7 @@
           "$ref": "#/$defs/Name"
         },
         "doc": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Doc"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
         },
         "line": {
           "$ref": "#/$defs/Regex"
@@ -619,10 +619,10 @@
           "$ref": "#/$defs/Name"
         },
         "doc": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Doc"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
         },
         "type": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/TypeRef"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/TypeRef"
         },
         "at": {
           "$ref": "#/$defs/Selector"
@@ -653,7 +653,7 @@
           }
         },
         "when": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Expression"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Expression"
         },
         "id": {
           "$ref": "#/$defs/IdBinding"
@@ -705,7 +705,7 @@
               "type": "boolean"
             },
             {
-              "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/LocalizedText"
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/LocalizedText"
             }
           ]
         }
@@ -739,10 +739,10 @@
           "$ref": "#/$defs/Name"
         },
         "doc": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Doc"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
         },
         "type": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/TypeRef"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/TypeRef"
         },
         "at": {
           "$ref": "#/$defs/Selector"
@@ -773,7 +773,7 @@
           }
         },
         "when": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Expression"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Expression"
         },
         "id": {
           "$ref": "#/$defs/IdBinding"
@@ -825,7 +825,7 @@
               "type": "boolean"
             },
             {
-              "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/LocalizedText"
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/LocalizedText"
             }
           ]
         },
@@ -871,7 +871,7 @@
           "type": "object",
           "properties": {
             "key": {
-              "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Expression"
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Expression"
             }
           },
           "additionalProperties": false,
@@ -926,7 +926,7 @@
           "type": "string"
         },
         "value": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Expression"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Expression"
         },
         "word": {
           "description": "lines, blocks: the value is the first word of the group (words split on whitespace, a double-quoted run being one word) that matches this expression; its named group 'value', if any, is the value.",
@@ -1042,7 +1042,7 @@
           "type": "string"
         },
         "value": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Expression"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Expression"
         },
         "word": {
           "description": "lines, blocks: the value is the first word of the group (words split on whitespace, a double-quoted run being one word) that matches this expression; its named group 'value', if any, is the value.",
@@ -1197,7 +1197,7 @@
               "type": "boolean"
             },
             {
-              "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/LocalizedText"
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/LocalizedText"
             }
           ]
         }
@@ -1328,7 +1328,7 @@
           "type": "string"
         },
         "when": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Expression"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Expression"
         }
       },
       "additionalProperties": false,
@@ -1372,7 +1372,7 @@
             "type": "object",
             "properties": {
               "doc": {
-                "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Doc"
+                "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
               },
               "values": {
                 "type": "array",
@@ -1435,7 +1435,7 @@
           }
         },
         "doc": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Doc"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
         }
       },
       "additionalProperties": false,
@@ -1560,7 +1560,7 @@
           "type": "string"
         },
         "doc": {
-          "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Doc"
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
         },
         "binding": {
           "$ref": "#/$defs/BindingRef"
@@ -1633,7 +1633,7 @@
             "type": "object",
             "properties": {
               "doc": {
-                "$ref": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Doc"
+                "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
               },
               "edit": {
                 "$ref": "#/$defs/Edit"
