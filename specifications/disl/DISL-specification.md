@@ -3731,6 +3731,8 @@ Automatic layout arranges nodes and routes edges. DISL does not define layout al
 
 The persistence layer declares exactly how the diagrams users draw are stored as DID definitions: which format, which files, how identifiers are generated, how elements and keys are ordered, which view data is kept, how precise numbers are, how old DID definitions are migrated, and how several people can edit at once. The goal is that any two conforming runtimes produce identical files for the same diagram, that files diff and merge well in version control, and that stored diagrams remain readable for decades. The structure these settings configure, and the rules a writer follows, are specified by DID ([DID-specification.md](../did/DID-specification.md)).
 
+A diagram type whose model lives in a file another tool owns (a Structurizr workspace, a Freeplane mind map, a pipeline's YAML) is not stored as a DID definition: its persistence names a binding in FBL, the Format Binding Language ([FBL-specification.md](../fbl/FBL-specification.md)), with `format: "fbl"` (11.2). *(informative)*
+
 ### 11.1 Overview
 
 ```json
@@ -3757,7 +3759,8 @@ The persistence layer declares exactly how the diagrams users draw are stored as
 
 | Property       | Type                                                                 | Description                                                                                                                                                                            |
 |----------------|----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `format`       | `"json"` (default), `"yaml"`, `"jsonl"`, `"cbor"`, `"plugin:<name>"` | Serialization. All formats encode the same logical DID definition (11.4). `jsonl` writes one element per line, which merges particularly well. `cbor` is for large binary-efficient storage. |
+| `format`       | `"json"` (default), `"yaml"`, `"jsonl"`, `"cbor"`, `"fbl"`, `"plugin:<name>"` | Serialization. All formats except `fbl` encode the same logical DID definition (11.4). `jsonl` writes one element per line, which merges particularly well. `cbor` is for large binary-efficient storage. `fbl`: the model is a body in another format, read and written through `binding`. |
+| `binding`      | URI reference or FBL Binding                                         | Required when `format` is `"fbl"`, forbidden otherwise: the binding that reads and writes the model, as `<uri>#<name>` of an FBL document ([FBL-specification.md](../fbl/FBL-specification.md), section 2.3), or an inline FBL Binding object. |
 | `encoding`     | `"utf-8"`                                                            | Only UTF-8 is allowed.                                                                                                                                                                 |
 | `indent`       | int or `"tab"`                                                       | Default 2. `0` writes minified JSON.                                                                                                                                                   |
 | `newline`      | `"lf"`, `"crlf"`                                                     | Default `"lf"`.                                                                                                                                                                        |
@@ -3766,6 +3769,8 @@ The persistence layer declares exactly how the diagrams users draw are stored as
 | `mediaType`    | string                                                               | Media type of DID definitions.                                                                                                                                                            |
 
 YAML output MUST quote strings that would otherwise be read as other types (the "Norway problem": `no`, `yes`, `on`, `off`, `~`, numeric-looking strings, dates) and MUST NOT use anchors, aliases or tags.
+
+When `format` is `"fbl"`, the stored model is the body the binding describes, not a DID definition, and it is written by the splices FBL defines, keeping the body's own conventions. `files`, `encoding`, `indent`, `newline`, `finalNewline`, `compression`, `mediaType`, `ordering`, `omitDefaults`, `precision`, `timestamps`, `canonical`, `metadata` and `definition` **MUST NOT** be given. `ids`, `view`, `migrations`, `collaboration`, `import` and `export` keep their meaning; view data is stored in the registration FBL defines. Such a specification needs no persistence plugin; the refusal of 13.1 for a missing required plugin applies only to a plugin the binding's reader names.
 
 ### 11.3 Files
 
@@ -4235,6 +4240,8 @@ Loading is tolerant of ids (11.5.4). A runtime **MUST** load a model in which id
 
 A model read through FBL is loaded in the same order, with FBL's reading order and FBL raising the reader findings.
 
+For a diagram whose persistence `format` is `"fbl"`, the body is read through its binding and the view data comes from the registration, as FBL specifies ([FBL-specification.md](../fbl/FBL-specification.md), section 14.2).
+
 ### 14.3 Unknown content
 
 Unknown types, attributes and view properties in a stored diagram are preserved as DID specifies ([DID-specification.md](../did/DID-specification.md), section 8.2), and unknown elements are reported by `std.typeExists`.
@@ -4269,7 +4276,7 @@ The "recompute derived values & bindings" step also recomputes `derived` ids (11
 ### 14.5 Saving
 
 1. Evaluate constraints with `save` timing. If `blockSaveOn: "error"` and errors exist, ask the user (saving MUST remain possible under a different name or as a draft if the runtime supports drafts).
-2. Write the DID definition canonically and atomically, as DID specifies ([DID-specification.md](../did/DID-specification.md), section 8.3).
+2. Write the DID definition canonically and atomically, as DID specifies ([DID-specification.md](../did/DID-specification.md), section 8.3). With `format: "fbl"`, write the body's edits as FBL specifies ([FBL-specification.md](../fbl/FBL-specification.md), section 6.6) instead.
 
 ---
 

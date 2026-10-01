@@ -33,11 +33,22 @@ DISL and DID have content; DESL, DED, EDSL and EDD are placeholders until a desi
 
 History: DEDL became DISL and DID. What was one language, DEDL 0.1, holding both a language definition and the documents made with it, is now DISL (the specification of a diagram type) and DID (a stored diagram). The acronym DEDL is retired and has no current meaning; files, schema addresses and links in its old form are still read or redirected as DISL or DID. Specification files were named after their language (`.disl`, `.desl`, `.edsl`) until 2026-09-30, when they took `.dis`, `.des` and `.eds`, because a file holds a specification, not the language; `.disl` files are still read.
 
+## Tools whose model is another tool's file
+
+Many tools do not store their model in a definition file of their own: the model is a file that belongs to another tool as much as to ADP, such as a Structurizr workspace, an Azure Pipelines YAML file or a Freeplane mind map. FBL, the **Format Binding Language** (`.fbl`), describes how such a file is read and written, and serves every kind of tool.
+
+- **Binding**: an FBL declaration of how one file format maps to a tool type's model in both directions: which files it claims, how elements, relations and attributes are read, and how each change is written back.
+- **Body**: the file or folder that holds a document's model when that model is another tool's file. The body is the model's only store; ADP never keeps a second copy of it.
+- **Splice**: one minimal, named replacement of a range of bytes in a body. Every edit a user makes is written as one or more splices, and everything outside them stays byte for byte as it was.
+- **Reading**: one tool type's view of a body. One body can have several readings open at once, such as six C4 diagram types of one Structurizr workspace, and they share one model and one undo history.
+- **Folder subject**: a body that is a folder rather than a file, such as a Helm chart, recognised by the files in it and watched for changes.
+- **Persistence plugin**: code that reads and writes a body in a format FBL cannot declare, under the plugin contract FBL defines.
+
 ## Related terms
 
 - **Tool type**: one particular tool ADP offers, such as the Wardley map; by kind a *diagram type*, *designer type* or *editor type*. Identified by its **origin**, `<vendor>/<type>`, for example `wardley/map`.
 - **Tool engineer**: the person who specifies a tool type in a specification language. Not a "designer", which is a kind of tool, and not an "author".
-- **Document**: one piece of content a user works on with a tool, such as one Wardley map. Where a host registers documents, its **registration file** (`.adp`) names the origin on its first line. For a diagram built on DISL, the stored form of the document is a DID definition file.
+- **Document**: one piece of content a user works on with a tool, such as one Wardley map. Where a host registers documents, its **registration file** (`.adp`) names the origin on its first line; for a document whose model is another tool's file, it also names the body and keeps the positions the user placed (FBL, section 8). For a diagram built on DISL, the stored form of the document is a DID definition file.
 - **Module**: the code package in a host that implements one or more tool types of one kind: a *diagram module*, *designer module* or *editor module*.
 - **Host**: an IDE that ADP's tools run in: standalone, IntelliJ, VS Code or Eclipse.
 - **Runtime**: the software in a host that loads a specification file and lets users create and change definition files with it.

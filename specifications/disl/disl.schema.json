@@ -11656,7 +11656,7 @@
       }
     },
     "Persistence": {
-      "description": "How the diagrams users draw are stored as DID definitions, declared in a specification's persistence property. It chooses the serialization format (json by default), encoding and file split, how ids are generated, how records and keys are ordered, number precision and timestamps, which view data and style overrides are kept, metadata, how the specification is referenced, migrations, collaboration, and import and export conversions. The aim is byte-identical output from any two conforming runtimes. DISL 0.2 moves ids to IdStrategy and adds viewer state to view. See section 11.1.",
+      "description": "How the diagrams users draw are stored as DID definitions, declared in a specification's persistence property. It chooses the serialization format (json by default), encoding and file split, how ids are generated, how records and keys are ordered, number precision and timestamps, which view data and style overrides are kept, metadata, how the specification is referenced, migrations, collaboration, and import and export conversions. The aim is byte-identical output from any two conforming runtimes. DISL 0.2 moves ids to IdStrategy and adds viewer state to view. With format fbl the model is instead a body in another tool's format, read and written through an FBL binding (FBL, the Format Binding Language), and the DID writer settings are not given. See sections 11.1 and 11.2.",
       "type": "object",
       "properties": {
         "format": {
@@ -11666,12 +11666,25 @@
                 "json",
                 "yaml",
                 "jsonl",
-                "cbor"
+                "cbor",
+                "fbl"
               ]
             },
             {
               "type": "string",
               "pattern": "^plugin:"
+            }
+          ]
+        },
+        "binding": {
+          "description": "The FBL binding that reads and writes the model when format is fbl: a URI reference to an FBL document followed by '#' and the binding's name, or an inline FBL Binding. See section 11.2.",
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri-reference"
+            },
+            {
+              "$ref": "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Binding"
             }
           ]
         },
@@ -12059,7 +12072,107 @@
       "additionalProperties": false,
       "patternProperties": {
         "^x-": true
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "format": {
+                "const": "fbl"
+              }
+            },
+            "required": [
+              "format"
+            ]
+          },
+          "then": {
+            "required": [
+              "binding"
+            ],
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "files"
+                  ]
+                },
+                {
+                  "required": [
+                    "encoding"
+                  ]
+                },
+                {
+                  "required": [
+                    "indent"
+                  ]
+                },
+                {
+                  "required": [
+                    "newline"
+                  ]
+                },
+                {
+                  "required": [
+                    "finalNewline"
+                  ]
+                },
+                {
+                  "required": [
+                    "compression"
+                  ]
+                },
+                {
+                  "required": [
+                    "mediaType"
+                  ]
+                },
+                {
+                  "required": [
+                    "ordering"
+                  ]
+                },
+                {
+                  "required": [
+                    "omitDefaults"
+                  ]
+                },
+                {
+                  "required": [
+                    "precision"
+                  ]
+                },
+                {
+                  "required": [
+                    "timestamps"
+                  ]
+                },
+                {
+                  "required": [
+                    "canonical"
+                  ]
+                },
+                {
+                  "required": [
+                    "metadata"
+                  ]
+                },
+                {
+                  "required": [
+                    "definition"
+                  ]
+                }
+              ]
+            }
+          },
+          "else": {
+            "not": {
+              "required": [
+                "binding"
+              ]
+            }
+          }
+        }
+      ]
     },
     "ViewKind": {
       "description": "A kind of view data: the 0.1 kinds a view may store (bounds, waypoints, anchors, labelOffsets, collapsed, zIndex, rotation, params, ports, viewport, guides, pinned, settings) plus the viewer-only kinds selection, filters and viewpoint. persistence.view lists the kinds a view stores and the kinds each viewer holds; a kind may not be in both. See DISL 0.2, section 11.6.",

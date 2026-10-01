@@ -1,9 +1,9 @@
 <!--
 Sync Impact Report
-- Version: 1.1.0 → 1.1.1 (PATCH)
-- Modified: Structure and Naming (the DISL examples and the example extension are `*.dis` and `.dis`, after the rename of specification files).
+- Version: 1.1.1 → 1.2.0 (MINOR)
+- Modified: Structure and Naming (a language shared by the tool kinds may sit beside the six tool languages, under the same naming rules; the first is FBL, the Format Binding Language).
 - Added or removed sections: none.
-- Rationale for PATCH: a specification file's extension names what it holds, a specification, rather than the language (Peter, 2026-09-30); the rule itself (lowercase and short) is unchanged.
+- Rationale for MINOR: materially expanded guidance on where specifications live (feature 005, Format Binding, 2026-09-30); no principle removed or redefined.
 - Templates: plan, spec and tasks templates unchanged; no follow-ups.
 --># etalii.adp Constitution
 
@@ -52,6 +52,7 @@ A construct, format or dependency MUST be justified by a current tool's need, no
 
 - `specifications/<name>/` holds one specification: its document `<NAME>-specification.md`, its schema `<name>.schema.json`, and its examples beside them. DISL, the Diagram Specification Language, in `specifications/disl/` (`DISL-specification.md`, `disl.schema.json`, examples `*.dis`), is the model.
 - Each kind of tool has one specification language and one definition language, and all six follow the model's pattern: DISL and DID (the Diagram Definition Language) for diagrams, DESL and DED for designers, EDSL and EDD for editors, in `specifications/disl/`, `did/`, `desl/`, `ded/`, `edsl/` and `edd/`. For each, `<name>` is the acronym in lowercase and is used alike for the folder, the schema, its `$id` (`https://etalii.net/adp/<name>/schema/<version>/<name>.schema.json`), the version key (`"<name>": "<version>"`) and the file extension (`.<name>`). A language without content yet is a placeholder document with status *Placeholder*, stating its purpose and extension and nothing normative.
+- A language that serves every kind of tool rather than one kind sits beside the six under the same rules. The first is FBL, the Format Binding Language, in `specifications/fbl/` (`FBL-specification.md`, `fbl.schema.json`, `$id` `https://etalii.net/adp/fbl/schema/<version>/fbl.schema.json`, version key `"fbl"`, extension `.fbl`), which declares how a tool reads and writes a model that lives in another tool's file.
 - `docs/` holds documentation about the organization and its repositories rather than a format, such as `new-repository.md`.
 - The organization is 'EtAlii' in prose and `etalii-adp` on GitHub; the product is 'ADP', 'A Different Perspective'.
 - A specification folder is the format's short name in lowercase (`disl`); its document takes the name in capitals (`DISL-specification.md`). A file extension a specification defines is lowercase and short (`.dis`).
@@ -69,4 +70,4 @@ A construct, format or dependency MUST be justified by a current tool's need, no
 
 This constitution supersedes other practices in this repository. Amendments are made through `/speckit-constitution`, recorded in version control, and versioned semantically: MAJOR for removing or redefining a principle, MINOR for adding a principle or materially expanding guidance, PATCH for clarifications. Reviews of plans and changes MUST verify compliance with the principles above; runtime guidance for agents lives in `CLAUDE.md`.
 
-**Version**: 1.1.1 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-09-30
+**Version**: 1.2.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-09-30
