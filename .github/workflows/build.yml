@@ -2,6 +2,9 @@
 # specifications/ (every *.dis and *.did, and the legacy fixtures through their aliases) and every tool definition under
 # definitions/ must validate against its specification's schema, as the constitution requires.
 # On pull requests, the terminology job also checks the ADP vocabulary against docs/terminology.md (spec 002).
+# The licence job checks that LICENSE is still the Apache License 2.0 with its copyright line, that no second licence
+# file sits at the root or under specifications/, and that every specification document states that licence in its
+# header table (spec 003-specification-licence).
 name: Build
 
 on:
@@ -43,3 +46,15 @@ jobs:
           python-version: '3.13'
       - name: Check the vocabulary against the glossary
         run: python .github/scripts/terminology-check.py --name etalii.adp
+
+  # Keeps the licence the etalii.adp.site refresh reads recognisable, and the statement in every specification
+  # document true (spec 003); no network, so a pull request is checked by what it contains.
+  licence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Check the licence file and every specification's licence statement
+        run: python .github/scripts/licence-check.py

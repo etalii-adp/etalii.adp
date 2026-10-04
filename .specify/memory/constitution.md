@@ -1,9 +1,9 @@
 <!--
 Sync Impact Report
-- Version: 1.1.1 → 1.2.0 (MINOR)
-- Modified: Structure and Naming (a language shared by the tool kinds may sit beside the six tool languages, under the same naming rules; the first is FBL, the Format Binding Language).
+- Version: 1.2.0 → 1.3.0 (MINOR)
+- Modified: Structure and Naming (every specification document, placeholders included, states the repository's licence in a `Licence` row of its header table; the repository keeps one licence file of its own, `LICENSE` at its root); Development Workflow (the Build workflow also checks the licence file and every specification's licence statement).
 - Added or removed sections: none.
-- Rationale for MINOR: materially expanded guidance on where specifications live (feature 005, Format Binding, 2026-09-30); no principle removed or redefined.
+- Rationale for MINOR: materially expanded guidance on the shape of a specification and on what the Build workflow checks (feature 003, Specification Licence, 2026-10-04); no principle removed or redefined.
 - Templates: plan, spec and tasks templates unchanged; no follow-ups.
 --># etalii.adp Constitution
 
@@ -55,6 +55,7 @@ A construct, format or dependency MUST be justified by a current tool's need, no
 - A language that serves every kind of tool rather than one kind sits beside the six under the same rules. The first is FBL, the Format Binding Language, in `specifications/fbl/` (`FBL-specification.md`, `fbl.schema.json`, `$id` `https://etalii.net/adp/fbl/schema/<version>/fbl.schema.json`, version key `"fbl"`, extension `.fbl`), which declares how a tool reads and writes a model that lives in another tool's file.
 - `docs/` holds documentation about the organization and its repositories rather than a format, such as `new-repository.md`.
 - The organization is 'EtAlii' in prose and `etalii-adp` on GitHub; the product is 'ADP', 'A Different Perspective'.
+- Every specification document, placeholders included, states the repository's licence as the last row of its header table: `` | Licence | [Apache License 2.0](https://github.com/etalii-adp/etalii.adp/blob/develop/LICENSE) (`Apache-2.0`) | ``. The repository keeps exactly one licence file of its own, `LICENSE` at its root, carrying the Apache License 2.0 and the line `Copyright © Peter Vrenken 2026`, and none beside it at the root or under `specifications/`.
 - A specification folder is the format's short name in lowercase (`disl`); its document takes the name in capitals (`DISL-specification.md`). A file extension a specification defines is lowercase and short (`.dis`).
 - A change that renames or moves a specification's files MUST update every reference to them in the same pull request.
 
@@ -64,10 +65,10 @@ A construct, format or dependency MUST be justified by a current tool's need, no
 - Each feature is developed on its own branch, `features/<number>-<name>`, in its own worktree. The one exception is `claude/<name>`, which Claude's cloud sessions are handed by their harness.
 - A feature reaches `develop`, the integration branch, only through a pull request merged with a merge commit. Nothing is merged locally into `develop` or pushed to it directly. When the pull request is merged or closed, the branch is deleted locally and on `origin`, and the worktree removed.
 - Every plan MUST include a Constitution Check against these principles; any deviation MUST be recorded with its justification in the plan's complexity-tracking section.
-- The Build workflow, `.github/workflows/build.yml`, runs on every pull request into `develop` and on every change to `develop`. It MUST at least validate every example against its schema, and its badge heads the readme (spec 001-ci-and-badges).
+- The Build workflow, `.github/workflows/build.yml`, runs on every pull request into `develop` and on every change to `develop`. It MUST at least validate every example against its schema, and its badge heads the readme (spec 001-ci-and-badges). It also checks the licence file and each specification's licence statement (spec 003-specification-licence).
 
 ## Governance
 
 This constitution supersedes other practices in this repository. Amendments are made through `/speckit-constitution`, recorded in version control, and versioned semantically: MAJOR for removing or redefining a principle, MINOR for adding a principle or materially expanding guidance, PATCH for clarifications. Reviews of plans and changes MUST verify compliance with the principles above; runtime guidance for agents lives in `CLAUDE.md`.
 
-**Version**: 1.2.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-09-30
+**Version**: 1.3.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-10-04

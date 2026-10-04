@@ -9,6 +9,7 @@
 | File extension | `.edd` |
 | Paired language | EDSL, the Editor Specification Language (`.eds`) |
 | Schema | none yet |
+| Licence | [Apache License 2.0](https://github.com/etalii-adp/etalii.adp/blob/develop/LICENSE) (`Apache-2.0`) |
 
 ---
 
