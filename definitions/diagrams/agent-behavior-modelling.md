@@ -42,7 +42,7 @@ DISL's persistence layer cannot describe a tree kept inside someone else's prose
 - **Notes** are the lines indented under an item that are not list items themselves, blank lines between them included. They are kept as written and are the node's `notes` attribute.
 - **Retry's count** is part of the keyword: `Retry up to 3 times`, or `Retry up to 1 time`. A new Retry gets three.
 - **An item without a keyword**, or with bold text that is none of the eleven (a Retry with no number among them), is read as a Do whose label is the whole item, drawn dashed, and reported (`abm.no-keyword`), so a hand-written list opens rather than refusing.
-- **Ids are places in the tree**: `1`, `1.2`, `1.2.1`. Nothing is written into the Markdown to name a node, because anything written there the agent would read too. The `.dis` says `ids.strategy: derived` with an expression for the last part; DISL has no way to say "the parent's id, a dot, and this". A place survives a rename, so selection and a stored position survive it too; a stored position follows the place rather than the node when siblings are reordered, which is a known limit.
+- **Ids are places in the tree**: `1`, `1.2`, `1.2.1`. Nothing is written into the Markdown to name a node, because anything written there the agent would read too. The `.dis` says `ids.strategy: derived` with an expression for the last part; DISL has no way to say "the parent's id, a dot, and this". A place survives a rename, so selection and a stored position survive it too; a drag that reorders siblings renames the stored positions with them, so they follow the node; a reorder by Alt+Up or Alt+Down, or a re-parent, does not, and a stored height then follows the place, which is a known limit.
 - **Round trip.** The parser never throws, and every edit is a line splice through `LineDocument`: the rest of the file, its line endings and its prose are untouched, and an unchanged file is written back byte for byte. A new list item uses the file's existing line ending.
 - **Adding to a file without a tree.** The first node added to a Markdown file with no Behavior heading appends a `## Behavior` section at the end of the file.
 - **A new diagram** (`AbmDocumentFactory.cs`) is written with CRLF: a title, one line saying what the file is, a `## How to follow the behavior` section that tells the agent what each keyword means, and a `## Behavior` section holding `- **Do in order:** Handle the request`. The legend is what lets a model that has never heard of behavior trees follow one.
@@ -51,17 +51,18 @@ DISL's persistence layer cannot describe a tree kept inside someone else's prose
 ## Layout
 
 - **Computed, top-down.** The root sits at the top; each node's children are laid out left to right in document order beneath it, each subtree as wide as it needs, so no two subtrees overlap (`AbmLayout.cs`: nodes 200 by 60, 28 between siblings, 56 between levels). Several roots stand side by side.
-- **Dragged positions win.** A drag stores the node's top-left in the `.adp` registration's `layout:` block, keyed by its place (`1.2: 360 116`), through core's `SetRegistrationLayoutCommand`. The `.dis` approximates this with `respect: pinned`; DISL cannot say that pins live in the registration rather than in the model file.
+- **Across, the order; down, the row.** A node's x is always the computed one, because its place among its siblings is the order they run in. All children of one parent share one row: the `.adp` registration's `layout:` block keeps the top-left of every node a drag moved, keyed by its place (`1.2: 360 160`), and a row is drawn at the first height stored for any of its nodes, or hangs the computed distance below its parent when none is, and never closer to the parent than 16 (`AbmLayout.Arrange`). So everything beneath a row follows it. The `.dis` approximates this with `respect: pinned`; DISL cannot say that pins live in the registration rather than in the model file, nor that a pin moves a row.
 - **Viewport.** The whole tree is laid out and then culled to the viewport; a parent line is kept when either end is in view and brings both ends with it (`AbmElementMapper.cs`).
 
 ## Interaction
 
 - **Adding** is a drop from the toolbox, one item per kind. The node goes under the nearest node above the drop point that can take another child, placed among its children by where it was dropped. Into an empty tree the first node becomes the root; a drop with no such node above it is refused with a sentence naming the kinds that take children. Its label is selected for editing at once. DISL's toolbox has no drop-from-palette mode and cannot say "the nearest node above that has room"; the `.dis` uses an operation per kind whose parent is a fallback.
 - **Re-parenting** is a right-button drag from the new parent's body to the node (`connectOnRightDrag`): the node moves, with everything under it, to the end of the new parent's children. A line to a leaf, to the node itself or to anything below it is refused with a sentence; the cycle rule is also declared on the canvas (`acyclic`), so such a target is never offered.
-- **Reordering** among siblings is Alt+Up and Alt+Down (`abm.move-earlier`, `abm.move-later`); the node's lines move with everything under them.
+- **Dragging** a node carries everything beneath it, and its siblings follow it up and down. Dropped past a sibling's middle, it takes that sibling's place: while it moves, the siblings it passes step aside to show where it will land, as the Sankey diagram does in a column, and on release its lines move in the Markdown with everything under them (`ArrangeAbmNodeCommand`). The order and the row's height are one undoable step.
+- **Reordering** among siblings is also Alt+Up and Alt+Down (`abm.move-earlier`, `abm.move-later`); the node's lines move with everything under them.
 - **Rename** is F2 or a double-click, editing the label only. The keyword is the kind, changed in the property grid's Kind choice (`abm.kind`); a kind that cannot hold the node's present children is refused ("\"Check\" holds no children, and this node has 2 children."). Attempts (`abm.attempts`) shows only for a Retry, Notes (`abm.notes`) edits the note lines, and Place (`abm.place`) is read-only.
 - **Delete** removes the node and everything under it, as one splice.
-- **Undo** restores the whole document text (`RestoreDocumentCommand<IAbmDocumentStore>`), so every edit above is one undoable step, a drag included.
+- **Undo** restores the whole document text (`RestoreDocumentCommand<IAbmDocumentStore>`), so every edit above is one undoable step; a drag's undo (`RestoreAbmArrangementCommand`) puts back the Markdown and every stored position together.
 
 ## Rules
 
@@ -92,7 +93,7 @@ The rule ids, in `backend/…/AbmRuleSet.cs`, reach the Errors and Warnings pane
 
 ## The examples
 
-`examples/` holds four agents: `pull-request-reviewer`, `customer-support`, `bug-fixer` and `research-assistant`. Together they use all eleven kinds, and `research-assistant.adp` has a `layout:` block that moves one node off its computed place. They were written for ADP because no published corpus of this notation can exist; their readme (`examples/readme.md`) says what they do not demonstrate.
+`examples/` holds four agents: `pull-request-reviewer`, `customer-support`, `bug-fixer` and `research-assistant`. Together they use all eleven kinds, and `research-assistant.adp` has a `layout:` block that lowers one row, with everything beneath it, below its computed height. They were written for ADP because no published corpus of this notation can exist; their readme (`examples/readme.md`) says what they do not demonstrate.
 
 ## Sources
 
