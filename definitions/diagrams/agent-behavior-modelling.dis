@@ -1,0 +1,1733 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
+  "disl": "0.1",
+  "language": {
+    "id": "net.etalii.adp.etalii.agent-behavior-modelling",
+    "version": "0.1.0",
+    "label": "Agent Behavior Modelling",
+    "doc": {
+      "summary": "A chat agent's instructions as a behavior tree: what it does in order, what it tries until something works, what it may do at once, where it asks first, and when it stops.",
+      "description": "Agent Behavior Modelling borrows the behavior tree from game development and tunes it to agent engineering. A tree of nodes says how an agent works through a task: composites (Do in order, Try in order, Do together) arrange their children, wrappers (Retry up to N times, Repeat until, Only while, Ask approval before) govern exactly one child, and leaves (Check, Do, Ask the user, Delegate) are the work itself.\n\nThe tree is not stored in a model file of its own. It is a keyword-marked bullet list under the `Behavior` heading of an ordinary Markdown file, and that Markdown file is the instruction file the agent reads (a system prompt, an `AGENTS.md`, a skill). The `.adp` registration beside it keeps only what the drawing needs: positions the author dragged.\n\nOrigin tag: `etalii/agent-behavior-modelling`. What this specification cannot express - the Markdown format, the places used as ids, the computed layout with its overrides, the re-parenting gesture and the kind change refused for a node's children - is described in `agent-behavior-modelling.md` beside this file.",
+      "rationale": "An instruction file written as prose hides its control flow: which steps are ordered, which are alternatives, where the agent must stop and ask. Drawn as a behavior tree, the flow is visible and checkable, while the file the agent reads stays plain Markdown.",
+      "tags": [
+        "agent",
+        "behavior tree",
+        "prompt",
+        "instructions",
+        "agent engineering",
+        "humans and agents together"
+      ],
+      "audience": [
+        "user",
+        "author"
+      ],
+      "seeAlso": [
+        {
+          "title": "Behavior tree (artificial intelligence, robotics and control)",
+          "href": "https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control)"
+        }
+      ]
+    },
+    "defaultLocale": "en",
+    "authors": [
+      {
+        "name": "Peter Vrenken"
+      }
+    ],
+    "license": "Apache-2.0",
+    "icon": "mdi-robot-outline",
+    "fileExtension": "md",
+    "requires": {
+      "conformance": "standard"
+    }
+  },
+  "metamodel": {
+    "doc": "Eleven node types in three families, nested to any depth. The tree is containment: every node but the root has exactly one parent, the order of a node's children is meaningful and stored, and the family decides how many children a node may hold.",
+    "types": {
+      "BehaviorNode": {
+        "abstract": true,
+        "doc": "Everything that can be placed in a behavior tree.",
+        "labelAttribute": "label",
+        "attributes": {
+          "label": {
+            "type": "string",
+            "label": "Label",
+            "default": "",
+            "order": 1,
+            "doc": {
+              "summary": "What this node does, or the condition it names.",
+              "description": "The text after the keyword on the node's list item. For Repeat until and Only while it is the condition; for Delegate it names the sub-agent or links another behavior file."
+            }
+          },
+          "notes": {
+            "type": "text",
+            "label": "Notes",
+            "markup": "markdown",
+            "default": "",
+            "order": 3,
+            "doc": {
+              "summary": "Further instructions for this node, kept as written.",
+              "description": "The lines indented under the node's list item that are not list items themselves. The agent reads them with the node; the diagram marks a node that has them but never draws them."
+            }
+          }
+        }
+      },
+      "Composite": {
+        "abstract": true,
+        "extends": "BehaviorNode",
+        "doc": "A node that arranges one or more children.",
+        "children": {
+          "allowed": [
+            "BehaviorNode"
+          ],
+          "ordered": true,
+          "min": 1
+        }
+      },
+      "Decorator": {
+        "abstract": true,
+        "extends": "BehaviorNode",
+        "doc": "A node that governs exactly one child: when it runs, how often, or whether the user agrees first.",
+        "children": {
+          "allowed": [
+            "BehaviorNode"
+          ],
+          "ordered": true,
+          "min": 1,
+          "max": 1
+        }
+      },
+      "Leaf": {
+        "abstract": true,
+        "extends": "BehaviorNode",
+        "doc": "A node that does the work and holds no children."
+      },
+      "Sequence": {
+        "extends": "Composite",
+        "label": "Do in order",
+        "icon": "mdi-format-list-numbered",
+        "doc": "Runs the children one after another; stops and fails at the first that fails; succeeds when all have succeeded.",
+        "x-abm": {
+          "keyword": "Do in order",
+          "kind": "sequence"
+        }
+      },
+      "Fallback": {
+        "extends": "Composite",
+        "label": "Try in order",
+        "icon": "mdi-call-split",
+        "doc": "Tries the children one after another; stops and succeeds at the first that succeeds; fails when all have failed.",
+        "x-abm": {
+          "keyword": "Try in order",
+          "kind": "fallback"
+        }
+      },
+      "Parallel": {
+        "extends": "Composite",
+        "label": "Do together",
+        "icon": "mdi-format-columns",
+        "doc": "The children are independent and may run at once, as parallel tool calls or sub-agents; succeeds when all have succeeded.",
+        "x-abm": {
+          "keyword": "Do together",
+          "kind": "parallel"
+        }
+      },
+      "Retry": {
+        "extends": "Decorator",
+        "label": "Retry",
+        "icon": "mdi-replay",
+        "doc": "Runs the child again when it fails, at most the given number of attempts in total.",
+        "attributes": {
+          "attempts": {
+            "type": "int",
+            "label": "Attempts",
+            "default": 3,
+            "min": 1,
+            "order": 2,
+            "doc": "The N of `Retry up to N times`: the most attempts in total, the first included."
+          }
+        },
+        "x-abm": {
+          "keyword": "Retry up to {attempts} times",
+          "kind": "retry"
+        }
+      },
+      "RepeatUntil": {
+        "extends": "Decorator",
+        "label": "Repeat until",
+        "icon": "mdi-repeat",
+        "doc": "Runs the child again and again until the condition in the label holds: the agentic loop, such as working until the tests pass.",
+        "x-abm": {
+          "keyword": "Repeat until",
+          "kind": "repeat"
+        }
+      },
+      "Guard": {
+        "extends": "Decorator",
+        "label": "Only while",
+        "icon": "mdi-shield-outline",
+        "doc": "Runs the child only while the condition in the label holds, and abandons it when it stops holding.",
+        "x-abm": {
+          "keyword": "Only while",
+          "kind": "guard"
+        }
+      },
+      "Approval": {
+        "extends": "Decorator",
+        "label": "Ask approval before",
+        "icon": "mdi-account-check-outline",
+        "doc": "Describes what the child will do and waits for the user's explicit approval; when refused, the node fails.",
+        "x-abm": {
+          "keyword": "Ask approval before",
+          "kind": "approval"
+        }
+      },
+      "Check": {
+        "extends": "Leaf",
+        "label": "Check",
+        "icon": "mdi-help-circle-outline",
+        "doc": "A question answered from the conversation, memory or a tool result; succeeds when true, fails when false. Never acts.",
+        "x-abm": {
+          "keyword": "Check",
+          "kind": "check"
+        }
+      },
+      "Do": {
+        "extends": "Leaf",
+        "label": "Do",
+        "icon": "mdi-play-outline",
+        "doc": "One piece of work: a tool call, a written answer, an edit. Succeeds when done.",
+        "x-abm": {
+          "keyword": "Do",
+          "kind": "action"
+        }
+      },
+      "AskUser": {
+        "extends": "Leaf",
+        "label": "Ask the user",
+        "icon": "mdi-account-question-outline",
+        "doc": "Asks the question and waits for the answer; succeeds when answered.",
+        "x-abm": {
+          "keyword": "Ask the user",
+          "kind": "ask"
+        }
+      },
+      "Delegate": {
+        "extends": "Leaf",
+        "label": "Delegate",
+        "icon": "mdi-account-arrow-right-outline",
+        "doc": "Hands the task to a sub-agent or to another behavior file, linked in the label; succeeds when it reports success.",
+        "x-abm": {
+          "keyword": "Delegate",
+          "kind": "delegate"
+        }
+      }
+    },
+    "relations": {
+      "Child": {
+        "label": "Child",
+        "doc": {
+          "summary": "The line from a node to each of its children, in order.",
+          "description": "Not a stored relation: a line is derived from containment, one per node that has a parent. Drawing one from a node to another moves the second, with everything under it, under the first; removing one is not offered, because a node always has its place in the tree."
+        },
+        "source": [
+          "Composite",
+          "Decorator"
+        ],
+        "target": "BehaviorNode",
+        "directed": true,
+        "allowSelfLoops": false,
+        "allowParallel": false,
+        "acyclic": true,
+        "derived": "diagram.nodes.filter(n, n.parent != null).map(n, {'source': n.parent, 'target': n})"
+      }
+    }
+  },
+  "coordinates": {
+    "doc": "One free pixel canvas. Every position is computed by the tree layout unless the author dragged the node, in which case the dragged top-left is kept in the .adp registration.",
+    "systems": {
+      "canvas": {
+        "kind": "cartesian",
+        "x": {
+          "kind": "linear",
+          "unit": "px"
+        },
+        "y": {
+          "kind": "linear",
+          "unit": "px"
+        },
+        "orientation": "y-down",
+        "grid": {
+          "visible": false
+        }
+      }
+    },
+    "default": "canvas"
+  },
+  "notation": {
+    "doc": "The family is the shape, as behavior tree editors in games draw it: a composite is a squircle, a wrapper a hexagon. Among the leaves a Check is a pill, a Do a box, an Ask the user a parallelogram and a Delegate a diode. Every node shows its keyword in small capitals above its label.",
+    "theme": {
+      "tokens": {
+        "color.text": "#0f172a",
+        "color.surface": "#ffffff",
+        "color.border": "#e2e8f0",
+        "color.abm.composite": "#aaed92",
+        "color.abm.decorator": "#fcf281",
+        "color.abm.check": "#9edcfa",
+        "color.abm.action": "#86e6d9",
+        "color.abm.other": "#ededed"
+      },
+      "modes": {
+        "dark": {
+          "color.text": "#f1f5f9",
+          "color.surface": "#1e293b",
+          "color.border": "#334155",
+          "color.abm.composite": "#2e7814",
+          "color.abm.decorator": "#736a03",
+          "color.abm.check": "#086fa1",
+          "color.abm.action": "#187569",
+          "color.abm.other": "#696969"
+        }
+      },
+      "defaultMode": "light",
+      "followSystem": true,
+      "doc": "The fills are the functional decomposition graph's, so the two etalii notations read alike in both themes."
+    },
+    "styles": {
+      "node": {
+        "stroke": {
+          "color": {
+            "token": "color.border"
+          },
+          "width": 1.5
+        },
+        "font": {
+          "size": 12,
+          "color": {
+            "token": "color.text"
+          }
+        },
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "composite": {
+        "extends": "node",
+        "fill": {
+          "token": "color.abm.composite"
+        }
+      },
+      "decorator": {
+        "extends": "node",
+        "fill": {
+          "token": "color.abm.decorator"
+        }
+      },
+      "check": {
+        "extends": "node",
+        "fill": {
+          "token": "color.abm.check"
+        }
+      },
+      "action": {
+        "extends": "node",
+        "fill": {
+          "token": "color.abm.action"
+        }
+      },
+      "other": {
+        "extends": "node",
+        "fill": {
+          "token": "color.abm.other"
+        }
+      },
+      "child": {
+        "stroke": {
+          "color": {
+            "token": "color.text"
+          },
+          "width": 1.5
+        }
+      }
+    },
+    "shapes": {
+      "superellipse": {
+        "label": "Superellipse",
+        "doc": "The squircle |x/a|^4 + |y/b|^4 = 1 inscribed in the bounds, written as four cubic Bezier quarters with control factor 0.919.",
+        "path": {
+          "segments": [
+            {
+              "op": "M",
+              "x": "w",
+              "y": "h * 0.5"
+            },
+            {
+              "op": "C",
+              "c1x": "w",
+              "c1y": "h * 0.9595",
+              "c2x": "w * 0.9595",
+              "c2y": "h",
+              "x": "w * 0.5",
+              "y": "h"
+            },
+            {
+              "op": "C",
+              "c1x": "w * 0.0405",
+              "c1y": "h",
+              "c2x": 0,
+              "c2y": "h * 0.9595",
+              "x": 0,
+              "y": "h * 0.5"
+            },
+            {
+              "op": "C",
+              "c1x": 0,
+              "c1y": "h * 0.0405",
+              "c2x": "w * 0.0405",
+              "c2y": 0,
+              "x": "w * 0.5",
+              "y": 0
+            },
+            {
+              "op": "C",
+              "c1x": "w * 0.9595",
+              "c1y": 0,
+              "c2x": "w",
+              "c2y": "h * 0.0405",
+              "x": "w",
+              "y": "h * 0.5"
+            },
+            {
+              "op": "Z"
+            }
+          ]
+        },
+        "textArea": {
+          "x": "w * 0.01 + 6",
+          "y": "h * 0.15",
+          "w": "w * 0.98 - 12",
+          "h": "h * 0.7"
+        }
+      },
+      "diode": {
+        "label": "Diode",
+        "doc": "Square on the left and round on the right: a rectangle closed on the right by a semicircle of radius r = min(h / 2, w).",
+        "path": {
+          "segments": [
+            {
+              "op": "M",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "op": "L",
+              "x": "w - min(h / 2.0, w)",
+              "y": 0
+            },
+            {
+              "op": "A",
+              "rx": "min(h / 2.0, w)",
+              "ry": "min(h / 2.0, w)",
+              "rotation": 0,
+              "largeArc": false,
+              "sweep": true,
+              "x": "w - min(h / 2.0, w)",
+              "y": "h"
+            },
+            {
+              "op": "L",
+              "x": 0,
+              "y": "h"
+            },
+            {
+              "op": "Z"
+            }
+          ]
+        },
+        "textArea": {
+          "x": 6,
+          "y": "h * 0.15",
+          "w": "w - 0.134 * min(h / 2.0, w) - 12",
+          "h": "h * 0.7"
+        }
+      }
+    },
+    "nodes": {
+      "Sequence": {
+        "shape": "superellipse",
+        "style": "composite",
+        "size": {
+          "default": [
+            200,
+            60
+          ],
+          "resizable": false
+        },
+        "placement": {
+          "x": {
+            "layout": true
+          },
+          "y": {
+            "layout": true
+          },
+          "anchor": "center",
+          "movable": true,
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "keyword",
+            "text": {
+              "cel": "'Do in order'"
+            },
+            "editable": false,
+            "position": "top",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "label",
+            "text": {
+              "attribute": "label"
+            },
+            "editable": "inline",
+            "position": "center",
+            "wrap": "none",
+            "overflow": "ellipsis",
+            "tooltip": {
+              "cel": "self.label"
+            }
+          }
+        ],
+        "doubleClick": "editLabel",
+        "doc": "Every node is 200 by 60 and shows its keyword on the top line and its label beneath it. Only the label is edited in place: the keyword is the node's type, changed in the property grid."
+      },
+      "Fallback": {
+        "shape": "superellipse",
+        "style": "composite",
+        "size": {
+          "default": [
+            200,
+            60
+          ],
+          "resizable": false
+        },
+        "placement": {
+          "x": {
+            "layout": true
+          },
+          "y": {
+            "layout": true
+          },
+          "anchor": "center",
+          "movable": true,
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "keyword",
+            "text": {
+              "cel": "'Try in order'"
+            },
+            "editable": false,
+            "position": "top",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "label",
+            "text": {
+              "attribute": "label"
+            },
+            "editable": "inline",
+            "position": "center",
+            "wrap": "none",
+            "overflow": "ellipsis",
+            "tooltip": {
+              "cel": "self.label"
+            }
+          }
+        ],
+        "doubleClick": "editLabel"
+      },
+      "Parallel": {
+        "shape": "superellipse",
+        "style": "composite",
+        "size": {
+          "default": [
+            200,
+            60
+          ],
+          "resizable": false
+        },
+        "placement": {
+          "x": {
+            "layout": true
+          },
+          "y": {
+            "layout": true
+          },
+          "anchor": "center",
+          "movable": true,
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "keyword",
+            "text": {
+              "cel": "'Do together'"
+            },
+            "editable": false,
+            "position": "top",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "label",
+            "text": {
+              "attribute": "label"
+            },
+            "editable": "inline",
+            "position": "center",
+            "wrap": "none",
+            "overflow": "ellipsis",
+            "tooltip": {
+              "cel": "self.label"
+            }
+          }
+        ],
+        "doubleClick": "editLabel"
+      },
+      "Retry": {
+        "shape": "hexagon",
+        "style": "decorator",
+        "size": {
+          "default": [
+            200,
+            60
+          ],
+          "resizable": false
+        },
+        "placement": {
+          "x": {
+            "layout": true
+          },
+          "y": {
+            "layout": true
+          },
+          "anchor": "center",
+          "movable": true,
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "keyword",
+            "text": {
+              "cel": "'Retry up to ' + string(self.attempts) + ' times'"
+            },
+            "editable": false,
+            "position": "top",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "label",
+            "text": {
+              "attribute": "label"
+            },
+            "editable": "inline",
+            "position": "center",
+            "wrap": "none",
+            "overflow": "ellipsis",
+            "tooltip": {
+              "cel": "self.label"
+            }
+          }
+        ],
+        "doubleClick": "editLabel"
+      },
+      "RepeatUntil": {
+        "shape": "hexagon",
+        "style": "decorator",
+        "size": {
+          "default": [
+            200,
+            60
+          ],
+          "resizable": false
+        },
+        "placement": {
+          "x": {
+            "layout": true
+          },
+          "y": {
+            "layout": true
+          },
+          "anchor": "center",
+          "movable": true,
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "keyword",
+            "text": {
+              "cel": "'Repeat until'"
+            },
+            "editable": false,
+            "position": "top",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "label",
+            "text": {
+              "attribute": "label"
+            },
+            "editable": "inline",
+            "position": "center",
+            "wrap": "none",
+            "overflow": "ellipsis",
+            "tooltip": {
+              "cel": "self.label"
+            }
+          }
+        ],
+        "doubleClick": "editLabel"
+      },
+      "Guard": {
+        "shape": "hexagon",
+        "style": "decorator",
+        "size": {
+          "default": [
+            200,
+            60
+          ],
+          "resizable": false
+        },
+        "placement": {
+          "x": {
+            "layout": true
+          },
+          "y": {
+            "layout": true
+          },
+          "anchor": "center",
+          "movable": true,
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "keyword",
+            "text": {
+              "cel": "'Only while'"
+            },
+            "editable": false,
+            "position": "top",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "label",
+            "text": {
+              "attribute": "label"
+            },
+            "editable": "inline",
+            "position": "center",
+            "wrap": "none",
+            "overflow": "ellipsis",
+            "tooltip": {
+              "cel": "self.label"
+            }
+          }
+        ],
+        "doubleClick": "editLabel"
+      },
+      "Approval": {
+        "shape": "hexagon",
+        "style": "decorator",
+        "size": {
+          "default": [
+            200,
+            60
+          ],
+          "resizable": false
+        },
+        "placement": {
+          "x": {
+            "layout": true
+          },
+          "y": {
+            "layout": true
+          },
+          "anchor": "center",
+          "movable": true,
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "keyword",
+            "text": {
+              "cel": "'Ask approval before'"
+            },
+            "editable": false,
+            "position": "top",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "label",
+            "text": {
+              "attribute": "label"
+            },
+            "editable": "inline",
+            "position": "center",
+            "wrap": "none",
+            "overflow": "ellipsis",
+            "tooltip": {
+              "cel": "self.label"
+            }
+          }
+        ],
+        "doubleClick": "editLabel"
+      },
+      "Check": {
+        "shape": "pill",
+        "style": "check",
+        "size": {
+          "default": [
+            200,
+            60
+          ],
+          "resizable": false
+        },
+        "placement": {
+          "x": {
+            "layout": true
+          },
+          "y": {
+            "layout": true
+          },
+          "anchor": "center",
+          "movable": true,
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "keyword",
+            "text": {
+              "cel": "'Check'"
+            },
+            "editable": false,
+            "position": "top",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "label",
+            "text": {
+              "attribute": "label"
+            },
+            "editable": "inline",
+            "position": "center",
+            "wrap": "none",
+            "overflow": "ellipsis",
+            "tooltip": {
+              "cel": "self.label"
+            }
+          }
+        ],
+        "doubleClick": "editLabel"
+      },
+      "Do": {
+        "shape": "rect",
+        "style": "action",
+        "size": {
+          "default": [
+            200,
+            60
+          ],
+          "resizable": false
+        },
+        "placement": {
+          "x": {
+            "layout": true
+          },
+          "y": {
+            "layout": true
+          },
+          "anchor": "center",
+          "movable": true,
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "keyword",
+            "text": {
+              "cel": "'Do'"
+            },
+            "editable": false,
+            "position": "top",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "label",
+            "text": {
+              "attribute": "label"
+            },
+            "editable": "inline",
+            "position": "center",
+            "wrap": "none",
+            "overflow": "ellipsis",
+            "tooltip": {
+              "cel": "self.label"
+            }
+          }
+        ],
+        "doubleClick": "editLabel"
+      },
+      "AskUser": {
+        "shape": {
+          "type": "parallelogram",
+          "params": {
+            "skew": 0.2,
+            "direction": "right"
+          }
+        },
+        "style": "other",
+        "size": {
+          "default": [
+            200,
+            60
+          ],
+          "resizable": false
+        },
+        "placement": {
+          "x": {
+            "layout": true
+          },
+          "y": {
+            "layout": true
+          },
+          "anchor": "center",
+          "movable": true,
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "keyword",
+            "text": {
+              "cel": "'Ask the user'"
+            },
+            "editable": false,
+            "position": "top",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "label",
+            "text": {
+              "attribute": "label"
+            },
+            "editable": "inline",
+            "position": "center",
+            "wrap": "none",
+            "overflow": "ellipsis",
+            "tooltip": {
+              "cel": "self.label"
+            }
+          }
+        ],
+        "doubleClick": "editLabel"
+      },
+      "Delegate": {
+        "shape": "diode",
+        "style": "other",
+        "size": {
+          "default": [
+            200,
+            60
+          ],
+          "resizable": false
+        },
+        "placement": {
+          "x": {
+            "layout": true
+          },
+          "y": {
+            "layout": true
+          },
+          "anchor": "center",
+          "movable": true,
+          "resizable": false
+        },
+        "labels": [
+          {
+            "id": "keyword",
+            "text": {
+              "cel": "'Delegate'"
+            },
+            "editable": false,
+            "position": "top",
+            "wrap": "none",
+            "overflow": "ellipsis"
+          },
+          {
+            "id": "label",
+            "text": {
+              "attribute": "label"
+            },
+            "editable": "inline",
+            "position": "center",
+            "wrap": "none",
+            "overflow": "ellipsis",
+            "tooltip": {
+              "cel": "self.label"
+            }
+          }
+        ],
+        "doubleClick": "editLabel"
+      }
+    },
+    "edges": {
+      "Child": {
+        "style": "child",
+        "line": {
+          "routing": "orthogonal",
+          "bendpoints": {
+            "editable": false
+          }
+        },
+        "sourceMarker": "none",
+        "targetMarker": "arrowFilled",
+        "deletable": false,
+        "reconnectable": false,
+        "doc": "An orthogonal line from the parent down to the child, with an arrowhead at the child."
+      }
+    }
+  },
+  "forms": {
+    "node": {
+      "for": "BehaviorNode",
+      "usage": [
+        "inspector"
+      ],
+      "label": "Behavior node",
+      "items": [
+        {
+          "kind": "section",
+          "title": "Node",
+          "items": [
+            {
+              "kind": "computed",
+              "label": "Kind",
+              "value": {
+                "cel": "self.type"
+              },
+              "doc": "Changed with the Kind choice the runtime offers; a kind that cannot hold the node's children is refused (see agent-behavior-modelling.md)."
+            },
+            {
+              "attribute": "label"
+            },
+            {
+              "attribute": "attempts",
+              "visible": "self.type == 'Retry'"
+            },
+            {
+              "attribute": "notes",
+              "widget": "textarea",
+              "rows": 4
+            }
+          ]
+        },
+        {
+          "kind": "section",
+          "title": "Model",
+          "items": [
+            {
+              "kind": "computed",
+              "label": "Place",
+              "value": {
+                "cel": "self.id"
+              },
+              "doc": "The node's place in the tree (1, 1.2, 1.2.1), which is also its id."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "toolbox": {
+    "doc": "One tool per kind, dropped where the node belongs: it goes under the nearest node above the drop that can take another child, or becomes the root of an empty tree. Parent lines are drawn on the canvas with a right-button drag, not from the toolbox.",
+    "generic": {
+      "select": true,
+      "pan": true
+    },
+    "groups": [
+      {
+        "id": "composites",
+        "label": "Composites",
+        "tools": [
+          {
+            "id": "sequence",
+            "kind": "operation",
+            "operation": "addSequence",
+            "label": "Do in order",
+            "icon": "mdi-format-list-numbered",
+            "doc": "Runs the children one after another; stops and fails at the first that fails; succeeds when all have succeeded."
+          },
+          {
+            "id": "fallback",
+            "kind": "operation",
+            "operation": "addFallback",
+            "label": "Try in order",
+            "icon": "mdi-call-split",
+            "doc": "Tries the children one after another; stops and succeeds at the first that succeeds; fails when all have failed."
+          },
+          {
+            "id": "parallel",
+            "kind": "operation",
+            "operation": "addParallel",
+            "label": "Do together",
+            "icon": "mdi-format-columns",
+            "doc": "The children are independent and may run at once, as parallel tool calls or sub-agents; succeeds when all have succeeded."
+          }
+        ]
+      },
+      {
+        "id": "decorators",
+        "label": "Wrappers",
+        "tools": [
+          {
+            "id": "retry",
+            "kind": "operation",
+            "operation": "addRetry",
+            "label": "Retry up to N times",
+            "icon": "mdi-replay",
+            "doc": "Runs the child again when it fails, at most the given number of attempts in total."
+          },
+          {
+            "id": "repeatUntil",
+            "kind": "operation",
+            "operation": "addRepeatUntil",
+            "label": "Repeat until",
+            "icon": "mdi-repeat",
+            "doc": "Runs the child again and again until the condition in the label holds: the agentic loop, such as working until the tests pass."
+          },
+          {
+            "id": "guard",
+            "kind": "operation",
+            "operation": "addGuard",
+            "label": "Only while",
+            "icon": "mdi-shield-outline",
+            "doc": "Runs the child only while the condition in the label holds, and abandons it when it stops holding."
+          },
+          {
+            "id": "approval",
+            "kind": "operation",
+            "operation": "addApproval",
+            "label": "Ask approval before",
+            "icon": "mdi-account-check-outline",
+            "doc": "Describes what the child will do and waits for the user's explicit approval; when refused, the node fails."
+          }
+        ]
+      },
+      {
+        "id": "leaves",
+        "label": "Leaves",
+        "tools": [
+          {
+            "id": "check",
+            "kind": "operation",
+            "operation": "addCheck",
+            "label": "Check",
+            "icon": "mdi-help-circle-outline",
+            "doc": "A question answered from the conversation, memory or a tool result; succeeds when true, fails when false. Never acts."
+          },
+          {
+            "id": "do",
+            "kind": "operation",
+            "operation": "addDo",
+            "label": "Do",
+            "icon": "mdi-play-outline",
+            "doc": "One piece of work: a tool call, a written answer, an edit. Succeeds when done."
+          },
+          {
+            "id": "askUser",
+            "kind": "operation",
+            "operation": "addAskUser",
+            "label": "Ask the user",
+            "icon": "mdi-account-question-outline",
+            "doc": "Asks the question and waits for the answer; succeeds when answered."
+          },
+          {
+            "id": "delegate",
+            "kind": "operation",
+            "operation": "addDelegate",
+            "label": "Delegate",
+            "icon": "mdi-account-arrow-right-outline",
+            "doc": "Hands the task to a sub-agent or to another behavior file, linked in the label; succeeds when it reports success."
+          }
+        ]
+      }
+    ],
+    "contextTools": [
+      {
+        "for": [
+          "BehaviorNode"
+        ],
+        "placement": "menu",
+        "tools": [
+          {
+            "kind": "editLabel",
+            "label": "Rename…",
+            "icon": "mdi-pencil-outline",
+            "shortcut": "F2"
+          },
+          {
+            "kind": "operation",
+            "operation": "moveEarlier",
+            "label": "Move earlier",
+            "icon": "mdi-arrow-up",
+            "shortcut": "Alt+ArrowUp"
+          },
+          {
+            "kind": "operation",
+            "operation": "moveLater",
+            "label": "Move later",
+            "icon": "mdi-arrow-down",
+            "shortcut": "Alt+ArrowDown"
+          },
+          {
+            "kind": "operation",
+            "operation": "editNotes",
+            "label": {
+              "cel": "self.notes != '' ? 'Edit notes…' : 'Add notes…'"
+            },
+            "icon": "mdi-note-text-outline"
+          },
+          {
+            "kind": "delete",
+            "label": "Remove",
+            "icon": "mdi-delete-outline",
+            "shortcut": "Delete"
+          }
+        ]
+      }
+    ]
+  },
+  "behavior": {
+    "doc": "Every change - add, remove, rename, change the kind, edit notes, reorder, re-parent, drag - is one undoable step.",
+    "operations": {
+      "addSequence": {
+        "label": "Do in order",
+        "for": "diagram",
+        "icon": "mdi-format-list-numbered",
+        "doc": "Adds a Do in order where it was dropped, then edits its label in place. Which parent the drop lands under is the runtime's (see agent-behavior-modelling.md); this body is the fallback.",
+        "actions": [
+          {
+            "create": {
+              "type": "'Sequence'",
+              "parent": "has(self.id) && self.type in ['Sequence', 'Fallback', 'Parallel'] ? self : null",
+              "attributes": {
+                "label": "'Do in order'"
+              }
+            },
+            "as": "added"
+          },
+          {
+            "select": "added"
+          },
+          {
+            "editLabel": {
+              "target": "added",
+              "label": "label"
+            }
+          }
+        ]
+      },
+      "addFallback": {
+        "label": "Try in order",
+        "for": "diagram",
+        "icon": "mdi-call-split",
+        "doc": "Adds a Try in order where it was dropped, then edits its label in place. Which parent the drop lands under is the runtime's (see agent-behavior-modelling.md); this body is the fallback.",
+        "actions": [
+          {
+            "create": {
+              "type": "'Fallback'",
+              "parent": "has(self.id) && self.type in ['Sequence', 'Fallback', 'Parallel'] ? self : null",
+              "attributes": {
+                "label": "'Try in order'"
+              }
+            },
+            "as": "added"
+          },
+          {
+            "select": "added"
+          },
+          {
+            "editLabel": {
+              "target": "added",
+              "label": "label"
+            }
+          }
+        ]
+      },
+      "addParallel": {
+        "label": "Do together",
+        "for": "diagram",
+        "icon": "mdi-format-columns",
+        "doc": "Adds a Do together where it was dropped, then edits its label in place. Which parent the drop lands under is the runtime's (see agent-behavior-modelling.md); this body is the fallback.",
+        "actions": [
+          {
+            "create": {
+              "type": "'Parallel'",
+              "parent": "has(self.id) && self.type in ['Sequence', 'Fallback', 'Parallel'] ? self : null",
+              "attributes": {
+                "label": "'Do together'"
+              }
+            },
+            "as": "added"
+          },
+          {
+            "select": "added"
+          },
+          {
+            "editLabel": {
+              "target": "added",
+              "label": "label"
+            }
+          }
+        ]
+      },
+      "addRetry": {
+        "label": "Retry",
+        "for": "diagram",
+        "icon": "mdi-replay",
+        "doc": "Adds a Retry where it was dropped, then edits its label in place. Which parent the drop lands under is the runtime's (see agent-behavior-modelling.md); this body is the fallback.",
+        "actions": [
+          {
+            "create": {
+              "type": "'Retry'",
+              "parent": "has(self.id) && self.type in ['Sequence', 'Fallback', 'Parallel'] ? self : null",
+              "attributes": {
+                "label": "'Retry'"
+              }
+            },
+            "as": "added"
+          },
+          {
+            "select": "added"
+          },
+          {
+            "editLabel": {
+              "target": "added",
+              "label": "label"
+            }
+          }
+        ]
+      },
+      "addRepeatUntil": {
+        "label": "Repeat until",
+        "for": "diagram",
+        "icon": "mdi-repeat",
+        "doc": "Adds a Repeat until where it was dropped, then edits its label in place. Which parent the drop lands under is the runtime's (see agent-behavior-modelling.md); this body is the fallback.",
+        "actions": [
+          {
+            "create": {
+              "type": "'RepeatUntil'",
+              "parent": "has(self.id) && self.type in ['Sequence', 'Fallback', 'Parallel'] ? self : null",
+              "attributes": {
+                "label": "'Repeat until'"
+              }
+            },
+            "as": "added"
+          },
+          {
+            "select": "added"
+          },
+          {
+            "editLabel": {
+              "target": "added",
+              "label": "label"
+            }
+          }
+        ]
+      },
+      "addGuard": {
+        "label": "Only while",
+        "for": "diagram",
+        "icon": "mdi-shield-outline",
+        "doc": "Adds a Only while where it was dropped, then edits its label in place. Which parent the drop lands under is the runtime's (see agent-behavior-modelling.md); this body is the fallback.",
+        "actions": [
+          {
+            "create": {
+              "type": "'Guard'",
+              "parent": "has(self.id) && self.type in ['Sequence', 'Fallback', 'Parallel'] ? self : null",
+              "attributes": {
+                "label": "'Only while'"
+              }
+            },
+            "as": "added"
+          },
+          {
+            "select": "added"
+          },
+          {
+            "editLabel": {
+              "target": "added",
+              "label": "label"
+            }
+          }
+        ]
+      },
+      "addApproval": {
+        "label": "Ask approval before",
+        "for": "diagram",
+        "icon": "mdi-account-check-outline",
+        "doc": "Adds a Ask approval before where it was dropped, then edits its label in place. Which parent the drop lands under is the runtime's (see agent-behavior-modelling.md); this body is the fallback.",
+        "actions": [
+          {
+            "create": {
+              "type": "'Approval'",
+              "parent": "has(self.id) && self.type in ['Sequence', 'Fallback', 'Parallel'] ? self : null",
+              "attributes": {
+                "label": "'Ask approval before'"
+              }
+            },
+            "as": "added"
+          },
+          {
+            "select": "added"
+          },
+          {
+            "editLabel": {
+              "target": "added",
+              "label": "label"
+            }
+          }
+        ]
+      },
+      "addCheck": {
+        "label": "Check",
+        "for": "diagram",
+        "icon": "mdi-help-circle-outline",
+        "doc": "Adds a Check where it was dropped, then edits its label in place. Which parent the drop lands under is the runtime's (see agent-behavior-modelling.md); this body is the fallback.",
+        "actions": [
+          {
+            "create": {
+              "type": "'Check'",
+              "parent": "has(self.id) && self.type in ['Sequence', 'Fallback', 'Parallel'] ? self : null",
+              "attributes": {
+                "label": "'Check'"
+              }
+            },
+            "as": "added"
+          },
+          {
+            "select": "added"
+          },
+          {
+            "editLabel": {
+              "target": "added",
+              "label": "label"
+            }
+          }
+        ]
+      },
+      "addDo": {
+        "label": "Do",
+        "for": "diagram",
+        "icon": "mdi-play-outline",
+        "doc": "Adds a Do where it was dropped, then edits its label in place. Which parent the drop lands under is the runtime's (see agent-behavior-modelling.md); this body is the fallback.",
+        "actions": [
+          {
+            "create": {
+              "type": "'Do'",
+              "parent": "has(self.id) && self.type in ['Sequence', 'Fallback', 'Parallel'] ? self : null",
+              "attributes": {
+                "label": "'Do'"
+              }
+            },
+            "as": "added"
+          },
+          {
+            "select": "added"
+          },
+          {
+            "editLabel": {
+              "target": "added",
+              "label": "label"
+            }
+          }
+        ]
+      },
+      "addAskUser": {
+        "label": "Ask the user",
+        "for": "diagram",
+        "icon": "mdi-account-question-outline",
+        "doc": "Adds a Ask the user where it was dropped, then edits its label in place. Which parent the drop lands under is the runtime's (see agent-behavior-modelling.md); this body is the fallback.",
+        "actions": [
+          {
+            "create": {
+              "type": "'AskUser'",
+              "parent": "has(self.id) && self.type in ['Sequence', 'Fallback', 'Parallel'] ? self : null",
+              "attributes": {
+                "label": "'Ask the user'"
+              }
+            },
+            "as": "added"
+          },
+          {
+            "select": "added"
+          },
+          {
+            "editLabel": {
+              "target": "added",
+              "label": "label"
+            }
+          }
+        ]
+      },
+      "addDelegate": {
+        "label": "Delegate",
+        "for": "diagram",
+        "icon": "mdi-account-arrow-right-outline",
+        "doc": "Adds a Delegate where it was dropped, then edits its label in place. Which parent the drop lands under is the runtime's (see agent-behavior-modelling.md); this body is the fallback.",
+        "actions": [
+          {
+            "create": {
+              "type": "'Delegate'",
+              "parent": "has(self.id) && self.type in ['Sequence', 'Fallback', 'Parallel'] ? self : null",
+              "attributes": {
+                "label": "'Delegate'"
+              }
+            },
+            "as": "added"
+          },
+          {
+            "select": "added"
+          },
+          {
+            "editLabel": {
+              "target": "added",
+              "label": "label"
+            }
+          }
+        ]
+      },
+      "moveEarlier": {
+        "label": "Move earlier",
+        "for": [
+          "BehaviorNode"
+        ],
+        "shortcut": "Alt+ArrowUp",
+        "enabled": "self.parent != null && self.parent.children[0].id != self.id",
+        "doc": "Swaps the node, with everything under it, with the sibling before it. Reordering moves lines in the Markdown.",
+        "plugin": {
+          "name": "net.etalii.adp.etalii.abmReorder"
+        }
+      },
+      "moveLater": {
+        "label": "Move later",
+        "for": [
+          "BehaviorNode"
+        ],
+        "shortcut": "Alt+ArrowDown",
+        "enabled": "self.parent != null && self.parent.children[self.parent.children.size() - 1].id != self.id",
+        "doc": "Swaps the node, with everything under it, with the sibling after it.",
+        "plugin": {
+          "name": "net.etalii.adp.etalii.abmReorder"
+        }
+      },
+      "editNotes": {
+        "label": "Notes",
+        "for": [
+          "BehaviorNode"
+        ],
+        "icon": "mdi-note-text-outline",
+        "params": {
+          "notes": {
+            "type": "text",
+            "label": "Notes",
+            "markup": "markdown"
+          }
+        },
+        "actions": [
+          {
+            "set": {
+              "notes": "p.notes"
+            }
+          }
+        ]
+      }
+    },
+    "deletion": {
+      "BehaviorNode": {
+        "children": "delete",
+        "relations": "delete",
+        "doc": "Removing a node removes everything under it: its lines are cut from the Markdown together."
+      }
+    }
+  },
+  "constraints": {
+    "doc": "A Markdown file edited by hand that breaks a rule still opens and draws; each breach is reported on the line it is on.",
+    "blockSaveOn": "never",
+    "builtIn": {
+      "std.multiplicity": {
+        "severity": "error"
+      },
+      "std.acyclic": {
+        "severity": "error"
+      }
+    },
+    "rules": [
+      {
+        "id": "leafWithChildren",
+        "label": "Leaf with children",
+        "scope": [
+          "Leaf"
+        ],
+        "rule": "self.children.size() == 0",
+        "severity": "error",
+        "message": {
+          "cel": "'A ' + self.type + ' node does the work itself and holds no children.'"
+        },
+        "doc": "Standalone rule id abm.leaf-with-children."
+      },
+      {
+        "id": "decoratorChildren",
+        "label": "Wrapper with other than one child",
+        "scope": [
+          "Decorator"
+        ],
+        "rule": "self.children.size() == 1",
+        "severity": "error",
+        "message": {
+          "cel": "'A ' + self.type + ' node wraps exactly one child; this one has ' + string(self.children.size()) + '.'"
+        },
+        "doc": "Standalone rule id abm.decorator-children."
+      },
+      {
+        "id": "emptyComposite",
+        "label": "Composite without children",
+        "scope": [
+          "Composite"
+        ],
+        "rule": "self.children.size() > 0",
+        "severity": "warning",
+        "message": "This composite has no children, so it has nothing to arrange.",
+        "doc": "Standalone rule id abm.empty-composite. A warning, because it is the natural state while a tree is being written."
+      },
+      {
+        "id": "severalRoots",
+        "label": "More than one root",
+        "scope": "diagram",
+        "rule": "diagram.nodes.filter(n, n.parent == null).size() <= 1",
+        "severity": "warning",
+        "message": "The behavior has more than one root; the agent reads them as if they were done in order.",
+        "doc": "Standalone rule id abm.several-roots."
+      },
+      {
+        "id": "noAttempts",
+        "label": "Retry without attempts",
+        "scope": [
+          "Retry"
+        ],
+        "rule": "self.attempts >= 1",
+        "severity": "error",
+        "message": "A retry needs at least one attempt.",
+        "doc": "Standalone rule id abm.no-attempts."
+      },
+      {
+        "id": "reparentWithinTree",
+        "kind": "containment",
+        "when": "has(child.id)",
+        "rule": "parent.id != child.id && !child.descendants().exists(d, d.id == parent.id)",
+        "message": "A node cannot be moved under itself or under anything below it.",
+        "doc": "The cycle rule the derived Child relation states, applied to the re-parenting gesture."
+      }
+    ]
+  },
+  "layout": {
+    "algorithms": {
+      "tree": {
+        "algorithm": "plugin:net.etalii.adp.etalii.abmTreeLayout",
+        "direction": "down",
+        "spacing": {
+          "node": 28,
+          "layer": 56
+        },
+        "doc": "Top-down: the root at the top, each node's children left to right in document order beneath it, each subtree as wide as it needs. The algorithm is in agent-behavior-modelling.md."
+      }
+    },
+    "default": "tree",
+    "trigger": "always",
+    "respect": "pinned",
+    "animate": false,
+    "doc": "The tree is laid out on every change. A node the author dragged is pinned: its position is kept in the .adp registration and wins over the computed one."
+  },
+  "persistence": {
+    "format": "plugin:net.etalii.adp.etalii.abmMarkdown",
+    "encoding": "utf-8",
+    "newline": "crlf",
+    "files": {
+      "mode": "single",
+      "model": "{name}.md"
+    },
+    "ids": {
+      "strategy": "derived",
+      "stable": false,
+      "doc": "A node's id is its place in the tree, written 1, 1.2, 1.2.1: its parent's place, a dot, and its position among its siblings counted from 1. Nothing is written into the Markdown to name it. The expression gives the last part; the runtime prefixes the parent's place (see agent-behavior-modelling.md).",
+      "expression": "string(self.parent == null ? diagram.nodes.filter(n, n.parent == null).indexOf(self) + 1 : self.parent.children.indexOf(self) + 1)"
+    },
+    "ordering": {
+      "elements": "tree"
+    },
+    "omitDefaults": true,
+    "view": {
+      "store": [
+        "pinned",
+        "bounds"
+      ]
+    },
+    "definition": {
+      "embed": "none"
+    },
+    "doc": "The tree is the first bullet list under the first Behavior heading of a Markdown file; everything else in the file is the author's and is kept byte for byte. Positions the author dragged live in the .adp registration's layout block, never in the Markdown. The format is in agent-behavior-modelling.md."
+  },
+  "plugins": {
+    "net.etalii.adp.etalii.abmMarkdown": {
+      "version": "^0.1.0",
+      "provides": [
+        "persistenceFormat"
+      ],
+      "required": true,
+      "doc": "Reads the behavior tree from a Markdown file's Behavior section and edits it line by line, so every other byte of the file survives."
+    },
+    "net.etalii.adp.etalii.abmTreeLayout": {
+      "version": "^0.1.0",
+      "provides": [
+        "layout"
+      ],
+      "required": false,
+      "fallback": {
+        "layout": "mrtree"
+      },
+      "doc": "The top-down tree layout, with dragged positions from the registration applied over it."
+    },
+    "net.etalii.adp.etalii.abmReorder": {
+      "version": "^0.1.0",
+      "provides": [
+        "action"
+      ],
+      "required": true,
+      "doc": "Moves a node earlier or later among its siblings by moving its lines in the Markdown."
+    }
+  },
+  "x-adp": {
+    "origin": "etalii/agent-behavior-modelling",
+    "kind": "Diagram",
+    "state": "Prototype",
+    "companion": "agent-behavior-modelling.md"
+  }
+}
