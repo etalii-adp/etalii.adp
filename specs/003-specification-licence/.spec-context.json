@@ -3,7 +3,7 @@
   "specName": "Specification Licence",
   "branch": "features/003-specification-licence",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -192,8 +192,23 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-10-04T16:04:41.661Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-04T16:19:26.524Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-04T16:19:26.525Z"
     }
   ],
   "telemetryInstanceId": "54c03356-66cc-4df9-b97d-c834af2feb6d",
-  "currentTask": "T021"
+  "currentTask": "T020"
 }
