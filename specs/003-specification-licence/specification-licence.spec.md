@@ -23,6 +23,8 @@ What that finds in this repository today:
 - None of the six specification documents says under which licence it is published. A reader who has only the document, or the page the site builds from it, learns the licence only from the site's provenance block or from the repository.
 - DESL, DED, EDSL and EDD are placeholders with no version and no schema, and the site does not list them yet. The language DISL and DID replaced (spec 002) is retired and the site does not publish it.
 
+Since the feature was specified (checked on 2026-10-04, research R1): `LICENSE` has gained the line `Copyright © Peter Vrenken 2026` and GitHub still identifies it as `Apache-2.0`; the site has published DISL 0.1 and DID 0.1 with that licence and copyright; and feature 005 has added a seventh specification document, FBL, the Format Binding Language, which this feature covers like the six named in the input. What remains is the statement in each document, the check, and the rule.
+
 So this feature does not unblock the site by itself; the licence the refresh needs is already there. It makes the licence something each specification states, keeps the repository in the form the refresh recognises, adds the copyright holder the site shows beside it, and makes sure none of this silently regresses.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -33,7 +35,7 @@ A maintainer of etalii.adp.site runs the refresh for a published language (today
 
 **Why this priority**: publishing on the site is the purpose Peter gave. The licence must stay recognisable at every revision the site may publish, and the copyright holder is the one part of the provenance that is missing today.
 
-**Independent Test**: after the change is merged, run the site's refresh as a dry run for DISL and for DID against `develop`; each reports `Apache-2.0` and records the copyright notice `© Peter Vrenken 2026`.
+**Independent Test**: after the change is merged, run the site's refresh as a dry run for DISL and for DID against `develop`; each reports `Apache-2.0`, and the copyright line the refresh records reads `Copyright © Peter Vrenken 2026`.
 
 **Acceptance Scenarios**:
 
@@ -45,16 +47,16 @@ A maintainer of etalii.adp.site runs the refresh for a published language (today
 
 ### User Story 2 - A reader of a specification sees its licence in the document (Priority: P2)
 
-A host developer or tool engineer opens any of the six specification documents, on GitHub, in a copy, or on the site, and finds at the top, beside its version and status, that the specification is published under the Apache License 2.0, with a link to the licence text.
+A host developer or tool engineer opens any specification document (seven today: DISL, DID, DESL, DED, EDSL, EDD and FBL), on GitHub, in a copy, or on the site, and finds at the top, beside its version and status, that the specification is published under the Apache License 2.0, with a link to the licence text.
 
 **Why this priority**: the documents are the source of truth (principle I) and travel on their own; the licence should travel with them. It is second because the site's provenance already shows the licence.
 
-**Independent Test**: open each of the six documents and find the licence in its header table, naming Apache-2.0 and linking the repository's `LICENSE`.
+**Independent Test**: open each of the seven documents and find the licence in its header table, naming Apache-2.0 and linking the repository's `LICENSE`.
 
 **Acceptance Scenarios**:
 
-1. **Given** any of the six specification documents, **When** a reader looks at its header, **Then** it states the licence as the Apache License 2.0 with its SPDX id `Apache-2.0` and links the licence text.
-2. **Given** a placeholder (DESL, DED, EDSL, EDD), **When** a reader looks at its header, **Then** it states the same licence, so the licence is in place before the language gains content.
+1. **Given** any of the seven specification documents, **When** a reader looks at its header, **Then** it states the licence as the Apache License 2.0 with its SPDX id `Apache-2.0` and links the licence text.
+2. **Given** a placeholder (DESL, DED, EDSL, EDD) or FBL, which the site does not list, **When** a reader looks at its header, **Then** it states the same licence, so the licence is in place before the language gains content.
 3. **Given** the site publishes the first section of DISL or DID, **When** a reader looks at its cover, **Then** the licence statement from the header appears there as part of the document.
 
 ---
@@ -65,7 +67,7 @@ A contributor adds a new specification, or edits a header, and leaves the licenc
 
 **Why this priority**: it keeps stories 1 and 2 true over time, but nothing is broken until a new language is added.
 
-**Independent Test**: on a scratch branch, remove the licence line from one specification document, and separately change the root licence file so GitHub no longer identifies it; the check fails for each and names the cause.
+**Independent Test**: on a scratch branch, remove the licence line from one specification document, and separately change the terms of the root licence file so it is no longer the Apache License 2.0; the check fails for each and names the cause.
 
 **Acceptance Scenarios**:
 
@@ -78,19 +80,19 @@ A contributor adds a new specification, or edits a header, and leaves the licenc
 - The copyright notice must not stop GitHub identifying the licence file as Apache-2.0; if the chosen form would do that, the licence is lost for the site, which is worse than a missing copyright holder.
 - Retired material (the files kept under `legacy/`) is not a published specification; it is covered by the repository licence and needs no statement of its own.
 - Schemas and examples are published by the site beside the prose. They are covered by the repository licence and the provenance of the version they belong to; they do not state it themselves (see Assumptions).
-- A second licence file, or one in a specification folder, could make GitHub's identification ambiguous; the repository keeps exactly one licence.
+- A second licence file, or one in a specification folder, could make GitHub's identification ambiguous; the repository keeps exactly one licence file of its own, at its root, and none under `specifications/`. The licence of vendored third-party material (today `.specify/extensions/companion/LICENSE`) stays with that material; GitHub does not read it and it is not the repository's.
 - A future decision to license a specification differently from the repository would have to change this rule; until then every specification states the repository's licence.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: The repository **MUST** keep exactly one licence file, at its root, that GitHub identifies as `Apache-2.0`, on `develop` and at every revision merged into it. This is the form the site's refresh recognises.
+- **FR-001**: The repository **MUST** keep exactly one licence file of its own, at its root and with none beside it there or under `specifications/`, that GitHub identifies as `Apache-2.0`, on `develop` and at every revision merged into it. This is the form the site's refresh recognises.
 - **FR-002**: The repository **MUST** state its copyright notice, `© Peter Vrenken 2026` (the © being U+00A9 COPYRIGHT SIGN), in a form the site's refresh records as the copyright, without changing GitHub's identification of the licence (FR-001). The site's provenance **MUST** then show that notice beside the licence.
-- **FR-003**: Each of the six specification documents (DISL, DID, DESL, DED, EDSL, EDD) **MUST** state in its header table that it is published under the Apache License 2.0, give the SPDX id `Apache-2.0`, and link the repository's licence file. Placeholders **MUST** state it too.
+- **FR-003**: Each specification document (today DISL, DID, DESL, DED, EDSL, EDD and FBL) **MUST** state in its header table that it is published under the Apache License 2.0, give the SPDX id `Apache-2.0`, and link the repository's licence file. Placeholders **MUST** state it too.
 - **FR-004**: The licence each document states **MUST** be the licence of the repository (FR-001).
 - **FR-005**: The Build workflow **MUST** fail a pull request in which a specification document under `specifications/` lacks the statement of FR-003 or names a licence other than the repository's, and **MUST** name the document. It **MUST** find the documents by the naming rule of the constitution, so a new language needs no configuration.
-- **FR-006**: The Build workflow **MUST** fail when the repository's licence file is no longer identified as Apache-2.0, or when a second licence file exists.
+- **FR-006**: The Build workflow **MUST** fail when the repository's licence file is no longer identified as Apache-2.0, or when a second licence file exists at the root or under `specifications/`. The check **MUST NOT** need the network: it holds the licence file to the Apache terms itself, at least as strictly as GitHub's identification does.
 - **FR-007**: The rule that every specification states the repository's licence **MUST** be recorded where the constitution sets out the shape of a specification, so new languages and placeholders follow it.
 - **FR-008**: The site's texts about this (the "Not published yet" message and the refresh's refusal) are owned by etalii.adp.site; this feature **MUST NOT** depend on changing them, and **MUST** leave the site able to publish DISL and DID by running its refresh unchanged.
 
@@ -105,10 +107,10 @@ A contributor adds a new specification, or edits a header, and leaves the licenc
 
 ### Measurable Outcomes
 
-- **SC-001**: 6 of 6 specification documents state Apache-2.0 in their header, and each links a licence file that exists.
-- **SC-002**: A dry run of the site's refresh for each language the site publishes (DISL, DID) against `develop` after the merge reports `Apache-2.0` and the copyright notice `© Peter Vrenken 2026`, with no refusal.
+- **SC-001**: 7 of 7 specification documents state Apache-2.0 in their header, and each links a licence file that exists.
+- **SC-002**: A dry run of the site's refresh for each language the site publishes (DISL, DID) against `develop` after the merge reports `Apache-2.0` with no refusal, and the copyright line the refresh records from the same source reads `Copyright © Peter Vrenken 2026`.
 - **SC-003**: GitHub identifies the repository licence as `Apache-2.0` after the merge.
-- **SC-004**: Each failure in User Story 3 is caught by the Build workflow on its pull request: 3 of 3 deliberate faults (missing statement, wrong licence, unidentifiable licence file) fail it, each naming its cause.
+- **SC-004**: Each failure in User Story 3 is caught by the check the Build workflow runs on a pull request: 3 of 3 deliberate faults (missing statement, wrong licence, licence file whose terms are not the Apache License 2.0) fail it, each naming its cause.
 - **SC-005**: The Build workflow passes on the pull request that delivers this feature.
 
 ## Assumptions

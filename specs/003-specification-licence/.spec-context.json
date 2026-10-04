@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "Specification Licence",
   "branch": "features/003-specification-licence",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
   "history": [
     {
       "step": "specify",
@@ -18,6 +18,20 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-09-29T16:51:38.832Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-04T00:12:05.993Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-04T00:12:56.669Z"
     }
   ],
   "telemetryInstanceId": "54c03356-66cc-4df9-b97d-c834af2feb6d"
