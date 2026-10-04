@@ -2,7 +2,7 @@
 
 The companion to [sankey.dis](sankey.dis). The `.dis` specifies ADP's **Sankey diagram** (`etalii/sankey`) in DISL 0.1 as far as DISL reaches; this page holds everything about the tool that DISL cannot express, or can express only approximately, so that an IDE implementing the diagram type from the specification ends up with the tool that exists today. Each point names the code that shows it.
 
-The diagram type is implemented in the standalone IDE as the module `src/diagrams/sankey/` of [etalii-adp/etalii.adp.ide.standalone](https://github.com/etalii-adp/etalii.adp.ide.standalone), origin `etalii/sankey`. Paths below without a repository are relative to that module folder; `standalone:` marks a path relative to the standalone repository root. At the time of writing the module is in the working tree of the standalone branch `claude/sankey-diagram-8m13aq` and not yet committed or merged into `develop`: its backend, client, examples and `docs/tools.md` row are all there, uncommitted. There is no specification document for it under `standalone:.spec-workflow/specs/`; the code is the source of truth.
+The diagram type is implemented in the standalone IDE as the module `src/diagrams/sankey/` of [etalii-adp/etalii.adp.ide.standalone](https://github.com/etalii-adp/etalii.adp.ide.standalone), origin `etalii/sankey`. Paths below without a repository are relative to that module folder; `standalone:` marks a path relative to the standalone repository root. It arrives in standalone with the pull request from branch `claude/sankey-diagram-8m13aq`. There is no specification document for it under `standalone:.spec-workflow/specs/`; the code is the source of truth.
 
 ## What the diagram is for
 
@@ -188,7 +188,6 @@ Negative values and zero steps are refused by every edit but only negative value
   - **A flow's value ignores its nodes' formats.** A flow's display value (its tooltip) uses the document's format only, so in `brightwater-coffee` a flow into a cost node reads `€…M` while the node reads `(€…M)`.
   - **Two wordings at the thickness limits**: the disabled menu entry says "as thick as they go", the command's refusal "as thick as this diagram draws them".
   - **A new flow's starting value counts every flow in the file**, undrawable and duplicate ones included, while a node's value counts only drawn flows.
-- **The module is uncommitted** in the standalone repository; the descriptions above are of the working tree on `claude/sankey-diagram-8m13aq` on 2026-10-04.
 
 ## The examples
 
@@ -202,7 +201,7 @@ Their readmes list what they do not demonstrate: a custom colour, a stated colum
 
 ## Sources
 
-- Module code and tests: `src/diagrams/sankey/` in etalii.adp.ide.standalone, working tree of branch `claude/sankey-diagram-8m13aq`.
+- Module code and tests: `src/diagrams/sankey/` in etalii.adp.ide.standalone.
 - Catalogue row: `docs/tools.md` in etalii.adp.ide.standalone, row for `etalii/sankey`.
 - Palette tokens: `--color-diagram-sankey-*` in `src/client/src/index.css` in etalii.adp.ide.standalone.
 - Canvas library: `src/client/src/canvas/library/` and `src/client/src/canvas/canvas.css` in etalii.adp.ide.standalone.
