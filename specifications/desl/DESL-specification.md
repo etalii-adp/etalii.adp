@@ -9,6 +9,7 @@
 | File extension | `.des` |
 | Paired language | DED, the Designer Definition Language (`.ded`) |
 | Schema | none yet |
+| Licence | [Apache License 2.0](https://github.com/etalii-adp/etalii.adp/blob/develop/LICENSE) (`Apache-2.0`) |
 
 ---
 

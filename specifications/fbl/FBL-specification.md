@@ -11,6 +11,7 @@
 | Expression language      | CEL — Common Expression Language (https://cel.dev)                                           |
 | Media type (provisional) | `application/vnd.fbl.document+json`                                                          |
 | File extension           | `.fbl`                                                                                       |
+| Licence                  | [Apache License 2.0](https://github.com/etalii-adp/etalii.adp/blob/develop/LICENSE) (`Apache-2.0`) |
 
 ---
 
