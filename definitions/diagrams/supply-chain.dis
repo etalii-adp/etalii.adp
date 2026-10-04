@@ -6,10 +6,10 @@
     "version": "0.1.0",
     "label": "Supply chain diagram",
     "doc": {
-      "summary": "Where goods come from and where they go: mines, suppliers, plants, distributors and consumers in their regions, the flows between them with their volumes, and the whole chain up and down from whatever is selected.",
-      "description": "A supply chain diagram follows goods from where they start to where they are used. Every **node** is one of seven **stages** - raw material, supplier, manufacturer, assembler, distributor, retailer, consumer - and may state a **quantity** (a capacity, a stock, a demand) in a **unit** of its own. A **flow** carries a **product** from a supplying node to a consuming one, with a **volume** in a unit of its own; its band is as broad as its volume relative to the heaviest flow counted in the same unit. **Groups** - a region, a company, a tier - are frames drawn around their members.\n\nSelecting a node, a flow or a group traces the chain through it: everything that supplies it, directly or not, is marked upstream, everything it supplies downstream, and the rest is dimmed. A selected node's quantity or flow's volume steps up and down in place, by a step each element states, never below zero. Nodes the document does not place are arranged left to right along the flows.",
+      "summary": "Where things come from and where they go: sources, processors, producers, integrators, hubs, outlets and consumers in their regions, the flows between them with their volumes, and the whole chain up and down from whatever is selected.",
+      "description": "A supply chain diagram follows goods - or energy, data or services - from where they start to where they are used. Every **node** is one of seven **stages** - source, processor, producer, integrator, hub, outlet, consumer - which name roles rather than industries, and may state a **quantity** (a capacity, a stock, a demand) in a **unit** of its own. A **flow** carries a **product** from a supplying node to a consuming one, with a **volume** in a unit of its own; its band is as broad as its volume relative to the heaviest flow counted in the same unit. **Groups** - a region, a company, a tier - are frames drawn around their members, joined by dragging a node inside one.\n\nSelecting a node, a flow or a group traces the chain through it: everything that supplies it, directly or not, is marked upstream, everything it supplies downstream, and the rest is dimmed. A selected node's quantity or flow's volume steps up and down in place, by a step each element states, never below zero. Nodes the document does not place are arranged left to right along the flows.",
       "rationale": "A generic diagram shows that two plants are connected; a supply chain diagram shows how much moves between them and what else depends on it, which is the question a supply chain is read for.",
-      "tags": ["supply chain", "logistics", "flows", "manufacturing", "dependencies"],
+      "tags": ["supply chain", "logistics", "flows", "value chain", "dependencies"],
       "audience": ["user", "author"],
       "seeAlso": [
         { "title": "Aspects DISL cannot express", "href": "supply-chain.md" },
@@ -31,18 +31,25 @@
       "returns": "string",
       "uses": ["diagram"],
       "cel": "!diagram.nodesOfType('Stage').exists(n, n.name == base) ? base : base + ' ' + string(lists.range(diagram.nodes.size() + 2).filter(i, i >= 2 && !diagram.nodesOfType('Stage').exists(n, n.name == base + ' ' + string(i)))[0])",
-      "doc": "The name itself when no node carries it yet, otherwise the name followed by the lowest number from 2 up that makes it unique among the nodes (\"New supplier\", \"New supplier 2\")."
+      "doc": "The name itself when no node carries it yet, otherwise the name followed by the lowest number from 2 up that makes it unique among the nodes (\"New processor\", \"New processor 2\")."
+    },
+    "uniqueGroupName": {
+      "params": [{ "name": "base", "type": "string" }],
+      "returns": "string",
+      "uses": ["diagram"],
+      "cel": "!diagram.nodesOfType('Group').exists(g, g.name == base) ? base : base + ' ' + string(lists.range(diagram.nodes.size() + 2).filter(i, i >= 2 && !diagram.nodesOfType('Group').exists(g, g.name == base + ' ' + string(i)))[0])",
+      "doc": "As uniqueName, among the groups' names (\"New group\", \"New group 2\")."
     },
     "stageLabel": {
       "params": [{ "name": "type", "type": "string" }],
       "returns": "string",
-      "cel": "{'RawMaterial': 'Raw material', 'Supplier': 'Supplier', 'Manufacturer': 'Manufacturer', 'Assembler': 'Assembler', 'Distributor': 'Distributor', 'Retailer': 'Retailer', 'Consumer': 'Consumer'}[type]",
+      "cel": "{'Source': 'Source', 'Processor': 'Processor', 'Producer': 'Producer', 'Integrator': 'Integrator', 'Hub': 'Hub', 'Outlet': 'Outlet', 'Consumer': 'Consumer'}[type]",
       "doc": "The stage as a reader names it, and as the card's header shows it in capitals."
     },
     "stageToken": {
       "params": [{ "name": "type", "type": "string" }],
       "returns": "string",
-      "cel": "{'RawMaterial': 'color.supply.raw-material', 'Supplier': 'color.supply.supplier', 'Manufacturer': 'color.supply.manufacturer', 'Assembler': 'color.supply.assembler', 'Distributor': 'color.supply.distributor', 'Retailer': 'color.supply.retailer', 'Consumer': 'color.supply.consumer'}[type]",
+      "cel": "{'Source': 'color.supply.source', 'Processor': 'color.supply.processor', 'Producer': 'color.supply.producer', 'Integrator': 'color.supply.integrator', 'Hub': 'color.supply.hub', 'Outlet': 'color.supply.outlet', 'Consumer': 'color.supply.consumer'}[type]",
       "doc": "The theme token of a stage's colour, which its card's header and share bar carry."
     },
     "stepOf": {
@@ -82,7 +89,7 @@
       "Stage": {
         "abstract": true,
         "doc": {
-          "summary": "One stage of the chain: a mine, a supplier, a plant, a distributor, a consumer.",
+          "summary": "One stage of the chain: a source, a processor, a producer, an integrator, a hub, an outlet, a consumer.",
           "description": "Which stage a node is is its type. Every stage carries the same attributes; only its header colour and title differ. The stage can be changed afterwards, which retypes the node and keeps every attribute and flow."
         },
         "labelAttribute": "name",
@@ -128,60 +135,60 @@
           }
         }
       },
-      "RawMaterial": {
+      "Source": {
         "extends": "Stage",
-        "label": "Raw material",
-        "icon": "mdi:pickaxe",
-        "doc": "Where it starts: a mine, a well, a farm.",
-        "tags": ["mine", "source"],
-        "x-supplyChain": { "documentType": "raw-material" }
+        "label": "Source",
+        "icon": "mdi:tray-arrow-up",
+        "doc": "Where something enters the chain: a mine, a well, a farm, a data feed.",
+        "tags": ["origin", "extraction", "input"],
+        "x-supplyChain": { "documentType": "source", "legacyDocumentTypes": ["raw-material"] }
       },
-      "Supplier": {
+      "Processor": {
         "extends": "Stage",
-        "label": "Supplier",
-        "icon": "mdi:flask-outline",
-        "doc": "Refines, processes or makes parts and materials for others.",
-        "tags": ["refinery", "supplier"],
-        "x-supplyChain": { "documentType": "supplier" }
+        "label": "Processor",
+        "icon": "mdi:cog-outline",
+        "doc": "Turns what it receives into material others can use.",
+        "tags": ["refining", "processing", "conversion"],
+        "x-supplyChain": { "documentType": "processor", "legacyDocumentTypes": ["supplier"] }
       },
-      "Manufacturer": {
+      "Producer": {
         "extends": "Stage",
-        "label": "Manufacturer",
+        "label": "Producer",
         "icon": "mdi:factory",
-        "doc": "Makes the components a product is built from.",
-        "tags": ["plant", "factory"],
-        "x-supplyChain": { "documentType": "manufacturer" }
+        "doc": "Makes the parts or components something is built from.",
+        "tags": ["plant", "components", "production"],
+        "x-supplyChain": { "documentType": "producer", "legacyDocumentTypes": ["manufacturer"] }
       },
-      "Assembler": {
+      "Integrator": {
         "extends": "Stage",
-        "label": "Assembler",
-        "icon": "mdi:cog-transfer-outline",
-        "doc": "Builds the finished product from components.",
-        "tags": ["assembly"],
-        "x-supplyChain": { "documentType": "assembler" }
+        "label": "Integrator",
+        "icon": "mdi:puzzle-outline",
+        "doc": "Combines parts into the finished whole.",
+        "tags": ["assembly", "integration"],
+        "x-supplyChain": { "documentType": "integrator", "legacyDocumentTypes": ["assembler"] }
       },
-      "Distributor": {
+      "Hub": {
         "extends": "Stage",
-        "label": "Distributor",
-        "icon": "mdi:truck-outline",
-        "doc": "Stores and moves finished goods to where they are sold.",
-        "tags": ["logistics", "warehouse"],
-        "x-supplyChain": { "documentType": "distributor" }
+        "label": "Hub",
+        "icon": "mdi:hub-outline",
+        "doc": "Holds and moves what is finished on to where it is wanted.",
+        "tags": ["distribution", "warehouse", "logistics"],
+        "x-supplyChain": { "documentType": "hub", "legacyDocumentTypes": ["distributor"] }
       },
-      "Retailer": {
+      "Outlet": {
         "extends": "Stage",
-        "label": "Retailer",
+        "label": "Outlet",
         "icon": "mdi:storefront-outline",
-        "doc": "Sells to the people and businesses who use the product.",
-        "tags": ["shop", "dealer"],
-        "x-supplyChain": { "documentType": "retailer" }
+        "doc": "Where the finished whole is offered to those who use it.",
+        "tags": ["shop", "channel", "point of sale"],
+        "x-supplyChain": { "documentType": "outlet", "legacyDocumentTypes": ["retailer"] }
       },
       "Consumer": {
         "extends": "Stage",
         "label": "Consumer",
-        "icon": "mdi:account-group-outline",
-        "doc": "Where the chain ends: who buys and uses it.",
-        "tags": ["customer", "market"],
+        "icon": "mdi:account-outline",
+        "doc": "Where the chain ends: whoever uses what it delivers.",
+        "tags": ["customer", "user", "market"],
         "x-supplyChain": { "documentType": "consumer" }
       },
       "Group": {
@@ -190,7 +197,7 @@
         "labelAttribute": "name",
         "doc": {
           "summary": "A region, a company or a tier the nodes inside it belong to.",
-          "description": "Drawn as a frame around its members, never placed or sized by itself: it follows them, and moving it moves them all. A group with no members draws nothing. Removing a group keeps its members, ungrouped."
+          "description": "Drawn as a frame around its members: it follows them, and moving it moves them all. A node joins a group by being dragged inside its frame. A group with no members is drawn where its own x and y place it, as large as the frame around one node; without them it draws nothing. Removing a group keeps its members, ungrouped."
         },
         "attributes": {
           "name": {
@@ -207,6 +214,20 @@
             "group": "Identity",
             "order": 1,
             "doc": "Prose about the group, shown in the property grid only."
+          },
+          "x": {
+            "type": "number",
+            "label": "X",
+            "group": "Position",
+            "order": 2,
+            "doc": "The left of the frame while the group has no members, not shown in the property grid (the group form omits it), written when a group is dropped from the palette, when its last member leaves it and when an empty group is dragged. A group with members is drawn around them and ignores it."
+          },
+          "y": {
+            "type": "number",
+            "label": "Y",
+            "group": "Position",
+            "order": 3,
+            "doc": "The top of the frame while the group has no members; see x."
           }
         },
         "children": {
@@ -275,7 +296,7 @@
   },
 
   "coordinates": {
-    "doc": "One free canvas in canvas units, y growing downwards. A node's top-left corner is stored when the document places it; otherwise the layout places it. A group's frame is never stored.",
+    "doc": "One free canvas in canvas units, y growing downwards. A node's top-left corner is stored when the document places it; otherwise the layout places it. A group's frame with members is never stored: it is the box around them. An empty group's top-left is stored as its x and y, and its frame is as large as the one around a single node, 232 by 156.",
     "systems": {
       "canvas": { "kind": "cartesian", "x": { "kind": "linear" }, "y": { "kind": "linear" },
                   "doc": "Positions are written rounded to whole units." }
@@ -290,12 +311,12 @@
         "color.text.muted": "#64748b",
         "color.surface": "#ffffff",
         "color.border": "#e2e8f0",
-        "color.supply.raw-material": "#7c4a1e",
-        "color.supply.supplier": "#b91c1c",
-        "color.supply.manufacturer": "#1d4ed8",
-        "color.supply.assembler": "#0f766e",
-        "color.supply.distributor": "#475569",
-        "color.supply.retailer": "#15803d",
+        "color.supply.source": "#7c4a1e",
+        "color.supply.processor": "#b91c1c",
+        "color.supply.producer": "#1d4ed8",
+        "color.supply.integrator": "#0f766e",
+        "color.supply.hub": "#475569",
+        "color.supply.outlet": "#15803d",
         "color.supply.consumer": "#be185d",
         "color.supply.on-stage": "#ffffff",
         "color.supply.trace": "#64748b",
@@ -310,12 +331,12 @@
           "color.text.muted": "#94a3b8",
           "color.surface": "#1e293b",
           "color.border": "#334155",
-          "color.supply.raw-material": "#7c4a1e",
-          "color.supply.supplier": "#b91c1c",
-          "color.supply.manufacturer": "#1d4ed8",
-          "color.supply.assembler": "#0f766e",
-          "color.supply.distributor": "#475569",
-          "color.supply.retailer": "#15803d",
+          "color.supply.source": "#7c4a1e",
+          "color.supply.processor": "#b91c1c",
+          "color.supply.producer": "#1d4ed8",
+          "color.supply.integrator": "#0f766e",
+          "color.supply.hub": "#475569",
+          "color.supply.outlet": "#15803d",
           "color.supply.consumer": "#be185d",
           "color.supply.on-stage": "#ffffff",
           "color.supply.trace": "#94a3b8",
@@ -354,7 +375,7 @@
       "groupFrame": {
         "fill": { "token": "color.supply.group-fill" },
         "stroke": { "color": { "token": "color.border" }, "width": 1.5, "dash": [6, 4], "dashScale": "absolute" },
-        "visible": { "cel": "self.children.size() > 0" }
+        "visible": { "cel": "self.children.size() > 0 || (has(self.x) && has(self.y))" }
       },
       "groupTraced": { "stroke": { "dash": "solid" } },
       "groupTitle": { "font": { "size": 13, "weight": 700, "color": { "token": "color.text" } } },
@@ -439,7 +460,7 @@
           "padding": [40, 20, 20, 20],
           "header": { "size": 40, "side": "top" },
           "autoGrow": true,
-          "doc": "The frame is the box around its members: 20 beyond them left, right and below, and 40 above them for the title."
+          "doc": "The frame is the box around its members: 20 beyond them left, right and below, and 40 above them for the title. With no members it stands at the group's own x and y, 232 by 156, the frame around one node (see supply-chain.md)."
         },
         "connectable": false,
         "layer": "background",
@@ -543,21 +564,25 @@
 
   "toolbox": {
     "groups": [
-      { "id": "stages", "label": "Stages", "doc": "One tool per stage, in the order goods pass through them. A flow has no palette tool: it is drawn from a node's side, or by dragging with the right button from one node to another.", "tools": [
-        { "id": "rawMaterial", "creates": "RawMaterial", "label": "Raw material", "icon": "mdi:pickaxe", "mode": "click", "after": "select",
-          "initial": { "quantity": 0 }, "doc": "Where it starts: a mine, a well, a farm." },
-        { "id": "supplier", "creates": "Supplier", "label": "Supplier", "icon": "mdi:flask-outline", "mode": "click", "after": "select",
-          "initial": { "quantity": 0 }, "doc": "Refines, processes or makes parts and materials for others." },
-        { "id": "manufacturer", "creates": "Manufacturer", "label": "Manufacturer", "icon": "mdi:factory", "mode": "click", "after": "select",
-          "initial": { "quantity": 0 }, "doc": "Makes the components a product is built from." },
-        { "id": "assembler", "creates": "Assembler", "label": "Assembler", "icon": "mdi:cog-transfer-outline", "mode": "click", "after": "select",
-          "initial": { "quantity": 0 }, "doc": "Builds the finished product from components." },
-        { "id": "distributor", "creates": "Distributor", "label": "Distributor", "icon": "mdi:truck-outline", "mode": "click", "after": "select",
-          "initial": { "quantity": 0 }, "doc": "Stores and moves finished goods to where they are sold." },
-        { "id": "retailer", "creates": "Retailer", "label": "Retailer", "icon": "mdi:storefront-outline", "mode": "click", "after": "select",
-          "initial": { "quantity": 0 }, "doc": "Sells to the people and businesses who use the product." },
-        { "id": "consumer", "creates": "Consumer", "label": "Consumer", "icon": "mdi:account-group-outline", "mode": "click", "after": "select",
-          "initial": { "quantity": 0 }, "doc": "Where the chain ends: who buys and uses it." }
+      { "id": "stages", "label": "Stages", "doc": "One tool per stage, in the order goods pass through them; each carries the stage's own icon. A flow has no palette tool: it is drawn from a node's side, or by dragging with the right button from one node to another.", "tools": [
+        { "id": "source", "creates": "Source", "label": "Source", "icon": "mdi:tray-arrow-up", "mode": "click", "after": "select",
+          "initial": { "quantity": 0 }, "doc": "Where something enters the chain: a mine, a well, a farm, a data feed." },
+        { "id": "processor", "creates": "Processor", "label": "Processor", "icon": "mdi:cog-outline", "mode": "click", "after": "select",
+          "initial": { "quantity": 0 }, "doc": "Turns what it receives into material others can use." },
+        { "id": "producer", "creates": "Producer", "label": "Producer", "icon": "mdi:factory", "mode": "click", "after": "select",
+          "initial": { "quantity": 0 }, "doc": "Makes the parts or components something is built from." },
+        { "id": "integrator", "creates": "Integrator", "label": "Integrator", "icon": "mdi:puzzle-outline", "mode": "click", "after": "select",
+          "initial": { "quantity": 0 }, "doc": "Combines parts into the finished whole." },
+        { "id": "hub", "creates": "Hub", "label": "Hub", "icon": "mdi:hub-outline", "mode": "click", "after": "select",
+          "initial": { "quantity": 0 }, "doc": "Holds and moves what is finished on to where it is wanted." },
+        { "id": "outlet", "creates": "Outlet", "label": "Outlet", "icon": "mdi:storefront-outline", "mode": "click", "after": "select",
+          "initial": { "quantity": 0 }, "doc": "Where the finished whole is offered to those who use it." },
+        { "id": "consumer", "creates": "Consumer", "label": "Consumer", "icon": "mdi:account-outline", "mode": "click", "after": "select",
+          "initial": { "quantity": 0 }, "doc": "Where the chain ends: whoever uses what it delivers." }
+      ] },
+      { "id": "frames", "label": "Frames", "doc": "A group dropped on its own, named \"New group\" and numbered from 2 when the name is taken among the groups; it is drawn empty at the drop until nodes are dragged into it.", "tools": [
+        { "id": "group", "creates": "Group", "label": "Group", "icon": "mdi:group", "mode": "click", "after": "select",
+          "doc": "A frame for a region, a company or a tier; drag nodes into it." }
       ] }
     ],
     "contextTools": [
@@ -619,10 +644,10 @@
         "id": "emptyGroup",
         "label": "Empty group",
         "scope": ["Group"],
-        "rule": "self.children.size() > 0",
+        "rule": "self.children.size() > 0 || (has(self.x) && has(self.y))",
         "severity": "warning",
-        "message": { "cel": "'The group `' + self.id + '` has no nodes, so it is not drawn.'" },
-        "doc": "A group is a frame around its members; with none it has nothing to frame.",
+        "message": { "cel": "'The group `' + self.id + '` has no nodes and no `x` and `y`, so it is not drawn.'" },
+        "doc": "A group is a frame around its members, or at its own x and y when it has none; with neither it has nothing to draw.",
         "x-adp-ruleId": "supply-chain.empty-group"
       },
       {
@@ -663,20 +688,12 @@
         "rule": "newValue != 0.0",
         "enforcement": "prevent",
         "message": "A step of zero would make + and − do nothing."
-      },
-      {
-        "id": "noDropIntoGroup",
-        "label": "Groups are joined through the property grid",
-        "kind": "containment",
-        "rule": "false",
-        "enforcement": "prevent",
-        "message": "A node joins a group through its Group property, not by being dropped on it."
       }
     ]
   },
 
   "behavior": {
-    "doc": "Every change - add, remove, move, connect, rename, step, set a property, group, arrange - is one undoable step that restores the document's whole text.",
+    "doc": "Every change - add, remove, move, connect, rename, step, set a property, group, arrange - is one undoable step that restores the document's whole text. Dragging a node whose centre lands inside another group's frame moves it into that group in the same step (see supply-chain.md, section 'Interaction').",
     "hooks": [
       {
         "id": "nameNewStage",
@@ -686,7 +703,17 @@
         "actions": [
           { "set": { "name": "uniqueName('New ' + lower(stageLabel(self.type)))" } }
         ],
-        "doc": "A new node is named after its stage - \"New raw material\", \"New supplier\" - numbered from 2 when the name is taken."
+        "doc": "A new node is named after its stage - \"New source\", \"New processor\" - numbered from 2 when the name is taken."
+      },
+      {
+        "id": "nameNewGroup",
+        "on": "create",
+        "for": ["Group"],
+        "when": "!has(self.name)",
+        "actions": [
+          { "set": { "name": "uniqueGroupName('New group')" } }
+        ],
+        "doc": "A group dropped from the palette is named \"New group\", numbered from 2 when the name is taken among the groups, and placed with its frame centred on the drop."
       }
     ],
     "operations": {
@@ -746,7 +773,7 @@
           { "create": { "type": "'Group'", "attributes": { "name": "p.groupName.trim()" } }, "as": "group" },
           { "reparent": { "target": "self", "parent": "group" } }
         ],
-        "doc": "A new group around this one node - the way a group comes into being, since an empty one draws nothing."
+        "doc": "A new group around this one node. A group can also be dropped from the palette, and drawn empty until nodes are dragged into it."
       },
       "arrange": {
         "label": "Arrange diagram",
@@ -760,13 +787,13 @@
       }
     },
     "retype": {
-      "RawMaterial": { "to": ["Supplier", "Manufacturer", "Assembler", "Distributor", "Retailer", "Consumer"] },
-      "Supplier": { "to": ["RawMaterial", "Manufacturer", "Assembler", "Distributor", "Retailer", "Consumer"] },
-      "Manufacturer": { "to": ["RawMaterial", "Supplier", "Assembler", "Distributor", "Retailer", "Consumer"] },
-      "Assembler": { "to": ["RawMaterial", "Supplier", "Manufacturer", "Distributor", "Retailer", "Consumer"] },
-      "Distributor": { "to": ["RawMaterial", "Supplier", "Manufacturer", "Assembler", "Retailer", "Consumer"] },
-      "Retailer": { "to": ["RawMaterial", "Supplier", "Manufacturer", "Assembler", "Distributor", "Consumer"] },
-      "Consumer": { "to": ["RawMaterial", "Supplier", "Manufacturer", "Assembler", "Distributor", "Retailer"] }
+      "Source": { "to": ["Processor", "Producer", "Integrator", "Hub", "Outlet", "Consumer"] },
+      "Processor": { "to": ["Source", "Producer", "Integrator", "Hub", "Outlet", "Consumer"] },
+      "Producer": { "to": ["Source", "Processor", "Integrator", "Hub", "Outlet", "Consumer"] },
+      "Integrator": { "to": ["Source", "Processor", "Producer", "Hub", "Outlet", "Consumer"] },
+      "Hub": { "to": ["Source", "Processor", "Producer", "Integrator", "Outlet", "Consumer"] },
+      "Outlet": { "to": ["Source", "Processor", "Producer", "Integrator", "Hub", "Consumer"] },
+      "Consumer": { "to": ["Source", "Processor", "Producer", "Integrator", "Hub", "Outlet"] }
     },
     "deletion": {
       "Stage": { "relations": "delete", "confirm": "Removing this node also removes the flows to or from it.",
