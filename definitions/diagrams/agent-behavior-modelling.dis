@@ -1664,7 +1664,7 @@
     "trigger": "always",
     "respect": "pinned",
     "animate": false,
-    "doc": "The tree is laid out on every change. A node the author dragged is pinned: its position is kept in the .adp registration and wins over the computed one."
+    "doc": "The tree is laid out on every change. A node the author dragged is pinned: its height is kept in the .adp registration and moves its whole row and everything beneath it; across, the order decides."
   },
   "persistence": {
     "format": "plugin:net.etalii.adp.etalii.abmMarkdown",
