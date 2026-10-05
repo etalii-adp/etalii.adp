@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "The ADP Plug-in for Visual Studio Code",
   "branch": "features/006-vscode-plugin",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -18,6 +18,27 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-04T23:37:46.849Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-05T00:13:00.349Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-05T00:13:00.349Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "ai",
+      "at": "2026-10-05T01:25:26.571Z"
     }
   ],
   "intent": "etalii.adp.ide.vscode produces one installable VS Code extension with the Gartner hype cycle graph and Agent Behavior Modelling diagrams, conforming to their definitions here, with tests, one-step debugging and a pipeline that offers the plug-in for download",
@@ -51,6 +72,14 @@
     {
       "decision": "Driving the tools from their .dis files or implementing them by hand is left to the plan (FR-008)",
       "why": "it is a how; FR-006 holds either way"
+    },
+    {
+      "decision": "Plan and tasks approved without review at Peter's instruction (2026-10-05): auto approve and start implementing",
+      "why": "he wants implementation to proceed overnight"
+    },
+    {
+      "decision": "Hand-written TypeScript in three layers (core, extension, webview); custom text editors; SVG canvas without a UI framework; toolbox in the editor, properties as a view",
+      "why": "research R2 to R5"
     }
   ],
   "telemetryInstanceId": "3f467e8c-93e3-4af1-82d8-89921cbf3f5b"

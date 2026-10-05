@@ -2,7 +2,7 @@
 
 **Feature Branch**: `features/006-vscode-plugin`
 **Created**: 2026-10-05
-**Status**: Draft
+**Status**: Planned
 **Input**: "in etalli.adp create a spec kit specification for the etalii.adp.ide.vscode plugin. Make sure that a pipeline is available to create a artifact to download. use the naming conventions as per the other implementations. For examples take the Gartner Hypecycle Graph and the Agent Behavior Modelling diagram tools. Replicate all tool specific functional logic and visual representation. Use VS Code specific aspects where they are available and if not create them from scratch (i.e. property grid). Add tests + make sure that debugging locally is easy."
 
 ## Context
