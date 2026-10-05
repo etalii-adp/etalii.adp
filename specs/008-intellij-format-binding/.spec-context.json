@@ -1,0 +1,17 @@
+{
+  "workflow": "speckit",
+  "specName": "A Generic FBL Implementation for IntelliJ",
+  "branch": "features/008-intellij-format-binding",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-05T15:35:52.642Z"
+    }
+  ],
+  "telemetryInstanceId": "c52cd03d-f12d-45b6-a49e-055779033560"
+}
