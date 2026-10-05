@@ -151,7 +151,8 @@ All 77 tasks are done. The seven steps were merged into `etalii.adp.ide.vscode`'
 
 **The quickstart, by hand (T076).** That build was downloaded, installed into a clean profile of Visual Studio Code 1.140 and worked with a real pointer. It lists as `etalii.adp@0.1.0`. A `.ghg` opens in the diagram from the Explorer with the toolbox, the filter, the legend and the ruler; Ctrl and the wheel zoom; dragging a trend marks the file modified and ADP Properties shows the new dates and boundaries; Ctrl+Z in the canvas takes it back and the file on disk is untouched. A Markdown file opens as text, "ADP: Open as Agent Behavior Model" opens its tree with the row its registration lowers, dragging a row changes only the `.adp`, and the context menu lists the node's actions. Three things it showed are fixed in etalii.adp.ide.vscode#14: the first zoom of a large graph, fractional positions from a drop at a zoom other than 100 percent, and the colour of a menu shortcut. One is recorded in that repository's `docs/parity.md`: a file named on the command line when Visual Studio Code starts opens as text.
 
-**Not built, and recorded in `docs/parity.md` rather than as tasks:** siblings stepping aside while a behavior node is dragged, and undoing from the diagram a drag that only moves a behavior row or an Arrange of a behavior model, which change the registration alone.
+**Closed afterwards, at Peter's request (etalii.adp.ide.vscode#15).** Two differences from the Agent Behavior Modelling definition that were first recorded in `docs/parity.md` are built: Undo and Redo in the diagram take back and reapply a drag that only moves a row and an Arrange, in their turn among the edits of the Markdown, and the siblings a dragged node has passed step aside to where the new order would put them.
+
 ## Dependencies
 
 - Phase 1 before everything. Phase 2 before phases 3 and 6.
