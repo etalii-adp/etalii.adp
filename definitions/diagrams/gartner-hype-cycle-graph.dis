@@ -3,7 +3,7 @@
   "disl": "0.1",
   "language": {
     "id": "net.etalii.adp.gartner.hypecycle-graph",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "label": "Gartner hype cycle graph",
     "fileExtension": "ghg",
     "license": "Apache-2.0",
@@ -910,6 +910,14 @@
         "enabled": "!env.readOnly && (has(self.peakEnd) || has(self.troughEnd) || has(self.slopeEnd))",
         "actions": [ { "unset": [ "peakEnd", "troughEnd", "slopeEnd" ] } ],
         "doc": "Forgets every dragged boundary, so the phases are spread evenly again. Offered only while one is stored."
+      },
+      "arrange": {
+        "label": "Arrange diagram",
+        "for": "diagram",
+        "icon": "mdi-sitemap-outline",
+        "enabled": "!env.readOnly && diagram.nodes.size() > 0",
+        "plugin": { "name": "net.etalii.adp.gartner.rowArrange" },
+        "doc": "Puts every trend, trigger and note on the row that leaves the graph least cluttered, as one undoable step. Across is the data, so only rows change: no date is touched. Refused when no row would change. Invoked, never automatic. The algorithm is in the companion document, *Arrange diagram*."
       }
     },
     "deletion": {
@@ -1010,6 +1018,12 @@
       "required": false,
       "fallback": { "layout": "lanes" },
       "doc": "The compact viewpoint's row-packed layout."
+    },
+    "net.etalii.adp.gartner.rowArrange": {
+      "version": "^1.0.0",
+      "provides": [ "action" ],
+      "required": false,
+      "doc": "Arrange diagram: chooses a row for every trend, trigger and note by interval partitioning, and writes only the rows that changed. See the companion document, *Arrange diagram*."
     }
   },
 

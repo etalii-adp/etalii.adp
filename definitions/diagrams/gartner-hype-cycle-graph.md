@@ -2,7 +2,7 @@
 
 This document accompanies [gartner-hype-cycle-graph.dis](gartner-hype-cycle-graph.dis), the DISL specification of the Gartner hype cycle graph diagram. The specification holds everything DISL 0.1 can state: the metamodel, the axes, the phased banner, the forms, the constraints, the hooks and the two viewpoints. This document holds the rest, each point tied to the code, specification or ruling that shows it.
 
-The tool it describes is the standalone module `src/diagrams/gartner-hype-cycle-graph/` in [etalii-adp/etalii.adp.ide.standalone](https://github.com/etalii-adp/etalii.adp.ide.standalone/tree/develop/src/diagrams/gartner-hype-cycle-graph), read at `develop` commit `b2a2692`. Its tool type origin is `gartner/hypecycle-graph` and its documents use the extension `.ghg`. Unless a path says otherwise, it is relative to that module: `backend/` is `backend/EtAlii.Adp.Diagram.GartnerHypeCycleGraph/`, and `client/` is the module's client folder.
+The tool it describes is the standalone module `src/diagrams/gartner-hype-cycle-graph/` in [etalii-adp/etalii.adp.ide.standalone](https://github.com/etalii-adp/etalii.adp.ide.standalone/tree/develop/src/diagrams/gartner-hype-cycle-graph), read at `develop` commit `13b517b3`. It is also implemented in the Visual Studio Code plug-in, [etalii-adp/etalii.adp.ide.vscode](https://github.com/etalii-adp/etalii.adp.ide.vscode), against this definition; where that host differs is recorded in its `docs/parity.md`. Its tool type origin is `gartner/hypecycle-graph` and its documents use the extension `.ghg`. Unless a path says otherwise, it is relative to that module: `backend/` is `backend/EtAlii.Adp.Diagram.GartnerHypeCycleGraph/`, and `client/` is the module's client folder.
 
 ## Contents
 
@@ -16,6 +16,7 @@ The tool it describes is the standalone module `src/diagrams/gartner-hype-cycle-
 8. [Canvas chrome: ruler, tag filter, legend](#canvas-chrome-ruler-tag-filter-legend)
 9. [Compact mode](#compact-mode)
 10. [Toolbox, context actions and the property grid](#toolbox-context-actions-and-the-property-grid)
+    - [Arrange diagram](#arrange-diagram)
 11. [Validation rules](#validation-rules)
 12. [Refusals and confirmations](#refusals-and-confirmations)
 13. [Extension keys used in the specification](#extension-keys-used-in-the-specification)
@@ -55,7 +56,7 @@ DISL's persistence layer describes JSON-like records keyed by id; the `.ghg` doc
 
 **Reading never fails.** The parser never throws (`backend/GhgParser.cs`). An unknown key, a malformed value or an entry it cannot read becomes a problem reported as `ghg.unreadable-entry`, with a line number, and the rest of the document is still drawn. Keys `from-phase`, `from-edge` and `from-at` on an influence that comes from a trigger are ignored and reported. A body that cannot be read at all opens as an empty, read-only diagram, and the document store refuses to write it; the property grid then says "The graph could not be read, so it cannot be edited." (`backend/GhgContextPropertyProvider.cs`).
 
-**Ids.** New entries get a ShortGuid, a version 4 GUID written as 22 characters of URL-safe base64 (`Commands/Add*CommandHandler.cs`). The specification says `uuid-v4`; the 22-character encoding is not expressible. Hand-written ids such as `steam-engine` are kept. Ids are unique across all four lists together, not per list (`ghg.duplicate-id`), and adding an entry under an id already in use is refused: "That id is already used in this graph."
+**Ids.** New entries get a ShortGuid, a version 4 GUID written as 25 characters of base 36, digits and lower-case letters (`Commands/Add*CommandHandler.cs`, and `ShortGuid.cs` in the standalone backend). The specification says `uuid-v4`; the 25-character encoding is not expressible. Hand-written ids such as `steam-engine` are kept. Ids are unique across all four lists together, not per list (`ghg.duplicate-id`), and adding an entry under an id already in use is refused: "That id is already used in this graph."
 
 **The project entry.** In the standalone tool each diagram sits beside a `.adp` entry file that names the tool type origin `gartner/hypecycle-graph` and the `body:` document (for example `examples/coal-technologies/coal-technologies.adp`). That entry belongs to the IDE host, not to this diagram type.
 
@@ -162,9 +163,26 @@ The specification's `compact` viewpoint states the static part: trends 24 canvas
 - Trigger: Rename…, Remove.
 - Note: Edit text…, Remove.
 - Influence: Remove influence.
+- Every menu, and empty canvas: Arrange diagram (see [Arrange diagram](#arrange-diagram)).
+- Empty canvas in true-time: Add trend here, Add trigger here, Add note here, each adding at the point that was clicked as a toolbox drop there would. Compact offers none of the three, because a compact x is no date.
 - Activating an element (double-click) also renames it.
 - A read-only diagram offers nothing that edits.
 
+### Arrange diagram
+
+(`Commands/ArrangeGhgCommandHandler.cs`, `GhgArrangement.cs`, and `RowPacking.cs` in the standalone backend's `EtAlii.Adp.Documents`)
+
+"Arrange diagram" (`ghg.arrange`) puts every trend, trigger and note on the row that leaves the graph least cluttered. **Across is the data; only the row is the tool's to choose**: an element's horizontal extent is its dates, so an arrangement changes nothing but `row` keys, and never a date. The specification declares it as the operation `arrange`, carried out by the plugin `net.etalii.adp.gartner.rowArrange`, because DISL's layout algorithms place nodes in two dimensions and have no way to say "rows only".
+
+- **What takes part.** Every element that can be drawn: a trend with a readable span, a trigger with a date, a note with a position and a size, each id once. An influence is a link between the two elements it names.
+- **An element's extent** includes the label written before it. A trend runs from its start, less 8 and the width of its name, to its stop. A trigger runs from its centre, less 8 (half its size), less 8 again and the width of `{name} · {when}`, to its centre plus 8. A note is its own box, and is as many rows tall as its height divided by the row step of 56, rounded up. A text's width is the hosts' shared estimate: characters times the font size, 12, times 0.55.
+- **Fewest rows.** Elements are taken from left to right (by left edge, then right edge, then document order). Each goes on a row that is free where it starts, keeping 16 clear of what is before it on that row; a row is opened only when every row is busy there, at which point that many elements overlap one point and no arrangement could use fewer.
+- **Linked elements close together.** Among the rows that are free, an element takes the one nearest the average row of the elements it is linked to that are already placed, the lower row on a tie; with none placed, the first free row. A chain of linked elements that do not overlap therefore runs along one row.
+- **Then whole rows swap** with their neighbour while that shortens the links in total, measured in rows, for at most 64 passes. A row touched by a note taller than one row stays where it is.
+- **Deterministic.** Ties fall to the lower row and the original order, so arranging an arranged graph changes nothing.
+- **Written as rows.** Only elements whose row changed are written, each as its one `row` line, bottom-up, in one undo step.
+- **Refusals.** "There is nothing to arrange until this graph has a trend." when nothing can be drawn; the action is shown disabled with the same sentence for a graph with no trend, trigger or note. "This graph is already arranged." when no row would change.
+- **Where it is offered.** On empty canvas and on every element, so it is in the ribbon too. Compact has no background menu, so it is reached there from an element.
 **Property grid** (`backend/GhgContextPropertyProvider.cs`): the specification's forms follow it. Details it cannot state exactly:
 
 - The Phases slider's four stops are labelled "Peak", "Peak and Trough", "Peak, Trough and Slope" and "All four". DISL has no labelled slider stops; the specification passes them as `widgetOptions.labels`.
