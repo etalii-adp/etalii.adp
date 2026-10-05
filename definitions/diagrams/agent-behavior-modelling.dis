@@ -3,7 +3,7 @@
   "disl": "0.1",
   "language": {
     "id": "net.etalii.adp.etalii.agent-behavior-modelling",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "label": "Agent Behavior Modelling",
     "doc": {
       "summary": "A chat agent's instructions as a behavior tree: what it does in order, what it tries until something works, what it may do at once, where it asks first, and when it stops.",
@@ -1559,6 +1559,16 @@
             }
           }
         ]
+      },
+      "arrange": {
+        "label": "Arrange diagram",
+        "for": "diagram",
+        "icon": "mdi-sitemap-outline",
+        "enabled": "diagram.nodes.size() > 0",
+        "doc": "Forgets every position a node was dragged to, so the whole tree is drawn by the computed layout again. The tidy tree is the arrangement: the order is the meaning, and a drag is only an override kept in the registration. The Markdown is never touched, and one undo puts the registration back byte for byte. Refused when there is no registration or nothing to forget.",
+        "plugin": {
+          "name": "net.etalii.adp.etalii.abmArrange"
+        }
       }
     },
     "deletion": {
@@ -1722,6 +1732,14 @@
       ],
       "required": true,
       "doc": "Moves a node earlier or later among its siblings by moving its lines in the Markdown."
+    },
+    "net.etalii.adp.etalii.abmArrange": {
+      "version": "^0.1.0",
+      "provides": [
+        "action"
+      ],
+      "required": false,
+      "doc": "Arrange diagram: removes the layout block from the .adp registration, leaving the Markdown untouched."
     }
   },
   "x-adp": {

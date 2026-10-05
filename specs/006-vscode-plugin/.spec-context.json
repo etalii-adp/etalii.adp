@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "The ADP Plug-in for Visual Studio Code",
   "branch": "features/006-vscode-plugin",
-  "currentStep": "tasks",
-  "status": "ready-to-implement",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -67,6 +67,13 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-10-05T00:11:57.883Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "ai",
+      "at": "2026-10-05T01:25:26.571Z"
     }
   ],
   "intent": "etalii.adp.ide.vscode produces one installable VS Code extension with the Gartner hype cycle graph and Agent Behavior Modelling diagrams, conforming to their definitions here, with tests, one-step debugging and a pipeline that offers the plug-in for download",
@@ -135,6 +142,14 @@
       "why": "FR-060 asks for ratification before the plan is checked, and the frame before the diagram types tests SC-011 by construction",
       "rejected": "one pull request; a plan per repository",
       "decision": "Delivery is one pull request here (definitions with Arrange diagram, re-read at standalone 13b517b3) and six into the VS Code repository, constitution first"
+    },
+    {
+      "decision": "Plan and tasks approved without review at Peter's instruction (2026-10-05): auto approve and start implementing",
+      "why": "he wants implementation to proceed overnight"
+    },
+    {
+      "decision": "Hand-written TypeScript in three layers (core, extension, webview); custom text editors; SVG canvas without a UI framework; toolbox in the editor, properties as a view",
+      "why": "research R2 to R5"
     }
   ],
   "telemetryInstanceId": "3f467e8c-93e3-4af1-82d8-89921cbf3f5b",
