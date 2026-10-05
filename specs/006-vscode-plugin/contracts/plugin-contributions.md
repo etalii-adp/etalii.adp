@@ -34,15 +34,15 @@ A view container "ADP" in the activity bar, holding the webview view `etalii.adp
 
 ## Commands
 
-All in category "ADP". Shortcuts apply when a diagram's canvas has the focus (`activeCustomEditorId` is one of ours) and are the definitions' defaults.
+All in category "ADP". Shortcuts apply when a diagram's canvas has the focus (`activeCustomEditorId` is one of ours, no text box in it is being typed in, and no view has the focus) and are the definitions' defaults. A command that acts on the selection runs the action the diagram type offers for it, found by its shortcut or label, so it means the same in every diagram type.
 
 | Command | Title | Default shortcut | Where else |
 |---|---|---|---|
-| `etalii.adp.newGartnerHypecycleGraph` | New Gartner Hype Cycle Graph | | Explorer context menu, File > New File |
-| `etalii.adp.newAgentBehaviorModel` | New Agent Behavior Model | | Explorer context menu, File > New File |
-| `etalii.adp.openAsAgentBehaviorModel` | Open as Agent Behavior Model | | Explorer context menu and editor title for Markdown with a Behavior heading |
+| `etalii.adp.new.gartner.hypecycle-graph` | New Gartner Hype Cycle Graph | | File > New File |
+| `etalii.adp.new.etalii.agent-behavior-modelling` | New Agent Behavior Model | | File > New File |
+| `etalii.adp.openAs.etalii.agent-behavior-modelling` | Open as Agent Behavior Model | | Explorer context menu and editor title for Markdown with a Behavior heading; Command Palette for any Markdown |
 | `etalii.adp.openAsText` | Open as Text | | editor title of a diagram |
-| `etalii.adp.arrangeDiagram` | Arrange Diagram | | canvas background context menu |
+| `etalii.adp.arrangeDiagram` | Arrange Diagram | | canvas context menu |
 | `etalii.adp.rename` | Rename | F2 | canvas context menu |
 | `etalii.adp.remove` | Remove | Delete | canvas context menu |
 | `etalii.adp.evenPhases` | Even Phases | | canvas context menu on a trend |
@@ -51,12 +51,11 @@ All in category "ADP". Shortcuts apply when a diagram's canvas has the focus (`a
 | `etalii.adp.toggleCompact` | Toggle Compact | | hype cycle graph |
 | `etalii.adp.focusProperties` | Focus on ADP Properties | | |
 
-Undo, redo, save and revert are the platform's own commands and are not contributed.
-
+A "New" and an "Open as" command is named after its diagram type's origin, as its view type is, so a third type adds its own without a new naming rule. Undo, redo, save and revert are the platform's own commands and are not contributed.
 ## Diagnostics
 
 One collection, source "ADP", code the rule id.
 
 ## Activation
 
-On opening one of the custom editors, on the `ghg` language, and on any of the commands. The plug-in does nothing at start-up otherwise.
+On opening one of the custom editors, on the `ghg` language, on any of the commands, and once Visual Studio Code has finished starting. The last is what lets the Explorer offer "Open as Agent Behavior Model" for the Markdown files that have a Behavior heading: whether a file has one is in its text, which a menu's condition cannot read, so the plug-in reads the workspace's Markdown files (up to 2,000 of at most 512 KB) and keeps the context key `etalii.adp.suggested` up to date. It does nothing else at start-up.

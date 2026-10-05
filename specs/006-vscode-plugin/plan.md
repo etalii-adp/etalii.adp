@@ -12,11 +12,11 @@
 
 **Language/Version**: TypeScript 5.x, strict, compiled for Node 22 (the extension host) and ES2022 browsers (webviews). Python 3.13 only for the repository's existing file check.
 
-**Primary Dependencies**: the `vscode` extension API at `engines.vscode` `^1.140.0`, the release current at planning (R1). Build: esbuild. Packaging: `@vscode/vsce`. Icons: `@mdi/js`, since the definitions name Material Design icons. No UI framework and no runtime dependency beyond these (R4); nothing is fetched at runtime.
+**Primary Dependencies**: the `vscode` extension API at `engines.vscode` `^1.140.0`, the release current at planning (R1). Build: esbuild. Packaging: `@vscode/vsce`. Two libraries are bundled into the plug-in: `yaml` (ISC), which reads YAML and never writes it, and `@mdi/js` (Apache-2.0), for the Material Design icons the definitions name. No UI framework (R4); nothing is fetched at runtime.
 
 **Storage**: the user's own files. A `.ghg` YAML document or a Markdown file is the model; the `.adp` registration beside it keeps positions (FBL, section 8). No other state is persisted.
 
-**Testing**: Vitest for `core` and, with jsdom, for `webview`; `@vscode/test-cli` with `@vscode/test-electron` and Mocha for the packaged plug-in in a real Visual Studio Code, under `xvfb-run` on Linux (R8). One command, `npm test`, runs all three.
+**Testing**: Vitest for `core` and, with jsdom, for `webview`; `@vscode/test-cli` with `@vscode/test-electron` and Mocha for the packaged plug-in, unpacked from the `.vsix`, in a real Visual Studio Code, under `xvfb-run` on Linux (R8). One command, `npm test`, runs all three.
 
 **Target Platform**: desktop Visual Studio Code 1.140 or later on Windows, macOS and Linux.
 
