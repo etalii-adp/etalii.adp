@@ -139,13 +139,13 @@
 - [x] T072 [P] [US7] `docs/tools.md` in the catalogue format of the other hosts, a row per diagram type with its state here (FR-059)
 - [x] T073 [P] [US7] `docs/parity.md`: a section per diagram type, every difference from the definition with its reason (FR-007)
 - [x] T074 [US7] `etalii.adp:` both companions name `etalii.adp.ide.vscode` as a host that implements the type (FR-029)
-- [ ] T075 [P] A document of several hundred trends and one of several hundred items stay usable; time the 13 examples against SC-005
+- [x] T075 [P] A document of several hundred trends and one of several hundred items stay usable; time the 13 examples against SC-005
 - [ ] T076 Walk [quickstart.md](quickstart.md) from a fresh clone and a downloaded development build; check SC-001 to SC-011; final `README.md`
 - [ ] T077 Open PR 7
 
 ## Where it stands (2026-10-05)
 
-Phases 1 to 7 are built and each is a green pull request in `etalii.adp.ide.vscode`, stacked in order: #7 (skeleton and pipeline), #8 (hype cycle core), #9 (frame), #10 (hype cycle editing, catalogue and parity record), #11 (behavior model core), #12 (behavior model in the editor). The definitions are etalii.adp#57. 264 tests run in the core and the simulated browser and 21 with the packaged plug-in in a real Visual Studio Code. What is left is T014's check after the first merge and phase 8's T075 to T077. Two behaviours are recorded as not built in `docs/parity.md` rather than as tasks: mapping a toolbox drop back to a date while Compact is on, and siblings stepping aside while a behavior node is dragged.
+Phases 1 to 7 are built and each is a green pull request in `etalii.adp.ide.vscode`, stacked in order: #7 (skeleton and pipeline), #8 (hype cycle core), #9 (frame), #10 (hype cycle editing, catalogue and parity record), #11 (behavior model core), #12 (behavior model in the editor). The definitions are etalii.adp#57. 264 tests run in the core and the simulated browser and 21 with the packaged plug-in in a real Visual Studio Code. The last step is #13 (a toolbox drop in Compact lands on its date, and large graphs are timed: 281 tests). What is left is T014's check after the first merge, and T076 and T077: a walk through the quickstart by hand in a Visual Studio Code window. One behaviour is recorded as not built in `docs/parity.md` rather than as a task: siblings stepping aside while a behavior node is dragged.
 
 ## Dependencies
 
