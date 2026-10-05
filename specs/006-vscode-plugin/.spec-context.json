@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "The ADP Plug-in for Visual Studio Code",
   "branch": "features/006-vscode-plugin",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
   "history": [
     {
       "step": "specify",
@@ -18,6 +18,55 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-04T23:37:46.849Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-04T23:46:29.025Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-04T23:58:11.795Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-05T00:02:20.910Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T00:02:32.984Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-05T00:04:14.808Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-05T00:11:23.284Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-05T00:11:57.883Z"
     }
   ],
   "intent": "etalii.adp.ide.vscode produces one installable VS Code extension with the Gartner hype cycle graph and Agent Behavior Modelling diagrams, conforming to their definitions here, with tests, one-step debugging and a pipeline that offers the plug-in for download",
@@ -51,7 +100,492 @@
     {
       "decision": "Driving the tools from their .dis files or implementing them by hand is left to the plan (FR-008)",
       "why": "it is a how; FR-006 holds either way"
+    },
+    {
+      "why": "both .dis files hand reading, layout and reordering to plugins and their companions list some forty behaviours DISL 0.1 cannot state; conformance is held by ported standalone tests, vendored fixtures and a test that compares code with the vendored .dis",
+      "rejected": "a DISL runtime with plugins; generating code from the .dis",
+      "decision": "Both diagram types are implemented by hand in TypeScript against a shared frame; no DISL runtime"
+    },
+    {
+      "why": "the standalone backend owns all diagram logic and an extension that needs nothing installed cannot carry .NET",
+      "rejected": "the backend as a child process; .NET as WebAssembly; lifting the 8,000-line React canvas library",
+      "decision": "Three layers (core, host, view) with the standalone C# ported function by function and its 274 tests as the checklist"
+    },
+    {
+      "why": "undo, dirty state, save and hot exit are then the platform's, and the text editor and diagram share one history",
+      "rejected": "a custom editor with its own document; edits applied in the webview",
+      "decision": "Each diagram is a custom text editor over the platform's text document; the view sends intents and the host applies line splices as one WorkspaceEdit"
+    },
+    {
+      "why": "one step of Edit > Undo must restore Markdown and registration together, also for registration-only changes",
+      "rejected": "the .adp as a second text document (VS Code asks to undo across files on every undo); writing at once without undo; an undo of the plug-in's own",
+      "decision": "A behavior model's registration is held pending, written on save, and tied to the Markdown's undo by an edit log with marker edits"
+    },
+    {
+      "why": "FR-039 prefers a view, a tree view cannot hold inputs, and SVG lets the standalone geometry be copied",
+      "rejected": "both inside the editor only; React; Canvas 2D; screenshot comparison",
+      "decision": "ADP Toolbox and ADP Properties are webview views in one ADP view container; the canvas is SVG drawn with Preact"
+    },
+    {
+      "why": "the ask is the other implementations' naming and an artifact to download",
+      "rejected": "a run-number or -dev version; an OS matrix",
+      "decision": "The pipeline takes the IntelliJ workflow's shape: build, real-ide-tests on the packaged .vsix, a development pre-release moved forward with gh, version 0.1.0 unchanged for development builds"
+    },
+    {
+      "why": "FR-060 asks for ratification before the plan is checked, and the frame before the diagram types tests SC-011 by construction",
+      "rejected": "one pull request; a plan per repository",
+      "decision": "Delivery is one pull request here (definitions with Arrange diagram, re-read at standalone 13b517b3) and six into the VS Code repository, constitution first"
     }
   ],
-  "telemetryInstanceId": "3f467e8c-93e3-4af1-82d8-89921cbf3f5b"
+  "telemetryInstanceId": "3f467e8c-93e3-4af1-82d8-89921cbf3f5b",
+  "concerns": [
+    {
+      "step": "plan",
+      "note": "Spike S1: a line replaced by itself must be recorded as an undo step and come back with reason undo; if not, FR-031 goes back to clarify before pull request 4",
+      "kind": "risk"
+    },
+    {
+      "step": "plan",
+      "note": "Spike S2: a toolbox drag may not cross from a webview view to the editor's webview; fallback is the toolbox also mounted inside the editor",
+      "kind": "risk"
+    },
+    {
+      "step": "plan",
+      "note": "Open point O1: the definition gives Do the teal fill and Ask the user and Delegate grey, the standalone stylesheet the reverse; the owner rules which side is corrected",
+      "kind": "question"
+    },
+    {
+      "step": "plan",
+      "note": "setup-plan.ps1 resolved to specs/001-ci-and-badges on develop; the plan was written to specs/006-vscode-plugin by hand, uncommitted in the develop working tree",
+      "kind": "note"
+    },
+    {
+      "step": "tasks",
+      "kind": "note",
+      "note": "T024 adds fixtures/registrations/ and T076 adds a member to DiagramType for the heading test; neither is in the plan structure or contracts/frame-api.md yet"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "TypeScript extension in three layers with hand-built diagram types on a shared frame, custom text editors, an edit log for the registration, IntelliJ-shaped pipeline; 18 decisions, 3 spikes, 6 contracts",
+      "risks": "S1 marker edit and S2 cross-webview drag rest on undocumented platform behaviour"
+    },
+    "tasks": {
+      "summary": "176 tasks in 10 phases across 8 pull requests: 25 setup and foundational (definitions, constitution, skeleton), US1 8, US5 5, US6 7, US4 53, US2 37, US3 30, US7 6, polish 5; tests first in every story; 101 parallel"
+    }
+  },
+  "approach": "A TypeScript extension in three layers (pure core, extension host, SVG webviews) where each diagram type is built by hand on a shared frame, porting the standalone C# logic with its tests. Diagrams are custom text editors over the platform's document; the view sends intents and the host applies line splices as one undoable edit, with an edit log tying the .adp registration to the same history. The definitions gain Arrange diagram first, then six pull requests land in the VS Code repository behind an IntelliJ-shaped pipeline.",
+  "coverage": {
+    "FR-001": {
+      "tasks": [
+        "T016",
+        "T027",
+        "T071"
+      ]
+    },
+    "FR-002": {
+      "tasks": [
+        "T016",
+        "T026",
+        "T028"
+      ]
+    },
+    "FR-003": {
+      "tasks": [
+        "T105",
+        "T130",
+        "T143",
+        "T161"
+      ]
+    },
+    "FR-004": {
+      "tasks": [
+        "T073",
+        "T095"
+      ]
+    },
+    "FR-005": {
+      "tasks": [
+        "T019",
+        "T050",
+        "T051",
+        "T175"
+      ]
+    },
+    "FR-006": {
+      "tasks": [
+        "T105",
+        "T143"
+      ]
+    },
+    "FR-007": {
+      "tasks": [
+        "T097",
+        "T134",
+        "T164",
+        "T168"
+      ]
+    },
+    "FR-008": {
+      "tasks": [
+        "T105",
+        "T143"
+      ]
+    },
+    "FR-009": {
+      "tasks": [
+        "T052",
+        "T099",
+        "T137"
+      ]
+    },
+    "FR-010": {
+      "tasks": [
+        "T053",
+        "T103",
+        "T131",
+        "T141",
+        "T162"
+      ]
+    },
+    "FR-011": {
+      "tasks": [
+        "T099",
+        "T110",
+        "T138"
+      ]
+    },
+    "FR-012": {
+      "tasks": [
+        "T130",
+        "T133"
+      ]
+    },
+    "FR-013": {
+      "tasks": [
+        "T076",
+        "T161",
+        "T163"
+      ]
+    },
+    "FR-014": {
+      "tasks": [
+        "T054",
+        "T060",
+        "T074",
+        "T163"
+      ]
+    },
+    "FR-015": {
+      "tasks": [
+        "T075",
+        "T115",
+        "T130",
+        "T152",
+        "T161"
+      ]
+    },
+    "FR-016": {
+      "tasks": [
+        "T063",
+        "T070",
+        "T133"
+      ]
+    },
+    "FR-017": {
+      "tasks": [
+        "T107",
+        "T125"
+      ]
+    },
+    "FR-018": {
+      "tasks": [
+        "T103",
+        "T116",
+        "T117",
+        "T118",
+        "T119",
+        "T120"
+      ]
+    },
+    "FR-019": {
+      "tasks": [
+        "T107",
+        "T126",
+        "T128"
+      ]
+    },
+    "FR-020": {
+      "tasks": [
+        "T102",
+        "T114"
+      ]
+    },
+    "FR-021": {
+      "tasks": [
+        "T104",
+        "T121"
+      ]
+    },
+    "FR-022": {
+      "tasks": [
+        "T138",
+        "T148",
+        "T149"
+      ]
+    },
+    "FR-023": {
+      "tasks": [
+        "T139",
+        "T145",
+        "T150",
+        "T158"
+      ]
+    },
+    "FR-024": {
+      "tasks": [
+        "T141",
+        "T146",
+        "T153",
+        "T154",
+        "T155"
+      ]
+    },
+    "FR-025": {
+      "tasks": [
+        "T140",
+        "T151"
+      ]
+    },
+    "FR-026": {
+      "tasks": [
+        "T142",
+        "T146",
+        "T156"
+      ]
+    },
+    "FR-027": {
+      "tasks": [
+        "T004",
+        "T005",
+        "T006",
+        "T007",
+        "T008"
+      ]
+    },
+    "FR-028": {
+      "tasks": [
+        "T010"
+      ]
+    },
+    "FR-029": {
+      "tasks": [
+        "T171"
+      ]
+    },
+    "FR-030": {
+      "tasks": [
+        "T071"
+      ]
+    },
+    "FR-031": {
+      "tasks": [
+        "T046",
+        "T064",
+        "T070",
+        "T146"
+      ]
+    },
+    "FR-032": {
+      "tasks": [
+        "T065",
+        "T068",
+        "T164"
+      ]
+    },
+    "FR-033": {
+      "tasks": [
+        "T066",
+        "T069"
+      ]
+    },
+    "FR-034": {
+      "tasks": [
+        "T072",
+        "T095",
+        "T096"
+      ]
+    },
+    "FR-035": {
+      "tasks": [
+        "T063",
+        "T070",
+        "T090"
+      ]
+    },
+    "FR-036": {
+      "tasks": [
+        "T083",
+        "T093",
+        "T129",
+        "T160"
+      ]
+    },
+    "FR-037": {
+      "tasks": [
+        "T070",
+        "T080"
+      ]
+    },
+    "FR-038": {
+      "tasks": [
+        "T080",
+        "T086",
+        "T087",
+        "T088",
+        "T089",
+        "T090",
+        "T091"
+      ]
+    },
+    "FR-039": {
+      "tasks": [
+        "T047",
+        "T073",
+        "T081",
+        "T094"
+      ]
+    },
+    "FR-040": {
+      "tasks": [
+        "T073",
+        "T082",
+        "T092"
+      ]
+    },
+    "FR-041": {
+      "tasks": [
+        "T073",
+        "T096"
+      ]
+    },
+    "FR-042": {
+      "tasks": [
+        "T020",
+        "T023",
+        "T035"
+      ]
+    },
+    "FR-043": {
+      "tasks": [
+        "T024",
+        "T033",
+        "T099",
+        "T136",
+        "T137"
+      ]
+    },
+    "FR-044": {
+      "tasks": [
+        "T055",
+        "T056",
+        "T101"
+      ]
+    },
+    "FR-045": {
+      "tasks": [
+        "T133",
+        "T163"
+      ]
+    },
+    "FR-046": {
+      "tasks": [
+        "T036",
+        "T037"
+      ]
+    },
+    "FR-047": {
+      "tasks": [
+        "T044",
+        "T098",
+        "T135",
+        "T165"
+      ]
+    },
+    "FR-048": {
+      "tasks": [
+        "T041"
+      ]
+    },
+    "FR-049": {
+      "tasks": [
+        "T042"
+      ]
+    },
+    "FR-050": {
+      "tasks": [
+        "T018",
+        "T040"
+      ]
+    },
+    "FR-051": {
+      "tasks": [
+        "T039",
+        "T040"
+      ]
+    },
+    "FR-052": {
+      "tasks": [
+        "T041"
+      ]
+    },
+    "FR-053": {
+      "tasks": [
+        "T030"
+      ]
+    },
+    "FR-054": {
+      "tasks": [
+        "T030"
+      ]
+    },
+    "FR-055": {
+      "tasks": [
+        "T031",
+        "T045"
+      ]
+    },
+    "FR-056": {
+      "tasks": [
+        "T029",
+        "T030"
+      ]
+    },
+    "FR-057": {
+      "tasks": [
+        "T030",
+        "T031"
+      ]
+    },
+    "FR-058": {
+      "tasks": [
+        "T032",
+        "T043",
+        "T169"
+      ]
+    },
+    "FR-059": {
+      "tasks": [
+        "T167"
+      ]
+    },
+    "FR-060": {
+      "tasks": [
+        "T012",
+        "T015",
+        "T047",
+        "T168"
+      ]
+    }
+  }
 }
