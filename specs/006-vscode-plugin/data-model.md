@@ -58,7 +58,7 @@ A pending registration is never written without the document being saved. A stal
 
 ### Document session
 
-One per open document that at least one diagram shows. Created when the first diagram editor for it resolves, disposed when the last closes.
+One per open document that at least one diagram shows. Created when the first custom editor showing it as a diagram resolves, disposed when the last closes.
 
 | Field | Note |
 |---|---|
@@ -67,7 +67,7 @@ One per open document that at least one diagram shows. Created when the first di
 | `reading` | the current reading and the document version it was made from |
 | `registration` | on disk and pending, for a type that uses one |
 | `editLog` | below |
-| `views` | the diagram editors showing it, and which one has the focus |
+| `views` | the custom editors showing it, and which one has the focus |
 | `selection` | per view, the selected ids |
 
 ### Edit log entry
