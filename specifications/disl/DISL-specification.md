@@ -1,10 +1,10 @@
 # DISL — Diagram Specification Language
 
-**Specification, version 0.2 (Working Draft)**
+**Specification, version 0.3 (Draft)**
 
 |                           |                                                                              |
 |---------------------------|------------------------------------------------------------------------------|
-| Date                      | 2026-09-30                                                                   |
+| Date                      | 2026-10-05                                                                   |
 | Specification schema      | `disl.schema.json` (JSON Schema, draft 2020-12), `$defs/Specification`       |
 | Definition language       | DID, the Diagram Definition Language, in [`../did/`](../did/DID-specification.md) |
 | Expression language       | CEL — Common Expression Language (https://cel.dev)                           |
@@ -16,7 +16,7 @@
 
 ## Status of this document
 
-This is a working draft, version 0.2. It is complete enough to implement a conforming validator, a documentation generator and a reference runtime, but individual constructs may still change before version 1.0. DISL 0.1 continued the earlier combined format (DEDL became DISL and DID); section 18 lists the old identifiers that runtimes still read. DISL 0.2 adds declarative constructs to 0.1 (declared identity, findings that point at files, reasons the tool gives, derived elements, gestures and menus, view state, budgets, notation and time details). Every valid 0.1 specification is a valid 0.2 specification and keeps its meaning, except in the places listed in [Changes from 0.1](#changes-from-01), where 0.1 was silent or ambiguous and 0.2 now says what it means. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
+This is a draft, version 0.3. It is complete enough to implement a conforming validator, a documentation generator and a reference runtime, but individual constructs may still change before version 1.0. DISL 0.1 continued the earlier combined format (DEDL became DISL and DID); section 18 lists the old identifiers that runtimes still read. DISL 0.2 adds declarative constructs to 0.1 (declared identity, findings that point at files, reasons the tool gives, derived elements, gestures and menus, view state, budgets, notation and time details). Every valid 0.1 specification is a valid 0.2 specification and keeps its meaning, except in the places listed in [Changes from 0.1](#changes-from-01), where 0.1 was silent or ambiguous and 0.2 now says what it means. DISL 0.3 adds the constructs that the Gartner hype cycle graph and Agent Behavior Modelling tools needed and 0.2 could not state (neighbour-aware bounds, standard row and tree layouts, a type map for format bindings, part tooltips, form fields that parse their own text, per-case built-in codes, geometric drop placement, typed retyping fields and pointer bindings for connect gestures); every valid 0.2 specification is a valid 0.3 specification with the same meaning, apart from the clarifications in [Changes from 0.2](#changes-from-02). Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
 
 The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY** and **OPTIONAL** are to be interpreted as described in RFC 2119 and RFC 8174 when, and only when, they appear in bold capitals.
 
@@ -42,6 +42,7 @@ The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **
 16. [Security, privacy and robustness](#16-security-privacy-and-robustness)
 17. [Complete examples](#17-complete-examples)
 - [Changes from 0.1](#changes-from-01)
+- [Changes from 0.2](#changes-from-02)
 18. [Deprecated aliases](#18-deprecated-aliases)
 - [Appendix A — JSON Schema](#appendix-a--json-schema)
 - [Appendix B — Built-in catalogues](#appendix-b--built-in-catalogues)
@@ -349,8 +350,9 @@ Any object in a specification or DID definition MAY contain properties whose nam
 
 ### 2.9 Versioning
 
-- `disl` (required) is the version of DISL the specification targets, as `"major.minor"`: `"0.1"` or `"0.2"`. A runtime MUST refuse a specification with a higher major version than it supports and SHOULD warn for a higher minor version. The deprecated alias of section 18 is still read.
+- `disl` (required) is the version of DISL the specification targets, as `"major.minor"`: `"0.1"`, `"0.2"` or `"0.3"`. A runtime MUST refuse a specification with a higher major version than it supports and SHOULD warn for a higher minor version. The deprecated alias of section 18 is still read.
 - DISL 0.2 is a superset of 0.1. A 0.2 runtime **MUST** read a specification that declares `"disl": "0.1"`, or whose `$schema` names the 0.1 schema (`https://etalii.net/adp/disl/schema/0.1/disl.schema.json`), as a 0.2 specification with the same meaning, apart from the clarifications listed in [Changes from 0.1](#changes-from-01). A validator **MUST** validate such a specification against the 0.2 schema and **MUST NOT** report its 0.1 version or schema address as deprecated.
+- DISL 0.3 is a superset of 0.2. A 0.3 runtime **MUST** read a specification that declares `"disl": "0.1"` or `"disl": "0.2"` with its meaning, apart from the clarifications listed in [Changes from 0.2](#changes-from-02). While 0.3 is a draft, its schema is published at the 0.2 address (`https://etalii.net/adp/disl/schema/0.2/disl.schema.json`), which accepts every 0.2 specification unchanged; a specification that uses a construct new in 0.3 **SHOULD** declare `"disl": "0.3"`, and a 0.2 runtime **SHOULD** warn about it as a newer minor version.
 - `language.version` (required) is the semantic version (SemVer 2.0.0) of the defined language. DID definitions record the language version they were written with; this drives migrations (section 11.9).
 - A change that can make previously valid DID definitions invalid or change their meaning is a **major** change; adding optional constructs is a **minor** change; documentation, visual and toolbox-only changes are **patch** changes. Validators MAY warn when a version increment does not match the observed difference to a previous specification.
 
@@ -747,6 +749,35 @@ A functional decomposition graph stores a height only for comments; every other 
                   "message": { "cel": "string(newValue) + ' is off the map; maturity runs from 0 to 1.'" } } }
 ```
 
+**Neighbour-aware bounds** *(DISL 0.3)*. `min` and `max` bound one attribute at a time. Ordered attributes that must stay a distance apart, such as the boundaries between a trend's phases, are bounded together by the type-level property `bounds.neighbour` of a node type (4.6) or relation type (4.9), beside `attributes`. **NeighbourBounds** (`$defs/NeighbourBounds`):
+
+| Property     | Type                                   | Default        | Description |
+|--------------|----------------------------------------|----------------|-------------|
+| `attributes` | attribute name[] (at least one)        | **required**   | The ordered attributes kept apart, in their order. |
+| `between`    | [attribute name, attribute name]       | **required**   | The two attributes every value of `attributes` lies between, the lower first. |
+| `gap`        | number or `{cel}`                      | **required**   | The least distance between two neighbouring anchors, in the attributes' units (months for `yearMonth`); `{cel}` in the `element` context. |
+| `inner`      | int or `{cel}`                         | all of them    | How many of `attributes`, from the first, take part as anchors; the others are only clamped inside `between`. |
+| `absent`     | `"spread"`, `"ignore"`                 | `"ignore"`     | `spread`: an absent attribute among the anchors takes part at its evenly spread position between its present neighbours; `ignore`: it does not take part. |
+| `on`         | (`"change"`, `"handle"`, `"create"`)[] | all three      | The edits after which the clamp runs: a typed or programmatic set, a shape handle drag (6.8), a creation. |
+| `pinned`     | `"edited"`, `"none"`                   | `"none"`       | `edited`: the attribute the transaction set is clamped first, and the others around it. |
+| `doc`        | Doc                                    |                |             |
+
+- After any transaction of a kind `on` lists that changes one of `attributes` or either attribute of `between`, a runtime **MUST** clamp the present values of `attributes`, in order, so that each lies at least `gap` after the previous anchor and at least `gap` (times the number of anchors still to come) before the second attribute of `between`, where an anchor is a present value or, with `absent: "spread"`, the evenly spread position of an absent one. The first attribute of `between` is the anchor before the first.
+- Only the first `inner` attributes take part as anchors; the others are only clamped inside `between`.
+- With `pinned: "edited"`, the attribute the transaction set is clamped first and the others around it.
+- The clamp is part of the transaction and **MUST NOT** be a separate undo step. When `between` leaves too little room for every anchor `gap` apart, no clamp satisfies the bounds, and the transaction **MUST** be refused (8.4) rather than clamped.
+- The clamp applies after snapping and after `outOfRange` (above), so it can move a value off the snap grid only where `gap` itself is off it.
+
+```json
+"Trend": {
+  "attributes": { "start": { "type": "yearMonth" }, "stop": { "type": "yearMonth" }, "phases": { "type": "int" },
+                  "peakEnd": { "type": "yearMonth" }, "troughEnd": { "type": "yearMonth" }, "slopeEnd": { "type": "yearMonth" } },
+  "bounds": { "neighbour": { "attributes": ["peakEnd", "troughEnd", "slopeEnd"], "between": ["start", "stop"],
+    "gap": 1, "inner": { "cel": "visiblePhases(self) - 1" }, "absent": "spread", "on": ["change", "handle"], "pinned": "edited" } } }
+```
+
+A trend from 2000-01 to 2000-05 with four phases keeps every phase at least a month long: dragging the Trough boundary to 2000-02 lands it at 2000-03, because Peak needs a month before it; a later resize of the trend to 2000-01..2000-04 is refused (too short) rather than clamped.
+
 **Unset values.** Reading an attribute that has no stored value yields its `default` when one is declared, otherwise the zero value of its CEL type (`''`, `0`, `0.0`, `false`, `[]`, `{}`, `null` for references, the Unix epoch for timestamps, `0s` for durations). The CEL macro `has(self.attr)` tests whether a value is explicitly stored. Persistence omits unset values (11.8).
 
 ### 4.4 Data types
@@ -806,6 +837,16 @@ Struct values are CEL maps; fields are accessed as `self.budget.amount`.
 
 EnumValue: `value`, `label`, `doc`, `color`, `icon`, `deprecated`. The optional `color` and `icon` are hints that notations may use (`{ "cel": "enumColor('Priority', self.priority)" }`).
 
+**Colours from theme tokens** *(DISL 0.3)*. An EnumValue's `color` is a Color or a TokenRef (`{ "token": … }`, 6.2). A token is resolved in the current theme mode wherever the colour is used: a legend entry (6.13) for an enum value whose `color` is a token **MUST** resolve the token in the current theme mode, and `enumColor()` (12.4) returns the resolved colour.
+
+```json
+"Phase": { "ordered": true, "values": {
+  "peak":   { "label": "Peak",   "color": { "token": "ghg.peak" } },
+  "trough": { "label": "Trough", "color": { "token": "ghg.trough" } } } }
+```
+
+With `ghg.peak` declared as `#f7e7a1` and, in the dark mode, `#6b5a17`, the hype cycle's legend paints the Peak swatch light or dark with the theme.
+
 **Stored form.** An enum value's key is its name in the specification and in CEL; `value` (a non-empty string, default: the key) is its **stored form**, how it is written in a DID definition and the spelling a format binding maps it to by default. Stored forms **MUST** be unique within an enumeration. A reader **MUST** map a stored form back to its key; an unknown stored form is kept as written for an `extensible` enum and reported by `std.facets` otherwise. CEL always sees the key, so a stored form need not be an identifier:
 
 ```json
@@ -827,6 +868,7 @@ A node type describes a kind of element that is drawn as a node.
 | `abstract`             | bool                 | Cannot be instantiated; exists for inheritance and type references.                                                                                                                                                                        |
 | `extends`              | TypeRef or TypeRef[] | Supertypes (4.7).                                                                                                                                                                                                                          |
 | `attributes`           | map → Attribute      | Own attributes.                                                                                                                                                                                                                            |
+| `bounds`               | `{neighbour}`        | Bounds that involve several attributes at once: `neighbour` keeps ordered attributes a gap apart (4.3). *(DISL 0.3)* |
 | `ports`                | map → PortType       | Connection points (4.10).                                                                                                                                                                                                                  |
 | `children`             | Containment          | What may be nested inside (4.8).                                                                                                                                                                                                           |
 | `multiplicity`         | `{min, max}`         | Number of instances allowed per diagram (for example exactly one `Start`). Enforced as a built-in constraint.                                                                                                                              |
@@ -913,6 +955,7 @@ A relation type describes a kind of connection, drawn as an edge.
 | `allowParallel`        | bool                              | More than one relation of this type between the same pair. Default `true`.                                                        |
 | `acyclic`              | bool                              | Shorthand for a built-in constraint (`std.acyclic`) forbidding cycles in the graph formed by all relations whose type is this type or one of its subtypes (below).                                                    |
 | `attributes`           | map → Attribute                   | Relation attributes.                                                                                                              |
+| `bounds`               | `{neighbour}`                     | As for node types (4.3). *(DISL 0.3)* |
 | `connectsRelations`    | bool                              | Endpoints may be relations, not only nodes (for example UML association classes, annotations pointing at edges). Default `false`. |
 | `derived`              | Expression or DerivedRelation     | Derived relations are computed and drawn read-only: an Expression returning a list of maps (below), or the object form of 4.11.3. |
 | `viewOnly`             | bool                              | As for node types — connectors between notes, for instance.                                                                       |
@@ -1445,6 +1488,8 @@ Snapping is defined **per axis**. Each axis of a coordinate system can have its 
 
 **Snapping per gesture.** An entry of `byGesture` applies to that gesture only and is more specific than the level it is declared on: it **MUST** be merged over that level per property and per axis, with the rule above. `move` covers dragging an element, `resize` dragging its extent, `drop` a toolbox drop, a create at the pointer (7.2) and a context-menu entry run at a point (7.3), `paste` pasting, and `handle` dragging a shape handle (6.8). `reference` **MAY** differ per gesture.
 
+*(DISL 0.3)* A `drop` (and a create at the pointer or a context-menu add) of a new element uses the snapping of the node notation of the type it creates, merged over its coordinate system's, and the value a rule receives is the position, with the new element's placement anchor at the pointer, of the point `reference` selects (the placement anchor itself by default).
+
 ```json
 "snapping": {
   "x": { "grid": { "spacing": 1 }, "ties": "away-from-zero" },
@@ -1621,6 +1666,7 @@ A ruler level also accepts `minSpacingPx`, which shows the level only while its 
 | `ticks`           | `{minSpacingPx, steps: [{unit, step, format}]}` (`$defs/RulerTicks`) | – | A single adaptive row: of `steps`, listed from finest to coarsest, the finest whose labels are at least `minSpacingPx` apart on screen is used. `ticks` and `levels` **MUST NOT** both be set. |
 | `boundaryFormats` | map unit → format                        | –         | A tick that falls exactly on the start of a listed unit uses that unit's format; when several apply, the coarsest unit wins. |
 | `attach`          | `"view"`, `"canvas"`                     | `"view"`  | `view`: the ruler stays at its edge of the pane whatever is scrolled; `canvas`: it scrolls with the drawing. |
+| `minUnit`         | TimeUnit or `{attribute}`                | –         | *(DISL 0.3)* The shortest step shown: a level, or a step of `ticks`, whose step is shorter than `minUnit` **MUST NOT** be shown, at any zoom. `{attribute}` binds it to an attribute of the diagram, such as the unit the diagram is drawn in. |
 
 Ticks and level boundaries **MUST** fall on round boundaries of their unit in the axis's time zone, never on offsets from the edge of the viewport; on a `yearMonth` axis, on month indices divisible by the step's number of months, counted from year 0.
 
@@ -1634,6 +1680,14 @@ Ticks and level boundaries **MUST** fall on round boundaries of their unit in th
 ```
 
 A timeline's one ruler row chooses the finest step that leaves 80 pixels per label, and writes the bare year on the first of January.
+
+```json
+"ruler": { "visible": true, "position": "bottom", "minUnit": { "attribute": "unit" },
+  "levels": [ { "unit": "month", "format": "MMM u", "minSpacingPx": 64 }, { "unit": "year", "format": "u", "minSpacingPx": 64 },
+              { "unit": "decade", "format": "u", "minSpacingPx": 64 } ] }
+```
+
+A hype cycle drawn in decades starts its ruler at decades, and one drawn in months at months: a diagram in years never shows the month level, however far it is zoomed in.
 
 
 ---
@@ -2064,6 +2118,14 @@ A path MAY have several sub-paths and a `fillRule` (`"nonzero"` default, `"eveno
 | `when`    | Expression                 | Include only when true.                                               |
 | `outline` | bool                       | Part contributes to the connection outline.                           |
 | `hit`     | bool                       | Part is hit-testable. Default `true`.                                 |
+| `tooltip` | Message                    | *(DISL 0.3)* Hover text over the part; context `element` plus `p` (the shape's parameter values). |
+
+**Part tooltips** *(DISL 0.3)*. Over a part with a `tooltip`, a runtime **MUST** show the part's tooltip in place of the node's (6.9). A part that is not hit-testable (`hit: false`) shows no tooltip of its own. Over a phased banner, the trough segment shows "Trough of Disillusionment" while the rest of the banner shows the trend's own tooltip:
+
+```json
+"parts": [ { "id": "trough", "shape": "rect", "box": { "x": "w * p.b1", "y": 0, "w": "w * (p.b2 - p.b1)", "h": "h" },
+             "tooltip": "Trough of Disillusionment" } ]
+```
 
 **Handles** let users fine-tune a shape directly on the canvas — dragging the fold of a note, the tail of a callout, the skew of a parallelogram — like the yellow diamonds of classic drawing tools.
 
@@ -2268,12 +2330,22 @@ A pipeline step shows only the indicators that apply, leftward from its top-righ
 | `gap`    | number                                        | Distance between the outline and the edge end.                                                                                                                                                                                |
 | `spread` | bool                                          | Distribute several edges arriving on the same side instead of converging on one point.                                                                                                                                        |
 | `sides`  | (`"top"`, `"right"`, `"bottom"`, `"left"`)[]  | The sides edges may attach to. Default: all four. With `sides` mode, the midpoint of the nearest allowed side is used; with `outline`, the attachment point is clamped to the allowed sides; `fixed` and `center` ignore it. |
+| `drawnFrom` | `"point"`, `"outline"`                      | *(DISL 0.3)* Where an edge's end is drawn: at the anchor point (`point`, default), or where the line towards the other end crosses the outline (`outline`, below). |
 
 ```json
 "anchors": { "mode": "sides", "sides": ["left", "right"] }
 ```
 
 A mind map's branches leave a topic at the middle of its left or right side, never at the top or bottom.
+
+**Drawn from the outline** *(DISL 0.3)*. With `drawnFrom: "outline"`, the chosen anchor point decides only which element side the edge belongs to; the edge's end is drawn where the line towards the other end crosses the outline. `drawnFrom` applies to the `fixed` and `sides` modes; `outline` and `center` draw from the outline or the centre already and ignore it.
+
+```json
+"anchors": { "mode": "fixed", "drawnFrom": "outline",
+  "points": [ { "id": "n", "x": 0.5, "y": 0 }, { "id": "e", "x": 1, "y": 0.5 }, { "id": "s", "x": 0.5, "y": 1 } ] }
+```
+
+A hype cycle trigger on row 2 that influences a trend on row 0 attaches at `n`, and the curve leaves the trigger's circle where it faces the trend.
 
 **ContainerSpec** — for nodes whose type has `children`:
 
@@ -2337,7 +2409,7 @@ A Variant may contain any NodeNotation property except `placement`; matching var
 | `states`, `conditions`, `variants`                    |                                     | As for nodes; variants may replace line, markers and labels.                                                               |
 | `tooltip`, `selectable`, `deletable`, `reconnectable` |                                     | `tooltip` is a Message (context `element`). `reconnectable` controls whether users may drag an end to another element.     |
 | `refusals`                                            | GestureRefusals                     | As for nodes (6.9); for example `"move": ["An edge is drawn between its endpoints; move one of those instead."]`.          |
-| `connect`                                             | ConnectGesture                      | The anchors a connect gesture of this relation type starts from, and which end each one makes (below).                     |
+| `connect`                                             | ConnectGesture                      | The anchors a connect gesture of this relation type starts from, which end each one makes, and (DISL 0.3) the pointer button that starts it (below). |
 | `stub`                                                | Stub                                | How a relation without a target is drawn (below). Also allowed in variants.                                                |
 | `accessibility`, `doc`                                |                                     |                                                                                                                            |
 
@@ -2408,6 +2480,19 @@ An influence on a hype cycle ends at a phase, an edge of that phase and a fracti
 ```
 
 In a dependency graph, dragging from a node's right anchor makes it depend on the node dropped on; dragging from its left anchor makes that node depend on it.
+
+**Pointer binding** *(DISL 0.3)*. A ConnectGesture also accepts `pointer` (`$defs/GesturePointer`), which says how the gesture is started with the pointer: `{ "button": "primary" | "secondary" | "middle", "start": "anchor" | "body", "modifiers": Modifier[] }`, with `button` `primary` and `start` `anchor` by default, and `modifiers` spelled as `Modifier` is (`"Alt"`, `"Shift"`, `"Ctrl"`, `"Meta"`, 5.9). Without `pointer`, a connect gesture starts as in 0.2.
+
+- A runtime **MUST** start a connect gesture of the relation type only with the pointer button and modifiers given. With `start: "body"`, a gesture **MUST** start from anywhere on the node's body, and the node dragged from **MUST** become the source unless `from` says otherwise.
+- A pointer gesture claimed by `pointer` **MUST NOT** also move, select by marquee or open a context menu; a runtime **MAY** open the context menu on a secondary click that moved less than its drag threshold.
+- On a device without that button (touch), a runtime **MUST** offer the gesture another way, such as a long press, and **SHOULD** say so in its help.
+
+```json
+"edges": { "Child": { "style": "child", "line": { "routing": "orthogonal" }, "targetMarker": "arrowFilled",
+  "connect": { "pointer": { "button": "secondary", "start": "body" } } } }
+```
+
+In an agent behavior model, a Child line is drawn by dragging with the right mouse button from the parent's body to the child's body, because the side anchors draw no handle to start from; a left-button drag on the body still moves the node.
 
 **Stubs.** **Stub** (`$defs/Stub`) is `{ "length": number, "side": "right" | "left" | "top" | "bottom" | "auto", "style": StyleRef, "label": Label }`. A relation whose target is absent (an `optional` target end, 4.9) **MUST** be drawn as a stub: a line of `length` canvas units leaving the source at the middle of `side`, with its `style` and `label`. The stub is the relation: selecting it selects the relation, and dragging its free end onto an element is a `connect` gesture. A relation without a target and without a stub is not drawn.
 
@@ -2542,6 +2627,7 @@ Labels display text on nodes, edges, ports and compartments. The same **Label** 
 | `placeholder`    | LocalizedText                                   | Shown (dimmed) when text is empty and the element is selected.                                                                                        |
 | `editable`       | `false`, `"inline"`, `"multiline"`, `"form"`    | How users edit the text; `form` opens the field in the form. Requires an attribute binding. Default: `"inline"` for attribute bindings, else `false`. |
 | `parse`          | `{cel, write}`                                  | Parse edited text into several attributes (for example `"name : Type"` → `name`, `type`), with `value` = entered text and `write` actions (9.4).      |
+| `editText`       | Message or `{ "attribute": … }`               | *(DISL 0.3)* The text an inline editor starts with, in place of the label's text (below).                                                              |
 | `position`       | Position                                        | For nodes and ports (6.9).                                                                                                                            |
 | `style`          | StyleRef                                        | Font, color, alignment.                                                                                                                               |
 | `background`     | `{fill, stroke, padding, cornerRadius}`         | Box behind the text (tags, pills).                                                                                                                    |
@@ -2566,6 +2652,15 @@ Labels display text on nodes, edges, ports and compartments. The same **Label** 
 ```
 
 A Wardley map reads each component's label offset from the map text, and draws the label at the default offset where the text gives none.
+
+**The text an editor starts with** *(DISL 0.3)*. A label whose text is computed shows more than the user edits. When a label with `editText` is edited in place, the editor **MUST** start with `editText`'s value (a Message in the `element` context, or the value of the attribute it binds) rather than the label's text; the committed text goes through `parse` when given, else is written to `editText`'s attribute. An attribute binding in `editText` satisfies the requirement that an editable label be bound to an attribute, even when `text` is computed.
+
+```json
+"labels": [ { "id": "name", "text": { "cel": "self.name + ' · ' + formatYearMonth(self.date, 'u')" },
+  "editText": { "attribute": "name" }, "editable": "inline", "position": "outside-left" } ]
+```
+
+A hype cycle trigger's label reads `Steam engine · 1712`, but its inline editor opens on `Steam engine`, and what is committed is written to `name`.
 
 **Edge label positioning** — for labels in `EdgeNotation.labels`:
 
@@ -2623,7 +2718,7 @@ block-beta
 - **Empty canvas.** `empty` (`$defs/EmptyMessage`) is `{ "text": Message, "when": Expression, "style": StyleRef }`, drawn centred on the surface while `when` holds. The default `when` is that the view draws no element after steps 1 and 2 of the drawing order (6.1), before viewer filters and budgets, so a canvas emptied by a filter does not claim that the model is empty. The toolbox and empty-canvas gestures stay available.
 - **Stretching.** With `fit: "stretch"`, `bounds` **MUST** be set, and the runtime **MUST** scale x and y independently so that `bounds` fills the pane minus `margin`, again when the pane is resized. Node sizes, strokes, fonts and label offsets are not stretched: they stay in canvas units at zoom 1, placed at their stretched anchor. User zoom and pan **MAY** be disabled. Stored positions are domain values and are unaffected.
 - **Initial zoom.** `zoom.initial` is a number or `"fit"`; default: `zoom.default`, as in 0.1. With `"fit"`, the runtime **MUST** fit zoom and pan to the drawn content once per viewer and view, keeping `fitPadding` (a fraction of the content's extent, default 0.05) on each side, when the view opens or, with `fitWhen: "firstContent"` (default), the first time it has content; afterwards a model change **MUST NOT** change zoom or pan. A stored `viewport` (11.6) takes precedence, and an empty view uses `default`. The fitted value is viewer state.
-- **Legend.** With `legend.from: "drawn"`, an entry **MUST** be shown only while at least one element of `diagram.drawn` matches it: a string entry of `entries` matches when a drawn element has that type, takes that enum value, uses that marker or satisfies that conditional style. With `from: "declared"` (default), every entry is shown, as in 0.1. `legend.computed` (`$defs/LegendComputed`) computes entries from the drawn elements: `key` (Expression, `legend` context) groups them into one entry each; `label` (Message) and `swatch` (`{shape, fill, stroke, icon}`) are evaluated on the first element of each group; `order` sorts the entries (default: first appearance in model order). `legend.title` is a Message heading the legend.
+- **Legend.** With `legend.from: "drawn"`, an entry **MUST** be shown only while at least one element of `diagram.drawn` matches it: a string entry of `entries` matches when a drawn element has that type, takes that enum value, uses that marker or satisfies that conditional style. With `from: "declared"` (default), every entry is shown, as in 0.1. `legend.computed` (`$defs/LegendComputed`) computes entries from the drawn elements: `key` (Expression, `legend` context) groups them into one entry each; `label` (Message) and `swatch` (`{shape, fill, stroke, icon}`) are evaluated on the first element of each group; `order` sorts the entries (default: first appearance in model order). `legend.title` is a Message heading the legend. *(DISL 0.3)* A legend entry for an enum value whose `color` is a token (4.5) **MUST** resolve the token in the current theme mode, so its swatch follows a change of mode.
 
 ```json
 "canvas": {
@@ -2809,6 +2904,7 @@ A timeline relation dragged to empty canvas creates a two-week element starting 
 | `targets`   | DropTarget[]                                  | `[]`       | Tried in order; the first whose `on` matches runs. |
 | `elsewhere` | `"create"`, `"ignore"`, `"refuse"`, `"menu"`  | `"create"` | What happens when no target matches: `create`, the tool's own creation at the drop point; `ignore`, nothing and no message; `refuse`, the `refusal` is shown; `menu`, the context menu of the empty canvas (7.3) opens at the drop point. |
 | `refusal`   | Reason                                        | the runtime's sentence | For `refuse`; context `create` plus `dropTarget`. |
+| `place`     | placement id                                  | –          | *(DISL 0.3)* A parent placement of `behavior.placements` (9.1) that chooses the parent and the index of the created element by geometry; `targets` and `elsewhere` are then not consulted (below). |
 
 A **DropTarget** (`$defs/DropTarget`) is a context tool (7.3) of any kind plus `on`, a list of TypeRefs and the keyword `"canvas"`; its `self` is the drop target (the diagram for `"canvas"`), and `position` is the drop point.
 
@@ -2817,6 +2913,19 @@ A **DropTarget** (`$defs/DropTarget`) is a context tool (7.3) of any kind plus `
 - While the entry is dragged, a runtime at level Standard or above **SHOULD** apply the `dropTarget` state to an element a target accepts and the `dropReject` state otherwise, and **SHOULD** show the refusal before the release.
 - A `create-node` tool without `drop` behaves as in 0.1: it creates at the point, inside a container under it when containment allows. An `operation` tool without `drop` runs on the drop target when the operation's `for` admits it, else on the diagram.
 - `"canvas"` is a reserved word in `on`; a type named `canvas` cannot be listed there.
+
+**Drops placed by geometry** *(DISL 0.3)*. A drop with `place` creates the tool's element where the named parent placement (9.1) puts it, which need not be at or inside the drop target: the drop point is bound as `position` in the placement.
+
+- A drop with `place` **MUST NOT** consult `targets` or `elsewhere`; a validator **SHOULD** warn when they are given beside it.
+- While the entry is dragged, a runtime at level Standard or above **SHOULD** apply the `dropTarget` state to the parent the placement would choose, and **SHOULD** show the placement's refusal before the release when it would choose none.
+- The created element is placed among the parent's children at the placement's index, and its position on the canvas follows from its placement and the layout (section 10).
+
+```json
+{ "id": "check", "creates": "Check", "mode": "drop", "label": "Check", "icon": "mdi-help-circle-outline",
+  "initial": { "label": "New question" }, "after": "editLabel", "drop": { "place": "underNearestAbove" } }
+```
+
+An agent behavior model's Check, dropped below a node, becomes a child of the nearest node above the drop point that can take another child (9.1), not of the element under the pointer.
 
 The `create` gesture context (8.4) binds `dropTarget` and `tool`, so a `create` constraint can refuse per target with a sentence that names what lies under the pointer.
 
@@ -3032,8 +3141,44 @@ If no form is defined for a type, runtimes generate one: one field per non-deriv
 | `absentText`, `emptyText`  | Message                             | Override the attribute's texts for an absent or empty value (4.3). Context `form`.                                         |
 | `showAbsent`               | bool                                | Whether the field is shown while its value is absent. Default `true`.                                                      |
 | `onChange`                 | Action[]                            | Actions run after the value is committed (9.4).                                                                            |
+| `display`                  | Message                             | *(DISL 0.3)* The text the field shows for its value, in place of the widget's own rendering; context `form` (below).        |
+| `parse`                    | FieldParse                          | *(DISL 0.3)* Makes the item editable as text, on an attribute or a `computed` item (below).                                |
 
 **FieldValidation** (`$defs/FieldValidation`): `rule` (Expression → bool, context `form`), `message` (Message, context `form`), `severity` (default `"error"`), and `timing`: `"input"` (default, as in 0.1: checked and shown as the user types) or `"commit"` (checked when the value is committed or the dialog is submitted, for input that is only judged complete). A validation message may call a declared function or a plugin's CEL function, so a format's own term grammar can word the refusal.
+
+**Fields that show and accept their own text** *(DISL 0.3)*. A field normally shows its attribute's value as its widget renders it, and accepts what the widget produces. Some values are read and written as a phrase: the number of phases a trend shows as "Peak and Trough", a note's size as `160 x 64`, an influence's end as `plateau/bottom/0.3`.
+
+- An item with `display` **MUST** show its value as `display` evaluates, in the `form` context with `value` bound to the attribute's value; the widget still edits the value itself.
+- An item with `parse` is editable as text, even when it is `computed`. **FieldParse** (`$defs/FieldParse`) is `{ "accepts": Expression → bool, "write": Action[], "refusal": Message }`. On commit, the runtime **MUST** bind `value` to the entered text, **MUST** refuse with `refusal` unless `accepts` is true, and otherwise **MUST** run `write` as one transaction. Read-only reasons (4.3) and `validate` apply before `accepts`.
+
+```json
+{ "kind": "computed", "label": "From attachment",
+  "value": { "cel": "endSpec(self.?fromPhase, self.?fromEdge, self.?fromAt)" },
+  "parse": {
+    "accepts": "value.trim().split('/').size() == 3 && value.trim().split('/')[0].trim() in ['peak', 'trough', 'slope', 'plateau'] && value.trim().split('/')[1].trim() in ['top', 'bottom']",
+    "write": [ { "set": { "fromPhase": "value.trim().split('/')[0].trim()", "fromEdge": "value.trim().split('/')[1].trim()",
+                          "fromAt": "double(value.trim().split('/')[2].trim())" } } ],
+    "refusal": { "cel": "'\\'' + value + '\\' is not an attachment; write it as phase/edge/at, such as plateau/bottom/0.3.'" } } }
+```
+
+On a hype cycle influence, `plateau/bottom/0.3` sets `fromPhase`, `fromEdge` and `fromAt` in one undo step, and `plateau/side/0.3` is refused with "'plateau/side/0.3' is not an attachment; write it as phase/edge/at, such as plateau/bottom/0.3."
+
+**Retyping in a form** *(DISL 0.3)*. An item of kind `type` shows the element's type and changes it through `behavior.retype` (9.5). It has `label`, `options` (in the form FormItem `options` already takes, a `{cel}` value or a literal list, giving the type names on offer), `optionLabel` (Expression → string, with `item` bound to a type name) and `refusals` (Reason[], whose expressions see `self` and `newValue`, the chosen type).
+
+- A `type` item **MUST** show the element's type, labelled by `optionLabel` with `item` bound to the type, and **MUST** offer as choices the types in `behavior.retype[self.type].to` for which that entry's `when` holds, further limited by `options` when given.
+- Choosing a different type **MUST** retype the element as `behavior.retype` describes, applying `attributeMapping`, as one transaction and one undo step.
+- A value not among the choices (typed, pasted or sent by another client) **MUST** be refused with the first of `refusals` whose `when` holds, or with the runtime's sentence when none does.
+
+```json
+{ "kind": "type", "label": "Kind",
+  "options": { "cel": "kinds().filter(t, canBecome(t, self))" },
+  "optionLabel": "kindChoice(item)",
+  "refusals": [
+    { "when": "familyOf(newValue) == 'leaf' && self.children.size() > 0",
+      "message": { "cel": "'\"' + kindChoice(newValue) + '\" holds no children, and this node has ' + (self.children.size() == 1 ? '1 child' : string(self.children.size()) + ' children') + '.'" } } ] }
+```
+
+An agent behavior model's Kind row lists only the kinds a node can become without losing a child: a leaf only when the node has no children. Choosing one rewrites the node's keyword as one undoable step; a kind typed past the list is refused with the sentence that says why.
 
 **Dialogs.** A form used as a dialog (`usage` `create` or `popover`, or an operation's `paramsForm`) **MUST** show `placeholder` in an empty input, **MUST** pre-fill `initial`, and **MUST** label its confirming button with `submitLabel`. It **MUST NOT** submit while a validation of severity `error` fails, and **MUST** show that validation's message beside the field. When the invoking entry supplies every parameter of the operation, the dialog **MUST NOT** open.
 
@@ -3054,7 +3199,7 @@ If no form is defined for a type, runtimes generate one: one field per non-deriv
 
 **Widgets**: `text`, `textarea`, `markdown`, `code` (with `widgetOptions.language`: `"cel"`, `"json"`, `"sql"`, …; the `cel` language is type-checked in the attribute's `context`), `number`, `slider` (`min`, `max`, `step`, `marks`), `spinner`, `rating` (`max`, `icon`), `checkbox`, `switch`, `select`, `combobox` (free entry allowed), `radio`, `segmented` (button group), `multiselect`, `tags`, `date`, `datetime`, `time`, `duration`, `month` (a `yearMonth` value), `daterange` (edits two attributes: `attribute` and `widgetOptions.endAttribute`), `color` (`palette`, `alpha`), `icon` (icon picker), `reference` (element picker, with `widgetOptions.pickOnCanvas: true` to select by clicking), `references` (for `many` references), `list` (editable list of primitives), `table` (list of structs, with `widgetOptions.columns`), `struct` (nested sub-form), `file` (binary or URI, `mediaTypes`), `image`, `link`, `progress` (read-only bar), `readonly` (plain text), `plugin`.
 
-**Containers and other items** (by `kind`): `section` (`title` as a Message, `collapsible`, `collapsed`, `items`), `row` (horizontal group), `tabs` (`tabs: [{title, icon, items}]`), `group` (a bordered box with `title`), `text` (static help text, Markdown), `divider`, `computed` (read-only `value` Bindable), `button` (`label` as a Message, `icon`, `operation` or `actions`, `enabled`, `unavailable` as Reason[], `confirm` as a Message or Confirmation (9.5); a button that runs an operation inherits its reasons, 9.3), `findings` (list of the element's current findings with quick fixes; `problems` is its deprecated alias, section 18), `plugin`.
+**Containers and other items** (by `kind`): `section` (`title` as a Message, `collapsible`, `collapsed`, `items`), `row` (horizontal group), `tabs` (`tabs: [{title, icon, items}]`), `group` (a bordered box with `title`), `text` (static help text, Markdown), `divider`, `computed` (read-only `value` Bindable), `button` (`label` as a Message, `icon`, `operation` or `actions`, `enabled`, `unavailable` as Reason[], `confirm` as a Message or Confirmation (9.5); a button that runs an operation inherits its reasons, 9.3), `findings` (list of the element's current findings with quick fixes; `problems` is its deprecated alias, section 18), `type` (the element's type, changed through `behavior.retype`; DISL 0.3, above), `plugin`.
 
 ### 7.6 Embedded forms (widgets inside nodes)
 
@@ -3132,10 +3277,19 @@ Constraints state what makes a diagram valid. They are written in CEL, evaluated
 |------------|--------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `severity` | `"error"`, `"warning"`, `"info"`, `"hint"`             | Re-rates the built-in.                                                                                                                                                                                      |
 | `enabled`  | bool                                                   | Switches the built-in off. Default `true`.                                                                                                                                                                  |
-| `code`     | QualifiedId (hyphens allowed)                          | The code reported with its findings (8.6), for example `"dependencies.duplicate-id"`.                                                                                                                      |
+| `code`     | QualifiedId (hyphens allowed) or `{cel}`               | The code reported with its findings (8.6), for example `"dependencies.duplicate-id"`. *(DISL 0.3)* `{cel}` computes it per finding (below). |
 | `message`  | Message                                                | Replaces the runtime's own wording of the built-in's findings (8.6); evaluated in the `constraint` context plus `detail`.                                                                                  |
 | `refusal`  | Message                                                | Replaces the runtime's own wording when the built-in refuses a gesture (8.4); evaluated in that gesture's context plus `violation`. Without it a refusal is worded by the runtime, never taken from `message`. |
 | `doc`      | Doc                                                    |                                                                                                                                                                                                             |
+
+**A code per case** *(DISL 0.3)*. One built-in can cover breaches a tool reports under several codes, as `std.endpoints` covers an influence into a trigger, a self-influence and a repeated influence. A `code` given as `{cel}` is evaluated per finding, in the `constraint` context plus `detail`, and returns a QualifiedId. A computed `code` whose result is not a QualifiedId is a specification error reported once, and the finding then carries the built-in's id.
+
+```json
+"std.endpoints": { "severity": "warning",
+  "code": { "cel": "self.target.isA('Trigger') ? 'ghg.influence-into-trigger' : (self.source == self.target ? 'ghg.self-influence' : 'ghg.duplicate-influence')" } }
+```
+
+An influence from `steam-engine` to itself is reported as `ghg.self-influence`.
 
 `detail` is a map whose keys each built-in lists in 8.7; `violation` is a map with `rule` (the built-in id) and the keys 8.4 lists per built-in. `detail` **MUST** be bound only in a built-in's `message`, and `violation` only in its `refusal`. Without `message` or `refusal`, the runtime words and localises the text itself, as in 0.1.
 
@@ -3416,13 +3570,16 @@ Each built-in binds `detail` in its `message` (8.1) with the keys below; the bui
 | `std.unparseable`       | `reason` (the parser's message)                                      | the file, at the parser's line and column when known; no element                     |
 | `std.unreadableEntry`   | `reason`, `entry` (a map: `text`, the entry's source text as written; `path`, a JSON Pointer (RFC 6901) to the entry in the file's parsed tree, or `''` when the format has no tree) | the entry's location; `subject` names the entry                                      |
 | `std.missingId`         | `reason` (`"absent"`, `"empty"`, `"pattern"` or `"derived"`)         | the element, with its new or ephemeral id, and its location                          |
-| `std.duplicateId`       | `id`, `first` (the element that keeps the id)                        | each second and later element, and its location                                      |
+| `std.references`        | `missingId` (0.1), `end` (DISL 0.3: `"source"`, `"target"` or the name of the reference attribute that names nothing) | the element holding the reference, and its location                                  |
+| `std.duplicateId`       | `id`, `first` (the element that keeps the id), `count` (DISL 0.3: the number of holders of the id, the first included) | each second and later element, and its location                                      |
 | `std.mixedPrecision`    | `attribute`, `other`, `precision`, `otherPrecision`                  | the element and the attribute                                                        |
 | `std.ephemeralViewData` | `key` (the stored id)                                                | the element when present; otherwise `subject` is the stored key                      |
 | `std.pluginMissing`     | `plugin` (the plugin id), `functions` (the names of its functions that were called) | the diagram; no location                                                   |
 | `std.derivedFailed`     | `type`, `reason` (the evaluation error), `property` (the failing property, such as `from` or `id`), `count` (the items dropped) | the diagram; `subject` names the type                    |
 | `std.derivedId`         | `id`, `first` (the element that keeps the id), `type`               | the element that is not drawn is named by `subject`; the finding targets `first`     |
 | `std.derivedEnds`       | `type`, `end` (`"source"` or `"target"`), `count` (the items dropped) | the diagram; `subject` names the type                                              |
+
+The keys marked DISL 0.3 are bound by a 0.3 runtime; a message that must also read under 0.2 reads them optionally, as `detail.?count.orValue(2)` and `detail.?end.orValue('target')`, so a duplicate id is worded "`a` is declared 3 times; an id names one entry." where the count is known.
 
 A reader **MUST** report `std.unparseable`, `std.unreadableEntry`, `std.missingId` and `std.duplicateId` as they occur, and **MUST NOT** fail to open a model because of any of them. Each built-in is raised only from a situation that 0.1 rejected or from a declaration that 0.2 adds, so a valid 0.1 diagram reports nothing new. `std.pluginMissing` defaults to `warning` because an absent plugin degrades the diagram without making it unusable (15.2); a specification that cannot work without the plugin declares it `required` (13.1) instead.
 
@@ -3465,6 +3622,7 @@ Besides hooks (9.2), operations (9.3) and the policies of 9.5, `behavior` holds 
 | `reasons`  | map id → NamedReason              | A library of named reasons (`$defs/NamedReason`: `{when, message, doc}`), so one sentence is declared once and referred to as `{ "reason": "<id>" }` wherever a Reason is accepted (2.3). `when` is evaluated in the context of the position that refers to it; absent, the reason always applies. |
 | `editGate` | Reason[]                          | Diagram-wide reasons that withhold every model change while one applies. Context `element`, with `self` bound to the diagram.                                                                  |
 | `messages` | map standard message id → Message | Replaces the sentences a runtime otherwise words itself: `std.notApplicable` (an action invoked on a selection it does not apply to; context `operation`, plus `operationId`), `std.readOnly` (the diagram is opened read-only; context `element` on the diagram), `std.atStart` and `std.atEnd` (a move up or down at the first or last position). |
+| `placements` | map id → ParentPlacement        | *(DISL 0.3)* Named parent placements, which choose the parent of a new element by geometry; referred to by a drop's or a `create` action's `place` (below). |
 
 **The edit gate.** While any reason of `behavior.editGate` applies, a runtime **MUST** treat every model-changing tool, context tool, operation, form field and gesture as unavailable or refused, with the applicable reason. Gestures that write only view data (moving, resizing, folding) are not model changes and **MUST NOT** be withheld by the gate. The gate is checked after a notation refusal and before every constraint (8.4).
 
@@ -3477,6 +3635,41 @@ Besides hooks (9.2), operations (9.3) and the policies of 9.5, `behavior` holds 
   "editGate": [ { "reason": "truncated" } ]
 }
 ```
+
+**Parent placements** *(DISL 0.3)*. A drop (7.2) or a `create` action (9.4) normally names its parent: the element under the pointer, or a fixed `parent`, `after` or `before`. A **parent placement** (`$defs/ParentPlacement`) chooses the parent instead by geometry, among elements that need not be under the pointer, and the index among that parent's children:
+
+| Property     | Type                     | Default       | Description |
+|--------------|--------------------------|---------------|-------------|
+| `candidates` | Expression → list(Element) | **required** | The elements that may become the parent. |
+| `as`         | SimpleId                 | `candidate`   | The name each candidate is bound to in `rank`. |
+| `rank`       | Expression → number      | **required**  | Evaluated per candidate; the lowest wins. |
+| `index`      | Expression → int         | after the last child | The new element's index among the chosen parent's children, with `parent` bound to it. |
+| `whenEmpty`  | `"root"`, `"refuse"`     | `"refuse"`    | What happens when there is no candidate. |
+| `refusal`    | Reason                   | the runtime's sentence | The refusal when no parent is chosen. |
+| `doc`        | Doc                      |               |             |
+
+- A placement is evaluated in the `parentPlacement` context (12.3): the `create` context with `position` bound to the drop point, or to the point where the context menu was opened.
+- A runtime **MUST** evaluate `candidates`, bind each one in turn as `as`, and choose as parent the candidate with the lowest `rank`, the first in model order on a tie.
+- With a parent chosen, the runtime **MUST** evaluate `index` with `parent` bound to it, and **MUST** create the element as that parent's child at that index (clamped to the number of children). The parent's type **MUST** declare `children.ordered: true` (4.8), as for a positional create.
+- With no candidate, the runtime **MUST** create the element at the top level when `whenEmpty` is `"root"` and the diagram has no top-level element of a type `candidates` could return, and **MUST** otherwise refuse with `refusal`.
+- A drop with `place` **MUST NOT** consult `targets` or `elsewhere` (7.2). A `create` action with `place` **MUST NOT** also give `parent`, `after` or `before`.
+
+```json
+"behavior": {
+  "placements": {
+    "underNearestAbove": {
+      "candidates": "diagram.nodes.filter(n, takesAnotherChild(n) && n.view.bounds.center()[1] < position.y)",
+      "as": "candidate",
+      "rank": "math.abs(position.x - candidate.view.bounds.center()[0]) + 2.0 * (position.y - candidate.view.bounds.center()[1])",
+      "index": "parent.children.filter(c, c.view.bounds.center()[0] < position.x).size()",
+      "whenEmpty": "root",
+      "refusal": "Drop the node below the node it belongs under: a Do in order, a Try in order, a Do together, or a Retry, Repeat until, Only while or Ask approval before that has no child yet."
+    }
+  }
+}
+```
+
+An agent behavior model takes as parent the node above the drop point that can take another child and is nearest by `|x - cx| + 2 (y - cy)`, and puts the new node before the first of its children whose centre lies right of the drop point. An empty tree takes the node as its root, and a drop with no node above it is refused. What is stored is the node's place in the tree; its position on the canvas follows from the layout (10.3).
 
 ### 9.2 Hooks
 
@@ -3537,7 +3730,7 @@ Actions are a small, closed set of declarative steps. **All values in actions ar
 |-------------|---------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------|
 | `set`       | `{ "set": { "attr": expr, … }, "target": expr }`                                                                          | Assign attributes of `target` (default `self`).                              |
 | `unset`     | `{ "unset": ["attr"], "target": expr }`                                                                                   | Remove stored values.                                                        |
-| `create`    | `{ "create": { "type": expr, "attributes": {…}, "parent": expr, "slot": expr, "at": expr, "size": expr, "after": expr, "before": expr }, "as": "name" }` | Create a node; the new element is available as `name` in subsequent actions. `after` or `before` places it next to a sibling (below). |
+| `create`    | `{ "create": { "type": expr, "attributes": {…}, "parent": expr, "slot": expr, "at": expr, "size": expr, "after": expr, "before": expr, "place": "id" }, "as": "name" }` | Create a node; the new element is available as `name` in subsequent actions. `after` or `before` places it next to a sibling (below). *(DISL 0.3)* `place` names a parent placement (9.1) that chooses its parent and index, with `position` the point the operation was invoked at; it excludes `parent`, `after` and `before`. |
 | `connect`   | `{ "connect": { "type": expr, "source": expr, "target": expr, "attributes": {…} }, "as": "name" }`                        | Create a relation.                                                           |
 | `delete`    | `{ "delete": expr }`                                                                                                      | Delete an element or list.                                                   |
 | `move`      | `{ "move": { "target": expr, "x": expr, "y": expr, "parent": expr } }`                                                    | Change placement (domain values, snapped if `applyToProgrammatic`).          |
@@ -3555,7 +3748,7 @@ Actions are a small, closed set of declarative steps. **All values in actions ar
 | `editLabel` | `{ "editLabel": { "target": expr, "label": "id" } }`                                                                      | Start inline editing.                                                        |
 | `openForm`  | `{ "openForm": { "target": expr, "form": "id" } }`                                                                        |                                                                              |
 | `notify`    | `{ "notify": { "message": expr, "severity": "info" } }`                                                                   | Toast message.                                                               |
-| `layout`    | `{ "layout": { "scope": expr, "algorithm": "id" } }`                                                                      | Run a layout (section 10).                                                   |
+| `layout`    | `{ "layout": { "scope": expr, "algorithm": "id", "refusals": { "nothingDrawn": Message, "unchanged": Message } } }` | Run a layout (section 10). *(DISL 0.3)* `refusals.nothingDrawn` refuses the action while its scope holds nothing the algorithm places; `refusals.unchanged` refuses it when the layout would change nothing (10.2). |
 | `abort`     | `{ "abort": { "message": expr } }`                                                                                        | Cancel the transaction (only in `before` hooks and operations). A runtime **MUST** show the message to the user as the refusal of the gesture or command, in the words given. |
 | `call`      | `{ "call": "operationId", "args": { … } }`                                                                                | Run another operation.                                                       |
 | `plugin`    | `{ "plugin": "name", "args": { … } }`                                                                                     | Delegate to a plugin action.                                                 |
@@ -3628,7 +3821,12 @@ A leaf has no descendants, so deleting it asks nothing; a branch asks with its c
 
 **Clipboard** (`behavior.clipboard`): `relations` (`"internal"` — only edges between copied elements, `"all"`, `"none"`), `ids` (`"regenerate"`), `names` (`"keep"`, `"suffix"` — adds " (copy)" to the label attribute), `offset` (canvas offset on paste; on time axes a duration), `crossDocument` (bool), `formats` (clipboard MIME types offered: `application/vnd.did.fragment+json` (DID, section 7), `image/svg+xml`, `text/plain`).
 
-**Retyping** (`behavior.retype`): map of type → allowed target types, with `attributeMapping` (target attr → Expression over `old`).
+**Retyping** (`behavior.retype`): map of type → allowed target types, with `attributeMapping` (target attr → Expression over `old`). *(DISL 0.3)* An entry's optional `when` (Expression → bool, with `self` the element and `target` the candidate type) makes a target type available only while it holds: a `retype` action (9.4) and a `type` form item (7.5) **MUST NOT** retype an element to a type whose `when` is false, and the `type` item does not offer it.
+
+```json
+"retype": { "Do": { "to": ["Sequence", "Check"], "when": "canBecome(target, self)",
+  "attributeMapping": { "attempts": "has(old.attempts) ? max(old.attempts, 3) : 3" } } }
+```
 
 **Undo** (`behavior.undo`): `mergeWindowMs` (typing in a label merges into one step), `maxSteps`, `persistHistory` (bool, stores history in the DID definition for collaborative review, default `false`).
 
@@ -3675,7 +3873,7 @@ A Databricks job plays a mock run wave by wave: a task starts once its upstream 
 
 ## 10. Layer 7 — Layout
 
-Automatic layout arranges nodes and routes edges. DISL does not define layout algorithms; it names them, passes options, and declares when layout runs and how it interacts with user placement and bound coordinates.
+Automatic layout arranges nodes and routes edges. DISL names layout algorithms, passes options, and declares when layout runs and how it interacts with user placement and bound coordinates. It does not define the algorithms it names, with three exceptions *(DISL 0.3)*: `rowPacked`, `rows` and `tidyTree` are **standard algorithms**, defined in 10.1 to 10.3, whose results are normative so that every runtime draws the same diagram; each takes its options in a LayoutConfig property of its own name.
 
 ```json
 {
@@ -3713,7 +3911,7 @@ Automatic layout arranges nodes and routes edges. DISL does not define layout al
 
 | Property          | Type                                   | Description                                                                                                                                                                                                                                                                                                                |
 |-------------------|----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `algorithm`       | string                                 | `"none"`, `"layered"` (Sugiyama), `"tree"`, `"mrtree"`, `"radial"`, `"force"`, `"stress"`, `"orthogonal"`, `"box"`, `"grid"`, `"circular"`, `"rectpacking"`, `"lanes"` (assign nodes to ordinal bands, then layer within bands), `"sequence"` (sequence diagrams), `"elk:<id>"` (any ELK algorithm id), `"plugin:<name>"`. |
+| `algorithm`       | string                                 | `"none"`, `"layered"` (Sugiyama), `"tree"`, `"mrtree"`, `"radial"`, `"force"`, `"stress"`, `"orthogonal"`, `"box"`, `"grid"`, `"circular"`, `"rectpacking"`, `"lanes"` (assign nodes to ordinal bands, then layer within bands), `"sequence"` (sequence diagrams), `"elk:<id>"` (any ELK algorithm id), `"plugin:<name>"`; and the standard algorithms `"rowPacked"` (10.1), `"rows"` (10.2) and `"tidyTree"` (10.3), DISL 0.3. |
 | `direction`       | `"right"`, `"down"`, `"left"`, `"up"`  | Main flow direction.                                                                                                                                                                                                                                                                                                       |
 | `spacing`         | `{node, layer, edge, component, port}` | Canvas units.                                                                                                                                                                                                                                                                                                              |
 | `edgeRouting`     | Routing                                | Routing applied to edges with `routing: "layout"` or when `overrideRouting` is true.                                                                                                                                                                                                                                       |
@@ -3721,9 +3919,105 @@ Automatic layout arranges nodes and routes edges. DISL does not define layout al
 | `options`         | map string → JSON                      | Pass-through options for the algorithm (ELK option ids recommended for interoperability). Unknown options are ignored.                                                                                                                                                                                                     |
 | `scope`           | `"all"`, `"selection"`, `"component"`  | Default scope when invoked.                                                                                                                                                                                                                                                                                                |
 | `includeViewOnly` | bool                                   | Whether notes and annotations take part.                                                                                                                                                                                                                                                                                   |
+| `rowPacked`, `rows`, `tidyTree` | RowPacked, RowsLayout, TidyTree | *(DISL 0.3)* The options of the standard algorithm of that name (10.1 to 10.3); given only with that `algorithm`. |
 | `doc`             | Doc                                    |                                                                                                                                                                                                                                                                                                                            |
 
 **Interaction with coordinate systems.** Layout only assigns coordinates whose PlacementSource is `free` or `layout`. Bound coordinates (a task's start date) are never changed by layout; algorithms receive them as fixed constraints. For example, `"lanes"` on a schedule keeps x (time) fixed and only packs y within bands. Layout results are snapped with the rules of the coordinate system unless `options["dedl.snap"]` is `false`.
+
+The one exception is an algorithm that declares the attributes it writes, as `rows` does with `writes` (10.2): it changes those attributes, and only those, as a model edit in one transaction and one undo step, with constraints and hooks as for any edit. Every other bound coordinate stays fixed.
+
+### 10.1 Row-packed layout (`rowPacked`) *(DISL 0.3)*
+
+`rowPacked` keeps every element on its row and packs each row along the main axis (`direction`, default `"right"`; the rows run across it). It suits a variant that shortens what a true-scale view draws, such as a hype cycle's compact view. **RowPacked** (`$defs/RowPacked`), the LayoutConfig property `rowPacked`:
+
+| Property            | Type                                                  | Default        | Description |
+|---------------------|-------------------------------------------------------|----------------|-------------|
+| `keepRows`          | `true`                                                | `true`         | States that rows are kept; it cannot be switched off. |
+| `order`             | `"start"`, `"document"`                               | **required**   | The order within a row. `start`: by the element's start along the packed axis as its base placement gives it (in a viewpoint variant, the placement of the viewpoint it varies, 3.5), ties in model order. `document`: model order. |
+| `gap`               | number                                                | **required**   | The least distance between two elements on a row, in canvas units. |
+| `followConnections` | TypeRef                                               | –              | A relation type whose targets start after their sources (below). |
+| `targetAfter`       | `"sourceStart"`, `"sourceMiddle"`, `"sourceEnd"`      | `"sourceEnd"`  | The point of the source a target starts no earlier than. |
+| `rowsCovered`       | Expression → int                                      | `1`            | The number of rows an element covers from its own row down; context `element`. |
+| `doc`               | Doc                                                   |                |             |
+
+- `rowPacked` **MUST NOT** change an element's row coordinate.
+- Within a row it places elements in the order `order` gives, each at the smallest main-axis position at which it is at least `gap` after the previous element on every row it covers. An element that covers several rows (`rowsCovered`) occupies each of them.
+- With `followConnections`, the target of a relation of that type **MUST** start no earlier than the source's `targetAfter` point; where that is impossible because of a cycle, the cycle is broken at the element earliest in `order`.
+- LayoutConfig `scope: "all"` lays out the whole model, not only what is in the viewport.
+
+```json
+"compactRows": { "algorithm": "rowPacked", "scope": "all",
+  "rowPacked": { "keepRows": true, "order": "start", "gap": 4, "followConnections": "Influence",
+                 "targetAfter": "sourceMiddle", "rowsCovered": "int(math.ceil(self.height / 56.0))" } }
+```
+
+In a hype cycle's compact view, Steam engine on row 0 influences Railways on row 1, so Railways starts after the middle of Steam engine's 96-unit banner even if row 1 is otherwise empty.
+
+### 10.2 Rows-only arrangement (`rows`) *(DISL 0.3)*
+
+`rows` assigns rows and nothing else, for diagrams whose other axis is data, such as a hype cycle's time. It is invoked through a `layout` action (9.4), typically from an Arrange operation, rather than run automatically. **RowsLayout** (`$defs/RowsLayout`), the LayoutConfig property `rows`:
+
+| Property     | Type                                   | Default      | Description |
+|--------------|----------------------------------------|--------------|-------------|
+| `writes`     | attribute name[]                       | **required** | The attributes the algorithm writes, the row first. |
+| `extent`     | map TypeRef → `{from, to, rows}`       | **required** | Per type, the extent an element occupies on its row: `from` and `to` along the main axis and `rows`, the rows it covers (default 1). GeomExpr in the `layoutExtent` context (12.3). Elements of types not listed do not take part. |
+| `clearance`  | number                                 | `0`          | The least distance between two extents on one row, in canvas units. |
+| `affinity`   | TypeRef                                | –            | A relation type that draws linked elements to nearby rows. |
+| `ties`       | `"lower"`, `"upper"`                   | `"lower"`    | Between two free rows equally near the wanted one: the smaller row number (`lower`) or the larger. |
+| `swapPasses` | int                                    | `0`          | The most passes of neighbouring-row swaps (below). |
+| `doc`        | Doc                                    |              |             |
+
+The algorithm takes the elements in the order of their extents' `from`, then `to`, then model order, and puts each on a free row (one where its extent keeps `clearance` from every extent already there): with `affinity`, the free row nearest the average row of its already-placed linked elements, `ties` deciding between two equally near; otherwise, and for an element with no placed link, the first free row. With `swapPasses`, it then swaps whole neighbouring rows while that shortens the total row distance of the `affinity` links, for at most that many passes.
+
+- `rows` **MUST** change only the attributes in `writes` and **MUST** use the fewest rows any assignment of the extents could use.
+- It **MUST** be deterministic: running it on its own result changes nothing.
+- The changed values **MUST** be written in one transaction and one undo step, and only where they change.
+- When it would change nothing, the `layout` action is refused with `refusals.unchanged`; while its scope holds no element of a type in `extent`, with `refusals.nothingDrawn` (9.4).
+
+```json
+"arrangeRows": { "algorithm": "rows",
+  "rows": { "writes": ["row"], "clearance": 16, "affinity": "Influence", "ties": "lower", "swapPasses": 64,
+    "extent": { "Trend":   { "from": "x - 8.0 - textWidth(self.name, 12.0)", "to": "x2" },
+                "Trigger": { "from": "x - 16.0 - textWidth(self.name, 12.0)", "to": "x + 8.0" },
+                "Note":    { "from": "x", "to": "x + width", "rows": "math.ceil(height / 56.0)" } } } }
+```
+
+```json
+"arrange": { "label": "Arrange diagram", "for": "diagram",
+  "actions": [ { "layout": { "algorithm": "arrangeRows",
+    "refusals": { "nothingDrawn": "There is nothing to arrange until this graph has a trend.",
+                  "unchanged": "This graph is already arranged." } } } ] }
+```
+
+Three trends from 1800 to 1850, 1840 to 1900 and 1860 to 1900 on rows 0, 1 and 2 are arranged onto rows 0, 1 and 0.
+
+### 10.3 Tidy tree (`tidyTree`) *(DISL 0.3)*
+
+`tidyTree` lays out containment as a tidy tree (Reingold and Tilford): each element's children in model order along the cross axis, each subtree packed as close as its outline allows. `direction` gives the main axis (default `"down"`, the root at the top), and `spacing.node`, `spacing.layer` and `spacing.component` the distances below. **TidyTree** (`$defs/TidyTree`), the LayoutConfig property `tidyTree`:
+
+| Property      | Type                                         | Default             | Description |
+|---------------|----------------------------------------------|---------------------|-------------|
+| `order`       | `"children"`                                 | `"children"`        | Each element's children in their model order. |
+| `parentAlign` | `"firstLastCentre"`, `"childrenCentre"`      | `"firstLastCentre"` | A parent centred over its first and last child, or over all its children's extent. |
+| `origin`      | `"leftmostAtZero"`, `"rootAtZero"`           | `"leftmostAtZero"`  | The whole is shifted so its leftmost node, or its first root, is at cross-axis 0. |
+| `rows`        | `{stored: "none" \| "y", minGap: number}`    | `{stored: "none"}`  | Main-axis positions stored per row (below). |
+| `drag`        | `{carry: "subtree" \| "node", across: "reorder" \| "none", down: "row" \| "none"}` | `{carry: "node", across: "none", down: "none"}` | What dragging an element does (below). |
+| `doc`         | Doc                                          |                     |             |
+
+- `tidyTree` **MUST** place each element's children in their model order along the cross axis, **MUST** pack each subtree so that no node is closer than `spacing.node` to a node of a neighbouring subtree at the same depth, and **MUST** place each parent centred over its first and last child (`firstLastCentre`) or over all its children's extent (`childrenCentre`). Without stored rows, children lie `spacing.layer` beyond their parent on the main axis. Top-level elements **MUST** be packed `spacing.component` apart.
+- With `rows.stored: "y"`, all children of one parent **MUST** share one position on the main axis: the first stored for any of them in model order, else `spacing.layer` beyond the parent, and never closer to the parent than `rows.minGap`. The cross-axis position **MUST** always be the computed one. The stored positions are view data (11.6), or a registration's layout when the model lives in a format binding.
+- With `drag.across: "reorder"`, dropping a dragged element past a sibling's centre **MUST** reorder it among its siblings in the model; with `drag.down: "row"`, the dropped main-axis position **MUST** be stored for every element of the row and beneath it; with `drag.carry: "subtree"`, everything beneath the dragged element **MUST** move with it while dragged. A drag **MUST** be one transaction and one undo step.
+
+```json
+"layout": { "algorithms": { "tree": { "algorithm": "tidyTree", "direction": "down",
+  "spacing": { "node": 28, "layer": 56, "component": 56 },
+  "tidyTree": { "order": "children", "parentAlign": "firstLastCentre", "origin": "leftmostAtZero",
+    "rows": { "stored": "y", "minGap": 16 },
+    "drag": { "carry": "subtree", "across": "reorder", "down": "row" } } } },
+  "default": "tree", "trigger": "always", "respect": "pinned" }
+```
+
+An agent behavior model draws its tree top-down, nodes 28 apart and levels 56 apart; a node dragged past its sibling's centre swaps places with it in the Markdown, and a row dragged down keeps its new height for itself and everything beneath it.
 
 
 ---
@@ -3762,6 +4056,7 @@ A diagram type whose model lives in a file another tool owns (a Structurizr work
 |----------------|----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `format`       | `"json"` (default), `"yaml"`, `"jsonl"`, `"cbor"`, `"fbl"`, `"plugin:<name>"` | Serialization. All formats except `fbl` encode the same logical DID definition (11.4). `jsonl` writes one element per line, which merges particularly well. `cbor` is for large binary-efficient storage. `fbl`: the model is a body in another format, read and written through `binding`. |
 | `binding`      | URI reference or FBL Binding                                         | Required when `format` is `"fbl"`, forbidden otherwise: the binding that reads and writes the model, as `<uri>#<name>` of an FBL document ([FBL-specification.md](../fbl/FBL-specification.md), section 2.3), or an inline FBL Binding object. |
+| `typeMap`      | map binding type → TypeMapEntry                                      | *(DISL 0.3)* Only with `format: "fbl"`: how the binding's types and attributes map onto the metamodel (below). |
 | `encoding`     | `"utf-8"`                                                            | Only UTF-8 is allowed.                                                                                                                                                                 |
 | `indent`       | int or `"tab"`                                                       | Default 2. `0` writes minified JSON.                                                                                                                                                   |
 | `newline`      | `"lf"`, `"crlf"`                                                     | Default `"lf"`.                                                                                                                                                                        |
@@ -3772,6 +4067,33 @@ A diagram type whose model lives in a file another tool owns (a Structurizr work
 YAML output MUST quote strings that would otherwise be read as other types (the "Norway problem": `no`, `yes`, `on`, `off`, `~`, numeric-looking strings, dates) and MUST NOT use anchors, aliases or tags.
 
 When `format` is `"fbl"`, the stored model is the body the binding describes, not a DID definition, and it is written by the splices FBL defines, keeping the body's own conventions. `files`, `encoding`, `indent`, `newline`, `finalNewline`, `compression`, `mediaType`, `ordering`, `omitDefaults`, `precision`, `timestamps`, `canonical`, `metadata` and `definition` **MUST NOT** be given. `ids`, `view`, `migrations`, `collaboration`, `import` and `export` keep their meaning; view data is stored in the registration FBL defines. Such a specification needs no persistence plugin; the refusal of 13.1 for a missing required plugin applies only to a plugin the binding's reader names.
+
+**Type map** *(DISL 0.3)*. A binding may name its types and attributes as its format does rather than as the metamodel does: a hype cycle's binding reads a `Unit` entry, a `Graph` header and influences as entries with `from` and `to`. `typeMap` maps each binding type, by its name, to a **TypeMapEntry** (`$defs/TypeMapEntry`):
+
+| Property         | Type                                                    | Description |
+|------------------|---------------------------------------------------------|-------------|
+| `as`             | `"diagram"`, `"header"`, `"unreadable"` or TypeRef      | **Required.** What the binding's entries of this type become. |
+| `attributes`     | map binding attribute → attribute name, `"source"`, `"target"`, `"id"` or `null` | The binding's attribute names mapped to the metamodel's; unlisted attributes keep their names. |
+| `hostAttributes` | string[]                                                | Attributes the binding reads and writes that are not attributes of the model. |
+| `doc`            | Doc                                                     |             |
+
+- Without `typeMap`, an FBL type and attribute **MUST** have the name of a metamodel type and attribute.
+- With it, a reader maps each FBL element to the type `as` names. `as: "diagram"` writes its attributes to the diagram's; `"header"` and `"unreadable"` keep the entry out of the model, and an `unreadable` entry is reported by `std.unreadableEntry` (8.7). An attribute mapped to `id` is the element's id, and one mapped to `null` is not in the model.
+- A reference attribute mapped to `source` or `target` makes the element a relation of the type `as` names, with that end. A relation whose mapped end names nothing **MUST** still be created, with that end unset, and reported by `std.references` with `detail.end` naming the end; it is not drawn (6.1), and `std.endpoints` does not report the missing end.
+- `hostAttributes` are read and written by the binding but are not attributes of the model: they are not visible in CEL, forms or constraints, and a writer keeps their values.
+- A binding type that `typeMap` does not list keeps its name, as without `typeMap`.
+
+```json
+"persistence": { "format": "fbl", "binding": "gartner-hype-cycle-graph.fbl#ghg",
+  "typeMap": {
+    "Graph":       { "as": "header" },
+    "Unit":        { "as": "diagram", "attributes": { "value": "unit" } },
+    "Trend":       { "as": "Trend", "hostAttributes": ["storedId", "unknownKeys"] },
+    "Influence":   { "as": "Influence", "attributes": { "from": "source", "to": "target" }, "hostAttributes": ["storedId", "unknownKeys"] },
+    "Unreadable":  { "as": "unreadable" } } }
+```
+
+The entry `influences: [{ id: i1, from: steam-engine, to: railways, to-phase: peak, … }]` becomes the relation `Influence` from `steam-engine` to `railways`, and `unit: year` becomes `diagram.unit == 'year'`.
 
 ### 11.3 Files
 
@@ -4035,7 +4357,7 @@ The context of an expression determines its variables. Validators type-check eac
 
 | Context           | Used by                                                                                                                                      | Variables                                                                                 |
 |-------------------|----------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
-| `element`         | derived attributes, labels, styles conditions, variants, visibility, tooltips, markers, notation Bindables, `form.visible` of embedded forms | `self`, `diagram`, `env`                                                                  |
+| `element`         | derived attributes, labels, styles conditions, variants, visibility, tooltips, markers, notation Bindables, `form.visible` of embedded forms | `self`, `diagram`, `env`; `p` (the shape's parameter values) in a part's `tooltip` (6.8) |
 | `compartmentItem` | `itemText`, `itemIcon`, `itemStyle`                                                                                                          | `self`, `item`, `index`, `diagram`, `env`                                                 |
 | `shape`           | GeomExpr in shapes, markers, handles, form regions                                                                                           | `w`, `h`, `p`, `self`, `env`; in markers additionally `sw` (stroke width)                 |
 | `handle`          | `Handle.value`, `yValue`, `label`                                                                                                            | as `shape`, plus `px`, `py`                                                               |
@@ -4043,11 +4365,12 @@ The context of an expression determines its variables. Validators type-check eac
 | `placementWrite`  | placement `write` actions                                                                                                                    | as `placement`, plus `value` (snapped domain value)                                       |
 | `snap`            | CEL snap rules                                                                                                                               | `value`, `axis`, `zoom`, `self`, `parent`, `diagram`                                      |
 | `categories`      | ordinal `categories` expressions                                                                                                             | `diagram`, `env`                                                                          |
-| `constraint`      | invariant `when`, `rule`, `message`, `target`, `severity`, `forEach`, `location`, `subject`, fix `when` and `label`, built-in `message`       | `self`, `diagram`, `env` (`env.now` is fixed at the start of a validation run); `item`, `index` with `forEach`; `view` with `over: "view"`; `detail` in built-in messages (8.7) |
+| `constraint`      | invariant `when`, `rule`, `message`, `target`, `severity`, `forEach`, `location`, `subject`, fix `when` and `label`, built-in `message` and computed `code` (DISL 0.3) | `self`, `diagram`, `env` (`env.now` is fixed at the start of a validation run); `item`, `index` with `forEach`; `view` with `over: "view"`; `detail` in built-in messages and codes (8.1, 8.7) |
 | `identity`        | id `expression` and `ephemeral` of the `derived` strategy (11.5.2)                                                                           | `self`, `diagram`; no `env`, so an id never depends on locale, user or time. `self.id` is not readable; the ids readable are those of `self`'s ancestors and, for a relation, of its ends and their ancestors |
 | `gesture:<kind>`  | gesture constraints; a built-in's `refusal`                                                                                                  | per 8.4; `violation` in a built-in's `refusal`; `count` in deletion confirmations (9.5)        |
 | `create`          | attribute CEL defaults, tool `initial`, CreateEnd `initial` (7.2), a drop's `refusal`, id `expression` of the `cel` strategy                  | `diagram`, `env`, `parent`, `elementType`, `position`; `dropTarget` and `tool` for a drop (7.2); `other` and `relationType` in a CreateEnd |
-| `form`            | form `visible`, `enabled`, `validate`, `options`, `label`, `placeholder`, `initial`, `readOnlyReasons`, `absentText`, `emptyText`, button `confirm` | `self`, `value` (current field value), `diagram`, `env`; `position` in `initial` (7.5); `count` in confirmations (9.5) |
+| `parentPlacement` | a parent placement's `candidates`, `rank` and `index` (9.1, DISL 0.3)                                                                        | as `create`, with `position` the drop point or the point the menu was opened at; the `as` name (default `candidate`) in `rank`; `parent` in `index` |
+| `form`            | form `visible`, `enabled`, `validate`, `options`, `label`, `placeholder`, `initial`, `readOnlyReasons`, `absentText`, `emptyText`, button `confirm`; `display`, `parse`, `optionLabel` and `refusals` (DISL 0.3) | `self`, `value` (current field value; the entered text in `parse`), `diagram`, `env`; `position` in `initial` (7.5); `count` in confirmations (9.5); `item` in `optionLabel` and `newValue` in `refusals` of a `type` item (7.5) |
 | `hook`            | hook `when` and actions                                                                                                                      | `self`, `old`, `event`, `diagram`, `env`, plus `let`/`as` bindings                        |
 | `operation`       | operation `enabled`, `label`, `unavailable`, `confirm` and actions                                                                           | `self` or `selection`, `p` (not in `label`, `unavailable` and `enabled`), `diagram`, `env`, `position` (the point it was invoked at, 7.3, or `null`), plus bindings; `count` in confirmations (9.5); `operationId` in `behavior.messages.std.notApplicable` |
 | `derive`          | a derived type's `from` (4.11)                                                                                                               | `diagram`, `env`                                                                          |
@@ -4055,6 +4378,7 @@ The context of an expression determines its variables. Validators type-check eac
 | `filter`          | a canvas filter's `keep` and `options` (6.13.1)                                                                                              | `self` (not in `options`), `value`, `match`, `diagram`, `env`                             |
 | `legend`          | `legend.computed` (6.13)                                                                                                                     | `self`, `diagram`, `env`                                                                  |
 | `chrome`          | notice, empty-canvas and notice-button texts and conditions, a budget notice's text (6.13, 3.2.1)                                            | `diagram`, `env`; `diagram.drawn`, `budget()` and `filterValue()` are readable            |
+| `layoutExtent`    | a `rows` layout's `extent` (10.2, DISL 0.3)                                                                                                  | `self`, `diagram`, `env`, and the element's bounds in canvas units as `x`, `y`, `x2`, `y2`, `width`, `height` |
 | `budget`          | a budget's `measure`, `order` and `unit` (3.2.1)                                                                                             | `self` (the candidate; absent in `measure`), `index` (its position in persistence order), `diagram`, `env` |
 | `connection`      | a `connection` context-menu set's `when` and entries (7.3)                                                                                   | `source`, `target`, `sourceAnchor`, `position`, `diagram`, `env`                          |
 | `handleWrite`     | a handle's `write` actions (6.8)                                                                                                             | `self`, `diagram`, `env`, `p`, `w`, `h`, `value`, `yValue` (the new, snapped parameter values) |
@@ -4171,9 +4495,18 @@ Plugins provide what the declarative core does not: exotic shapes, special route
 | `args`         | map → Attribute                        | Declared arguments with types, so uses of the plugin are validated.                                                                                                                             |
 | `source`       | object                                 | Hints where implementations can be obtained (`npm`, `maven`, `url`, …) with integrity hashes. Runtimes MUST NOT download and execute code automatically without user or administrator approval. |
 | `celFunctions` | `{name, params, returns, cost, uses, deterministic, fallback, doc}`[] | Declarations of CEL functions the plugin adds, so validators can type-check expressions that use them (13.1.1).                                                             |
+| `plans`        | (`"add"`, `"set"`, `"remove"`, `"move"`, `"retype"`)[] | *(DISL 0.3)* For a `persistenceFormat` plugin: the model changes its `plan` operation accepts ([FBL](../fbl/FBL-specification.md) 0.2, section 11.2). Default `["add", "set", "remove"]`. A change it does not declare is sent as the changes it does: a `move` as a remove and an add, a `retype` as a remove and an add, with the host's warning. |
+| `add`, `move`  | `{position: bool}`                     | *(DISL 0.3)* For a `persistenceFormat` plugin: `position: true` declares that it honours the position of an add or a move, inserting there or refusing (FBL 0.2, section 11.2). |
 | `doc`          | Doc                                    |                                                                                                                                                                                                 |
 
 Every plugin use (`{ "plugin": "acme.bpmnRouter", "args": {…} }`) references a declared plugin; `args` are validated against the declaration.
+
+```json
+"net.etalii.adp.etalii.abmMarkdown": { "version": "^0.1.0", "provides": ["persistenceFormat"], "required": true,
+  "plans": ["add", "set", "remove", "move", "retype"], "add": { "position": true }, "move": { "position": true } }
+```
+
+An agent behavior model's Markdown plugin plans a move, a retype and a positioned add as line splices of their own, so a node moved to another parent keeps its bytes.
 
 #### 13.1.1 Plugin functions in CEL
 
@@ -4331,7 +4664,7 @@ Beside them, seven trimmed excerpts of real diagram specifications show the cons
 | `mindmap.dis`                   | Per-viewer folding (11.6), positional create and reorder (7.3, 8.4), branch-or-leaf confirmations (9.5), a text metric (6.5), anchors restricted to sides (6.9), containment drawn as edges (4.11), a file-system rule (12.4), and tolerant ids with built-in messages for missing and duplicate ids (11.5.4). |
 | `c4-container.dis`              | View membership with wildcards (3.5), relationships lifted to what is drawn and merged (4.11.3), a legend computed from what is drawn and a header band (6.13), read-only reasons (2.3, 4.3), drops onto the parent kind (7.2), whole-model and per-view rules (8.2), and natural, case-insensitive and ephemeral ids (11.5). |
 | `rdf-graph.dis`                 | Derived resource cards and statement edges computed from stored triples (4.11), a truncating budget with a declared `budget:<id>` notice and a budget that gates edits (3.2.1, 6.13), the edit gate and named reasons (9.1), refusals per element kind (6.9, 6.10), derived and ephemeral ids with per-type rules (11.5), bounded recursion (3.4), connect gestures chosen by anchor (6.10), plugin functions called by name (13.1.1) and `std.unparseable` (8.7). |
-| `gartner-hype-cycle.dis`        | The `yearMonth` time axis with a bound unit and ranges (5.3, 5.5), multi-level and adaptive rulers (5.13), snapping per gesture (5.9), boundary handles that write the model and show a computed label (6.8), edge ends bound to shape parts (6.10), a tag filter (6.13.1), a compact variant (3.5), commit-time field validation with `parseYearMonth` (7.5, 12.4) and mixed-precision findings (8.7). |
+| `gartner-hype-cycle.dis`        | The `yearMonth` time axis with a bound unit and ranges (5.3, 5.5), multi-level and adaptive rulers (5.13), snapping per gesture (5.9), boundary handles that write the model and show a computed label (6.8), edge ends bound to shape parts (6.10), a tag filter (6.13.1), a compact variant (3.5), commit-time field validation with `parseYearMonth` (7.5, 12.4) and mixed-precision findings (8.7); and, from DISL 0.3, neighbour-aware bounds (4.3), enum colours from tokens (4.5), `minUnit` (5.13), part tooltips (6.8), `drawnFrom` (6.9), `editText` (6.12), a field with `display` and `parse` (7.5), a computed built-in `code` and `detail.count` (8.1, 8.7), and the `rowPacked` and `rows` layouts with the `layout` action's refusals (9.4, 10.1, 10.2). |
 | `functional-decomposition.dis`  | The superellipse and a custom shape (6.7, 6.8), a contrast requirement (6.2), a `fixed` attribute (4.3), acyclicity over an abstract relation type (4.9), built-in refusals worded by the specification (8.1, 8.4), a deletion confirmation with a threshold (9.5), the `findings` form item (7.5) and base-36 ids (11.5.1). |
 | `causal-loop.dis`               | Cycle enumeration with `diagram.cycles` and `diagram.knots` (12.4), one finding per cycle with `forEach` (8.2), a hook whose actions run per cycle (9.2, 9.4), drops onto a variable that are refused elsewhere (7.2), view membership (3.5) and the empty-canvas message (6.13). |
 | `databricks-job.dis`            | A simulated run (9.6), rules per item with `forEach` and file locations (8.2), `std.unreadableEntry` (8.7), enum stored forms (4.5), a stub for a relation whose target is optional (4.9, 6.10), Bézier reach (6.10) and context-menu entries generated per item (7.3). |
@@ -5484,6 +5817,38 @@ This section lists every place where DISL 0.2 gives a meaning that DISL 0.1 left
 | 16 | Rulers | How they are attached is unstated. | Attached to the view by default (`attach: "view"`). | Rulers stay at the edge of the pane. | 5.13 |
 | 17 | What is drawn | No single order. | Viewpoint membership, derived elements, viewer filters, budgets, `visible: false`, in that order, exposed as `diagram.drawn`; a relation with an undrawn end is not drawn. | Budgets, filters and legends must agree. | 6.1 |
 
+## Changes from 0.2
+
+DISL 0.3 (draft, 2026-10-05) adds the constructs listed below, approved by the product owner on 2026-10-05; each is optional, and its absence is the 0.2 behaviour. This section then lists every place where 0.3 gives a meaning that 0.2 left open or stated otherwise, with the reason. Everything not listed keeps its 0.2 meaning, and no valid 0.2 specification becomes invalid.
+
+| Construct | Section | Schema |
+|-----------|---------|--------|
+| `bounds.neighbour` on node and relation types: ordered attributes kept a gap apart | 4.3 | `NodeType.bounds`, `RelationType.bounds`, `$defs/NeighbourBounds` |
+| An enum value's `color` as a theme token | 4.5, 6.13 | `EnumValue.color` |
+| `minUnit` on a ruler | 5.13 | `Ruler.minUnit` |
+| `tooltip` on a shape part | 6.8 | `ShapePart.tooltip` |
+| `drawnFrom` on anchors | 6.9 | `AnchorSpec.drawnFrom` |
+| `pointer` on a connect gesture | 6.10 | `ConnectGesture.pointer`, `$defs/GesturePointer` |
+| `editText` on a label | 6.12 | `Label.editText` |
+| `place` on a drop and a `create` action; `behavior.placements` | 7.2, 9.1, 9.4, 12.3 | `DropSpec.place`, `Action.create.place`, `Behavior.placements`, `$defs/ParentPlacement` |
+| `display` and `parse` on form items | 7.5 | `FormItem.display`, `FormItem.parse`, `$defs/FieldParse` |
+| Form items of kind `type`; `when` on a retype entry | 7.5, 9.5 | `FormItem.kind`, `FormItem.optionLabel`, `FormItem.refusals`, `Behavior.retype.*.when` |
+| A computed `code` on a built-in | 8.1 | `BuiltInSetting.code` |
+| `detail.count` of `std.duplicateId`, `detail.end` of `std.references` | 8.7 | – |
+| `refusals` on the `layout` action | 9.4 | `Action.layout.refusals` |
+| The standard layout algorithms `rowPacked`, `rows` and `tidyTree` | 10.1–10.3, B.10 | `LayoutConfig.rowPacked`, `.rows`, `.tidyTree`, `$defs/RowPacked`, `$defs/RowsLayout`, `$defs/TidyTree` |
+| `typeMap` for a format binding | 11.2 | `Persistence.typeMap`, `$defs/TypeMapEntry` |
+| `plans`, `add` and `move` on a persistence plugin | 13.1 | `Plugin.plans`, `Plugin.add`, `Plugin.move` |
+
+| #  | Change | 0.2 said | 0.3 says | Reason | Section |
+|----|--------|----------|----------|--------|---------|
+| 1  | Snapping of a new element | Which notation's snapping a drop of a new element uses, and what point a rule receives, was unstated. | The node notation of the created type, merged over the coordinate system's; the rule receives the point `reference` selects, with the placement anchor at the pointer. | Trends and notes dropped on one hype cycle find their rows differently. | 5.9 |
+| 2  | Layout algorithms | DISL names algorithms and defines none. | Three standard algorithms are defined; the rest are still only named. | Two runtimes drew different trees and rows. | 10 |
+| 3  | Bound coordinates under layout | Never changed by layout. | Still never changed, except the attributes an algorithm declares in `writes` (`rows`), written as one model edit. | Arranging rows writes the row attribute. | 10, 10.2 |
+| 4  | A relation with an end that names nothing | Only an `optional` target end may be missing. | Under `typeMap`, a relation read with a mapped end that names nothing is kept with that end unset, not drawn, and reported by `std.references`. | A hand-edited file keeps a broken influence until the user fixes it. | 4.9, 11.2 |
+| 5  | An editable label with a computed text | An editable label requires an attribute binding in `text`. | An attribute binding in `editText` satisfies it. | A label shows more than the user edits. | 6.12 |
+| 6  | A move sent to a persistence plugin | FBL 0.1 named a move without fields. | A plugin that does not declare `move` in `plans` is sent a remove and an add. | Only a declared move can keep the element's bytes. | 13.1 |
+
 ---
 
 ## 18. Deprecated aliases
@@ -5505,7 +5870,7 @@ A specification carries exactly one of the two version keys; the schema accepts 
 
 ## Appendix A — JSON Schema
 
-The normative JSON Schema is published as `disl.schema.json` (JSON Schema draft 2020-12), `$id` `https://etalii.net/adp/disl/schema/0.2/disl.schema.json`. The 0.1 schema address stays published, and a document that names it is read against the 0.2 schema (2.9). Its root, `#/$defs/Specification`, validates **specifications**. Stored diagrams are validated by DID's schema, `did.schema.json`, which references this schema's `QualifiedId`, `SemVer` and `Point`. The schema is kept together with this document, and every specification example in section 17 validates against it.
+The normative JSON Schema is published as `disl.schema.json` (JSON Schema draft 2020-12), `$id` `https://etalii.net/adp/disl/schema/0.2/disl.schema.json`. The 0.1 schema address stays published, and a document that names it is read against the 0.2 schema (2.9). While DISL 0.3 is a draft, its constructs are added to the schema at the 0.2 address, which keeps accepting every 0.2 specification and accepts `"disl": "0.3"`; the schema moves to a 0.3 address when 0.3 is published. Its root, `#/$defs/Specification`, validates **specifications**. Stored diagrams are validated by DID's schema, `did.schema.json`, which references this schema's `QualifiedId`, `SemVer` and `Point`. The schema is kept together with this document, and every specification example in section 17 validates against it.
 
 ### A.1 Structure
 
@@ -5523,17 +5888,17 @@ Rules that JSON Schema cannot express — name resolution, CEL type checking, in
 |-----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Common                | `SimpleId`, `QualifiedId`, `TypeRef`, `TypeRefs`, `SemVer`, `LocalizedText`, `Doc`, `CelSource`, `Expression`, `CelValue`, `AttrBinding`, `TokenRef`, `ParamRef`, `Dynamic`, `BString`, `BNumber`, `BBool`, `GeomExpr`, `Length`, `Color`, `Size`, `Insets`, `Point`, `Box`, `MinMax`, `PluginUse`, `PluginCall`, `Modifier`, **`Message`**, **`Reason`**, **`NamedReason`**, **`TimeUnit`**                                                                                                                                                                                                                                                                                                            |
 | Top level             | `Specification`, `Language`, `Import`, `Function`, `Viewpoint`, `Plugin`, **`Budget`**, **`BudgetWithhold`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| 1 · Metamodel         | `Metamodel`, `Attribute`, `DataType`, `Enum`, `EnumValue`, `NodeType`, `Containment`, `PortType`, `RelationType`, `RelationEnd`, **`OutOfRange`**, **`DerivedNode`**, **`DerivedRelation`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| 1 · Metamodel         | `Metamodel`, `Attribute`, `DataType`, `Enum`, `EnumValue`, `NodeType`, `Containment`, `PortType`, `RelationType`, `RelationEnd`, **`OutOfRange`**, **`DerivedNode`**, **`DerivedRelation`**, *`NeighbourBounds`*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | 2 · Coordinates       | `Coordinates`, `Axis`, `AxisRef`, `Calendar`, `Category`, `Ruler`, `ZoomLevel`, `CoordinateSystem`, `GridDisplay`, `Guides`, `Placement`, `PlacementSource`, `Anchor`, `Snapping`, `SnappingRef`, `SnapRule`, `SnapRuleObject`, `AxisRules`, **`AxisRange`**, **`RulerTicks`**                                                                                                                                                                                                                                                                                                                                                                                             |
-| 3 · Notation          | `Notation`, `Theme`, `Paint`, `Gradient`, `Pattern`, `ImagePaint`, `Stroke`, `DashStyle`, `LineEffect`, `Font`, `Style`, `StyleRef`, `StyleRefs`, `States`, `Conditions`, `IconDef`, `IconRef`, `ShapeRef`, `ShapeInstance`, `ShapeDef`, `ShapeParam`, `PathDef`, `PathSegment`, `ShapePart`, `Handle`, `ScaleMode`, `Position`, `Label`, `Compartment`, `NodeIcon`, `Badge`, `PortNotation`, `AnchorSpec`, `ContainerSpec`, `SizeSpec`, `EmbeddedForm`, `LodRule`, `NodeNotation`, `NodeVariant`, `MarkerDef`, `MarkerInstance`, `MarkerRef`, `MidMarker`, `Routing`, `LineSpec`, `EndAnchor`, `EdgeNotation`, `EdgeVariant`, `Canvas`, **`ContrastRequirement`**, **`TextMetric`**, **`BadgeLayout`**, **`GestureRefusals`**, **`ConnectGesture`**, **`BezierSpec`**, **`Stub`**, **`ChromeBand`**, **`Notice`**, **`Filter`**, **`EmptyMessage`**, **`LegendComputed`** |
-| 4 · Toolbox and forms | `Toolbox`, `ToolGroup`, `Tool`, `ContextToolSet`, `ContextTool`, `Template`, `FragmentNode`, `FragmentRelation`, `Form`, `FormItem`, `FieldValidation`, **`CreateEnd`**, **`DropSpec`**, **`DropTarget`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| 3 · Notation          | `Notation`, `Theme`, `Paint`, `Gradient`, `Pattern`, `ImagePaint`, `Stroke`, `DashStyle`, `LineEffect`, `Font`, `Style`, `StyleRef`, `StyleRefs`, `States`, `Conditions`, `IconDef`, `IconRef`, `ShapeRef`, `ShapeInstance`, `ShapeDef`, `ShapeParam`, `PathDef`, `PathSegment`, `ShapePart`, `Handle`, `ScaleMode`, `Position`, `Label`, `Compartment`, `NodeIcon`, `Badge`, `PortNotation`, `AnchorSpec`, `ContainerSpec`, `SizeSpec`, `EmbeddedForm`, `LodRule`, `NodeNotation`, `NodeVariant`, `MarkerDef`, `MarkerInstance`, `MarkerRef`, `MidMarker`, `Routing`, `LineSpec`, `EndAnchor`, `EdgeNotation`, `EdgeVariant`, `Canvas`, **`ContrastRequirement`**, **`TextMetric`**, **`BadgeLayout`**, **`GestureRefusals`**, **`ConnectGesture`**, **`BezierSpec`**, **`Stub`**, **`ChromeBand`**, **`Notice`**, **`Filter`**, **`EmptyMessage`**, **`LegendComputed`**, *`GesturePointer`* |
+| 4 · Toolbox and forms | `Toolbox`, `ToolGroup`, `Tool`, `ContextToolSet`, `ContextTool`, `Template`, `FragmentNode`, `FragmentRelation`, `Form`, `FormItem`, `FieldValidation`, **`CreateEnd`**, **`DropSpec`**, **`DropTarget`**, *`FieldParse`*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | 5 · Constraints       | `Constraints`, `Constraint`, `QuickFix`, **`BuiltInSetting`**, **`SourceLocation`**, **`Finding`**, **`ValidatorOutput`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| 6 · Behavior          | `Behavior`, `Hook`, `Operation`, `Action`, `DeletionPolicy`, **`Confirmation`**, **`Simulation`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| 7 · Layout            | `Layout`, `LayoutConfig`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| 8 · Persistence       | `Persistence`, `Migration`, `MigrationStep`, **`IdStrategy`**, **`IdRule`**, **`ViewKind`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| 6 · Behavior          | `Behavior`, `Hook`, `Operation`, `Action`, `DeletionPolicy`, **`Confirmation`**, **`Simulation`**, *`ParentPlacement`*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| 7 · Layout            | `Layout`, `LayoutConfig`, *`RowPacked`*, *`RowsLayout`*, *`TidyTree`*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| 8 · Persistence       | `Persistence`, `Migration`, `MigrationStep`, **`IdStrategy`**, **`IdRule`**, **`ViewKind`**, *`TypeMapEntry`*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | Documents             | `Document`, `ElementRecord`, `RelationRecord`, `ViewRecord`, `NodeView`, `EdgeView`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
-In total the schema has 170 `$defs` entries; the 35 in bold are new in 0.2, and `Finding` and `ValidatorOutput` describe what a headless validator prints (8.6), not a specification. The stored-diagram structures `Document`, `ElementRecord`, `RelationRecord`, `ViewRecord`, `NodeView` and `EdgeView` of the earlier combined schema moved to DID's schema.
+In total the schema has 178 `$defs` entries; the 35 in bold are new in 0.2 and the 8 in italics in 0.3, and `Finding` and `ValidatorOutput` describe what a headless validator prints (8.6), not a specification. The stored-diagram structures `Document`, `ElementRecord`, `RelationRecord`, `ViewRecord`, `NodeView` and `EdgeView` of the earlier combined schema moved to DID's schema.
 
 ### A.3 Excerpt: snapping
 
@@ -6313,6 +6678,8 @@ Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`,
 
 DISL 0.2 adds: `view.viewer` (viewer state, 11.6), `canvas.filters` (6.13.1), `canvas.notices` (6.13), `canvas.chrome` (title, header, empty message and a legend from what is drawn, 6.13), `canvas.stretch` (6.13), `viewpoint.variants` (3.5), `limits.budgets` (3.2.1), `anchor.part` and `anchor.sides` (6.9, 6.10), `edge.stub` (6.10), `edge.bezierLoop` (6.10), `node.badgeLayout` (6.9), `axis.ranges` (5.3), `axis.yearMonth` (5.5), `ruler.adaptive` (5.13), `snap.byGesture` (5.9) and `text.metric` (6.5). A runtime that lacks one degrades as 15.2 says.
 
+DISL 0.3 adds: `bounds.neighbour` (4.3), `ruler.minUnit` (5.13), `shape.partTooltip` (6.8), `anchor.drawnFrom` (6.9), `edge.connectPointer` (6.10), `label.editText` (6.12), `drop.placement` (7.2, 9.1), `form.parse` and `form.typeField` (7.5), `layout.rowPacked`, `layout.rows` and `layout.tidyTree` (10.1 to 10.3), `persist.typeMap` (11.2) and `plugin.plans` (13.1).
+
 ### B.9 Built-in constraints
 
 The built-in constraints of 8.7, in the order of its table, with who raises them. Findings of the four the reader raises come first, in reading order; the others follow in this order (8.6). Each can be re-rated, switched off, and given a `code` and a `message` in `constraints.builtIn` (8.1).
@@ -6339,6 +6706,16 @@ The built-in constraints of 8.7, in the order of its table, with who raises them
 | `std.derivedFailed`     | the runtime, per derived type that fails to compute | warning / report            | 0.2   |
 | `std.derivedId`         | the runtime, per derived id already in use  | warning / report                    | 0.2   |
 | `std.derivedEnds`       | the runtime, per derived relation type with ends that do not fit | warning / report | 0.2   |
+
+### B.10 Standard layout algorithms
+
+The algorithms whose results DISL defines *(DISL 0.3)*. Every other name of section 10 is passed to a layout engine, and its result is the engine's.
+
+| Algorithm   | Options property | Moves                                         | Writes the model                         | Section |
+|-------------|------------------|-----------------------------------------------|------------------------------------------|---------|
+| `rowPacked` | `rowPacked`      | the main-axis position, within each row       | no                                       | 10.1    |
+| `rows`      | `rows`           | nothing but the attributes in `writes`        | yes, `writes` only, as one undo step     | 10.2    |
+| `tidyTree`  | `tidyTree`       | both axes, from containment and model order   | only by a drag: order, and stored rows with `rows.stored` | 10.3 |
 
 ---
 
