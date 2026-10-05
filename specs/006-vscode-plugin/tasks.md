@@ -25,7 +25,7 @@
 - [x] T011 [US1] `.github/workflows/build.yml`: fill in the `plugin` job as [contracts/build-workflow.md](contracts/build-workflow.md) gives it; teach `.github/scripts/check-files.py` to skip `node_modules`, `dist` and `.vscode-test`
 - [x] T012 [US1] `.github/workflows/build.yml`: the `development-build` job, adapted from IntelliJ's (FR-055, FR-057)
 - [x] T013 [P] [US1] [US6] `README.md`: what the plug-in brings, install from the Releases page and from a run, build, test, debug, package (FR-058)
-- [ ] T014 [US1] Open PR 1; from its run download the `.vsix` and install it into a clean profile; after the merge, check the development build on the Releases page (quickstart, US1). *Opened as etalii.adp.ide.vscode#7 and green, with the `.vsix` offered from the run; installing it by hand and the development build wait for the merge.*
+- [x] T014 [US1] Open PR 1; from its run download the `.vsix` and install it into a clean profile; after the merge, check the development build on the Releases page (quickstart, US1). *Opened as etalii.adp.ide.vscode#7 and green, with the `.vsix` offered from the run; installing it by hand and the development build wait for the merge.*
 
 **Checkpoint**: an installable, empty plug-in; F5 opens a development window; three test levels run in CI.
 
@@ -140,12 +140,18 @@
 - [x] T073 [P] [US7] `docs/parity.md`: a section per diagram type, every difference from the definition with its reason (FR-007)
 - [x] T074 [US7] `etalii.adp:` both companions name `etalii.adp.ide.vscode` as a host that implements the type (FR-029)
 - [x] T075 [P] A document of several hundred trends and one of several hundred items stay usable; time the 13 examples against SC-005
-- [ ] T076 Walk [quickstart.md](quickstart.md) from a fresh clone and a downloaded development build; check SC-001 to SC-011; final `README.md`
-- [ ] T077 Open PR 7
+- [x] T076 Walk [quickstart.md](quickstart.md) from a fresh clone and a downloaded development build; check SC-001 to SC-011; final `README.md`
+- [x] T077 Open PR 7
 
 ## Where it stands (2026-10-05)
 
-Phases 1 to 7 are built and each is a green pull request in `etalii.adp.ide.vscode`, stacked in order: #7 (skeleton and pipeline), #8 (hype cycle core), #9 (frame), #10 (hype cycle editing, catalogue and parity record), #11 (behavior model core), #12 (behavior model in the editor). The definitions are etalii.adp#57. 264 tests run in the core and the simulated browser and 21 with the packaged plug-in in a real Visual Studio Code. The last step is #13 (a toolbox drop in Compact lands on its date, and large graphs are timed: 281 tests). What is left is T014's check after the first merge, and T076 and T077: a walk through the quickstart by hand in a Visual Studio Code window. One behaviour is recorded as not built in `docs/parity.md` rather than as a task: siblings stepping aside while a behavior node is dragged.
+All 77 tasks are done. The seven steps were merged into `etalii.adp.ide.vscode`'s `develop` as #7 to #13, and the definitions and this plan into `etalii.adp` as #56 and #57. 282 tests run in the core and the simulated browser and 21 with the packaged plug-in in a real Visual Studio Code.
+
+**The development build (T014).** After the merges the Releases page offers "Development build 0.1.0 (b00ccca, 2026-10-05)" as a pre-release under the tag `development`, which points at `develop`'s head, with `etalii-adp-0.1.0.vsix` as its one asset and notes naming the commit and the run that checked it. Seven merges landed within four minutes; two of their runs were cancelled by the next push, and the build ended as the one from the last commit.
+
+**The quickstart, by hand (T076).** That build was downloaded, installed into a clean profile of Visual Studio Code 1.140 and worked with a real pointer. It lists as `etalii.adp@0.1.0`. A `.ghg` opens in the diagram from the Explorer with the toolbox, the filter, the legend and the ruler; Ctrl and the wheel zoom; dragging a trend marks the file modified and ADP Properties shows the new dates and boundaries; Ctrl+Z in the canvas takes it back and the file on disk is untouched. A Markdown file opens as text, "ADP: Open as Agent Behavior Model" opens its tree with the row its registration lowers, dragging a row changes only the `.adp`, and the context menu lists the node's actions. Three things it showed are fixed in etalii.adp.ide.vscode#14: the first zoom of a large graph, fractional positions from a drop at a zoom other than 100 percent, and the colour of a menu shortcut. One is recorded in that repository's `docs/parity.md`: a file named on the command line when Visual Studio Code starts opens as text.
+
+**Closed afterwards, at Peter's request (etalii.adp.ide.vscode#15).** Two differences from the Agent Behavior Modelling definition that were first recorded in `docs/parity.md` are built: Undo and Redo in the diagram take back and reapply a drag that only moves a row and an Arrange, in their turn among the edits of the Markdown, and the siblings a dragged node has passed step aside to where the new order would put them.
 
 ## Dependencies
 
