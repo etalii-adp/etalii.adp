@@ -2,7 +2,7 @@
 
 The companion to [agent-behavior-modelling.dis](agent-behavior-modelling.dis). The `.dis` specifies the diagram type in DISL 0.1 as far as DISL reaches; this page holds everything about the tool that DISL cannot express, each point tied to the code that shows it.
 
-The diagram type is implemented in the standalone IDE as the module `src/diagrams/agent-behavior-modelling/` of [etalii-adp/etalii.adp.ide.standalone](https://github.com/etalii-adp/etalii.adp.ide.standalone), origin `etalii/agent-behavior-modelling`. Paths below without a repository are relative to that module folder; `standalone:` marks a path relative to the standalone repository root. The research it rests on is [docs/research/behavior-trees-for-agents.md](../../docs/research/behavior-trees-for-agents.md) in this repository.
+The diagram type is implemented in the standalone IDE as the module `src/diagrams/agent-behavior-modelling/` of [etalii-adp/etalii.adp.ide.standalone](https://github.com/etalii-adp/etalii.adp.ide.standalone), origin `etalii/agent-behavior-modelling`, read here at `develop` commit `13b517b3`. It is also implemented in the Visual Studio Code plug-in, [etalii-adp/etalii.adp.ide.vscode](https://github.com/etalii-adp/etalii.adp.ide.vscode), against this definition; where that host differs is recorded in its `docs/parity.md`. Paths below without a repository are relative to that module folder; `standalone:` marks a path relative to the standalone repository root. The research it rests on is [docs/research/behavior-trees-for-agents.md](../../docs/research/behavior-trees-for-agents.md) in this repository.
 
 ## What the diagram is for
 
@@ -61,7 +61,8 @@ DISL's persistence layer cannot describe a tree kept inside someone else's prose
 - **Dragging** a node carries everything beneath it, and its siblings follow it up and down. Dropped past a sibling's middle, it takes that sibling's place: while it moves, the siblings it passes step aside to show where it will land, as the Sankey diagram does in a column, and on release its lines move in the Markdown with everything under them (`ArrangeAbmNodeCommand`). The order and the row's height are one undoable step.
 - **Reordering** among siblings is also Alt+Up and Alt+Down (`abm.move-earlier`, `abm.move-later`); the node's lines move with everything under them.
 - **Rename** is F2 or a double-click, editing the label only. The keyword is the kind, changed in the property grid's Kind choice (`abm.kind`); a kind that cannot hold the node's present children is refused ("\"Check\" holds no children, and this node has 2 children."). Attempts (`abm.attempts`) shows only for a Retry, Notes (`abm.notes`) edits the note lines, and Place (`abm.place`) is read-only.
-- **Delete** removes the node and everything under it, as one splice.
+- **Delete** removes the node and everything under it, as one splice. When nodes go with it, it asks first: "Removing this node also removes the 1 node beneath it." or "… the N nodes beneath it."
+- **Arrange diagram** (`abm.arrange`, `Commands/ArrangeAbmCommand.cs`) is offered on empty canvas and on every node. The tidy tree is the arrangement: a behavior tree's layout is computed from the tree, and a drag is only an override kept in the registration, so the least cluttered drawing is the computed one and arranging means dropping the overrides. It removes the registration's `layout:` block and never touches the Markdown; one undo puts the registration back byte for byte. It is refused with "This behavior model was opened without a registration, so it has no dragged positions to forget." when there is no registration, with "This behavior model is already arranged." when the block is empty, and is disabled with "There is nothing to arrange until this behavior model has a node." for an empty tree. The `.dis` declares it as the operation `arrange`, carried out by the plugin `net.etalii.adp.etalii.abmArrange`.
 - **Undo** restores the whole document text (`RestoreDocumentCommand<IAbmDocumentStore>`), so every edit above is one undoable step; a drag's undo (`RestoreAbmArrangementCommand`) puts back the Markdown and every stored position together.
 
 ## Rules
@@ -82,7 +83,7 @@ The rule ids, in `backend/…/AbmRuleSet.cs`, reach the Errors and Warnings pane
 
 - **Two labels.** Each node shows its keyword in small capitals on the top line and its label beneath it (`client/AbmCanvas.tsx`). The `.dis` writes the keyword label as a CEL string per type.
 - **Superellipse and diode** are drawn by the canvas library's built-in shapes (`standalone:src/client/src/canvas/library/shapes/outline.ts`); the `.dis` reuses the functional decomposition graph's custom paths for them.
-- **Colours** are CSS variables in `standalone:src/client/src/index.css` (`--color-diagram-abm-*`) applied by `client/abm.css`, the functional decomposition graph's fills reused per family: composites green, wrappers yellow, Check blue, Do teal, Ask the user and Delegate grey.
+- **Colours** are CSS variables in `standalone:src/client/src/index.css` (`--color-diagram-abm-*`) applied by `client/abm.css`, the functional decomposition graph's fills reused per family: composites green (`#aaed92`, dark `#2e7814`), wrappers yellow (`#fcf281`, `#736a03`), Check blue (`#9edcfa`, `#086fa1`), Do grey (`#ededed`, `#696969`), Ask the user and Delegate teal (`#86e6d9`, `#187569`).
 - **An implicit Do** is drawn with a dashed outline, a payload flag the `.dis` has no notation for.
 
 ## Known gaps
