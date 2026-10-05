@@ -24,6 +24,16 @@ The SpecKit Companion extension (`.specify/extensions/companion/`) records each 
 
 Specs say *what* and *why*; plans say *how*. Do not put implementation choices in a spec.
 
+### Specifications for every repository live here
+
+This repository holds the Spec Kit features of every `etalii-adp` repository, not only its own: a change to `etalii.adp.ide.intellij`, `etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse`, `etalii.adp.site` or `.github` is specified here too, and those repositories have no Spec Kit setup of their own. `etalii.adp.ide.standalone` is the exception: it keeps planning with spec-workflow in its own `.spec-workflow/`.
+
+- A new feature is `specs/NNN-feature-name/`, in the one sequence, whichever repository its code lands in; put the repository in the name when it is one (`007-intellij-settings-search`).
+- Its `tasks.md` names files with their repository as prefix (`etalii.adp.ide.intellij/core/...`). The clones sit side by side (`C:\git\<repository>` locally, `/home/user/<repository>` in a cloud session), so the paths resolve from either. Each repository it touches gets a branch of the feature's name and its own pull request; spec 001-ci-and-badges is the model.
+- A session started in another repository's folder finds no `.specify/`; start it here, or set `SPECIFY_INIT_DIR` to this repository.
+- Plans check `.specify/memory/constitution.md` and, for code in another repository, that repository's principles in `.specify/memory/repositories/<repository>.md`.
+- Features specified elsewhere before 2026-10-05 are kept under `specs/<repository>/NNN-feature-name/` with their old numbers; see [specs/README.md](specs/README.md). Continue one with the companion's `--feature-dir specs/<repository>/NNN-feature-name`.
+
 ## Branches and delivery
 
 - `develop` is the integration branch.

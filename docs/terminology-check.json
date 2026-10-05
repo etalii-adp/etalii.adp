@@ -164,24 +164,24 @@
     "etalii.adp": [
       "specs/001-*/**",
       "specs/002-*/**",
+      "specs/etalii.adp.ide.intellij/001-*/**",
+      "specs/etalii.adp.ide.intellij/002-*/**",
+      "specs/etalii.adp.ide.intellij/003-*/**",
+      "specs/etalii.adp.ide.intellij/004-*/**",
+      "specs/etalii.adp.site/001-*/**",
+      "specs/etalii.adp.site/002-*/**",
+      "specs/etalii.adp.site/003-*/**",
+      "specs/etalii.adp.site/004-*/**",
+      "specs/etalii.adp.site/005-*/**",
+      "specs/etalii.adp.site/006-*/**",
       ".github/scripts/validate-examples.py"
     ],
     "etalii.adp.ide.intellij": [
-      "specs/001-*/**",
-      "specs/002-*/**",
-      "specs/003-*/**",
-      "specs/004-*/**",
       "core/src/test/resources/settings/baseline-adp.xml",
       "freemind/testdata/reference/spec001-test-inventory.md",
       "allure-results/**"
     ],
     "etalii.adp.site": [
-      "specs/001-*/**",
-      "specs/002-*/**",
-      "specs/003-*/**",
-      "specs/004-*/**",
-      "specs/005-*/**",
-      "specs/006-*/**",
       "src/data/redirects.ts",
       "tests/reference/fixtures/dedl-aaef333/**",
       "tests/reference/fixtures/disl-c2623d4/**",
@@ -220,6 +220,12 @@
     }
   ],
   "allowedLines": [
+    {
+      "repository": "etalii.adp",
+      "path": ".specify/memory/repositories/etalii.adp.site.md",
+      "regex": "reference for DEDL\\)",
+      "reason": "the site constitution's amendment history, moved here with it"
+    },
     {
       "path": "specifications/*/*.schema.json",
       "regex": "\"(dedl|dedlDocument)\"",
