@@ -500,5 +500,6 @@
       "status": "DONE",
       "did": "./gradlew check green in 9m53s (tests, integrationTest, verifyPlugin, licences); no Gradle deprecations; one JNA native-access warning from the test runtime"
     }
-  }
+  },
+  "telemetryInstanceId": "6404a42d-327f-4919-8b14-54c6bf643ab1"
 }

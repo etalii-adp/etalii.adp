@@ -31,5 +31,6 @@
       "what": "FR-001 to FR-005 are etalii.adp spec 002 Part 1 (T012-T017), all ticked there; on develop the catalogue reads docs/tools.md then docs/diagrams.md (src/lib/catalogue/sources.ts catalogueFileNames), the Kind column (aff210d), and both upstream names (696b05a). The old forms were later dropped by spec 002 Part 7 as this spec foresaw. Closed out 2026-10-01 at Peter's request."
     }
   ],
-  "status": "completed"
+  "status": "completed",
+  "telemetryInstanceId": "c5d3fcbb-c706-4cdf-be28-90eeb14204b5"
 }

@@ -1118,7 +1118,7 @@
       "command": "gradlew.bat test verifyPlugin verifyDependencyLicences --console=plain",
       "source": "derived",
       "exitCode": 1,
-      "durationSeconds": 0.0,
+      "durationSeconds": 0,
       "result": "'gradlew.bat' is not recognized as an internal or external command, · operable program or batch file.",
       "warnings": [
         "exited 1"
@@ -1129,7 +1129,7 @@
       "command": "C:\\git\\etalii.adp.ide.intellij\\.claude\\worktrees\\004-settings-page\\gradlew.bat -p C:\\git\\etalii.adp.ide.intellij\\.claude\\worktrees\\004-settings-page test verifyPlugin verifyDependencyLicences --console=plain",
       "source": "derived",
       "exitCode": 0,
-      "durationSeconds": 2.0,
+      "durationSeconds": 2,
       "result": "BUILD SUCCESSFUL in 1s · 59 actionable tasks: 2 executed, 57 up-to-date · Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.8.0/userguide/configuration_cache_enabling.html"
     },
     {
@@ -1140,5 +1140,6 @@
       "durationSeconds": 2.4,
       "result": "BUILD SUCCESSFUL in 2s · 62 actionable tasks: 2 executed, 60 up-to-date · Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.8.0/userguide/configuration_cache_enabling.html"
     }
-  ]
+  ],
+  "telemetryInstanceId": "ae0e4597-be23-4e1b-a0ba-0b46ad83e66d"
 }

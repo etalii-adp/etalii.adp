@@ -50,5 +50,6 @@
     {
       "note": "Releases page carries both a rolling development build and versioned releases (Peter, 2026-09-27)"
     }
-  ]
+  ],
+  "telemetryInstanceId": "5794ba76-281e-4d2a-a2b0-bbe37d89feec"
 }
