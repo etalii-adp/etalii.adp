@@ -4,7 +4,7 @@
 
 |                           |                                                                              |
 |---------------------------|------------------------------------------------------------------------------|
-| Date                      | 2026-10-05                                                                   |
+| Date                      | 2026-10-06                                                                   |
 | Specification schema      | `disl.schema.json` (JSON Schema, draft 2020-12), `$defs/Specification`       |
 | Definition language       | DID, the Diagram Definition Language, in [`../did/`](../did/DID-specification.md) |
 | Expression language       | CEL — Common Expression Language (https://cel.dev)                           |
@@ -16,7 +16,7 @@
 
 ## Status of this document
 
-This is a draft, version 0.3. It is complete enough to implement a conforming validator, a documentation generator and a reference runtime, but individual constructs may still change before version 1.0. DISL 0.1 continued the earlier combined format (DEDL became DISL and DID); section 18 lists the old identifiers that runtimes still read. DISL 0.2 adds declarative constructs to 0.1 (declared identity, findings that point at files, reasons the tool gives, derived elements, gestures and menus, view state, budgets, notation and time details). Every valid 0.1 specification is a valid 0.2 specification and keeps its meaning, except in the places listed in [Changes from 0.1](#changes-from-01), where 0.1 was silent or ambiguous and 0.2 now says what it means. DISL 0.3 adds the constructs that the Gartner hype cycle graph and Agent Behavior Modelling tools needed and 0.2 could not state (neighbour-aware bounds, standard row and tree layouts, a type map for format bindings, part tooltips, form fields that parse their own text, per-case built-in codes, geometric drop placement, typed retyping fields and pointer bindings for connect gestures); every valid 0.2 specification is a valid 0.3 specification with the same meaning, apart from the clarifications in [Changes from 0.2](#changes-from-02). Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
+This is a draft, version 0.3. It is complete enough to implement a conforming validator, a documentation generator and a reference runtime, but individual constructs may still change before version 1.0. DISL 0.1 continued the earlier combined format (DEDL became DISL and DID); section 18 lists the old identifiers that runtimes still read. DISL 0.2 adds declarative constructs to 0.1 (declared identity, findings that point at files, reasons the tool gives, derived elements, gestures and menus, view state, budgets, notation and time details). Every valid 0.1 specification is a valid 0.2 specification and keeps its meaning, except in the places listed in [Changes from 0.1](#changes-from-01), where 0.1 was silent or ambiguous and 0.2 now says what it means. DISL 0.3 adds the constructs that the Gartner hype cycle graph and Agent Behavior Modelling tools needed and 0.2 could not state (neighbour-aware bounds, standard row and tree layouts, a type map for format bindings, part tooltips, form fields that parse their own text, per-case built-in codes, geometric drop placement, typed retyping fields and pointer bindings for connect gestures, and, by the ruling of 2026-10-06, menu groups, form row ids, a declared order of findings, one finding per group of duplicates and the case of an endpoint finding); every valid 0.2 specification is a valid 0.3 specification with the same meaning, apart from the clarifications in [Changes from 0.2](#changes-from-02). Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
 
 The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY** and **OPTIONAL** are to be interpreted as described in RFC 2119 and RFC 8174 when, and only when, they appear in bold capitals.
 
@@ -2965,7 +2965,7 @@ Context tools appear next to the selected element (a "quick bar" or radial menu)
 | `tools`     | ContextTool[]                                 | Items.                                    |
 | `runSingle` | bool                                          | When exactly one entry is available, run it without showing the set. Default `false`. |
 
-ContextTool kinds: `create-connected` (create a node of type `creates` connected via relation `via`, placed at `position` using the layout's spacing; `direction` `outgoing` or `incoming`), `connect` (start an edge of type `via` from this element), `create-child` (create a child of `creates` in `slot`), `operation`, `delete`, `duplicate`, `editLabel`, `openForm`, `plugin`, `moveUp` and `moveDown` (move the element one place earlier or later among its siblings with the `reorder` action, 9.4). All kinds accept `label`, `doc`, `icon`, `shortcut`, `enabled`, `position`, `visible` and `unavailable`:
+ContextTool kinds: `create-connected` (create a node of type `creates` connected via relation `via`, placed at `position` using the layout's spacing; `direction` `outgoing` or `incoming`), `connect` (start an edge of type `via` from this element), `create-child` (create a child of `creates` in `slot`), `operation`, `delete`, `duplicate`, `editLabel`, `openForm`, `plugin`, `moveUp` and `moveDown` (move the element one place earlier or later among its siblings with the `reorder` action, 9.4). All kinds accept `label`, `doc`, `icon`, `shortcut`, `enabled`, `position`, `visible`, `unavailable` and `group`:
 
 | Property      | Type       | Description                                                                                                                                  |
 |---------------|------------|----------------------------------------------------------------------------------------------------------------------------------------------|
@@ -2973,6 +2973,7 @@ ContextTool kinds: `create-connected` (create a node of type `creates` connected
 | `enabled`     | Expression | Whether the entry can run; context `element`. False shows the entry disabled.                                                                |
 | `visible`     | Expression | Whether the entry is offered at all; context `element`. False hides the entry instead of disabling it. Default `true`.                      |
 | `unavailable` | Reason[]   | Why the entry cannot run now; context `element`. An entry of kind `operation` also inherits the operation's `enabled` and `unavailable` (9.3). |
+| `group`       | SimpleId   | *(DISL 0.3)* The menu group the entry is shown in (below). Default: none.                                                                    |
 
 An entry whose `visible` is false, or whose operation's `for` does not admit the target, **MUST NOT** be shown. A visible entry that is unavailable **MUST** be shown disabled with the applicable reason and **MUST NOT** run (9.3). Actions that do not apply are either not offered or shown disabled with their reason, never silently absent where the specification declares a reason:
 
@@ -2982,6 +2983,22 @@ An entry whose `visible` is false, or whose operation's `for` does not admit the
 ```
 
 Right-click **context menus** are defined the same way under `toolbox.contextMenus` with `placement: "menu"`; runtimes add standard entries (cut, copy, paste, delete, arrange) unless `standardEntries: false`.
+
+**Menu groups** *(DISL 0.3)*. An entry's `group` names the group it is shown in, so that related entries stand together and apart from the rest, as a hype cycle trigger's Rename and Remove stand apart from Arrange diagram.
+
+- Consecutive entries of one set's `tools` with an equal `group` **MUST** form one group, and consecutive entries without `group` one group too. A group never spans two sets, and a name that comes back after another group has started starts a new group.
+- Groups are decided by the entries as declared, before `visible` and `forEach` are applied. A group none of whose entries is shown **MUST NOT** be shown, and the groups on either side of it stay two groups.
+- A runtime **MUST** show the groups in order and **SHOULD** set them apart from one another, for example with a divider. The name only tells groups apart; it is not shown.
+- A set whose entries carry no `group` is one group, which is how a 0.2 menu reads.
+
+```json
+{ "for": [ "Trigger" ], "placement": "menu", "standardEntries": false, "tools": [
+  { "kind": "editLabel", "group": "edit", "label": "Rename…", "shortcut": "F2" },
+  { "kind": "delete", "group": "edit", "label": "Remove", "shortcut": "Delete" },
+  { "kind": "operation", "operation": "arrange", "group": "arrange", "label": "Arrange diagram" } ] }
+```
+
+A hype cycle trigger's menu shows Rename… and Remove, then, set apart, Arrange diagram.
 
 **Move up and move down.** `moveUp` at the first position among the siblings and `moveDown` at the last **MUST** be unavailable, with the reason `behavior.messages` gives for `std.atStart` or `std.atEnd` (9.1), or else the runtime's sentence. They are refused like any reorder by `reorder` gesture constraints (8.4).
 
@@ -3143,6 +3160,7 @@ If no form is defined for a type, runtimes generate one: one field per non-deriv
 | `onChange`                 | Action[]                            | Actions run after the value is committed (9.4).                                                                            |
 | `display`                  | Message                             | *(DISL 0.3)* The text the field shows for its value, in place of the widget's own rendering; context `form` (below).        |
 | `parse`                    | FieldParse                          | *(DISL 0.3)* Makes the item editable as text, on an attribute or a `computed` item (below).                                |
+| `id`                       | SimpleId                            | *(DISL 0.3)* The item's row id, on a field, a `computed` item or a `type` item (below). Default: none.                    |
 
 **FieldValidation** (`$defs/FieldValidation`): `rule` (Expression → bool, context `form`), `message` (Message, context `form`), `severity` (default `"error"`), and `timing`: `"input"` (default, as in 0.1: checked and shown as the user types) or `"commit"` (checked when the value is committed or the dialog is submitted, for input that is only judged complete). A validation message may call a declared function or a plugin's CEL function, so a format's own term grammar can word the refusal.
 
@@ -3182,6 +3200,19 @@ On a hype cycle influence, `plateau/bottom/0.3` sets `fromPhase`, `fromEdge` and
 
 An agent behavior model's Kind row lists the node's own kind and the kinds it can become without losing a child: a leaf only when the node has no children. Choosing another kind rewrites the node's keyword as one undoable step; a kind typed past the list is refused with the sentence that says why. Choosing the node's own kind applies the mapping only: a Retry with 2 attempts chosen as Retry again gets 3, as a node changed into a Retry does, and a Do chosen as Do is unchanged, except that an item written without a keyword is given its kind's keyword.
 
+**Row ids** *(DISL 0.3)*. A field, a `computed` item and a `type` item each show one row, and a host addresses that row by its **row id**, for example to map it to a property id of its own. The row id is the item's `id` when it has one, else its `attribute`, else its `label` as evaluated.
+
+- `id` **MUST NOT** change what the row shows, edits or refuses; it only names the row.
+- Items of one form whose row ids would otherwise be equal, such as two `computed` items labelled alike in two sections, **SHOULD** each be given an `id`, and the row ids of one form **SHOULD** be unique.
+
+```json
+{ "kind": "section", "title": "Peak", "items": [
+  { "kind": "computed", "id": "peakInfluences", "label": "Influence", "widget": "textarea",
+    "value": { "cel": "listOrNone(self.outgoingOf('Influence').filter(r, r.?fromPhase.orValue('') == 'peak').map(r, endText(r.target, r.?toPhase.orValue(''))))" } } ] }
+```
+
+A hype cycle trend's form lists the influences of each of its four phases under the label Influence; each list has its own row id, `peakInfluences` for the peak's, so a host can tell the four apart.
+
 **Dialogs.** A form used as a dialog (`usage` `create` or `popover`, or an operation's `paramsForm`) **MUST** show `placeholder` in an empty input, **MUST** pre-fill `initial`, and **MUST** label its confirming button with `submitLabel`. It **MUST NOT** submit while a validation of severity `error` fails, and **MUST** show that validation's message beside the field. When the invoking entry supplies every parameter of the operation, the dialog **MUST NOT** open.
 
 ```json
@@ -3201,7 +3232,7 @@ An agent behavior model's Kind row lists the node's own kind and the kinds it ca
 
 **Widgets**: `text`, `textarea`, `markdown`, `code` (with `widgetOptions.language`: `"cel"`, `"json"`, `"sql"`, …; the `cel` language is type-checked in the attribute's `context`), `number`, `slider` (`min`, `max`, `step`, `marks`), `spinner`, `rating` (`max`, `icon`), `checkbox`, `switch`, `select`, `combobox` (free entry allowed), `radio`, `segmented` (button group), `multiselect`, `tags`, `date`, `datetime`, `time`, `duration`, `month` (a `yearMonth` value), `daterange` (edits two attributes: `attribute` and `widgetOptions.endAttribute`), `color` (`palette`, `alpha`), `icon` (icon picker), `reference` (element picker, with `widgetOptions.pickOnCanvas: true` to select by clicking), `references` (for `many` references), `list` (editable list of primitives), `table` (list of structs, with `widgetOptions.columns`), `struct` (nested sub-form), `file` (binary or URI, `mediaTypes`), `image`, `link`, `progress` (read-only bar), `readonly` (plain text), `plugin`.
 
-**Containers and other items** (by `kind`): `section` (`title` as a Message, `collapsible`, `collapsed`, `items`), `row` (horizontal group), `tabs` (`tabs: [{title, icon, items}]`), `group` (a bordered box with `title`), `text` (static help text, Markdown), `divider`, `computed` (read-only `value` Bindable), `button` (`label` as a Message, `icon`, `operation` or `actions`, `enabled`, `unavailable` as Reason[], `confirm` as a Message or Confirmation (9.5); a button that runs an operation inherits its reasons, 9.3), `findings` (list of the element's current findings with quick fixes; `problems` is its deprecated alias, section 18), `type` (the element's type, changed through `behavior.retype`; DISL 0.3, above), `plugin`.
+**Containers and other items** (by `kind`): `section` (`title` as a Message, `collapsible`, `collapsed`, `items`), `row` (horizontal group), `tabs` (`tabs: [{title, icon, items}]`), `group` (a bordered box with `title`), `text` (static help text, Markdown), `divider`, `computed` (read-only `value` Bindable; `id`, DISL 0.3), `button` (`label` as a Message, `icon`, `operation` or `actions`, `enabled`, `unavailable` as Reason[], `confirm` as a Message or Confirmation (9.5); a button that runs an operation inherits its reasons, 9.3), `findings` (list of the element's current findings with quick fixes; `problems` is its deprecated alias, section 18), `type` (the element's type, changed through `behavior.retype`; DISL 0.3, above), `plugin`.
 
 ### 7.6 Embedded forms (widgets inside nodes)
 
@@ -3272,6 +3303,7 @@ Constraints state what makes a diagram valid. They are written in CEL, evaluated
 | `defaults`    | `{severity, timing}`                                     | Defaults for rules.                                                                                                                         |
 | `blockSaveOn` | `"never"`, `"error"`                                     | Whether saving is prevented while errors exist. Default `"never"` (never lose work); DID definitions are saved with findings and remain loadable. |
 | `builtIn`     | map built-in id → BuiltInSetting                         | Tune the built-in constraints (8.7).                                                                                                        |
+| `order`       | QualifiedId[]                                            | *(DISL 0.3)* The codes in the order findings are listed (8.6). Default: none, which keeps the order of 8.6.                                |
 
 **BuiltInSetting** (`$defs/BuiltInSetting`), the value of each `constraints.builtIn` entry:
 
@@ -3282,6 +3314,7 @@ Constraints state what makes a diagram valid. They are written in CEL, evaluated
 | `code`     | QualifiedId (hyphens allowed) or `{cel}`               | The code reported with its findings (8.6), for example `"dependencies.duplicate-id"`. *(DISL 0.3)* `{cel}` computes it per finding (below). |
 | `message`  | Message                                                | Replaces the runtime's own wording of the built-in's findings (8.6); evaluated in the `constraint` context plus `detail`.                                                                                  |
 | `refusal`  | Message                                                | Replaces the runtime's own wording when the built-in refuses a gesture (8.4); evaluated in that gesture's context plus `violation`. Without it a refusal is worded by the runtime, never taken from `message`. |
+| `oncePerGroup` | `"second"`, `"last"`                              | *(DISL 0.3)* Reports a group of duplicates once, at its second or its last member (below). Default: none, which flags every member after the first. |
 | `doc`      | Doc                                                    |                                                                                                                                                                                                             |
 
 **A code per case** *(DISL 0.3)*. One built-in can cover breaches a tool reports under several codes, as `std.endpoints` covers an influence into a trigger, a self-influence and a repeated influence. A `code` given as `{cel}` is evaluated per finding, in the `constraint` context plus `detail`, and returns a QualifiedId. A computed `code` whose result is not a QualifiedId is a specification error reported once, and the finding then carries the built-in's id.
@@ -3291,7 +3324,20 @@ Constraints state what makes a diagram valid. They are written in CEL, evaluated
   "code": { "cel": "self.target.isA('Trigger') ? 'ghg.influence-into-trigger' : (self.source == self.target ? 'ghg.self-influence' : 'ghg.duplicate-influence')" } }
 ```
 
-An influence from `steam-engine` to itself is reported as `ghg.self-influence`.
+An influence from `steam-engine` to itself is reported as `ghg.self-influence`. A relation that breaks several limits is reported once per limit, and `detail.violation` (8.7) says which, so a computed `code` can report a loop that is also a repeat under both codes.
+
+**One finding per group** *(DISL 0.3)*. Two built-ins flag the members of a group of duplicates: `std.duplicateId` the elements that hold one id, in reading order, and `std.endpoints`, in its `parallel` case, the relations of one type that `allowParallel: false` forbids between the same two elements (in the same direction, or in either direction for an undirected type), in model order (8.7).
+
+- Without `oncePerGroup`, each member after the first is flagged, as 8.7 says.
+- With `oncePerGroup`, a group **MUST** be reported by exactly one finding: `"second"` at its second member, `"last"` at its last. Its `detail` is the one that member would have had; `count` of `std.duplicateId` still counts every holder.
+- `oncePerGroup` has no effect on any other built-in, nor on the other cases of `std.endpoints`.
+
+```json
+"std.duplicateId": { "code": "ghg.duplicate-id", "oncePerGroup": "last",
+  "message": { "cel": "'`' + detail.id + '` is declared ' + string(detail.?count.orValue(2)) + ' times; an id names one entry.'" } }
+```
+
+An id held by three hype cycle entries is reported once, at the third, as "`a` is declared 3 times; an id names one entry."; three influences from one trend to another in one direction, with `oncePerGroup: "second"` on `std.endpoints`, are reported once, at the second.
 
 `detail` is a map whose keys each built-in lists in 8.7; `violation` is a map with `rule` (the built-in id) and the keys 8.4 lists per built-in. `detail` **MUST** be bound only in a built-in's `message`, and `violation` only in its `refusal`. Without `message` or `refusal`, the runtime words and localises the text itself, as in 0.1.
 
@@ -3518,6 +3564,15 @@ Every finding **MUST** carry a rule, a severity and a message, and at least one 
 3. declared constraints, in the order of `rules`;
 4. within one constraint, by scope element in model order (12.5), then by `forEach` item order.
 
+**Declared order** *(DISL 0.3)*. When `constraints.order` lists codes, findings **MUST** instead be ordered as follows, so that a tool can keep the order its users know:
+
+1. by the position of the finding's code in `order`, a finding without a code taking its constraint's id; findings whose code is not listed come after every listed one;
+2. within one position, the findings the reader raised while reading a file (`std.unparseable`, `std.unreadableEntry`) first, in reading order;
+3. then the others by the line of their element: for a declared rule, the scope element it was evaluated for, or for a rule scoped to the diagram its `forEach` item, else its first target; for a built-in, its element. A finding about a group of duplicates (8.1, 8.7) takes the line of the group's first member, whichever member it is reported at. A finding without a line comes after those with one;
+4. ties keep the order of the list above.
+
+An empty `order` is the same as none. A hype cycle lists every duplicated influence first, by the line of the first influence of each pair, then every self-influence, and so on in the order of its twelve codes.
+
 The headless validator's output and a runtime's default presentation **MUST** use this order; a runtime **MAY** let the user sort differently.
 
 **Suppressions.** A user may suppress a finding of a suppressible rule for an element, or, for a finding without an element, for its subject; suppressions are stored in the DID definition (DID, section 3) and are keyed by the rule's `id`, never by its `code`. A suppression **MUST NOT** name an ephemeral id (11.5).
@@ -3557,7 +3612,7 @@ Metamodel declarations generate built-in constraints automatically, and the read
 | `std.unparseable`  | the reader, once per file of the model that cannot be parsed; replaces every other finding located in that file (8.6) | error / report                                                |
 | `std.unreadableEntry` | the reader, per entry of a parsed file that cannot become an element (an unknown key, a malformed value, a line in no known form); the entry is kept and not drawn | warning / report                                              |
 | `std.missingId`    | the reader or runtime, per element without a usable id, or whose derived id cannot be computed (11.5) | warning / report                                              |
-| `std.duplicateId`  | the reader or runtime, per element whose id, compared as `persistence.ids.compare` says, equals that of an element earlier in reading order; only the second and later are flagged (11.5) | warning / report                                              |
+| `std.duplicateId`  | the reader or runtime, per element whose id, compared as `persistence.ids.compare` says, equals that of an element earlier in reading order; only the second and later are flagged (11.5), or the one `oncePerGroup` names (8.1) | warning / report                                              |
 | `std.mixedPrecision` | the runtime, when attributes of one element tied by `samePrecisionAs` (4.3) hold values written with different precisions (`precisionOf`, 12.4) | warning / report (and prevent in forms)                       |
 | `std.ephemeralViewData` | the runtime, per stored view data, style override or suppression keyed by an ephemeral id (11.5) | info / report                                                 |
 | `std.pluginMissing` | the runtime, once per declared plugin that is absent and whose CEL functions are called (13.1) | warning / report                                              |
@@ -3572,6 +3627,7 @@ Each built-in binds `detail` in its `message` (8.1) with the keys below; the bui
 | `std.unparseable`       | `reason` (the parser's message)                                      | the file, at the parser's line and column when known; no element                     |
 | `std.unreadableEntry`   | `reason`, `entry` (a map: `text`, the entry's source text as written; `path`, a JSON Pointer (RFC 6901) to the entry in the file's parsed tree, or `''` when the format has no tree) | the entry's location; `subject` names the entry                                      |
 | `std.missingId`         | `reason` (`"absent"`, `"empty"`, `"pattern"` or `"derived"`)         | the element, with its new or ephemeral id, and its location                          |
+| `std.endpoints`         | `relationType` (0.1), `violation` (DISL 0.3: `"source"` or `"target"` for an end whose element the relation type does not allow there, `"selfLoop"` for a loop `allowSelfLoops: false` forbids, `"parallel"` for a repeat `allowParallel: false` forbids) | the relation, and its location; for `parallel`, each second and later relation of the group, or the one `oncePerGroup` names (8.1) |
 | `std.references`        | `missingId` (0.1), `end` (DISL 0.3: `"source"`, `"target"` or the name of the reference attribute that names nothing) | the element holding the reference, and its location                                  |
 | `std.duplicateId`       | `id`, `first` (the element that keeps the id), `count` (DISL 0.3: the number of holders of the id, the first included) | each second and later element, and its location                                      |
 | `std.mixedPrecision`    | `attribute`, `other`, `precision`, `otherPrecision`                  | the element and the attribute                                                        |
@@ -3581,7 +3637,15 @@ Each built-in binds `detail` in its `message` (8.1) with the keys below; the bui
 | `std.derivedId`         | `id`, `first` (the element that keeps the id), `type`               | the element that is not drawn is named by `subject`; the finding targets `first`     |
 | `std.derivedEnds`       | `type`, `end` (`"source"` or `"target"`), `count` (the items dropped) | the diagram; `subject` names the type                                              |
 
-The keys marked DISL 0.3 are bound by a 0.3 runtime; a message that must also read under 0.2 reads them optionally, as `detail.?count.orValue(2)` and `detail.?end.orValue('target')`, so a duplicate id is worded "`a` is declared 3 times; an id names one entry." where the count is known.
+The keys marked DISL 0.3 are bound by a 0.3 runtime; a message that must also read under 0.2 reads them optionally, as `detail.?count.orValue(2)`, `detail.?end.orValue('target')` and `detail.?violation.orValue('parallel')`, so a duplicate id is worded "`a` is declared 3 times; an id names one entry." where the count is known.
+
+`std.endpoints` raises one finding per limit a stored relation with both ends breaks, in the order `source`, `target`, `selfLoop`, `parallel`, each with its own `violation`. A hype cycle reads it in its computed `code` (8.1), falling back to the relation itself under 0.2:
+
+```json
+"code": { "cel": "cel.bind(v, detail.?violation.orValue(self.target.isA('Trigger') ? 'target' : (self.source == self.target ? 'selfLoop' : 'parallel')), v == 'target' ? 'ghg.influence-into-trigger' : (v == 'selfLoop' ? 'ghg.self-influence' : 'ghg.duplicate-influence'))" }
+```
+
+An influence from a trend to itself that repeats an earlier one is reported twice, as `ghg.self-influence` and as `ghg.duplicate-influence`.
 
 A reader **MUST** report `std.unparseable`, `std.unreadableEntry`, `std.missingId` and `std.duplicateId` as they occur, and **MUST NOT** fail to open a model because of any of them. Each built-in is raised only from a situation that 0.1 rejected or from a declaration that 0.2 adds, so a valid 0.1 diagram reports nothing new. `std.pluginMissing` defaults to `warning` because an absent plugin degrades the diagram without making it unusable (15.2); a specification that cannot work without the plugin declares it `required` (13.1) instead.
 
@@ -4673,7 +4737,7 @@ Beside them, seven trimmed excerpts of real diagram specifications show the cons
 | `mindmap.dis`                   | Per-viewer folding (11.6), positional create and reorder (7.3, 8.4), branch-or-leaf confirmations (9.5), a text metric (6.5), anchors restricted to sides (6.9), containment drawn as edges (4.11), a file-system rule (12.4), and tolerant ids with built-in messages for missing and duplicate ids (11.5.4). |
 | `c4-container.dis`              | View membership with wildcards (3.5), relationships lifted to what is drawn and merged (4.11.3), a legend computed from what is drawn and a header band (6.13), read-only reasons (2.3, 4.3), drops onto the parent kind (7.2), whole-model and per-view rules (8.2), and natural, case-insensitive and ephemeral ids (11.5). |
 | `rdf-graph.dis`                 | Derived resource cards and statement edges computed from stored triples (4.11), a truncating budget with a declared `budget:<id>` notice and a budget that gates edits (3.2.1, 6.13), the edit gate and named reasons (9.1), refusals per element kind (6.9, 6.10), derived and ephemeral ids with per-type rules (11.5), bounded recursion (3.4), connect gestures chosen by anchor (6.10), plugin functions called by name (13.1.1) and `std.unparseable` (8.7). |
-| `gartner-hype-cycle.dis`        | The `yearMonth` time axis with a bound unit and ranges (5.3, 5.5), multi-level and adaptive rulers (5.13), snapping per gesture (5.9), boundary handles that write the model and show a computed label (6.8), edge ends bound to shape parts (6.10), a tag filter (6.13.1), a compact variant (3.5), commit-time field validation with `parseYearMonth` (7.5, 12.4) and mixed-precision findings (8.7); and, from DISL 0.3, neighbour-aware bounds (4.3), enum colours from tokens (4.5), `minUnit` (5.13), part tooltips (6.8), `drawnFrom` (6.9), `editText` (6.12), a field with `display` and `parse` (7.5), a computed built-in `code` and `detail.count` (8.1, 8.7), and the `rowPacked` and `rows` layouts with the `layout` action's refusals (9.4, 10.1, 10.2). |
+| `gartner-hype-cycle.dis`        | The `yearMonth` time axis with a bound unit and ranges (5.3, 5.5), multi-level and adaptive rulers (5.13), snapping per gesture (5.9), boundary handles that write the model and show a computed label (6.8), edge ends bound to shape parts (6.10), a tag filter (6.13.1), a compact variant (3.5), commit-time field validation with `parseYearMonth` (7.5, 12.4) and mixed-precision findings (8.7); and, from DISL 0.3, neighbour-aware bounds (4.3), enum colours from tokens (4.5), `minUnit` (5.13), part tooltips (6.8), `drawnFrom` (6.9), `editText` (6.12), a field with `display` and `parse` (7.5), a computed built-in `code` reading `detail.violation`, `detail.count` and `oncePerGroup` (8.1, 8.7), menu groups (7.3), a declared order of findings (8.6), and the `rowPacked` and `rows` layouts with the `layout` action's refusals (9.4, 10.1, 10.2). |
 | `functional-decomposition.dis`  | The superellipse and a custom shape (6.7, 6.8), a contrast requirement (6.2), a `fixed` attribute (4.3), acyclicity over an abstract relation type (4.9), built-in refusals worded by the specification (8.1, 8.4), a deletion confirmation with a threshold (9.5), the `findings` form item (7.5) and base-36 ids (11.5.1). |
 | `causal-loop.dis`               | Cycle enumeration with `diagram.cycles` and `diagram.knots` (12.4), one finding per cycle with `forEach` (8.2), a hook whose actions run per cycle (9.2, 9.4), drops onto a variable that are refused elsewhere (7.2), view membership (3.5) and the empty-canvas message (6.13). |
 | `databricks-job.dis`            | A simulated run (9.6), rules per item with `forEach` and file locations (8.2), `std.unreadableEntry` (8.7), enum stored forms (4.5), a stub for a relation whose target is optional (4.9, 6.10), Bézier reach (6.10) and context-menu entries generated per item (7.3). |
@@ -5870,6 +5934,16 @@ The draft's additions were amended on 2026-10-06 so that they state the behaviou
 | `tidyTree` distances | Children `spacing.layer` beyond their parent; `minGap` from the parent; top-level elements packed apart. | `spacing.layer` and `minGap` are gaps from the parent's far edge to the row's near edge; the top-level elements share one row. | 10.3 |
 | The `rows` example | A trigger's extent from `x - 16.0 - textWidth(self.name, 12.0)` to `x + 8.0`, 8 units off with `x` the left edge, measuring the name only. | From `x - 8.0` less the width of the name and date to `x2`, as the hype cycle definition has it. | 10.2 |
 
+Five more constructs became standard on 2026-10-06, by Peter's ruling ("Spec all but wire ids"). The hype cycle and agent behavior modelling definitions had declared them under `x-` keys shaped as these proposals, and now use the standard keys. Each is optional, and its absence is the 0.2 behaviour. The wire-id maps those definitions declare (`x-ghg`, `x-abm`) stay extension keys.
+
+| Construct | Was | Section | Schema |
+|-----------|-----|---------|--------|
+| `group` on a context-menu entry: consecutive entries with one name form one menu group | `x-menu.group` | 7.3 | `ContextTool.group` |
+| `id` on a form item: an explicit row id | `x-field.id` | 7.5 | `FormItem.id` |
+| `constraints.order`: findings by the order of their codes, then by line; a group of duplicates by its first member | `constraints.x-order` | 8.1, 8.6 | `Constraints.order` |
+| `oncePerGroup` on a built-in: a group of duplicates reported once, at its second or its last member | `x-builtIn.oncePerGroup` | 8.1, 8.7 | `BuiltInSetting.oncePerGroup` |
+| `detail.violation` of `std.endpoints` (`source`, `target`, `selfLoop` or `parallel`), which a computed `code` reads | read as `detail.?violation`, not listed | 8.7 | – |
+
 ---
 
 ## 18. Deprecated aliases
@@ -6699,7 +6773,7 @@ Runtimes provide these monochrome icons under `std.`: `add`, `remove`, `delete`,
 
 DISL 0.2 adds: `view.viewer` (viewer state, 11.6), `canvas.filters` (6.13.1), `canvas.notices` (6.13), `canvas.chrome` (title, header, empty message and a legend from what is drawn, 6.13), `canvas.stretch` (6.13), `viewpoint.variants` (3.5), `limits.budgets` (3.2.1), `anchor.part` and `anchor.sides` (6.9, 6.10), `edge.stub` (6.10), `edge.bezierLoop` (6.10), `node.badgeLayout` (6.9), `axis.ranges` (5.3), `axis.yearMonth` (5.5), `ruler.adaptive` (5.13), `snap.byGesture` (5.9) and `text.metric` (6.5). A runtime that lacks one degrades as 15.2 says.
 
-DISL 0.3 adds: `bounds.neighbour` (4.3), `ruler.minUnit` (5.13), `shape.partTooltip` (6.8), `anchor.drawnFrom` (6.9), `edge.connectPointer` (6.10), `label.editText` (6.12), `drop.placement` (7.2, 9.1), `form.parse` and `form.typeField` (7.5), `layout.rowPacked`, `layout.rows` and `layout.tidyTree` (10.1 to 10.3), `persist.typeMap` (11.2) and `plugin.plans` (13.1).
+DISL 0.3 adds: `bounds.neighbour` (4.3), `ruler.minUnit` (5.13), `shape.partTooltip` (6.8), `anchor.drawnFrom` (6.9), `edge.connectPointer` (6.10), `label.editText` (6.12), `drop.placement` (7.2, 9.1), `form.parse` and `form.typeField` (7.5), `layout.rowPacked`, `layout.rows` and `layout.tidyTree` (10.1 to 10.3), `persist.typeMap` (11.2) and `plugin.plans` (13.1); by the ruling of 2026-10-06, `menu.group` (7.3), `form.rowId` (7.5), `builtIn.oncePerGroup` (8.1) and `constraints.order` (8.6).
 
 ### B.9 Built-in constraints
 
@@ -6720,7 +6794,7 @@ The built-in constraints of 8.7, in the order of its table, with who raises them
 | `std.unparseable`       | the reader, per file that does not parse    | error / report                      | 0.2   |
 | `std.unreadableEntry`   | the reader, per entry that cannot become an element | warning / report            | 0.2   |
 | `std.missingId`         | the reader or runtime, per element without a usable id | warning / report         | 0.2   |
-| `std.duplicateId`       | the reader or runtime, per second and later holder of an id | warning / report    | 0.2   |
+| `std.duplicateId`       | the reader or runtime, per second and later holder of an id, or once per id with `oncePerGroup` (0.3) | warning / report    | 0.2   |
 | `std.mixedPrecision`    | the runtime (`samePrecisionAs`)             | warning / report, prevent in forms  | 0.2   |
 | `std.ephemeralViewData` | the runtime, per stored data keyed by an ephemeral id | info / report             | 0.2   |
 | `std.pluginMissing`     | the runtime, per absent plugin whose functions are called | warning / report      | 0.2   |

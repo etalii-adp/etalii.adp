@@ -521,9 +521,9 @@
         "placement": "menu",
         "standardEntries": false,
         "tools": [
-          { "kind": "editLabel", "label": "Rename…", "shortcut": "F2" },
-          { "kind": "operation", "operation": "evenPhases", "label": "Even phases" },
-          { "kind": "delete", "label": "Remove", "shortcut": "Delete" }
+          { "kind": "editLabel", "group": "edit", "label": "Rename…", "shortcut": "F2" },
+          { "kind": "operation", "operation": "evenPhases", "group": "edit", "label": "Even phases" },
+          { "kind": "delete", "group": "edit", "label": "Remove", "shortcut": "Delete" }
         ]
       }
     ]
@@ -562,17 +562,23 @@
   },
 
   "constraints": {
+    "order": [
+      "ghg.duplicate-influence", "ghg.self-influence", "ghg.stop-before-start", "ghg.phase-count", "ghg.boundary-order", "ghg.bad-attachment",
+      "ghg.duplicate-id", "ghg.unreadable-entry", "ghg.influence-into-trigger", "ghg.mixed-precision"
+    ],
     "builtIn": {
       "std.facets": { "severity": "warning" },
       "std.endpoints": {
         "severity": "warning",
-        "code": { "cel": "self.target.isA('Trigger') ? 'ghg.influence-into-trigger' : (self.source == self.target ? 'ghg.self-influence' : 'ghg.duplicate-influence')" },
-        "doc": "Covers ghg.duplicate-influence, ghg.self-influence and ghg.influence-into-trigger, which the standalone tool reports under their own codes; the code is computed per finding."
+        "code": { "cel": "cel.bind(v, detail.?violation.orValue(self.target.isA('Trigger') ? 'target' : (self.source == self.target ? 'selfLoop' : 'parallel')), v == 'target' ? 'ghg.influence-into-trigger' : (v == 'selfLoop' ? 'ghg.self-influence' : 'ghg.duplicate-influence'))" },
+        "oncePerGroup": "second",
+        "doc": "Covers ghg.duplicate-influence, ghg.self-influence and ghg.influence-into-trigger, which the standalone tool reports under their own codes; the code is computed per finding, by detail.violation. A repeat is reported once per pair, at the second influence."
       },
       "std.duplicateId": {
         "code": "ghg.duplicate-id",
         "message": { "cel": "'`' + detail.id + '` is declared ' + string(detail.?count.orValue(2)) + ' times; an id names one entry.'" },
-        "doc": "Ids are unique across all four lists together."
+        "oncePerGroup": "last",
+        "doc": "Ids are unique across all four lists together. An id held several times is reported once, at its last holder."
       },
       "std.unreadableEntry": { "code": "ghg.unreadable-entry", "message": { "cel": "'This entry could not be read and is not drawn (' + (detail.entry.path != '' ? detail.entry.path : detail.entry.text) + '): ' + detail.reason" } },
       "std.mixedPrecision": { "code": "ghg.mixed-precision", "message": "A trigger's announcement and shipping dates are both dates, or both carry a time." }
