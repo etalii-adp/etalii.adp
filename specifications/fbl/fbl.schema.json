@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json",
-  "title": "FBL 0.1 — Format Binding Language",
+  "title": "FBL 0.2 (draft) — Format Binding Language",
   "description": "FBL documents ($defs/Document), written by tool engineers, declare how a format maps to a language's model in both directions. The schema also describes the parsed form of an .adp registration ($defs/Registration) and round-trip fixtures ($defs/Fixture). It references DISL's Doc, LocalizedText, Expression and TypeRef.",
   "$ref": "#/$defs/Document",
   "$defs": {
@@ -32,8 +32,11 @@
           "type": "string"
         },
         "fbl": {
-          "description": "The FBL version the document is written in.",
-          "const": "0.1"
+          "description": "The FBL version the document is written in: 0.1, or 0.2 (draft), which adds the model changes of section 11.2. See FBL 0.2, section 2.7.",
+          "enum": [
+            "0.1",
+            "0.2"
+          ]
         },
         "doc": {
           "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
@@ -1838,6 +1841,262 @@
           "required": [
             "save"
           ]
+        }
+      ]
+    },
+    "ModelChange": {
+      "description": "One model change a persistence plugin's plan operation receives (and the shapes a declared binding plans, section 6.4): an object whose one key, add, set, remove, move or retype, holds the change's fields. See FBL 0.2, section 11.2.",
+      "oneOf": [
+        {
+          "description": "Add an element or relation.",
+          "type": "object",
+          "properties": {
+            "add": {
+              "description": "The fields of an add.",
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "attributes": {
+                  "type": "object"
+                },
+                "parent": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "slot": {
+                  "type": "string"
+                },
+                "position": {
+                  "$ref": "#/$defs/ChangePosition"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "attributes"
+              ],
+              "patternProperties": {
+                "^x-": true
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "add"
+          ],
+          "patternProperties": {
+            "^x-": true
+          }
+        },
+        {
+          "description": "Set attributes of an element or relation.",
+          "type": "object",
+          "properties": {
+            "set": {
+              "description": "The fields of a set.",
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "attributes": {
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "attributes"
+              ],
+              "patternProperties": {
+                "^x-": true
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "set"
+          ],
+          "patternProperties": {
+            "^x-": true
+          }
+        },
+        {
+          "description": "Remove an element or relation.",
+          "type": "object",
+          "properties": {
+            "remove": {
+              "description": "The fields of a remove.",
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "id"
+              ],
+              "patternProperties": {
+                "^x-": true
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "remove"
+          ],
+          "patternProperties": {
+            "^x-": true
+          }
+        },
+        {
+          "description": "Move an element, with everything under it, to a parent (null for the top level) at a position.",
+          "type": "object",
+          "properties": {
+            "move": {
+              "description": "The fields of a move.",
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "parent": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "slot": {
+                  "type": "string"
+                },
+                "position": {
+                  "$ref": "#/$defs/ChangePosition"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "parent",
+                "position"
+              ],
+              "patternProperties": {
+                "^x-": true
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "move"
+          ],
+          "patternProperties": {
+            "^x-": true
+          }
+        },
+        {
+          "description": "Change the type of an element; attributes are the values after the type's attributeMapping (DISL 9.5).",
+          "type": "object",
+          "properties": {
+            "retype": {
+              "description": "The fields of a retype.",
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "type": {
+                  "type": "string"
+                },
+                "attributes": {
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "type",
+                "attributes"
+              ],
+              "patternProperties": {
+                "^x-": true
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "retype"
+          ],
+          "patternProperties": {
+            "^x-": true
+          }
+        }
+      ]
+    },
+    "ChangePosition": {
+      "description": "Where an added or moved element goes among its parent's children in the slot: at an index counted after the element left its old place, or directly after or before a sibling. See FBL 0.2, section 11.2.",
+      "oneOf": [
+        {
+          "description": "At an index.",
+          "type": "object",
+          "properties": {
+            "index": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "index"
+          ],
+          "patternProperties": {
+            "^x-": true
+          }
+        },
+        {
+          "description": "Directly after a sibling.",
+          "type": "object",
+          "properties": {
+            "after": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "after"
+          ],
+          "patternProperties": {
+            "^x-": true
+          }
+        },
+        {
+          "description": "Directly before a sibling.",
+          "type": "object",
+          "properties": {
+            "before": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "before"
+          ],
+          "patternProperties": {
+            "^x-": true
+          }
         }
       ]
     }

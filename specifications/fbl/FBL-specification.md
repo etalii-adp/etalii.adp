@@ -1,10 +1,10 @@
 # FBL — Format Binding Language
 
-**Specification, version 0.1 (Working Draft)**
+**Specification, version 0.2 (Draft)**
 
 |                          |                                                                                              |
 |--------------------------|----------------------------------------------------------------------------------------------|
-| Date                     | 2026-09-30                                                                                   |
+| Date                     | 2026-10-05                                                                                   |
 | Document schema          | `fbl.schema.json` (JSON Schema, draft 2020-12), `$defs/Document`                             |
 | Also in the schema       | `$defs/Registration` (the parsed `.adp` registration), `$defs/Fixture` (round-trip fixtures) |
 | Serves                   | every kind of tool; today [DISL](../disl/DISL-specification.md), through `persistence.binding` |
@@ -17,9 +17,9 @@
 
 ## Status of this document
 
-This is a working draft. It is complete enough to implement a conforming validator of FBL documents and a host that reads and writes bodies through declared bindings, but individual constructs may still change before version 1.0. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
+This is a draft, version 0.2. It is complete enough to implement a conforming validator of FBL documents and a host that reads and writes bodies through declared bindings, but individual constructs may still change before version 1.0. FBL 0.2 (2026-10-05, approved by the product owner as part of the DISL 0.3 additions) gives the model changes a persistence plugin plans their fields: an add with a position, a move and a retype (section 11.2), which declared bindings follow too (section 6.4); and it lets a DISL specification map a binding's own type and attribute names onto its metamodel (DISL §11.2, `persistence.typeMap`; section 5.1). Every valid 0.1 document is a valid 0.2 document with the same meaning, except that a plugin that does not declare `move` is sent a reorder or re-parent as a remove and an add. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
 
-FBL relies on constructs that DISL 0.2 defines: id strategies and ephemeral ids (DISL §11.5), findings and their source locations (DISL §8.6), derived elements (DISL §4.11) and the tool type's origin (`language.origin`, DISL §3.2). Where this document names one of them, DISL is the definition; FBL defines none of its own.
+FBL relies on constructs that DISL 0.2 and 0.3 define: id strategies and ephemeral ids (DISL §11.5), findings and their source locations (DISL §8.6), derived elements (DISL §4.11) and the tool type's origin (`language.origin`, DISL §3.2). Where this document names one of them, DISL is the definition; FBL defines none of its own.
 
 The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY** and **OPTIONAL** are to be interpreted as described in RFC 2119 and RFC 8174 when, and only when, they appear in bold capitals.
 
@@ -116,7 +116,7 @@ An FBL document is a JSON document (RFC 8259) encoded in UTF-8, validated by `fb
 | Property   | Type                 | Description                                                    |
 |------------|----------------------|----------------------------------------------------------------|
 | `$schema`  | URI                  | Optional; the schema's `$id` with `#/$defs/Document`.          |
-| `fbl`      | `"0.1"`              | Required. The FBL version the document is written in.          |
+| `fbl`      | `"0.1"`, `"0.2"`       | Required. The FBL version the document is written in.          |
 | `doc`      | Doc                  | Documentation, as in DISL §2.4.                                |
 | `bindings` | map Name → Binding   | Required, at least one. Each binding is described in section 3. |
 
@@ -163,7 +163,7 @@ A body file is UTF-8, with or without a byte-order mark. A byte-order mark, if p
 
 ### 2.7 Versioning
 
-`fbl` names the version of FBL a document is written in. A host **MUST** refuse a document whose major version it does not support, and **SHOULD** read a document of a newer minor version, ignoring what it does not know, with a warning. Before 1.0 any construct may change (constitution principle IV).
+`fbl` names the version of FBL a document is written in: `"0.1"` or `"0.2"`. FBL 0.2 is a superset of 0.1, and a 0.2 host **MUST** read a 0.1 document with its meaning. While 0.2 is a draft, its schema is published at the 0.1 address (`https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json`), which accepts every 0.1 document unchanged. A host **MUST** refuse a document whose major version it does not support, and **SHOULD** read a document of a newer minor version, ignoring what it does not know, with a warning. Before 1.0 any construct may change (constitution principle IV).
 
 ---
 
@@ -352,6 +352,8 @@ An element rule turns entries into elements of one node type:
 | `undo`            | `"inverse"` (default), `"snapshot"` | Section 7.1. |
 | `readOnly`        | bool or LocalizedText       | Section 3.4. |
 
+*(FBL 0.2)* A rule's `type`, and the attributes its bindings name, are the metamodel's, unless the DISL specification maps the binding's names onto its metamodel with `persistence.typeMap` (DISL §11.2): then they are the binding's own names, and the map says what each type and attribute becomes, including a type read as the diagram's attributes, as a header, as an unreadable entry or as a relation whose ends are reference attributes. FBL reads and writes the body by the binding's names either way.
+
 When several rules match the same entry, the first in the binding's order (elements before relations) whose `when` holds takes it; an entry becomes at most one element or relation. Rules of the same node type are how a type is written in several shapes (the timeline's `Period` and `Moment` are one kind of entry, told apart by `has(entry.end)`).
 
 ### 5.2 Slots and attribute bindings
@@ -485,7 +487,9 @@ New text follows the body's own conventions where the body shows them, and the b
 
 ### 6.4 Edits
 
-A user gesture, form commit, operation or quick fix is one DISL transaction (DISL §14.4). When the transaction commits, its model changes are **planned** as splices: each attribute set, element or relation added, removed or moved becomes the splices this section gives, in the order the transaction made them, then adjusted so that all offsets refer to the body before the edit. The result is one **edit**: its splices applied together, recorded together, undone together. If any change cannot be planned (no `insert`, no `remove`, a read-only slot, `empty: "refuse"`, an `absent` refusal, a duplicate on rename, a plugin's refusal), the whole transaction is rejected with that reason and rolled back, and nothing is written.
+A user gesture, form commit, operation or quick fix is one DISL transaction (DISL §14.4). When the transaction commits, its model changes are **planned** as splices: each model change of section 11.2 (*(FBL 0.2)* an `add`, `set`, `remove`, `move` or `retype`, with the fields given there) becomes the splices this section gives, in the order the transaction made them, then adjusted so that all offsets refer to the body before the edit. The result is one **edit**: its splices applied together, recorded together, undone together. If any change cannot be planned (no `insert`, no `remove`, a read-only slot, `empty: "refuse"`, an `absent` refusal, a duplicate on rename, a plugin's refusal), the whole transaction is rejected with that reason and rolled back, and nothing is written.
+
+*(FBL 0.2)* A declared binding plans the changes of section 11.2 as a plugin that declares `add.position` and `move` does. An `add` with a `position` is one `insert-entry` directly before the entry of the sibling at that index (or after the last sibling's entry when the index equals their number), in place of the rule's `insert.place`; a rule whose `insert` cannot place it there refuses the add. A `move` is the `remove-entry` and `insert-entry` of section 5.5, the inserted text being the entry's own bytes, at its `position`. A `retype` is planned as a `remove` and an `add` of the element under its new type's rule, and the host warns as section 11.2 says.
 
 ### 6.5 Determinism
 
@@ -658,9 +662,34 @@ A plugin implements these operations, stated as data exchanged so that each host
 | Operation  | Receives | Delivers |
 |------------|----------|----------|
 | `read`     | The body's bytes (a file body), or for a folder subject the relative path and bytes of every file the file rules select; the binding's `args`. | The elements and relations: type, id, parent and slot, attribute values; for each, the source span of the entry and of every writable value (file, byte range); the findings, with source locations; and whether the body is unreadable as a whole. |
-| `plan`     | The current bytes, the last `read` result, and one model change: add, set, remove or move an element or relation. | The splices that realise it, each `{operation, file, start, end, text}` with an operation from section 6.1; or a refusal with the sentence the host shows. |
+| `plan`     | The current bytes, the last `read` result, and one model change (below): add, set, remove, move or retype an element or relation. | The splices that realise it, each `{operation, file, start, end, text}` with an operation from section 6.1; or a refusal with the sentence the host shows. |
 | `template` | The new body's name and the template placeholders (section 13). | The bytes of a new body. Only asked when the binding has no `template.text`. |
 | `watch`    | The last `read` result (folder subjects, optional). | The paths the reading depends on beyond the file rules; the host watches them too. |
+
+**Model changes** *(FBL 0.2)*. The change `plan` receives is one of these, each an object with the change's name as its one key (`$defs/ModelChange`):
+
+| Change   | Fields |
+|----------|--------|
+| `add`    | `type`, `id` (optional), `attributes`, `parent` (optional), `slot` (optional), `position` (optional) |
+| `set`    | `id`, `attributes` |
+| `remove` | `id` |
+| `move`   | `id`, `parent` (`null` for the top level), `slot` (optional), `position` |
+| `retype` | `id`, `type`, `attributes` (the values after the type's `attributeMapping`, DISL §9.5) |
+
+where `position` (`$defs/ChangePosition`) is `{ "index": int }`, `{ "after": id }` or `{ "before": id }`. A plugin declares which changes it plans in its DISL declaration (DISL §13.1): `"plans": ["add", "set", "remove", "move", "retype"]`, with `"add": { "position": true }` when it honours a position, and `"move": { "position": true }` likewise. Without `plans`, a plugin plans `add`, `set` and `remove`.
+
+- A host **MUST** send an add with `position` when the change came from an ordered placement (DISL `create` with `after` or `before`, a parent placement, a drop), and a plugin that declares `add.position` **MUST** insert at that position or refuse.
+- A host **MUST** send a reorder or a re-parent as one `move`, never as a remove and an add, so the plugin can splice the element's bytes unchanged; a plugin that does not declare `move` gets the remove and the add instead.
+- A host **MUST** send a DISL retype as one `retype`; a plugin that does not declare `retype` **MUST** be sent a remove and an add, and the host **MUST** warn that identity and unbound bytes may not survive.
+- An index **MUST** be counted among the parent's children in the slot after the element was removed from its old place, so the same index means the same thing for a move within one parent and across parents.
+
+```json
+{ "move":   { "id": "1.2", "parent": "1", "position": { "index": 2 } } }
+{ "retype": { "id": "1.3", "type": "Check", "attributes": {} } }
+{ "add":    { "type": "Check", "attributes": { "label": "New question" }, "parent": "1", "position": { "index": 1 } } }
+```
+
+An agent behavior model's Markdown plugin declares all five changes and positions. Move later on `1.2`, the second of three children of `1`, sends the move above; changing `1.3` from Do to Check sends the retype; a drop under `1` between its first and second child sends the add. Each becomes line splices that keep every other byte.
 
 ### 11.3 What the host does
 
@@ -840,6 +869,6 @@ Rewriting the definitions to use FBL is follow-up work, as is implementing FBL i
 
 ## Appendix A — JSON Schema
 
-The normative schema is [`fbl.schema.json`](fbl.schema.json) beside this document (JSON Schema draft 2020-12, `$id` `https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json`). Its `$defs` are: `Document`, `Binding`, `Claims`, `Marker`, `Body`, `Family`, `FileRule`, `PluginReader`, `TextDefaults`, `Header`, `BlockRule`, `ElementRule`, `RelationRule`, `IdBinding`, `Slot`, `AttributeBinding`, `Insert`, `Remove`, `RegistrationSettings`, `Template`, `Registration`, `Splice`, `Fixture`, `Edit`, and the helpers `Name`, `BindingRef`, `Regex`, `Selector`. It references DISL's `Doc`, `LocalizedText`, `Expression` and `TypeRef`.
+The normative schema is [`fbl.schema.json`](fbl.schema.json) beside this document (JSON Schema draft 2020-12, `$id` `https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json`). Its `$defs` are: `Document`, `Binding`, `Claims`, `Marker`, `Body`, `Family`, `FileRule`, `PluginReader`, `TextDefaults`, `Header`, `BlockRule`, `ElementRule`, `RelationRule`, `IdBinding`, `Slot`, `AttributeBinding`, `Insert`, `Remove`, `RegistrationSettings`, `Template`, `Registration`, `Splice`, `Fixture`, `Edit`, the model changes `ModelChange` and `ChangePosition` (FBL 0.2, section 11.2), and the helpers `Name`, `BindingRef`, `Regex`, `Selector`. While 0.2 is a draft, the schema keeps its 0.1 `$id` and accepts `"fbl": "0.2"`. It references DISL's `Doc`, `LocalizedText`, `Expression` and `TypeRef`.
 
 The examples beside this document are `timeline.fbl`, `databricks-job.fbl`, `databricks-pipeline.fbl`, `mindmap.fbl`, `causal-loop-diagram.fbl`, `structurizr.fbl`, `w3c-turtle.fbl` and `helm-chart.fbl`; registrations are in `registrations/` and round-trip fixtures in `fixtures/`. `python .github/scripts/validate-examples.py` validates them all.
