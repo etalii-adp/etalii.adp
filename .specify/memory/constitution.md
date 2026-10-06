@@ -1,10 +1,10 @@
 <!--
 Sync Impact Report
-- Version: 1.3.0 → 1.4.0 (MINOR)
-- Modified: Structure and Naming (`specs/` holds the Spec Kit features of every etalii-adp repository but standalone, and `.specify/memory/repositories/` the principles of each); Development Workflow (where a feature lives whichever repository its code lands in, how features moved here from other repositories are kept and continued, and that a plan checks the target repository's principles as well).
-- Added or removed sections: none.
-- Rationale for MINOR: materially expanded guidance on where features live, after every Spec Kit specification of etalii.adp.ide.intellij and etalii.adp.site, and the principles of those two and etalii.adp.ide.vscode, moved here (Peter, 2026-10-05); no principle removed or redefined.
-- Templates: plan, spec and tasks templates unchanged; no follow-ups.
+- Version: 1.4.0 → 1.5.0 (MINOR)
+- Modified: none.
+- Added or removed sections: added Core Principle VI, No JetBrains Rider Warnings in C#.
+- Rationale for MINOR: a principle added, for the C# projects of every etalii-adp repository (Peter, 2026-10-07); no principle removed or redefined.
+- Templates: plan, spec and tasks templates unchanged; a plan whose code is C# now checks principle VI in its Constitution Check. Follow-up outside this repository: etalii.adp.ide.standalone records the same rule in its spec-workflow steering (`tech.md`) and clears its existing warnings through its `rider-warnings-cleanup` specification.
 --># etalii.adp Constitution
 
 ADP ("A Different Perspective") is a family of task-focused tools: diagrams, designers and editors. They serve (constructive) technology assessment, collaboration between humans and agents, and bringing clarity to textual data. ADP tools are hosted in several IDEs, each in its own repository (`etalii.adp.ide.standalone`, `etalii.adp.ide.intellij`, `etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse`). This repository holds what those hosts share: the specifications of the formats and languages a tool is built from. It also holds the Spec Kit features through which every repository but standalone is changed. Its readers are the developers of the ADP hosts, who implement the specifications; tool engineers, who write specifications and definitions in these formats; and agents working in any ADP repository, who need one place to read what a format means. The words used here (tool, diagram, designer, editor, tool engineer, specification, definition, runtime) are defined in [docs/terminology.md](../../docs/terminology.md).
@@ -48,6 +48,17 @@ Rationale: hosts and tool engineers must be able to tell whether their specifica
 
 A construct, format or dependency MUST be justified by a current tool's need, not an anticipated one. Prefer an existing standard (JSON Schema, CEL) over a new mechanism.
 
+### VI. No JetBrains Rider Warnings in C#
+
+This principle holds for every C# project in every etalii-adp repository, `etalii.adp.ide.standalone` included.
+
+- C# code MUST carry no JetBrains Rider warning. Every finding that Rider's code inspection reports at severity Warning or higher MUST be corrected in the code. The same inspection runs without the IDE as `jb inspectcode` (JetBrains.ReSharper.GlobalTools), and its report is the one that counts.
+- A change MUST NOT add a warning, and a C# project is not finished while it reports one.
+- Where an inspection does not fit the code, it MAY be switched off or downgraded only where the rule lives: the repository's shared `.DotSettings` or `.editorconfig`, with a note stating why. A warning MUST NOT be left reported, and MUST NOT be silenced at the place it occurs merely to make it disappear.
+- An inspection run only counts when it could see the code: a run that reports unresolved symbols, or that inspected no files, proves nothing.
+
+Rationale: developers work in Rider, and a list of warnings nobody corrects is the list in which the next real defect goes unread.
+
 ## Structure and Naming
 
 - `specifications/<name>/` holds one specification: its document `<NAME>-specification.md`, its schema `<name>.schema.json`, and its examples beside them. DISL, the Diagram Specification Language, in `specifications/disl/` (`DISL-specification.md`, `disl.schema.json`, examples `*.dis`), is the model.
@@ -74,4 +85,4 @@ A construct, format or dependency MUST be justified by a current tool's need, no
 
 This constitution supersedes other practices in this repository. Amendments are made through `/speckit-constitution`, recorded in version control, and versioned semantically: MAJOR for removing or redefining a principle, MINOR for adding a principle or materially expanding guidance, PATCH for clarifications. Reviews of plans and changes MUST verify compliance with the principles above; runtime guidance for agents lives in `CLAUDE.md`.
 
-**Version**: 1.4.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-10-05
+**Version**: 1.5.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-10-07
