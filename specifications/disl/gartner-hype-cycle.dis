@@ -31,6 +31,12 @@
       "cel": "t.start + int(math.round(f * double(t.stop - t.start)))",
       "doc": "The month index a fraction of the banner falls on; `yearMonth` values are month indices in CEL."
     },
+    "formatWhen": {
+      "params": [{ "name": "m", "type": "yearMonth" }, { "name": "u", "type": "string" }, { "name": "long", "type": "bool" }],
+      "returns": "string",
+      "cel": "u != 'month' ? string(m.year()) : (long ? ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])[m.month() - 1] + ' ' + string(m.year())",
+      "doc": "A date as a trigger shows it: `Dec 1947` (or `December 1947` when long) in a diagram of months, the year alone in one of years or coarser."
+    },
     "phaseName": {
       "params": [{ "name": "i", "type": "int" }],
       "returns": "string",
@@ -384,7 +390,7 @@
         "size": { "fixed": [16, 16] },
         "placement": { "system": "hypeCycle", "x": { "attribute": "date" }, "y": { "attribute": "row" }, "anchor": "center" },
         "labels": [
-          { "id": "name", "text": { "cel": "self.name + ' · ' + (diagram.unit == 'month' ? formatYearMonth(self.date, 'MMM u') : string(self.date.year()))" }, "editText": { "attribute": "name" }, "position": "outside-left", "editable": "inline", "wrap": "none" }
+          { "id": "name", "text": { "cel": "self.name + ' · ' + formatWhen(self.date, diagram.unit, false)" }, "editText": { "attribute": "name" }, "position": "outside-left", "editable": "inline", "wrap": "none" }
         ],
         "anchors": { "mode": "fixed", "drawnFrom": "outline", "points": [ { "id": "n", "x": 0.5, "y": 0 }, { "id": "e", "x": 1, "y": 0.5 }, { "id": "s", "x": 0.5, "y": 1 } ] },
         "states": { "filteredOut": "dimmed" }
@@ -664,8 +670,8 @@
           "writes": ["row"],
           "extent": {
             "Trend": { "from": "x - 8.0 - textWidth(self.name, 12.0)", "to": "x2" },
-            "Trigger": { "from": "x - 16.0 - textWidth(self.name, 12.0)", "to": "x + 8.0" },
-            "Note": { "from": "x", "to": "x + width", "rows": "math.ceil(height / 56.0)" }
+            "Trigger": { "from": "x - 8.0 - textWidth(self.name + ' · ' + formatWhen(self.date, diagram.unit, false), 12.0)", "to": "x2" },
+            "Note": { "from": "x", "to": "x + width", "rows": "int(math.ceil(height / 56.0))" }
           },
           "clearance": 16,
           "affinity": "Influence",

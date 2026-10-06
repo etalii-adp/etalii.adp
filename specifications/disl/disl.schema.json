@@ -8636,7 +8636,7 @@
       }
     },
     "TextMetric": {
-      "description": "How text is measured for every measurement that affects geometry (auto-sizing, wrapping, ellipsis, layout inputs): host, the host's font metrics (the default, 0.1), or an average advance per counted character, so that every runtime and headless layout measures alike. CEL textWidth and textHeight use it. See DISL 0.2, section 6.5.",
+      "description": "How text is measured at layout time: host, the host's font metrics (the default, 0.1), or an average advance per counted character. CEL textWidth and textHeight use it, and so every layout input computed with them, so that every runtime and headless layout computes the same layout; drawing measures with the real font. See DISL 0.3, section 6.5.",
       "anyOf": [
         {
           "const": "host"
@@ -9630,7 +9630,7 @@
             "problems",
             "plugin"
           ],
-          "description": "What the item is. findings lists the findings on the form's target; problems is its deprecated alias (section 18), read and never written. type (DISL 0.3) shows and changes the element's type through behavior.retype. See DISL 0.3, section 7.5."
+          "description": "What the item is. findings lists the findings on the form's target; problems is its deprecated alias (section 18), read and never written. type (DISL 0.3) shows and changes the element's type through behavior.retype, its choices options as given, the element's own type among them. See DISL 0.3, section 7.5."
         },
         "attribute": {
           "type": "string"
@@ -10870,7 +10870,7 @@
               "type": "string"
             },
             "refusals": {
-              "description": "Refusals of a layout action: nothingDrawn while the scope holds nothing the algorithm places, unchanged when the layout would change nothing. See DISL 0.3, section 9.4.",
+              "description": "Refusals of a layout action: nothingDrawn while the scope holds nothing the algorithm can place (for rows, no element with a drawable extent), unchanged when the layout would change nothing. See DISL 0.3, section 9.4.",
               "type": "object",
               "properties": {
                 "nothingDrawn": {
@@ -11614,7 +11614,7 @@
       }
     },
     "RowsLayout": {
-      "description": "The options of the rows algorithm: assigns rows only, writing the attributes in writes, with the fewest rows the extents allow. See DISL 0.3, section 10.2.",
+      "description": "The options of the rows algorithm: assigns rows only, writing the attributes in writes; the fewest rows the extents allow when every extent covers one row, and a row covered by a taller extent is never swapped. See DISL 0.3, section 10.2.",
       "type": "object",
       "properties": {
         "writes": {
@@ -11627,7 +11627,7 @@
           "uniqueItems": true
         },
         "extent": {
-          "description": "Per type, the extent an element occupies on its row: from and to along the main axis, and the rows it covers. In the layoutExtent context. See DISL 0.3, section 10.2.",
+          "description": "Per type, the extent an element occupies on its row: from and to along the main axis, and the rows it covers from its own row down. In the layoutExtent context; an element whose extent does not evaluate does not take part. See DISL 0.3, section 10.2.",
           "type": "object",
           "propertyNames": {
             "$ref": "#/$defs/TypeRef"
@@ -11722,14 +11722,14 @@
           "type": "object",
           "properties": {
             "stored": {
-              "description": "none (the default): every position is computed; y: all children of one parent share one stored main-axis position. See DISL 0.3, section 10.3.",
+              "description": "none (the default): every position is computed; y: the top-level elements, and all children of one parent, share one stored main-axis position. See DISL 0.3, section 10.3.",
               "enum": [
                 "none",
                 "y"
               ]
             },
             "minGap": {
-              "description": "The least distance between a parent and its children's row, in canvas units. See DISL 0.3, section 10.3.",
+              "description": "The least gap between a parent's far edge on the main axis and the near edge of its children's row, in canvas units. See DISL 0.3, section 10.3.",
               "type": "number",
               "minimum": 0
             },

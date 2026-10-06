@@ -1878,7 +1878,7 @@ A **Font** object:
 
 Font files MAY be declared in `notation.fonts`: `{ "Inter": { "src": ["fonts/Inter.woff2"], "weights": [400, 600] } }`. Runtimes that cannot load a font use the next family in the stack.
 
-**Text metric.** `notation.textMetric` (`$defs/TextMetric`) says how text is measured wherever a measurement affects geometry. It is `"host"` (default, the 0.1 behaviour: the host's font metrics) or `{ "kind": "average", "advance": number, "count": "utf16" | "codepoint" | "grapheme", "lineHeight": number }`: every counted character advances by `advance` times the font size, and a line is `lineHeight` times the font size high. When a metric other than `host` is declared, runtimes and headless layout **MUST** use it for every measurement that affects geometry (`autoSize`, wrapping at `maxWidth`, `overflow: "ellipsis"` and `"shrink"`, and the inputs of layout), so that every host draws the same geometry; the glyphs themselves are still drawn in the real font. CEL reads the metric with `textWidth` and `textHeight` (12.4).
+**Text metric.** `notation.textMetric` (`$defs/TextMetric`) says how text is measured wherever a measurement affects geometry. It is `"host"` (default, the 0.1 behaviour: the host's font metrics) or `{ "kind": "average", "advance": number, "count": "utf16" | "codepoint" | "grapheme", "lineHeight": number }`: every counted character advances by `advance` times the font size, and a line is `lineHeight` times the font size high. *(Scoped in DISL 0.3.)* The metric governs measurement at layout time: CEL reads it with `textWidth` and `textHeight` (12.4), and when a metric other than `host` is declared, runtimes and headless layout **MUST** use it for those functions and so for every layout input computed with them, such as a node's size from `textWidth` or a `rows` extent (10.2), so that every host computes the same layout. Drawing measures with the real font: the glyphs, and whatever a runtime places by the size of a drawn text (such as the inline editor over a relation's label, 6.12), use the host's font metrics, and a runtime **MAY** do the same for `autoSize`, wrapping at `maxWidth` and `overflow: "ellipsis"` and `"shrink"`.
 
 ```json
 "textMetric": { "kind": "average", "advance": 0.55, "count": "utf16", "lineHeight": 1.4 }
@@ -3165,9 +3165,11 @@ On a hype cycle influence, `plateau/bottom/0.3` sets `fromPhase`, `fromEdge` and
 
 **Retyping in a form** *(DISL 0.3)*. An item of kind `type` shows the element's type and changes it through `behavior.retype` (9.5). It has `label`, `options` (in the form FormItem `options` already takes, a `{cel}` value or a literal list, giving the type names on offer), `optionLabel` (Expression → string, with `item` bound to a type name) and `refusals` (Reason[], whose expressions see `self` and `newValue`, the chosen type).
 
-- A `type` item **MUST** show the element's type, labelled by `optionLabel` with `item` bound to the type, and **MUST** offer as choices the types in `behavior.retype[self.type].to` for which that entry's `when` holds, further limited by `options` when given.
+- A `type` item **MUST** show the element's type, labelled by `optionLabel` with `item` bound to the type. Its choices **MUST** be the types `options` gives, in that order, each labelled the same way; without `options`, they are the element's own type followed by the types in `behavior.retype[self.type].to` whose `when` holds (9.5). The choices are not limited further by `behavior.retype`.
+- The element's own type **MUST** be among the choices, so that the list holds the value it shows: `options`, when given, **MUST** yield it. An `options` that filters the types by the element's state, as `canBecome(t, self)` below does, keeps it, because an element can always stay what it is.
 - Choosing a different type **MUST** retype the element as `behavior.retype` describes, applying `attributeMapping`, as one transaction and one undo step.
-- A value not among the choices (typed, pasted or sent by another client) **MUST** be refused with the first of `refusals` whose `when` holds, or with the runtime's sentence when none does.
+- Choosing the element's own type **MUST** retype it to that same type: the `attributeMapping` of the entry for its type is applied, as one transaction and one undo step, and nothing else of the element changes. Where the mapping changes no value, the model is unchanged, though a format binding **MAY** rewrite the element in its canonical form.
+- A value not among the choices (typed, pasted or sent by another client) **MUST** be refused with the first of `refusals` whose `when` holds, or with the runtime's sentence when none does. A chosen type that `behavior.retype` does not allow for the element (9.5) is refused the same way.
 
 ```json
 { "kind": "type", "label": "Kind",
@@ -3178,7 +3180,7 @@ On a hype cycle influence, `plateau/bottom/0.3` sets `fromPhase`, `fromEdge` and
       "message": { "cel": "'\"' + kindChoice(newValue) + '\" holds no children, and this node has ' + (self.children.size() == 1 ? '1 child' : string(self.children.size()) + ' children') + '.'" } } ] }
 ```
 
-An agent behavior model's Kind row lists only the kinds a node can become without losing a child: a leaf only when the node has no children. Choosing one rewrites the node's keyword as one undoable step; a kind typed past the list is refused with the sentence that says why.
+An agent behavior model's Kind row lists the node's own kind and the kinds it can become without losing a child: a leaf only when the node has no children. Choosing another kind rewrites the node's keyword as one undoable step; a kind typed past the list is refused with the sentence that says why. Choosing the node's own kind applies the mapping only: a Retry with 2 attempts chosen as Retry again gets 3, as a node changed into a Retry does, and a Do chosen as Do is unchanged, except that an item written without a keyword is given its kind's keyword.
 
 **Dialogs.** A form used as a dialog (`usage` `create` or `popover`, or an operation's `paramsForm`) **MUST** show `placeholder` in an empty input, **MUST** pre-fill `initial`, and **MUST** label its confirming button with `submitLabel`. It **MUST NOT** submit while a validation of severity `error` fails, and **MUST** show that validation's message beside the field. When the invoking entry supplies every parameter of the operation, the dialog **MUST NOT** open.
 
@@ -3748,7 +3750,7 @@ Actions are a small, closed set of declarative steps. **All values in actions ar
 | `editLabel` | `{ "editLabel": { "target": expr, "label": "id" } }`                                                                      | Start inline editing.                                                        |
 | `openForm`  | `{ "openForm": { "target": expr, "form": "id" } }`                                                                        |                                                                              |
 | `notify`    | `{ "notify": { "message": expr, "severity": "info" } }`                                                                   | Toast message.                                                               |
-| `layout`    | `{ "layout": { "scope": expr, "algorithm": "id", "refusals": { "nothingDrawn": Message, "unchanged": Message } } }` | Run a layout (section 10). *(DISL 0.3)* `refusals.nothingDrawn` refuses the action while its scope holds nothing the algorithm places; `refusals.unchanged` refuses it when the layout would change nothing (10.2). |
+| `layout`    | `{ "layout": { "scope": expr, "algorithm": "id", "refusals": { "nothingDrawn": Message, "unchanged": Message } } }` | Run a layout (section 10). *(DISL 0.3)* `refusals.nothingDrawn` refuses the action while its scope holds nothing the algorithm can place (for `rows`, no element with a drawable extent, 10.2); `refusals.unchanged` refuses it when the layout would change nothing (10.2). |
 | `abort`     | `{ "abort": { "message": expr } }`                                                                                        | Cancel the transaction (only in `before` hooks and operations). A runtime **MUST** show the message to the user as the refusal of the gesture or command, in the words given. |
 | `call`      | `{ "call": "operationId", "args": { … } }`                                                                                | Run another operation.                                                       |
 | `plugin`    | `{ "plugin": "name", "args": { … } }`                                                                                     | Delegate to a plugin action.                                                 |
@@ -3821,12 +3823,14 @@ A leaf has no descendants, so deleting it asks nothing; a branch asks with its c
 
 **Clipboard** (`behavior.clipboard`): `relations` (`"internal"` — only edges between copied elements, `"all"`, `"none"`), `ids` (`"regenerate"`), `names` (`"keep"`, `"suffix"` — adds " (copy)" to the label attribute), `offset` (canvas offset on paste; on time axes a duration), `crossDocument` (bool), `formats` (clipboard MIME types offered: `application/vnd.did.fragment+json` (DID, section 7), `image/svg+xml`, `text/plain`).
 
-**Retyping** (`behavior.retype`): map of type → allowed target types, with `attributeMapping` (target attr → Expression over `old`). *(DISL 0.3)* An entry's optional `when` (Expression → bool, with `self` the element and `target` the candidate type) makes a target type available only while it holds: a `retype` action (9.4) and a `type` form item (7.5) **MUST NOT** retype an element to a type whose `when` is false, and the `type` item does not offer it.
+**Retyping** (`behavior.retype`): map of type → allowed target types, with `attributeMapping` (target attr → Expression over `old`). *(DISL 0.3)* An entry's `when` (Expression → bool, with `self` the element and `target` the candidate type) is optional and defaults to `true`, so that without it every type in `to` is allowed whatever the element's state. When given, a `retype` action (9.4) and a `type` form item (7.5) **MUST NOT** retype an element to a type whose `when` is false, and a `type` item without `options` does not offer it. A retype that `to` allows but that the element's state forbids, such as a type that holds no children for an element that has some, is refused by whoever applies the change, typically the writer of the persistence format; a specification states those refusals, in the writer's sentences, as the `refusals` of its `type` item (7.5), and keeps the choices free of them with that item's `options`, rather than with `when`. A type an entry's `to` does not list, or an element that has no entry, is refused with the runtime's sentence.
 
 ```json
-"retype": { "Do": { "to": ["Sequence", "Check"], "when": "canBecome(target, self)",
+"retype": { "Sequence": { "to": ["Fallback", "Parallel", "Retry", "Check", "Do"],
   "attributeMapping": { "attempts": "has(old.attempts) ? max(old.attempts, 3) : 3" } } }
 ```
+
+An agent behavior model lists every other kind in `to` and gives no `when`: a Sequence with two children may be listed as becoming a Do, and the Markdown writer refuses it with `"Do" holds no children, and this node has 2 children.`, the sentence of the Kind item's first refusal (7.5).
 
 **Undo** (`behavior.undo`): `mergeWindowMs` (typing in a label merges into one step), `maxSteps`, `persistHistory` (bool, stores history in the DID definition for collaborative review, default `false`).
 
@@ -3960,26 +3964,30 @@ In a hype cycle's compact view, Steam engine on row 0 influences Railways on row
 | Property     | Type                                   | Default      | Description |
 |--------------|----------------------------------------|--------------|-------------|
 | `writes`     | attribute name[]                       | **required** | The attributes the algorithm writes, the row first. |
-| `extent`     | map TypeRef → `{from, to, rows}`       | **required** | Per type, the extent an element occupies on its row: `from` and `to` along the main axis and `rows`, the rows it covers (default 1). GeomExpr in the `layoutExtent` context (12.3). Elements of types not listed do not take part. |
+| `extent`     | map TypeRef → `{from, to, rows}`       | **required** | Per type, the extent an element occupies on its row: `from` and `to` along the main axis and `rows`, the rows it covers from its own row down (default 1). GeomExpr in the `layoutExtent` context (12.3). Elements of types not listed do not take part. |
 | `clearance`  | number                                 | `0`          | The least distance between two extents on one row, in canvas units. |
 | `affinity`   | TypeRef                                | –            | A relation type that draws linked elements to nearby rows. |
 | `ties`       | `"lower"`, `"upper"`                   | `"lower"`    | Between two free rows equally near the wanted one: the smaller row number (`lower`) or the larger. |
 | `swapPasses` | int                                    | `0`          | The most passes of neighbouring-row swaps (below). |
 | `doc`        | Doc                                    |              |             |
 
-The algorithm takes the elements in the order of their extents' `from`, then `to`, then model order, and puts each on a free row (one where its extent keeps `clearance` from every extent already there): with `affinity`, the free row nearest the average row of its already-placed linked elements, `ties` deciding between two equally near; otherwise, and for an element with no placed link, the first free row. With `swapPasses`, it then swaps whole neighbouring rows while that shortens the total row distance of the `affinity` links, for at most that many passes.
+**What takes part.** An element takes part when it has a drawable extent: its type is in `extent` and its extent evaluates, which it does not for an element missing a value it is computed from (a trend without a span, a trigger without a date). An element with no id, or with an id an element earlier in model order already has, does not take part either. An element that does not take part keeps its row.
 
-- `rows` **MUST** change only the attributes in `writes` and **MUST** use the fewest rows any assignment of the extents could use.
-- It **MUST** be deterministic: running it on its own result changes nothing.
+**The assignment.** The algorithm takes the elements in the order of their extents' `from`, then `to`, then model order. It puts each on a free top row: one from which every row its extent covers keeps `clearance` from every extent already there, among the rows already in use. With `affinity`, that is the free top row nearest the average row of its already-placed linked elements, `ties` deciding between two equally near; otherwise, and for an element with no placed link, the first free top row. When no row in use is free, it takes the lowest top row from which its rows are free, counting the rows beyond the last in use as free, so that rows are opened below. With `swapPasses`, it then swaps whole neighbouring rows, from the top down, keeping a swap only when it strictly shortens the total row distance of the `affinity` links, for at most that many passes or until a pass keeps none. A row covered by an element that covers more than one row is pinned: a swap **MUST NOT** move it, because that would tear the element apart.
+
+- `rows` **MUST** change only the attributes in `writes`, and **MUST** assign rows as the assignment above describes.
+- When every extent covers one row, the result uses the fewest rows any assignment of the extents could use, because a row is opened only where that many extents meet. With an extent that covers several rows it need not, and a runtime **MUST NOT** use fewer rows than the assignment gives.
+- It **MUST** be deterministic: it reads no row, so running it on its own result changes nothing.
 - The changed values **MUST** be written in one transaction and one undo step, and only where they change.
-- When it would change nothing, the `layout` action is refused with `refusals.unchanged`; while its scope holds no element of a type in `extent`, with `refusals.nothingDrawn` (9.4).
+- While no element in its scope has a drawable extent, the `layout` action is refused with `refusals.nothingDrawn`; otherwise, when it would change nothing, with `refusals.unchanged` (9.4).
 
 ```json
 "arrangeRows": { "algorithm": "rows",
   "rows": { "writes": ["row"], "clearance": 16, "affinity": "Influence", "ties": "lower", "swapPasses": 64,
     "extent": { "Trend":   { "from": "x - 8.0 - textWidth(self.name, 12.0)", "to": "x2" },
-                "Trigger": { "from": "x - 16.0 - textWidth(self.name, 12.0)", "to": "x + 8.0" },
-                "Note":    { "from": "x", "to": "x + width", "rows": "math.ceil(height / 56.0)" } } } }
+                "Trigger": { "from": "x - 8.0 - textWidth(self.name + ' · ' + formatWhen(self.date, diagram.unit, false), 12.0)",
+                             "to": "x2" },
+                "Note":    { "from": "x", "to": "x + width", "rows": "int(math.ceil(height / 56.0))" } } } }
 ```
 
 ```json
@@ -3989,7 +3997,7 @@ The algorithm takes the elements in the order of their extents' `from`, then `to
                   "unchanged": "This graph is already arranged." } } } ] }
 ```
 
-Three trends from 1800 to 1850, 1840 to 1900 and 1860 to 1900 on rows 0, 1 and 2 are arranged onto rows 0, 1 and 0.
+Three trends from 1800 to 1850, 1840 to 1900 and 1860 to 1900 on rows 0, 1 and 2 are arranged onto rows 0, 1 and 0. A trend's extent starts at its name, 8 units before its banner, and a trigger's at its label, its name and date, 8 units before its circle; `x` is the left edge of the element's bounds. A note two rows tall pins both its rows, so the rows it spans are never swapped apart. A graph whose only trend has no span has nothing drawable and is refused with "There is nothing to arrange until this graph has a trend.".
 
 ### 10.3 Tidy tree (`tidyTree`) *(DISL 0.3)*
 
@@ -4004,8 +4012,9 @@ Three trends from 1800 to 1850, 1840 to 1900 and 1860 to 1900 on rows 0, 1 and 2
 | `drag`        | `{carry: "subtree" \| "node", across: "reorder" \| "none", down: "row" \| "none"}` | `{carry: "node", across: "none", down: "none"}` | What dragging an element does (below). |
 | `doc`         | Doc                                          |                     |             |
 
-- `tidyTree` **MUST** place each element's children in their model order along the cross axis, **MUST** pack each subtree so that no node is closer than `spacing.node` to a node of a neighbouring subtree at the same depth, and **MUST** place each parent centred over its first and last child (`firstLastCentre`) or over all its children's extent (`childrenCentre`). Without stored rows, children lie `spacing.layer` beyond their parent on the main axis. Top-level elements **MUST** be packed `spacing.component` apart.
-- With `rows.stored: "y"`, all children of one parent **MUST** share one position on the main axis: the first stored for any of them in model order, else `spacing.layer` beyond the parent, and never closer to the parent than `rows.minGap`. The cross-axis position **MUST** always be the computed one. The stored positions are view data (11.6), or a registration's layout when the model lives in a format binding.
+- `tidyTree` **MUST** place each element's children in their model order along the cross axis, **MUST** pack each subtree so that no node is closer than `spacing.node` to a node of a neighbouring subtree at the same depth, measured between their facing edges, and **MUST** place each parent centred over its first and last child (`firstLastCentre`) or over all its children's extent (`childrenCentre`). Top-level elements **MUST** be packed the same way, `spacing.component` apart.
+- Distances on the main axis are gaps between edges, not between positions: children **MUST** lie with their near edge `spacing.layer` beyond their parent's far edge (with `direction: "down"`, their top `spacing.layer` below the parent's bottom). The top-level elements **MUST** share one row, at main-axis position 0, so every depth is one row.
+- With `rows.stored: "y"`, the top-level elements **MUST** share one position on the main axis, the first stored for any of them in model order, else 0; and all children of one parent **MUST** share one position on the main axis: the first stored for any of them in model order, else with their near edge `spacing.layer` beyond the parent's far edge as the parent is drawn, and never with it closer to that edge than `rows.minGap`. A row's position is the one everything beneath it hangs from, so a moved row carries the rows beneath that store none. The cross-axis position **MUST** always be the computed one. The stored positions are view data (11.6), or a registration's layout when the model lives in a format binding.
 - With `drag.across: "reorder"`, dropping a dragged element past a sibling's centre **MUST** reorder it among its siblings in the model; with `drag.down: "row"`, the dropped main-axis position **MUST** be stored for every element of the row and beneath it; with `drag.carry: "subtree"`, everything beneath the dragged element **MUST** move with it while dragged. A drag **MUST** be one transaction and one undo step.
 
 ```json
@@ -4017,7 +4026,7 @@ Three trends from 1800 to 1850, 1840 to 1900 and 1860 to 1900 on rows 0, 1 and 2
   "default": "tree", "trigger": "always", "respect": "pinned" }
 ```
 
-An agent behavior model draws its tree top-down, nodes 28 apart and levels 56 apart; a node dragged past its sibling's centre swaps places with it in the Markdown, and a row dragged down keeps its new height for itself and everything beneath it.
+An agent behavior model draws its tree top-down, its nodes 200 by 60: neighbouring subtrees 28 apart, each row of children 56 below its parent's bottom edge, and several roots side by side on one row, 56 apart. A node dragged past its sibling's centre swaps places with it in the Markdown, and a row dragged down keeps its new height for itself and everything beneath it; a row dragged up stops with its top 16 below its parent's bottom.
 
 
 ---
@@ -5848,6 +5857,18 @@ DISL 0.3 (draft, 2026-10-05) adds the constructs listed below, approved by the p
 | 4  | A relation with an end that names nothing | Only an `optional` target end may be missing. | Under `typeMap`, a relation read with a mapped end that names nothing is kept with that end unset, not drawn, and reported by `std.references`. | A hand-edited file keeps a broken influence until the user fixes it. | 4.9, 11.2 |
 | 5  | An editable label with a computed text | An editable label requires an attribute binding in `text`. | An attribute binding in `editText` satisfies it. | A label shows more than the user edits. | 6.12 |
 | 6  | A move sent to a persistence plugin | FBL 0.1 named a move without fields. | A plugin that does not declare `move` in `plans` is sent a remove and an add. | Only a declared move can keep the element's bytes. | 13.1 |
+| 7  | What `textMetric` governs | Every measurement that affects geometry, `autoSize`, wrapping and ellipsis included, uses the declared metric. | Layout-time measurement uses it: `textWidth`, `textHeight` and the layout inputs computed with them. Drawing measures with the real font, and a runtime may do so for `autoSize`, wrapping and ellipsis. | Hosts measure drawn labels with the font they draw; only the layout must agree everywhere. | 6.5 |
+
+The draft's additions were amended on 2026-10-06 so that they state the behaviour of today's hype cycle and agent behavior modelling tools, which the code shows:
+
+| Construct | The draft said | It now says | Section |
+|-----------|----------------|-------------|---------|
+| Choices of a `type` form item | The types `behavior.retype[self.type].to` allows, limited by `options`, which leaves out the element's own type. | The types `options` gives, the element's own type among them; without `options`, the own type and the allowed targets. Choosing the own type applies the type's `attributeMapping` and nothing else. | 7.5 |
+| `when` on a retype entry | The `type` item and the `retype` action refuse a type whose `when` is false; the example used `when` for a refusal that depends on the children. | `when` is optional and defaults to `true`. A refusal that depends on the element's state is the writer's, stated as the `type` item's `refusals` and kept out of the choices by `options`. | 9.5 |
+| `rows`: `refusals.nothingDrawn` | Fires while the scope holds no element of a type in `extent`. | Fires while no element has a drawable extent: an element whose extent does not evaluate, with no id, or with an id an earlier element has, does not take part. | 9.4, 10.2 |
+| `rows`: elements covering several rows | The fewest rows any assignment could use. | Each element takes a top row from which all its rows are free; rows an element covering several rows spans are pinned and never swapped. The fewest rows are guaranteed only while every extent covers one row. | 10.2 |
+| `tidyTree` distances | Children `spacing.layer` beyond their parent; `minGap` from the parent; top-level elements packed apart. | `spacing.layer` and `minGap` are gaps from the parent's far edge to the row's near edge; the top-level elements share one row. | 10.3 |
+| The `rows` example | A trigger's extent from `x - 16.0 - textWidth(self.name, 12.0)` to `x + 8.0`, 8 units off with `x` the left edge, measuring the name only. | From `x - 8.0` less the width of the name and date to `x2`, as the hype cycle definition has it. | 10.2 |
 
 ---
 
