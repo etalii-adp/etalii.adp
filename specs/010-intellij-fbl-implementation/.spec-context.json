@@ -74,6 +74,14 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-10-06T22:32:15.912Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:33:18.271Z"
     }
   ],
   "telemetryInstanceId": "e35a1f59-9cdb-47cc-95e5-d2e563aea0fc",
@@ -437,5 +445,15 @@
       "summary": "67 tasks in 7 phases: Setup 9, Foundational 11, US1 21, US2 10, US3 7, US4 3, Polish 6; each phase laid out as waves, tests first"
     }
   },
-  "approach": "Port standalone's FBL library at 25fc7b4a into a new Gradle module fbl in etalii.adp.ide.intellij: Java 25, byte offsets throughout, hand-written parsers, no dependency and no import from the platform, composed into the plug-in and registered nowhere. Tests are written first, layer by layer: the eight published fixtures, a counterpart for each of the 86 baseline tests tracked in an inventory table, the real-file properties over 108 .mm maps and 41 files copied from standalone, a node-id comparison with the FreeMind parser, and one test on the headless platform. Open questions and divergences go to etalii.adp as one issue."
+  "approach": "Port standalone's FBL library at 25fc7b4a into a new Gradle module fbl in etalii.adp.ide.intellij: Java 25, byte offsets throughout, hand-written parsers, no dependency and no import from the platform, composed into the plug-in and registered nowhere. Tests are written first, layer by layer: the eight published fixtures, a counterpart for each of the 86 baseline tests tracked in an inventory table, the real-file properties over 108 .mm maps and 41 files copied from standalone, a node-id comparison with the FreeMind parser, and one test on the headless platform. Open questions and divergences go to etalii.adp as one issue.",
+  "currentTask": "T001",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "Committed the feature folder as 9a257ea, pushed, opened pull request 77 into develop",
+      "files": [
+        "specs/010-intellij-fbl-implementation/"
+      ]
+    }
+  }
 }

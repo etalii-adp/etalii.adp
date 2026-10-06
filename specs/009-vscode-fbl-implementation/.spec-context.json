@@ -1,0 +1,941 @@
+{
+  "workflow": "speckit",
+  "specName": "A Generic FBL Implementation for Visual Studio Code",
+  "branch": "features/009-vscode-fbl-implementation",
+  "currentStep": "implement",
+  "status": "implementing",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-06T16:36:05.726Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T16:38:17.449Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-06T16:38:17.454Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T16:54:01Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T16:57:52Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T16:58:08.986Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-06T17:13:41.177Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T20:02:49.604Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T20:02:51.958Z"
+    },
+    {
+      "step": "analyze",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-06T20:58:22.337Z"
+    },
+    {
+      "step": "analyze",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T21:01:38.322Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T011",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T014",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T015",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T016",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T018",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T019",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T020",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T022",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T023",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T024",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T025",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T026",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T027",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T028",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T029",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T030",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T031",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T032",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T033",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T034",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T035",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T036",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T037",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T038",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T039",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T040",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T041",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T042",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T043",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T044",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T045",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T046",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T047",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T048",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T049",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T050",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T051",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T052",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T053",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T054",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T055",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T056",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T057",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T058",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T059",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T060",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T061",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T062",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T063",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T064",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T065",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T066",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T067",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T068",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T069",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T070",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T071",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T072",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T073",
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T22:44:04.751Z"
+    }
+  ],
+  "telemetryInstanceId": "72b0941e-01bf-4750-8c21-32431e42dcb9",
+  "approach": "Port standalone's FBL library (25fc7b4a) to TypeScript in src/core/fbl of etalii.adp.ide.vscode, module by module, on bytes, with its 86 tests ported first and FBL as referee where the two differ. No dependency is added: the library has its own bounded regular expression matcher, CEL subset and YAML, JSON, XML and line readers. FBL's corpus and standalone's real files are copied into fixtures/fbl with a checked manifest, and the packaged plug-in exposes the library only through what activate returns, for one in-editor test.",
+  "decisions": [
+    {
+      "decision": "Port standalone's library module by module, with FBL as referee",
+      "why": "SC-004 asks for standalone's splices byte for byte and FBL 6.3 leaves no freedom in new text",
+      "rejected": "Writing from the specification alone and comparing afterwards; compiling the C# for Node"
+    },
+    {
+      "decision": "A regular expression matcher of the library's own with a step budget",
+      "why": "FBL section 16 requires a bounded match and JavaScript's RegExp cannot be bounded or interrupted on its thread; the loader must parse the subset anyway",
+      "rejected": "Unbounded RegExp; a worker thread with a timeout; re2 or re2js as a new bundled dependency"
+    },
+    {
+      "decision": "Port standalone's CEL subset, corrected to CEL where standalone strays",
+      "why": "Five baseline tests fix which expressions compile; FBL names CEL as the definition",
+      "rejected": "A CEL package from npm; copying standalone's deviations"
+    },
+    {
+      "decision": "Expose the library only as AdpApi.fbl, the object activate returns",
+      "why": "It must be reachable from the entry point to be in the bundle, and FR-004 rules out a tool, editor, command or setting",
+      "rejected": "A test-only command under ADP_TEST"
+    },
+    {
+      "decision": "Copy the real files standalone's tests read, under the same paths, about 3 MB",
+      "why": "All 14 real-file tests on bodies and registrations then have counterparts and only the module cross-check does not apply",
+      "rejected": "One file per declared binding; leaving out the 2.6 MB of Turtle"
+    },
+    {
+      "decision": "Build only what the fixtures and the 86 baseline tests prove; list the rest as not implemented and report it",
+      "why": "A behaviour no fixture pins down would have two hosts decide bytes separately, against FR-014",
+      "rejected": "Implementing every FBL sentence standalone leaves out"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "Plan, research (R1 to R18, Q1 to Q7), data model, three contracts and quickstart for a TypeScript port of standalone's FBL library into etalii.adp.ide.vscode, with no new dependency and one test of 86 not applicable"
+    },
+    "tasks": {
+      "summary": "74 tasks in 7 phases: setup 11, foundational reading 21, US1 16, US2 12, US3 5, US4 5, polish and delivery 4; tests first in every phase; code in etalii.adp.ide.vscode, one pull request"
+    }
+  },
+  "coverage": {
+    "FR-001": {
+      "tasks": [
+        "T008",
+        "T067"
+      ]
+    },
+    "FR-002": {
+      "tasks": [
+        "T066",
+        "T068"
+      ]
+    },
+    "FR-003": {
+      "tasks": [
+        "T008",
+        "T017",
+        "T023"
+      ]
+    },
+    "FR-004": {
+      "tasks": [
+        "T008",
+        "T068"
+      ]
+    },
+    "FR-005": {
+      "tasks": [
+        "T028",
+        "T029",
+        "T030",
+        "T031",
+        "T041",
+        "T042",
+        "T043",
+        "T044",
+        "T048",
+        "T070"
+      ]
+    },
+    "FR-006": {
+      "tasks": [
+        "T014",
+        "T022",
+        "T024",
+        "T025"
+      ]
+    },
+    "FR-007": {
+      "tasks": [
+        "T015",
+        "T027",
+        "T032"
+      ]
+    },
+    "FR-008": {
+      "tasks": [
+        "T033",
+        "T039",
+        "T040"
+      ]
+    },
+    "FR-009": {
+      "tasks": [
+        "T036",
+        "T045",
+        "T046"
+      ]
+    },
+    "FR-010": {
+      "tasks": [
+        "T047",
+        "T049",
+        "T053",
+        "T054"
+      ]
+    },
+    "FR-011": {
+      "tasks": [
+        "T050",
+        "T051",
+        "T055",
+        "T056",
+        "T058"
+      ]
+    },
+    "FR-012": {
+      "tasks": [
+        "T052",
+        "T057"
+      ]
+    },
+    "FR-013": {
+      "tasks": [
+        "T020",
+        "T021",
+        "T032",
+        "T053",
+        "T058"
+      ]
+    },
+    "FR-014": {
+      "tasks": [
+        "T026",
+        "T048",
+        "T071"
+      ]
+    },
+    "FR-015": {
+      "tasks": [
+        "T005",
+        "T006",
+        "T007",
+        "T010"
+      ]
+    },
+    "FR-016": {
+      "tasks": [
+        "T033",
+        "T048"
+      ]
+    },
+    "FR-017": {
+      "tasks": [
+        "T011",
+        "T060"
+      ]
+    },
+    "FR-018": {
+      "tasks": [
+        "T011"
+      ]
+    },
+    "FR-019": {
+      "tasks": [
+        "T061",
+        "T063",
+        "T065"
+      ]
+    },
+    "FR-020": {
+      "tasks": [
+        "T004",
+        "T061",
+        "T064"
+      ]
+    },
+    "FR-021": {
+      "tasks": [
+        "T062",
+        "T065"
+      ]
+    },
+    "FR-022": {
+      "tasks": [
+        "T066",
+        "T068"
+      ]
+    },
+    "FR-023": {
+      "tasks": [
+        "T009",
+        "T012",
+        "T013",
+        "T014",
+        "T015",
+        "T033",
+        "T035",
+        "T036",
+        "T049",
+        "T050",
+        "T051",
+        "T052",
+        "T060"
+      ]
+    },
+    "FR-024": {
+      "tasks": [
+        "T060",
+        "T073"
+      ]
+    },
+    "FR-025": {
+      "tasks": [
+        "T069",
+        "T070"
+      ]
+    },
+    "FR-026": {
+      "tasks": [
+        "T071"
+      ]
+    }
+  },
+  "concerns": [
+    {
+      "step": "analyze",
+      "note": "D1 CRITICAL: FR-013 limits (regex step budget and fbl.regex-timeout in T020, maxBodyBytes and maxEntries in T032, CEL budget in T021) are built with no test task; no baseline test covers them, so FR-023 and principle IV of the VS Code repository are not met"
+    },
+    {
+      "step": "analyze",
+      "note": "F1 HIGH: T060 and the Phase 4 independent test expect baseline.test.ts to pass, but it needs the 14 real-file titles whose files are only written in Phase 5 (T063, T064); the checkpoint count 78 should be 71"
+    },
+    {
+      "step": "analyze",
+      "note": "F2 HIGH: FR-005 requires conformance as Host, declared, while research R15 leaves out parts FBL 15.1 lists for that class (5.5, 6.2, 8.3, 8.4, 9.1); T070 would document a claim the tasks do not deliver"
+    },
+    {
+      "step": "analyze",
+      "note": "C1 MEDIUM: T016 runs every expression over every line of the real files including 2.6 MB of Turtle, against research R18 and SC-007, and does not say how a legitimate difference from RegExp (dot, case folding beyond ASCII) is settled"
+    },
+    {
+      "step": "analyze",
+      "note": "B1 MEDIUM: T067 forbids naming a binding of the corpus, but binding names include workspace, settings and job, and the contract has a parameter workspaceRoot; the match rule is not defined, and the test is written after all the code"
+    },
+    {
+      "step": "analyze",
+      "note": "F3 MEDIUM: research R15 lists legacyIdentities (8.7) as not implemented while T049 and T054 build and test legacy identities"
+    },
+    {
+      "step": "analyze",
+      "note": "F4 MEDIUM: the specification still assumes eight unmerged YAML tests will join the baseline; research found they do not belong to it"
+    },
+    {
+      "step": "analyze",
+      "note": "F5 MEDIUM: the 009 folder is untracked on a checkout of features/010-intellij-fbl-implementation, while T001 commits it on features/009-vscode-fbl-implementation"
+    }
+  ],
+  "currentTask": "T074"
+}

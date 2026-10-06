@@ -33,7 +33,7 @@
 
 **Wave 1 — independent (different repositories):**
 
-- [ ] **T001** [P] In `etalii.adp`, commit this feature's folder and nothing else from the working tree, on `features/010-intellij-fbl-implementation`, push it and open pull request A into `develop`, merged with a merge commit · etalii.adp/specs/010-intellij-fbl-implementation/
+- [x] **T001** [P] In `etalii.adp`, commit this feature's folder and nothing else from the working tree, on `features/010-intellij-fbl-implementation`, push it and open pull request A into `develop`, merged with a merge commit · etalii.adp/specs/010-intellij-fbl-implementation/
 - [ ] **T002** [P] In `etalii.adp.ide.intellij`, create a worktree on a new branch `features/010-intellij-fbl-implementation` from `origin/develop` (`6a976b9` or later). Run `./gradlew build -x integrationTest` there, confirm it passes, and note how long the test tasks took: SC-008 is measured against it in T064 · etalii.adp.ide.intellij/.claude/worktrees/010-intellij-fbl-implementation
 
 **⟶ Wait for Wave 1 to finish, then:**
