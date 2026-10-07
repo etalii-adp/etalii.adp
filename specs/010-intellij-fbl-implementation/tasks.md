@@ -24,6 +24,8 @@
 - Nothing under `etalii.adp.ide.intellij/fbl/src/main` imports `com.intellij`, `java.awt`, `javax.swing`, `java.net` or `java.nio.channels`, or names a tool type or an example binding (FR-001, research R2).
 
 > **Ticking**: a task whose code lands in `etalii.adp.ide.intellij` is ticked here only after pull request 1 is merged (T067), never when the code is written or pushed. The tasks of `etalii.adp` itself (T001, T065, T067) are ticked when done.
+>
+> **Shipped**: the code was merged into `etalii.adp.ide.intellij` on 2026-10-07 by [pull request 32](https://github.com/etalii-adp/etalii.adp.ide.intellij/pull/32) (merge commit `80df534`), with its tasks taken from etalii.adp commit `9a257ea`. The open questions and divergences are reported in [issue 83](https://github.com/etalii-adp/etalii.adp/issues/83).
 
 ---
 
@@ -311,7 +313,7 @@ Owned test files: `fbl/.../platform/FblOnThePlatformTest`, `src/integrationTest/
 
 **⟶ Wait for T066 to finish, then:**
 
-- [ ] **T067** After pull request 1 is merged with a merge commit: delete its branch locally and on `origin` and remove its worktree. Then tick T002 to T066 here, on a branch of `etalii.adp`, with the link to the issue, and open pull request B into `develop` · etalii.adp/specs/010-intellij-fbl-implementation/tasks.md
+- [x] **T067** After pull request 1 is merged with a merge commit: delete its branch locally and on `origin` and remove its worktree. Then tick T002 to T066 here, on a branch of `etalii.adp`, with the link to the issue, and open pull request B into `develop` · etalii.adp/specs/010-intellij-fbl-implementation/tasks.md
 
 ---
 
