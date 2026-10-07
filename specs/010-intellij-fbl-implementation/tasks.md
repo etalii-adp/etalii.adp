@@ -307,7 +307,7 @@ Owned test files: `fbl/.../platform/FblOnThePlatformTest`, `src/integrationTest/
 
 **⟶ Wait for T065 to finish, then:**
 
-- [ ] **T066** Push `features/010-intellij-fbl-implementation` of `etalii.adp.ide.intellij` and open pull request 1 into `develop`. Its description names `specs/010-intellij-fbl-implementation/` in `etalii.adp`, the `etalii.adp` commit these tasks were taken from, the two measured durations of T064, and T065's issue. Its Build run is green in both test jobs (FR-025) · etalii.adp.ide.intellij/
+- [x] **T066** Push `features/010-intellij-fbl-implementation` of `etalii.adp.ide.intellij` and open pull request 1 into `develop`. Its description names `specs/010-intellij-fbl-implementation/` in `etalii.adp`, the `etalii.adp` commit these tasks were taken from, the two measured durations of T064, and T065's issue. Its Build run is green in both test jobs (FR-025) · etalii.adp.ide.intellij/
 
 **⟶ Wait for T066 to finish, then:**
 
