@@ -773,7 +773,7 @@
       "step": "implement"
     },
     {
-      "note": "The Notion page ADP terminology still shows .disl, .desl and .edsl and has no FBL section; T012 updated only Host, IDE host and Notion add-on",
+      "note": "The Notion page ADP terminology still shows the retired extensions of specification files and has no FBL section; T012 updated only Host, IDE host and Notion add-on",
       "step": "implement"
     },
     {
