@@ -34,7 +34,9 @@ npm run sync-fbl -- ../etalii.adp ../etalii.adp.ide.standalone
   - every `.tml`, `.cld`, `.mm`, `.dsl`, `.adp`, `.ttl` and `.nt` file, the extension matched ignoring case;
   - every `.yml` and `.yaml` file whose content contains `task_key`, and every `.json` file whose content contains `"libraries"`;
   - every `*.layout.json` and `*.identities.json`;
-  - every file of a folder that holds a `Chart.yaml`, with its subfolders.
+  - every file of a folder that holds a `Chart.yaml`, with its subfolders;
+  - the file a copied registration names in its `body` header, whatever its kind (found when the tests first ran: two registrations name a bundle file that no rule above selects);
+  - the third-party notice (`LICENSE`, `NOTICE` or `COPYING`, with any extension) of a folder that holds a copied file, at any depth.
 - Both folders are emptied before they are written, so a file that left the source leaves the copy.
 - The script prints, for each kind above, how many files it copied, and fails when a kind has fewer than its recorded minimum (data below), so that a moved folder in standalone is noticed when copying and not as a silently smaller test run.
 - It writes `manifest.json` and `PROVENANCE.md` last. `PROVENANCE.md` names both repositories, both commits, the licence of each (Apache-2.0), any third-party notice copied with the real files, and how to refresh.
@@ -43,7 +45,7 @@ Recorded commits for the first copy: `etalii.adp` `30206eaf29bc33b4af9aa0ecddc88
 
 ## Recorded minimums
 
-In `test/core/fbl/realFiles/corpus.ts`, used by the script and by the tests (FR-020, acceptance scenario 3.1):
+In `test/core/fbl/realFiles/minimums.json`, which the script reads and `test/core/fbl/realFiles/corpus.ts` gives the tests, so they are written once (FR-020, acceptance scenario 3.1):
 
 | Key | Binding | Files selected | Minimum |
 |---|---|---|---|
@@ -69,6 +71,7 @@ The tests enumerate `fixtures/fbl/real-files/` and, with the same rules, the res
 | `scripts/unpack-plugin.mjs` | None: it already copies `fixtures/` into the in-editor tests' workspace. |
 | `vitest.config.mts`, `.vscode-test.mjs`, `.vscodeignore` | None. |
 | `.github/workflows/build.yml` | None: `npm run test:unit` and `npm run test:vscode` already run on every pull request and on `develop`, a failing test already fails the job, and `scripts/skipped-tests.mjs` already lists what was skipped (FR-024). The task that adds the two link tests checks that their reason appears in that list, and changes the script if it does not. |
+| `scripts/skipped-tests.mjs` | Changed, as that task found: the JUnit report of the core and webview tests keeps no reason for a skipped test, so a test that skips itself writes its reason to `reports/skip-reasons.jsonl`, and the script reads it there. |
 | `.github/scripts/check-files.py` | None: it already leaves `fixtures/` alone, which the corpus needs (a body with a byte-order mark, bodies malformed on purpose). |
 
 ## Documentation that changes

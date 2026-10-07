@@ -1,0 +1,1482 @@
+{
+  "workflow": "companion",
+  "specName": "A Generic FBL Implementation for IntelliJ",
+  "branch": "features/010-intellij-fbl-implementation",
+  "currentStep": "implement",
+  "status": "implementing",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-06T16:36:31.663Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-06T16:38:19.830Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-06T16:38:25.924Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T16:47:57.307Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T16:49:32.734Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T16:50:12.063Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-06T17:13:33.827Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T21:33:18.775Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T21:33:49.280Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-06T22:32:15.912Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:33:18.271Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:48:50.416Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:48:51.175Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:48:52.612Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:48:54.413Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:48:55.332Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:48:55.929Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:48:56.557Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:48:57.149Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:48:57.737Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:48:58.419Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T014",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T22:48:59.421Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T011",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:03:39.519Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:03:42.989Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T015",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:03:45.847Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T016",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:03:47.085Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:03:49.663Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T018",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:03:53.427Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T019",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:03:55.061Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T020",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:03:56.245Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:04.703Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T022",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:05.312Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T023",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:05.835Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T024",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:06.347Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T025",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:06.876Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T026",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:07.393Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T027",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:07.895Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T028",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:08.398Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T029",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:08.898Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T030",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:09.408Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T031",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:09.998Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T032",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:10.518Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T033",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:11.011Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T034",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:11.515Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T035",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:12.088Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T036",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:12.584Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T037",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:13.107Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T038",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:13.604Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T039",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:14.107Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T040",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:14.616Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T041",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-06T23:56:15.184Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T042",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:09:36.549Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T043",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:09:37.055Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T044",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:09:37.564Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T045",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:09:38.152Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T046",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:09:38.658Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T047",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:09:39.151Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T048",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:09:39.661Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T049",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:09:40.186Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T050",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:09:40.708Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T051",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:09:41.212Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T052",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:09:41.993Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T053",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:21:32.121Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T054",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:21:32.815Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T055",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:21:33.428Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T056",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:21:34.119Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T057",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:21:34.825Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T058",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:21:35.368Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T059",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:21:35.920Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T060",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:21:36.532Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T061",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:21:37.071Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T062",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:21:37.936Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T063",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:21:38.483Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T064",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:30:19.284Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T065",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:34:21.048Z"
+    }
+  ],
+  "telemetryInstanceId": "e35a1f59-9cdb-47cc-95e5-d2e563aea0fc",
+  "last_action": "T064 validated; T065 to T067 wait for the user's go-ahead",
+  "coverage": {
+    "FR-001": {
+      "title": "One generic FBL implementation that names no tool type or example binding",
+      "tasks": [
+        "T008",
+        "T013",
+        "T026"
+      ]
+    },
+    "FR-002": {
+      "title": "Part of the installable plug-in, in every IDE on the platform, with no network",
+      "tasks": [
+        "T008",
+        "T060",
+        "T061",
+        "T064"
+      ]
+    },
+    "FR-003": {
+      "title": "Usable without a running IDE",
+      "tasks": [
+        "T004",
+        "T008"
+      ]
+    },
+    "FR-004": {
+      "title": "Connected to no tool, editor, action or setting; FreeMind and draw.io unchanged",
+      "tasks": [
+        "T061",
+        "T064"
+      ]
+    },
+    "FR-005": {
+      "title": "Host, declared of FBL 0.1 for yaml, json, xml, lines and blocks",
+      "tasks": [
+        "T033",
+        "T034",
+        "T035",
+        "T036",
+        "T062"
+      ]
+    },
+    "FR-006": {
+      "title": "Loads an FBL document by section 14.1 and reports every problem with its location",
+      "tasks": [
+        "T012",
+        "T016",
+        "T017",
+        "T019"
+      ]
+    },
+    "FR-007": {
+      "title": "Reads a body tolerantly into elements, relations, values, positions and findings",
+      "tasks": [
+        "T021",
+        "T029",
+        "T032",
+        "T037"
+      ]
+    },
+    "FR-008": {
+      "title": "Plans every edit as splices in the body's conventions; an unedited save is the bytes read",
+      "tasks": [
+        "T022",
+        "T023",
+        "T028",
+        "T030",
+        "T031",
+        "T038"
+      ]
+    },
+    "FR-009": {
+      "title": "A history with exact undo and redo, refused on drift",
+      "tasks": [
+        "T024",
+        "T039"
+      ]
+    },
+    "FR-010": {
+      "title": "Reads and writes the .adp registration with layout, identities and legacy sidecars",
+      "tasks": [
+        "T040",
+        "T042",
+        "T046",
+        "T047"
+      ]
+    },
+    "FR-011": {
+      "title": "Routes a file or folder to its bindings and produces a body from a template",
+      "tasks": [
+        "T043",
+        "T044",
+        "T048",
+        "T050",
+        "T051"
+      ]
+    },
+    "FR-012": {
+      "title": "The host's part of the plugin contract",
+      "tasks": [
+        "T045",
+        "T049"
+      ]
+    },
+    "FR-013": {
+      "title": "The limits of section 16: match time, body size, entry count, paths, templates",
+      "tasks": [
+        "T011",
+        "T015",
+        "T025",
+        "T037",
+        "T046",
+        "T051"
+      ]
+    },
+    "FR-014": {
+      "title": "The bytes every other conforming host produces; open questions go to specifications/fbl",
+      "tasks": [
+        "T020",
+        "T041",
+        "T065"
+      ]
+    },
+    "FR-015": {
+      "title": "An unchanged copy of the bindings, fixtures and registrations with commit and licence, kept from conversion",
+      "tasks": [
+        "T003",
+        "T005",
+        "T007"
+      ]
+    },
+    "FR-016": {
+      "title": "Every fixture run as section 15.3 defines; discovery fails on none",
+      "tasks": [
+        "T027",
+        "T041"
+      ]
+    },
+    "FR-017": {
+      "title": "Every baseline test has a named counterpart with the same inputs and results",
+      "tasks": [
+        "T009",
+        "T010",
+        "T011",
+        "T012",
+        "T021",
+        "T022",
+        "T024",
+        "T042",
+        "T043",
+        "T044",
+        "T045",
+        "T055",
+        "T056",
+        "T057"
+      ]
+    },
+    "FR-018": {
+      "title": "A baseline test that cannot apply is listed with its reason",
+      "tasks": [
+        "T009",
+        "T056"
+      ]
+    },
+    "FR-019": {
+      "title": "The real-file properties over every .mm of the repository and a copied corpus for each other binding",
+      "tasks": [
+        "T052",
+        "T053",
+        "T055"
+      ]
+    },
+    "FR-020": {
+      "title": "The mindmap binding's node ids compared with the FreeMind module's parser",
+      "tasks": [
+        "T057"
+      ]
+    },
+    "FR-021": {
+      "title": "Every real .adp parsed and saved unchanged; every enumeration asserts a minimum",
+      "tasks": [
+        "T053",
+        "T056"
+      ]
+    },
+    "FR-022": {
+      "title": "Disagreements recorded with reason; unrecorded and stale ones fail",
+      "tasks": [
+        "T054",
+        "T058"
+      ]
+    },
+    "FR-023": {
+      "title": "One test in a headless IDE walks a fixture through read, save, edit and undo",
+      "tasks": [
+        "T059"
+      ]
+    },
+    "FR-024": {
+      "title": "Every test written before its behaviour and seen to fail",
+      "tasks": [
+        "T007",
+        "T008",
+        "T009",
+        "T010",
+        "T011",
+        "T012",
+        "T021",
+        "T027",
+        "T042",
+        "T055",
+        "T059",
+        "T060"
+      ]
+    },
+    "FR-025": {
+      "title": "The Build workflow runs every test; no compiler warnings",
+      "tasks": [
+        "T004",
+        "T064",
+        "T066"
+      ]
+    },
+    "FR-026": {
+      "title": "The documentation says what the plug-in carries, what it claims and where the corpus comes from",
+      "tasks": [
+        "T062",
+        "T063"
+      ]
+    },
+    "FR-027": {
+      "title": "Every divergence and open question reported to etalii.adp",
+      "tasks": [
+        "T058",
+        "T065"
+      ]
+    }
+  },
+  "size": "oversized",
+  "classification": {
+    "projectedFiles": 60,
+    "projectedTasks": 70,
+    "scopeSignal": "larger",
+    "verdict": "oversized"
+  },
+  "expectations": [
+    "Wiring FBL into the existing FreeMind and draw.io diagrams",
+    "Changes to FBL itself; those go through their own feature in specifications/fbl",
+    "Standalone tests added after commit 25fc7b4a",
+    "A shared package of fixtures across hosts",
+    "No tool, editor, action or setting is connected to the implementation",
+    "The FreeMind and draw.io modules are not changed or moved onto a binding",
+    "No persistence plugin is implemented",
+    "No JSON Schema validation of FBL documents",
+    "No DISL: tool types, derived ids and constraints stay out",
+    "No file watching or shared open bodies between readings"
+  ],
+  "context": [
+    "area: specifications/fbl (FBL 0.1, 8 fixtures, 8 example bindings, 6 registrations; conformance classes in section 15.1)",
+    "area: etalii.adp.ide.standalone src/backend/EtAlii.Adp.Specification.Fbl and .Tests at develop 25fc7b4a (86 tests, 15 of them on standalone's own files under RealFiles/)",
+    "area: etalii.adp.ide.intellij (Gradle modules core, freemind, drawio, testing; no FBL code; 108 .mm files under freemind/testdata)",
+    "constraint: .specify/memory/repositories/etalii.adp.ide.intellij.md (platform-bundled dependencies, no network, test-first against real files, no compiler warnings)",
+    "constraint: user asked to start from scratch and avoid duplication, so the spec points at FBL and the baseline instead of copying them",
+    "area: etalii.adp.ide.intellij (modules core, freemind, drawio, testing; FreeMind reference maps under freemind/testdata)",
+    "area: etalii.adp/specifications/fbl (FBL 0.1, eight bindings, eight round-trip fixtures, six registrations)",
+    "area: etalii.adp.ide.standalone FBL test project, 86 tests at develop 25fc7b4a",
+    "constraint: etalii.adp.ide.intellij principles in .specify/memory/repositories/etalii.adp.ide.intellij.md",
+    "constraint: counterpart of spec 009-vscode-fbl-implementation"
+  ],
+  "intent": "Give etalii.adp.ide.intellij a generic FBL implementation proven by the shared fixtures and by counterparts of standalone's 86 FBL tests",
+  "decisions": [
+    {
+      "decision": "A new Gradle module fbl (package etalii.adp.fbl), composed into the plug-in and registered nowhere",
+      "why": "Composing ships it (FR-002), registering nothing keeps FR-004, and a module of its own gives one test command (SC-008)",
+      "rejected": "A package inside core, which imports the platform and knows no file format"
+    },
+    {
+      "decision": "The module works on byte offsets with its own BodyText and scanners; core's TextChange and XmlScanner are not reused",
+      "why": "FBL fixtures state byte offsets, core counts UTF-16 characters and imports the platform, and 16 of the 108 maps hold non-ASCII text",
+      "rejected": "A byte-to-character map over core.xml, which cannot hold an invalid UTF-8 body"
+    },
+    {
+      "decision": "Hand-written span-preserving JSON, YAML, XML and lines parsers and a CEL evaluator, ported from standalone, with no third-party library",
+      "why": "Splices need byte spans, duplicate keys need locations, and the module must run without the platform's jars",
+      "rejected": "Platform-bundled Gson, Jackson or SnakeYAML, and cel-java"
+    },
+    {
+      "decision": "The module's own YAML parser decides whether a yaml body is well-formed",
+      "why": "No YAML library may be shipped, and unreadable is the safe side because nothing is written",
+      "rejected": "SnakeYAML Engine from the platform; the possible disagreement with standalone's YamlDotNet is reported to etalii.adp"
+    },
+    {
+      "decision": "Regular expressions run on java.util.regex behind the ported subset validator, bounded by a CharSequence whose charAt throws after a 250 ms deadline",
+      "why": "Java's regex has no timeout, and the wrapper needs no thread and no library",
+      "rejected": "A worker thread per match, and RE2/J as a shipped dependency"
+    },
+    {
+      "decision": "Numbers in new text follow ECMAScript Number.prototype.toString, built from Double.toString; fixed decimals use BigDecimal HALF_UP",
+      "why": "It is what standalone writes, and Double.toString alone gives 640.0 and 1.0E21",
+      "rejected": "String.format, which is locale-sensitive and not shortest round-trip"
+    },
+    {
+      "decision": "Ids DISL would derive come from an optional deriveId function in FblOptions; the tests supply NaturalIds under src/test",
+      "why": "Most fixture ids follow DISL, and main code must name no binding (FR-001)",
+      "rejected": "Derivations in main code"
+    },
+    {
+      "decision": "Refusal and drift sentences are standalone's, word for word, and a refused fixture step is compared by its reason string",
+      "why": "The baseline tests assert these strings and FR-017 asks for the same expected results",
+      "rejected": "Sentences in this host's own wording; that FBL specifies none is reported to etalii.adp"
+    },
+    {
+      "decision": "The conformance corpus is written with git archive into fbl/testdata/conformance, under a -text rule added first, with a SHA256SUMS list a test checks",
+      "why": "The .fbl files are text=auto in etalii.adp, so a working-tree copy differs from the blob, and the digest list notices a converted or edited file",
+      "rejected": "A licence sibling per file, and a git submodule"
+    },
+    {
+      "decision": "The real-file corpus is the repository's 108 .mm maps plus the 41 files standalone's five other declared bindings take, with the registrations naming them and standalone's paths kept",
+      "why": "The same inputs as the baseline's real-file tests, and divergence records that compare entry by entry between hosts",
+      "rejected": "One file per binding, the minimum FR-019 allows"
+    },
+    {
+      "decision": "The cross-check compares MapNode.id() walked in document order with the ids the node rule reads",
+      "why": "MindMap.nodesByKey is unordered and its keys fall back to an index path",
+      "rejected": "Comparing nodesByKey keys"
+    },
+    {
+      "decision": "The headless IDE test is an in-process BasePlatformTestCase in fbl, with a second test that inspects the built zip",
+      "why": "SC-006 asks for the network off, a Starter test downloads its IDE, and nothing is registered for a driver to call",
+      "rejected": "A Starter and Driver test through @Remote with a new static entry point"
+    },
+    {
+      "decision": "An inventory table of 86 rows maps each baseline test to its counterpart, checked by BaselineCoverageTest",
+      "why": "It is the repository's own InventoryCoverageTest pattern and makes FR-017's correspondence readable and enforced",
+      "rejected": "Correspondence by naming convention alone"
+    },
+    {
+      "decision": "fbl's build sets -Xlint:all and -Werror",
+      "why": "FR-025 requires no compiler warnings and nothing in the repository enforces it",
+      "rejected": "Relying on convention, or turning it on for every module in this feature"
+    },
+    {
+      "decision": "Number writing follows standalone's code, not ECMAScript's Number.prototype.toString",
+      "why": "The fixtures were produced by standalone; it writes 1e-7 as 0.0000001 and rounds fixed decimals in double arithmetic",
+      "rejected": "BigDecimal HALF_UP from Double.toString, as research R8 had it"
+    },
+    {
+      "decision": "The conformance corpus is copied with line-ending conversion switched off",
+      "why": "git archive converts .fbl files as a checkout would; each copied file now equals its blob",
+      "rejected": "Plain git archive, as research R12 had it"
+    },
+    {
+      "decision": "The real files are copied in the form standalone checks them out, mostly CRLF",
+      "why": "Its .gitattributes forces CRLF, so that is what its own real-file tests read",
+      "rejected": "The LF blobs"
+    },
+    {
+      "decision": "The yaml parser itself refuses some malformed YAML with sentences of its own",
+      "why": "No YAML library may be shipped, and standalone leaves well-formedness to one",
+      "rejected": "Accepting everything standalone's parser alone accepts"
+    },
+    {
+      "decision": "Tasks in etalii.adp.ide.intellij are journaled and not ticked",
+      "why": "CLAUDE.md: a task in another repository is ticked only once its pull request is merged",
+      "rejected": "--close-task, which ticks at once"
+    }
+  ],
+  "concerns": [
+    {
+      "note": "{\"concern\": \"A hand-written YAML parser can disagree with standalone's YamlDotNet on whether a body is well-formed\", \"why\": \"FBL does not say which YAML a host must accept; reported under FR-027\"}"
+    },
+    {
+      "note": "{\"concern\": \"The headless IDE test does not start a real IDE from the installed zip\", \"why\": \"The in-process test and the zip inspection together are read as meeting FR-023; the review of this plan may ask for a Starter test instead\"}"
+    },
+    {
+      "note": "Two symbolic-link tests are skipped on Windows and FblOnThePlatformTest's teardown was seen to fail here on a locked temp folder; none of the three has been seen on Linux yet",
+      "step": "implement"
+    },
+    {
+      "note": "T065 (issue), T066 (push and pull request) and T067 (after merge) are not done; the spec stays at implementing",
+      "step": "implement"
+    },
+    {
+      "note": "The expression layer differs from standalone in known places (whitespace and word-boundary classes, code points against UTF-16 units, the engine's own error text); they go into the T065 issue",
+      "step": "implement"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "Plan for a host-free fbl module in etalii.adp.ide.intellij, ported from standalone at 25fc7b4a, proven by the eight fixtures, 86 counterparts, 149 real files and one platform test",
+      "key_finding": "Every existing offset in the IntelliJ repository counts UTF-16 characters and its core package imports the platform, so nothing there can be reused for FBL's byte splices"
+    },
+    "tasks": {
+      "summary": "67 tasks in 7 phases: Setup 9, Foundational 11, US1 21, US2 10, US3 7, US4 3, Polish 6; each phase laid out as waves, tests first"
+    },
+    "implement": {
+      "summary": "T001 to T064 done: the fbl module with 1175 tests green in the IntelliJ worktree, 29 commits, not pushed"
+    }
+  },
+  "approach": "Port standalone's FBL library at 25fc7b4a into a new Gradle module fbl in etalii.adp.ide.intellij: Java 25, byte offsets throughout, hand-written parsers, no dependency and no import from the platform, composed into the plug-in and registered nowhere. Tests are written first, layer by layer: the eight published fixtures, a counterpart for each of the 86 baseline tests tracked in an inventory table, the real-file properties over 108 .mm maps and 41 files copied from standalone, a node-id comparison with the FreeMind parser, and one test on the headless platform. Open questions and divergences go to etalii.adp as one issue.",
+  "currentTask": "T065",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "Committed the feature folder as 9a257ea, pushed, opened pull request 77 into develop",
+      "files": [
+        "specs/010-intellij-fbl-implementation/"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "Worktree on features/010-intellij-fbl-implementation from 6a976b9; baseline build ran 11m35s and stopped on two core tests that fail on this machine before any change (AdpEditorProviderTest.stateKeepsZoomAndSelection, ToolLeakTest.closedToolsAreNotReachable)",
+      "files": [
+        "etalii.adp.ide.intellij/.claude/worktrees/010-intellij-fbl-implementation"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "fbl/testdata/** -text committed as 1359467 before any corpus file",
+      "files": [
+        "etalii.adp.ide.intellij/.gitattributes"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "Module fbl added: no dependency on core, -Xlint:all -Werror, adp.fbl.testdata and adp.freemind.testdata",
+      "files": [
+        "etalii.adp.ide.intellij/settings.gradle.kts",
+        "etalii.adp.ide.intellij/fbl/build.gradle.kts"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "30 corpus files from etalii.adp 2c873cf, each equal to its blob; git archive needed autocrlf off; README and SHA256SUMS",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/testdata/conformance/"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "Corpus and TemporaryFolder test support",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/support/"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "CorpusUnchangedTest; seen failing on a CRLF copy of timeline.fbl, passes on the restored copy",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/conformance/CorpusUnchangedTest.java"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "HostFreeTest: forbidden imports and binding names; seen failing with no source",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/HostFreeTest.java"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "Inventory of 86 rows, 82 counterparts and 4 not applicable; BaselineCoverageTest fails until the counterparts exist",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/testdata/baseline/fbl-test-inventory.md",
+        "etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/BaselineCoverageTest.java"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "BodyTextTest, 6 counterparts; seen failing to compile, commit 07e3907",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/text/BodyTextTest.java"
+      ]
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "Span, Splice, Edit, Finding, FblModel, FblOptions ported",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/"
+      ]
+    },
+    "T014": {
+      "status": "DONE",
+      "did": "BodyText ported; BodyTextTest passes, commit 515b22c",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/text/BodyText.java"
+      ]
+    },
+    "T011": {
+      "status": "DONE",
+      "did": "ExpressionsTest: 5 counterparts and the time bound test; seen failing, commit 3aea432",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/expression/ExpressionsTest.java"
+      ]
+    },
+    "T012": {
+      "status": "DONE",
+      "did": "LoadingTest: 9 counterparts and every copied binding loads; seen failing to compile",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/document/LoadingTest.java"
+      ]
+    },
+    "T015": {
+      "status": "DONE",
+      "did": "RegexSubset and BoundedRegex on java.util.regex with a deadline; commit 4c627c3",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/expression/"
+      ]
+    },
+    "T016": {
+      "status": "DONE",
+      "did": "JsonParser with spans, separators and marked duplicate keys",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/json/JsonParser.java"
+      ]
+    },
+    "T017": {
+      "status": "DONE",
+      "did": "Document model records and Glob",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/document/",
+        "etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/routing/Glob.java"
+      ]
+    },
+    "T018": {
+      "status": "DONE",
+      "did": "CEL compiler and evaluator ported; ExpressionsTest passes",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/expression/"
+      ]
+    },
+    "T019": {
+      "status": "DONE",
+      "did": "FblDocumentLoader; LoadingTest passes, 59 tests run",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/document/FblDocumentLoader.java"
+      ]
+    },
+    "T020": {
+      "status": "DONE",
+      "did": "Gate passed: all eight copied bindings load with the subsets as ported",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/expression/"
+      ]
+    },
+    "T021": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T022": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T023": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T024": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T025": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T026": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T027": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T028": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T029": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T030": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T031": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T032": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T033": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T034": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T035": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T036": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T037": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T038": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T039": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T040": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T041": {
+      "status": "DONE",
+      "did": "Phase 3 done: 191 tests run, all eight fixtures pass; commits cf02b8e to 5504458",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T042": {
+      "status": "DONE",
+      "did": "Phase 4 done: 249 tests run, 2 skipped (symbolic links on Windows); commits bd7e2e1 to 11ace57",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T043": {
+      "status": "DONE",
+      "did": "Phase 4 done: 249 tests run, 2 skipped (symbolic links on Windows); commits bd7e2e1 to 11ace57",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T044": {
+      "status": "DONE",
+      "did": "Phase 4 done: 249 tests run, 2 skipped (symbolic links on Windows); commits bd7e2e1 to 11ace57",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T045": {
+      "status": "DONE",
+      "did": "Phase 4 done: 249 tests run, 2 skipped (symbolic links on Windows); commits bd7e2e1 to 11ace57",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T046": {
+      "status": "DONE",
+      "did": "Phase 4 done: 249 tests run, 2 skipped (symbolic links on Windows); commits bd7e2e1 to 11ace57",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T047": {
+      "status": "DONE",
+      "did": "Phase 4 done: 249 tests run, 2 skipped (symbolic links on Windows); commits bd7e2e1 to 11ace57",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T048": {
+      "status": "DONE",
+      "did": "Phase 4 done: 249 tests run, 2 skipped (symbolic links on Windows); commits bd7e2e1 to 11ace57",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T049": {
+      "status": "DONE",
+      "did": "Phase 4 done: 249 tests run, 2 skipped (symbolic links on Windows); commits bd7e2e1 to 11ace57",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T050": {
+      "status": "DONE",
+      "did": "Phase 4 done: 249 tests run, 2 skipped (symbolic links on Windows); commits bd7e2e1 to 11ace57",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T051": {
+      "status": "DONE",
+      "did": "Phase 4 done: 249 tests run, 2 skipped (symbolic links on Windows); commits bd7e2e1 to 11ace57",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T052": {
+      "status": "DONE",
+      "did": "41 bodies and 32 registrations from standalone 25fc7b4a in their checked-out form, with README",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/testdata/real/"
+      ]
+    },
+    "T053": {
+      "status": "DONE",
+      "did": "Real-file tests written and seen failing on 27 unlisted divergences; commit 3f8dff0",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/"
+      ]
+    },
+    "T054": {
+      "status": "DONE",
+      "did": "Real-file tests written and seen failing on 27 unlisted divergences; commit 3f8dff0",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/"
+      ]
+    },
+    "T055": {
+      "status": "DONE",
+      "did": "Real-file tests written and seen failing on 27 unlisted divergences; commit 3f8dff0",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/"
+      ]
+    },
+    "T056": {
+      "status": "DONE",
+      "did": "Real-file tests written and seen failing on 27 unlisted divergences; commit 3f8dff0",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/"
+      ]
+    },
+    "T057": {
+      "status": "DONE",
+      "did": "Real-file tests written and seen failing on 27 unlisted divergences; commit 3f8dff0",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/"
+      ]
+    },
+    "T058": {
+      "status": "DONE",
+      "did": "No port fault found; 27 divergences recorded, each matching standalone's record; 1174 tests pass; commit b9337ca",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/testdata/divergences.json"
+      ]
+    },
+    "T059": {
+      "status": "DONE",
+      "did": "FblOnThePlatformTest; seen failing on a wrong edit; on this Windows machine its teardown cannot delete the temp folder",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/platform/FblOnThePlatformTest.java"
+      ]
+    },
+    "T060": {
+      "status": "DONE",
+      "did": "FblInPluginIntegrationTest; seen failing with 0 FBL classes in the zip",
+      "files": [
+        "etalii.adp.ide.intellij/src/integrationTest/java/etalii/adp/it/FblInPluginIntegrationTest.java"
+      ]
+    },
+    "T061": {
+      "status": "DONE",
+      "did": "fbl composed into the plug-in, commit 41ebcf8; zip test passes; core, freemind, drawio and src/main unchanged",
+      "files": [
+        "etalii.adp.ide.intellij/build.gradle.kts"
+      ]
+    },
+    "T062": {
+      "status": "DONE",
+      "did": "README: layout row and the FBL implementation section; vocabulary check 0 errors",
+      "files": [
+        "etalii.adp.ide.intellij/README.md"
+      ]
+    },
+    "T063": {
+      "status": "DONE",
+      "did": "CLAUDE.md modules line gains fbl and drawio",
+      "files": [
+        "etalii.adp.ide.intellij/CLAUDE.md"
+      ]
+    },
+    "T064": {
+      "status": "DONE",
+      "did": "Full build green: core 278, freemind 465, drawio 57, fbl 1175 tests, 0 failed; fbl tests take 6.3s beside 140.7s for the others; no compiler warning",
+      "files": [
+        "etalii.adp.ide.intellij/fbl/"
+      ]
+    },
+    "T065": {
+      "status": "DONE",
+      "did": "Filed etalii-adp/etalii.adp#83: eight open questions for FBL and the 27 divergences, all known from standalone",
+      "files": [
+        "specs/010-intellij-fbl-implementation/tasks.md"
+      ]
+    }
+  },
+  "verified": [
+    {
+      "what": "Whole build of etalii.adp.ide.intellij with every module's tests and plug-in verification",
+      "command": "./gradlew build -x integrationTest --continue",
+      "result": "BUILD SUCCESSFUL in 8m 24s: core 278, freemind 465, drawio 57, fbl 1175 tests, 0 failed, 4 skipped",
+      "warnings": [
+        "The first run of the day failed two core tests and one fbl platform test in teardown, a temp folder locked by another process on this Windows machine; the later full run passed"
+      ]
+    },
+    {
+      "what": "The plug-in zip holds the FBL classes and no tracked file names the previous host",
+      "command": "./gradlew integrationTest --tests *FblInPluginIntegrationTest --tests *NoPreviousHostIntegrationTest",
+      "result": "BUILD SUCCESSFUL"
+    },
+    {
+      "what": "ADP vocabulary check on the worktree",
+      "command": "terminology-check.py --name etalii.adp.ide.intellij",
+      "result": "0 errors, 13 for review"
+    }
+  ]
+}

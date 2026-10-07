@@ -19,7 +19,7 @@ npx vitest run test/core/fbl/corpus.test.ts test/core/fbl/conformanceFixtures.te
 
 Expected: the corpus test passes (every copied file has its recorded digest); "the fixtures are found" passes with eight; "the fixture passes" and "every byte of the input belongs to the reading" pass once for each of the eight.
 
-To see that the tests can fail: in `src/core/fbl/`, make new text always end lines with LF, and run again. `timeline-edits`, whose body has CRLF, fails on its first edit with the expected and the planned splice shown. Undo the change.
+To see that the tests can fail: in `src/core/fbl/rules/familyReader.ts`, make `newlineAt` always return LF, and run again. `timeline-edits`, whose body has CRLF, fails on its first edit (its second step, after the save) with the expected and the planned splice shown, and so does `databricks-pipeline-json`, whose body has CRLF too. Undo the change.
 
 To see that a converted copy is noticed: open `fixtures/fbl/conformance/fixtures/timeline-edits/roadmap.tml`, save it with LF endings, and run again. The corpus test names the file. Restore it with `git checkout`.
 
@@ -29,7 +29,7 @@ To see that a converted copy is noticed: open `fixtures/fbl/conformance/fixtures
 npx vitest run test/core/fbl
 ```
 
-Expected: every test passes; `baseline.test.ts` confirms 86 entries, 85 with a counterpart and one not applicable. On a system that refuses to create a symbolic link, two tests are reported as skipped with that reason and none as failed.
+Expected: every test passes; `baseline.test.ts` confirms 86 entries, 85 with a counterpart and one not applicable. The two tests that need a link make a junction on Windows, which needs no privilege, so they run there too; on a system that refuses to make a link they are reported as skipped with that reason and none as failed, and `node scripts/skipped-tests.mjs` lists them with it.
 
 To read the correspondence: open `test/core/fbl/baseline.json` beside [contracts/test-baseline.md](contracts/test-baseline.md).
 
@@ -75,7 +75,7 @@ npm run sync-fbl -- ../etalii.adp ../etalii.adp.ide.standalone
 npx vitest run test/core/fbl
 ```
 
-Expected: the script prints the two commits and the number of files of each kind, and rewrites `fixtures/fbl/`. Then the tests say what the newer sources changed: a fixture that no longer passes, or a divergence that no longer occurs.
+Expected: the script prints the two commits and the number of files of each kind, and rewrites `fixtures/fbl/`. Both refs default to `origin/develop`, so this moves the copies to the newest commits: when no copied file changed there, only the two commits in `manifest.json` and `PROVENANCE.md` change. Then the tests say what the newer sources changed: a fixture that no longer passes, or a divergence that no longer occurs. To get the first copy again, give the two recorded commits of [contracts/corpus.md](contracts/corpus.md) as the third and fourth argument.
 
 ## 7. The time the unit tests take (SC-007)
 
