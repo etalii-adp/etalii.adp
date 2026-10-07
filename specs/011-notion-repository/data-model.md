@@ -186,8 +186,8 @@ One run of `deploy.yml` in `etalii.adp.site`.
 
 | Field | Meaning |
 | --- | --- |
-| trigger | A push to the site's `develop`, or a `workflow_dispatch`: by the Notion repository's `publish` job or by a maintainer |
-| site revision | The site commit the run builds |
+| trigger | A successful run of the site's `Build` for a push to `develop` (a push itself until etalii.adp.site #89, 2026-10-07), or a `workflow_dispatch`: by the Notion repository's `publish` job or by a maintainer |
+| site revision | `develop`'s head, as the site's `Build` built and checked it |
 | add-on revision | `develop` of `etalii.adp.ide.notion` at the time of its checkout |
 | concurrency group | `pages`, without cancelling |
 | result | success or failure, shown on GitHub |
@@ -196,7 +196,7 @@ One run of `deploy.yml` in `etalii.adp.site`.
 
 - Runs that arrive together are serialised by the concurrency group, and each checks out the latest `develop` of both, so neither repository publishes a state that lacks the other's latest content (edge cases, D2).
 - A failed run uploads nothing: the previous version stays served and the failure shows as a failed run (FR-013).
-- The site's tests and checks run before every publication, so a failing site check holds back an add-on (D2, accepted consequence).
+- The site's tests and checks run before every publication, in the site's `Build`, so a failing site check holds back an add-on (D2, accepted consequence).
 - The checkout of the Notion repository needs no token, because the repository is public (D2).
 
 ### Publish job

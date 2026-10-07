@@ -51,7 +51,7 @@ A maintainer creates it once, before the first pull request merges, and renews i
 
 ## `deploy` in `etalii.adp.site`
 
-`.github/workflows/deploy.yml` keeps its triggers (a push to `develop`, and `workflow_dispatch`), its concurrency group `pages` without cancelling, and its single artifact `dist`. It gains, after the site is built into `dist/adp` and before the upload:
+`.github/workflows/deploy.yml` keeps `workflow_dispatch`, its concurrency group `pages` without cancelling, and its single artifact `dist`. Since etalii.adp.site #89 (2026-10-07) it starts on a successful run of the site's `Build` for a push to `develop` instead of on the push itself, and takes `dist/adp` from that run's `site` artifact rather than building and checking the site a second time; a dispatch takes it from the passing `Build` of `develop`'s head. It gains, after `dist/adp` is in place and before the upload:
 
 ```yaml
       - name: Check out the Notion add-ons
@@ -69,7 +69,7 @@ A maintainer creates it once, before the first pull request merges, and renews i
 
 | Rule | Requirement |
 | --- | --- |
-| Every run of `deploy` builds both `dist/adp` and `dist/adp-notion` and uploads them as one artifact | FR-012 |
+| Every run of `deploy` that publishes carries both `dist/adp`, as the site's `Build` built and checked it, and `dist/adp-notion`, built in the run, and uploads them as one artifact | FR-012 |
 | The checkout takes `develop` of `etalii.adp.ide.notion` and needs no token, the repository being public | FR-011, D2 |
 | The side folder lies outside `dist` and outside what the site's build reads | FR-012 |
 | A step that fails stops the job before the upload, so the previous deployment stays served | FR-013 |
