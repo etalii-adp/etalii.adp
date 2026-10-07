@@ -304,7 +304,7 @@ In `docs/terminology.md` of `etalii.adp`.
 | --- | --- |
 | `CLAUDE.md` | `etalii.adp.ide.notion` joins the repositories whose features are specified here (FR-006) |
 | `docs/new-repository.md` | The name rule and the Pages rule name the Notion host (FR-006) |
-| `.specify/memory/constitution.md` | The preamble and the list of principles files gain the repository; 1.4.0 to 1.5.0 |
+| `.specify/memory/constitution.md` | The preamble and the list of principles files gain the repository; 1.5.0 to 1.6.0 |
 | `.specify/memory/repositories/etalii.adp.site.md` | The host list gains Notion, and the constraint that only the site's repository is involved in `etalii.net` is amended; 1.1.0 to 1.2.0 |
 | `specs/001-ci-and-badges/contracts/build-workflow.md` | The per-repository table gains a row (D9) |
 

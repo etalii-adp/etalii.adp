@@ -27,7 +27,7 @@ The Notion repository's build script is Node with no dependencies, because the s
 
 *Gate before Phase 0, re-checked after Phase 1.*
 
-`etalii.adp` constitution 1.4.0:
+`etalii.adp` constitution 1.5.0:
 
 | Principle | Assessment |
 | --- | --- |
@@ -36,7 +36,8 @@ The Notion repository's build script is Node with no dependencies, because the s
 | III. Precise Normative Language | PASS. The new principles file uses the RFC 2119 key words as the other repository principles do. |
 | IV. Versioned Specifications | PASS. No specification version changes. |
 | V. Simplicity | PASS. One build script with no dependency, one added step in an existing workflow, no new hosting service, no catalogue column before a tool needs it. |
-| Structure and Naming | PASS after amendment. The preamble names four IDE hosts and the list of repositories with principles names three; both gain the Notion repository through `/speckit-constitution` (1.4.0 to 1.5.0, MINOR). |
+| VI. No JetBrains Rider Warnings in C# | PASS. No C# is written. |
+| Structure and Naming | PASS after amendment. The preamble names four IDE hosts and the list of repositories with principles names three; both gain the Notion repository through `/speckit-constitution` (1.5.0 to 1.6.0, MINOR). |
 | Development Workflow | PASS. One feature here, one branch and pull request per repository, merge commits. |
 
 `etalii.adp.site` principles 1.1.0:
@@ -83,7 +84,7 @@ etalii.adp/
 ├── docs/terminology.md                                         # Host redefined, Notion listed, "Notion add-on" defined (first)
 ├── docs/new-repository.md                                      # name rule and the Pages rule gain the Notion host
 ├── CLAUDE.md                                                   # list of repositories specified here
-├── .specify/memory/constitution.md                             # preamble and list of principles files, 1.5.0
+├── .specify/memory/constitution.md                             # preamble and list of principles files, 1.6.0
 ├── .specify/memory/repositories/etalii.adp.ide.notion.md       # new, 1.0.0
 ├── .specify/memory/repositories/etalii.adp.site.md             # host list and hosting constraint, 1.2.0
 └── specs/001-ci-and-badges/contracts/build-workflow.md         # per-repository table gains a row

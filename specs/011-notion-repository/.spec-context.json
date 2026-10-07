@@ -1,9 +1,9 @@
 {
   "workflow": "companion",
-  "specName": "A Notion Host Repository, Published at etalii.net/adp/notion",
+  "specName": "A Notion Host Repository, Published at etalii.net/adp-notion",
   "branch": "features/011-notion-repository",
-  "currentStep": "plan",
-  "status": "planned",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -46,55 +46,250 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-07T15:44:04.960Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-07T16:12:40.856Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T16:15:44.596Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T16:16:03.879Z"
+    },
+    {
+      "step": "analyze",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-07T16:18:09.234Z"
+    },
+    {
+      "step": "analyze",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-07T16:20:31.353Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-07T16:20:31.359Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T16:23:53.024Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T16:23:53.176Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T16:23:53.311Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T16:24:24.616Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T16:25:00.293Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T16:25:12.165Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T16:25:16.981Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T16:25:33.076Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T16:26:24.562Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T16:26:24.707Z"
     }
   ],
   "last_action": "living specs evaluated — no capabilities matched",
   "telemetryInstanceId": "f6af9078-e4ae-4464-87ac-696a9f4a77ac",
   "coverage": {
     "FR-001": {
-      "title": "Repository is named etalii.adp.ide.notion; the existing etalii-adp-ide-notion is renamed, no second one created"
+      "title": "Repository is named etalii.adp.ide.notion; the existing etalii-adp-ide-notion is renamed, no second one created",
+      "tasks": [
+        "T013"
+      ]
     },
     "FR-002": {
-      "title": "Repository satisfies every rule in docs/new-repository.md"
+      "title": "Repository satisfies every rule in docs/new-repository.md",
+      "tasks": [
+        "T013",
+        "T015",
+        "T016",
+        "T017",
+        "T018",
+        "T027",
+        "T029"
+      ]
     },
     "FR-003": {
-      "title": "First pull request adds the Build workflow with the terminology job"
+      "title": "First pull request adds the Build workflow with the terminology job",
+      "tasks": [
+        "T022",
+        "T024",
+        "T025"
+      ]
     },
     "FR-004": {
-      "title": "Both build tables gain a row for etalii.adp.ide.notion"
+      "title": "Both build tables gain a row for etalii.adp.ide.notion",
+      "tasks": [
+        "T033",
+        "T036"
+      ]
     },
     "FR-005": {
-      "title": "Glossary lists Notion as a host, no longer requires a host to be an IDE, and defines Notion add-on"
+      "title": "Glossary lists Notion as a host, no longer requires a host to be an IDE, and defines Notion add-on",
+      "tasks": [
+        "T004",
+        "T012"
+      ]
     },
     "FR-006": {
-      "title": "CLAUDE.md and docs/new-repository.md in etalii.adp name the Notion repository"
+      "title": "CLAUDE.md and docs/new-repository.md in etalii.adp name the Notion repository",
+      "tasks": [
+        "T005",
+        "T006",
+        "T009"
+      ]
     },
     "FR-007": {
-      "title": "Repository principles recorded in .specify/memory/repositories/etalii.adp.ide.notion.md"
+      "title": "Repository principles recorded in .specify/memory/repositories/etalii.adp.ide.notion.md",
+      "tasks": [
+        "T007"
+      ]
     },
     "FR-008": {
-      "title": "Content served at https://etalii.net/adp/notion over HTTPS by GitHub Pages only"
+      "title": "Content served at https://etalii.net/adp-notion over HTTPS by GitHub Pages only",
+      "tasks": [
+        "T030",
+        "T044"
+      ]
     },
     "FR-009": {
-      "title": "The address serves an index of published add-ons with the published revision"
+      "title": "The address serves an index of published add-ons with the published revision",
+      "tasks": [
+        "T020",
+        "T024"
+      ]
     },
     "FR-010": {
-      "title": "Each add-on has its own stable address under /adp/notion/"
+      "title": "Each add-on has its own stable address under /adp-notion/",
+      "tasks": [
+        "T020",
+        "T021"
+      ]
     },
     "FR-011": {
-      "title": "A merge into develop publishes without a manual step; an unmerged pull request publishes nothing"
+      "title": "A merge into develop publishes without a manual step; an unmerged pull request publishes nothing",
+      "tasks": [
+        "T024",
+        "T025",
+        "T026",
+        "T028",
+        "T044"
+      ]
     },
     "FR-012": {
-      "title": "Notion and site publications never change or remove each other's pages"
+      "title": "Notion and site publications never change or remove each other's pages",
+      "tasks": [
+        "T010",
+        "T030",
+        "T044"
+      ]
     },
     "FR-013": {
-      "title": "A failed publication leaves the previous version in place and shows as a failed run"
+      "title": "A failed publication leaves the previous version in place and shows as a failed run",
+      "tasks": [
+        "T020",
+        "T024",
+        "T030"
+      ]
     },
     "FR-014": {
-      "title": "Every page under /adp/notion is displayable as an embed inside a Notion page"
+      "title": "Every page under /adp-notion is displayable as an embed inside a Notion page",
+      "tasks": [
+        "T020",
+        "T044"
+      ]
     },
     "FR-015": {
-      "title": "The site names Notion as a host with no tool available yet"
+      "title": "The site names Notion as a host with no tool available yet",
+      "tasks": [
+        "T031",
+        "T032",
+        "T034",
+        "T037",
+        "T038"
+      ]
     }
   },
   "size": "oversized",
@@ -186,13 +381,118 @@
     },
     {
       "note": ".spec-context.json specName, intent and coverage titles and checklists/requirements.md still say /adp/notion"
+    },
+    {
+      "note": "Plan marks site principle II (Sourced, Never Retyped) as PASS, but T032 adds the notion host entry to hosts.yaml by hand; the deviation is not in Complexity Tracking, and T032 omits the required source field method",
+      "step": "analyze"
+    },
+    {
+      "note": "SC-003 asks for 15 minutes from merge to served; the last five site deploy runs took 12 to 21 minutes, before the Notion Build is added in front, so research D2 (a site deployment takes minutes, inside SC-003) does not hold",
+      "step": "analyze"
+    },
+    {
+      "note": "T039 runs a site refresh of the terminology pages that does not exist: terminology.mdx is hand-written and scripts/refresh/plan.mjs starts no procedure for docs/terminology.md, so the site would keep defining a host as an IDE",
+      "step": "analyze"
+    },
+    {
+      "note": "FR-013 and Story 2 scenario 6 (a failed publication keeps the previous version) have no validating task or quickstart step; the build script's failure branches and its non-empty listing are never run either",
+      "step": "analyze"
+    },
+    {
+      "note": "The first commit pushed straight to develop of the Notion repository (T018) contradicts pull-requests-only in docs/new-repository.md and FR-002; it is in Delivery Order only, not in Complexity Tracking, and T005 does not write the exception into the rule",
+      "step": "analyze"
+    },
+    {
+      "note": "checklists/publication.md has 47 unchecked items, which /speckit-implement reads as a gate; it was meant to be reviewed before /speckit-tasks",
+      "step": "analyze"
+    },
+    {
+      "note": "Plan and quickstart say four pull requests and two maintainer steps; tasks.md says five pull requests and seven maintainer tasks",
+      "step": "analyze"
     }
   ],
   "step_summaries": {
     "plan": {
       "summary": "Plan, research, data model, three contracts and a quickstart for the Notion host repository across four repositories",
       "key_finding": "GitHub Pages serves one deployment per domain, so /adp-notion can only be published by the site deploy workflow carrying the Notion repository output"
+    },
+    "tasks": {
+      "summary": "46 tasks in 6 phases: setup, the glossary and rules (pull request 1), one phase per story across the Notion repository, the site and the profile, then validation and delivery; 7 are a maintainer's"
     }
   },
-  "approach": "Rename and set up etalii.adp.ide.notion with a Build workflow and a dependency-free Node build script that writes an index and one folder per add-on. The site's deploy workflow checks that repository out, builds it into dist/adp-notion and publishes it with the site; a publish job in the Notion repository starts that workflow with a token. The glossary, rules, constitution, site principles, both build tables and the site's host list name Notion as a host."
+  "approach": "Rename and set up etalii.adp.ide.notion with a Build workflow and a dependency-free Node build script that writes an index and one folder per add-on. The site's deploy workflow checks that repository out, builds it into dist/adp-notion and publishes it with the site; a publish job in the Notion repository starts that workflow with a token. The glossary, rules, constitution, site principles, both build tables and the site's host list name Notion as a host.",
+  "assistant": "claude-vscode",
+  "currentTask": "T010",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "Site worktree on features/011-notion-repository from origin/develop bfdb65d; npm ci ran",
+      "files": [
+        "etalii.adp.site/.claude/worktrees/011-notion-repository"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": ".github worktree on features/011-notion-repository from origin/develop a047859",
+      "files": [
+        "etalii-adp.github/.claude/worktrees/011-notion-repository"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "Eclipse fetched; the eclipse source is origin/develop 59d855d9f4cd390659fe52746ed29d48309b285f",
+      "files": [
+        "etalii.adp.ide.eclipse"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "Host redefined with Notion, IDE host and Notion add-on defined, 'the Notion workspace' for the catalogue's workspace; committed alone",
+      "files": [
+        "docs/terminology.md"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "Added the etalii.adp.ide.notion row to the per-repository table of the build-workflow contract: checks check-files.py, artifact the addons job",
+      "files": [
+        "specs/001-ci-and-badges/contracts/build-workflow.md"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "Named the Notion host in the name rule and the Pages rule of docs/new-repository.md",
+      "files": [
+        "docs/new-repository.md"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "Named etalii.adp.ide.notion among the repositories whose features are specified here; built in the main session after the worker declined to edit CLAUDE.md",
+      "files": [
+        "CLAUDE.md"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "Wrote the Notion repository's principles 1.0.0: note, Terminology, four Core Principles, constraints, Development Workflow, Governance",
+      "files": [
+        ".specify/memory/repositories/etalii.adp.ide.notion.md"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "Constitution 1.5.0 to 1.6.0 (develop was already at 1.5.0): preamble names Notion as a host, principles list gains etalii.adp.ide.notion",
+      "files": [
+        ".specify/memory/constitution.md"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "Site principles 1.1.0 to 1.2.0: host list gains Notion, hosting constraint allows the deployment to carry /adp-notion",
+      "files": [
+        ".specify/memory/repositories/etalii.adp.site.md"
+      ]
+    }
+  }
 }
