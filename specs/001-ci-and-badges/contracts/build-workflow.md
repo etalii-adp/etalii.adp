@@ -46,6 +46,7 @@ jobs:
 | `etalii.adp.ide.intellij` | `xvfb-run ./gradlew build` on JDK 25 | the plug-in zip from `build/distributions/` |
 | `etalii.adp.ide.vscode` | `check-files.py`: JSON and YAML parse, markdown links resolve | `plugin` job: `.vsix` once `package.json` exists, skipped with a notice before |
 | `etalii.adp.ide.eclipse` | `check-files.py`: JSON and YAML parse, markdown links resolve | `plugin` job: update-site zip once `pom.xml` exists, skipped with a notice before |
+| `etalii.adp.ide.notion` | `check-files.py`: JSON and YAML parse, markdown links resolve | `addons` job: the published tree that `node scripts/build.mjs --out <dir>` writes, built and checked on every run |
 | `etalii.adp.site` | the jobs of today's `ci.yml`, unchanged apart from the runner | none (deployment stays in `deploy.yml`) |
 
 ## Plug-in job (VS Code and Eclipse)

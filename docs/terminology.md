@@ -1,6 +1,6 @@
 # ADP terminology
 
-The words ADP uses for what it offers, and what each one means. This file is the single source of these definitions (spec [002, naming convention alignment](../specs/002-naming-convention-alignment/naming-convention-alignment.spec.md)); the Notion page "ADP terminology" and the site's pages `/adp/docs/terminology/` and `/adp/docs/specification-and-definition/` repeat it and point here. A change to a definition is made here first, and the others follow in the same change.
+The words ADP uses for what it offers, and what each one means. This file is the single source of these definitions (spec [002, naming convention alignment](../specs/002-naming-convention-alignment/naming-convention-alignment.spec.md)); the page "ADP terminology" in the Notion workspace and the site's pages `/adp/docs/terminology/` and `/adp/docs/specification-and-definition/` repeat it and point here. A change to a definition is made here first, and the others follow in the same change.
 
 ## Tools
 
@@ -50,11 +50,13 @@ Many tools do not store their model in a definition file of their own: the model
 - **Tool engineer**: the person who specifies a tool type in a specification language. Not a "designer", which is a kind of tool, and not an "author".
 - **Document**: one piece of content a user works on with a tool, such as one Wardley map. Where a host registers documents, its **registration file** (`.adp`) names the origin on its first line; for a document whose model is another tool's file, it also names the body and keeps the positions the user placed (FBL, section 8). For a diagram built on DISL, the stored form of the document is a DID definition file.
 - **Module**: the code package in a host that implements one or more tool types of one kind: a *diagram module*, *designer module* or *editor module*.
-- **Host**: an IDE that ADP's tools run in: standalone, IntelliJ, VS Code or Eclipse.
+- **Host**: an environment that ADP's tools run in: standalone, IntelliJ, VS Code, Eclipse or Notion.
+- **IDE host**: one of the four hosts that are IDEs: standalone, IntelliJ, VS Code and Eclipse. Notion is a host and not an IDE host.
+- **Notion add-on**: a web page that shows one tool inside a Notion page. It is how a tool runs in the Notion host.
 - **Runtime**: the software in a host that loads a specification file and lets users create and change definition files with it.
 - **Canvas**: the surface a diagram or a designer is drawn on.
 - **Finding**: the result of evaluating a rule or reading a model, such as a broken constraint, an unreadable entry or a duplicate id. It has a severity (error, warning, info or hint) and says where it is: an element, a source location in a file, or a subject that is not drawn. DISL 0.1 called it a *problem*.
-- **Display name**: the one name of a tool type, spelled and capitalised the same in every host, the catalogue, the site and Notion. It is a name, not a description: "Mind map", not "Mind map (radial/hierarchical, single central topic)".
+- **Display name**: the one name of a tool type, spelled and capitalised the same in every host, the catalogue, the site and the Notion workspace. It is a name, not a description: "Mind map", not "Mind map (radial/hierarchical, single central topic)".
 
 ## Retired uses
 

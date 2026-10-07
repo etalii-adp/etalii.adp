@@ -1,0 +1,7 @@
+# Living specs for this project.
+# Specs go at capabilities/<name>/<name>.spec.md, all under one root.
+# Adopt a code area to add the first capability.
+enabled: true
+layout: central
+exempt: ["*.config.*", "*.test.*", "**/migrations/**"]
+capabilities: []
