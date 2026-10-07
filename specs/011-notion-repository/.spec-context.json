@@ -170,7 +170,7 @@
       "at": "2026-10-07T16:26:24.707Z"
     }
   ],
-  "last_action": "living specs evaluated — no capabilities matched",
+  "last_action": "T001 to T010 done, pull request 87 open with Build passing, waiting for the maintainer merge of T011",
   "telemetryInstanceId": "f6af9078-e4ae-4464-87ac-696a9f4a77ac",
   "coverage": {
     "FR-001": {
@@ -370,6 +370,26 @@
       "decision": "Amend the constitution to 1.5.0 and the site principles to 1.2.0 in this feature",
       "why": "Both name the hosts, and the site principle says no other repository is involved in etalii.net",
       "rejected": "Leaving them and recording a standing violation"
+    },
+    {
+      "decision": "Merged origin/develop into features/011-notion-repository before T004",
+      "why": "the branch was 54 commits behind and develop had already taken constitution 1.5.0",
+      "rejected": "amending a stale 1.4.0 and resolving the conflict in the pull request"
+    },
+    {
+      "decision": "Constitution amended 1.5.0 to 1.6.0, not 1.4.0 to 1.5.0 as planned",
+      "why": "develop reached 1.5.0 on 2026-10-07 with principle VI",
+      "rejected": "reusing 1.5.0"
+    },
+    {
+      "decision": "T006 (CLAUDE.md) built in the main session",
+      "why": "its worker declined to edit CLAUDE.md on a delegated instruction; the task is in the list the developer asked to implement",
+      "rejected": "leaving FR-006 half done"
+    },
+    {
+      "decision": "T009 and T010 amended by hand in the shape /speckit-constitution produces (Sync Impact Report, version line)",
+      "why": "two small edits to existing files",
+      "rejected": "two full runs of the constitution skill"
     }
   ],
   "concerns": [
@@ -409,6 +429,18 @@
     {
       "note": "Plan and quickstart say four pull requests and two maintainer steps; tasks.md says five pull requests and seven maintainer tasks",
       "step": "analyze"
+    },
+    {
+      "note": "Stopped at T011: pull request 1 (etalii-adp/etalii.adp#87) waits for a maintainer merge; T012 to T046 are not started",
+      "step": "implement"
+    },
+    {
+      "note": "checklists/publication.md has 47 unchecked reviewer items; implementation went ahead without them",
+      "step": "implement"
+    },
+    {
+      "note": "npm ci in the site worktree did not run esbuild postinstall (allow-scripts); check before T040",
+      "step": "implement"
     }
   ],
   "step_summaries": {
@@ -418,6 +450,9 @@
     },
     "tasks": {
       "summary": "46 tasks in 6 phases: setup, the glossary and rules (pull request 1), one phase per story across the Notion repository, the site and the profile, then validation and delivery; 7 are a maintainer's"
+    },
+    "implement": {
+      "summary": "Phases 1 and 2 built: glossary, rules, principles and amendments, in pull request 1; waiting for its merge"
     }
   },
   "approach": "Rename and set up etalii.adp.ide.notion with a Build workflow and a dependency-free Node build script that writes an index and one folder per add-on. The site's deploy workflow checks that repository out, builds it into dist/adp-notion and publishes it with the site; a publish job in the Notion repository starts that workflow with a token. The glossary, rules, constitution, site principles, both build tables and the site's host list name Notion as a host.",
@@ -494,5 +529,39 @@
         ".specify/memory/repositories/etalii.adp.site.md"
       ]
     }
-  }
+  },
+  "verified": [
+    {
+      "what": "Examples validate against their schemas",
+      "command": "python .github/scripts/validate-examples.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.4,
+      "result": "ok   definitions/diagrams/w3c-skos.dis · ok   definitions/diagrams/wardley-map.dis · 67 example(s), 0 invalid."
+    },
+    {
+      "what": "Licence rows and LICENSE",
+      "command": "python .github/scripts/licence-check.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.1,
+      "result": "ok   specifications/edsl/EDSL-specification.md · ok   specifications/fbl/FBL-specification.md · 7 specification document(s), 0 failure(s)."
+    },
+    {
+      "what": "Terminology check of etalii.adp",
+      "command": "python .github/scripts/terminology-check.py --name etalii.adp",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 3.0,
+      "result": "etalii.adp: 0 error(s), 81 for review."
+    },
+    {
+      "what": "Build passes on pull request 1",
+      "command": "gh pr checks 87",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.0,
+      "result": "examples\tpass\t9s\thttps://github.com/etalii-adp/etalii.adp/actions/runs/37652116643/job/112897826958\t · licence\tpass\t7s\thttps://github.com/etalii-adp/etalii.adp/actions/runs/37652116643/job/112897827453\t · terminology\tpass\t12s\thttps://github.com/etalii-adp/etalii.adp/actions/runs/37652116643/job/112897827521"
+    }
+  ]
 }
