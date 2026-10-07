@@ -23,7 +23,7 @@ The rules every repository in the `etalii-adp` GitHub organization follows. Work
 
 - **Pull Requests:** tick only "Allow merge commits"; untick "Allow squash merging" and "Allow rebase merging".
 - **Tick "Automatically delete head branches".**
-- **No branch protection or rulesets.** They were not available while the repositories were private on the free plan, and the paid plan was declined (2026-09-26). The pull-request rule above is kept by convention, in the repository's `CLAUDE.md`, so agents must never push to `develop` directly.
+- **No branch protection or rulesets by default.** They were not available while the repositories were private on the free plan, and the paid plan was declined (2026-09-26). The pull-request rule above is kept by convention, in the repository's `CLAUDE.md`, so agents must never push to `develop` directly. Now that the repositories are public, rulesets are free: `etalii.adp.site` has one on `develop` (2026-10-07) that requires a pull request and its `Build` workflow's `complete` job and its `refresh-checks` job, so that a pull request can be set to auto-merge. A repository that adds one gives its `Build` workflow a single job to require, as the site's `complete` does, and says so in its `CLAUDE.md`.
 
 ## Files the repository starts with
 
