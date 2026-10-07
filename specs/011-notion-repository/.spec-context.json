@@ -1,0 +1,117 @@
+{
+  "workflow": "companion",
+  "specName": "A Notion Host Repository, Published at etalii.net/adp/notion",
+  "branch": "features/011-notion-repository",
+  "currentStep": "plan",
+  "status": "planning",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-07T15:05:21.572Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-07T15:07:06.150Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-07T15:36:55.857Z"
+    }
+  ],
+  "last_action": "living specs evaluated — no capabilities matched",
+  "telemetryInstanceId": "f6af9078-e4ae-4464-87ac-696a9f4a77ac",
+  "coverage": {
+    "FR-001": {
+      "title": "Repository is named etalii.adp.ide.notion; the existing etalii-adp-ide-notion is renamed, no second one created"
+    },
+    "FR-002": {
+      "title": "Repository satisfies every rule in docs/new-repository.md"
+    },
+    "FR-003": {
+      "title": "First pull request adds the Build workflow with the terminology job"
+    },
+    "FR-004": {
+      "title": "Both build tables gain a row for etalii.adp.ide.notion"
+    },
+    "FR-005": {
+      "title": "Glossary lists Notion as a host, no longer requires a host to be an IDE, and defines Notion add-on"
+    },
+    "FR-006": {
+      "title": "CLAUDE.md and docs/new-repository.md in etalii.adp name the Notion repository"
+    },
+    "FR-007": {
+      "title": "Repository principles recorded in .specify/memory/repositories/etalii.adp.ide.notion.md"
+    },
+    "FR-008": {
+      "title": "Content served at https://etalii.net/adp/notion over HTTPS by GitHub Pages only"
+    },
+    "FR-009": {
+      "title": "The address serves an index of published add-ons with the published revision"
+    },
+    "FR-010": {
+      "title": "Each add-on has its own stable address under /adp/notion/"
+    },
+    "FR-011": {
+      "title": "A merge into develop publishes without a manual step; an unmerged pull request publishes nothing"
+    },
+    "FR-012": {
+      "title": "Notion and site publications never change or remove each other's pages"
+    },
+    "FR-013": {
+      "title": "A failed publication leaves the previous version in place and shows as a failed run"
+    },
+    "FR-014": {
+      "title": "Every page under /adp/notion is displayable as an embed inside a Notion page"
+    },
+    "FR-015": {
+      "title": "The site names Notion as a host with no tool available yet"
+    }
+  },
+  "size": "oversized",
+  "classification": {
+    "projectedFiles": 17,
+    "projectedTasks": 22,
+    "scopeSignal": "none",
+    "verdict": "oversized"
+  },
+  "expectations": [
+    "No tool add-on is delivered by this feature",
+    "Where a Notion document's model is stored is not decided here",
+    "No Notion API integration or marketplace listing"
+  ],
+  "context": [
+    "area: etalii-adp/etalii-adp-ide-notion on GitHub: exists, empty, name breaks the dot rule, settings not yet checked",
+    "area: etalii.adp docs/terminology.md, docs/new-repository.md, CLAUDE.md, .specify/memory/repositories/",
+    "area: etalii.adp.site src/data/builds.ts and .github/workflows/deploy.yml; its Pages site holds the etalii.net domain and is built by workflow",
+    "area: etalii-adp.github profile/README.md build table",
+    "constraint: docs/new-repository.md rules for every repository",
+    "constraint: site principle that this repository is the only one involved in etalii.net; may need amending in the plan",
+    "constraint: site principle III, no tool claimed that is not published",
+    "constraint: the glossary is changed first; host is defined as an IDE today",
+    "living specs: evaluated, no capabilities registered"
+  ],
+  "intent": "Make etalii.adp.ide.notion a regular etalii-adp repository whose merged content is served at https://etalii.net/adp/notion, ready for the first Notion add-on",
+  "reviewComments": [
+    {
+      "id": "ref-1791387060973-rght4",
+      "doc": "spec",
+      "anchor": {
+        "heading": "User Story 3 - Notion is named as a host wherever hosts are listed (Priority: P3)",
+        "blockText": "",
+        "line": 61
+      },
+      "comment": "Remove the edge case to deploy to adp-notion instead.",
+      "status": "applied",
+      "createdAt": "2026-10-07T15:31:00.974Z"
+    }
+  ]
+}
