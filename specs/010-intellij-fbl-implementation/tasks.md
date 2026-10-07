@@ -34,29 +34,29 @@
 **Wave 1 — independent (different repositories):**
 
 - [x] **T001** [P] In `etalii.adp`, commit this feature's folder and nothing else from the working tree, on `features/010-intellij-fbl-implementation`, push it and open pull request A into `develop`, merged with a merge commit · etalii.adp/specs/010-intellij-fbl-implementation/
-- [ ] **T002** [P] In `etalii.adp.ide.intellij`, create a worktree on a new branch `features/010-intellij-fbl-implementation` from `origin/develop` (`6a976b9` or later). Run `./gradlew build -x integrationTest` there, confirm it passes, and note how long the test tasks took: SC-008 is measured against it in T064 · etalii.adp.ide.intellij/.claude/worktrees/010-intellij-fbl-implementation
+- [x] **T002** [P] In `etalii.adp.ide.intellij`, create a worktree on a new branch `features/010-intellij-fbl-implementation` from `origin/develop` (`6a976b9` or later). Run `./gradlew build -x integrationTest` there, confirm it passes, and note how long the test tasks took: SC-008 is measured against it in T064 · etalii.adp.ide.intellij/.claude/worktrees/010-intellij-fbl-implementation
 
 **⟶ Wait for Wave 1 to finish, then:**
 
 **Wave 2 — independent (different files):**
 
-- [ ] **T003** [P] Add the line `fbl/testdata/** -text`, with a comment that the FBL corpus is compared byte for byte, and commit it before any corpus file exists · etalii.adp.ide.intellij/.gitattributes
-- [ ] **T004** [P] Add `"fbl"` to the `include` of `etalii.adp.ide.intellij/settings.gradle.kts`, and create the module's build script, cloned from `freemind/build.gradle.kts`: no `implementation(project(":core"))`, `testImplementation(project(":freemind"))` added, `-Xlint:all` and `-Werror` on every `JavaCompile` task, and the system properties `adp.fbl.testdata` (the module's `testdata`) and `adp.freemind.testdata` (`freemind/testdata`), both declared as test inputs · etalii.adp.ide.intellij/fbl/build.gradle.kts
+- [x] **T003** [P] Add the line `fbl/testdata/** -text`, with a comment that the FBL corpus is compared byte for byte, and commit it before any corpus file exists · etalii.adp.ide.intellij/.gitattributes
+- [x] **T004** [P] Add `"fbl"` to the `include` of `etalii.adp.ide.intellij/settings.gradle.kts`, and create the module's build script, cloned from `freemind/build.gradle.kts`: no `implementation(project(":core"))`, `testImplementation(project(":freemind"))` added, `-Xlint:all` and `-Werror` on every `JavaCompile` task, and the system properties `adp.fbl.testdata` (the module's `testdata`) and `adp.freemind.testdata` (`freemind/testdata`), both declared as test inputs · etalii.adp.ide.intellij/fbl/build.gradle.kts
 
 **⟶ Wait for Wave 2 to finish, then:**
 
 **Wave 3 — independent (different files):**
 
-- [ ] **T005** [P] Write the eight `.fbl` documents, `fixtures/` and `registrations/` of `specifications/fbl/` with `git -C ../etalii.adp archive <commit>`, from the commit `origin/develop` of `etalii.adp` is at, never from a working tree. Add `README.md` (that commit, Apache-2.0, never edited here) and `SHA256SUMS` (one line for every file). Check that no copied file holds the previous host's name, which `NoPreviousHostIntegrationTest` scans for · etalii.adp.ide.intellij/fbl/testdata/conformance/
-- [ ] **T006** [P] Create the test support: `Corpus` (the bytes of a file under `adp.fbl.testdata`, and the listing of a folder) and `TemporaryFolder` (removed after the test, with a helper that creates a symbolic link or aborts the test through a JUnit assumption with the system's reason) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/support/Corpus.java, etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/support/TemporaryFolder.java
+- [x] **T005** [P] Write the eight `.fbl` documents, `fixtures/` and `registrations/` of `specifications/fbl/` with `git -C ../etalii.adp archive <commit>`, from the commit `origin/develop` of `etalii.adp` is at, never from a working tree. Add `README.md` (that commit, Apache-2.0, never edited here) and `SHA256SUMS` (one line for every file). Check that no copied file holds the previous host's name, which `NoPreviousHostIntegrationTest` scans for · etalii.adp.ide.intellij/fbl/testdata/conformance/
+- [x] **T006** [P] Create the test support: `Corpus` (the bytes of a file under `adp.fbl.testdata`, and the listing of a folder) and `TemporaryFolder` (removed after the test, with a helper that creates a symbolic link or aborts the test through a JUnit assumption with the system's reason) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/support/Corpus.java, etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/support/TemporaryFolder.java
 
 **⟶ Wait for Wave 3 to finish, then:**
 
 **Wave 4 — independent (different files):**
 
-- [ ] **T007** [P] Write `CorpusUnchangedTest`: every file under `conformance/` is listed in `SHA256SUMS` with its digest, nothing listed is missing, the failure names the file, and an empty folder fails. See it fail on a copy saved with CRLF, then restore the copy (FR-015) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/conformance/CorpusUnchangedTest.java
-- [ ] **T008** [P] Write `HostFreeTest`, after `freemind`'s `FormatPurityTest` and `NoNetworkAccessTest`: no file under `fbl/src/main` has an import of the five forbidden packages, and none holds the stem of a copied `.fbl` file. It fails while it finds no source file, which is its first failure (FR-001, FR-002, FR-003) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/HostFreeTest.java
-- [ ] **T009** [P] Write the inventory, a table of 86 rows (`File.Method` of the source's tests, the counterpart `Class.method` or `not applicable`, the reason), and `BaselineCoverageTest`, after `freemind`'s `InventoryCoverageTest`: 86 rows, every named class and method exists, and `not applicable` only on `Registrations.AW3CReadingsSuggestMatchesItsBody`, `AC4RegistrationReadsItsLegacyLayout`, `TheC4LegacyLayoutsArePositionedThroughTheirRegistrations` and `EveryChartFolderIsRecognisedAndEveryTurtleFileRoutesToTheTurtleBinding`. `ModuleCrossCheck.TheBindingReadsTheIdsTheModuleReads` maps to `FreeMindCrossCheckTest`, with the three parsers this host lacks named in its reason column. It stays failing until Phase 5 ends (FR-017, FR-018) · etalii.adp.ide.intellij/fbl/testdata/baseline/fbl-test-inventory.md, etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/BaselineCoverageTest.java
+- [x] **T007** [P] Write `CorpusUnchangedTest`: every file under `conformance/` is listed in `SHA256SUMS` with its digest, nothing listed is missing, the failure names the file, and an empty folder fails. See it fail on a copy saved with CRLF, then restore the copy (FR-015) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/conformance/CorpusUnchangedTest.java
+- [x] **T008** [P] Write `HostFreeTest`, after `freemind`'s `FormatPurityTest` and `NoNetworkAccessTest`: no file under `fbl/src/main` has an import of the five forbidden packages, and none holds the stem of a copied `.fbl` file. It fails while it finds no source file, which is its first failure (FR-001, FR-002, FR-003) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/HostFreeTest.java
+- [x] **T009** [P] Write the inventory, a table of 86 rows (`File.Method` of the source's tests, the counterpart `Class.method` or `not applicable`, the reason), and `BaselineCoverageTest`, after `freemind`'s `InventoryCoverageTest`: 86 rows, every named class and method exists, and `not applicable` only on `Registrations.AW3CReadingsSuggestMatchesItsBody`, `AC4RegistrationReadsItsLegacyLayout`, `TheC4LegacyLayoutsArePositionedThroughTheirRegistrations` and `EveryChartFolderIsRecognisedAndEveryTurtleFileRoutesToTheTurtleBinding`. `ModuleCrossCheck.TheBindingReadsTheIdsTheModuleReads` maps to `FreeMindCrossCheckTest`, with the three parsers this host lacks named in its reason column. It stays failing until Phase 5 ends (FR-017, FR-018) · etalii.adp.ide.intellij/fbl/testdata/baseline/fbl-test-inventory.md, etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/BaselineCoverageTest.java
 
 **Checkpoint**: `CorpusUnchangedTest` passes. `HostFreeTest` and `BaselineCoverageTest` fail for want of code, as intended. The plug-in's existing tests pass unchanged.
 
@@ -70,36 +70,36 @@
 
 **Wave 1 — independent (different files):**
 
-- [ ] **T010** [P] Write `BodyTextTest`: the 6 counterparts of `Bytes/BodyText.Tests.cs` (one theory of 4 rows) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/text/BodyTextTest.java
-- [ ] **T011** [P] Write `ExpressionsTest`: the 5 counterparts of `Expressions/Expressions.Tests.cs` (four theories, 24 rows), and one test of this host's own: a pattern that backtracks without end on a hostile line gives no match and the finding `fbl.regex-timeout` within a match time of 50 ms (FR-013) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/expression/ExpressionsTest.java
-- [ ] **T012** [P] Write `LoadingTest`: the 9 counterparts of `Loading/Loading.Tests.cs` (three theories, 13 rows), and one more test, every copied `.fbl` under `conformance/` loads with no problem of severity error, with a guard that eight were found · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/document/LoadingTest.java
+- [x] **T010** [P] Write `BodyTextTest`: the 6 counterparts of `Bytes/BodyText.Tests.cs` (one theory of 4 rows) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/text/BodyTextTest.java
+- [x] **T011** [P] Write `ExpressionsTest`: the 5 counterparts of `Expressions/Expressions.Tests.cs` (four theories, 24 rows), and one test of this host's own: a pattern that backtracks without end on a hostile line gives no match and the finding `fbl.regex-timeout` within a match time of 50 ms (FR-013) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/expression/ExpressionsTest.java
+- [x] **T012** [P] Write `LoadingTest`: the 9 counterparts of `Loading/Loading.Tests.cs` (three theories, 13 rows), and one more test, every copied `.fbl` under `conformance/` loads with no problem of severity error, with a guard that eight were found · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/document/LoadingTest.java
 
 ### Implementation
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T013** Port `Span.cs`, `Splice.cs`, `Finding.cs` and `FblModel.cs` and the options type. Offsets are byte offsets, start inclusive, end exclusive, byte-order mark counted. Two splices are equal when operation, start, end and text are. `FblOptions` carries the five limits of data-model.md and the optional `deriveId` · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/Splice.java, Finding.java, FindingCodes.java, FblModel.java, FblOptions.java, text/Span.java
+- [x] **T013** Port `Span.cs`, `Splice.cs`, `Finding.cs` and `FblModel.cs` and the options type. Offsets are byte offsets, start inclusive, end exclusive, byte-order mark counted. Two splices are equal when operation, start, end and text are. `FblOptions` carries the five limits of data-model.md and the optional `deriveId` · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/Splice.java, Finding.java, FindingCodes.java, FblModel.java, FblOptions.java, text/Span.java
 
 **⟶ Wait for T013 to finish, then:**
 
 **Wave 2 — independent (different files):**
 
-- [ ] **T014** [P] Port `Text/BodyText.cs` over a `byte[]`: byte-order mark, each line with its own ending, the dominant ending of FBL section 2.6, line and column from a byte offset and back, the offset of each invalid UTF-8 sequence. T010 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/text/BodyText.java
-- [ ] **T015** [P] Port `Expressions/RegexSubset.cs`: the subset validator rejects by the name of the construct and rewrites `\d`, `\w` and case-insensitivity to ASCII classes. `BoundedRegex` runs `java.util.regex` over a `CharSequence` whose `charAt` throws once the deadline of `FblOptions` has passed (research R6) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/expression/RegexSubset.java, etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/expression/BoundedRegex.java
-- [ ] **T016** [P] Write the span-preserving JSON parser the loader and the json family share, from the parsing part of `Files/Json/JsonFamily.cs`: members in document order, the raw text of every number, the byte span of every key, value and comma, and a duplicate key kept with its location (research R4) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/json/JsonParser.java
-- [ ] **T017** [P] Port `Documents/FblModelTypes.cs` as records, with every list in document order, and `Problem` (location, severity, message). Port `Routing/Glob.cs` with it, which the records and the loader use: matching ignores case on Windows and macOS only · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/document/, etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/routing/Glob.java
+- [x] **T014** [P] Port `Text/BodyText.cs` over a `byte[]`: byte-order mark, each line with its own ending, the dominant ending of FBL section 2.6, line and column from a byte offset and back, the offset of each invalid UTF-8 sequence. T010 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/text/BodyText.java
+- [x] **T015** [P] Port `Expressions/RegexSubset.cs`: the subset validator rejects by the name of the construct and rewrites `\d`, `\w` and case-insensitivity to ASCII classes. `BoundedRegex` runs `java.util.regex` over a `CharSequence` whose `charAt` throws once the deadline of `FblOptions` has passed (research R6) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/expression/RegexSubset.java, etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/expression/BoundedRegex.java
+- [x] **T016** [P] Write the span-preserving JSON parser the loader and the json family share, from the parsing part of `Files/Json/JsonFamily.cs`: members in document order, the raw text of every number, the byte span of every key, value and comma, and a duplicate key kept with its location (research R4) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/json/JsonParser.java
+- [x] **T017** [P] Port `Documents/FblModelTypes.cs` as records, with every list in document order, and `Problem` (location, severity, message). Port `Routing/Glob.cs` with it, which the records and the loader use: matching ignores case on Windows and macOS only · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/document/, etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/routing/Glob.java
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T018** Port `Expressions/Cel.cs`: compiler and evaluator for `has()`, member access, ternaries, `==`, `!=`, `&&`, `||`, list literals and `in`. Anything else is rejected at load by the name of the construct (research R7). T011 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/expression/Cel.java
+- [x] **T018** Port `Expressions/Cel.cs`: compiler and evaluator for `has()`, member access, ternaries, `==`, `!=`, `&&`, `||`, list literals and `in`. Anything else is rejected at load by the name of the construct (research R7). T011 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/expression/Cel.java
 
 **⟶ Wait for T018 to finish, then:**
 
-- [ ] **T019** Port `Documents/FblDocumentLoader.cs` on T016: FBL section 14.1, steps 1, 2, 4, 5 and 6. A duplicate key, an unsupported major version, a name that resolves to nothing, a failed rule check and an expression outside the subsets are each a problem at the location of its cause, and every problem is reported. The checks that need DISL are not made (research R20). T012 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/document/FblDocumentLoader.java
+- [x] **T019** Port `Documents/FblDocumentLoader.cs` on T016: FBL section 14.1, steps 1, 2, 4, 5 and 6. A duplicate key, an unsupported major version, a name that resolves to nothing, a failed rule check and an expression outside the subsets are each a problem at the location of its cause, and every problem is reported. The checks that need DISL are not made (research R20). T012 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/document/FblDocumentLoader.java
 
 **⟶ Wait for T019 to finish, then:**
 
-- [ ] **T020** Gate: if a copied binding does not load with the subsets of T015 and T018, stop and raise it in `etalii-adp/etalii.adp` before going on. Do not edit the binding and do not widen a subset (FR-014) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/expression/
+- [x] **T020** Gate: if a copied binding does not load with the subsets of T015 and T018, stop and raise it in `etalii-adp/etalii.adp` before going on. Do not edit the binding and do not widen a subset (FR-014) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/expression/
 
 **Checkpoint**: T010 to T012 pass, every copied binding loads, and `HostFreeTest` passes for the first time.
 
@@ -119,63 +119,63 @@ Owned test files: `rule/ReadingTest`, `yaml/YamlScalarsTest`, `plan/NumberTextTe
 
 **Wave 1 — independent (different files):**
 
-- [ ] **T021** [P] [US1] Write `ReadingTest`: the 11 counterparts of `Reading/Reading.Tests.cs` · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/rule/ReadingTest.java
-- [ ] **T022** [P] [US1] Write `YamlScalarsTest`: the 4 counterparts of `Yaml/YamlScalars.Tests.cs` (three theories, 51 rows) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/yaml/YamlScalarsTest.java
-- [ ] **T023** [P] [US1] Write `NumberTextTest`, which no baseline test covers: the numbers the fixtures and the source's legacy-layout test write, a whole double without `.0`, `1e21` in exponent form and `1e20` not, `-0` as `0`, and three fixed decimals rounding a half up (research R8) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/plan/NumberTextTest.java
-- [ ] **T024** [P] [US1] Write `HistoryTest`: the 5 counterparts of `History/History.Tests.cs` · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/history/HistoryTest.java
-- [ ] **T025** [P] [US1] Write `LimitsTest`, which no baseline test covers: a body over the size limit and a body with more entries than the entry limit are each unreadable with one finding, read with small limits passed through `FblOptions` (FR-013) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/LimitsTest.java
-- [ ] **T026** [P] [US1] Port `Support/NaturalIds.cs` as a `deriveId` function keyed by binding and rule. It lives under `src/test` because it names bindings (research R10) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/support/NaturalIds.java
+- [x] **T021** [P] [US1] Write `ReadingTest`: the 11 counterparts of `Reading/Reading.Tests.cs` · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/rule/ReadingTest.java
+- [x] **T022** [P] [US1] Write `YamlScalarsTest`: the 4 counterparts of `Yaml/YamlScalars.Tests.cs` (three theories, 51 rows) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/yaml/YamlScalarsTest.java
+- [x] **T023** [P] [US1] Write `NumberTextTest`, which no baseline test covers: the numbers the fixtures and the source's legacy-layout test write, a whole double without `.0`, `1e21` in exponent form and `1e20` not, `-0` as `0`, and three fixed decimals rounding a half up (research R8) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/plan/NumberTextTest.java
+- [x] **T024** [P] [US1] Write `HistoryTest`: the 5 counterparts of `History/History.Tests.cs` · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/history/HistoryTest.java
+- [x] **T025** [P] [US1] Write `LimitsTest`, which no baseline test covers: a body over the size limit and a body with more entries than the entry limit are each unreadable with one finding, read with small limits passed through `FblOptions` (FR-013) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/LimitsTest.java
+- [x] **T026** [P] [US1] Port `Support/NaturalIds.cs` as a `deriveId` function keyed by binding and rule. It lives under `src/test` because it names bindings (research R10) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/support/NaturalIds.java
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T027** [US1] Write `ConformanceFixturesTest`, porting `Conformance/ConformanceFixtures.Tests.cs`: the fixtures are found (eight, and none fails), every step of every fixture (the reading it lists, then the step's splices by operation, start, end and text, then its document, or its `refused` reason with the bytes unchanged), and every byte of an input that is not a registration belongs to the reading. A fixture whose input ends in `.adp` runs against the registration with no body beside it. The runner supports `expectFile`, a splice's `file` and `add.after` as the source's does (research R13). `fixture.json` is read with the platform's Gson, on the test classpath only (FR-016) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/conformance/ConformanceFixturesTest.java
+- [x] **T027** [US1] Write `ConformanceFixturesTest`, porting `Conformance/ConformanceFixtures.Tests.cs`: the fixtures are found (eight, and none fails), every step of every fixture (the reading it lists, then the step's splices by operation, start, end and text, then its document, or its `refused` reason with the bytes unchanged), and every byte of an input that is not a registration belongs to the reading. A fixture whose input ends in `.adp` runs against the registration with no body beside it. The runner supports `expectFile`, a splice's `file` and `add.after` as the source's does (research R13). `fixture.json` is read with the platform's Gson, on the test classpath only (FR-016) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/conformance/ConformanceFixturesTest.java
 
 ### Implementation
 
 **⟶ Wait for T027 to finish, then:**
 
-- [ ] **T028** [US1] Port `Planning/_Model/` and `Planning/Plan.cs`: `ModelChange` (save, add, set, remove, place, identify), `PlanResult` (the splices or a refusal with its reason), `Plan` and `EmitPart` · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/plan/ModelChange.java, PlanResult.java, Plan.java, EmitPart.java
+- [x] **T028** [US1] Port `Planning/_Model/` and `Planning/Plan.cs`: `ModelChange` (save, add, set, remove, place, identify), `PlanResult` (the splices or a refusal with its reason), `Plan` and `EmitPart` · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/plan/ModelChange.java, PlanResult.java, Plan.java, EmitPart.java
 
 **⟶ Wait for T028 to finish, then:**
 
 **Wave 2 — independent (different files):**
 
-- [ ] **T029** [P] [US1] Port `Rules/FamilyReader.cs` and `Rules/Selector.cs`: entries, candidates, slots and trivia, such that every byte of a readable body belongs to an entry or to trivia · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/rule/FamilyReader.java, etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/rule/Selector.java
-- [ ] **T030** [P] [US1] Port `Planning/NewText.cs`, with its number writing in `NumberText`: ECMAScript's `Number.prototype.toString` shaped from `Double.toString`, fixed decimals through `BigDecimal` and `RoundingMode.HALF_UP`. T023 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/plan/NewText.java, etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/plan/NumberText.java
-- [ ] **T031** [P] [US1] Port `Files/Yaml/YamlScalars.cs`. T022 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/yaml/YamlScalars.java
+- [x] **T029** [P] [US1] Port `Rules/FamilyReader.cs` and `Rules/Selector.cs`: entries, candidates, slots and trivia, such that every byte of a readable body belongs to an entry or to trivia · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/rule/FamilyReader.java, etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/rule/Selector.java
+- [x] **T030** [P] [US1] Port `Planning/NewText.cs`, with its number writing in `NumberText`: ECMAScript's `Number.prototype.toString` shaped from `Double.toString`, fixed decimals through `BigDecimal` and `RoundingMode.HALF_UP`. T023 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/plan/NewText.java, etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/plan/NumberText.java
+- [x] **T031** [P] [US1] Port `Files/Yaml/YamlScalars.cs`. T022 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/yaml/YamlScalars.java
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T032** [US1] Port `Rules/TreeFamily.cs`: the tree values and entries the yaml and json families share · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/rule/TreeFamily.java
+- [x] **T032** [US1] Port `Rules/TreeFamily.cs`: the tree values and entries the yaml and json families share · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/rule/TreeFamily.java
 
 **⟶ Wait for T032 to finish, then:**
 
 **Wave 3 — independent (one family each, read and write):**
 
-- [ ] **T033** [P] [US1] Port `Files/Yaml/YamlParser.cs`, `FlowReader.cs` and `YamlFamily.cs`. The module's own parser decides whether a body is well-formed: one it cannot parse at the top level is unreadable (research R5) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/yaml/YamlParser.java, FlowReader.java, YamlFamily.java
-- [ ] **T034** [P] [US1] Port the rest of `Files/Json/JsonFamily.cs` on T016's parser · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/json/JsonFamily.java
-- [ ] **T035** [P] [US1] Port `Files/Xml/XmlFamily.cs` and its `_Model/`: a scanner over bytes that keeps carriage returns, with `self-close` and `open-block`. `core`'s `XmlScanner` is not used (research R3) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/xml/
-- [ ] **T036** [P] [US1] Port `Files/Lines/LinesFamily.cs`, for `lines` and `blocks`, with `re-emit-line` and `open-block` · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/lines/LinesFamily.java
+- [x] **T033** [P] [US1] Port `Files/Yaml/YamlParser.cs`, `FlowReader.cs` and `YamlFamily.cs`. The module's own parser decides whether a body is well-formed: one it cannot parse at the top level is unreadable (research R5) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/yaml/YamlParser.java, FlowReader.java, YamlFamily.java
+- [x] **T034** [P] [US1] Port the rest of `Files/Json/JsonFamily.cs` on T016's parser · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/json/JsonFamily.java
+- [x] **T035** [P] [US1] Port `Files/Xml/XmlFamily.cs` and its `_Model/`: a scanner over bytes that keeps carriage returns, with `self-close` and `open-block`. `core`'s `XmlScanner` is not used (research R3) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/xml/
+- [x] **T036** [P] [US1] Port `Files/Lines/LinesFamily.cs`, for `lines` and `blocks`, with `re-emit-line` and `open-block` · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/lines/LinesFamily.java
 
 **⟶ Wait for Wave 3 to finish, then:**
 
-- [ ] **T037** [US1] Port `Rules/BodyReading.cs`: an entry becomes at most one element or relation, taken by the first rule in binding order; findings and never a failure for an entry without an id, two equal ids and a missing header; an unreadable body gives an empty model with one finding; the size and entry limits; `deriveId` for an entry whose rule stores no id. T025 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/rule/BodyReading.java
+- [x] **T037** [US1] Port `Rules/BodyReading.cs`: an entry becomes at most one element or relation, taken by the first rule in binding order; findings and never a failure for an entry without an id, two equal ids and a missing header; an unreadable body gives an empty model with one finding; the size and entry limits; `deriveId` for an entry whose rule stores no id. T025 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/rule/BodyReading.java
 
 **⟶ Wait for T037 to finish, then:**
 
-- [ ] **T038** [US1] Port `Planning/EditPlanner.cs`: a save plans no splice, a change that cannot be planned is refused whole, and the same body, binding and change give the same splices · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/plan/EditPlanner.java
+- [x] **T038** [US1] Port `Planning/EditPlanner.cs`: a save plans no splice, a change that cannot be planned is refused whole, and the same body, binding and change give the same splices · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/plan/EditPlanner.java
 
 **⟶ Wait for T038 to finish, then:**
 
-- [ ] **T039** [US1] Port `History/SplicedFile.cs`, `EditHistory.cs` and `OpenBody.cs`: bytes spliced and read again after every edit, an entry with the SHA-256 before and after, undo and redo refused on drift with nothing written, no entry for an edit without splices, saving through the writer callback, an unreadable body never saved (research R9). T024 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/history/SplicedFile.java, EditHistory.java, OpenBody.java
+- [x] **T039** [US1] Port `History/SplicedFile.cs`, `EditHistory.cs` and `OpenBody.cs`: bytes spliced and read again after every edit, an entry with the SHA-256 before and after, undo and redo refused on drift with nothing written, no entry for an edit without splices, saving through the writer callback, an unreadable body never saved (research R9). T024 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/history/SplicedFile.java, EditHistory.java, OpenBody.java
 
 **⟶ Wait for T039 to finish, then:**
 
-- [ ] **T040** [US1] Port `Registration/RegistrationDocument.cs` and `OpenRegistration.cs`: origin, headers in order, the layout and identities blocks with the span of every entry, layout numbers at three decimals, an unknown header kept and reported, a stale layout entry reported and removed at the next write. T021 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/registration/RegistrationDocument.java, etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/registration/OpenRegistration.java
+- [x] **T040** [US1] Port `Registration/RegistrationDocument.cs` and `OpenRegistration.cs`: origin, headers in order, the layout and identities blocks with the span of every entry, layout numbers at three decimals, an unknown header kept and reported, a stale layout entry reported and removed at the next write. T021 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/registration/RegistrationDocument.java, etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/registration/OpenRegistration.java
 
 **⟶ Wait for T040 to finish, then:**
 
-- [ ] **T041** [US1] Run T027 until all eight fixtures pass. A splice that differs from a fixture's is a fault of the port, to be found in the source, never a reason to change a fixture. Then write LF where a body has CRLF, see a fixture fail, and take the fault out (SC-001, SC-005) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/
+- [x] **T041** [US1] Run T027 until all eight fixtures pass. A splice that differs from a fixture's is a fault of the port, to be found in the source, never a reason to change a fixture. Then write LF where a body has CRLF, see a fixture fail, and take the fault out (SC-001, SC-005) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/
 
 **Checkpoint**: SC-001. All eight fixtures pass, with `ReadingTest`, `YamlScalarsTest`, `NumberTextTest`, `HistoryTest` and `LimitsTest`.
 
@@ -195,10 +195,10 @@ Owned test files: `registration/RegistrationTest`, `routing/RoutingTest`, `routi
 
 **Wave 1 — independent (different files):**
 
-- [ ] **T042** [P] [US2] Write `RegistrationTest`: the 9 counterparts of `Registration/Registration.Tests.cs` (one theory of 2 rows). The test of a body reached through a link uses T006's assumption · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/registration/RegistrationTest.java
-- [ ] **T043** [P] [US2] Write `RoutingTest`: the 9 counterparts of `Routing/Routing.Tests.cs` (three theories, 17 rows). The folder test that must not follow a link uses T006's assumption · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/routing/RoutingTest.java
-- [ ] **T044** [P] [US2] Write `TemplatesTest`: the 5 counterparts of `Routing/Templates.Tests.cs` (one theory of 6 rows, one over every template the copied bindings declare, with a guard on their count) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/routing/TemplatesTest.java
-- [ ] **T045** [P] [US2] Write `PluginBodyTest`, the 5 counterparts of `Plugins/PluginBody.Tests.cs`, and `FakePlugin`, which stands in for a persistence plugin · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/plugin/PluginBodyTest.java, etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/support/FakePlugin.java
+- [x] **T042** [P] [US2] Write `RegistrationTest`: the 9 counterparts of `Registration/Registration.Tests.cs` (one theory of 2 rows). The test of a body reached through a link uses T006's assumption · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/registration/RegistrationTest.java
+- [x] **T043** [P] [US2] Write `RoutingTest`: the 9 counterparts of `Routing/Routing.Tests.cs` (three theories, 17 rows). The folder test that must not follow a link uses T006's assumption · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/routing/RoutingTest.java
+- [x] **T044** [P] [US2] Write `TemplatesTest`: the 5 counterparts of `Routing/Templates.Tests.cs` (one theory of 6 rows, one over every template the copied bindings declare, with a guard on their count) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/routing/TemplatesTest.java
+- [x] **T045** [P] [US2] Write `PluginBodyTest`, the 5 counterparts of `Plugins/PluginBody.Tests.cs`, and `FakePlugin`, which stands in for a persistence plugin · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/plugin/PluginBodyTest.java, etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/support/FakePlugin.java
 
 ### Implementation
 
@@ -206,17 +206,17 @@ Owned test files: `registration/RegistrationTest`, `routing/RoutingTest`, `routi
 
 **Wave 2 — independent (different files):**
 
-- [ ] **T046** [P] [US2] Port `Registration/BodyLocator.cs`: the body found as FBL section 8.2 says, within a root the caller passes; refused when the path is absolute, leaves the root or passes through a link (`Files.isSymbolicLink` and `toRealPath` containment, research R19) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/registration/BodyLocator.java
-- [ ] **T047** [P] [US2] Port `Registration/LegacySidecar.cs`: a JSON file read and written by json splices, as a `SplicedFile` · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/registration/LegacySidecar.java
-- [ ] **T048** [P] [US2] Port `Routing/MarkerEvaluator.cs`, on T017's `Glob`: a pattern marker looks at the lines `FblOptions` says, and a YAML `rootKey` marker is read by the module's own parser · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/routing/MarkerEvaluator.java
-- [ ] **T049** [P] [US2] Port `Plugins/IPersistencePlugin.cs`, its `_Model/` and `Plugins/PluginBody.cs`: without its plugin a body opens read-only with a finding that says why; with one, its splices are applied, recorded and undone as any other. T045 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/plugin/
+- [x] **T046** [P] [US2] Port `Registration/BodyLocator.cs`: the body found as FBL section 8.2 says, within a root the caller passes; refused when the path is absolute, leaves the root or passes through a link (`Files.isSymbolicLink` and `toRealPath` containment, research R19) · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/registration/BodyLocator.java
+- [x] **T047** [P] [US2] Port `Registration/LegacySidecar.cs`: a JSON file read and written by json splices, as a `SplicedFile` · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/registration/LegacySidecar.java
+- [x] **T048** [P] [US2] Port `Routing/MarkerEvaluator.cs`, on T017's `Glob`: a pattern marker looks at the lines `FblOptions` says, and a YAML `rootKey` marker is read by the module's own parser · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/routing/MarkerEvaluator.java
+- [x] **T049** [P] [US2] Port `Plugins/IPersistencePlugin.cs`, its `_Model/` and `Plugins/PluginBody.cs`: without its plugin a body opens read-only with a finding that says why; with one, its splices are applied, recorded and undone as any other. T045 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/plugin/
 
 **⟶ Wait for Wave 2 to finish, then:**
 
 **Wave 3 — independent (different files):**
 
-- [ ] **T050** [P] [US2] Port `Routing/Router.cs` and `Routing/FolderSubject.cs`: the candidate bindings of a file or folder in their order, and a folder subject's files selected without following a link. T042 and T043 pass · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/routing/Router.java, etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/routing/FolderSubject.java
-- [ ] **T051** [P] [US2] Port `Routing/TemplateWriter.cs`: a binding's template with its placeholders replaced and nothing else, never evaluated. T044 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/routing/TemplateWriter.java
+- [x] **T050** [P] [US2] Port `Routing/Router.cs` and `Routing/FolderSubject.cs`: the candidate bindings of a file or folder in their order, and a folder subject's files selected without following a link. T042 and T043 pass · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/routing/Router.java, etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/routing/FolderSubject.java
+- [x] **T051** [P] [US2] Port `Routing/TemplateWriter.cs`: a binding's template with its placeholders replaced and nothing else, never evaluated. T044 passes · etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/routing/TemplateWriter.java
 
 **Checkpoint**: the 68 rule tests and the 3 fixture tests have passing counterparts. On Windows the two link tests are skipped with their reason.
 
@@ -234,28 +234,28 @@ Files: `fbl/testdata/real/`, `fbl/testdata/divergences.json`.
 
 Owned test files: everything under `fbl/src/test/java/etalii/adp/fbl/real/`.
 
-- [ ] **T052** [US3] Write, with `git -C ../etalii.adp.ide.standalone archive 25fc7b4a`, the files the source's `RealFiles/RealFileCorpus.cs` selects for timeline (15), causal loop (4), structurizr (16), databricks job (4) and databricks pipeline (2), and every `.adp` beside one of them that names it, with their paths under `src/` kept. Add `README.md` (the commit, Apache-2.0). Refuse a file whose licence is share-alike or unknown, and check that none holds the previous host's name (FR-019, research R15) · etalii.adp.ide.intellij/fbl/testdata/real/
+- [x] **T052** [US3] Write, with `git -C ../etalii.adp.ide.standalone archive 25fc7b4a`, the files the source's `RealFiles/RealFileCorpus.cs` selects for timeline (15), causal loop (4), structurizr (16), databricks job (4) and databricks pipeline (2), and every `.adp` beside one of them that names it, with their paths under `src/` kept. Add `README.md` (the commit, Apache-2.0). Refuse a file whose licence is share-alike or unknown, and check that none holds the previous host's name (FR-019, research R15) · etalii.adp.ide.intellij/fbl/testdata/real/
 
 **⟶ Wait for T052 to finish, then:**
 
 **Wave 1 — independent (different files):**
 
-- [ ] **T053** [P] [US3] Port `RealFiles/RealFileCorpus.cs`: the enumeration of `fbl/testdata/real/` by the source's selection rules, and of every `.mm` under `adp.freemind.testdata`, each with its recorded minimum (108, 15, 4, 16, 4, 2, and the registrations as counted in T052) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/RealFileCorpus.java
-- [ ] **T054** [P] [US3] Port `RealFiles/Divergences.cs` and start the record as an empty array: an unlisted disagreement fails, a listed one observed differently fails, a listed one that no longer occurs fails, and every entry has a reason and names a file of the corpus (FR-022, research R16) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/Divergences.java, etalii.adp.ide.intellij/fbl/testdata/divergences.json
+- [x] **T053** [P] [US3] Port `RealFiles/RealFileCorpus.cs`: the enumeration of `fbl/testdata/real/` by the source's selection rules, and of every `.mm` under `adp.freemind.testdata`, each with its recorded minimum (108, 15, 4, 16, 4, 2, and the registrations as counted in T052) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/RealFileCorpus.java
+- [x] **T054** [P] [US3] Port `RealFiles/Divergences.cs` and start the record as an empty array: an unlisted disagreement fails, a listed one observed differently fails, a listed one that no longer occurs fails, and every entry has a reason and names a file of the corpus (FR-022, research R16) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/Divergences.java, etalii.adp.ide.intellij/fbl/testdata/divergences.json
 
 **⟶ Wait for Wave 1 to finish, then:**
 
 **Wave 2 — independent (different files):**
 
-- [ ] **T055** [P] [US3] Write `DeclaredBodiesTest`: the 7 counterparts of `RealFiles/DeclaredBodies.Tests.cs`, the five properties of contracts/build-interface.md over binding and file, each with a guard on the count · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/DeclaredBodiesTest.java
-- [ ] **T056** [P] [US3] Write `RegistrationsTest`: the counterparts of `TheEnumerationFindsTheRegistrations`, `TheRegistrationParsesAndSavesUnchanged` and `ADeclaredBindingsRegistrationOpensItsBody`. The other four of `RealFiles/Registrations.Tests.cs` are the inventory's `not applicable` rows (FR-021) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/RegistrationsTest.java
-- [ ] **T057** [P] [US3] Write `FreeMindCrossCheckTest`: for each of the 108 maps, `MindMapParser.parse(String)` walked from the root in document order collecting `MapNode.id()`, compared with the ids the `node` rule of `mindmap.fbl#freeplane` reads, in order. A file one side refuses and the other reads is a divergence of property `cross-check`. Nothing in `freemind` changes (FR-020, research R17) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/FreeMindCrossCheckTest.java
+- [x] **T055** [P] [US3] Write `DeclaredBodiesTest`: the 7 counterparts of `RealFiles/DeclaredBodies.Tests.cs`, the five properties of contracts/build-interface.md over binding and file, each with a guard on the count · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/DeclaredBodiesTest.java
+- [x] **T056** [P] [US3] Write `RegistrationsTest`: the counterparts of `TheEnumerationFindsTheRegistrations`, `TheRegistrationParsesAndSavesUnchanged` and `ADeclaredBindingsRegistrationOpensItsBody`. The other four of `RealFiles/Registrations.Tests.cs` are the inventory's `not applicable` rows (FR-021) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/RegistrationsTest.java
+- [x] **T057** [P] [US3] Write `FreeMindCrossCheckTest`: for each of the 108 maps, `MindMapParser.parse(String)` walked from the root in document order collecting `MapNode.id()`, compared with the ids the `node` rule of `mindmap.fbl#freeplane` reads, in order. A file one side refuses and the other reads is a divergence of property `cross-check`. Nothing in `freemind` changes (FR-020, research R17) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/FreeMindCrossCheckTest.java
 
 ### Implementation
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T058** [US3] Run T055 to T057 and settle every failure. A fault of the port is fixed under `fbl/src/main` and pinned by a test in `PortFaultsTest`. A disagreement between a copied binding and a real file is entered in `divergences.json` with what was observed and why, only when this host's tests show it. No binding is edited, no file skipped and no assertion weakened. An entry that differs from the source's `RealFiles/divergences.json`, or one of the source's that does not arise here, is noted for T065 · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/PortFaultsTest.java
+- [x] **T058** [US3] Run T055 to T057 and settle every failure. A fault of the port is fixed under `fbl/src/main` and pinned by a test in `PortFaultsTest`. A disagreement between a copied binding and a real file is entered in `divergences.json` with what was observed and why, only when this host's tests show it. No binding is edited, no file skipped and no assertion weakened. An entry that differs from the source's `RealFiles/divergences.json`, or one of the source's that does not arise here, is noted for T065 · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/real/PortFaultsTest.java
 
 **Checkpoint**: SC-002, SC-003 and SC-004. `./gradlew :fbl:test` passes whole, `BaselineCoverageTest` included: 82 counterparts and 4 rows not applicable.
 
@@ -275,14 +275,14 @@ Owned test files: `fbl/.../platform/FblOnThePlatformTest`, `src/integrationTest/
 
 **Wave 1 — independent (different files):**
 
-- [ ] **T059** [P] [US4] Write `FblOnThePlatformTest`, a JUnit 4 `BasePlatformTestCase`: load `timeline.fbl`, read the `timeline-edits` fixture's body from a file in the test project, save it unchanged, make the fixture's first edit and undo it, comparing bytes each time. It adds no behaviour, so see it fail by comparing against a wrong expected document once, then correct it (FR-023, research R18) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/platform/FblOnThePlatformTest.java
-- [ ] **T060** [P] [US4] Write `FblInPluginIntegrationTest`, as `NoPreviousHostIntegrationTest` inspects the zip: the built zip holds classes under `etalii/adp/fbl/`. It starts no IDE, and fails until T061 (FR-002) · etalii.adp.ide.intellij/src/integrationTest/java/etalii/adp/it/FblInPluginIntegrationTest.java
+- [x] **T059** [P] [US4] Write `FblOnThePlatformTest`, a JUnit 4 `BasePlatformTestCase`: load `timeline.fbl`, read the `timeline-edits` fixture's body from a file in the test project, save it unchanged, make the fixture's first edit and undo it, comparing bytes each time. It adds no behaviour, so see it fail by comparing against a wrong expected document once, then correct it (FR-023, research R18) · etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/platform/FblOnThePlatformTest.java
+- [x] **T060** [P] [US4] Write `FblInPluginIntegrationTest`, as `NoPreviousHostIntegrationTest` inspects the zip: the built zip holds classes under `etalii/adp/fbl/`. It starts no IDE, and fails until T061 (FR-002) · etalii.adp.ide.intellij/src/integrationTest/java/etalii/adp/it/FblInPluginIntegrationTest.java
 
 ### Implementation
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T061** [US4] Add `pluginComposedModule(implementation(project(":fbl")))` beside the three existing ones, and nothing else: no descriptor fragment, no `xi:include`, no entry in `gradle/allowed-licences.properties`. T060 passes, and `git diff origin/develop --stat -- core freemind drawio src/main` is empty (FR-004, SC-007) · etalii.adp.ide.intellij/build.gradle.kts
+- [x] **T061** [US4] Add `pluginComposedModule(implementation(project(":fbl")))` beside the three existing ones, and nothing else: no descriptor fragment, no `xi:include`, no entry in `gradle/allowed-licences.properties`. T060 passes, and `git diff origin/develop --stat -- core freemind drawio src/main` is empty (FR-004, SC-007) · etalii.adp.ide.intellij/build.gradle.kts
 
 **Checkpoint**: SC-006. Both tests pass, and nothing a user can see or do has changed.
 
@@ -294,16 +294,16 @@ Owned test files: `fbl/.../platform/FblOnThePlatformTest`, `src/integrationTest/
 
 **Wave 1 — independent (different files):**
 
-- [ ] **T062** [P] Add a row for `fbl` to the layout table under "Build" and a short section saying: the plug-in carries a generic FBL implementation; it claims *Host, declared* of FBL 0.1 for `yaml`, `json`, `xml`, `lines` and `blocks`, without section 9 and without the loader checks that need DISL; both corpora with their commits; no tool uses it yet, and the tool that first does must join FBL's history to the platform's undo (FR-026, research R20, R22). Use the glossary's words: the Build workflow checks them · etalii.adp.ide.intellij/README.md
-- [ ] **T063** [P] Add `fbl` and the missing `drawio` to the "Modules:" line · etalii.adp.ide.intellij/CLAUDE.md
+- [x] **T062** [P] Add a row for `fbl` to the layout table under "Build" and a short section saying: the plug-in carries a generic FBL implementation; it claims *Host, declared* of FBL 0.1 for `yaml`, `json`, `xml`, `lines` and `blocks`, without section 9 and without the loader checks that need DISL; both corpora with their commits; no tool uses it yet, and the tool that first does must join FBL's history to the platform's undo (FR-026, research R20, R22). Use the glossary's words: the Build workflow checks them · etalii.adp.ide.intellij/README.md
+- [x] **T063** [P] Add `fbl` and the missing `drawio` to the "Modules:" line · etalii.adp.ide.intellij/CLAUDE.md
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T064** Validate against the Success Criteria in the worktree: `./gradlew build -x integrationTest` and `./gradlew integrationTest --tests "*FblInPluginIntegrationTest"` pass with no compiler warning; `./gradlew --offline :fbl:test` passes; the test tasks take at most twice what T002 noted (SC-008); every test that existed before passes unchanged (SC-007); `python3 .github/scripts/skipped-tests.py` lists the two link tests and nothing else of `fbl` when run on Windows · etalii.adp.ide.intellij/fbl/
+- [x] **T064** Validate against the Success Criteria in the worktree: `./gradlew build -x integrationTest` and `./gradlew integrationTest --tests "*FblInPluginIntegrationTest"` pass with no compiler warning; `./gradlew --offline :fbl:test` passes; the test tasks take at most twice what T002 noted (SC-008); every test that existed before passes unchanged (SC-007); `python3 .github/scripts/skipped-tests.py` lists the two link tests and nothing else of `fbl` when run on Windows · etalii.adp.ide.intellij/fbl/
 
 **⟶ Wait for T064 to finish, then:**
 
-- [ ] **T065** File one issue in `etalii-adp/etalii.adp` before pull request 1 is merged: which YAML is well-formed (research R5), the refusal sentences (R11), a class for a host without DISL (R20), the `branch` rule of `mindmap.fbl` that can never match, and every entry of `divergences.json` marked as known from standalone or new, with the differences T058 noted (FR-027, SC-009) · etalii.adp/specs/010-intellij-fbl-implementation/tasks.md
+- [x] **T065** File one issue in `etalii-adp/etalii.adp` before pull request 1 is merged: which YAML is well-formed (research R5), the refusal sentences (R11), a class for a host without DISL (R20), the `branch` rule of `mindmap.fbl` that can never match, and every entry of `divergences.json` marked as known from standalone or new, with the differences T058 noted (FR-027, SC-009) · etalii.adp/specs/010-intellij-fbl-implementation/tasks.md
 
 **⟶ Wait for T065 to finish, then:**
 
