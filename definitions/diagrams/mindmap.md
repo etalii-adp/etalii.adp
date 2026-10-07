@@ -1,6 +1,8 @@
 # Mind map (`freeplane/mindmap`)
 
-This is the companion to [`mindmap.dis`](mindmap.dis), the DISL specification of the Mind map diagram type. The `.dis` holds everything DISL can say: the one node type and its attributes, the derived branches, the notation, the toolbox and context actions, the property form, the rules and the operations. This file holds everything it cannot: the Freeplane `.mm` file format, the two-sided layout algorithm, per-viewer folding, sibling naming, links, the drag-to-re-parent gesture, and the places where the `.dis` could only approximate what the standalone implementation does.
+This is the companion to [`mindmap.dis`](mindmap.dis), the DISL 0.3 specification of the Mind map diagram type. The `.dis` holds everything DISL can say: the one node type and its attributes, the derived branches, the notation, the toolbox and the context menu, the property form, the three rules, the deletion confirmation, the per-viewer folding and the operations. This file holds everything it cannot: the Freeplane `.mm` file format the persistence plugin reads, the two-sided layout algorithm, sibling naming, links, the drag-to-re-parent gesture, and the places where the `.dis` could only approximate what the standalone implementation does.
+
+The standalone host runs this type from the `.dis`: its toolbox, context menus, property rows and findings are derived from it, and its canvas is compiled from the notation. Where the `.dis` and the standalone code disagreed, the code won and the `.dis` was rewritten to say what the code does (Peter's ruling for the DISL switch-over, 2026-10).
 
 Every statement here is tied to the source that shows it. Paths are in [etalii.adp.ide.standalone](https://github.com/etalii-adp/etalii.adp.ide.standalone) on `develop` unless another repository is named; `src/diagrams/mindmap/` is abbreviated to `mindmap/`. "Req" refers to the standalone spec `mindmap-diagram`, which was removed from the tree and is read with `git show "ece03c36^:.spec-workflow/archive/specs/mindmap-diagram/requirements.md"` (and `design.md`, `tasks.md` beside it).
 
@@ -37,11 +39,11 @@ DISL's `persistence.files` describes the files of one diagram, but not the stand
 
 ## 3. The `.mm` format
 
-`mindmap.dis` names the format `plugin:net.etalii.adp.freeplane.mm`, because DISL's persistence layer describes JSON-family DID definitions and a mind map is stored in Freeplane's own XML instead. The plugin's contract is this section.
+`mindmap.dis` stores the map through FBL (`persistence.format: "fbl"`): its binding `mindmap.fbl#mindmap`, which lives beside the standalone module (`mindmap/backend/EtAlii.Adp.Diagram.Mindmap/mindmap.fbl`), names the persistence plugin `net.etalii.adp.freeplane.mm` as its reader, because no declared FBL rule reads nested `<node>` elements whose text may be HTML. The plugin reads every `<node>` as a `Node` with `text`, `notes`, `link` (only when `LINK` is present, empty or not), `folded` and `position`, its parent and its place, and keeps the `ID` the file writes as `storedId`. A later holder of an `ID` the file gives twice, and a node without one, is read under an ephemeral id; findings name it by what the file writes. A file the plugin cannot read is unreadable, with the reason as `std.unparseable`'s `detail.reason`. Edits are not planned by the plugin in the standalone host: they are made in place on the XML by the module's commands, which carry their own undo. The rest of this section is the plugin's contract.
 
 ### 3.1 The principle: the XML is the model
 
-The XML a map was parsed from is the single source of truth. Reading a node reads its element; editing a node edits its element; saving writes the XML back rather than regenerating it. Everything ADP does not understand therefore survives exactly as it was (`_Model/MindmapNode.cs`, `MindmapDocument.cs`; Req 3.2, 3.3). This is why DISL's canonical-form, ordering, `omitDefaults` and id-generation settings do not describe the stored file; they are set in the `.dis` only so the specification is complete.
+The XML a map was parsed from is the single source of truth. Reading a node reads its element; editing a node edits its element; saving writes the XML back rather than regenerating it. Everything ADP does not understand therefore survives exactly as it was (`_Model/MindmapNode.cs`, `MindmapDocument.cs`; Req 3.2, 3.3). This is why the `.dis` states no canonical form, ordering or `omitDefaults`: with `format: "fbl"` DISL forbids them, and the file's own conventions are kept.
 
 ### 3.2 Structure
 
@@ -77,7 +79,7 @@ Everything else is preserved and neither shown nor edited: `hook`, `MapStyle`, `
 
 - Every node has an `ID` once loaded. A node without one is given `ID_` followed by a ShortGuid in memory, and the id is written on the next save - never on open, and never by the read-only validator (`MindmapDocument.AssignMissingIds`, `NewId`; Req 3.4).
 - Freeplane's own ids are `ID_` plus digits; a genuine Freeplane save never contains an id-less node (Fixtures readme, item 3).
-- `mindmap.dis` declares `uuid-v4` with prefix `ID_`, the closest DISL strategy; the exact form is the ShortGuid above.
+- `mindmap.dis` declares `uuid-v4` with prefix `ID_` and `base36` encoding, the ShortGuid above.
 
 ### 3.6 Byte-exact round trip
 
@@ -139,15 +141,16 @@ IntelliJ lays out the same files with its own framework; after Peter's 2026-09-2
 - A collapsed branch is drawn as its node with the ⊕ glyph; its descendants disappear and the rest of the map re-lays out (`MindmapSession.OnFoldToggled`).
 - Revealing a node inside a collapsed branch - by a selection from elsewhere - expands its collapsed ancestors (`FoldedAncestorsOf`; Req 10.5).
 
-DISL has `collapsed` view data, but storing it would write fold state into the diagram; the `.dis` therefore stores no view data and models the file's `FOLDED` as a read-only `folded` attribute, with the toggle as a plugin operation (`net.etalii.adp.freeplane.mindmapFold`).
+DISL 0.2 made this expressible, and the `.dis` now says it: `persistence.view.viewer` lists `collapsed`, `view.initial` seeds it from `self.folded` (the file's `FOLDED`, a read-only attribute), the context menu reads `self.view.collapsed` to show Expand or Collapse, and `toggleFold` is a `view` action. The plugin operation `net.etalii.adp.freeplane.mindmapFold` of the 0.1 `.dis` is gone.
 
 ## 6. Notation details DISL does not pin down
 
-- **Node:** a plain rectangle (`centered-box`), fill `--color-surface`, stroke `--color-border` 1.5, text `--color-text` at 12px, `user-select: none`, pointer cursor (`mindmap.css`). Before the backend has measured a node the client draws it 120 × 32 (`MindmapCanvas.tsx`).
+- **Node:** a rectangle with corners rounded by 6 (`centered-box`, the custom shape `topicBox` in the `.dis`, whose geometry a standalone test compares with the drawn box), fill `--color-surface`, stroke `--color-border` 1.5, text `--color-text` at 12px, `user-select: none`, pointer cursor (`mindmap.css`). Before the backend has measured a node the client draws it 120 × 32 (`MindmapCanvas.tsx`).
 - **Font size mismatch:** the backend sizes boxes for 14px text while the client renders 12px, so boxes have more room than their text needs. Recorded, not resolved.
-- **Corner glyphs:** `•` notes, `↗` link, `⊕` collapsed with children, joined by spaces, anchored top right (offset y 12, inset x 4). A CSS rule meant them muted and 10px but never applied; they render like the node text, and whether they should look as that rule meant is an open question for Peter (`mindmap.css`).
-- **Branches:** a cubic bezier from the parent to the child, leaving and entering each box at the middle of its left or right side only (`anchors: { kind: "edge", edgeSides: "horizontal" }`), under the boxes, 1.5 wide in `--color-border`, no arrowheads. DISL's `sides` anchor mode may also pick the top or bottom side; a mind map never does.
+- **Corner glyphs:** `•` notes, `↗` a non-empty link, `⊕` collapsed with children, joined by single spaces with the ends trimmed (so notes and a fold without a link leave two spaces between them), anchored top right (offset y 12, inset x 4; the `.dis` function `indicators`). A CSS rule meant them muted and 10px but never applied; they render like the node text, and whether they should look as that rule meant is an open question for Peter (`mindmap.css`).
+- **Branches:** a cubic bezier from the parent to the child, leaving and entering each box at the middle of its left or right side only (`anchors: { mode: "sides", sides: ["left", "right"] }`), under the boxes, 1.5 wide in `--color-border`, no arrowheads.
 - **Branches are not selectable**, by decision: a branch is a node's link to its parent, so pressing it is pressing the background (client readme; centralized-selection Req 2.4).
+- **Double-click** does nothing of its own (`doubleClick: "none"`); the text is edited in place through Rename.
 - **Drag feedback:** the dragged node at 0.65 opacity; the candidate parent ringed in `--color-primary` (limegreen), 2.5 wide, dashed 6 3; a dashed preview branch from the candidate parent to the dragged node.
 - **Theme tokens** in the `.dis` copy the standalone shell's light and dark values (`src/client/src/index.css`).
 
@@ -166,7 +169,7 @@ DISL has `collapsed` view data, but storing it would write fold state into the d
 | Unlink | none | the node has a link | |
 | Collapse / Expand | Space | the node has children | View state only. |
 
-Sources: `MindmapContextActionProvider.cs`, `MindmapCanvas.tsx`. Actions that do not apply are not offered rather than disabled (Req 8.6). F2, Delete and Insert are also the explorer's keys; the innermost level of the current selection decides which provider receives them, never a global key table (Req 8.7). Escape cancels an inline edit and dispatches nothing (Req 7.8). In read-only mode no document-changing action is offered (Req 6.8). The `.dis` writes Space as `"Space"`; the client declares it as `" "`.
+Sources: `MindmapContextActionProvider.cs`, `MindmapCanvas.tsx`. Actions that do not apply are not offered rather than disabled (Req 8.6). F2, Delete and Insert are also the explorer's keys; the innermost level of the current selection decides which provider receives them, never a global key table (Req 8.7). Escape cancels an inline edit and dispatches nothing (Req 7.8). In read-only mode no document-changing action is offered (Req 6.8). The `.dis` writes Space as `"Space"`; the standalone host sends and matches it as the key `" "`, and declares Tab as a second key of Add child, which a DISL entry's one `shortcut` cannot say. Expand and Collapse are two entries of the one `toggleFold` operation, each `visible` for one collapsed state, because an entry's icon is not an expression.
 
 ### 7.2 Add, then edit in place
 
@@ -186,7 +189,7 @@ A node is never positioned by dragging; a drag is a re-parenting proposal (`Mind
 
 ### 7.4 Delete
 
-Deleting a leaf happens without a question. Deleting a branch asks "Delete branch?" with "Delete '<text>' and the N nodes under it? You can undo this.", as a danger action. Both are undoable; the undo restores the whole subtree - ids, text, notes, links and unknown content - at its old place (`RemoveNodeCommand`, `RestoreSubtreeCommand`; Req 7.4). DISL's `deletion.confirm` is one fixed text for every deletion of a type, so the leaf-or-branch distinction lives here.
+Deleting a leaf happens without a question. Deleting a branch asks "Delete branch?" with "Delete '<text>' and the N nodes under it? You can undo this.", as a danger action. Both are undoable; the undo restores the whole subtree - ids, text, notes, links and unknown content - at its old place (`RemoveNodeCommand`, `RestoreSubtreeCommand`; Req 7.4). The `.dis` says this with `deletion.confirm`: `count` is the nodes beneath, `threshold` 1, so a leaf goes without asking.
 
 ### 7.5 Toolbox
 
@@ -194,7 +197,7 @@ One entry, "Node" (`mdi-card-plus-outline`), "Drop on a node to add a child unde
 
 ### 7.6 Properties
 
-The property grid shows Text, Notes (multi-line) and Link as editable, each edit one undo step through the same commands as the actions; an emptied link is an unlink. "Collapsed" (category View) and "Identifier" (category Model) are shown read-only with the explanations the `.dis` form carries (`MindmapContextPropertyProvider.cs`). The grid's "Collapsed" reads the file's `FOLDED`, not the viewer's fold state; the `.dis` form shows the viewer's state, which is what the explanation describes.
+The property grid shows Text, Notes (multi-line) and Link as editable, each edit one undo step through the same commands as the actions; an emptied link is an unlink. "Collapsed" (category View, only for a node with children) and "Identifier" (category Model) are shown read-only with the explanations the `.dis` form carries. "Collapsed" reads the file's `FOLDED`, not the viewer's fold state, as the standalone grid always has; the 0.1 `.dis` showed the viewer's state and was corrected to the code. Whether the row should follow the viewer instead, which is what its explanation describes, is an open question for Peter.
 
 ### 7.7 Selection
 
@@ -209,14 +212,17 @@ The property grid shows Text, Notes (multi-line) and Link as editable, each edit
 - A file link never resolves outside the project, however it got into the file (Req 12.9 in code, 12.11 in requirements; `MindmapLinks.ResolveWithinProject`).
 - Requirements not met yet, see section 11: the wire carries the raw link only, and following, broken-link display and rewriting links on move are not wired.
 
-## 9. Rules DISL cannot state
+## 9. Rules
 
-| Rule | Severity | Message | Why it is not in the `.dis` |
+All three rules are in the `.dis` (DISL 0.3), in the order `constraints.order` gives:
+
+| Rule | Severity | Message | In the `.dis` |
 |---|---|---|---|
-| `mindmap.not-a-map` | Error | "'<name>' is not a readable mind map: <reason>" | It judges the file before there is a model to evaluate CEL against. |
-| `mindmap.duplicate-id` | Error | "Two nodes share the id '<id>' ('<a>' and '<b>')." | DISL element ids are unique by construction; in a hand-edited `.mm` they need not be. Two nodes with one id would answer to each other's selections. |
+| `mindmap.not-a-map` | Error | "'<name>' is not a readable mind map: <reason>" | The built-in `std.unparseable` with this code and message; a file that is not readable has no other finding. |
+| `mindmap.unnamed-root` | Warning | "The map '<name>' has an unnamed central topic." | The rule `unnamedCentralTopic`. |
+| `mindmap.duplicate-id` | Error | "Two nodes share the id '<id>' ('<a>' and '<b>')." | The rule `duplicateId`, on each later holder in document order; the built-in `std.duplicateId` is off because it orders a group by its first member. Two nodes with one id would answer to each other's selections. |
 
-The third rule, `mindmap.unnamed-root` ("The map '<name>' has an unnamed central topic.", warning), is in the `.dis` as `unnamedCentralTopic`. Ordinary nodes without text are deliberately not judged, because Freeplane keeps them (`MindmapValidator.cs`; Req 7.6).
+`<name>` is the file the Problems panel attributes the map to (its `.adp`, else the `.mm`) without `.adp`: `fileBase(diagram.file)`. Ordinary nodes without text are deliberately not judged, because Freeplane keeps them (Req 7.6). A map with several root nodes is not readable at all, so the 0.1 rule `singleCentralTopic` is gone.
 
 ## 10. Runtime behaviour specific to the standalone host
 
@@ -248,14 +254,11 @@ The IntelliJ host (`etalii.adp.ide.intellij`, spec `001-freemind-mindmap-designe
 - keys: Insert and Tab add a child, Enter a sibling, F2 renames, Delete deletes, Ctrl+Up/Down reorder, Ctrl+Left/Right move, Space folds (`freemind/src/main/resources/META-INF/adp-freemind-editing.xml`);
 - a 1,000-node map opens in under 2 s and an edit shows in under 0.1 s (SC-003).
 
-## 13. What DISL 0.1 lacks for this type
+## 13. What DISL still lacks for this type
 
-Recorded as input for the DISL specification, in the order of how much of this file each would absorb:
+The 0.1 list had seven items. DISL 0.2 and 0.3 answered four, and the `.dis` now uses them: FBL persistence for a format the type adopts (1), viewer state (2), anchors on some sides (6) and a deletion confirmation with a count and a threshold (7). What is left, in the order of how much of this file each would absorb:
 
-1. **A non-JSON persistence format with preserve-what-you-don't-understand semantics.** DISL's persistence layer assumes a DID definition it regenerates; a type that adopts an existing external format needs a way to declare "the stored file is the model, edit it in place".
-2. **Per-viewer view state that is never persisted**, distinct from `view.store`: fold here, and probably viewport and selection elsewhere.
-3. **A tree layout with sides**, or a way to describe a two-sided `mrtree`; `radial` and `mrtree` both differ from the conventional mind-map arrangement.
-4. **Containment drawn as edges**: DISL containment nests children visually inside their parent. The `.dis` gets the mind-map picture from a derived relation plus a container that delegates to the layout, which works but says it sideways.
-5. **Positional `create`** ("insert after this sibling") and **drop-target semantics for tools** ("run on the node under the drop").
-6. **Anchors restricted to some sides** (left and right only).
-7. **Deletion confirmation that depends on the element** (branch versus leaf).
+1. **A tree layout with sides**, or a way to describe a two-sided `mrtree`; `radial` and `mrtree` both differ from the conventional mind-map arrangement.
+2. **Containment drawn as edges**: DISL containment nests children visually inside their parent. The `.dis` gets the mind-map picture from a derived relation plus a container that delegates to the layout, which works but says it sideways.
+3. **Positional `create`** ("insert after this sibling") and **drop-target semantics for tools** ("run on the node under the drop").
+4. **Several shortcuts for one entry** (Insert and Tab).
