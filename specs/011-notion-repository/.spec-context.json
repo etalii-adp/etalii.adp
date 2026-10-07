@@ -3,7 +3,7 @@
   "specName": "A Notion Host Repository, Published at etalii.net/adp/notion",
   "branch": "features/011-notion-repository",
   "currentStep": "plan",
-  "status": "planning",
+  "status": "planned",
   "history": [
     {
       "step": "specify",
@@ -25,6 +25,27 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-10-07T15:36:55.857Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T15:42:02.217Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T15:44:00.499Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T15:44:04.960Z"
     }
   ],
   "last_action": "living specs evaluated — no capabilities matched",
@@ -113,5 +134,65 @@
       "status": "applied",
       "createdAt": "2026-10-07T15:31:00.974Z"
     }
-  ]
+  ],
+  "decisions": [
+    {
+      "decision": "Publish at /adp-notion, as the spec and its Verbatim Constraints say",
+      "why": "The reviewed spec changed to it so no site address can clash with an add-on; it is a folder beside the site output",
+      "rejected": "/adp/notion, the original input, which lies inside the site Astro output"
+    },
+    {
+      "decision": "The site deploy workflow checks out etalii.adp.ide.notion at develop, runs its build script into dist/adp-notion and uploads one artifact",
+      "why": "A Pages deployment replaces the whole domain, so only one deployment holding both keeps both",
+      "rejected": "A Pages site in the Notion repository (served on github.io, not etalii.net); an organization site holding the domain; cross-repository artifacts"
+    },
+    {
+      "decision": "A publish job in the Notion Build workflow starts the site deploy by workflow_dispatch with the secret SITE_DEPLOY_TOKEN",
+      "why": "deploy.yml already accepts a dispatch and Actions write is the narrowest permission",
+      "rejected": "A schedule on deploy; a GitHub App; repository_dispatch needing Contents write"
+    },
+    {
+      "decision": "The Notion repository owns scripts/build.mjs, Node without dependencies, which generates the index and names its own revision",
+      "why": "Only its checkout knows its revision, and the site job already has Node",
+      "rejected": "A hand-written index.html; a Python script"
+    },
+    {
+      "decision": "One add-on per folder addons/<id>/, served at /adp-notion/<id>/",
+      "why": "The address depends only on the folder name",
+      "rejected": "Numbered or versioned addresses"
+    },
+    {
+      "decision": "On the site Notion is a listed host (listedHostIds, hosts.yaml, state planned), not a catalogue host",
+      "why": "FR-015 asks only that the host is named with no tool; a catalogue column belongs to the first add-on",
+      "rejected": "Adding notion to hostIds; a home-page sentence only"
+    },
+    {
+      "decision": "Host is redefined as an environment; IDE host is kept for the four IDEs; the catalogue workspace becomes the Notion workspace",
+      "why": "Existing uses of IDE host stay true, so no specification changes",
+      "rejected": "Rewording every IDE host and four hosts across repositories"
+    },
+    {
+      "decision": "Amend the constitution to 1.5.0 and the site principles to 1.2.0 in this feature",
+      "why": "Both name the hosts, and the site principle says no other repository is involved in etalii.net",
+      "rejected": "Leaving them and recording a standing violation"
+    }
+  ],
+  "concerns": [
+    {
+      "note": "SITE_DEPLOY_TOKEN is a fine-grained personal token: a maintainer must create it and it expires within a year; the publish job then fails visibly"
+    },
+    {
+      "note": "A failing site test or check holds back an add-on publication, since both go through the site deploy"
+    },
+    {
+      "note": ".spec-context.json specName, intent and coverage titles and checklists/requirements.md still say /adp/notion"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "Plan, research, data model, three contracts and a quickstart for the Notion host repository across four repositories",
+      "key_finding": "GitHub Pages serves one deployment per domain, so /adp-notion can only be published by the site deploy workflow carrying the Notion repository output"
+    }
+  },
+  "approach": "Rename and set up etalii.adp.ide.notion with a Build workflow and a dependency-free Node build script that writes an index and one folder per add-on. The site's deploy workflow checks that repository out, builds it into dist/adp-notion and publishes it with the site; a publish job in the Notion repository starts that workflow with a token. The glossary, rules, constitution, site principles, both build tables and the site's host list name Notion as a host."
 }
