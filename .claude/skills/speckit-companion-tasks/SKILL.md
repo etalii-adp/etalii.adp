@@ -9,8 +9,6 @@ user-invocable: true
 disable-model-invocation: false
 ---
 
-# Companion Tasks Skill
-
 ## User Input
 
 ```text

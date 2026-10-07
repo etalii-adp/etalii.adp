@@ -10,8 +10,6 @@ user-invocable: true
 disable-model-invocation: false
 ---
 
-# Companion Auto Skill
-
 ## User Input
 
 ```text

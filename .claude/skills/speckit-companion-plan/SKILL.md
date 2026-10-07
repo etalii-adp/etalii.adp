@@ -9,8 +9,6 @@ user-invocable: true
 disable-model-invocation: false
 ---
 
-# Companion Plan Skill
-
 ## User Input
 
 ```text
