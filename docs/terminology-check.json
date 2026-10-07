@@ -80,7 +80,8 @@
       "regex": "(?<!\\.\\.)\\.(disl|desl|edsl)\\b(?!\\.)",
       "severity": "error",
       "entry": "a specification file holds a specification, not the language",
-      "replacement": ".dis, .des, .eds"
+      "replacement": ".dis, .des, .eds",
+      "caseSensitive": true
     },
     {
       "id": "language-designer",
@@ -314,6 +315,18 @@
       "path": "tests/reference/visuals.test.ts",
       "regex": "(statemachine|x)\\.dedl",
       "reason": "file names of the pinned DEDL 0.1 fixture that the visual tests read"
+    },
+    {
+      "repository": "etalii.adp.ide.standalone",
+      "path": "src/backend/EtAlii.Adp.Specification.Disl.Tests/DislLoader.Tests.cs",
+      "regex": "\"dedl\": \"0\\.1\"",
+      "reason": "the test that the deprecated version key is still read (FR-011)"
+    },
+    {
+      "repository": "etalii.adp.ide.standalone",
+      "path": "src/client/src/canvas/library/disl/disTypes.ts",
+      "regex": "document\\.disl\\b",
+      "reason": "the DISL version key read from a parsed specification, not a file extension"
     }
   ]
 }

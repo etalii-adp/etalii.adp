@@ -11,3 +11,8 @@ __pycache__/
 # OS
 .DS_Store
 Thumbs.db
+
+# spec-workflow MCP belongs to etalii.adp.ide.standalone only; a dashboard or
+# server pointed at this folder recreates these, so keep them out of the tree
+.spec-workflow/
+audit.log

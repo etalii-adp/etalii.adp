@@ -3,7 +3,7 @@
   "specName": "A Generic FBL Implementation for IntelliJ",
   "branch": "features/010-intellij-fbl-implementation",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -594,6 +594,29 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-07T00:34:21.048Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T066",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T00:34:22.470Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T067",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T13:55:24.185Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T13:55:24.485Z"
     }
   ],
   "telemetryInstanceId": "e35a1f59-9cdb-47cc-95e5-d2e563aea0fc",
@@ -998,7 +1021,7 @@
     }
   },
   "approach": "Port standalone's FBL library at 25fc7b4a into a new Gradle module fbl in etalii.adp.ide.intellij: Java 25, byte offsets throughout, hand-written parsers, no dependency and no import from the platform, composed into the plug-in and registered nowhere. Tests are written first, layer by layer: the eight published fixtures, a counterpart for each of the 86 baseline tests tracked in an inventory table, the real-file properties over 108 .mm maps and 41 files copied from standalone, a node-id comparison with the FreeMind parser, and one test on the headless platform. Open questions and divergences go to etalii.adp as one issue.",
-  "currentTask": "T065",
+  "currentTask": "T067",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -1454,6 +1477,20 @@
     "T065": {
       "status": "DONE",
       "did": "Filed etalii-adp/etalii.adp#83: eight open questions for FBL and the 27 divergences, all known from standalone",
+      "files": [
+        "specs/010-intellij-fbl-implementation/tasks.md"
+      ]
+    },
+    "T066": {
+      "status": "DONE",
+      "did": "Pushed the branch and opened etalii-adp/etalii.adp.ide.intellij#32 into develop",
+      "files": [
+        "etalii.adp.ide.intellij/"
+      ]
+    },
+    "T067": {
+      "status": "DONE",
+      "did": "Pull request 32 merged as 80df534; branch and worktree removed in etalii.adp.ide.intellij; tasks ticked and follow-up pull request opened",
       "files": [
         "specs/010-intellij-fbl-implementation/tasks.md"
       ]

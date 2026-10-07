@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json",
-  "title": "DISL 0.2 — Diagram Specification Language",
+  "title": "DISL 0.3 (draft) — Diagram Specification Language",
   "description": "Specifications of diagram types ($defs/Specification), written by tool engineers. The root validates specifications. Stored diagrams are DID definitions, validated by did.schema.json, which references this schema's QualifiedId, SemVer and Point.",
   "$ref": "#/$defs/Specification",
   "$defs": {
@@ -1300,6 +1300,52 @@
             }
           }
         },
+        "plans": {
+          "description": "For a persistenceFormat plugin: the model changes its plan operation accepts (FBL 0.2, section 11.2); a change it does not declare is sent as the changes it does. Default add, set and remove. See DISL 0.3, section 13.1.",
+          "type": "array",
+          "items": {
+            "enum": [
+              "add",
+              "set",
+              "remove",
+              "move",
+              "retype"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "add": {
+          "description": "For a persistenceFormat plugin: how it plans a add. position true means it honours a position, inserting there or refusing (FBL 0.2, section 11.2). See DISL 0.3, section 13.1.",
+          "type": "object",
+          "properties": {
+            "position": {
+              "type": "boolean"
+            },
+            "doc": {
+              "$ref": "#/$defs/Doc"
+            }
+          },
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
+          }
+        },
+        "move": {
+          "description": "For a persistenceFormat plugin: how it plans a move. position true means it honours a position, inserting there or refusing (FBL 0.2, section 11.2). See DISL 0.3, section 13.1.",
+          "type": "object",
+          "properties": {
+            "position": {
+              "type": "boolean"
+            },
+            "doc": {
+              "$ref": "#/$defs/Doc"
+            }
+          },
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
+          }
+        },
         "doc": {
           "$ref": "#/$defs/Doc"
         }
@@ -1318,7 +1364,8 @@
         },
         "disl": {
           "type": "string",
-          "pattern": "^\\d+\\.\\d+$"
+          "pattern": "^\\d+\\.\\d+$",
+          "description": "The DISL version the specification targets, as major.minor: 0.1, 0.2 or 0.3. A 0.3 runtime reads 0.1 and 0.2 specifications with their meaning. See DISL 0.3, section 2.9."
         },
         "dedl": {
           "type": "string",
@@ -1649,6 +1696,93 @@
         "^x-": true
       }
     },
+    "NeighbourBounds": {
+      "description": "Ordered attributes of one element kept a minimum gap apart and inside two other attributes, in a node or relation type's bounds.neighbour: after any transaction that changes one of them, the runtime clamps the present values in order, as part of that transaction. See DISL 0.3, section 4.3.",
+      "type": "object",
+      "properties": {
+        "attributes": {
+          "description": "The ordered attributes kept apart, in their order. See DISL 0.3, section 4.3.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SimpleId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "between": {
+          "description": "The two attributes every value of attributes lies between, the lower first. See DISL 0.3, section 4.3.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SimpleId"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "gap": {
+          "description": "The least distance between two neighbouring anchors, in the attributes' units (months for yearMonth); a number or {cel} in the element context. See DISL 0.3, section 4.3.",
+          "anyOf": [
+            {
+              "type": "number",
+              "minimum": 0
+            },
+            {
+              "$ref": "#/$defs/CelValue"
+            }
+          ]
+        },
+        "inner": {
+          "description": "How many of attributes, from the first, take part as anchors; the others are only clamped inside between. An int or {cel} in the element context; default all of them. See DISL 0.3, section 4.3.",
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "$ref": "#/$defs/CelValue"
+            }
+          ]
+        },
+        "absent": {
+          "description": "An absent attribute among the anchors: spread takes its evenly spread position between its present neighbours as an anchor; ignore (the default) leaves it out. See DISL 0.3, section 4.3.",
+          "enum": [
+            "spread",
+            "ignore"
+          ]
+        },
+        "on": {
+          "description": "The edits after which the clamp runs: change (a typed or programmatic set), handle (a shape handle drag) and create; default all three. See DISL 0.3, section 4.3.",
+          "type": "array",
+          "items": {
+            "enum": [
+              "change",
+              "handle",
+              "create"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "pinned": {
+          "description": "edited clamps the attribute the transaction set first and the others around it; none (the default) clamps them in order. See DISL 0.3, section 4.3.",
+          "enum": [
+            "edited",
+            "none"
+          ]
+        },
+        "doc": {
+          "$ref": "#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "attributes",
+        "between",
+        "gap"
+      ],
+      "patternProperties": {
+        "^x-": true
+      }
+    },
     "DataType": {
       "description": "A data type is a named value type declared in the metamodel, either a constrained primitive or a struct. A constrained primitive names its base primitive and adds that primitive's facets, such as a range, pattern or unit; a struct lists its fields as attributes, which may themselves be structs, lists or references. Its display property says how a value is summarised in labels and list cells. See section 4.4.",
       "type": "object",
@@ -1780,7 +1914,15 @@
           "$ref": "#/$defs/LocalizedText"
         },
         "color": {
-          "type": "string"
+          "description": "A colour hint for notations and legends: a Color, or a TokenRef resolved in the current theme mode. See DISL 0.3, sections 4.5 and 6.13.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Color"
+            },
+            {
+              "$ref": "#/$defs/TokenRef"
+            }
+          ]
         },
         "icon": {
           "$ref": "#/$defs/IconRef"
@@ -2012,6 +2154,22 @@
             "$ref": "#/$defs/Attribute"
           }
         },
+        "bounds": {
+          "description": "Bounds of a node or relation type that involve several of its attributes at once. See DISL 0.3, section 4.3.",
+          "type": "object",
+          "properties": {
+            "neighbour": {
+              "$ref": "#/$defs/NeighbourBounds"
+            },
+            "doc": {
+              "$ref": "#/$defs/Doc"
+            }
+          },
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
+          }
+        },
         "ports": {
           "type": "object",
           "propertyNames": {
@@ -2230,6 +2388,22 @@
           },
           "additionalProperties": {
             "$ref": "#/$defs/Attribute"
+          }
+        },
+        "bounds": {
+          "description": "Bounds of a node or relation type that involve several of its attributes at once. See DISL 0.3, section 4.3.",
+          "type": "object",
+          "properties": {
+            "neighbour": {
+              "$ref": "#/$defs/NeighbourBounds"
+            },
+            "doc": {
+              "$ref": "#/$defs/Doc"
+            }
+          },
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
           }
         },
         "connectsRelations": {
@@ -2606,6 +2780,17 @@
             "canvas"
           ],
           "description": "view (the default) keeps the ruler at its edge of the pane whatever is scrolled; canvas scrolls it with the drawing. See DISL 0.2, section 5.13."
+        },
+        "minUnit": {
+          "description": "No level or tick step shorter than this unit is shown: a TimeUnit, or an attribute binding to one, such as the diagram's unit. See DISL 0.3, section 5.13.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TimeUnit"
+            },
+            {
+              "$ref": "#/$defs/AttrBinding"
+            }
+          ]
         },
         "format": {
           "type": "string"
@@ -5118,6 +5303,10 @@
         "hit": {
           "type": "boolean"
         },
+        "tooltip": {
+          "description": "Hover text over this part, shown in place of the node's tooltip; a Message in the element context plus p, the shape's parameter values. See DISL 0.3, section 6.8.",
+          "$ref": "#/$defs/Message"
+        },
         "doc": {
           "$ref": "#/$defs/Doc"
         }
@@ -5506,6 +5695,17 @@
           "patternProperties": {
             "^x-": true
           }
+        },
+        "editText": {
+          "description": "The text an inline editor starts with in place of the label's text: a Message in the element context, or an attribute binding, which also receives the committed text when the label has no parse. See DISL 0.3, section 6.12.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Message"
+            },
+            {
+              "$ref": "#/$defs/AttrBinding"
+            }
+          ]
         },
         "position": {
           "$ref": "#/$defs/Position"
@@ -6108,6 +6308,13 @@
               "^x-": true
             }
           }
+        },
+        "drawnFrom": {
+          "description": "point (the default) draws an edge's end at its anchor; outline uses the anchor only to decide which side of the element the edge belongs to, and draws the end where the line towards the other end crosses the outline. See DISL 0.3, section 6.9.",
+          "enum": [
+            "point",
+            "outline"
+          ]
         },
         "doc": {
           "$ref": "#/$defs/Doc"
@@ -7766,6 +7973,51 @@
           "description": "The library tool whose mode, initial, createSource and createTarget apply to a gesture started from an anchor. See DISL 0.2, section 6.10.",
           "$ref": "#/$defs/SimpleId"
         },
+        "pointer": {
+          "description": "The pointer button, modifiers and start area of the gesture; absent means the primary button from an anchor, as in 0.2. See DISL 0.3, section 6.10.",
+          "$ref": "#/$defs/GesturePointer"
+        },
+        "doc": {
+          "$ref": "#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-": true
+      }
+    },
+    "GesturePointer": {
+      "description": "The pointer binding of a connect gesture: the button and modifier keys that start it, and whether it starts from an anchor or anywhere on the node's body. See DISL 0.3, section 6.10.",
+      "type": "object",
+      "properties": {
+        "button": {
+          "description": "The pointer button that starts the gesture; default primary. See DISL 0.3, section 6.10.",
+          "enum": [
+            "primary",
+            "secondary",
+            "middle"
+          ]
+        },
+        "start": {
+          "description": "anchor (the default): the gesture starts from an anchor or port; body: from anywhere on the node's body. See DISL 0.3, section 6.10.",
+          "enum": [
+            "anchor",
+            "body"
+          ]
+        },
+        "modifiers": {
+          "description": "Keys that must be held for the gesture to start, spelled as Modifier is. See DISL 0.3, section 6.10.",
+          "type": "array",
+          "items": {
+            "enum": [
+              "Alt",
+              "Shift",
+              "Ctrl",
+              "Meta"
+            ]
+          },
+          "uniqueItems": true
+        },
         "doc": {
           "$ref": "#/$defs/Doc"
         }
@@ -8384,7 +8636,7 @@
       }
     },
     "TextMetric": {
-      "description": "How text is measured for every measurement that affects geometry (auto-sizing, wrapping, ellipsis, layout inputs): host, the host's font metrics (the default, 0.1), or an average advance per counted character, so that every runtime and headless layout measures alike. CEL textWidth and textHeight use it. See DISL 0.2, section 6.5.",
+      "description": "How text is measured at layout time: host, the host's font metrics (the default, 0.1), or an average advance per counted character. CEL textWidth and textHeight use it, and so every layout input computed with them, so that every runtime and headless layout computes the same layout; drawing measures with the real font. See DISL 0.3, section 6.5.",
       "anyOf": [
         {
           "const": "host"
@@ -8626,11 +8878,59 @@
           "description": "The refusal shown for elsewhere: refuse; context diagram, env, dropTarget and position. See DISL 0.2, section 7.2.",
           "$ref": "#/$defs/Reason"
         },
+        "place": {
+          "description": "A parent placement of behavior.placements that chooses where a drop creates the tool's element; with it, targets and elsewhere are not consulted. See DISL 0.3, section 7.2.",
+          "$ref": "#/$defs/SimpleId"
+        },
         "doc": {
           "$ref": "#/$defs/Doc"
         }
       },
       "additionalProperties": false,
+      "patternProperties": {
+        "^x-": true
+      }
+    },
+    "ParentPlacement": {
+      "description": "A parent placement in behavior.placements: chooses the parent of a new element by geometry among candidates, and its index among that parent's children. Evaluated in the parentPlacement context. See DISL 0.3, section 9.1.",
+      "type": "object",
+      "properties": {
+        "candidates": {
+          "description": "The elements that may become the parent, a list of Element. See DISL 0.3, section 9.1.",
+          "$ref": "#/$defs/Expression"
+        },
+        "as": {
+          "description": "The name each candidate is bound to in rank; default candidate. See DISL 0.3, section 9.1.",
+          "$ref": "#/$defs/SimpleId"
+        },
+        "rank": {
+          "description": "A number per candidate; the lowest wins, the first in model order on a tie. See DISL 0.3, section 9.1.",
+          "$ref": "#/$defs/Expression"
+        },
+        "index": {
+          "description": "The new element's index among the chosen parent's children, with parent bound; clamped to their number; default after the last. See DISL 0.3, section 9.1.",
+          "$ref": "#/$defs/Expression"
+        },
+        "whenEmpty": {
+          "description": "With no candidate: root creates the element at the top level when the diagram has no top-level element candidates could return; refuse (the default) refuses with refusal. See DISL 0.3, section 9.1.",
+          "enum": [
+            "root",
+            "refuse"
+          ]
+        },
+        "refusal": {
+          "description": "The refusal when no parent is chosen. See DISL 0.3, section 9.1.",
+          "$ref": "#/$defs/Reason"
+        },
+        "doc": {
+          "$ref": "#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "candidates",
+        "rank"
+      ],
       "patternProperties": {
         "^x-": true
       }
@@ -8833,7 +9133,7 @@
       }
     },
     "ContextTool": {
-      "description": "One item of a context tool set, shown beside the selected element as the fastest way to grow a diagram. Its required kind is one of create-connected (a new node linked through the relation type in via, outgoing or incoming), connect, create-child (in a slot), operation, delete, duplicate, editLabel, openForm or plugin. Every kind accepts a label, icon, shortcut, enabled condition and position relative to the element. DISL 0.2 adds moveUp and moveDown, visible and unavailable, a picker of existing elements (target pick), and one entry per list item (forEach). See section 7.3.",
+      "description": "One item of a context tool set, shown beside the selected element as the fastest way to grow a diagram. Its required kind is one of create-connected (a new node linked through the relation type in via, outgoing or incoming), connect, create-child (in a slot), operation, delete, duplicate, editLabel, openForm or plugin. Every kind accepts a label, icon, shortcut, enabled condition and position relative to the element. DISL 0.2 adds moveUp and moveDown, visible and unavailable, a picker of existing elements (target pick), and one entry per list item (forEach); DISL 0.3 adds the menu group an entry is shown in (group). See section 7.3.",
       "type": "object",
       "properties": {
         "kind": {
@@ -8944,6 +9244,10 @@
         "submenu": {
           "description": "Groups the entries generated by forEach under one submenu with this label. See DISL 0.2, section 7.3.",
           "$ref": "#/$defs/Message"
+        },
+        "group": {
+          "description": "The menu group the entry is shown in: consecutive entries of one set with an equal group, or with none, form one group, decided by the entries as declared; a runtime shows the groups in order and sets them apart. The name is not shown. See DISL 0.3, section 7.3.",
+          "$ref": "#/$defs/SimpleId"
         },
         "doc": {
           "$ref": "#/$defs/Doc"
@@ -9277,6 +9581,39 @@
         "^x-": true
       }
     },
+    "FieldParse": {
+      "description": "How a form item accepts typed text: accepts decides whether the text is taken, write turns it into attribute values as one transaction, and refusal is shown otherwise. value is bound to the entered text. Form context. See DISL 0.3, section 7.5.",
+      "type": "object",
+      "properties": {
+        "accepts": {
+          "description": "Whether the entered text, value, is accepted. See DISL 0.3, section 7.5.",
+          "$ref": "#/$defs/Expression"
+        },
+        "write": {
+          "description": "Run as one transaction when the text is accepted. See DISL 0.3, section 7.5.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Action"
+          }
+        },
+        "refusal": {
+          "description": "Shown when accepts is false. See DISL 0.3, section 7.5.",
+          "$ref": "#/$defs/Message"
+        },
+        "doc": {
+          "$ref": "#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "accepts",
+        "write",
+        "refusal"
+      ],
+      "patternProperties": {
+        "^x-": true
+      }
+    },
     "FormItem": {
       "description": "One item in a form: either a field that edits an attribute, or a container or other item chosen by its kind. A field names its attribute path and optionally a widget (defaulting by attribute type), label, placeholder, options, field-local validation and actions run on change. Other kinds are section, row, tabs, group, static text, divider, a computed read-only value, a button running an operation or actions, a findings list (problems is its deprecated alias) and plugin. See section 7.5.",
       "type": "object",
@@ -9292,11 +9629,16 @@
             "divider",
             "computed",
             "button",
+            "type",
             "findings",
             "problems",
             "plugin"
           ],
-          "description": "What the item is. findings lists the findings on the form's target; problems is its deprecated alias (section 18), read and never written. See DISL 0.2, section 7.5."
+          "description": "What the item is. findings lists the findings on the form's target; problems is its deprecated alias (section 18), read and never written. type (DISL 0.3) shows and changes the element's type through behavior.retype, its choices options as given, the element's own type among them. See DISL 0.3, section 7.5."
+        },
+        "id": {
+          "description": "The row id of a field, computed item or type item, by which a host addresses the row; without it the row id is the attribute, else the label as evaluated. It changes nothing the row shows, edits or refuses. See DISL 0.3, section 7.5.",
+          "$ref": "#/$defs/SimpleId"
         },
         "attribute": {
           "type": "string"
@@ -9411,6 +9753,25 @@
         },
         "rows": {
           "type": "integer"
+        },
+        "display": {
+          "description": "The text an attribute item shows for its value, in place of the widget's rendering of it; a Message in the form context. See DISL 0.3, section 7.5.",
+          "$ref": "#/$defs/Message"
+        },
+        "parse": {
+          "description": "Makes an attribute or computed item editable as text: what it accepts, what it writes and how it refuses. See DISL 0.3, section 7.5.",
+          "$ref": "#/$defs/FieldParse"
+        },
+        "optionLabel": {
+          "description": "For a type item: the label of a choice, with item bound to the type. See DISL 0.3, section 7.5.",
+          "$ref": "#/$defs/Expression"
+        },
+        "refusals": {
+          "description": "For a type item: the reasons a value outside the choices is refused, the first that applies shown; self and newValue (the chosen type) are bound. See DISL 0.3, section 7.5.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Reason"
+          }
         },
         "readOnly": {
           "$ref": "#/$defs/BBool"
@@ -9866,7 +10227,7 @@
       }
     },
     "Constraints": {
-      "description": "The container for a specification's validity rules, declared in its constraints property. It holds the ordered list of constraint rules, named groups that users can enable, disable or re-rate as a unit, default severity and timing for rules, and settings that tune the built-in constraints. Its blockSaveOn setting defaults to never, so diagrams with problems are still saved and remain loadable. See section 8.1.",
+      "description": "The container for a specification's validity rules, declared in its constraints property. It holds the ordered list of constraint rules, named groups that users can enable, disable or re-rate as a unit, default severity and timing for rules, settings that tune the built-in constraints and, in DISL 0.3, the order of the codes findings are listed in. Its blockSaveOn setting defaults to never, so diagrams with problems are still saved and remain loadable. See section 8.1.",
       "type": "object",
       "properties": {
         "rules": {
@@ -9947,6 +10308,13 @@
             "$ref": "#/$defs/BuiltInSetting"
           }
         },
+        "order": {
+          "description": "The codes in the order findings are listed: by the position of a finding's code here, unlisted codes last; then the reader's findings in reading order; then by the line of the finding's element, a group of duplicates by its first member. Without it, or empty, findings keep the order of section 8.6. See DISL 0.3, sections 8.1 and 8.6.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/QualifiedId"
+          }
+        },
         "doc": {
           "$ref": "#/$defs/Doc"
         }
@@ -9957,7 +10325,7 @@
       }
     },
     "BuiltInSetting": {
-      "description": "The settings of one built-in constraint, in constraints.builtIn keyed by its id such as std.references: its severity, whether it is enabled, the code its findings report, the message of its findings, which may be computed from detail, and the refusal it shows when it refuses a gesture, which may be computed from violation. See DISL 0.2, section 8.1.",
+      "description": "The settings of one built-in constraint, in constraints.builtIn keyed by its id such as std.references: its severity, whether it is enabled, the code its findings report, the message of its findings, which may be computed from detail, and the refusal it shows when it refuses a gesture, which may be computed from violation, and (DISL 0.3) whether a group of duplicates is reported once. See DISL 0.3, section 8.1.",
       "type": "object",
       "properties": {
         "severity": {
@@ -9974,8 +10342,15 @@
           "description": "Switches the built-in off; defaults to true. See DISL 0.2, section 8.1."
         },
         "code": {
-          "description": "The code findings of this built-in report, such as timeline.dangling-connection. See DISL 0.2, section 8.1.",
-          "$ref": "#/$defs/QualifiedId"
+          "description": "The code findings of this built-in report, such as timeline.dangling-connection; or {cel} evaluated per finding in the constraint context plus detail, returning such a code. See DISL 0.3, section 8.1.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/QualifiedId"
+            },
+            {
+              "$ref": "#/$defs/CelValue"
+            }
+          ]
         },
         "message": {
           "description": "The message of this built-in's findings, in place of the runtime's, in the constraint context plus detail (the keys each built-in lists in 8.7). See DISL 0.2, section 8.1.",
@@ -9984,6 +10359,13 @@
         "refusal": {
           "description": "The refusal this built-in shows when it refuses a gesture, in place of the runtime's, in that gesture's context plus violation (the keys 8.4 lists per built-in). Without it a refusal is worded by the runtime, never taken from message. See DISL 0.2, section 8.4.",
           "$ref": "#/$defs/Message"
+        },
+        "oncePerGroup": {
+          "enum": [
+            "second",
+            "last"
+          ],
+          "description": "Reports a group of duplicates once, at its second or its last member, rather than at every member after the first: the holders of one id for std.duplicateId, a repeat that allowParallel false forbids for std.endpoints. No effect on any other built-in or case. See DISL 0.3, section 8.1."
         },
         "doc": {
           "$ref": "#/$defs/Doc"
@@ -10186,6 +10568,10 @@
             "before": {
               "description": "A sibling element: the new or reparented element is placed directly before it in its parent's child order. See DISL 0.2, section 9.4.",
               "$ref": "#/$defs/Expression"
+            },
+            "place": {
+              "description": "A parent placement of behavior.placements that chooses the parent and index; exclusive with parent, after and before. See DISL 0.3, section 9.4.",
+              "$ref": "#/$defs/SimpleId"
             }
           },
           "additionalProperties": false,
@@ -10194,7 +10580,37 @@
           ],
           "patternProperties": {
             "^x-": true
-          }
+          },
+          "allOf": [
+            {
+              "if": {
+                "required": [
+                  "place"
+                ]
+              },
+              "then": {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "parent"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "after"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "before"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
         },
         "connect": {
           "type": "object",
@@ -10474,6 +10890,25 @@
             },
             "algorithm": {
               "type": "string"
+            },
+            "refusals": {
+              "description": "Refusals of a layout action: nothingDrawn while the scope holds nothing the algorithm can place (for rows, no element with a drawable extent), unchanged when the layout would change nothing. See DISL 0.3, section 9.4.",
+              "type": "object",
+              "properties": {
+                "nothingDrawn": {
+                  "$ref": "#/$defs/Message"
+                },
+                "unchanged": {
+                  "$ref": "#/$defs/Message"
+                },
+                "doc": {
+                  "$ref": "#/$defs/Doc"
+                }
+              },
+              "additionalProperties": false,
+              "patternProperties": {
+                "^x-": true
+              }
             }
           },
           "additionalProperties": false,
@@ -10867,6 +11302,16 @@
       "description": "What happens in response to user actions beyond direct manipulation, declared in a specification's behavior property. It holds hooks that react to events, named operations, per-type deletion policies, and clipboard, retyping and undo settings. Its maxHookDepth bounds the number of hook executions in one transaction (default 100), so hooks that trigger further hooks cannot run away. DISL 0.2 adds named reasons, the diagram-wide edit gate and standard messages. See section 9.1.",
       "type": "object",
       "properties": {
+        "placements": {
+          "description": "Named parent placements, referred to by a drop's or a create action's place. See DISL 0.3, section 9.1.",
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/SimpleId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/ParentPlacement"
+          }
+        },
         "hooks": {
           "type": "array",
           "items": {
@@ -10942,6 +11387,13 @@
                 "additionalProperties": {
                   "$ref": "#/$defs/Expression"
                 }
+              },
+              "when": {
+                "description": "Whether the element may become a target type: self is the element and target the candidate type; default true. See DISL 0.3, section 9.5.",
+                "$ref": "#/$defs/Expression"
+              },
+              "doc": {
+                "$ref": "#/$defs/Doc"
               }
             },
             "additionalProperties": false,
@@ -11012,7 +11464,8 @@
       "type": "object",
       "properties": {
         "algorithm": {
-          "type": "string"
+          "type": "string",
+          "description": "The algorithm: a name DISL lists (10), of which rowPacked, rows and tidyTree are standard and defined in 10.1 to 10.3, elk:<id> or plugin:<name>. See DISL 0.3, section 10."
         },
         "direction": {
           "enum": [
@@ -11065,6 +11518,18 @@
         "includeViewOnly": {
           "type": "boolean"
         },
+        "rowPacked": {
+          "description": "The options of the standard rowPacked algorithm; only with algorithm rowPacked. See DISL 0.3, section 10.",
+          "$ref": "#/$defs/RowPacked"
+        },
+        "rows": {
+          "description": "The options of the standard rows algorithm; only with algorithm rows. See DISL 0.3, section 10.",
+          "$ref": "#/$defs/RowsLayout"
+        },
+        "tidyTree": {
+          "description": "The options of the standard tidyTree algorithm; only with algorithm tidyTree. See DISL 0.3, section 10.",
+          "$ref": "#/$defs/TidyTree"
+        },
         "doc": {
           "$ref": "#/$defs/Doc"
         }
@@ -11073,6 +11538,271 @@
       "required": [
         "algorithm"
       ],
+      "patternProperties": {
+        "^x-": true
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "rowPacked"
+            ]
+          },
+          "then": {
+            "properties": {
+              "algorithm": {
+                "const": "rowPacked"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "rows"
+            ]
+          },
+          "then": {
+            "properties": {
+              "algorithm": {
+                "const": "rows"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "tidyTree"
+            ]
+          },
+          "then": {
+            "properties": {
+              "algorithm": {
+                "const": "tidyTree"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "RowPacked": {
+      "description": "The options of the rowPacked algorithm: elements keep their rows and are packed along the main axis in order, gap apart, with connected targets after their sources. See DISL 0.3, section 10.1.",
+      "type": "object",
+      "properties": {
+        "keepRows": {
+          "description": "States that rows are kept; rowPacked never changes an element's row. See DISL 0.3, section 10.1.",
+          "const": true
+        },
+        "order": {
+          "description": "The order within a row: start, by the element's start along the packed axis as its base placement gives it; document, model order. See DISL 0.3, section 10.1.",
+          "enum": [
+            "start",
+            "document"
+          ]
+        },
+        "gap": {
+          "description": "The least distance between two elements on a row, in canvas units. See DISL 0.3, section 10.1.",
+          "type": "number",
+          "minimum": 0
+        },
+        "followConnections": {
+          "description": "A relation type whose targets start no earlier than the targetAfter point of their source. See DISL 0.3, section 10.1.",
+          "$ref": "#/$defs/TypeRef"
+        },
+        "targetAfter": {
+          "description": "The point of a source a target starts after; default sourceEnd. See DISL 0.3, section 10.1.",
+          "enum": [
+            "sourceStart",
+            "sourceMiddle",
+            "sourceEnd"
+          ]
+        },
+        "rowsCovered": {
+          "description": "The number of rows an element covers from its own row, in the element context; default 1. See DISL 0.3, section 10.1.",
+          "$ref": "#/$defs/Expression"
+        },
+        "doc": {
+          "$ref": "#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "order",
+        "gap"
+      ],
+      "patternProperties": {
+        "^x-": true
+      }
+    },
+    "RowsLayout": {
+      "description": "The options of the rows algorithm: assigns rows only, writing the attributes in writes; the fewest rows the extents allow when every extent covers one row, and a row covered by a taller extent is never swapped. See DISL 0.3, section 10.2.",
+      "type": "object",
+      "properties": {
+        "writes": {
+          "description": "The attributes the algorithm writes, the row first; it changes nothing else. See DISL 0.3, section 10.2.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SimpleId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "extent": {
+          "description": "Per type, the extent an element occupies on its row: from and to along the main axis, and the rows it covers from its own row down. In the layoutExtent context; an element whose extent does not evaluate does not take part. See DISL 0.3, section 10.2.",
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/TypeRef"
+          },
+          "additionalProperties": {
+            "description": "The extent of one type's elements. See DISL 0.3, section 10.2.",
+            "type": "object",
+            "properties": {
+              "from": {
+                "$ref": "#/$defs/GeomExpr"
+              },
+              "to": {
+                "$ref": "#/$defs/GeomExpr"
+              },
+              "rows": {
+                "$ref": "#/$defs/GeomExpr"
+              },
+              "doc": {
+                "$ref": "#/$defs/Doc"
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "from",
+              "to"
+            ],
+            "patternProperties": {
+              "^x-": true
+            }
+          }
+        },
+        "clearance": {
+          "description": "The least distance between two extents on one row, in canvas units; default 0. See DISL 0.3, section 10.2.",
+          "type": "number",
+          "minimum": 0
+        },
+        "affinity": {
+          "description": "A relation type that draws linked elements to nearby rows. See DISL 0.3, section 10.2.",
+          "$ref": "#/$defs/TypeRef"
+        },
+        "ties": {
+          "description": "Between two equally near free rows, lower takes the smaller row number (the default), upper the larger. See DISL 0.3, section 10.2.",
+          "enum": [
+            "lower",
+            "upper"
+          ]
+        },
+        "swapPasses": {
+          "description": "The most passes of neighbouring-row swaps; default 0. See DISL 0.3, section 10.2.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "doc": {
+          "$ref": "#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "writes",
+        "extent"
+      ],
+      "patternProperties": {
+        "^x-": true
+      }
+    },
+    "TidyTree": {
+      "description": "The options of the tidyTree algorithm: a tidy tree in model order, with optional stored rows and drag behaviour. See DISL 0.3, section 10.3.",
+      "type": "object",
+      "properties": {
+        "order": {
+          "description": "children: each element's children in their model order. See DISL 0.3, section 10.3.",
+          "enum": [
+            "children"
+          ]
+        },
+        "parentAlign": {
+          "description": "A parent centred over its first and last child (firstLastCentre, the default) or over its children's extent (childrenCentre). See DISL 0.3, section 10.3.",
+          "enum": [
+            "firstLastCentre",
+            "childrenCentre"
+          ]
+        },
+        "origin": {
+          "description": "leftmostAtZero (the default) shifts the layout so its leftmost node is at 0; rootAtZero puts the first root's position at 0. See DISL 0.3, section 10.3.",
+          "enum": [
+            "leftmostAtZero",
+            "rootAtZero"
+          ]
+        },
+        "rows": {
+          "description": "Stored main-axis positions shared by siblings. See DISL 0.3, section 10.3.",
+          "type": "object",
+          "properties": {
+            "stored": {
+              "description": "none (the default): every position is computed; y: the top-level elements, and all children of one parent, share one stored main-axis position. See DISL 0.3, section 10.3.",
+              "enum": [
+                "none",
+                "y"
+              ]
+            },
+            "minGap": {
+              "description": "The least gap between a parent's far edge on the main axis and the near edge of its children's row, in canvas units. See DISL 0.3, section 10.3.",
+              "type": "number",
+              "minimum": 0
+            },
+            "doc": {
+              "$ref": "#/$defs/Doc"
+            }
+          },
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
+          }
+        },
+        "drag": {
+          "description": "What dragging an element does. See DISL 0.3, section 10.3.",
+          "type": "object",
+          "properties": {
+            "carry": {
+              "description": "subtree: everything beneath moves with the dragged element; node: it moves alone. See DISL 0.3, section 10.3.",
+              "enum": [
+                "subtree",
+                "node"
+              ]
+            },
+            "across": {
+              "description": "reorder: dropped past a sibling's centre, the element is reordered among its siblings in the model. See DISL 0.3, section 10.3.",
+              "enum": [
+                "reorder",
+                "none"
+              ]
+            },
+            "down": {
+              "description": "row: the dropped main-axis position is stored for the row and everything beneath it. See DISL 0.3, section 10.3.",
+              "enum": [
+                "row",
+                "none"
+              ]
+            },
+            "doc": {
+              "$ref": "#/$defs/Doc"
+            }
+          },
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
+          }
+        },
+        "doc": {
+          "$ref": "#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
       "patternProperties": {
         "^x-": true
       }
@@ -11688,6 +12418,16 @@
             }
           ]
         },
+        "typeMap": {
+          "description": "Only with format fbl: the binding's types mapped onto the metamodel, keyed by the binding's type name; without it, the binding's types and attributes are the metamodel's. See DISL 0.3, section 11.2.",
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/QualifiedId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/TypeMapEntry"
+          }
+        },
         "encoding": {
           "const": "utf-8"
         },
@@ -12166,13 +12906,75 @@
           },
           "else": {
             "not": {
-              "required": [
-                "binding"
+              "anyOf": [
+                {
+                  "required": [
+                    "binding"
+                  ]
+                },
+                {
+                  "required": [
+                    "typeMap"
+                  ]
+                }
               ]
             }
           }
         }
       ]
+    },
+    "TypeMapEntry": {
+      "description": "How one type of an FBL binding maps onto the metamodel, in persistence.typeMap. See DISL 0.3, section 11.2.",
+      "type": "object",
+      "properties": {
+        "as": {
+          "description": "What the binding's entries of this type become: diagram (their attributes are the diagram's), header or unreadable (kept out of the model; unreadable ones reported by std.unreadableEntry), or a metamodel type. See DISL 0.3, section 11.2.",
+          "anyOf": [
+            {
+              "enum": [
+                "diagram",
+                "header",
+                "unreadable"
+              ]
+            },
+            {
+              "$ref": "#/$defs/TypeRef"
+            }
+          ]
+        },
+        "attributes": {
+          "description": "The binding's attribute names mapped to metamodel attributes; source and target make a reference attribute an end of a relation, id the element's id, and null leaves the attribute out of the model. Unlisted attributes keep their names. See DISL 0.3, section 11.2.",
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "hostAttributes": {
+          "description": "Attributes the binding reads and writes that are not attributes of the model. See DISL 0.3, section 11.2.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "doc": {
+          "$ref": "#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "as"
+      ],
+      "patternProperties": {
+        "^x-": true
+      }
     },
     "ViewKind": {
       "description": "A kind of view data: the 0.1 kinds a view may store (bounds, waypoints, anchors, labelOffsets, collapsed, zIndex, rotation, params, ports, viewport, guides, pinned, settings) plus the viewer-only kinds selection, filters and viewpoint. persistence.view lists the kinds a view stores and the kinds each viewer holds; a kind may not be in both. See DISL 0.2, section 11.6.",
