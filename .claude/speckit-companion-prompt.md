@@ -1,1 +1,1 @@
-/speckit-converge Converge the feature in specs/009-vscode-fbl-implementation. If that is not the feature you resolve for this run, stop and say so instead of changing its tasks.
+/speckit-companion-resume specs\011-notion-repository

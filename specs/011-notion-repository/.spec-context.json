@@ -168,9 +168,289 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-07T16:26:24.707Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T011",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T18:52:33.557Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T18:52:53.112Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T18:53:18.392Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T014",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T18:53:19.107Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T015",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T18:54:26.536Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T016",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T18:54:26.709Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T18:54:26.887Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T018",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T18:54:27.040Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T019",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T18:54:27.197Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T025",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T18:56:18.632Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T020",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T20:43:31.603Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T20:43:31.762Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T022",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T20:43:31.941Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T023",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T20:43:32.119Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T024",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T20:43:32.293Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T040",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T20:57:00.540Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T042",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T20:57:33.597Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T041",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:17:07.184Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T026",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:23:23.435Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T028",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:23:30.105Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T030",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:27:04.188Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T031",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:27:04.373Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T032",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:27:04.576Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T033",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:27:04.794Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T034",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:27:04.983Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T035",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:27:05.200Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T037",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:27:05.400Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T038",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:27:05.596Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T039",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:27:05.799Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T036",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:27:05.987Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T043",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:27:06.177Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T027",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:37:02.872Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T029",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T21:37:03.049Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T044",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T22:18:36.388Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T045",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T22:18:36.637Z"
     }
   ],
-  "last_action": "T001 to T010 done, pull request 87 open with Build passing, waiting for the maintainer merge of T011",
+  "last_action": "Pull request 5 open; T046 follows its merge",
   "telemetryInstanceId": "f6af9078-e4ae-4464-87ac-696a9f4a77ac",
   "coverage": {
     "FR-001": {
@@ -390,6 +670,52 @@
       "decision": "T009 and T010 amended by hand in the shape /speckit-constitution produces (Sync Impact Report, version line)",
       "why": "two small edits to existing files",
       "rejected": "two full runs of the constitution skill"
+    },
+    {
+      "decision": "T011 closed against etalii.adp#87, which was already open and merged when this run resumed",
+      "why": "The pull request holds the feature folder and T004 to T010 and was merged with a merge commit",
+      "rejected": "Opening a second pull request"
+    },
+    {
+      "decision": "T015 to T017 ticked on the first push to develop, not on pull request 2",
+      "why": "The starting files reach develop by the one direct push the tasks allow, so they are shipped",
+      "rejected": "Waiting for T028"
+    },
+    {
+      "decision": "The site deploy checks the Notion repository out into .notion-addons",
+      "why": "Inside the workspace as actions/checkout requires, outside dist, and after every check of the site has run",
+      "rejected": "A folder under .cache or outside the workspace"
+    },
+    {
+      "decision": "build.mjs validates every add-on folder before it writes anything",
+      "why": "Exit code 0 only when the whole tree is written; a failed build leaves no partial tree",
+      "rejected": "Writing as it goes"
+    },
+    {
+      "decision": "T020 to T024 ticked on the merge of etalii.adp.ide.notion#1 (10464fa)",
+      "why": "a task in another repository is ticked once its pull request is merged"
+    },
+    {
+      "decision": "T028 left open although pull request 2 is merged",
+      "why": "it was merged before SITE_DEPLOY_TOKEN existed, so publish failed and started no deploy run",
+      "rejected": "ticking it on the merge alone"
+    },
+    {
+      "decision": "T039 done by hand: Host, IDE host and Notion add-on added to the site terminology page",
+      "why": "no refresh procedure writes that page",
+      "rejected": "bringing over the FBL section and Finding, which this feature does not own"
+    },
+    {
+      "decision": "Site suites run in a detached checkout in the scratchpad",
+      "why": "astro fails in the worktree under .claude/worktrees because the main clone above it has a tsconfig.json and no installed dependencies"
+    },
+    {
+      "decision": "hosts.yaml notion entry has method manual",
+      "why": "the schema requires the field and the other four entries are manual"
+    },
+    {
+      "decision": "T045 ticked in pull request 5 itself",
+      "why": "its merge is what makes it true, and a tick made afterwards could not reach develop without a sixth pull request"
     }
   ],
   "concerns": [
@@ -441,6 +767,34 @@
     {
       "note": "npm ci in the site worktree did not run esbuild postinstall (allow-scripts); check before T040",
       "step": "implement"
+    },
+    {
+      "note": "Local develop of etalii.adp holds unpushed commits f63db27 and 57ae2af that delete specs/etalii.adp.ide.intellij and specs/etalii.adp.site (124 files) and merge the feature branch locally into develop; not pushed and not touched by this run",
+      "step": "implement"
+    },
+    {
+      "note": "The Notion page ADP terminology still shows the retired extensions of specification files and has no FBL section; T012 updated only Host, IDE host and Notion add-on",
+      "step": "implement"
+    },
+    {
+      "note": "T020 to T024 and T030 are written and pushed but unticked until their pull requests merge; T026 to T028 wait for a maintainer",
+      "step": "implement"
+    },
+    {
+      "note": "Build is red on develop of etalii.adp.ide.notion: publish ran with an empty SITE_DEPLOY_TOKEN. Create the secret (T026) and re-run the failed job to close T028; the badge in both tables is red until then",
+      "step": "implement"
+    },
+    {
+      "note": "npm run build fails in etalii.adp.site/.claude/worktrees/* with Tsconfig not found astro/tsconfigs/strict while the main clone has no node_modules/astro",
+      "step": "implement"
+    },
+    {
+      "note": "T029 walked on 2026-10-07 with 2 open items, so it stays open: the row in both build tables waits for the merges of etalii.adp.site#87 and .github#7 (T043), and the Claude project resources wait for the maintainer (T027). Every other rule of docs/new-repository.md and contracts/repository-settings.md holds",
+      "step": "implement"
+    },
+    {
+      "note": "The deploy run of #87 took 21m51s and waited behind a 13m run: SC-003 (15 minutes from merge to served) is at risk; step 6 will measure it",
+      "step": "implement"
     }
   ],
   "step_summaries": {
@@ -457,7 +811,7 @@
   },
   "approach": "Rename and set up etalii.adp.ide.notion with a Build workflow and a dependency-free Node build script that writes an index and one folder per add-on. The site's deploy workflow checks that repository out, builds it into dist/adp-notion and publishes it with the site; a publish job in the Notion repository starts that workflow with a token. The glossary, rules, constitution, site principles, both build tables and the site's host list name Notion as a host.",
   "assistant": "claude-vscode",
-  "currentTask": "T010",
+  "currentTask": "T045",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -528,6 +882,203 @@
       "files": [
         ".specify/memory/repositories/etalii.adp.site.md"
       ]
+    },
+    "T011": {
+      "status": "DONE",
+      "did": "Pull request 1 is etalii.adp#87, merged with a merge commit e8c7ae1; Build passed (examples, terminology, licence)",
+      "files": [
+        "specs/011-notion-repository/"
+      ]
+    },
+    "T012": {
+      "status": "DONE",
+      "did": "Notion page ADP terminology: Host redefined as an environment, IDE host and Notion add-on added, as the merged glossary has them",
+      "files": [
+        "Notion page ADP terminology"
+      ]
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "Renamed etalii-adp-ide-notion to etalii.adp.ide.notion; merge commits only, head branches deleted, wiki off, description says add-ons; Claude app covers all repositories; old name redirects",
+      "files": [
+        "GitHub settings of etalii-adp/etalii.adp.ide.notion"
+      ]
+    },
+    "T014": {
+      "status": "DONE",
+      "did": "Cloned the empty repository to C:\\git\\etalii.adp.ide.notion",
+      "files": [
+        "etalii.adp.ide.notion/"
+      ]
+    },
+    "T015": {
+      "status": "DONE",
+      "did": "CLAUDE.md adapted from the eclipse source; on develop in 2a9500c",
+      "files": [
+        "etalii.adp.ide.notion/CLAUDE.md"
+      ]
+    },
+    "T016": {
+      "status": "DONE",
+      "did": "README.md with the name, the build badge and what the repository is for; on develop in 2a9500c",
+      "files": [
+        "etalii.adp.ide.notion/README.md"
+      ]
+    },
+    "T017": {
+      "status": "DONE",
+      "did": "LICENSE, .gitattributes and .gitignore copied unchanged from eclipse 59d855d; on develop in 2a9500c",
+      "files": [
+        "etalii.adp.ide.notion/LICENSE",
+        "etalii.adp.ide.notion/.gitattributes",
+        "etalii.adp.ide.notion/.gitignore"
+      ]
+    },
+    "T018": {
+      "status": "DONE",
+      "did": "First commit 2a9500c pushed to develop; develop is the default branch; settings read back",
+      "files": [
+        "etalii.adp.ide.notion/"
+      ]
+    },
+    "T019": {
+      "status": "DONE",
+      "did": "Worktree on features/011-notion-repository from develop",
+      "files": [
+        "etalii.adp.ide.notion/.claude/worktrees/011-notion-repository"
+      ]
+    },
+    "T025": {
+      "status": "DONE",
+      "did": "Pull request 2 is etalii.adp.ide.notion#1; Build reported in 30 seconds with check, addons and terminology passing and publish skipped",
+      "files": [
+        "etalii.adp.ide.notion/ (pull request 2)"
+      ]
+    },
+    "T020": {
+      "status": "DONE",
+      "did": "Build script merged in etalii.adp.ide.notion#1 (10464fa)",
+      "files": [
+        "etalii.adp.ide.notion/scripts/build.mjs"
+      ]
+    },
+    "T021": {
+      "status": "DONE",
+      "did": "addons/README.md merged in etalii.adp.ide.notion#1",
+      "files": [
+        "etalii.adp.ide.notion/addons/README.md"
+      ]
+    },
+    "T022": {
+      "status": "DONE",
+      "did": "check-files.py merged in etalii.adp.ide.notion#1",
+      "files": [
+        "etalii.adp.ide.notion/.github/scripts/check-files.py"
+      ]
+    },
+    "T023": {
+      "status": "DONE",
+      "did": ".editorconfig merged in etalii.adp.ide.notion#1",
+      "files": [
+        "etalii.adp.ide.notion/.editorconfig"
+      ]
+    },
+    "T024": {
+      "status": "DONE",
+      "did": "Build workflow merged in etalii.adp.ide.notion#1; check, addons, terminology green on the pull request",
+      "files": [
+        "etalii.adp.ide.notion/.github/workflows/build.yml"
+      ]
+    },
+    "T040": {
+      "status": "DONE",
+      "did": "Site: 83 unit tests, build of 265 pages, check:reference, check with 1117 page tests, all pass with dist/adp-notion built from the Notion repository's develop; actionlint clean on both workflows; validate-examples and licence-check pass"
+    },
+    "T042": {
+      "status": "DONE",
+      "did": "Pushed the .github branch and opened etalii-adp/.github#7 with the builds table row",
+      "files": [
+        "etalii-adp.github/profile/README.md"
+      ]
+    },
+    "T041": {
+      "status": "DONE",
+      "did": "Pushed the site branch and opened etalii.adp.site#87; check, reference-fixture and terminology pass"
+    },
+    "T026": {
+      "status": "DONE",
+      "did": "Maintainer stored SITE_DEPLOY_TOKEN on etalii.adp.ide.notion; gh secret list shows it, set 2026-10-07T21:17:49Z"
+    },
+    "T028": {
+      "status": "DONE",
+      "did": "Pull request 2 merged (10464fa); Build green on develop after the publish job was re-run with the secret, and it started deploy run 37688445728 in etalii.adp.site"
+    },
+    "T030": {
+      "status": "DONE",
+      "did": "Merged in etalii.adp.site#87 (4091d1b)"
+    },
+    "T031": {
+      "status": "DONE",
+      "did": "Merged in etalii.adp.site#87 (4091d1b)"
+    },
+    "T032": {
+      "status": "DONE",
+      "did": "Merged in etalii.adp.site#87 (4091d1b)"
+    },
+    "T033": {
+      "status": "DONE",
+      "did": "Merged in etalii.adp.site#87 (4091d1b)"
+    },
+    "T034": {
+      "status": "DONE",
+      "did": "Merged in etalii.adp.site#87 (4091d1b)"
+    },
+    "T035": {
+      "status": "DONE",
+      "did": "Merged in etalii.adp.site#87 (4091d1b)"
+    },
+    "T037": {
+      "status": "DONE",
+      "did": "Merged in etalii.adp.site#87 (4091d1b)"
+    },
+    "T038": {
+      "status": "DONE",
+      "did": "Merged in etalii.adp.site#87 (4091d1b)"
+    },
+    "T039": {
+      "status": "DONE",
+      "did": "Merged in etalii.adp.site#87 (4091d1b)"
+    },
+    "T036": {
+      "status": "DONE",
+      "did": "Merged in etalii-adp/.github#7 (aa3f5a4)",
+      "files": [
+        "etalii-adp.github/profile/README.md"
+      ]
+    },
+    "T043": {
+      "status": "DONE",
+      "did": "Maintainer merged etalii.adp.site#87 and .github#7, each with a merge commit; deploy run 37689445955 queued"
+    },
+    "T027": {
+      "status": "DONE",
+      "did": "Maintainer added etalii-adp/etalii.adp.ide.notion to the Claude project's resources (reported by the maintainer; an agent cannot read it back)"
+    },
+    "T029": {
+      "status": "DONE",
+      "did": "Walked docs/new-repository.md and contracts/repository-settings.md, quickstart steps 1 to 3: 0 open items after the build-table rows merged (#87, #7) and T027"
+    },
+    "T044": {
+      "status": "DONE",
+      "did": "Quickstart steps 4 to 14 pass: SC-002 Build on #2 in under a minute without publish; SC-003 merge a8b691a served after 12m24s; SC-004 embed shows in a Notion page (maintainer); SC-005 a hand-started deploy kept revision a8b691a; SC-006 and SC-007 both tables and the host list name Notion"
+    },
+    "T045": {
+      "status": "DONE",
+      "did": "Checklist title corrected to /adp-notion; record and ticked tasks delivered in pull request 5",
+      "files": [
+        "specs/011-notion-repository/checklists/requirements.md",
+        "specs/011-notion-repository/tasks.md"
+      ]
     }
   },
   "verified": [
@@ -562,6 +1113,50 @@
       "exitCode": 0,
       "durationSeconds": 1.0,
       "result": "examples\tpass\t9s\thttps://github.com/etalii-adp/etalii.adp/actions/runs/37652116643/job/112897826958\t · licence\tpass\t7s\thttps://github.com/etalii-adp/etalii.adp/actions/runs/37652116643/job/112897827453\t · terminology\tpass\t12s\thttps://github.com/etalii-adp/etalii.adp/actions/runs/37652116643/job/112897827521"
+    },
+    {
+      "what": "Pull request 2: check, addons and terminology pass, publish skipped",
+      "command": "gh pr checks 1 --repo etalii-adp/etalii.adp.ide.notion",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.0,
+      "result": "addons\tpass\t8s\thttps://github.com/etalii-adp/etalii.adp.ide.notion/actions/runs/37670544837/job/112960974595\t · check\tpass\t8s\thttps://github.com/etalii-adp/etalii.adp.ide.notion/actions/runs/37670544837/job/112960890702\t · terminology\tpass\t9s\thttps://github.com/etalii-adp/etalii.adp.ide.notion/actions/runs/37670544837/job/112960890254"
+    },
+    {
+      "what": "etalii.adp examples validate",
+      "command": "python .github/scripts/validate-examples.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.5,
+      "result": "ok   definitions/diagrams/w3c-skos.dis · ok   definitions/diagrams/wardley-map.dis · 67 example(s), 0 invalid."
+    },
+    {
+      "what": "etalii.adp licence rows",
+      "command": "python .github/scripts/licence-check.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.1,
+      "result": "ok   specifications/edsl/EDSL-specification.md · ok   specifications/fbl/FBL-specification.md · 7 specification document(s), 0 failure(s)."
+    },
+    {
+      "what": "Site suites on the branch, in a checkout outside the main clone, with dist/adp-notion built from the Notion repository develop (10464fa)",
+      "command": "npm run test && npm run build && npm run check:reference && node scripts/build.mjs --out dist/adp-notion && npm run check",
+      "result": "83 unit tests, 265 pages, 8 reference checks, 1117 page tests: all pass; home page lists Notion as Planned"
+    },
+    {
+      "what": "actionlint 1.7.12 on the site deploy.yml and the Notion build.yml",
+      "command": "actionlint deploy.yml build.yml",
+      "result": "no finding"
+    },
+    {
+      "what": "Quickstart steps 4, 5, 7, 8, 11 to 14 on 2026-10-07 (T044, partial)",
+      "command": "curl and gh against etalii.net and GitHub",
+      "result": "deploy 37689445955 of #87 published /adp-notion (200, revision 10464fa, no-addons); without the slash 301 to the slash over HTTPS; /adp/ and three more pages 200; no X-Frame-Options or CSP header; home page lists Notion as Planned; both build tables hold the row and the badge is passing; etalii.adp.ide.notion#2 got check, addons, terminology in under a minute with publish skipped, and the served revision did not change"
+    },
+    {
+      "what": "Quickstart steps 6, 9 and 10 (T044)",
+      "command": "curl polling of https://etalii.net/adp-notion/ and gh run watch",
+      "result": "merge of etalii.adp.ide.notion#2 at 21:53:09Z served at 22:05:33Z (12m24s); hand-started deploy 37693921569 succeeded and the index kept revision a8b691a; the maintainer embedded the address in a Notion page and the index showed"
     }
   ]
 }
