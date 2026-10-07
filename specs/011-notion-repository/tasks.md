@@ -62,11 +62,11 @@ Files: `etalii.adp/docs/terminology.md`, `etalii.adp/docs/new-repository.md`, `e
 
 **⟶ Wait for Wave 3 to finish, then:**
 
-- [ ] **T011** Commit this feature's folder and T005 to T010 on `features/011-notion-repository`, push it and open pull request 1 into `develop`. `Build` passes on it. **Maintainer**: merge it with a merge commit · etalii.adp/specs/011-notion-repository/
+- [x] **T011** Commit this feature's folder and T005 to T010 on `features/011-notion-repository`, push it and open pull request 1 into `develop`. `Build` passes on it. **Maintainer**: merge it with a merge commit · etalii.adp/specs/011-notion-repository/
 
 **⟶ Wait for T011 to be merged, then:**
 
-- [ ] **T012** Update the Notion page "ADP terminology" to the merged glossary: Host, IDE host, Notion add-on (research D9). It is no file · Notion workspace, page "ADP terminology"
+- [x] **T012** Update the Notion page "ADP terminology" to the merged glossary: Host, IDE host, Notion add-on (research D9). It is no file · Notion workspace, page "ADP terminology"
 
 **Checkpoint**: the glossary on `develop` of `etalii.adp` names the Notion host, so the terminology job of the other repositories accepts the terms.
 
@@ -82,21 +82,21 @@ Files: everything in `etalii.adp.ide.notion/` (`CLAUDE.md`, `README.md`, `LICENS
 
 ### Implementation
 
-- [ ] **T013** [US1] Rename `etalii-adp/etalii-adp-ide-notion` to `etalii.adp.ide.notion`; create no second repository. Set: merge commits on, squash and rebase off, head branches deleted on merge, wiki off, description with "add-ons". Check that the Claude GitHub app covers it and that `gh repo view etalii-adp/etalii-adp-ide-notion --json name` answers with the new name (FR-001, FR-002, research D10) · GitHub settings of etalii-adp/etalii.adp.ide.notion
-- [ ] **T014** [US1] Clone the empty repository beside the others · etalii.adp.ide.notion/
+- [x] **T013** [US1] Rename `etalii-adp/etalii-adp-ide-notion` to `etalii.adp.ide.notion`; create no second repository. Set: merge commits on, squash and rebase off, head branches deleted on merge, wiki off, description with "add-ons". Check that the Claude GitHub app covers it and that `gh repo view etalii-adp/etalii-adp-ide-notion --json name` answers with the new name (FR-001, FR-002, research D10) · GitHub settings of etalii-adp/etalii.adp.ide.notion
+- [x] **T014** [US1] Clone the empty repository beside the others · etalii.adp.ide.notion/
 
 **⟶ Wait for T014 to finish, then:**
 
 **Wave 1 — independent (different files):**
 
-- [ ] **T015** [P] [US1] Write the rules for agents, from the eclipse source's `CLAUDE.md` and adapted: `develop`, feature branches, pull requests only, merge commits, features specified in `etalii.adp`, the glossary's words. It names no tool as available · etalii.adp.ide.notion/CLAUDE.md
-- [ ] **T016** [P] [US1] Write the name `etalii.adp.ide.notion`, the build badge on the line after the heading as [the badge contract of spec 001](../001-ci-and-badges/contracts/badge.md) gives it, and what the repository is for: the Notion add-ons, published at `https://etalii.net/adp-notion`, none yet. It is the source of the site's host entry (T032) · etalii.adp.ide.notion/README.md
-- [ ] **T017** [P] [US1] Copy from the eclipse source, unchanged: Apache License 2.0 with the line `Copyright © Peter Vrenken 2026`, the `*.sh` LF rule, and the ignore rule for `.claude/settings.local.json` · etalii.adp.ide.notion/LICENSE, etalii.adp.ide.notion/.gitattributes, etalii.adp.ide.notion/.gitignore
+- [x] **T015** [P] [US1] Write the rules for agents, from the eclipse source's `CLAUDE.md` and adapted: `develop`, feature branches, pull requests only, merge commits, features specified in `etalii.adp`, the glossary's words. It names no tool as available · etalii.adp.ide.notion/CLAUDE.md
+- [x] **T016** [P] [US1] Write the name `etalii.adp.ide.notion`, the build badge on the line after the heading as [the badge contract of spec 001](../001-ci-and-badges/contracts/badge.md) gives it, and what the repository is for: the Notion add-ons, published at `https://etalii.net/adp-notion`, none yet. It is the source of the site's host entry (T032) · etalii.adp.ide.notion/README.md
+- [x] **T017** [P] [US1] Copy from the eclipse source, unchanged: Apache License 2.0 with the line `Copyright © Peter Vrenken 2026`, the `*.sh` LF rule, and the ignore rule for `.claude/settings.local.json` · etalii.adp.ide.notion/LICENSE, etalii.adp.ide.notion/.gitattributes, etalii.adp.ide.notion/.gitignore
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T018** [US1] Commit the five starting files as the first commit on `develop` and push it. It is the one push that is not a pull request: an empty repository has no branch to open one against. Set `develop` as the default branch and read the settings back with `gh api repos/etalii-adp/etalii.adp.ide.notion` (FR-002) · etalii.adp.ide.notion/ (branch `develop`)
-- [ ] **T019** [US1] Create a worktree on a new branch `features/011-notion-repository` from `develop` · etalii.adp.ide.notion/.claude/worktrees/011-notion-repository
+- [x] **T018** [US1] Commit the five starting files as the first commit on `develop` and push it. It is the one push that is not a pull request: an empty repository has no branch to open one against. Set `develop` as the default branch and read the settings back with `gh api repos/etalii-adp/etalii.adp.ide.notion` (FR-002) · etalii.adp.ide.notion/ (branch `develop`)
+- [x] **T019** [US1] Create a worktree on a new branch `features/011-notion-repository` from `develop` · etalii.adp.ide.notion/.claude/worktrees/011-notion-repository
 
 **⟶ Wait for T019 to finish, then:**
 
@@ -115,7 +115,7 @@ Files: everything in `etalii.adp.ide.notion/` (`CLAUDE.md`, `README.md`, `LICENS
 
 **Wave 3 — independent (no shared file):**
 
-- [ ] **T025** [P] [US1] Push the branch and open pull request 2 into `develop`. `Build` reports on it within 5 minutes with `check`, `addons` and `terminology`, and no `publish` job runs (SC-002, FR-011) · etalii.adp.ide.notion/ (pull request 2)
+- [x] **T025** [P] [US1] Push the branch and open pull request 2 into `develop`. `Build` reports on it within 5 minutes with `check`, `addons` and `terminology`, and no `publish` job runs (SC-002, FR-011) · etalii.adp.ide.notion/ (pull request 2)
 - [ ] **T026** [P] [US1] **Maintainer**: create a fine-grained personal access token limited to `etalii.adp.site` with "Actions: read and write" and no other permission, expiring within a year, and store it as the Actions secret `SITE_DEPLOY_TOKEN` of `etalii.adp.ide.notion`. Check with `gh secret list --repo etalii-adp/etalii.adp.ide.notion` (FR-011) · GitHub secret SITE_DEPLOY_TOKEN
 - [ ] **T027** [P] [US1] **Maintainer**: add `etalii.adp.ide.notion` to the Claude project's resources (FR-002) · Claude project resources
 
