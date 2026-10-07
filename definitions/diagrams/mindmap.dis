@@ -1,36 +1,97 @@
 {
-  "$schema": "https://etalii.net/adp/disl/schema/0.1/disl.schema.json#/$defs/Specification",
-  "disl": "0.1",
+  "$schema": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Specification",
+  "disl": "0.3",
   "language": {
     "id": "net.etalii.adp.freeplane.mindmap",
-    "version": "0.1.0",
+    "version": "0.3.0",
+    "origin": "freeplane/mindmap",
     "label": "Mind map",
     "doc": {
       "summary": "Ideas branching from one central topic, for thinking a subject through rather than specifying it.",
-      "description": "A mind map is a tree of topics around one central topic. Its first-level branches go to the left and the right of the centre; every deeper branch grows away from the centre. The diagram is stored in the Freeplane `.mm` format (FreeMind-compatible), so Freeplane and FreeMind can open what ADP writes and ADP can open what they write, with everything ADP does not understand preserved byte for byte.\n\nOrigin tag: `freeplane/mindmap`. What this specification cannot express - the `.mm` file format, the two-sided layout, fold state per viewer, sibling naming, links and the drag-to-re-parent gesture - is described in `mindmap.md` beside this file.",
-      "tags": ["mind map", "mindmap", "freeplane", "freemind", "knowledge", "brainstorming"],
+      "description": "A mind map is a tree of topics around one central topic. Its first-level branches go to the left and the right of the centre; every deeper branch grows away from the centre. The diagram is stored in the Freeplane `.mm` format (FreeMind-compatible), so Freeplane and FreeMind can open what ADP writes and ADP can open what they write, with everything ADP does not understand preserved byte for byte.\n\nWhat this specification cannot express - the `.mm` format and the persistence plugin that reads it, the two-sided layout, sibling naming, the link picker and the drag-to-re-parent gesture - is described in `mindmap.md` beside this file.",
+      "tags": [
+        "mind map",
+        "mindmap",
+        "freeplane",
+        "freemind",
+        "knowledge",
+        "brainstorming"
+      ],
       "seeAlso": [
-        { "title": "Freeplane", "href": "https://www.freeplane.org/" },
-        { "title": "Freeplane example maps", "href": "https://www.freeplane.org/wiki/index.php/Gallery" }
+        {
+          "title": "Freeplane",
+          "href": "https://www.freeplane.org/"
+        },
+        {
+          "title": "Freeplane example maps",
+          "href": "https://www.freeplane.org/wiki/index.php/Gallery"
+        }
       ]
     },
-    "authors": [{ "name": "Peter Vrenken", "url": "https://github.com/vrenken" }],
+    "authors": [
+      {
+        "name": "Peter Vrenken",
+        "url": "https://github.com/vrenken"
+      }
+    ],
     "license": "Apache-2.0",
     "homepage": "https://etalii.net/adp",
     "icon": "mdi-family-tree",
     "fileExtension": "mm"
   },
-
+  "functions": {
+    "siblingName": {
+      "params": [
+        {
+          "name": "names",
+          "type": "list(string)"
+        }
+      ],
+      "returns": "string",
+      "cel": "'Node'",
+      "doc": "The name for a new node among siblings with `names`. This body is the fallback only; ADP continues a numbered run ('Phase 1', 'Phase 2' -> 'Phase 3', one past the highest) or a shared last word ('Measure pass', 'Arrange pass' -> 'New pass'), and makes the result unique. The full rule is in mindmap.md."
+    },
+    "indicators": {
+      "params": [
+        {
+          "name": "n",
+          "type": "Element"
+        }
+      ],
+      "returns": "string",
+      "cel": "[n.notes != '' ? '\u2022' : '', n.link != '' ? '\u2197' : '', n.view.collapsed && n.children.size() > 0 ? '\u2295' : ''].join(' ').trim()",
+      "doc": "The corner glyphs of a node: \u2022 it has notes, \u2197 it links somewhere (an empty link draws none), \u2295 its branch is collapsed for this viewer. The three are joined by single spaces before the ends are trimmed, so a node with notes and a collapsed branch but no link reads `\u2022  \u2295`, two spaces apart, as the canvas has always drawn it."
+    },
+    "fileBase": {
+      "params": [
+        {
+          "name": "file",
+          "type": "string"
+        }
+      ],
+      "returns": "string",
+      "cel": "file.trim().lowerAscii().endsWith('.adp') ? file.trim().substring(0, file.trim().size() - 4) : file.trim()",
+      "doc": "The name a finding calls the map by: the file it is attributed to (its `.adp` registration, else the `.mm` itself) without the registration's `.adp`."
+    }
+  },
   "metamodel": {
     "doc": "One node type, nested to any depth. The tree is containment: every node but the central topic has exactly one parent node, and the order of a node's children is meaningful and stored.",
     "enums": {
       "Side": {
         "doc": "Freeplane's `POSITION` attribute on a first-level node: which side of the central topic the branch is drawn on. Freeplane 1.11 wrote `left`/`right`; 1.12 writes `top_or_left`/`bottom_or_right`. Both vocabularies are read; ADP never writes the attribute.",
         "values": {
-          "right": { "label": "Right (Freeplane 1.11)" },
-          "left": { "label": "Left (Freeplane 1.11)" },
-          "bottom_or_right": { "label": "Right (Freeplane 1.12)" },
-          "top_or_left": { "label": "Left (Freeplane 1.12)" }
+          "right": {
+            "label": "Right (Freeplane 1.11)"
+          },
+          "left": {
+            "label": "Left (Freeplane 1.11)"
+          },
+          "bottom_or_right": {
+            "label": "Right (Freeplane 1.12)"
+          },
+          "top_or_left": {
+            "label": "Left (Freeplane 1.12)"
+          }
         }
       }
     },
@@ -40,7 +101,7 @@
         "icon": "mdi-card-plus-outline",
         "doc": {
           "summary": "A topic in the map. The one node without a parent is the central topic.",
-          "description": "Stored as a Freeplane `<node>` element. Its `ID` is the element id (`ID_` plus a short id for nodes ADP creates). A node with no `ID` in the file is given one in memory on open and written on the next save, never on open."
+          "description": "Stored as a Freeplane `<node>` element. Its `ID` is the element id (`ID_` plus a short id for nodes ADP creates). A node with no `ID` in the file is given one in memory on open and written on the next save, never on open. Two nodes the file gives one `ID` are both read; the first keeps the id and the later ones are reported by `mindmap.duplicate-id`."
         },
         "attributes": {
           "text": {
@@ -69,7 +130,7 @@
             "label": "Link",
             "doc": {
               "summary": "What the node links to: a file or folder in the project, or a URL.",
-              "description": "Stored in the `LINK` attribute exactly as Freeplane defines it: a path relative to the map file (forward slashes), or an absolute URL. A file link is picked from the project's files, never typed, and never resolves outside the project."
+              "description": "Stored in the `LINK` attribute exactly as Freeplane defines it: a path relative to the map file (forward slashes), or an absolute URL. A file link is picked from the project's files, never typed, and never resolves outside the project. An empty `LINK=\"\"` is a stored link with no target: the node offers Change link and Unlink, and draws no link glyph."
             },
             "order": 3
           },
@@ -81,7 +142,7 @@
             "group": "View",
             "doc": {
               "summary": "Whether the file says this branch starts collapsed.",
-              "description": "Freeplane's `FOLDED=\"true\"`. It seeds each viewer's own fold state when the map opens; collapsing and expanding afterwards is per-viewer view state that is never written to the file and never lands on the undo history.",
+              "description": "Freeplane's `FOLDED=\"true\"`. It seeds each viewer's own collapsed state when the map opens (`persistence.view.initial`); collapsing and expanding afterwards is viewer state that is never written to the file and never lands on the undo history. The Collapsed row shows this flag, not the viewer's state.",
               "rationale": "Two people viewing one map fold independently."
             },
             "order": 4
@@ -95,7 +156,9 @@
           }
         },
         "children": {
-          "allowed": ["Node"],
+          "allowed": [
+            "Node"
+          ],
           "ordered": true
         },
         "labelAttribute": "text"
@@ -113,26 +176,36 @@
         "directed": true,
         "allowSelfLoops": false,
         "allowParallel": false,
-        "acyclic": true,
-        "derived": "diagram.nodes.filter(n, n.parent != null).map(n, {'source': n.parent, 'target': n})"
+        "derived": {
+          "from": "diagram.nodes.filter(n, n.parent != null)",
+          "source": "item.parent",
+          "target": "item",
+          "doc": "One branch per node with a parent, from the parent to the node. Containment already rules out a cycle, so the relation states no `acyclic` of its own."
+        }
       }
     }
   },
-
   "coordinates": {
     "doc": "One free pixel canvas without grid or snapping. The central topic's centre is the origin; every position is computed by the layout.",
     "systems": {
       "canvas": {
         "kind": "cartesian",
-        "x": { "kind": "linear", "unit": "px" },
-        "y": { "kind": "linear", "unit": "px" },
+        "x": {
+          "kind": "linear",
+          "unit": "px"
+        },
+        "y": {
+          "kind": "linear",
+          "unit": "px"
+        },
         "orientation": "y-down",
-        "grid": { "visible": false }
+        "grid": {
+          "visible": false
+        }
       }
     },
     "default": "canvas"
   },
-
   "notation": {
     "theme": {
       "tokens": {
@@ -154,46 +227,180 @@
     },
     "styles": {
       "node": {
-        "fill": { "token": "color.surface" },
-        "stroke": { "color": { "token": "color.border" }, "width": 1.5 },
-        "font": { "family": { "token": "font.body" }, "size": 12, "color": { "token": "color.text" } },
-        "padding": [6, 10],
+        "fill": {
+          "token": "color.surface"
+        },
+        "stroke": {
+          "color": {
+            "token": "color.border"
+          },
+          "width": 1.5
+        },
+        "font": {
+          "family": {
+            "token": "font.body"
+          },
+          "size": 12,
+          "color": {
+            "token": "color.text"
+          }
+        },
+        "padding": [
+          6,
+          10
+        ],
         "cursor": "pointer"
       },
       "branch": {
-        "stroke": { "color": { "token": "color.border" }, "width": 1.5 }
+        "stroke": {
+          "color": {
+            "token": "color.border"
+          },
+          "width": 1.5
+        }
+      }
+    },
+    "shapes": {
+      "topicBox": {
+        "label": "Topic box",
+        "doc": "A rectangle with corners rounded by 6, as an SVG `rect` with `rx` 6 draws it: each radius is at most half its side, so a box narrower or lower than 12 has elliptical corners. The node's position is its centre (`placement.anchor`).",
+        "path": {
+          "segments": [
+            {
+              "op": "M",
+              "x": "min(6.0, w / 2.0)",
+              "y": 0
+            },
+            {
+              "op": "L",
+              "x": "w - min(6.0, w / 2.0)",
+              "y": 0
+            },
+            {
+              "op": "A",
+              "rx": "min(6.0, w / 2.0)",
+              "ry": "min(6.0, h / 2.0)",
+              "rotation": 0,
+              "largeArc": false,
+              "sweep": true,
+              "x": "w",
+              "y": "min(6.0, h / 2.0)"
+            },
+            {
+              "op": "L",
+              "x": "w",
+              "y": "h - min(6.0, h / 2.0)"
+            },
+            {
+              "op": "A",
+              "rx": "min(6.0, w / 2.0)",
+              "ry": "min(6.0, h / 2.0)",
+              "rotation": 0,
+              "largeArc": false,
+              "sweep": true,
+              "x": "w - min(6.0, w / 2.0)",
+              "y": "h"
+            },
+            {
+              "op": "L",
+              "x": "min(6.0, w / 2.0)",
+              "y": "h"
+            },
+            {
+              "op": "A",
+              "rx": "min(6.0, w / 2.0)",
+              "ry": "min(6.0, h / 2.0)",
+              "rotation": 0,
+              "largeArc": false,
+              "sweep": true,
+              "x": 0,
+              "y": "h - min(6.0, h / 2.0)"
+            },
+            {
+              "op": "L",
+              "x": 0,
+              "y": "min(6.0, h / 2.0)"
+            },
+            {
+              "op": "A",
+              "rx": "min(6.0, w / 2.0)",
+              "ry": "min(6.0, h / 2.0)",
+              "rotation": 0,
+              "largeArc": false,
+              "sweep": true,
+              "x": "min(6.0, w / 2.0)",
+              "y": 0
+            },
+            {
+              "op": "Z"
+            }
+          ]
+        }
       }
     },
     "nodes": {
       "Node": {
-        "shape": "rect",
+        "shape": "topicBox",
         "style": "node",
-        "size": { "min": [32, 31.6], "autoSize": "fitContent", "resizable": false },
+        "size": {
+          "min": [
+            32,
+            31.6
+          ],
+          "autoSize": "fitContent",
+          "resizable": false
+        },
         "placement": {
-          "x": { "layout": true },
-          "y": { "layout": true },
+          "x": {
+            "layout": true
+          },
+          "y": {
+            "layout": true
+          },
           "anchor": "center",
-          "movable": false,
+          "movable": true,
           "resizable": false,
-          "doc": "Positions come from the layout. Dragging a node onto another node makes it that node's last child; dropping it on empty canvas does nothing."
+          "doc": "Positions come from the layout. A node can be dragged: dropping it on another node makes it that node's last child, and dropping it on empty canvas does nothing. The drag never writes a position."
         },
         "labels": [
           {
             "id": "text",
-            "text": { "attribute": "text" },
+            "text": {
+              "attribute": "text"
+            },
             "editable": "inline",
             "position": "center",
             "wrap": "none"
           },
           {
             "id": "indicators",
-            "text": { "cel": "[self.notes != '' ? '•' : '', has(self.link) && self.link != '' ? '↗' : '', self.view.collapsed && self.children.size() > 0 ? '⊕' : ''].filter(s, s != '').join(' ')" },
-            "visible": { "cel": "self.notes != '' || (has(self.link) && self.link != '') || (self.view.collapsed && self.children.size() > 0)" },
-            "position": "top-right",
-            "doc": "Corner glyphs: • the node has notes, ↗ the node has a link, ⊕ the branch is collapsed."
+            "text": {
+              "cel": "indicators(self)"
+            },
+            "visible": {
+              "cel": "indicators(self) != ''"
+            },
+            "position": {
+              "anchor": [
+                1,
+                0
+              ],
+              "offset": [
+                -4,
+                12
+              ],
+              "align": "end"
+            },
+            "doc": "The corner glyphs (`indicators`), right-aligned 4 inside the right edge, 12 below the top."
           }
         ],
-        "anchors": { "mode": "sides" },
+        "anchors": {
+          "mode": "sides",
+          "sides": [
+            "left",
+            "right"
+          ]
+        },
         "container": {
           "layout": "layout:mindmap",
           "clip": false,
@@ -201,28 +408,57 @@
           "highlightOnDrop": true
         },
         "states": {
-          "dragging": { "opacity": 0.65 },
-          "dropTarget": { "stroke": { "color": { "token": "color.primary" }, "width": 2.5, "dash": [6, 3], "dashScale": "absolute" } }
+          "dragging": {
+            "opacity": 0.65
+          },
+          "dropTarget": {
+            "stroke": {
+              "color": {
+                "token": "color.primary"
+              },
+              "width": 2.5,
+              "dash": [
+                6,
+                3
+              ],
+              "dashScale": "absolute"
+            }
+          }
         },
-        "deletable": { "cel": "self.parent != null" },
-        "doubleClick": "editLabel",
-        "accessibility": { "name": { "cel": "self.parent == null ? 'Central topic ' + self.text : 'Node ' + self.text" } },
-        "doc": "A plain box sized to its text, with the text centred and the corner glyphs top right."
+        "deletable": {
+          "cel": "self.parent != null"
+        },
+        "doubleClick": "none",
+        "doc": "A box with rounded corners sized to its text, the text centred and the corner glyphs top right. A double-click does nothing of its own; the text is edited in place through Rename (F2). A branch leaves and reaches a node at the middle of its left or right side."
       }
     },
     "edges": {
       "Branch": {
         "line": {
-          "stroke": { "color": { "token": "color.border" }, "width": 1.5 },
+          "stroke": {
+            "color": {
+              "token": "color.border"
+            },
+            "width": 1.5
+          },
           "routing": "bezier",
-          "bendpoints": { "editable": false },
+          "bendpoints": {
+            "editable": false
+          },
           "startDirection": "auto",
           "endDirection": "auto"
         },
         "style": "branch",
         "sourceMarker": "none",
         "targetMarker": "none",
-        "anchoring": { "source": { "mode": "sides" }, "target": { "mode": "sides" } },
+        "anchoring": {
+          "source": {
+            "mode": "sides"
+          },
+          "target": {
+            "mode": "sides"
+          }
+        },
         "selectable": false,
         "deletable": false,
         "reconnectable": false,
@@ -231,13 +467,17 @@
       }
     },
     "canvas": {
-      "background": { "token": "color.surface" }
+      "background": {
+        "token": "color.surface"
+      }
     }
   },
-
   "toolbox": {
     "doc": "One tool: a node, dropped on the node that becomes its parent. Everything else is on the selected node's context menu and keyboard.",
-    "generic": { "select": true, "pan": true },
+    "generic": {
+      "select": true,
+      "pan": true
+    },
     "searchable": false,
     "groups": [
       {
@@ -255,73 +495,213 @@
         ]
       }
     ],
-    "contextTools": [
+    "contextMenus": [
       {
-        "for": ["Node"],
+        "for": [
+          "Node"
+        ],
         "placement": "menu",
+        "standardEntries": false,
         "tools": [
-          { "kind": "operation", "operation": "addChild", "label": "Add child", "icon": "mdi-subdirectory-arrow-right", "shortcut": "Insert" },
-          { "kind": "operation", "operation": "addSibling", "label": "Add sibling", "icon": "mdi-plus", "shortcut": "Enter", "enabled": "self.parent != null" },
-          { "kind": "editLabel", "label": "Rename…", "icon": "mdi-pencil-outline", "shortcut": "F2" },
-          { "kind": "delete", "label": "Delete", "icon": "mdi-trash-can-outline", "shortcut": "Delete", "enabled": "self.parent != null" },
-          { "kind": "operation", "operation": "editNotes", "label": { "cel": "self.notes != '' ? 'Edit notes…' : 'Add notes…'" }, "icon": "mdi-note-text-outline" },
-          { "kind": "operation", "operation": "link", "label": { "cel": "has(self.link) ? 'Change link…' : 'Link to…'" }, "icon": "mdi-link-variant" },
-          { "kind": "operation", "operation": "unlink", "label": "Unlink", "icon": "mdi-link-variant-off", "enabled": "has(self.link)" },
-          { "kind": "operation", "operation": "toggleFold", "label": { "cel": "self.view.collapsed ? 'Expand' : 'Collapse'" }, "icon": "mdi-unfold-less-horizontal", "shortcut": "Space", "enabled": "self.children.size() > 0" }
-        ]
+          {
+            "kind": "operation",
+            "operation": "addChild",
+            "group": "structure",
+            "label": "Add child",
+            "icon": "mdi-subdirectory-arrow-right",
+            "shortcut": "Insert"
+          },
+          {
+            "kind": "operation",
+            "operation": "addSibling",
+            "group": "structure",
+            "label": "Add sibling",
+            "icon": "mdi-plus",
+            "shortcut": "Enter",
+            "visible": "self.parent != null"
+          },
+          {
+            "kind": "editLabel",
+            "group": "structure",
+            "label": "Rename\u2026",
+            "icon": "mdi-pencil-outline",
+            "shortcut": "F2"
+          },
+          {
+            "kind": "delete",
+            "group": "structure",
+            "label": "Delete",
+            "icon": "mdi-trash-can-outline",
+            "shortcut": "Delete",
+            "visible": "self.parent != null"
+          },
+          {
+            "kind": "operation",
+            "operation": "editNotes",
+            "group": "content",
+            "label": {
+              "cel": "self.notes != '' ? 'Edit notes\u2026' : 'Add notes\u2026'"
+            },
+            "icon": "mdi-note-text-outline"
+          },
+          {
+            "kind": "operation",
+            "operation": "link",
+            "group": "content",
+            "label": {
+              "cel": "has(self.link) ? 'Change link\u2026' : 'Link to\u2026'"
+            },
+            "icon": "mdi-link-variant"
+          },
+          {
+            "kind": "operation",
+            "operation": "unlink",
+            "group": "content",
+            "label": "Unlink",
+            "icon": "mdi-link-variant-off",
+            "visible": "has(self.link)"
+          },
+          {
+            "kind": "operation",
+            "operation": "toggleFold",
+            "group": "view",
+            "label": "Expand",
+            "icon": "mdi-unfold-more-horizontal",
+            "shortcut": "Space",
+            "visible": "self.children.size() > 0 && self.view.collapsed"
+          },
+          {
+            "kind": "operation",
+            "operation": "toggleFold",
+            "group": "view",
+            "label": "Collapse",
+            "icon": "mdi-unfold-less-horizontal",
+            "shortcut": "Space",
+            "visible": "self.children.size() > 0 && !self.view.collapsed"
+          }
+        ],
+        "doc": "Three groups: the structure (add, rename, delete), the content (notes and link) and the view (expand or collapse). An entry that does not apply is left out rather than greyed: the central topic has no sibling and cannot be deleted, an unlinked node has nothing to unlink, a leaf has nothing to collapse. Expand and Collapse are one operation with two faces; which one shows follows this viewer's collapsed state."
       }
     ]
   },
-
   "forms": {
     "nodeProperties": {
       "for": "Node",
-      "usage": ["inspector"],
+      "usage": [
+        "inspector"
+      ],
       "label": "Mind map node",
       "items": [
-        { "attribute": "text", "widget": "text" },
-        { "attribute": "notes", "widget": "textarea", "rows": 4 },
-        { "attribute": "link", "widget": "text", "placeholder": "Empty to unlink" },
         {
-          "kind": "section", "title": "View", "items": [
-            { "kind": "computed", "label": "Collapsed", "value": { "cel": "self.view.collapsed ? 'Yes' : 'No'" },
+          "attribute": "text",
+          "widget": "text"
+        },
+        {
+          "attribute": "notes",
+          "widget": "textarea",
+          "rows": 4
+        },
+        {
+          "attribute": "link",
+          "widget": "text",
+          "placeholder": "Empty to unlink",
+          "doc": "An emptied link is an unlink."
+        },
+        {
+          "kind": "section",
+          "title": "View",
+          "items": [
+            {
+              "kind": "computed",
+              "id": "folded",
+              "label": "Collapsed",
+              "value": {
+                "cel": "self.folded ? 'Yes' : 'No'"
+              },
               "visible": "self.children.size() > 0",
-              "doc": "Collapsing is a view setting rather than part of the document, so it is not undoable. Collapse from the canvas or the context menu." }
+              "readOnlyReasons": [
+                "Collapsing is a view setting rather than part of the document, so it is not undoable. Collapse from the canvas or the context menu."
+              ],
+              "doc": "The file's FOLDED flag, which seeds each viewer's collapsed state; shown only for a node with children."
+            }
           ]
         },
         {
-          "kind": "section", "title": "Model", "items": [
-            { "kind": "computed", "label": "Identifier", "value": { "cel": "self.id" },
-              "doc": "Freeplane gives every node its identifier and other files may link to it, so it is not ours to change." }
+          "kind": "section",
+          "title": "Model",
+          "items": [
+            {
+              "kind": "computed",
+              "id": "identifier",
+              "label": "Identifier",
+              "value": {
+                "cel": "self.id"
+              },
+              "readOnlyReasons": [
+                "Freeplane gives every node its identifier and other files may link to it, so it is not ours to change."
+              ]
+            }
           ]
         }
       ]
     }
   },
-
   "constraints": {
+    "doc": "A map that breaks a rule still opens. A file that is not a readable map has the one finding `mindmap.not-a-map` and no other. Only the central topic is judged for text: Freeplane itself keeps ordinary nodes without text, so an empty node elsewhere is style, not a problem. A map with more than one root node is not readable at all, so it needs no rule of its own.",
+    "blockSaveOn": "never",
+    "order": [
+      "mindmap.unnamed-root",
+      "mindmap.duplicate-id"
+    ],
+    "builtIn": {
+      "std.unparseable": {
+        "code": "mindmap.not-a-map",
+        "severity": "error",
+        "message": {
+          "cel": "\"'\" + fileBase(diagram.file) + \"' is not a readable mind map: \" + detail.reason"
+        }
+      },
+      "std.duplicateId": {
+        "enabled": false,
+        "doc": "Reported by mindmap.duplicate-id, once per later holder in document order and naming both texts."
+      }
+    },
     "rules": [
       {
-        "id": "singleCentralTopic",
-        "label": "One central topic",
-        "scope": "diagram",
-        "rule": "diagram.nodes.filter(n, n.parent == null).size() == 1",
-        "severity": "error",
-        "message": { "cel": "'A map has exactly one root node; this one has ' + string(diagram.nodes.filter(n, n.parent == null).size()) + '.'" },
-        "doc": { "rationale": "A mind map grows from one central topic; a Freeplane `<map>` holds exactly one root `<node>`." }
-      },
-      {
         "id": "unnamedCentralTopic",
+        "code": "mindmap.unnamed-root",
         "label": "Named central topic",
-        "scope": "Node",
+        "scope": [
+          "Node"
+        ],
         "when": "self.parent == null",
         "rule": "self.text.trim() != ''",
         "severity": "warning",
-        "attribute": "text",
-        "message": "The map has an unnamed central topic.",
+        "suppressible": false,
+        "message": {
+          "cel": "\"The map '\" + fileBase(diagram.file) + \"' has an unnamed central topic.\""
+        },
         "doc": {
-          "summary": "The central topic should have text.",
-          "rationale": "Only the central topic is judged: Freeplane itself keeps ordinary nodes without text, so an empty node elsewhere is style, not a problem."
+          "summary": "The central topic should have text."
+        }
+      },
+      {
+        "id": "duplicateId",
+        "code": "mindmap.duplicate-id",
+        "label": "One node per id",
+        "scope": [
+          "Node"
+        ],
+        "when": "self.id != ''",
+        "rule": "diagram.elementById(self.id) == self",
+        "severity": "error",
+        "suppressible": false,
+        "message": {
+          "cel": "\"Two nodes share the id '\" + self.id + \"' ('\" + diagram.elementById(self.id).text + \"' and '\" + self.text + \"').\""
+        },
+        "doc": {
+          "summary": "Two nodes with one id would answer to each other's selections.",
+          "description": "Reported on each node after the first that the file gives an id, in document order. A node the file gives no id is not judged."
         }
       },
       {
@@ -341,87 +721,164 @@
       }
     ]
   },
-
   "behavior": {
     "operations": {
       "addChild": {
         "label": "Add child",
-        "for": ["Node"],
+        "for": [
+          "Node"
+        ],
         "icon": "mdi-subdirectory-arrow-right",
         "shortcut": "Insert",
         "doc": "Adds a node as the last child, named after the pattern its new siblings follow, then edits its text in place.",
         "actions": [
-          { "create": { "type": "'Node'", "parent": "self", "attributes": { "text": "siblingName(self.children.map(c, c.text))" } }, "as": "added" },
-          { "select": "added" },
-          { "editLabel": { "target": "added", "label": "text" } }
+          {
+            "create": {
+              "type": "'Node'",
+              "parent": "self",
+              "attributes": {
+                "text": "siblingName(self.children.map(c, c.text))"
+              }
+            },
+            "as": "added"
+          },
+          {
+            "select": "added"
+          },
+          {
+            "editLabel": {
+              "target": "added",
+              "label": "text"
+            }
+          }
         ]
       },
       "addSibling": {
         "label": "Add sibling",
-        "for": ["Node"],
+        "for": [
+          "Node"
+        ],
         "icon": "mdi-plus",
         "shortcut": "Enter",
         "enabled": "self.parent != null",
         "doc": "Adds a node right after this one under the same parent, named after the pattern of its siblings, then edits its text in place. The position right after this node is not expressible in the `create` action and is supplied by the runtime (see mindmap.md).",
         "actions": [
-          { "create": { "type": "'Node'", "parent": "self.parent", "attributes": { "text": "siblingName(self.parent.children.map(c, c.text))" } }, "as": "added" },
-          { "select": "added" },
-          { "editLabel": { "target": "added", "label": "text" } }
+          {
+            "create": {
+              "type": "'Node'",
+              "parent": "self.parent",
+              "attributes": {
+                "text": "siblingName(self.parent.children.map(c, c.text))"
+              }
+            },
+            "as": "added"
+          },
+          {
+            "select": "added"
+          },
+          {
+            "editLabel": {
+              "target": "added",
+              "label": "text"
+            }
+          }
         ]
       },
       "editNotes": {
         "label": "Notes",
-        "for": ["Node"],
+        "for": [
+          "Node"
+        ],
         "icon": "mdi-note-text-outline",
-        "params": { "notes": { "type": "text", "label": "Notes" } },
-        "actions": [ { "set": { "notes": "p.notes" } } ]
+        "params": {
+          "notes": {
+            "type": "text",
+            "label": "Notes"
+          }
+        },
+        "actions": [
+          {
+            "set": {
+              "notes": "p.notes"
+            }
+          }
+        ]
       },
       "link": {
         "label": "Link to",
-        "for": ["Node"],
+        "for": [
+          "Node"
+        ],
         "icon": "mdi-link-variant",
         "doc": "Picks a file or folder of the project from a tree and stores it relative to the map file.",
-        "plugin": { "name": "net.etalii.adp.ide.projectLinkPicker" }
+        "plugin": {
+          "name": "net.etalii.adp.ide.projectLinkPicker"
+        }
       },
       "unlink": {
         "label": "Unlink",
-        "for": ["Node"],
+        "for": [
+          "Node"
+        ],
         "icon": "mdi-link-variant-off",
         "enabled": "has(self.link)",
-        "actions": [ { "unset": ["link"] } ]
+        "actions": [
+          {
+            "unset": [
+              "link"
+            ]
+          }
+        ]
       },
       "toggleFold": {
-        "label": "Collapse or expand",
-        "for": ["Node"],
+        "label": {
+          "cel": "self.view.collapsed ? 'Expand' : 'Collapse'"
+        },
+        "for": [
+          "Node"
+        ],
         "shortcut": "Space",
-        "enabled": "self.children.size() > 0",
         "doc": "Collapses or expands the branch for this viewer only. View state: nothing is written and nothing lands on the undo history.",
-        "plugin": { "name": "net.etalii.adp.freeplane.mindmapFold" }
+        "enabled": "self.children.size() > 0",
+        "actions": [
+          {
+            "view": {
+              "collapsed": "!self.view.collapsed"
+            }
+          }
+        ]
       }
     },
     "deletion": {
       "Node": {
         "children": "delete",
-        "relations": "delete"
+        "relations": "delete",
+        "confirm": {
+          "count": "self.descendants().size()",
+          "threshold": 1,
+          "title": "Delete branch?",
+          "message": {
+            "cel": "\"Delete '\" + self.text + \"' and the \" + string(count) + \" nodes under it? You can undo this.\""
+          },
+          "confirmLabel": "Delete",
+          "danger": true
+        },
+        "doc": "Deleting a node takes its branch with it. A leaf goes without asking; a node with anything beneath it asks first, naming how many nodes go with it. Both are undoable."
       }
     },
-    "clipboard": { "relations": "internal", "ids": "regenerate" }
-  },
-
-  "functions": {
-    "siblingName": {
-      "params": [{ "name": "names", "type": "list(string)" }],
-      "returns": "string",
-      "cel": "'Node'",
-      "doc": "The name for a new node among siblings with `names`. This body is the fallback only; ADP continues a numbered run ('Phase 1', 'Phase 2' → 'Phase 3', one past the highest) or a shared last word ('Measure pass', 'Arrange pass' → 'New pass'), and makes the result unique. The full rule is in mindmap.md."
+    "clipboard": {
+      "relations": "internal",
+      "ids": "regenerate"
     }
   },
-
   "layout": {
     "algorithms": {
       "mindmap": {
         "algorithm": "plugin:net.etalii.adp.freeplane.mindmapLayout",
-        "spacing": { "node": 10, "layer": 48 },
+        "spacing": {
+          "node": 10,
+          "layer": 48
+        },
         "options": {
           "net.etalii.adp.mindmap.minimumGapRatio": 0.1,
           "net.etalii.adp.mindmap.fontSize": 14,
@@ -439,45 +896,98 @@
     "incremental": false,
     "animate": false
   },
-
   "persistence": {
-    "format": "plugin:net.etalii.adp.freeplane.mm",
-    "encoding": "utf-8",
-    "files": { "mode": "single", "model": "{name}.mm" },
-    "ids": { "strategy": "uuid-v4", "prefix": "ID_", "stable": true },
-    "ordering": { "elements": "tree" },
-    "omitDefaults": true,
-    "view": { "store": [], "styleOverrides": "none" },
-    "metadata": [],
-    "collaboration": { "mode": "none" },
-    "doc": "Stored as a Freeplane `.mm` file, not as JSON: the XML the map was read from is the single source of truth, edits change it in place, and an unchanged map is written back byte for byte. The format is in mindmap.md."
+    "format": "fbl",
+    "binding": "https://raw.githubusercontent.com/etalii-adp/etalii.adp.ide.standalone/develop/src/diagrams/mindmap/backend/EtAlii.Adp.Diagram.Mindmap/mindmap.fbl#mindmap",
+    "ids": {
+      "strategy": "uuid-v4",
+      "prefix": "ID_",
+      "encoding": "base36",
+      "stable": true,
+      "doc": "A node ADP creates gets `ID_` and a ShortGuid (a version 4 GUID as 25 characters of base 36). Freeplane's own ids (`ID_` and digits) are kept as written. A node read without an `ID` is given one in memory and written on the next save."
+    },
+    "view": {
+      "store": [],
+      "viewer": [
+        "collapsed",
+        "viewport"
+      ],
+      "initial": {
+        "collapsed": {
+          "cel": "self.folded"
+        }
+      },
+      "doc": "Folding belongs to each viewer: FOLDED in the file seeds it once, and nothing a viewer folds is written."
+    },
+    "typeMap": {
+      "Node": {
+        "as": "Node",
+        "hostAttributes": [
+          "storedId"
+        ],
+        "doc": "The plugin reads a `<node>` as a Node. A later holder of an id the file gives twice is read under an ephemeral id; `storedId` keeps what the file writes, which findings name it by."
+      }
+    },
+    "doc": "Stored as a Freeplane `.mm` file, not as JSON: the XML the map was read from is the single source of truth, edits change it in place, and an unchanged map is written back byte for byte. The binding `mindmap.fbl#mindmap` names the persistence plugin `net.etalii.adp.freeplane.mm` as its reader. The format is in mindmap.md."
   },
-
   "plugins": {
     "net.etalii.adp.freeplane.mm": {
       "version": "^0.1.0",
-      "provides": ["persistenceFormat"],
+      "provides": [
+        "persistenceFormat"
+      ],
       "required": true,
-      "doc": "Reads and writes Freeplane `.mm` XML with byte-exact round-tripping of everything the map does not change."
+      "doc": "Reads Freeplane `.mm` XML into nodes, for the binding `mindmap.fbl#mindmap`. Edits are made in place on the XML the map was read from, so everything the map does not change is written back byte for byte."
     },
     "net.etalii.adp.freeplane.mindmapLayout": {
       "version": "^0.1.0",
-      "provides": ["layout"],
+      "provides": [
+        "layout"
+      ],
       "required": false,
-      "fallback": { "layout": "mrtree" },
+      "fallback": {
+        "layout": "mrtree"
+      },
       "doc": "The two-sided mind map layout."
-    },
-    "net.etalii.adp.freeplane.mindmapFold": {
-      "version": "^0.1.0",
-      "provides": ["action"],
-      "required": false,
-      "doc": "Toggles a branch's collapsed state in the current viewer's view only."
     },
     "net.etalii.adp.ide.projectLinkPicker": {
       "version": "^0.1.0",
-      "provides": ["action", "widget"],
+      "provides": [
+        "action",
+        "widget"
+      ],
       "required": false,
       "doc": "Lets the user pick a project file or folder from a tree and stores the choice as a path relative to the map file."
+    }
+  },
+  "x-mindmap": {
+    "doc": "Today's wire ids, which the standalone client and backend share, mapped from this specification's names, as x-abm and x-ghg do. A tool is keyed by its id; an action by its entry's operation, else its kind; a property row by its form item's id, else its attribute.",
+    "types": {
+      "Node": "node",
+      "Branch": "branch"
+    },
+    "tools": {
+      "node": {
+        "id": "mindmap.toolbox.node",
+        "drop": "mindmap.add-child"
+      }
+    },
+    "actions": {
+      "addChild": "mindmap.add-child",
+      "addSibling": "mindmap.add-sibling",
+      "editLabel": "mindmap.rename",
+      "delete": "mindmap.delete",
+      "editNotes": "mindmap.edit-notes",
+      "link": "mindmap.link",
+      "unlink": "mindmap.unlink",
+      "toggleFold": "mindmap.toggle-fold"
+    },
+    "properties": {
+      "text": "mindmap.text",
+      "notes": "mindmap.notes",
+      "link": "mindmap.link",
+      "folded": "mindmap.folded",
+      "identifier": "mindmap.identifier"
     }
   }
 }
