@@ -4,9 +4,9 @@ The rules every repository in the `etalii-adp` GitHub organization follows. Work
 
 ## Name
 
-- All lowercase, dot-separated, starting with `etalii.adp`: `etalii.adp` for the specifications, `etalii.adp.ide.<ide>` for an IDE host (`standalone`, `intellij`, `vscode`, `eclipse`).
+- All lowercase, dot-separated, starting with `etalii.adp`: `etalii.adp` for the specifications, `etalii.adp.ide.<host>` for a host: the four IDE hosts (`standalone`, `intellij`, `vscode`, `eclipse`) and the Notion host (`notion`), which keeps the `ide` segment although Notion is a host and not an IDE host.
 - Public, in the `etalii-adp` organization, not under a personal account (every repository was made public on 2026-09-27, so its build badge shows to every visitor and its workflows run on GitHub's hosted runners for free).
-- `etalii.adp.site`, the website, serves GitHub Pages with the `etalii.net` domain, under `/adp`, and redirects the root there.
+- `etalii.adp.site`, the website, serves GitHub Pages with the `etalii.net` domain, under `/adp`, and redirects the root there. It is the only repository with a Pages site: `etalii.adp.ide.notion` has none of its own, and its Notion add-ons are published by the site's `deploy` under `/adp-notion`.
 
 ## Branches
 

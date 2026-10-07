@@ -1,1 +1,1 @@
-/speckit-companion-resume specs/010-intellij-fbl-implementation
+/speckit-companion-resume specs\009-vscode-fbl-implementation

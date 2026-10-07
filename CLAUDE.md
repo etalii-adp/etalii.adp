@@ -26,7 +26,7 @@ Specs say *what* and *why*; plans say *how*. Do not put implementation choices i
 
 ### Specifications for every repository live here
 
-This repository holds the Spec Kit features of every `etalii-adp` repository, not only its own: a change to `etalii.adp.ide.intellij`, `etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse`, `etalii.adp.site` or `.github` is specified here too, and those repositories have no Spec Kit setup of their own. `etalii.adp.ide.standalone` is the exception: it keeps planning with spec-workflow in its own `.spec-workflow/`.
+This repository holds the Spec Kit features of every `etalii-adp` repository, not only its own: a change to `etalii.adp.ide.intellij`, `etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse`, `etalii.adp.ide.notion`, `etalii.adp.site` or `.github` is specified here too, and those repositories have no Spec Kit setup of their own. `etalii.adp.ide.standalone` is the exception: it keeps planning with spec-workflow in its own `.spec-workflow/`.
 
 - A new feature is `specs/NNN-feature-name/`, in the one sequence, whichever repository its code lands in; put the repository in the name when it is one (`007-intellij-settings-search`).
 - Its `tasks.md` names files with their repository as prefix (`etalii.adp.ide.intellij/core/...`). The clones sit side by side (`C:\git\<repository>` locally, `/home/user/<repository>` in a cloud session), so the paths resolve from either. Each repository it touches gets a branch of the feature's name and its own pull request; spec 001-ci-and-badges is the model.
