@@ -1,4 +1,4 @@
-# Specification Quality Checklist: A Notion Host Repository, Published at etalii.net/adp/notion
+# Specification Quality Checklist: A Notion Host Repository, Published at etalii.net/adp-notion
 
 **Purpose**: Validate Companion specification completeness before planning
 **Created**: 2026-10-07
