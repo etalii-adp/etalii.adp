@@ -76,7 +76,7 @@ Files in `etalii.adp.ide.notion`: `scripts/sync-fbl.mjs`, `scripts/sync-specific
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T020** Run `python .github/scripts/validate-examples.py` and `python .github/scripts/licence-check.py`, commit, push the branch and open pull request 1 into `develop` · etalii.adp
+- [x] **T020** Run `python .github/scripts/validate-examples.py` and `python .github/scripts/licence-check.py`, commit, push the branch and open pull request 1 into `develop` · etalii.adp
 - [ ] **T021** **Maintainer**: merge pull request 1 with a merge commit · etalii.adp
 
 ### Part B: `etalii.adp.ide.notion`

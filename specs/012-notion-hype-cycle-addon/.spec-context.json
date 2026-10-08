@@ -208,6 +208,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-08T00:19:47.281Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T020",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:20:34.656Z"
     }
   ],
   "last_action": "living specs evaluated — no capabilities matched",
@@ -891,7 +899,7 @@
     }
   },
   "approach": "A static add-on at /adp-notion/gartner-hype-cycle-graph/ is compiled from shared parts that name no tool type: a new DISL interpreter, the Visual Studio Code host's FBL library copied unchanged, a store that keeps a document as one row per element, a canvas, and Notion-styled panels. The store rebuilds the binding's document text in memory, so FBL plans every edit and keeps the undo history, and each edit is written back as row changes. A stateless Cloudflare Worker completes Notion's sign-in and forwards the calls with the viewer's token.",
-  "currentTask": "T019",
+  "currentTask": "T020",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -989,6 +997,10 @@
     "T019": {
       "status": "DONE",
       "did": "Raised the four differences as issues 91 to 94 in etalii.adp"
+    },
+    "T020": {
+      "status": "DONE",
+      "did": "Validated, committed (350ec4c), pushed and opened pull request 95 into develop"
     }
   }
 }
