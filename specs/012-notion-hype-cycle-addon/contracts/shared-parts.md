@@ -51,6 +51,7 @@ A second add-on is one folder, `addons/<id>/`, and nothing under `src/`:
 | `test/words.test.ts` enforces it: it takes those names from every specification and binding under `addons/` and fails when a file under `src/` holds one as a word of its own. `src/fbl/` is a copy and is checked as well | D15 |
 | A name is held as a word of its own when it is a whole identifier, or a whole word of a string literal or a template literal, whatever its case; a part of a longer identifier and a word of a comment do not count | FR-004 |
 | A name that DISL, FBL, TypeScript or the web platform uses as a word too, such as `id`, `name`, `text`, `width` or `from`, is exempt only by a line of `test/words.exempt.json`, which gives the name and which of the four uses it. A name that none of them uses is never exempt | FR-004 |
+| The copied FBL library is another repository's code and uses ordinary words of its own. A name it uses so, such as a path's `segment`, is exempt inside `src/fbl/` only, by a line of the same file with the reason `library` and that scope. Outside `src/fbl/` the name is not exempt | FR-004, D4 |
 | A part imports only parts above it in the table, the history imports no other part, and the frame alone imports all | FR-028 |
 | The panels import neither the store nor the canvas, so that they serve an add-on with another canvas or another store | FR-027 |
 | Nothing under `src/` but `src/store/session.ts` and `src/store/notion.ts` knows the service or a token | FR-010 |

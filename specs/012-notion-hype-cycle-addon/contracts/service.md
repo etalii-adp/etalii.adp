@@ -28,6 +28,7 @@ The service is one handler that knows no platform: it takes a request and its co
 | `state` is required: 32 to 128 characters of `A-Z`, `a-z`, `0-9`, `-` and `_`, made at random by the add-on for this one grant. Without it, `400` | D8 |
 | Answers `302` to `https://api.notion.com/v1/oauth/authorize` with `client_id`, `response_type=code`, `owner=user`, `redirect_uri=<service>/callback` and the same `state` | FR-010 |
 | The add-on opens it in a window of its own, never in the frame Notion gave it | Published tree: no page leaves a frame |
+| The window is opened from the control `id="connect"`, in answer to the person's click: a browser blocks a window opened at any other moment. A page with no token kept shows `connect` and asks for none by itself | D8 |
 
 ### `GET /callback`
 
@@ -57,6 +58,8 @@ Notion's answer to the exchange carries a `refresh_token` beside the `access_tok
 | --- | --- |
 | The add-on sends the person's token as `Authorization: Bearer <token>`. The service forwards it and adds `Notion-Version: 2026-03-11`. A call without the header is `401` and is not forwarded | FR-010 |
 | The request's body and Notion's status, body and `Retry-After` are passed on unchanged | FR-020 |
+| A call with a query string is not forwarded: the table names none. When Notion cannot be reached the answer is `502` with the code `bad_gateway` | FR-020 |
+| Every answer of the service carries `Cache-Control: no-store` | FR-010 |
 | Only the calls of the table below are forwarded; any other method or path is `403` and reaches Notion never | D8 |
 | Answers carry `Access-Control-Allow-Origin: https://etalii.net` and `Vary: Origin`. A request from another origin gets no such header | FR-010 |
 | The preflight allows the methods `GET`, `POST`, `PATCH` and the headers `Authorization` and `Content-Type`, with `Access-Control-Max-Age: 86400` | SC-004 |
@@ -93,7 +96,7 @@ Whether a person may write to a store decides between the states `ready` and `re
 | The add-on keeps the token in the browser's local storage for the origin `https://etalii.net`, under the key `adp-notion.token`, as `{ "token": "...", "refresh": "...", "workspace": "..." }`, for as long as Notion takes the token | Plan: Storage |
 | One grant serves every Notion add-on, the key being shared by them | FR-028 |
 | No document, row or history is kept there | FR-006 |
-| A token is asked for only when a call needs one and none is kept. A `401` from Notion is answered by one `POST /refresh`, and the call is made again with the new token; where that fails, the key is removed and the page is in the state `connect` | FR-010 |
+| A token is asked for only when a call needs one and none is kept. A `401` from Notion is answered by one `POST /refresh`, and the call is made again with the new token; where Notion refuses the refresh, the key is removed and the page is in the state `connect`. A refresh that cannot reach the service or Notion keeps the key, and the status is `offline` | FR-010 |
 | The page offers a control that removes the key, `id="disconnect"` | FR-010 |
 | A browser that keeps an embedded page's storage apart from a tab's shows `connect` again in the embed after a grant made in a tab; `id="open-in-tab"` is the way through, and the first manual pass checks it | Research R4 |
 
