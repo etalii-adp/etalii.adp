@@ -1,10 +1,11 @@
 <!--
 Sync Impact Report
-- Version: template → 1.0.0 (first ratification, 2026-10-07)
-- Principles: I. One Source of Truth; II. Every Address under /adp-notion; III. Truthful About What Exists; IV. Simplicity.
-- Sections: Terminology, Core Principles, Publication and Technology Constraints, Development Workflow, Governance.
-- Written by etalii.adp spec 011-notion-repository (task T007, FR-007), in the shape of the principles of etalii.adp.ide.vscode 1.0.0 and etalii.adp.site 1.1.0.
+- Version: 1.0.0 → 1.1.0 (MINOR)
+- Modified: I. One Source of Truth (a binding is the one its specification names, wherever it lives; a copy taken byte for byte with its source recorded is not a restatement; `<id>` is the name of the tool type's specification file); IV. Simplicity (the service is named beside GitHub Pages); Publication and Technology Constraints (the service; the build installs what it needs; no secret in a page or a file).
+- Added or removed sections: none.
+- Rationale for MINOR: guidance materially expanded for the first add-on, which reads and writes a Notion database through a service and is compiled from shared parts (etalii.adp spec 012-notion-hype-cycle-addon, task T017, plan Complexity Tracking); no principle removed or redefined.
 - Templates: plan, spec and tasks templates unchanged; no follow-ups.
+- Earlier: template → 1.0.0, first ratification on 2026-10-07 by spec 011-notion-repository (task T007, FR-007).
 -->
 > These are the principles of [`etalii.adp.ide.notion`](https://github.com/etalii-adp/etalii.adp.ide.notion), written here on 2026-10-07 by spec [011-notion-repository](../../../specs/011-notion-repository/notion-repository.spec.md): that repository has no Spec Kit setup of its own, and its features are specified in etalii.adp. A plan whose code lands in `etalii.adp.ide.notion` checks them beside [etalii.adp's own](../constitution.md). Amend them here, with a pull request into etalii.adp.
 
@@ -20,9 +21,9 @@ ADP's words are defined once, in the ADP glossary, `docs/terminology.md` in etal
 
 The repository does not own what a tool is; etalii.adp does.
 
-- A Notion add-on MUST take its tool type from a DISL specification and its file formats from FBL bindings in etalii.adp, and MUST NOT restate them.
+- A Notion add-on MUST take its tool type from a DISL specification in etalii.adp and its file formats from the binding its specification names, and MUST NOT restate them. A copy of either, taken byte for byte by a script with its source, commit and SHA-256 recorded and checked by the Build workflow, is not a restatement; it MUST NOT be edited here.
 - A difference between an add-on and its specification or binding MUST be raised as a change in etalii.adp, never settled in the add-on.
-- One folder, `addons/<id>/`, is one add-on of one tool type, and `<id>` is the id of that tool type.
+- One folder, `addons/<id>/`, is one add-on of one tool type, and `<id>` is the name of the tool type's specification file, without its extension.
 
 Rationale: five hosts that each define a tool are five tools. An add-on that restates a specification drifts from it, and nobody notices until two hosts disagree about the same file.
 
@@ -44,15 +45,16 @@ Rationale: a reader who embeds an add-on on the strength of a claim that turns o
 
 ### IV. Simplicity
 
-Start with the smallest repository that publishes an add-on, and grow it by specification. A dependency, a build step or a hosting service MUST be justified by a current requirement, not an anticipated one. Publication is by GitHub Pages only, through the deployment of `etalii.adp.site`.
+Start with the smallest repository that publishes an add-on, and grow it by specification. A dependency, a build step or a hosting service MUST be justified by a current requirement, not an anticipated one. Pages are published by GitHub Pages only, through the deployment of `etalii.adp.site`. One service stands beside them, which completes Notion's grant of access and forwards an add-on's calls to the Notion API: a page in a browser can do neither. It MUST keep no state, and a second service MUST be justified as the first was.
 
 Rationale: a small add-on that honours principles I to III beats a large one that does not.
 
 ## Publication and Technology Constraints
 
-- What the repository publishes is served at `https://etalii.net/adp-notion`, over HTTPS, by GitHub Pages and by no other hosting service.
+- The pages the repository publishes are served at `https://etalii.net/adp-notion`, over HTTPS, by GitHub Pages and by no other hosting service. The service of principle IV has an address of its own, publishes no page, and MUST answer no origin but `https://etalii.net`.
+- No published page and no file of the repository MUST hold a secret. The service's secrets are kept by its host, and the token that deploys it by the repository's Actions secrets.
 - The repository has no GitHub Pages site of its own. The `deploy` workflow of `etalii.adp.site` builds it and places the result beside the site, so that every deployment of `etalii.net` carries both `/adp` and `/adp-notion`.
-- The contract between the two repositories is one command line, `node scripts/build.mjs --out <dir>`, which writes `index.html` and one folder per add-on. The site's workflow MUST NOT need to know what is inside.
+- The contract between the two repositories is one command line, `node scripts/build.mjs --out <dir>`, which writes `index.html` and one folder per add-on. The script installs what it needs itself, so the site's workflow runs no step before it and MUST NOT need to know what is inside.
 - The same command MUST run in the Build workflow on every pull request, so that a tree that cannot be built is found before it is merged.
 - A merge into `develop` MUST publish without a manual step. A pull request, also one from a fork, MUST publish nothing and MUST NOT see a secret.
 - The repository is public and in English only.
@@ -70,4 +72,4 @@ Rationale: a small add-on that honours principles I to III beats a large one tha
 
 This constitution supersedes other practices in this repository. Amendments are made through `/speckit-constitution`, recorded in version control, and versioned semantically: MAJOR for removing or redefining a principle, MINOR for adding a principle or materially expanding guidance, PATCH for clarifications. Reviews of plans and changes MUST verify compliance with the principles above; runtime guidance for agents lives in `CLAUDE.md`.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-07 | **Last Amended**: 2026-10-07
+**Version**: 1.1.0 | **Ratified**: 2026-10-07 | **Last Amended**: 2026-10-08
