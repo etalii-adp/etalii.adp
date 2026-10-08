@@ -651,6 +651,38 @@
     {
       "note": "the spec uses editor for a person, which the glossary keeps for a kind of tool; the data model says views page where the spec says diagram page",
       "step": "analyze"
+    },
+    {
+      "note": "SC-001 cannot read 0 differences: 106 of 131 relation ends on an anchor differ by up to 6 canvas units, because the specification says such an end is drawn from the outline and the hosts draw it at the anchor point (etalii.adp issue 97); the comparison is an expected failure in the suite",
+      "step": "implement"
+    },
+    {
+      "note": "The page has never been drawn in a real browser or inside a Notion embed: layout, focus ring, pointer capture, both appearances and the grant window are unverified",
+      "step": "implement"
+    },
+    {
+      "note": "T079, T080 and T101 were written after their modules, not first; the worker showed afterwards that they fail when the drift check or the restore is removed",
+      "step": "implement"
+    },
+    {
+      "note": "An edit on the largest example (518 rows) is answered in 95 to 115 ms, at the edge of SC-004; nearly all of it is the copied FBL library reading the body again",
+      "step": "implement"
+    },
+    {
+      "note": "No value of notion.css was measured in a running Notion client; several are estimates and some of Notion own values were strengthened for contrast (docs/styling.md)",
+      "step": "implement"
+    },
+    {
+      "note": "The Worker address is not in src/frame/config.ts: a page on any host but localhost cannot reach Notion until T032, T029 and T045 are done",
+      "step": "implement"
+    },
+    {
+      "note": "Story 4 (the Showcase entries) and every pass in Notion are not done: they need the Notion integration, a token and the published add-on",
+      "step": "implement"
+    },
+    {
+      "note": "The copied FBL library mis-indents a multi-line text in a new entry, throws on two attributes set in one change, and writes a list item with a comma unquoted (etalii.adp.ide.vscode issue 22); the store works around the first two",
+      "step": "implement"
     }
   ],
   "expectations": [
@@ -887,6 +919,31 @@
       "decision": "Each story's wiring of the frame is a module of its own under src/frame/parts, attached through src/frame/page.ts and bundled with src/frame/main.ts by the build",
       "why": "Every file has one owner phase, and main.ts would otherwise be edited by Stories 1, 2 and 3",
       "rejected": "One main.ts that each story extends"
+    },
+    {
+      "decision": "The service is one handler that knows no platform; a local service runs it and the Cloudflare Worker is a wrapper built last",
+      "why": "The maintainer asked on 2026-10-08 for the Cloudflare implementation last and a small local service first",
+      "rejected": "A Worker written first and run with wrangler dev"
+    },
+    {
+      "decision": "Tasks whose files land in etalii.adp.ide.notion are journaled but not ticked until its pull request is merged",
+      "why": "CLAUDE.md: a ticked task is read as shipped",
+      "rejected": "Ticking through --close-task as the companion does by default"
+    },
+    {
+      "decision": "A word of the copied FBL library is exempt from the words test inside src/fbl only, and a word of a Material Design icon id inside the icons table only",
+      "why": "Neither is knowledge of a tool type, and the copy cannot be edited",
+      "rejected": "Renaming the style in the specification or the identifier upstream"
+    },
+    {
+      "decision": "One edit of an open document may carry several changes, planned, refused and undone as one",
+      "why": "An arrangement or a move of several elements is one gesture and FR-024 asks for one step",
+      "rejected": "One change per edit, with several undo steps"
+    },
+    {
+      "decision": "Differences between the specification and the hosts are raised as issues in etalii.adp and the add-on follows the specification",
+      "why": "FR-003",
+      "rejected": "Reproducing the hosts in the shared parts"
     }
   ],
   "step_summaries": {
@@ -896,6 +953,9 @@
     },
     "tasks": {
       "summary": "134 tasks in 8 phases: Setup, Foundational (etalii.adp pull request 1, then the Notion repository's shared spine), five story phases, and Polish with delivery through four pull requests; ten tasks are a maintainer's"
+    },
+    "implement": {
+      "summary": "The add-on is built and tested in etalii.adp.ide.notion up to the page with editing and undo; what remains needs Notion, Cloudflare or a merge"
     }
   },
   "approach": "A static add-on at /adp-notion/gartner-hype-cycle-graph/ is compiled from shared parts that name no tool type: a new DISL interpreter, the Visual Studio Code host's FBL library copied unchanged, a store that keeps a document as one row per element, a canvas, and Notion-styled panels. The store rebuilds the binding's document text in memory, so FBL plans every edit and keeps the undo history, and each edit is written back as row changes. A stateless Cloudflare Worker completes Notion's sign-in and forwards the calls with the viewer's token.",
@@ -1002,5 +1062,78 @@
       "status": "DONE",
       "did": "Validated, committed (350ec4c), pushed and opened pull request 95 into develop"
     }
-  }
+  },
+  "verified": [
+    {
+      "what": "Notion repository: the whole test suite",
+      "command": "cd /c/git/etalii.adp.ide.notion/.claude/worktrees/012-notion-hype-cycle-addon && npm test",
+      "source": "derived",
+      "exitCode": 1,
+      "durationSeconds": 0.0,
+      "result": "The system cannot find the path specified.",
+      "warnings": [
+        "exited 1"
+      ]
+    },
+    {
+      "what": "Notion repository: lint",
+      "command": "cd /c/git/etalii.adp.ide.notion/.claude/worktrees/012-notion-hype-cycle-addon && npm run lint",
+      "source": "derived",
+      "exitCode": 1,
+      "durationSeconds": 0.0,
+      "result": "The system cannot find the path specified.",
+      "warnings": [
+        "exited 1"
+      ]
+    },
+    {
+      "what": "Notion repository: type-check",
+      "command": "cd /c/git/etalii.adp.ide.notion/.claude/worktrees/012-notion-hype-cycle-addon && npm run typecheck",
+      "source": "derived",
+      "exitCode": 1,
+      "durationSeconds": 0.0,
+      "result": "The system cannot find the path specified.",
+      "warnings": [
+        "exited 1"
+      ]
+    },
+    {
+      "what": "Notion repository: build and tree check",
+      "command": "cd /c/git/etalii.adp.ide.notion/.claude/worktrees/012-notion-hype-cycle-addon && node scripts/build.mjs --out /tmp/adp-notion-verify && node scripts/check-tree.mjs /tmp/adp-notion-verify",
+      "source": "derived",
+      "exitCode": 1,
+      "durationSeconds": 0.0,
+      "result": "The system cannot find the path specified.",
+      "warnings": [
+        "exited 1"
+      ]
+    },
+    {
+      "what": "Notion repository: the three copy checks",
+      "command": "cd /c/git/etalii.adp.ide.notion/.claude/worktrees/012-notion-hype-cycle-addon && node scripts/sync-fbl.mjs --check && node scripts/sync-specifications.mjs --check && node scripts/sync-examples.mjs --check",
+      "source": "derived",
+      "exitCode": 1,
+      "durationSeconds": 0.0,
+      "result": "The system cannot find the path specified.",
+      "warnings": [
+        "exited 1"
+      ]
+    },
+    {
+      "what": "etalii.adp: examples validate",
+      "command": "python .github/scripts/validate-examples.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.5,
+      "result": "ok   definitions/diagrams/w3c-skos.dis · ok   definitions/diagrams/wardley-map.dis · 67 example(s), 0 invalid."
+    },
+    {
+      "what": "etalii.adp: licence check",
+      "command": "python .github/scripts/licence-check.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.1,
+      "result": "ok   specifications/edsl/EDSL-specification.md · ok   specifications/fbl/FBL-specification.md · 7 specification document(s), 0 failure(s)."
+    }
+  ]
 }
