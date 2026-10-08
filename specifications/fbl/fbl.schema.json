@@ -32,10 +32,11 @@
           "type": "string"
         },
         "fbl": {
-          "description": "The FBL version the document is written in: 0.1, or 0.2 (draft), which adds the model changes of section 11.2. See FBL 0.2, section 2.7.",
+          "description": "The FBL version the document is written in: 0.1, 0.2, or 0.3 (draft), which names the tool type's specification in place of DISL, lets a specification name one binding per format family, and spells a reference to a stored id as by: \"id\". See FBL 0.3, section 2.7.",
           "enum": [
             "0.1",
-            "0.2"
+            "0.2",
+            "0.3"
           ]
         },
         "doc": {
@@ -1100,7 +1101,7 @@
           ]
         },
         "reference": {
-          "description": "The value names another entry; renaming that entry rewrites it.",
+          "description": "The value names another entry of the rules 'to', by the value of their attribute 'by', or by their stored id when 'by' is \"id\"; renaming that entry rewrites it, and removing it cascades where the removed rule says so. See sections 5.2 and 5.7.",
           "type": "object",
           "properties": {
             "to": {
@@ -1684,7 +1685,7 @@
       ]
     },
     "Edit": {
-      "description": "A model change in a fixture: add an element or relation, set attributes, remove, or save without change.",
+      "description": "A model change in a fixture: add an element or relation (at a position, FBL 0.3), set attributes, remove, move (FBL 0.3), place, or save without change.",
       "oneOf": [
         {
           "description": "Add an element or relation.",
@@ -1708,6 +1709,9 @@
                 },
                 "attributes": {
                   "type": "object"
+                },
+                "position": {
+                  "$ref": "#/$defs/ChangePosition"
                 }
               },
               "additionalProperties": false,
@@ -1787,6 +1791,46 @@
           },
           "required": [
             "remove"
+          ]
+        },
+        {
+          "description": "Move an element, with everything under it, to a parent (null for the top level) at a position (FBL 0.3; the change of section 11.2).",
+          "type": "object",
+          "properties": {
+            "move": {
+              "description": "",
+              "type": "object",
+              "properties": {
+                "element": {
+                  "type": "string"
+                },
+                "parent": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "position": {
+                  "$ref": "#/$defs/ChangePosition"
+                }
+              },
+              "additionalProperties": false,
+              "patternProperties": {
+                "^x-": true
+              },
+              "required": [
+                "element",
+                "parent",
+                "position"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
+          },
+          "required": [
+            "move"
           ]
         },
         {

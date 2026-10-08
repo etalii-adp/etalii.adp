@@ -1,5 +1,5 @@
 # Checks every pull request into develop and every change to develop (spec 001-ci-and-badges): every example under
-# specifications/ (every *.dis and *.did, and the legacy fixtures through their aliases) and every tool definition under
+# specifications/ (every *.dis, *.did, *.des and *.fbl, and the legacy fixtures through their aliases) and every tool definition under
 # definitions/ must validate against its specification's schema, as the constitution requires.
 # On pull requests, the terminology job also checks the ADP vocabulary against docs/terminology.md (spec 002).
 # The licence job checks that LICENSE is still the Apache License 2.0 with its copyright line, that no second licence

@@ -1,6 +1,6 @@
 {
   "$schema": "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Document",
-  "fbl": "0.2",
+  "fbl": "0.3",
   "doc": "The knowledge file of the Knowledge designer (definitions/designers/knowledge.des, knowledge.md): one table of typed properties, rows and views, in YAML, JSON or XML, one binding per format family. The file is ADP's own; every id is stored in it, a cell names its property by id and holds its value under a key named for its type, and several values are several entries.",
   "bindings": {
     "yaml": {

@@ -15,7 +15,7 @@
 
 ## Status of this document
 
-This is a placeholder. It holds nothing normative: no construct, no schema and no examples. It exists so that each kind of ADP tool has its specification language and its definition language in one pattern, as the [terminology](../../docs/terminology.md) and the constitution's Structure and Naming section require. Its content is to come, when a designer needs it (constitution principle V).
+This is a placeholder. It holds nothing normative: no construct, no schema and no examples. Its paired language, DESL, has content since version 0.1 (2026-10-09), and designer documents are stored through FBL until DED is needed. This document exists so that each kind of ADP tool has its specification language and its definition language in one pattern, as the [terminology](../../docs/terminology.md) and the constitution's Structure and Naming section require. Its content is to come, when a designer needs it (constitution principle V).
 
 ## Purpose
 

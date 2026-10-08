@@ -1,10 +1,10 @@
 """Validates every example in specifications/, and every tool definition in definitions/, against its specification's
 schema (constitution principle II).
 
-An example is a DISL specification (`*.dis`), a DID definition (`*.did`), an FBL document (`*.fbl`), or a `*.json`
-file that names its schema in `$schema`. The extension decides the schema: `*.dis` against
+An example is a DISL specification (`*.dis`), a DID definition (`*.did`), an FBL document (`*.fbl`), a DESL
+specification (`*.des`), or a `*.json` file that names its schema in `$schema`. The extension decides the schema: `*.dis` against
 `disl.schema.json#/$defs/Specification`, `*.did` against `did.schema.json#/$defs/Definition`, `*.fbl` against
-`fbl.schema.json#/$defs/Document`. A `$schema` the example names must agree with that; its part before `#`
+`fbl.schema.json#/$defs/Document`, `*.des` against `desl.schema.json#/$defs/Specification`. A `$schema` the example names must agree with that; its part before `#`
 is matched against the `$id` of a `*.schema.json` in this repository, so the schemas in the same commit are used,
 never the published ones. All schemas are loaded into one registry, so DID's references to DISL resolve. A `$schema`
 naming an earlier version of DISL or DID (0.1) is read against the current schema, because 0.2 keeps every 0.1 document valid.
@@ -40,10 +40,11 @@ folders = [root, repository / "definitions"]
 DISL = "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Specification"
 DID = "https://etalii.net/adp/did/schema/0.2/did.schema.json#/$defs/Definition"
 FBL = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Document"
+DESL = "https://etalii.net/adp/desl/schema/0.1/desl.schema.json#/$defs/Specification"
 FBL_REGISTRATION = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Registration"
 FBL_FIXTURE = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Fixture"
-CURRENT_EXTENSIONS = {".dis": DISL, ".did": DID, ".fbl": FBL}
-CURRENT_VERSION_KEYS = {"disl": DISL, "did": DID, "fbl": FBL}
+CURRENT_EXTENSIONS = {".dis": DISL, ".did": DID, ".fbl": FBL, ".des": DESL}
+CURRENT_VERSION_KEYS = {"disl": DISL, "did": DID, "fbl": FBL, "desl": DESL}
 
 # Alias table: each deprecated identifier and the current schema reference it is read as.
 LEGACY = "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json"
@@ -237,6 +238,89 @@ def resolve_names(document) -> list[str]:
     return problems
 
 
+def resolve_desl(path: Path, document) -> list[str]:
+    """Checks the names a DESL specification's surface and persistence refer to (DESL section 9.1, step 4) and
+    returns a problem per unresolved name, each with the JSON Pointer of where it is used."""
+    problems = []
+    types = document.get("metamodel", {}).get("types", {})
+    type_map = document.get("persistence", {}).get("typeMap", {})
+
+    def attributes_of(name):
+        """The attributes of a node type, its supertypes' included (DISL section 4.7)."""
+        found, pending, seen = {}, [name], set()
+        while pending:
+            current = pending.pop()
+            if current in seen or current not in types:
+                continue
+            seen.add(current)
+            found.update(types[current].get("attributes", {}))
+            extends = types[current].get("extends", [])
+            pending.extend([extends] if isinstance(extends, str) else extends)
+        return found
+
+    def children_of(name):
+        children = types.get(name, {}).get("children", {})
+        allowed = set(children.get("allowed", []))
+        for slot in children.get("slots", {}).values():
+            allowed.update(slot.get("allowed", []))
+        return allowed
+
+    def node_type(name, pointer):
+        if name not in types:
+            problems.append(f"at {pointer}: names the type {name!r}, which the metamodel does not declare")
+            return False
+        return True
+
+    def attribute(owner, name, pointer, attributes=None):
+        if name is not None and name not in (attributes if attributes is not None else attributes_of(owner)):
+            problems.append(f"at {pointer}: the type {owner!r} has no attribute {name!r}")
+
+    surface = document.get("surface", {})
+    columns, cells, views = surface.get("columns", {}), surface.get("cells", {}), surface.get("views", {})
+    if node_type(columns.get("type"), "/surface/columns/type"):
+        for role in ("name", "valueType", "title", "parent"):
+            attribute(columns["type"], columns.get(role), f"/surface/columns/{role}")
+        options = columns.get("options")
+        if options and node_type(options["type"], "/surface/columns/options/type"):
+            if options["type"] not in children_of(columns["type"]):
+                problems.append(f"at /surface/columns/options/type: {options['type']!r} is not contained in {columns['type']!r}")
+            for role in ("name", "colour"):
+                attribute(options["type"], options.get(role), f"/surface/columns/options/{role}")
+    node_type(surface.get("rows", {}).get("type"), "/surface/rows/type")
+    if node_type(cells.get("type"), "/surface/cells/type"):
+        attribute(cells["type"], cells.get("column"), "/surface/cells/column")
+        if "items" in cells and node_type(cells["items"], "/surface/cells/items") and cells["items"] not in children_of(cells["type"]):
+            problems.append(f"at /surface/cells/items: {cells['items']!r} is not contained in {cells['type']!r}")
+    if node_type(views.get("type"), "/surface/views/type"):
+        attribute(views["type"], views.get("name"), "/surface/views/name")
+        attribute("the document", views.get("active"), "/surface/views/active", document.get("metamodel", {}).get("diagram", {}).get("attributes", {}))
+        for role, name in views.get("settings", {}).items():
+            node_type(name, f"/surface/views/settings/{role}")
+    for name, value_type in surface.get("valueTypes", {}).items():
+        holder = cells.get("items") if value_type.get("many") else cells.get("type")
+        if holder in types:
+            attribute(holder, value_type.get("key"), f"/surface/valueTypes/{name}/key")
+        for target in value_type.get("converts", {}):
+            if target not in surface.get("valueTypes", {}):
+                problems.append(f"at /surface/valueTypes/{name}/converts: names the value type {target!r}, which the surface does not declare")
+    for index, reference in enumerate(document.get("persistence", {}).get("bindings", [])):
+        pointer = f"/persistence/bindings/{index}"
+        file, _, binding_name = reference.partition("#")
+        target = (path.parent / file).resolve() if file else path
+        if not target.is_file():
+            problems.append(f"at {pointer}: the FBL document {file!r} does not exist")
+            continue
+        binding = json.loads(target.read_text(encoding="utf-8")).get("bindings", {}).get(binding_name)
+        if binding is None:
+            problems.append(f"at {pointer}: {file!r} has no binding {binding_name!r}")
+            continue
+        for kind in ("elements", "relations"):
+            for rule in binding.get(kind, []):
+                if rule["type"] not in types and rule["type"] not in type_map:
+                    problems.append(f"at {pointer}: the rule {rule['name']!r} produces the type {rule['type']!r}, which neither the metamodel nor the type map declares")
+    return problems
+
+
 def expected_reference(path: Path, document) -> tuple[str | None, list[str], str | None]:
     """Returns the schema reference to validate against, the deprecated aliases used, and a problem, if any."""
     aliases = []
@@ -309,7 +393,7 @@ for path in examples:
     elif reference == FBL_FIXTURE and (problem := replay_fixture(path, document)):
         failures += 1
         print(f"FAIL {name}: {problem}")
-    elif reference == FBL and (problems := resolve_names(document)):
+    elif reference in (FBL, DESL) and (problems := (resolve_names(document) if reference == FBL else resolve_desl(path, document))):
         failures += 1
         print(f"FAIL {name}: {len(problems)} unresolved name(s)")
         for problem in problems[:10]:

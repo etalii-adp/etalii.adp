@@ -1,0 +1,397 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://etalii.net/adp/desl/schema/0.1/desl.schema.json",
+  "title": "DESL 0.1 — Designer Specification Language",
+  "description": "Specifications ($defs/Specification): one designer type each, written by a tool engineer. The metamodel, constraints, operations, ids and findings are DISL's, referenced by absolute $id; the surface is DESL's own. See DESL-specification.md.",
+  "$ref": "#/$defs/Specification",
+  "$defs": {
+    "Specification": {
+      "description": "The root of a DESL document: one designer type, with the DESL version, the language's identity, the metamodel, how its documents are stored through FBL, its constraints, its surface and its operations. See section 2.",
+      "type": "object",
+      "properties": {
+        "$schema": {
+          "type": "string"
+        },
+        "desl": {
+          "description": "The DESL version the specification is written in.",
+          "const": "0.1"
+        },
+        "language": {
+          "allOf": [
+            {
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Language"
+            },
+            {
+              "required": [
+                "origin"
+              ]
+            }
+          ]
+        },
+        "metamodel": {
+          "description": "DISL's metamodel, without relation types: a designer draws no relation (section 4).",
+          "allOf": [
+            {
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Metamodel"
+            },
+            {
+              "not": {
+                "required": [
+                  "relations"
+                ]
+              }
+            }
+          ]
+        },
+        "persistence": {
+          "$ref": "#/$defs/Persistence"
+        },
+        "constraints": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Constraints"
+        },
+        "surface": {
+          "$ref": "#/$defs/Surface"
+        },
+        "operations": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+          },
+          "additionalProperties": {
+            "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Operation"
+          }
+        },
+        "functions": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+          },
+          "additionalProperties": {
+            "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Function"
+          }
+        },
+        "doc": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-": true
+      },
+      "required": [
+        "desl",
+        "language",
+        "metamodel",
+        "persistence",
+        "surface"
+      ]
+    },
+    "Persistence": {
+      "description": "How the designer's documents are stored: through FBL, one binding per format family, with DISL's id strategy and type map. See section 5.",
+      "type": "object",
+      "properties": {
+        "format": {
+          "const": "fbl"
+        },
+        "bindings": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/BindingRef"
+          }
+        },
+        "ids": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/IdStrategy"
+        },
+        "typeMap": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/TypeMapEntry"
+          }
+        },
+        "doc": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-": true
+      },
+      "required": [
+        "format",
+        "bindings"
+      ]
+    },
+    "Surface": {
+      "description": "How the model is laid out for the user. DESL 0.1 defines one kind, table. See section 7.",
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "table"
+        },
+        "columns": {
+          "$ref": "#/$defs/Columns"
+        },
+        "rows": {
+          "description": "The rows' node type.",
+          "type": "object",
+          "properties": {
+            "type": {
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/TypeRef"
+            },
+            "doc": {
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
+            }
+          },
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
+          },
+          "required": [
+            "type"
+          ]
+        },
+        "cells": {
+          "$ref": "#/$defs/Cells"
+        },
+        "views": {
+          "$ref": "#/$defs/Views"
+        },
+        "valueTypes": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {
+            "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/ValueType"
+          }
+        },
+        "doc": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-": true
+      },
+      "required": [
+        "kind",
+        "columns",
+        "rows",
+        "cells",
+        "views",
+        "valueTypes"
+      ]
+    },
+    "Columns": {
+      "description": "The columns of a table: their node type and the attributes that name them, type them, mark the title column and the parent column, and the options a choice may take. See section 7.3.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/TypeRef"
+        },
+        "name": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+        },
+        "valueType": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+        },
+        "title": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+        },
+        "parent": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+        },
+        "options": {
+          "description": "The node type of a column's options, and the attributes that name and colour one.",
+          "type": "object",
+          "properties": {
+            "type": {
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/TypeRef"
+            },
+            "name": {
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+            },
+            "colour": {
+              "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+            }
+          },
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
+          },
+          "required": [
+            "type",
+            "name"
+          ]
+        },
+        "doc": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-": true
+      },
+      "required": [
+        "type",
+        "name",
+        "valueType"
+      ]
+    },
+    "Cells": {
+      "description": "The cells of a table: their node type, the reference attribute naming the column, and the node type of one of several values. See section 7.3.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/TypeRef"
+        },
+        "column": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+        },
+        "items": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/TypeRef"
+        },
+        "doc": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-": true
+      },
+      "required": [
+        "type",
+        "column"
+      ]
+    },
+    "Views": {
+      "description": "The views of a table: their node type, the attribute naming one, the document attribute naming the active one, and the node types of their settings by role. See section 7.4.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/TypeRef"
+        },
+        "name": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+        },
+        "active": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+        },
+        "settings": {
+          "type": "object",
+          "propertyNames": {
+            "enum": [
+              "columns",
+              "sorts",
+              "conditions",
+              "filterGroups",
+              "groups"
+            ]
+          },
+          "additionalProperties": {
+            "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/TypeRef"
+          }
+        },
+        "doc": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-": true
+      },
+      "required": [
+        "type",
+        "name"
+      ]
+    },
+    "ValueType": {
+      "description": "What a column's cells hold: the key of the value, whether there are several, the editor, the filter comparisons, the sort order and the conversions to other value types. See section 7.5.",
+      "type": "object",
+      "properties": {
+        "label": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/LocalizedText"
+        },
+        "key": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+        },
+        "many": {
+          "type": "boolean"
+        },
+        "editor": {
+          "enum": [
+            "text",
+            "number",
+            "checkbox",
+            "date",
+            "dateTime",
+            "time",
+            "choice",
+            "choices",
+            "rows"
+          ]
+        },
+        "comparisons": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "not": {
+              "enum": [
+                "is-empty",
+                "is-not-empty"
+              ]
+            }
+          }
+        },
+        "sort": {
+          "enum": [
+            "text",
+            "number",
+            "false-first",
+            "chronological",
+            "option-order",
+            "title"
+          ]
+        },
+        "converts": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/SimpleId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/Conversion"
+          }
+        },
+        "doc": {
+          "$ref": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Doc"
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-": true
+      },
+      "required": [
+        "label",
+        "key",
+        "editor",
+        "comparisons",
+        "sort"
+      ]
+    },
+    "Conversion": {
+      "description": "What a value becomes when its column's value type changes. See section 7.6.",
+      "enum": [
+        "written-form",
+        "parse",
+        "match-option",
+        "wrap",
+        "unwrap"
+      ]
+    }
+  }
+}

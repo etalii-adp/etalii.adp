@@ -1,13 +1,13 @@
 # FBL — Format Binding Language
 
-**Specification, version 0.2 (Draft)**
+**Specification, version 0.3 (Draft)**
 
 |                          |                                                                                              |
 |--------------------------|----------------------------------------------------------------------------------------------|
-| Date                     | 2026-10-05                                                                                   |
+| Date                     | 2026-10-09                                                                                   |
 | Document schema          | `fbl.schema.json` (JSON Schema, draft 2020-12), `$defs/Document`                             |
 | Also in the schema       | `$defs/Registration` (the parsed `.adp` registration), `$defs/Fixture` (round-trip fixtures) |
-| Serves                   | every kind of tool; today [DISL](../disl/DISL-specification.md), through `persistence.binding` |
+| Serves                   | every kind of tool: [DISL](../disl/DISL-specification.md) through `persistence.binding`, [DESL](../desl/DESL-specification.md) through `persistence.bindings` |
 | Expression language      | CEL — Common Expression Language (https://cel.dev)                                           |
 | Media type (provisional) | `application/vnd.fbl.document+json`                                                          |
 | File extension           | `.fbl`                                                                                       |
@@ -17,9 +17,9 @@
 
 ## Status of this document
 
-This is a draft, version 0.2. It is complete enough to implement a conforming validator of FBL documents and a host that reads and writes bodies through declared bindings, but individual constructs may still change before version 1.0. FBL 0.2 (2026-10-05, approved by the product owner as part of the DISL 0.3 additions) gives the model changes a persistence plugin plans their fields: an add with a position, a move and a retype (section 11.2), which declared bindings follow too (section 6.4); and it lets a DISL specification map a binding's own type and attribute names onto its metamodel (DISL §11.2, `persistence.typeMap`; section 5.1). Every valid 0.1 document is a valid 0.2 document with the same meaning, except that a plugin that does not declare `move` is sent a reorder or re-parent as a remove and an add. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
+This is a draft, version 0.3. It is complete enough to implement a conforming validator of FBL documents and a host that reads and writes bodies through declared bindings, but individual constructs may still change before version 1.0. FBL 0.2 (2026-10-05, approved by the product owner as part of the DISL 0.3 additions) gives the model changes a persistence plugin plans their fields: an add with a position, a move and a retype (section 11.2), which declared bindings follow too (section 6.4); and it lets a DISL specification map a binding's own type and attribute names onto its metamodel (DISL §11.2, `persistence.typeMap`; section 5.1). Every valid 0.1 document is a valid 0.2 document with the same meaning, except that a plugin that does not declare `move` is sent a reorder or re-parent as a remove and an add. FBL 0.3 (2026-10-09, for the Knowledge designer, spec 013) changes no behaviour: it names the tool type's specification wherever 0.2 said DISL, since a DESL specification uses bindings too (DESL section 5); it lets a specification name one binding per format family, the body choosing among them by the files each claims (sections 1.2, 8.1); it spells a reference to a stored id as `by: "id"` (sections 5.2, 5.7); and it lets a fixture's edit be a `move` or an `add` with a `position`, as section 11.2 already defines them (section 15.3). Every valid 0.2 document is a valid 0.3 document with the same meaning. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
 
-FBL relies on constructs that DISL 0.2 and 0.3 define: id strategies and ephemeral ids (DISL §11.5), findings and their source locations (DISL §8.6), derived elements (DISL §4.11) and the tool type's origin (`language.origin`, DISL §3.2). Where this document names one of them, DISL is the definition; FBL defines none of its own.
+FBL relies on constructs that DISL 0.2 and 0.3 define: id strategies and ephemeral ids (DISL §11.5), findings and their source locations (DISL §8.6), derived elements (DISL §4.11) and the tool type's origin (`language.origin`, DISL §3.2). Where this document names one of them, DISL is the definition; FBL defines none of its own. A DESL specification adopts the same sections by reference (DESL section 1.3), so they mean the same for a designer. Where this document says **the tool type's specification**, it means the DISL or DESL specification whose persistence names the binding.
 
 The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY** and **OPTIONAL** are to be interpreted as described in RFC 2119 and RFC 8174 when, and only when, they appear in bold capitals.
 
@@ -65,13 +65,14 @@ FBL, the Format Binding Language, declares instead how such a file maps to a too
 
 ### 1.2 How FBL is used *(informative)*
 
-A tool engineer writes an FBL document, `*.fbl`, holding one or more named bindings, and points a tool type's specification at one of them:
+A tool engineer writes an FBL document, `*.fbl`, holding one or more named bindings, and points a tool type's specification at one of them, or, for a tool type whose documents may be written in several formats, at one binding per format family:
 
 ```json
 { "persistence": { "format": "fbl", "binding": "timeline.fbl#timeline" } }
+{ "persistence": { "format": "fbl", "bindings": ["knowledge.fbl#yaml", "knowledge.fbl#json", "knowledge.fbl#xml"] } }
 ```
 
-A host that opens a file first routes it to a binding (section 12), reads its registration if there is one (section 8), opens the body through the binding (sections 4 and 5) and builds the model the DISL specification describes. Every transaction the user commits is planned as splices (section 6), applied to the body's bytes and kept in the body's history for undo (section 7). Positions the user drags are written to the registration. Other tools can keep editing the body, and the host picks their changes up (section 7.3).
+A host that opens a file first routes it to a binding (section 12), reads its registration if there is one (section 8), opens the body through the binding for the body's family (sections 4 and 5) and builds the model the tool type's specification describes. Every transaction the user commits is planned as splices (section 6), applied to the body's bytes and kept in the body's history for undo (section 7). Positions the user drags are written to the registration. Other tools can keep editing the body, and the host picks their changes up (section 7.3).
 
 The same binding serves every host. The round-trip fixtures in `fixtures/` (section 15.3) are the shared test: a host that passes them reads and writes bodies the way every other host does.
 
@@ -116,7 +117,7 @@ An FBL document is a JSON document (RFC 8259) encoded in UTF-8, validated by `fb
 | Property   | Type                 | Description                                                    |
 |------------|----------------------|----------------------------------------------------------------|
 | `$schema`  | URI                  | Optional; the schema's `$id` with `#/$defs/Document`.          |
-| `fbl`      | `"0.1"`, `"0.2"`       | Required. The FBL version the document is written in.          |
+| `fbl`      | `"0.1"`, `"0.2"`, `"0.3"` | Required. The FBL version the document is written in.    |
 | `doc`      | Doc                  | Documentation, as in DISL §2.4.                                |
 | `bindings` | map Name → Binding   | Required, at least one. Each binding is described in section 3. |
 
@@ -128,7 +129,7 @@ A binding name and a rule name is a **Name**: a letter or underscore followed by
 
 ### 2.3 Binding references
 
-A binding is referenced as `<document>#<name>`: a URI reference to an FBL document, resolved against the referring document's own location, followed by `#` and the binding's name. `#<name>` alone refers to a binding in the same document. A DISL specification refers to a binding the same way from `persistence.binding` (DISL §11.2), or embeds a Binding object there.
+A binding is referenced as `<document>#<name>`: a URI reference to an FBL document, resolved against the referring document's own location, followed by `#` and the binding's name. `#<name>` alone refers to a binding in the same document. A DISL specification refers to a binding the same way from `persistence.binding` (DISL §11.2), or embeds a Binding object there; a DESL specification lists one binding per format family in `persistence.bindings` (DESL section 5).
 
 ### 2.4 CEL
 
@@ -163,7 +164,7 @@ A body file is UTF-8, with or without a byte-order mark. A byte-order mark, if p
 
 ### 2.7 Versioning
 
-`fbl` names the version of FBL a document is written in: `"0.1"` or `"0.2"`. FBL 0.2 is a superset of 0.1, and a 0.2 host **MUST** read a 0.1 document with its meaning. While 0.2 is a draft, its schema is published at the 0.1 address (`https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json`), which accepts every 0.1 document unchanged. A host **MUST** refuse a document whose major version it does not support, and **SHOULD** read a document of a newer minor version, ignoring what it does not know, with a warning. Before 1.0 any construct may change (constitution principle IV).
+`fbl` names the version of FBL a document is written in: `"0.1"`, `"0.2"` or `"0.3"`. Each is a superset of the one before, and a host **MUST** read a document of an earlier minor version with its meaning. While 0.3 is a draft, its schema is published at the 0.1 address (`https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json`), which accepts every 0.1 document unchanged. A host **MUST** refuse a document whose major version it does not support, and **SHOULD** read a document of a newer minor version, ignoring what it does not know, with a warning. Before 1.0 any construct may change (constitution principle IV).
 
 ---
 
@@ -338,7 +339,7 @@ An element rule turns entries into elements of one node type:
 | Property          | Type                        | Description |
 |-------------------|-----------------------------|-------------|
 | `name`            | Name                        | Required. Referenced by `parent`, `cascade`, `reference.to` and `within`. |
-| `type`            | TypeRef                     | Required. The DISL node type produced. |
+| `type`            | TypeRef                     | Required. The node type produced, as the tool type's specification declares it. |
 | `at`              | Selector                    | yaml, json, xml: where the entries are. |
 | `line`            | Regex                       | lines, blocks: the statement. Exactly one of `at` and `line`. |
 | `within`, `opens`, `caseInsensitive` | | blocks (section 4.7); `caseInsensitive` also for lines. |
@@ -352,7 +353,7 @@ An element rule turns entries into elements of one node type:
 | `undo`            | `"inverse"` (default), `"snapshot"` | Section 7.1. |
 | `readOnly`        | bool or LocalizedText       | Section 3.4. |
 
-*(FBL 0.2)* A rule's `type`, and the attributes its bindings name, are the metamodel's, unless the DISL specification maps the binding's names onto its metamodel with `persistence.typeMap` (DISL §11.2): then they are the binding's own names, and the map says what each type and attribute becomes, including a type read as the diagram's attributes, as a header, as an unreadable entry or as a relation whose ends are reference attributes. FBL reads and writes the body by the binding's names either way.
+*(FBL 0.2)* A rule's `type`, and the attributes its bindings name, are the metamodel's, unless the tool type's specification maps the binding's names onto its metamodel with `persistence.typeMap` (DISL §11.2): then they are the binding's own names, and the map says what each type and attribute becomes, including a type read as the diagram's attributes, as a header, as an unreadable entry or as a relation whose ends are reference attributes. FBL reads and writes the body by the binding's names either way.
 
 When several rules match the same entry, the first in the binding's order (elements before relations) whose `when` holds takes it; an entry becomes at most one element or relation. Rules of the same node type are how a type is written in several shapes (the timeline's `Period` and `Moment` are one kind of entry, told apart by `has(entry.end)`).
 
@@ -370,7 +371,7 @@ A **slot** is exactly one place a value is read from and written to:
 | `{capture: c}`           | yaml, json, xml   | The key a `{c}` selector segment matched; writing it renames the key. |
 | `{value: cel}`           | all               | Computed; read-only. |
 
-An **attribute binding** is a slot bound to one DISL attribute of the rule's type, with these options:
+An **attribute binding** is a slot bound to one attribute of the rule's type, with these options:
 
 | Property    | Values | Meaning |
 |-------------|--------|---------|
@@ -380,7 +381,7 @@ An **attribute binding** is a slot bound to one DISL attribute of the rule's typ
 | `number`    | `"shortest"`, `{decimals}` | How a number is written (section 6.3). |
 | `time`      | `"keep-precision"` | A written date or date-time keeps the precision of the value it replaces (section 6.3). |
 | `style`     | `plain`, `double`, `single`, `literal`, `flow` | yaml: the style of a newly written value, when the value it replaces gives none (section 6.3). |
-| `reference` | `{to, by}` | The value names an entry of the rules `to` by the value of their attribute `by` (section 5.7). |
+| `reference` | `{to, by}` | The value names an entry of the rules `to` by the value of their attribute `by`, or, with `by: "id"`, by the id those rules store with `id.from` (section 5.7). DISL reserves `id` as an element's built-in field, so it is never an attribute's name. |
 | `map`       | map wire value → model value | Translates values both ways. Several wire values may map to one model value; writing uses the first key in document order of the map whose value matches, unless the value being replaced already maps to it, in which case it is kept. |
 | `override`  | Slot | A second slot that wins on read when present and is removed (`remove-key`) when the attribute is written. |
 | `content`   | `"text"`, `"html-paragraphs"` | xml text slots (section 4.5). |
@@ -413,7 +414,7 @@ A relation rule is an element rule with two more slots, `source` and `target`, e
 
 ### 5.7 References and rename
 
-A slot is a **reference** when its attribute binding has `reference`, or when it is a relation's `source` or `target` (which reference ids). When the referenced value changes (the `by` attribute of an entry of the `to` rules, or an id stored with `from`), every reference to the old value is rewritten in the same edit, one `rewrite-reference` splice each. A reference inside a `word` or a list value is rewritten in place, word by word or item by item. A rename to a value another entry of the same rules already has is refused.
+A slot is a **reference** when its attribute binding has `reference`, or when it is a relation's `source` or `target` (which reference ids). A reference by id is written `by: "id"`, and every rule it names **MUST** store its id with `id.from`. When the referenced value changes (the `by` attribute of an entry of the `to` rules, or an id stored with `from`), every reference to the old value is rewritten in the same edit, one `rewrite-reference` splice each. A reference inside a `word` or a list value is rewritten in place, word by word or item by item. A rename to a value another entry of the same rules already has is refused.
 
 A group holding several references (a causal loop's members) is split into words, each a reference.
 
@@ -556,7 +557,7 @@ layout:
   task:quality_gate: 260 0
 ```
 
-1. **Line 1** is the **origin** of the tool type (`language.origin`, DISL §3.2), after a byte-order mark if there is one. A host finds the DISL specification with that origin, and through its `persistence.binding` the binding.
+1. **Line 1** is the **origin** of the tool type (`language.origin`, DISL §3.2), after a byte-order mark if there is one. A host finds the tool type's specification with that origin, and through its persistence the binding: the one a DISL specification's `persistence.binding` names, or, of the bindings a DESL specification's `persistence.bindings` names, the one whose `claims` take the body (section 12.1). A body two of them claim is refused with a reason, and a validator reports a specification whose bindings claim one extension twice.
 2. **Headers** follow, one per line, `key: value` (the first `: ` separates them; blank lines are skipped). FBL defines `body`, `view` and `resource`; a binding declares others in `registration.headers` (the SKOS reading's `language`). A header neither defines is kept and reported as `fbl.unknown-header`. The header region ends at the first line that is not a header.
 3. **Blocks** follow the headers: `layout:` (section 8.3) and `identities:` (section 8.6), each a line holding only the block's name and colon, followed by its entries, each indented by two spaces (any whitespace is read), `<key>: <value>`, where the key is everything before the **last** `: ` of the line, so keys may contain `: `.
 
@@ -771,7 +772,7 @@ A template **MUST** read through its binding with no finding of severity warning
 1. **Parse** the JSON; reject duplicate keys.
 2. **Check the version**: `fbl` major version supported.
 3. **Validate** against `fbl.schema.json#/$defs/Document`.
-4. **Resolve names**: rule names unique within each binding; every rule named in `parent`, `cascade`, `reference.to`, `within` and `files` exists; every `type` names a type of the specification that uses the binding (checked when a DISL specification is loaded with it, DISL §14.1).
+4. **Resolve names**: rule names unique within each binding; every rule named in `parent`, `cascade`, `reference.to`, `within` and `files` exists; every reference's `by` is an attribute every rule in `to` binds, or `id` when every rule in `to` stores its id with `id.from`; every `type` names a type of the specification that uses the binding (checked when the tool type's specification is loaded with it, DISL §14.1).
 5. **Compile** every regular expression in the common subset (section 2.5) and every CEL expression in its context (section 2.4).
 6. **Check** the rules: every writable attribute has exactly one slot (section 3.3); no `fixed` DISL attribute is bound; a `shared` claim has a marker or is `registrationOnly`; at most one reading is `bare`; a declared binding has a family and rules; a plugin reader's plugin is declared by the specification.
 
@@ -821,7 +822,7 @@ A host that cannot watch files reads bodies on open and on request only, and say
 | `binding` | The binding under test, relative to the fixture. |
 | `input`   | The input body, a file beside the fixture, compared byte for byte (the repository keeps these files from line-ending conversion). |
 | `read`    | What reading the input yields: `elements` (`id`, `type`), `findings` (`rule`, `line`), `unreadable`. |
-| `steps`   | In order: an `edit` (add, set, remove, place, or save without change), an `undo` or a `redo`; the `splices` it must produce, as `{operation, start, end, text}` with UTF-8 byte offsets into the document before the step; the document after it (`expect`, or `expectFile`); `refused` with the reason when the edit must be refused and write nothing. |
+| `steps`   | In order: an `edit` (add, set, remove, *(FBL 0.3)* move, place, or save without change; an add or a move carries a `position` as section 11.2 gives it), an `undo` or a `redo`; the `splices` it must produce, as `{operation, start, end, text}` with UTF-8 byte offsets into the document before the step; the document after it (`expect`, or `expectFile`); `refused` with the reason when the edit must be refused and write nothing. |
 
 A host passes a fixture when reading the input gives what `read` lists and every step produces exactly its splices and its document. The repository's validator checks every fixture's consistency: each step's splices turn the document before it into its `expect`, and back by their inverses; an undo returns the document the undone edit started from; a save and a refused edit change nothing. Undo steps list the inverse splices under the operation of the splice each inverts.
 
@@ -869,6 +870,6 @@ Rewriting the definitions to use FBL is follow-up work, as is implementing FBL i
 
 ## Appendix A — JSON Schema
 
-The normative schema is [`fbl.schema.json`](fbl.schema.json) beside this document (JSON Schema draft 2020-12, `$id` `https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json`). Its `$defs` are: `Document`, `Binding`, `Claims`, `Marker`, `Body`, `Family`, `FileRule`, `PluginReader`, `TextDefaults`, `Header`, `BlockRule`, `ElementRule`, `RelationRule`, `IdBinding`, `Slot`, `AttributeBinding`, `Insert`, `Remove`, `RegistrationSettings`, `Template`, `Registration`, `Splice`, `Fixture`, `Edit`, the model changes `ModelChange` and `ChangePosition` (FBL 0.2, section 11.2), and the helpers `Name`, `BindingRef`, `Regex`, `Selector`. While 0.2 is a draft, the schema keeps its 0.1 `$id` and accepts `"fbl": "0.2"`. It references DISL's `Doc`, `LocalizedText`, `Expression` and `TypeRef`.
+The normative schema is [`fbl.schema.json`](fbl.schema.json) beside this document (JSON Schema draft 2020-12, `$id` `https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json`). Its `$defs` are: `Document`, `Binding`, `Claims`, `Marker`, `Body`, `Family`, `FileRule`, `PluginReader`, `TextDefaults`, `Header`, `BlockRule`, `ElementRule`, `RelationRule`, `IdBinding`, `Slot`, `AttributeBinding`, `Insert`, `Remove`, `RegistrationSettings`, `Template`, `Registration`, `Splice`, `Fixture`, `Edit`, the model changes `ModelChange` and `ChangePosition` (FBL 0.2, section 11.2), and the helpers `Name`, `BindingRef`, `Regex`, `Selector`. While 0.3 is a draft, the schema keeps its 0.1 `$id` and accepts `"fbl": "0.2"` and `"0.3"`. It references DISL's `Doc`, `LocalizedText`, `Expression` and `TypeRef`.
 
 The examples beside this document are `timeline.fbl`, `databricks-job.fbl`, `databricks-pipeline.fbl`, `mindmap.fbl`, `causal-loop-diagram.fbl`, `structurizr.fbl`, `w3c-turtle.fbl` and `helm-chart.fbl`; registrations are in `registrations/` and round-trip fixtures in `fixtures/`. `python .github/scripts/validate-examples.py` validates them all.
