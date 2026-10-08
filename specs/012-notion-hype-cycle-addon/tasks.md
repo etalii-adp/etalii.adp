@@ -413,7 +413,7 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 **⟶ Wait for Wave 3 to finish, then:**
 
 - [x] **T130** Run the site's checks, push the branch and open pull request 3 into `develop`; its description names `specs/012-notion-hype-cycle-addon/` and the `etalii.adp` commit of T021 · etalii.adp.site
-- [ ] **T131** **Maintainer**: merge pull request 3 with a merge commit · etalii.adp.site
+- [x] **T131** **Maintainer**: merge pull request 3 with a merge commit · etalii.adp.site
 
 **⟶ Wait for T131 to finish, then:**
 
@@ -469,5 +469,5 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 **Purpose**: the first pass (T078) showed that the grant completes in a web browser and not in the Notion desktop app. The service hands a completed grant over to the page that started it (contracts/service.md, `POST /grant`).
 
 - [x] **T141** Amend the Notion repository's principles from 1.1.0 to 1.2.0 (MINOR) through `/speckit-constitution`: the service keeps no state but a grant of access in progress, for at most two minutes and handed over once · etalii.adp/.specify/memory/repositories/etalii.adp.ide.notion.md
-- [ ] **T142** Keep a completed grant for at most 120 seconds under its state and hand it over once to the verifier's holder, in the handler, the local service and the Worker with a Durable Object; have the session ask for it beside the message of the window it opened, and the page show the link to the grant and a way to stop waiting (FR-010, research R4) · etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/service/worker.ts, etalii.adp.ide.notion/service/wrangler.toml, etalii.adp.ide.notion/scripts/service.mjs, etalii.adp.ide.notion/src/store/session.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
-- [ ] **T143** **Maintainer**: in the Notion desktop app, connect a diagram page of the Showcase and say whether the diagram opens after the grant is approved in the browser · Notion desktop app
+- [x] **T142** Keep a completed grant for at most 120 seconds under its state and hand it over once to the verifier's holder, in the handler, the local service and the Worker with a Durable Object; have the session ask for it beside the message of the window it opened, and the page show the link to the grant and a way to stop waiting (FR-010, research R4) · etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/service/worker.ts, etalii.adp.ide.notion/service/wrangler.toml, etalii.adp.ide.notion/scripts/service.mjs, etalii.adp.ide.notion/src/store/session.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
+- [x] **T143** **Maintainer**: in the Notion desktop app, connect a diagram page of the Showcase and say whether the diagram opens after the grant is approved in the browser · Notion desktop app

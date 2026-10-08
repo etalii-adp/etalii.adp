@@ -1080,6 +1080,30 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-08T16:17:09.409Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T142",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T16:31:34.927Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T143",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T23:33:59.598Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T131",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T23:34:00.237Z"
     }
   ],
   "last_action": "1101 tests pass and 9 are expected failures naming issue 97; branch pushed, pull request 2 not opened",
@@ -1823,7 +1847,7 @@
     }
   },
   "approach": "A static add-on at /adp-notion/gartner-hype-cycle-graph/ is compiled from shared parts that name no tool type: a new DISL interpreter, the Visual Studio Code host's FBL library copied unchanged, a store that keeps a document as one row per element, a canvas, and Notion-styled panels. The store rebuilds the binding's document text in memory, so FBL plans every edit and keeps the undo history, and each edit is written back as row changes. A stateless Cloudflare Worker completes Notion's sign-in and forwards the calls with the viewer's token.",
-  "currentTask": "T141",
+  "currentTask": "T131",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -2719,6 +2743,26 @@
       "files": [
         ".specify/memory/repositories/etalii.adp.ide.notion.md"
       ]
+    },
+    "T142": {
+      "status": "DONE",
+      "did": "The service keeps a completed grant for at most 120 seconds and hands it once to the verifier's holder; the session asks for it and the page links to the sign-in while waiting; pull request 7 of etalii.adp.ide.notion",
+      "files": [
+        "etalii.adp.ide.notion/service/handler.ts",
+        "etalii.adp.ide.notion/service/worker.ts",
+        "etalii.adp.ide.notion/service/wrangler.toml",
+        "etalii.adp.ide.notion/scripts/service.mjs",
+        "etalii.adp.ide.notion/src/store/session.ts",
+        "etalii.adp.ide.notion/src/frame/parts/reading.ts"
+      ]
+    },
+    "T143": {
+      "status": "DONE",
+      "did": "The maintainer connected a diagram page in the Notion desktop app: after the grant was approved in the browser, the diagram opened"
+    },
+    "T131": {
+      "status": "DONE",
+      "did": "The maintainer merged pull request 98 of etalii.adp.site"
     }
   },
   "verified": [
