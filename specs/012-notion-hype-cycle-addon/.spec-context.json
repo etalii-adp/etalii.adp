@@ -1016,6 +1016,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-08T14:04:51.217Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T078",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:17:33.947Z"
     }
   ],
   "last_action": "1101 tests pass and 9 are expected failures naming issue 97; branch pushed, pull request 2 not opened",
@@ -1759,7 +1767,7 @@
     }
   },
   "approach": "A static add-on at /adp-notion/gartner-hype-cycle-graph/ is compiled from shared parts that name no tool type: a new DISL interpreter, the Visual Studio Code host's FBL library copied unchanged, a store that keeps a document as one row per element, a canvas, and Notion-styled panels. The store rebuilds the binding's document text in memory, so FBL plans every edit and keeps the undo history, and each edit is written back as row changes. A stateless Cloudflare Worker completes Notion's sign-in and forwards the calls with the viewer's token.",
-  "currentTask": "T045",
+  "currentTask": "T078",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -2610,6 +2618,10 @@
     "T045": {
       "status": "DONE",
       "did": "The maintainer set the Worker's two secrets and the repository's CLOUDFLARE_API_TOKEN; the Worker's /authorize now redirects to Notion's grant with a client id, and Notion answers it"
+    },
+    "T078": {
+      "status": "DONE",
+      "did": "The maintainer made the first pass in a Notion embed block against the deployed Worker: Connect to Notion granted access from inside the embed and the diagram of a store was drawn, with toolbox, property grid, filters, legend and the viewpoint toggle"
     }
   },
   "verified": [

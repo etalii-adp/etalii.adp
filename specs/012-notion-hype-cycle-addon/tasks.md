@@ -148,7 +148,7 @@ Part B starts when T011 to T016 are written. T034 waits for T020, whose commit i
 
 **⟶ Wait for the checkpoint and T038, then:**
 
-- [ ] **T078** **Maintainer**: the first pass in Notion (research R4), made before any story is built, because every story needs the grant. Run the local service of T028 with the integration's client id and secret and `ALLOWED_ORIGIN` set to the address of the pass, and serve this branch's build at an HTTPS address a Notion page can embed, with a page of the pass's own, not kept, that asks the session of T044 for a token when it opens and shows whether it has one. Embed it in a Notion page and grant access from inside the embed block. Record whether the window opens and whether the embed has the token after a grant made in a tab. If neither gives the embed a token, stop: the plan returns to research D1 and no story is started · Notion workspace
+- [x] **T078** **Maintainer**: the first pass in Notion (research R4), made before any story is built, because every story needs the grant. Run the local service of T028 with the integration's client id and secret and `ALLOWED_ORIGIN` set to the address of the pass, and serve this branch's build at an HTTPS address a Notion page can embed, with a page of the pass's own, not kept, that asks the session of T044 for a token when it opens and shows whether it has one. Embed it in a Notion page and grant access from inside the embed block. Record whether the window opens and whether the embed has the token after a grant made in a tab. If neither gives the embed a token, stop: the plan returns to research D1 and no story is started · Notion workspace
 
 ---
 
