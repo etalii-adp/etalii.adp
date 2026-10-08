@@ -304,13 +304,13 @@ Files: none in a repository. Pages: the entry "Gartner hype cycle graph" and nin
 
 **Wave 1: independent (different pages)**
 
-- [ ] **T104** [P] [US4] **Maintainer**: give a `NOTION_TOKEN` of an integration the Showcase is shared with, for `scripts/store.mjs`; it goes in the environment and in no file · Notion workspace
+- [x] **T104** [P] [US4] **Maintainer**: give a `NOTION_TOKEN` of an integration the Showcase is shared with, for `scripts/store.mjs`; it goes in the environment and in no file · Notion workspace
 - [x] **T105** [P] [US4] Rename the first graph's pages to the tool type's display name, `Gartner hype cycle graph` and `Gartner hype cycle graph - Data`, keep `Diagram`, and set the embed of `Diagram` to `https://etalii.net/adp-notion/gartner-hype-cycle-graph/?store=3f2be2fd05b680f5bfe1d89398eabb4e`. The page "Root" is left as it is (FR-008, FR-030) · Notion workspace/Showcase/Gartner hype cycle graph
 - [x] **T106** [P] [US4] Create nine entries under the Showcase, titled as the store contract lists them, each with a database `<title> - Data` and a page `Diagram` whose one embed block names that database (FR-029) · Notion workspace/Showcase
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T107** [US4] Prepare the first graph's database, and `put` each of the nine examples of `test/examples/` into its store. Then `take` each out and read it beside the example through the binding: 0 differences. Note what `put` reported as not kept (FR-007, FR-029, SC-003) · Notion workspace/Showcase
+- [x] **T107** [US4] Prepare the first graph's database, and `put` each of the nine examples of `test/examples/` into its store. Then `take` each out and read it beside the example through the binding: 0 differences. Note what `put` reported as not kept (FR-007, FR-029, SC-003) · Notion workspace/Showcase
 
 **⟶ Wait for T107 to finish, then:**
 
