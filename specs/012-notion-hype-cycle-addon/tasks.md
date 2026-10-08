@@ -104,7 +104,7 @@ Part B starts when T011 to T016 are written. T034 waits for T020, whose commit i
 - [x] **T035** [P] Run `node scripts/sync-examples.mjs` at the commits of T002 and T003: nine examples with their places, the fixtures and `mindmap.dis` · etalii.adp.ide.notion/test/examples/, etalii.adp.ide.notion/test/fixtures/
 - [x] **T036** [P] Write the dispatcher (one handler per command type, records nothing) and the history stack (runs a command, keeps the entry when an inverse is reported, undoes and redoes by dispatching, tells its listeners what is available, can be cleared), with a test of the transitions table of the data model. Neither names Notion, a store or a tool type (FR-026, FR-028) · etalii.adp.ide.notion/src/history/dispatcher.ts, etalii.adp.ide.notion/src/history/historyStack.ts, etalii.adp.ide.notion/test/history/historyStack.test.ts
 - [x] **T037** [P] Write the service's address, the one place in `src/` that names it: the local service's, `http://localhost:8787`, for a page served from `localhost`, and the Worker's for any other, written by T029 once T032 gives it · etalii.adp.ide.notion/src/frame/config.ts
-- [ ] **T038** [P] **Maintainer**: register the Notion integration as public, with the redirect address `http://localhost:8787/callback` of the local service and the capabilities to read, update and insert content, and give its client id and client secret to the local service through the environment. The Worker's `<service>/callback` is added as a second redirect address in T045 · Notion integrations
+- [x] **T038** [P] **Maintainer**: register the Notion integration as public, with the redirect address `http://localhost:8787/callback` of the local service and the capabilities to read, update and insert content, and give its client id and client secret to the local service through the environment. The Worker's `<service>/callback` is added as a second redirect address in T045 · Notion integrations
 
 **⟶ Wait for Wave 2 to finish, then:**
 
@@ -370,11 +370,11 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 **⟶ Wait for T032 to finish, then:**
 
-- [ ] **T029** Wrap the handler of T028 as a Cloudflare Worker and configure it: its name, `ALLOWED_ORIGIN` as `https://etalii.net`, and nothing of the handler's logic repeated. Write the Worker's address of T032 into `src/frame/config.ts`, and add to `Build` a job that runs `wrangler deploy` on a push to `develop` only, after the others pass (contracts: service) · etalii.adp.ide.notion/service/worker.ts, etalii.adp.ide.notion/service/wrangler.toml, etalii.adp.ide.notion/src/frame/config.ts, etalii.adp.ide.notion/.github/workflows/build.yml
+- [x] **T029** Wrap the handler of T028 as a Cloudflare Worker and configure it: its name, `ALLOWED_ORIGIN` as `https://etalii.net`, and nothing of the handler's logic repeated. Write the Worker's address of T032 into `src/frame/config.ts`, and add to `Build` a job that runs `wrangler deploy` on a push to `develop` only, after the others pass (contracts: service) · etalii.adp.ide.notion/service/worker.ts, etalii.adp.ide.notion/service/wrangler.toml, etalii.adp.ide.notion/src/frame/config.ts, etalii.adp.ide.notion/.github/workflows/build.yml
 
 **⟶ Wait for T029 to finish, then:**
 
-- [ ] **T045** **Maintainer**: add `<service>/callback` to the Notion integration as a second redirect address, set the Worker's secrets `NOTION_CLIENT_ID` and `NOTION_CLIENT_SECRET`, and the repository's Actions secret `CLOUDFLARE_API_TOKEN`, a token that may deploy this one Worker · Cloudflare, etalii.adp.ide.notion (GitHub settings)
+- [x] **T045** **Maintainer**: add `<service>/callback` to the Notion integration as a second redirect address, set the Worker's secrets `NOTION_CLIENT_ID` and `NOTION_CLIENT_SECRET`, and the repository's Actions secret `CLOUDFLARE_API_TOKEN`, a token that may deploy this one Worker · Cloudflare, etalii.adp.ide.notion (GitHub settings)
 
 
 **⟶ Wait for T045 to finish, then:**

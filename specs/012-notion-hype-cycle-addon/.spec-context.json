@@ -992,6 +992,30 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-08T13:36:50.870Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T029",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T13:36:51.215Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T038",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:04:50.797Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T045",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:04:51.217Z"
     }
   ],
   "last_action": "1101 tests pass and 9 are expected failures naming issue 97; branch pushed, pull request 2 not opened",
@@ -1735,7 +1759,7 @@
     }
   },
   "approach": "A static add-on at /adp-notion/gartner-hype-cycle-graph/ is compiled from shared parts that name no tool type: a new DISL interpreter, the Visual Studio Code host's FBL library copied unchanged, a store that keeps a document as one row per element, a canvas, and Notion-styled panels. The store rebuilds the binding's document text in memory, so FBL plans every edit and keeps the undo history, and each edit is written back as row changes. A stateless Cloudflare Worker completes Notion's sign-in and forwards the calls with the viewer's token.",
-  "currentTask": "T032",
+  "currentTask": "T045",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -2568,6 +2592,24 @@
     "T032": {
       "status": "DONE",
       "did": "The maintainer created the Cloudflare account; the Worker's address is https://adp-notion.notion-adp.workers.dev"
+    },
+    "T029": {
+      "status": "DONE",
+      "did": "Wrapped the handler as a Cloudflare Worker, deployed it, wrote its address into config.ts and added the deploy job; pull request 4 of etalii.adp.ide.notion",
+      "files": [
+        "etalii.adp.ide.notion/service/worker.ts",
+        "etalii.adp.ide.notion/service/wrangler.toml",
+        "etalii.adp.ide.notion/src/frame/config.ts",
+        "etalii.adp.ide.notion/.github/workflows/build.yml"
+      ]
+    },
+    "T038": {
+      "status": "DONE",
+      "did": "The maintainer registered the public Notion integration with both redirect addresses"
+    },
+    "T045": {
+      "status": "DONE",
+      "did": "The maintainer set the Worker's two secrets and the repository's CLOUDFLARE_API_TOKEN; the Worker's /authorize now redirects to Notion's grant with a client id, and Notion answers it"
     }
   },
   "verified": [
