@@ -314,7 +314,7 @@ Files: none in a repository. Pages: the entry "Gartner hype cycle graph" and nin
 
 **⟶ Wait for T107 to finish, then:**
 
-- [ ] **T108** [US4] Check the ten entries: each database is named by one diagram page and no other, no two embeds name the same store, and each title is the example's display name (US4 scenarios 1 and 3) · Notion workspace/Showcase
+- [x] **T108** [US4] Check the ten entries: each database is named by one diagram page and no other, no two embeds name the same store, and each title is the example's display name (US4 scenarios 1 and 3) · Notion workspace/Showcase
 
 **Checkpoint**: ten stores hold their documents. The diagram pages show them once the add-on is published (T119, T120).
 
