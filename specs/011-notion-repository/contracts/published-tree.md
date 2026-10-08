@@ -1,6 +1,6 @@
 # Contract: Published Tree
 
-What `etalii.adp.ide.notion` publishes, and the command that writes it. The site's `deploy` workflow and the repository's own `Build` both code against this, and so does anyone who embeds an address in a Notion page. Decisions are in [research.md](../research.md) D4, D5 and D6.
+What `etalii.adp.ide.notion` publishes, and the command that writes it. The site's `deploy` workflow and the repository's own `Build` both code against this, and so does anyone who embeds an address in a Notion page. Decisions are in [research.md](../research.md) D4, D5 and D6. From the first add-on on, this contract is replaced by [the contract of that name of spec 012](../../012-notion-hype-cycle-addon/contracts/published-tree.md).
 
 ## Command
 

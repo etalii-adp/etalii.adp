@@ -1,0 +1,994 @@
+{
+  "workflow": "companion",
+  "specName": "The Gartner Hype Cycle Graph as a Notion Add-on",
+  "branch": "features/012-notion-hype-cycle-addon",
+  "currentStep": "implement",
+  "status": "implementing",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-07T22:32:14.857Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-07T22:34:25.580Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-07T22:46:49.900Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T23:11:36.594Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T23:17:02.736Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T23:17:09.734Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-07T23:46:17.886Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T23:57:19.889Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T23:57:48.437Z"
+    },
+    {
+      "step": "analyze",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-07T23:58:15.970Z"
+    },
+    {
+      "step": "analyze",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:02:18.213Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-08T00:15:43.041Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:16:16.691Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:16:16.907Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:16:17.112Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:18:04.361Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:18:04.531Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:18:04.709Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:18:04.897Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:18:05.058Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:18:05.228Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:19:46.051Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:19:46.287Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T014",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:19:46.549Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:19:46.794Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T018",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:19:47.041Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T019",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:19:47.281Z"
+    }
+  ],
+  "last_action": "living specs evaluated — no capabilities matched",
+  "telemetryInstanceId": "9795bf70-0de8-4781-9efc-f6e69a389dbe",
+  "coverage": {
+    "FR-001": {
+      "title": "A Notion add-on for the tool type with origin `gartner/hypecycle-graph` MUST be published under `https://etalii.net/adp-notion`, in its own folder, at an addres",
+      "tasks": [
+        "T025",
+        "T026",
+        "T053",
+        "T119",
+        "T124"
+      ]
+    },
+    "FR-002": {
+      "title": "The add-on MUST take everything it knows about the tool type from the DISL specification `definitions/diagrams/gartner-hype-cycle-graph.dis` and the FBL binding",
+      "tasks": [
+        "T034",
+        "T040",
+        "T047",
+        "T059",
+        "T060",
+        "T061",
+        "T062",
+        "T063",
+        "T084",
+        "T085",
+        "T086"
+      ]
+    },
+    "FR-003": {
+      "title": "This feature MUST NOT change that DISL specification or that FBL binding. A difference found between them and what Notion needs MUST be raised as a change in `e",
+      "tasks": [
+        "T019",
+        "T034",
+        "T117"
+      ]
+    },
+    "FR-004": {
+      "title": "The part of the add-on that interprets DISL and FBL MUST be general: it MUST NOT name an element, attribute or rule of the Gartner hype cycle graph.",
+      "tasks": [
+        "T042",
+        "T087",
+        "T112"
+      ]
+    },
+    "FR-005": {
+      "title": "What the add-on does not yet support of the DISL specification MUST be listed where a reader of the add-on finds it, and the add-on MUST NOT claim more.",
+      "tasks": [
+        "T046",
+        "T077"
+      ]
+    },
+    "FR-006": {
+      "title": "A graph's document MUST be kept in a Notion database, and in nothing else: the add-on keeps no second copy on a server or in the browser that outlives the page.",
+      "tasks": [
+        "T028",
+        "T052",
+        "T065"
+      ]
+    },
+    "FR-007": {
+      "title": "What the database holds MUST be what the FBL binding describes, so that a document taken out of the database opens unchanged in the standalone and Visual Studio",
+      "tasks": [
+        "T011",
+        "T050",
+        "T052",
+        "T066",
+        "T107"
+      ]
+    },
+    "FR-008": {
+      "title": "The first graph MUST be stored in the database \"Gartner HypeCycle Graph - Data\" and shown on the page \"Diagram\", both under the page \"Gartner Hypecycle Graph\" o",
+      "tasks": [
+        "T105",
+        "T107"
+      ]
+    },
+    "FR-009": {
+      "title": "The add-on MUST be told which database to read by the page that embeds it, so that one published add-on serves any number of graphs.",
+      "tasks": [
+        "T051",
+        "T076",
+        "T106"
+      ]
+    },
+    "FR-010": {
+      "title": "The add-on MUST read and write the database with the rights of the person looking at the page, or with rights that person granted, and MUST NOT publish a secret",
+      "tasks": [
+        "T013",
+        "T028",
+        "T038",
+        "T043",
+        "T044",
+        "T045",
+        "T124"
+      ]
+    },
+    "FR-011": {
+      "title": "The diagram MUST be shown inside a Notion page through an embed block, and MUST be usable at the width and height the embed block is given.",
+      "tasks": [
+        "T026",
+        "T075",
+        "T083",
+        "T100"
+      ]
+    },
+    "FR-012": {
+      "title": "A document MUST be drawn the same as in the standalone and Visual Studio Code hosts: the same elements, names, places on the time ruler, phases and influences.",
+      "tasks": [
+        "T055",
+        "T069",
+        "T070",
+        "T071",
+        "T072",
+        "T073",
+        "T120"
+      ]
+    },
+    "FR-013": {
+      "title": "Reading MUST NOT fail. An entry that cannot be read is a finding and the rest is drawn; a document that cannot be read at all opens empty and read-only.",
+      "tasks": [
+        "T056",
+        "T058",
+        "T065",
+        "T076"
+      ]
+    },
+    "FR-014": {
+      "title": "Findings MUST be shown with their severity, their sentence and the element they concern.",
+      "tasks": [
+        "T057",
+        "T063",
+        "T076"
+      ]
+    },
+    "FR-015": {
+      "title": "An editor MUST be able to make every edit the DISL specification offers: add a trend, a trigger and a note from the toolbox, draw an influence, move and resize",
+      "tasks": [
+        "T081",
+        "T086",
+        "T097",
+        "T098",
+        "T099",
+        "T121"
+      ]
+    },
+    "FR-016": {
+      "title": "A toolbox MUST list the toolbox items of the specification, and a property grid MUST show and change the attributes of the selection through the forms of the sp",
+      "tasks": [
+        "T082",
+        "T094",
+        "T095",
+        "T100"
+      ]
+    },
+    "FR-017": {
+      "title": "The toolbox and the property grid MUST each be collapsible, and the diagram MUST remain usable with both collapsed.",
+      "tasks": [
+        "T082",
+        "T089",
+        "T100"
+      ]
+    },
+    "FR-018": {
+      "title": "Every completed edit MUST be stored in the database without a save action.",
+      "tasks": [
+        "T079",
+        "T087",
+        "T093"
+      ]
+    },
+    "FR-019": {
+      "title": "An edit the specification refuses MUST change nothing and MUST show the specification's sentence.",
+      "tasks": [
+        "T079",
+        "T093",
+        "T099"
+      ]
+    },
+    "FR-020": {
+      "title": "An edit that cannot be stored MUST be reported to the editor, and the diagram MUST then show what the database holds.",
+      "tasks": [
+        "T080",
+        "T093",
+        "T099"
+      ]
+    },
+    "FR-021": {
+      "title": "Somebody who may not edit the database MUST get a read-only diagram with no editing control.",
+      "tasks": [
+        "T056",
+        "T065",
+        "T076",
+        "T100"
+      ]
+    },
+    "FR-022": {
+      "title": "A change made to the database outside the diagram MUST NOT be overwritten by the diagram's next write without the editor being told.",
+      "tasks": [
+        "T080",
+        "T088",
+        "T093",
+        "T121"
+      ]
+    },
+    "FR-023": {
+      "title": "CTRL+Z MUST undo the last edit and CTRL+Y MUST redo the last undone edit, on the canvas and in the database, while the diagram has the keyboard focus. On macOS",
+      "tasks": [
+        "T102",
+        "T103"
+      ]
+    },
+    "FR-024": {
+      "title": "One gesture MUST be one step of undo.",
+      "tasks": [
+        "T093",
+        "T097",
+        "T101"
+      ]
+    },
+    "FR-025": {
+      "title": "Undo and redo MUST also be reachable without a keyboard.",
+      "tasks": [
+        "T102",
+        "T103"
+      ]
+    },
+    "FR-026": {
+      "title": "Where Notion offers a way for an add-on to take part in Notion's own undo, the add-on MUST use it; where it does not, the add-on MUST keep its own history and s",
+      "tasks": [
+        "T027",
+        "T036",
+        "T093",
+        "T101"
+      ]
+    },
+    "FR-027": {
+      "title": "The toolbox and the property grid MUST be usable by another Notion add-on without change, drawing their content from that add-on's DISL specification.",
+      "tasks": [
+        "T094",
+        "T095",
+        "T109"
+      ]
+    },
+    "FR-028": {
+      "title": "The interpreter of DISL and FBL, the storage in a Notion database and the undo history MUST likewise be usable by another add-on, so that a second add-on consis",
+      "tasks": [
+        "T012",
+        "T036",
+        "T049",
+        "T112",
+        "T114"
+      ]
+    },
+    "FR-029": {
+      "title": "For every example the other hosts ship for this tool type, the Showcase MUST hold a database with that example's document and a page that shows it, each named a",
+      "tasks": [
+        "T106",
+        "T107",
+        "T108"
+      ]
+    },
+    "FR-030": {
+      "title": "The naming of the first graph's pages MUST follow the same rule, and MUST spell the tool type as its display name does.",
+      "tasks": [
+        "T105"
+      ]
+    },
+    "FR-031": {
+      "title": "Once the add-on is published, the places that say no tool is available in Notion MUST say what is: the index at `/adp-notion`, the `README.md` of `etalii.adp.id",
+      "tasks": [
+        "T053",
+        "T115",
+        "T126",
+        "T127"
+      ]
+    },
+    "FR-032": {
+      "title": "The row of the Gartner hype cycle in the \"Tools\" database of the Notion workspace MUST state the tool's state in the Notion host.",
+      "tasks": [
+        "T128",
+        "T129"
+      ]
+    },
+    "NFR-001": {
+      "title": "Everything the add-on shows around the diagram MUST follow Notion's styling as far as possible: the toolbox, the property grid, the menus, the controls, the fin",
+      "tasks": [
+        "T030",
+        "T091",
+        "T096",
+        "T122"
+      ]
+    },
+    "NFR-002": {
+      "title": "The drawing of the diagram itself is not subject to NFR-001: its notation is what the DISL specification gives and FR-012 holds. Where the specification leaves",
+      "tasks": [
+        "T070",
+        "T075"
+      ]
+    },
+    "NFR-003": {
+      "title": "The add-on MUST follow the light and the dark appearance of the page it is embedded in, wherever it can tell which of the two the reader uses.",
+      "tasks": [
+        "T030",
+        "T051",
+        "T122"
+      ]
+    },
+    "NFR-004": {
+      "title": "Every place where the add-on departs from Notion's styling MUST be listed with its reason where a reader of the add-on finds it.",
+      "tasks": [
+        "T113",
+        "T122"
+      ]
+    },
+    "NFR-005": {
+      "title": "The styling of the toolbox and the property grid MUST be a part of them, so that another add-on that uses them gets the same look with no styling of its own.",
+      "tasks": [
+        "T091",
+        "T111"
+      ]
+    },
+    "NFR-006": {
+      "title": "The toolbox, the property grid and the controls MUST be operable with the keyboard alone, with a visible focus, and MUST name their controls to assistive techno",
+      "tasks": [
+        "T089",
+        "T090",
+        "T110"
+      ]
+    },
+    "NFR-007": {
+      "title": "Text and controls MUST keep the contrast Notion's own have, in both appearances.",
+      "tasks": [
+        "T113",
+        "T122"
+      ]
+    },
+    "NFR-008": {
+      "title": "The add-on MUST show that it is loading, storing or has lost its connection in the manner Notion does, and MUST NOT block the page it is embedded in while it do",
+      "tasks": [
+        "T043",
+        "T076",
+        "T099"
+      ]
+    }
+  },
+  "size": "oversized",
+  "classification": {
+    "projectedFiles": 60,
+    "projectedTasks": 80,
+    "scopeSignal": "larger",
+    "verdict": "oversized"
+  },
+  "concerns": [
+    {
+      "note": "A page shown in a Notion embed block has no access to Notion data by itself; FR-010 may need a service beside the published pages, which conflicts with Notion repository principle IV",
+      "step": "specify"
+    },
+    {
+      "note": "SC-002 will not hold for technology-trends (518 rows, six sequential queries)"
+    },
+    {
+      "note": "SC-004's 5 seconds will not hold for an edit that moves many elements: Notion allows about three writes a second"
+    },
+    {
+      "note": "FR-021: somebody who may read the database but cannot grant the integration access sees the invitation to connect, not a read-only diagram"
+    },
+    {
+      "note": "Sign-in opens a window from inside an embed block; unverified until the first manual pass in Notion"
+    },
+    {
+      "note": "Two maintainer-only steps: registering the Notion public integration and creating the Cloudflare account with its secrets"
+    },
+    {
+      "note": "contracts/store.md, contracts/shared-parts.md, contracts/service.md and research D3 and D9 are behind the data model until T011 to T016 are done; code written from them before that would be wrong"
+    },
+    {
+      "note": "Nothing can be seen in a Notion page before pull request 2 is merged (T119), so every pass in Notion but the first (T078) comes after the merge, and a defect found there needs a further pull request"
+    },
+    {
+      "note": "T127 names no single file: how the site's catalogue learns a tool's availability in the Notion host is left to procedures/refresh-catalogue.md and may need a docs/tools.md in the Notion repository"
+    },
+    {
+      "note": "CRITICAL: the add-on id gartner-hype-cycle-graph is the specification file name, not the id of the tool type that Notion principle I and spec 011 published-tree ask for; the plan marks principle I PASS and records no deviation, and T017 does not amend that wording",
+      "step": "analyze"
+    },
+    {
+      "note": "contracts/store.md, contracts/shared-parts.md and research D3 and D9 still contradict the data model (references as rich text against Notion relations, the FBL history against a command history); T011 to T016 repair this only inside implement, and the plan Summary and contracts/published-tree.md are covered by none of them",
+      "step": "analyze"
+    },
+    {
+      "note": "a reference that names nothing loses its id in a store (data model, Store schema), but FR-007, SC-003 and the put report of contracts/store.md do not list that loss, so a document with such an end cannot round-trip with 0 differences",
+      "step": "analyze"
+    },
+    {
+      "note": "FR-021 and US2 scenario 8 promise a read-only diagram to somebody who may not edit; research R3 gives that person the invitation to connect, and no artifact says how read-only is told at open",
+      "step": "analyze"
+    },
+    {
+      "note": "risk R4 (granting access from inside an embed block) is first checked at T078, after all of Story 1 is built, though Story 1 needs the grant too; T078 needs a Worker at the registered redirect address, which is first deployed by T119; no fallback is decided",
+      "step": "analyze"
+    },
+    {
+      "note": "the words test of T042 cannot pass as written: the names it forbids under src/ include id, name, text, row, width, height, from, to, at, top and bottom, and as a word of its own is not defined",
+      "step": "analyze"
+    },
+    {
+      "note": "what the database holds after some row writes of one edit succeeded and a later one failed, after a page is closed with writes still queued, or when undo is pressed during a queue is not specified (storage checklist CHK001 to CHK004, open)",
+      "step": "analyze"
+    },
+    {
+      "note": "SC-004 promises the database within 5 seconds for every edit; research R2 and contracts/addon-address.md hold it for an edit of one element only",
+      "step": "analyze"
+    },
+    {
+      "note": "FR-008 requires the titles Gartner HypeCycle Graph - Data and Gartner Hypecycle Graph, which FR-030 and T105 rename",
+      "step": "analyze"
+    },
+    {
+      "note": "the four behaviours the specification leaves unstated (research, Differences) are raised as issues by T019, but no task says what the add-on does meanwhile or lists them in docs/disl-support.md",
+      "step": "analyze"
+    },
+    {
+      "note": "FR-028 is checked by import rules and the words test only: no test runs a second specification through the interpreter, the store and the canvas, and US1 scenario 6 has no test",
+      "step": "analyze"
+    },
+    {
+      "note": "94 checklist items are open (storage 42, interpretation-and-styling 52); the implement step stops on open checklists",
+      "step": "analyze"
+    },
+    {
+      "note": "the spec uses editor for a person, which the glossary keeps for a kind of tool; the data model says views page where the spec says diagram page",
+      "step": "analyze"
+    }
+  ],
+  "expectations": [
+    "No change to the DISL specification or the FBL binding of the tool type",
+    "No add-on for any other tool type",
+    "No live collaboration between two editors",
+    "Editing on a phone is not promised"
+  ],
+  "context": [
+    "area: etalii.adp/definitions/diagrams/gartner-hype-cycle-graph.dis and .md (DISL 0.3, persistence by the FBL binding gartner-hype-cycle-graph.fbl#ghg, document is .ghg YAML)",
+    "area: etalii.adp.ide.notion/addons/<id>/ served at /adp-notion/<id>/, built by scripts/build.mjs",
+    "area: etalii.adp.ide.vscode/examples/gartner-hypecycle-graph/ holds the six examples",
+    "area: Notion Showcase page, with Gartner Hypecycle Graph holding the database (one Name property, no rows) and the blank page Diagram",
+    "constraint: Notion repository principles I (one source of truth), II (every address under /adp-notion, embeddable) and IV (publication by GitHub Pages only)",
+    "constraint: the Claude session linked in the request answered 403 and was not read"
+  ],
+  "intent": "Publish the Gartner hype cycle graph as the first Notion add-on: interpreted from its DISL specification and FBL binding, stored in a Notion database, editable with toolbox, property grid and undo",
+  "reviewComments": [
+    {
+      "id": "ref-1791412795697-tqz0t",
+      "doc": "spec",
+      "anchor": {
+        "heading": "User Story 5 - A contributor reuses the toolbox and the property grid in another add-on (Priority: P5)",
+        "blockText": "1. **Given** the DISL specification of another tool type, **When** the toolbox is given it, **Then** it lists that type's toolbox items with their names, icons and descriptions.",
+        "line": 106
+      },
+      "comment": "Add also non-functional requirements. For example that the Notion styling should be followed wherever much as possible.",
+      "status": "applied",
+      "createdAt": "2026-10-07T22:39:55.698Z"
+    },
+    {
+      "id": "ref-1791415113379-0hhcq",
+      "doc": "data-model",
+      "anchor": {
+        "heading": "Data Model: The Gartner Hype Cycle Graph as a Notion Add-on",
+        "blockText": "Its entities are of five kinds. The **specification entities** are what the add-on is given and does not own. The **storage entities** are the database, its rows and the document they make. The **session entities** are what exists only while a page is open: the access a person granted, the open document, its edits, its history and its findings. The **published entities** are the add-on, its shared parts and the service. The **workspace entities** are the pages of the Notion workspace that show a graph.",
+        "line": 7
+      },
+      "comment": "The diagram under the overview header does not look nice (still text, no mermaid). Please redo it.",
+      "status": "applied",
+      "createdAt": "2026-10-07T23:18:33.380Z"
+    },
+    {
+      "id": "ref-1791415220818-gctnp",
+      "doc": "data-model",
+      "anchor": {
+        "heading": "Store",
+        "blockText": "**Rules**",
+        "line": 126
+      },
+      "comment": "\"A graph's document is kept in its store\" = i.e. as database rows and properties / relations.",
+      "status": "applied",
+      "createdAt": "2026-10-07T23:20:20.819Z"
+    },
+    {
+      "id": "ref-1791415263283-2kzzz",
+      "doc": "data-model",
+      "anchor": {
+        "heading": "Tool type",
+        "blockText": "**Rules**",
+        "line": 51
+      },
+      "comment": "Even more strict: The whole definition as specified using DISL and FBL needs to be honored.",
+      "status": "applied",
+      "createdAt": "2026-10-07T23:21:03.284Z"
+    },
+    {
+      "id": "ref-1791415314780-ng6b1",
+      "doc": "data-model",
+      "anchor": {
+        "heading": "Store",
+        "blockText": "### Store schema",
+        "line": 134
+      },
+      "comment": "Shouldn't this table not also talk about properties that present relations between elements? \nAnd properties that depict the type etc.?",
+      "status": "applied",
+      "createdAt": "2026-10-07T23:21:54.780Z"
+    },
+    {
+      "id": "ref-1791415407691-ctgzf",
+      "doc": "data-model",
+      "anchor": {
+        "heading": "Row",
+        "blockText": "### Document",
+        "line": 177
+      },
+      "comment": "No, for Notion the database should below the FBL be the single source of truth.",
+      "status": "applied",
+      "createdAt": "2026-10-07T23:23:27.691Z"
+    },
+    {
+      "id": "ref-1791415435268-1qmxo",
+      "doc": "data-model",
+      "anchor": {
+        "heading": "Document",
+        "blockText": "**Rules**",
+        "line": 189
+      },
+      "comment": "Not needed as the relations are also part of the Notion database.",
+      "status": "applied",
+      "createdAt": "2026-10-07T23:23:55.269Z"
+    },
+    {
+      "id": "ref-1791415488482-knzug",
+      "doc": "data-model",
+      "anchor": {
+        "heading": "Document",
+        "blockText": "## Session entities",
+        "line": 196
+      },
+      "comment": "The access token should only be requested when needed, and then cached for as long as possible. Only when it expires should a new token be requested.",
+      "status": "applied",
+      "createdAt": "2026-10-07T23:24:48.482Z"
+    },
+    {
+      "id": "ref-1791415547140-xxvsj",
+      "doc": "data-model",
+      "anchor": {
+        "heading": "State transitions: an open document",
+        "blockText": "### Edit",
+        "line": 271
+      },
+      "comment": "Splices below here should have an impact on specific database rows and properties. The trick is to find out which ones.",
+      "status": "applied",
+      "createdAt": "2026-10-07T23:25:47.140Z"
+    },
+    {
+      "id": "ref-1791415651256-omm56",
+      "doc": "data-model",
+      "anchor": {
+        "heading": "State transitions: an edit",
+        "blockText": "### History",
+        "line": 304
+      },
+      "comment": "If Notion does not provide it and it needs to be implemented then make sure that the undo/redo architecture is command based (just like the standalone application). Also make it a reusable component just like the DISL/FBL subsystems and all parts of the diagram visualization that can be reused. Take notice of how that is done in the other hosts.",
+      "status": "applied",
+      "createdAt": "2026-10-07T23:27:31.257Z"
+    },
+    {
+      "id": "ref-1791415698454-0a48h",
+      "doc": "data-model",
+      "anchor": {
+        "heading": "Add-on declaration",
+        "blockText": "### Shared part",
+        "line": 389
+      },
+      "comment": "persist the collapse/expand state of any panels also in the local browser storage.",
+      "status": "applied",
+      "createdAt": "2026-10-07T23:28:18.456Z"
+    },
+    {
+      "id": "ref-1791415763525-f9pmc",
+      "doc": "data-model",
+      "anchor": {
+        "heading": "Showcase entry",
+        "blockText": "### Example",
+        "line": 482
+      },
+      "comment": "These are more examples. so there should be multiple databases and one views page per database.",
+      "status": "applied",
+      "createdAt": "2026-10-07T23:29:23.526Z"
+    },
+    {
+      "id": "ref-1791418103648-qy02p",
+      "doc": "contracts/service",
+      "anchor": {
+        "heading": "Contract: Service",
+        "blockText": "The one service beside the published pages: a Cloudflare Worker that completes Notion's grant of access and forwards the add-ons' calls to the Notion API. Every Notion add-on codes against its endpoints, and a maintainer against its secrets. Decisions are in [research.md](../research.md) D1 and D8; the risks of signing in from an embedded page are R3 and R4.",
+        "line": 3
+      },
+      "comment": "Do the cloufdlare implementation last. Build or re-use an existing, simple service that is locally hosted.",
+      "status": "applied",
+      "createdAt": "2026-10-08T00:08:23.649Z"
+    }
+  ],
+  "assistant": "claude-vscode",
+  "decisions": [
+    {
+      "decision": "The add-on stays a static page in an embed block and reaches Notion through one stateless Cloudflare Worker that completes Notion's sign-in and forwards calls with the viewer's token",
+      "why": "Maintainer's answer to FR-010 on 2026-10-08: the Notion API answers no browser and the sign-in needs a client secret",
+      "rejected": "A Notion custom block (alpha, leaves /adp-notion); a token in the page"
+    },
+    {
+      "decision": "A store is one row per element with one property per key of the binding, and keeps no document text",
+      "why": "Maintainer's answer to FR-007 on 2026-10-08: readers sort and filter the elements in Notion",
+      "rejected": "One row per entry keeping its YAML lines; one row per graph"
+    },
+    {
+      "decision": "The store turns rows into the binding's document text in memory by replaying them through the FBL library, and writes back the rows that differ after each edit",
+      "why": "The binding stays the one description of the format and FBL's refusals, cascades and history keep working, with a store that names no tool type",
+      "rejected": "Mapping rows straight to the interpreter's model; a YAML emitter of our own"
+    },
+    {
+      "decision": "The FBL library is copied byte for byte from etalii.adp.ide.vscode src/core/fbl by a sync script with recorded commit and SHA-256",
+      "why": "It is general, tested and host-free; the organization already shares files between hosts this way",
+      "rejected": "A git dependency; a published package; writing FBL a third time"
+    },
+    {
+      "decision": "A new DISL interpreter in src/disl, sized to the twelve features this specification requires, with the rest listed in docs/disl-support.md",
+      "why": "No host interprets DISL; FR-002 and FR-004 rule out stating the diagram by hand",
+      "rejected": "A hand-stated DiagramDefinition on the Visual Studio Code host's canvas"
+    },
+    {
+      "decision": "The specification and binding are copied into the add-on's folder by a sync script and loaded at run time",
+      "why": "The build must be the same for the same revision, and a changed specification must need no code change",
+      "rejected": "Fetching from raw GitHub in the browser; checking out more repositories in the site's deployment"
+    },
+    {
+      "decision": "CEL is evaluated by @marcbachmann/cel-js, proven first by parsing every expression of the specification",
+      "why": "The specification uses CEL beyond the copied FBL evaluator's subset",
+      "rejected": "Extending the copied evaluator; an evaluator of our own unless the library falls short"
+    },
+    {
+      "decision": "Undo and redo are the FBL library's history, one entry per gesture, stored as row writes",
+      "why": "An embedded page has no part in Notion's own undo, and the library already has exact undo with drift refusal",
+      "rejected": "A history of our own"
+    },
+    {
+      "decision": "Shared parts live in src/ and scripts/build.mjs compiles them into each add-on's folder, installing its own dependencies; the command line stays",
+      "why": "Every folder under addons/ is published as an add-on, and the site's deployment must not change",
+      "rejected": "Hand-written modules copied into each add-on"
+    },
+    {
+      "decision": "The add-on's id is gartner-hype-cycle-graph and its embed address carries ?store=<database id>",
+      "why": "The language id and the origin fail the id pattern; the file name is etalii.adp's own spelling",
+      "rejected": "gartner-hypecycle-graph"
+    },
+    {
+      "decision": "Where the data model and the earlier contracts or research differ, the tasks follow the data model: relations are Notion relations, an edit writes the rows its splices land on, and the history is a command-based part of its own in src/history",
+      "why": "The data model carries the maintainer's review comments of 2026-10-07, made after the contracts and the research were written; T011 to T016 bring those in line first",
+      "rejected": "Following contracts/store.md and research D3 and D9 as written"
+    },
+    {
+      "decision": "Each story's wiring of the frame is a module of its own under src/frame/parts, attached through src/frame/page.ts and bundled with src/frame/main.ts by the build",
+      "why": "Every file has one owner phase, and main.ts would otherwise be edited by Stories 1, 2 and 3",
+      "rejected": "One main.ts that each story extends"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "Plan, research, data model and five contracts for the first Notion add-on: a general DISL interpreter, the copied FBL library, a row-per-element store, and a small sign-in and forwarding service",
+      "key_finding": "No host interprets DISL yet, but the Visual Studio Code host has a complete host-free FBL library with undo and drift refusal that the add-on can copy unchanged"
+    },
+    "tasks": {
+      "summary": "134 tasks in 8 phases: Setup, Foundational (etalii.adp pull request 1, then the Notion repository's shared spine), five story phases, and Polish with delivery through four pull requests; ten tasks are a maintainer's"
+    }
+  },
+  "approach": "A static add-on at /adp-notion/gartner-hype-cycle-graph/ is compiled from shared parts that name no tool type: a new DISL interpreter, the Visual Studio Code host's FBL library copied unchanged, a store that keeps a document as one row per element, a canvas, and Notion-styled panels. The store rebuilds the binding's document text in memory, so FBL plans every edit and keeps the undo history, and each edit is written back as row changes. A stateless Cloudflare Worker completes Notion's sign-in and forwards the calls with the viewer's token.",
+  "currentTask": "T019",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "Fetched etalii.adp.ide.notion and created the worktree on features/012-notion-hype-cycle-addon from origin/develop a8b691a",
+      "files": [
+        "etalii.adp.ide.notion/.claude/worktrees/012-notion-hype-cycle-addon"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "Fetched etalii.adp.ide.vscode; origin/develop is 271a92ca83548276f63b669454637491f31f9264"
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "Fetched etalii.adp.ide.standalone; origin/develop is 70ac0263e86a189aee8a8ee690c56e80a8c99aa5"
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "Added the package with its scripts and dependencies; every licence is Apache-2.0-compatible",
+      "files": [
+        "etalii.adp.ide.notion/package.json",
+        "etalii.adp.ide.notion/package-lock.json"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "Configured TypeScript 5.9, strict, for src, service and test",
+      "files": [
+        "etalii.adp.ide.notion/tsconfig.json"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "Configured vitest with a jsdom project for panels, frame and canvas",
+      "files": [
+        "etalii.adp.ide.notion/vitest.config.mts"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "Configured eslint with src/fbl left out",
+      "files": [
+        "etalii.adp.ide.notion/eslint.config.mjs"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "Ignored node_modules, dist and .wrangler",
+      "files": [
+        "etalii.adp.ide.notion/.gitignore"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "Wrote ensure-dependencies, which runs npm ci when node_modules is missing or stale",
+      "files": [
+        "etalii.adp.ide.notion/scripts/ensure-dependencies.mjs"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "Defined Store in the glossary, beside Body",
+      "files": [
+        "docs/terminology.md"
+      ]
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "Stated the token's renewal: POST /refresh with Notion's rotating refresh token, tried once on a 401; no right of the person is known before a write",
+      "files": [
+        "specs/012-notion-hype-cycle-addon/contracts/service.md"
+      ]
+    },
+    "T014": {
+      "status": "DONE",
+      "did": "Named the local-storage key of a panel's collapsed state and said setup asks for no token",
+      "files": [
+        "specs/012-notion-hype-cycle-addon/contracts/addon-address.md"
+      ]
+    },
+    "T017": {
+      "status": "DONE",
+      "did": "Amended the Notion repository's principles to 1.1.0: the service, the build that installs what it needs, the binding its specification names, the id as the specification's file name",
+      "files": [
+        ".specify/memory/repositories/etalii.adp.ide.notion.md"
+      ]
+    },
+    "T018": {
+      "status": "DONE",
+      "did": "Pointed spec 011's published-tree contract at its successor",
+      "files": [
+        "specs/011-notion-repository/contracts/published-tree.md"
+      ]
+    },
+    "T019": {
+      "status": "DONE",
+      "did": "Raised the four differences as issues 91 to 94 in etalii.adp"
+    }
+  }
+}
