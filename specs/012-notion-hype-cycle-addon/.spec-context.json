@@ -1024,6 +1024,22 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-08T14:17:33.947Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T128",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:42:47.518Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T129",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:42:47.905Z"
     }
   ],
   "last_action": "1101 tests pass and 9 are expected failures naming issue 97; branch pushed, pull request 2 not opened",
@@ -1767,7 +1783,7 @@
     }
   },
   "approach": "A static add-on at /adp-notion/gartner-hype-cycle-graph/ is compiled from shared parts that name no tool type: a new DISL interpreter, the Visual Studio Code host's FBL library copied unchanged, a store that keeps a document as one row per element, a canvas, and Notion-styled panels. The store rebuilds the binding's document text in memory, so FBL plans every edit and keeps the undo history, and each edit is written back as row changes. A stateless Cloudflare Worker completes Notion's sign-in and forwards the calls with the viewer's token.",
-  "currentTask": "T078",
+  "currentTask": "T129",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -2622,6 +2638,17 @@
     "T078": {
       "status": "DONE",
       "did": "The maintainer made the first pass in a Notion embed block against the deployed Worker: Connect to Notion granted access from inside the embed and the diagram of a store was drawn, with toolbox, property grid, filters, legend and the viewpoint toggle"
+    },
+    "T128": {
+      "status": "DONE",
+      "did": "The Tools row of the Gartner hype cycle graph states the Notion host as Work-in-progress, as the maintainer set it on 2026-10-08"
+    },
+    "T129": {
+      "status": "DONE",
+      "did": "Brought the section The Notion row up to date: the row's states per host, and what the tool is in the Notion host",
+      "files": [
+        "definitions/diagrams/gartner-hype-cycle-graph.md"
+      ]
     }
   },
   "verified": [

@@ -407,8 +407,8 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 - [ ] **T126** [P] Refresh the `notion` entry from the Notion repository's `README.md` at the merge commit of T119: its `state`, without `unavailableNote`, with the new `revision` and `taken` (FR-031) · etalii.adp.site/src/data/hosts.yaml
 - [ ] **T127** [P] Make the tool catalogue say the Gartner hype cycle graph is available in the Notion host, by the site's `procedures/refresh-catalogue.md` (FR-031) · etalii.adp.site/src/content/catalogue/
-- [ ] **T128** [P] State the tool's state in the Notion host on the Gartner hype cycle row of the "Tools" database (FR-032) · Notion workspace/Tools
-- [ ] **T129** [P] Bring the section "The Notion row" up to date with T128. The `.dis` is not touched. The change travels in pull request 4 · etalii.adp/definitions/diagrams/gartner-hype-cycle-graph.md
+- [x] **T128** [P] State the tool's state in the Notion host on the Gartner hype cycle row of the "Tools" database (FR-032) · Notion workspace/Tools
+- [x] **T129** [P] Bring the section "The Notion row" up to date with T128. The `.dis` is not touched. The change travels in pull request 4 · etalii.adp/definitions/diagrams/gartner-hype-cycle-graph.md
 
 **⟶ Wait for Wave 3 to finish, then:**
 
