@@ -22,6 +22,7 @@ and an undo must return the document the undone edit started from (FBL section 1
 then checked for its names (FBL section 14.1, step 4): every rule a `parent`, `cascade`, `reference.to`, `within` or
 `files` names exists in its binding, and a reference's `by` is an attribute every rule it names binds, or `id` when
 every rule it names stores its id with `id.from` (DISL reserves `id`, so it is never an attribute's name).
+The fixtures under a folder named `*-equivalence` read one model in different formats: their `read` must be identical.
 
 Prints one line per example and exits 1 when any example is invalid or names an unknown schema.
 """
@@ -401,6 +402,18 @@ for path in examples:
     else:
         via = f" (legacy fixture, read through: {', '.join(aliases)})" if aliases else ""
         print(f"ok   {name}{via}")
+
+# The fixtures under a folder named '*-equivalence' read the same model in different formats: what each reads must be
+# the same.
+for folder in sorted((root / "fbl" / "fixtures").glob("*-equivalence")):
+    reads = {p.relative_to(repository).as_posix(): json.loads(p.read_text(encoding="utf-8")).get("read") for p in sorted(folder.rglob("fixture.json"))}
+    first = next(iter(reads.values()), None)
+    differing = [name for name, read in reads.items() if read != first]
+    if len(reads) < 2 or differing:
+        failures += 1
+        print(f"FAIL {folder.relative_to(repository).as_posix()}: " + (f"reads differently in {', '.join(differing)}" if differing else "an equivalence needs two fixtures or more"))
+    else:
+        print(f"ok   {folder.relative_to(repository).as_posix()}: {len(reads)} fixtures read the same {len(first.get('elements', []))} elements")
 
 print(f"{len(examples)} example(s), {failures} invalid.")
 sys.exit(1 if failures or not examples else 0)

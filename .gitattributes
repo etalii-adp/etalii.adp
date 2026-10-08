@@ -7,3 +7,6 @@
 # FBL fixtures are compared byte for byte (line endings, byte-order marks), so Git must never convert them.
 specifications/fbl/fixtures/** -text
 specifications/fbl/registrations/** -text
+
+# The knowledge examples are read byte for byte by the knowledge-equivalence fixture, CRLF endings included.
+definitions/designers/examples/** -text

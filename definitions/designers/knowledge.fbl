@@ -207,7 +207,7 @@
           "at": "/views/*/groupOrder/*",
           "parent": { "rules": ["view"], "slot": "groupOrder" },
           "attributes": { "key": { "key": "key", "empty": "refuse" } },
-          "insert": { "place": "after-last", "container": "groupOrder", "create": { "at": { "after": "name" } }, "keys": ["key"] },
+          "insert": { "place": "after-last", "container": "groupOrder", "create": { "at": { "after": "groupBy" } }, "keys": ["key"] },
           "remove": { "container": "remove-when-empty" }
         },
         {
@@ -216,7 +216,7 @@
           "at": "/views/*/hiddenGroups/*",
           "parent": { "rules": ["view"], "slot": "hiddenGroups" },
           "attributes": { "key": { "key": "key", "empty": "refuse" } },
-          "insert": { "place": "after-last", "container": "hiddenGroups", "create": { "at": { "after": "name" } }, "keys": ["key"] },
+          "insert": { "place": "after-last", "container": "hiddenGroups", "create": { "at": { "after": "groupBy" } }, "keys": ["key"] },
           "remove": { "container": "remove-when-empty" }
         },
         {
@@ -225,7 +225,7 @@
           "at": "/views/*/collapsed/*",
           "parent": { "rules": ["view"], "slot": "collapsed" },
           "attributes": { "key": { "key": "key", "empty": "refuse" } },
-          "insert": { "place": "after-last", "container": "collapsed", "create": { "at": { "after": "name" } }, "keys": ["key"] },
+          "insert": { "place": "after-last", "container": "collapsed", "create": { "at": { "after": "groupBy" } }, "keys": ["key"] },
           "remove": { "container": "remove-when-empty" }
         },
         {
@@ -504,7 +504,7 @@
           "at": "/views/*/groupOrder/*",
           "parent": { "rules": ["view"], "slot": "groupOrder" },
           "attributes": { "key": { "key": "key", "empty": "refuse" } },
-          "insert": { "place": "after-last", "container": "groupOrder", "create": { "at": { "after": "name" } }, "emit": "{ \"key\": \"{key}\" }" },
+          "insert": { "place": "after-last", "container": "groupOrder", "create": { "at": { "after": "groupBy" } }, "emit": "{ \"key\": \"{key}\" }" },
           "remove": { "container": "remove-when-empty" }
         },
         {
@@ -513,7 +513,7 @@
           "at": "/views/*/hiddenGroups/*",
           "parent": { "rules": ["view"], "slot": "hiddenGroups" },
           "attributes": { "key": { "key": "key", "empty": "refuse" } },
-          "insert": { "place": "after-last", "container": "hiddenGroups", "create": { "at": { "after": "name" } }, "emit": "{ \"key\": \"{key}\" }" },
+          "insert": { "place": "after-last", "container": "hiddenGroups", "create": { "at": { "after": "groupBy" } }, "emit": "{ \"key\": \"{key}\" }" },
           "remove": { "container": "remove-when-empty" }
         },
         {
@@ -522,7 +522,7 @@
           "at": "/views/*/collapsed/*",
           "parent": { "rules": ["view"], "slot": "collapsed" },
           "attributes": { "key": { "key": "key", "empty": "refuse" } },
-          "insert": { "place": "after-last", "container": "collapsed", "create": { "at": { "after": "name" } }, "emit": "{ \"key\": \"{key}\" }" },
+          "insert": { "place": "after-last", "container": "collapsed", "create": { "at": { "after": "groupBy" } }, "emit": "{ \"key\": \"{key}\" }" },
           "remove": { "container": "remove-when-empty" }
         },
         {
