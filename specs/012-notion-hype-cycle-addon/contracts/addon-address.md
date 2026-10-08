@@ -62,7 +62,8 @@ Elements a test may rely on. Each is present only in the states that show it.
 | `id="connect"` | The control that starts the grant of access |
 | `id="disconnect"` | The control that removes the kept token and puts the page in `connect`; present in every state that has a token |
 | `id="prepare"` | The control that adds the missing properties to the database |
-| `id="open-in-tab"` | A link to this same address for a browser tab of its own, offered beside `id="connect"` (research R4) |
+| `id="open-in-tab"` | While a grant of access is in progress: a link to the grant itself, for the person to open when no window opened, as in the Notion desktop app (research R4) |
+| `id="cancel-connect"` | While a grant of access is in progress: the control that stops waiting for it |
 
 | Attribute | On | Value |
 | --- | --- | --- |

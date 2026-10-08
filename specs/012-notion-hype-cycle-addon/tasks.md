@@ -461,3 +461,13 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 **⟶ Wait for T136 to T139 to finish, then:**
 
 - [ ] **T140** Deliver T136 to T138 in a pull request into `develop` of `etalii.adp.ide.notion` that names this folder and the etalii.adp commit of T135, and tick them once it is merged · etalii.adp.ide.notion
+
+---
+
+## Phase 10: The grant of access in the Notion desktop app (2026-10-09)
+
+**Purpose**: the first pass (T078) showed that the grant completes in a web browser and not in the Notion desktop app. The service hands a completed grant over to the page that started it (contracts/service.md, `POST /grant`).
+
+- [x] **T141** Amend the Notion repository's principles from 1.1.0 to 1.2.0 (MINOR) through `/speckit-constitution`: the service keeps no state but a grant of access in progress, for at most two minutes and handed over once · etalii.adp/.specify/memory/repositories/etalii.adp.ide.notion.md
+- [ ] **T142** Keep a completed grant for at most 120 seconds under its state and hand it over once to the verifier's holder, in the handler, the local service and the Worker with a Durable Object; have the session ask for it beside the message of the window it opened, and the page show the link to the grant and a way to stop waiting (FR-010, research R4) · etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/service/worker.ts, etalii.adp.ide.notion/service/wrangler.toml, etalii.adp.ide.notion/scripts/service.mjs, etalii.adp.ide.notion/src/store/session.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
+- [ ] **T143** **Maintainer**: in the Notion desktop app, connect a diagram page of the Showcase and say whether the diagram opens after the grant is approved in the browser · Notion desktop app

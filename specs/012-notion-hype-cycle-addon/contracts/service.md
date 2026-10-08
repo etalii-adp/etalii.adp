@@ -17,6 +17,7 @@ The service is one handler that knows no platform: it takes a request and its co
 | `GET <service>/authorize?state=<state>` | Redirects to Notion's grant of access |
 | `GET <service>/callback?code=<code>&state=<state>` | Exchanges the code for a token and hands it to the page that asked |
 | `POST <service>/refresh` | Exchanges a refresh token for a new access token and a new refresh token |
+| `POST <service>/grant` | Hands a completed grant over to the page that started it, once |
 | `OPTIONS <service>/notion/<path>` | Answers the browser's preflight |
 | `GET`, `POST`, `PATCH` `<service>/notion/<path>` | Forwards the call to `https://api.notion.com/<path>` |
 | Anything else | `404`, with no body that names a secret |
@@ -52,6 +53,20 @@ Notion's answer to the exchange carries a `refresh_token` beside the `access_tok
 | The answer on failure is Notion's status with `{ "error": "<Notion's error code>" }`; the add-on then removes what it kept and shows `connect` | FR-010 |
 | It answers the origin of the `/notion/<path>` rules only, with the same preflight, and is never cached | FR-010 |
 
+### `POST /grant`
+
+A page in a web browser gets its token from the window it opened. A page in the Notion desktop app cannot: the app hands the grant to the system's browser, a window that has no way back to the page, and the app keeps its own storage. So the service hands a completed grant over, once, to the page that started it (the maintainer's decision of 2026-10-09, which replaces the rule that the service keeps no state).
+
+| Rule | Requirement |
+| --- | --- |
+| The add-on makes a random `verifier`, 32 to 128 characters of `A-Z`, `a-z`, `0-9`, `-` and `_`, and gives as `state` its SHA-256 in base64url without padding. The verifier never appears in an address | FR-010 |
+| `/callback` keeps what it would post to the window that opened it, the token or the error, under that `state`, for at most 120 seconds. Where no window opened it, its page stays open and says in one sentence that access is granted and the diagram opens by itself | FR-010 |
+| `POST /grant` with the body `{ "verifier": "<verifier>" }` answers `200` and that object when a grant is kept under the verifier's SHA-256, and removes it, so it is read once. With none it answers `204` and no body. A verifier of another form is `400` | FR-010 |
+| The state alone hands nothing over: it is the verifier that is asked for, and only the page that made it has it | FR-010 |
+| The add-on asks every 2 seconds while a grant is in progress, for at most 5 minutes, and takes whichever comes first, the message of the window it opened or this answer. When the message comes first it asks once more, so that the kept copy is removed at once | FR-010 |
+| It answers the origin of the `/notion/<path>` rules only, with the same preflight, and is never cached. Nothing of a grant is written to a log | FR-010 |
+| On Cloudflare the grants are kept by a Durable Object, one per state, which removes its grant by an alarm after 120 seconds. The local service keeps them in memory | D8 |
+
 ### `/notion/<path>`
 
 | Rule | Requirement |
@@ -85,8 +100,8 @@ Whether a person may write to a store decides between the states `ready` and `re
 
 | Rule | Requirement |
 | --- | --- |
-| No state: no database, no key-value store, no cookie, no session | D8 |
-| No token and no document: neither is stored, and neither is written to a log | FR-006, FR-010 |
+| One kind of state and no other: the grant in progress of `POST /grant`, kept for at most 120 seconds and removed when it is read. No cookie, no session, no account of who asked | D8, R4 |
+| No document, ever. A token is kept only as that grant in progress, for at most 120 seconds, and is written to no log | FR-006, FR-010 |
 | It reads no request body beyond passing it on | FR-006 |
 
 ## The token in the browser
@@ -98,7 +113,7 @@ Whether a person may write to a store decides between the states `ready` and `re
 | No document, row or history is kept there | FR-006 |
 | A token is asked for only when a call needs one and none is kept. A `401` from Notion is answered by one `POST /refresh`, and the call is made again with the new token; where Notion refuses the refresh, the key is removed and the page is in the state `connect`. A refresh that cannot reach the service or Notion keeps the key, and the status is `offline` | FR-010 |
 | The page offers a control that removes the key, `id="disconnect"` | FR-010 |
-| A browser that keeps an embedded page's storage apart from a tab's shows `connect` again in the embed after a grant made in a tab; `id="open-in-tab"` is the way through, and the first manual pass checks it | Research R4 |
+| A page whose grant is completed in another window, as in the Notion desktop app, which hands the grant to the system's browser, gets its token through `POST /grant`. `id="open-in-tab"` is the link that opens the grant when no window opened by itself | Research R4 |
 
 ## Secrets and configuration
 
