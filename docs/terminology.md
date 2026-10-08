@@ -53,6 +53,7 @@ Many tools do not store their model in a definition file of their own: the model
 - **Host**: an environment that ADP's tools run in: standalone, IntelliJ, VS Code, Eclipse or Notion.
 - **IDE host**: one of the four hosts that are IDEs: standalone, IntelliJ, VS Code and Eclipse. Notion is a host and not an IDE host.
 - **Notion add-on**: a web page that shows one tool inside a Notion page. It is how a tool runs in the Notion host.
+- **Store**: the Notion database that holds one document of a tool in the Notion host, as one row per element. It is the document's only store, as a body is where the model is another tool's file: ADP keeps no second copy beside either. A store is not a body: it holds no file and no text, and a binding reads its rows.
 - **Runtime**: the software in a host that loads a specification file and lets users create and change definition files with it.
 - **Canvas**: the surface a diagram or a designer is drawn on.
 - **Finding**: the result of evaluating a rule or reading a model, such as a broken constraint, an unreadable entry or a duplicate id. It has a severity (error, warning, info or hint) and says where it is: an element, a source location in a file, or a subject that is not drawn. DISL 0.1 called it a *problem*.
