@@ -149,7 +149,7 @@ A document **MUST NOT** contain duplicate keys. Properties whose names start wit
 
 ### 7.1 Overview
 
-`surface` says how the model is laid out for the user, by naming which types and attributes of the metamodel play which part. It names no designer type of its own; a host's component for a `kind` serves every designer type of that kind.
+`surface` says how the model is laid out for the user, by naming which types and attributes of the metamodel play which part. It names no designer type of its own; a host's component for a `kind` serves all designer types of that kind.
 
 | Property | Type | Description |
 |----------|------|-------------|
