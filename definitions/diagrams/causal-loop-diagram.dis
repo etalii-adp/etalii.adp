@@ -153,8 +153,8 @@
           },
           "members": {
             "type": "Variable", "many": true, "minItems": 1, "uniqueItems": true,
-            "label": "Runs through", "group": "Feedback", "order": 5, "readOnly": true,
-            "doc": "The cycle, in the order the loop runs; the last variable links back to the first. Edited on the canvas, where the path can be seen."
+            "label": "Runs through", "group": "Feedback", "order": 5,
+            "doc": "The cycle, in the order the loop runs; the last variable links back to the first. Chosen in the inspector among the cycles the arrows form through the loop's variables."
           },
           "computed": {
             "type": "LoopPolarity", "derived": "cyclePolarity(self.members)",
@@ -401,7 +401,12 @@
           { "kind": "computed", "label": "Computed polarity", "value": { "cel": "self.computed" }, "doc": "Counted from the polarity of the links around the cycle. Change an arrow to change this." },
           { "kind": "computed", "label": "Stated polarity", "value": { "cel": "self.stated" }, "visible": "self.disagrees",
             "doc": "Shown only where it differs from the computed polarity. Neither is corrected for you: change the identifier or change an arrow." },
-          { "kind": "computed", "label": "Runs through", "value": { "cel": "self.members.map(m, m.name).join(' → ')" }, "doc": "The cycle a loop claims is edited on the canvas, where the path can be seen." }
+          { "attribute": "members", "label": "Runs through", "widget": "select",
+            "options": { "cel": "[{'value': self.members, 'label': self.members.map(m, m.name).join(' → ')}] + elementaryCycles('CausalLink').filter(c, c.exists(v, self.members.exists(m, m.id == v.id)) && !diagram.nodesOfType('Loop').exists(l, signature(l.members) == signature(c))).map(c, {'value': c, 'label': c.map(v, v.name).join(' → ')})" },
+            "validate": [ { "timing": "commit",
+              "rule": "value == self.members || (value.exists(v, self.members.exists(m, m.id == v.id)) && !diagram.nodesOfType('Loop').exists(l, signature(l.members) == signature(value)) && elementaryCycles('CausalLink').exists(c, c == value))",
+              "message": { "cel": "'\\'' + value.map(v, v.name).join(' → ') + '\\' is not a cycle this loop can run through: choose one the arrows form through its variables that no other loop claims.'" } } ],
+            "doc": "The loop's own cycle, first and as written, then every other cycle the arrows form through at least one of its variables that no loop claims yet. Choosing one changes what the loop runs through, as one undo step." }
         ] },
         { "kind": "problems" }
       ]
