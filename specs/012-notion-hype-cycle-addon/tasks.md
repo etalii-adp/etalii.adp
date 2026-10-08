@@ -77,7 +77,7 @@ Files in `etalii.adp.ide.notion`: `scripts/sync-fbl.mjs`, `scripts/sync-specific
 **⟶ Wait for Wave 1 to finish, then:**
 
 - [x] **T020** Run `python .github/scripts/validate-examples.py` and `python .github/scripts/licence-check.py`, commit, push the branch and open pull request 1 into `develop` · etalii.adp
-- [ ] **T021** **Maintainer**: merge pull request 1 with a merge commit · etalii.adp
+- [x] **T021** **Maintainer**: merge pull request 1 with a merge commit · etalii.adp
 
 ### Part B: `etalii.adp.ide.notion`
 
@@ -306,7 +306,7 @@ Files: none in a repository. Pages: the entry "Gartner hype cycle graph" and nin
 
 - [ ] **T104** [P] [US4] **Maintainer**: give a `NOTION_TOKEN` of an integration the Showcase is shared with, for `scripts/store.mjs`; it goes in the environment and in no file · Notion workspace
 - [x] **T105** [P] [US4] Rename the first graph's pages to the tool type's display name, `Gartner hype cycle graph` and `Gartner hype cycle graph - Data`, keep `Diagram`, and set the embed of `Diagram` to `https://etalii.net/adp-notion/gartner-hype-cycle-graph/?store=3f2be2fd05b680f5bfe1d89398eabb4e`. The page "Root" is left as it is (FR-008, FR-030) · Notion workspace/Showcase/Gartner hype cycle graph
-- [ ] **T106** [P] [US4] Create nine entries under the Showcase, titled as the store contract lists them, each with a database `<title> - Data` and a page `Diagram` whose one embed block names that database (FR-029) · Notion workspace/Showcase
+- [x] **T106** [P] [US4] Create nine entries under the Showcase, titled as the store contract lists them, each with a database `<title> - Data` and a page `Diagram` whose one embed block names that database (FR-029) · Notion workspace/Showcase
 
 **⟶ Wait for Wave 1 to finish, then:**
 
@@ -363,7 +363,7 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-**The Cloudflare Worker, last** (the maintainer's instruction of 2026-10-08): everything before this ran against the local service.
+**The Cloudflare Worker, last** (the maintainer's instruction of 2026-10-08): everything before this ran against the local service. Pull request 2 was opened on 2026-10-08 before these three tasks, so that the published address answers and the embed blocks of the Showcase can be seen in Notion; the Worker's address and the job that deploys it then travel in a pull request of their own into `develop` of `etalii.adp.ide.notion`, merged before T120.
 
 - [ ] **T032** **Maintainer**: create the Cloudflare account and note the Worker's address · Cloudflare
 
@@ -384,7 +384,7 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 **⟶ Wait for T117 and T021 to finish, then:**
 
-- [ ] **T118** Push the branch and open pull request 2 into `develop`; its description names `specs/012-notion-hype-cycle-addon/` and the `etalii.adp` commit of T021 · etalii.adp.ide.notion
+- [x] **T118** Push the branch and open pull request 2 into `develop`; its description names `specs/012-notion-hype-cycle-addon/` and the `etalii.adp` commit of T021 · etalii.adp.ide.notion
 - [ ] **T119** **Maintainer**: merge pull request 2 with a merge commit. Check that `Build` passes on `develop` and deploys the Worker, and that the site's `deploy` publishes `https://etalii.net/adp-notion/gartner-hype-cycle-graph/` · etalii.adp.ide.notion
 
 **⟶ Wait for T119 and T108 to finish, then:**

@@ -904,6 +904,30 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-08T08:06:24.526Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T11:33:37.942Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T106",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T11:33:38.345Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T118",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T11:35:02.816Z"
     }
   ],
   "last_action": "1101 tests pass and 9 are expected failures naming issue 97; branch pushed, pull request 2 not opened",
@@ -1647,7 +1671,7 @@
     }
   },
   "approach": "A static add-on at /adp-notion/gartner-hype-cycle-graph/ is compiled from shared parts that name no tool type: a new DISL interpreter, the Visual Studio Code host's FBL library copied unchanged, a store that keeps a document as one row per element, a canvas, and Notion-styled panels. The store rebuilds the binding's document text in memory, so FBL plans every edit and keeps the undo history, and each edit is written back as row changes. A stateless Cloudflare Worker completes Notion's sign-in and forwards the calls with the viewer's token.",
-  "currentTask": "T105",
+  "currentTask": "T118",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -2436,6 +2460,18 @@
     "T105": {
       "status": "DONE",
       "did": "Renamed the first graph's entry and database to the display name and set the Diagram page's embed to the add-on's address with its store"
+    },
+    "T021": {
+      "status": "DONE",
+      "did": "The maintainer merged pull request 95 as c154a05"
+    },
+    "T106": {
+      "status": "DONE",
+      "did": "Created nine entries under the Showcase, each with its database and a Diagram page whose embed names that database"
+    },
+    "T118": {
+      "status": "DONE",
+      "did": "Pushed the branch and opened pull request 3 in etalii.adp.ide.notion, naming the feature's folder and etalii.adp commit c154a05"
     }
   },
   "verified": [
