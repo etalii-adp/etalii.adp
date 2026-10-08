@@ -27,7 +27,7 @@ Three roles appear below. A **reader** opens a Notion page that holds the diagra
 
 ### Session 2026-10-09
 
-The maintainer added two requirements while the feature was being finished (FR-033 to FR-037). Two points of them are open and marked below. On 2026-10-09 the maintainer settled the third: the add-on adds the missing properties itself, once the user has agreed (FR-035).
+The maintainer added two requirements while the feature was being finished (FR-033 to FR-037). One point of them is open and marked below (FR-033). The maintainer said which properties are internal: everything that is technically needed and not relevant to understand the domain, such as coordinates and row levels (FR-036). On 2026-10-09 the maintainer settled the third: the add-on adds the missing properties itself, once the user has agreed (FR-035).
 - The other hosts ship nine examples, not six: the plan step found `llms-and-agents`, `technology-trends` and `warfare-in-ukraine` beside the six named when this specification was written.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -161,7 +161,7 @@ A contributor starts a second Notion add-on for another tool type. They do not w
 - **FR-033**: When the add-on is added to a page without a store, it MUST ask the user to select a database, from the databases that user's access reaches, and MUST NOT need the user to find and type a database id. [NEEDS CLARIFICATION: an embedded page cannot change the address of its own embed block. Where is the choice kept: in the address, which the add-on then gives the user to paste into the block, or elsewhere?]
 - **FR-034**: For the selected database the add-on MUST check whether the properties the tool type needs are there, or can be projected from properties the database already has, such as an existing property of the right type under another name.
 - **FR-035**: Where properties are missing and cannot be projected, the add-on MUST tell the user which ones and offer to add them. It adds them itself once the user has agreed, and MUST NOT change a database before that.
-- **FR-036**: The properties of a store that hold internal, technical information MUST be hidden in the database's views, so that a reader of the table sees what the graph is about. [NEEDS CLARIFICATION: which properties count as internal: the store's own `Kind` and `Order`, the stored id, also the properties of placement and attachment?]
+- **FR-036**: The properties of a store that hold internal, technical information MUST be hidden in the database's views, so that a reader of the table sees what the graph is about. A property is internal when it is needed to draw or to keep the graph and tells nothing of its domain: where an element is placed and how large it is drawn, where a relation is attached, and the order of the rows. For the Gartner hype cycle graph these are `Order`, `row`, `at`, `width`, `height`, `peak-end`, `trough-end`, `slope-end`, `from-phase`, `from-edge`, `from-at`, `to-phase`, `to-edge` and `to-at`. What stays shown is the id, `name`, `Kind`, `description`, `tags`, `start`, `stop`, `date`, `phases`, `text`, `from`, `to` and `unit`. The add-on MUST find the internal properties from the specification and name none itself (FR-004).
 - **FR-037**: FR-036 MUST hold for every store that exists when this feature is delivered, the ten of the Showcase, and for every database the add-on prepares or fills from then on.
 
 **Showing**

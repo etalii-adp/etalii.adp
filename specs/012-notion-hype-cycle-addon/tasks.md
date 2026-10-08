@@ -447,16 +447,16 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 ## Phase 9: Addendum of 2026-10-09 (FR-033 to FR-037)
 
-**Purpose**: the two requirements the maintainer added while the feature was being finished: selecting a database when the add-on is added, with a check and a projection of its properties, and hiding the properties that hold internal information. Two points are open in the specification (FR-033 and FR-036); T135 settles them before anything is built.
+**Purpose**: the two requirements the maintainer added while the feature was being finished: selecting a database when the add-on is added, with a check and a projection of its properties, and hiding the properties that hold internal information. One point is open in the specification (FR-033); T135 settles it before anything is built, and finds the rule by which the add-on tells an internal property from the specification alone, raising it in `etalii.adp` if the specification cannot say.
 
-- [ ] **T135** Settle the two open points of FR-033 and FR-036 with the maintainer, remove their markers from the specification, and bring the address, store and service contracts and the data model in line: where a selected store is kept, the call that lists the databases a person's access reaches, what projecting a property means and where a projection is kept, and which properties are internal · etalii.adp/specs/012-notion-hype-cycle-addon/
+- [ ] **T135** Settle the open point of FR-033 with the maintainer, remove its marker from the specification, and bring the address, store and service contracts and the data model in line: where a selected store is kept, the call that lists the databases a person's access reaches, what projecting a property means and where a projection is kept, and the rule that finds the internal properties from a specification · etalii.adp/specs/012-notion-hype-cycle-addon/
 
 **⟶ Wait for T135 to finish, then:**
 
 - [ ] **T136** [P] In the state `setup`, list the databases the person's access reaches and let the user select one; the service forwards the one call that lists them (FR-033) · etalii.adp.ide.notion/src/frame/parts/, etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/src/store/notion.ts
 - [ ] **T137** [P] Check a selected database against the schema, project the properties that can be, and ask the user about the ones that are missing before anything is changed (FR-034, FR-035) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
 - [ ] **T138** [P] Hide the internal properties in a database's views when the add-on or `scripts/store.mjs` prepares or fills it (FR-036, FR-037) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/scripts/store.mjs
-- [ ] **T139** [P] Hide the internal properties in the views of the ten stores of the Showcase (FR-037) · Notion workspace/Showcase
+- [x] **T139** [P] Hide the internal properties in the views of the ten stores of the Showcase (FR-037) · Notion workspace/Showcase
 
 **⟶ Wait for T136 to T139 to finish, then:**
 
