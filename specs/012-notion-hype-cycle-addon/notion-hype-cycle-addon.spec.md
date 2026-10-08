@@ -24,6 +24,10 @@ Three roles appear below. A **reader** opens a Notion page that holds the diagra
 - Q: Is a graph one row that holds the whole document, or one row per trend, trigger, note and influence? → A: One row per element, with each attribute a property of the database and no document text kept. Comments, the order of keys, keys the binding does not read and entries that are not a mapping are not kept, so SC-003 compares what the hosts read and not bytes.
 - Q: How does a web page shown in an embed block come to read and write a Notion database? → A: Through a small service beside the published pages, which a person grants access to their Notion content once. The Notion repository's principle that publication is by GitHub Pages only is amended in this feature.
 - A reference between two elements is a Notion relation between their two rows (the maintainer's review of the data model, 2026-10-07). A relation cannot hold the id of an element that does not exist, so the id of a reference that names nothing is not kept either; FR-007 and SC-003 say so.
+
+### Session 2026-10-09
+
+The maintainer added two requirements while the feature was being finished (FR-033 to FR-037). Three points of them are open and marked below.
 - The other hosts ship nine examples, not six: the plan step found `llms-and-agents`, `technology-trends` and `warfare-in-ukraine` beside the six named when this specification was written.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -151,6 +155,14 @@ A contributor starts a second Notion add-on for another tool type. They do not w
 - **FR-008**: The first graph MUST be stored in the database and shown on the page that the request names, both identified by their Notion addresses under Verbatim Constraints. They were found titled "Gartner HypeCycle Graph - Data" and "Diagram", under the page "Gartner Hypecycle Graph" of the Showcase; FR-030 says what they are titled from here on.
 - **FR-009**: The add-on MUST be told which database to read by the page that embeds it, so that one published add-on serves any number of graphs.
 - **FR-010**: The add-on MUST read and write the database with the rights of the person looking at the page, or with rights that person granted, and MUST NOT publish a secret in its pages. It does so through a service beside the published pages, to which that person grants access once.
+
+**Choosing and preparing a store**
+
+- **FR-033**: When the add-on is added to a page without a store, it MUST ask the user to select a database, from the databases that user's access reaches, and MUST NOT need the user to find and type a database id. [NEEDS CLARIFICATION: an embedded page cannot change the address of its own embed block. Where is the choice kept: in the address, which the add-on then gives the user to paste into the block, or elsewhere?]
+- **FR-034**: For the selected database the add-on MUST check whether the properties the tool type needs are there, or can be projected from properties the database already has, such as an existing property of the right type under another name.
+- **FR-035**: Where properties are missing and cannot be projected, the add-on MUST tell the user which ones and ask the user to add them; it MUST NOT change a database before the user has agreed. [NEEDS CLARIFICATION: does the add-on add them itself once the user agrees, as `prepare` does today, or does the user add them by hand in Notion?]
+- **FR-036**: The properties of a store that hold internal, technical information MUST be hidden in the database's views, so that a reader of the table sees what the graph is about. [NEEDS CLARIFICATION: which properties count as internal: the store's own `Kind` and `Order`, the stored id, also the properties of placement and attachment?]
+- **FR-037**: FR-036 MUST hold for every store that exists when this feature is delivered, the ten of the Showcase, and for every database the add-on prepares or fills from then on.
 
 **Showing**
 

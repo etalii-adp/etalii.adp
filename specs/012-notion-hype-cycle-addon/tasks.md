@@ -2,7 +2,7 @@
 
 **Input**: [plan.md](plan.md), [notion-hype-cycle-addon.spec.md](notion-hype-cycle-addon.spec.md), [research.md](research.md), [data-model.md](data-model.md), [contracts/addon-address.md](contracts/addon-address.md), [contracts/store.md](contracts/store.md), [contracts/service.md](contracts/service.md), [contracts/published-tree.md](contracts/published-tree.md), [contracts/shared-parts.md](contracts/shared-parts.md)
 
-**Scale note**: 134 tasks over three repositories (`etalii.adp`, `etalii.adp.ide.notion`, `etalii.adp.site`) and the Notion workspace, about 110 files, four pull requests and ten sets of pages in the Showcase. Watch three things. The data model was reviewed after the contracts and the research were written and differs from them in four places; the analysis of 2026-10-08 brought the store contract, the shared-parts contract, the research and the plan in line (T011, T012, T015 and T016, ticked then), T013 and T014 finish that before any code is written, and the code follows the data model. The Cloudflare Worker comes last, as the maintainer asked on 2026-10-08: until Phase 8 the service is the local one of T028, a small Node process around the same handler the Worker wraps. Ten tasks are a maintainer's and are marked **Maintainer**: the Cloudflare account, the Notion integration, the secrets, a token for the Showcase, the first pass in Notion, timing the set-up steps, and the four merges. Nothing can be seen in a Notion page before T119, so the passes in Notion are in the last phase, not at the end of each story; the one exception is T078, the pass that shows whether access can be granted from an embed block at all, which is made before any story is built.
+**Scale note**: 134 tasks, and six more of an addendum in Phase 9, over three repositories (`etalii.adp`, `etalii.adp.ide.notion`, `etalii.adp.site`) and the Notion workspace, about 110 files, four pull requests and ten sets of pages in the Showcase. Watch three things. The data model was reviewed after the contracts and the research were written and differs from them in four places; the analysis of 2026-10-08 brought the store contract, the shared-parts contract, the research and the plan in line (T011, T012, T015 and T016, ticked then), T013 and T014 finish that before any code is written, and the code follows the data model. The Cloudflare Worker comes last, as the maintainer asked on 2026-10-08: until Phase 8 the service is the local one of T028, a small Node process around the same handler the Worker wraps. Ten tasks are a maintainer's and are marked **Maintainer**: the Cloudflare account, the Notion integration, the secrets, a token for the Showcase, the first pass in Notion, timing the set-up steps, and the four merges. Nothing can be seen in a Notion page before T119, so the passes in Notion are in the last phase, not at the end of each story; the one exception is T078, the pass that shows whether access can be granted from an embed block at all, which is made before any story is built.
 
 **Tests**: asked for by the plan (Testing, research D15). Each module is written with its unit test in the same task. The tests that state a story's outcome are under that story's `### Tests` and are written first, to fail.
 
@@ -442,3 +442,22 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 - **Phase 6**: Wave 1 (T104 to T106) → T107 → T108.
 - **Phase 7**: tests (T109 to T112) beside Wave 1 (T113, T114).
 - **Phase 8**: Wave 1 (T115, T116) → T032 → T029 → T045 → T117 → T118 → T119 → Wave 2 (T120 to T124) → T125 → Wave 3 (T126 to T129) → T130 → T131 → T132 → T133 → T134.
+
+---
+
+## Phase 9: Addendum of 2026-10-09 (FR-033 to FR-037)
+
+**Purpose**: the two requirements the maintainer added while the feature was being finished: selecting a database when the add-on is added, with a check and a projection of its properties, and hiding the properties that hold internal information. Three points are open in the specification; T135 settles them before anything is built.
+
+- [ ] **T135** Settle the three open points of FR-033, FR-035 and FR-036 with the maintainer, remove their markers from the specification, and bring the address, store and service contracts and the data model in line: where a selected store is kept, the call that lists the databases a person's access reaches, what projecting a property means and where a projection is kept, who adds a missing property, and which properties are internal · etalii.adp/specs/012-notion-hype-cycle-addon/
+
+**⟶ Wait for T135 to finish, then:**
+
+- [ ] **T136** [P] In the state `setup`, list the databases the person's access reaches and let the user select one; the service forwards the one call that lists them (FR-033) · etalii.adp.ide.notion/src/frame/parts/, etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/src/store/notion.ts
+- [ ] **T137** [P] Check a selected database against the schema, project the properties that can be, and ask the user about the ones that are missing before anything is changed (FR-034, FR-035) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
+- [ ] **T138** [P] Hide the internal properties in a database's views when the add-on or `scripts/store.mjs` prepares or fills it (FR-036, FR-037) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/scripts/store.mjs
+- [ ] **T139** [P] Hide the internal properties in the views of the ten stores of the Showcase (FR-037) · Notion workspace/Showcase
+
+**⟶ Wait for T136 to T139 to finish, then:**
+
+- [ ] **T140** Deliver T136 to T138 in a pull request into `develop` of `etalii.adp.ide.notion` that names this folder and the etalii.adp commit of T135, and tick them once it is merged · etalii.adp.ide.notion
