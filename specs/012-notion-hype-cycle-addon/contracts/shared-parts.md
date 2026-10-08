@@ -109,7 +109,7 @@ export interface OpenDocument {
   readonly canUndo: boolean;
   readonly canRedo: boolean;
   register(handler: CommandHandler): void;     // the handlers of this document's commands, brought by the store and by a part
-  edit(change: ModelChange): EditResult;       // one gesture, one command, one step
+  edit(change: ModelChange | readonly ModelChange[]): EditResult;   // one gesture, one command, one step, however many entries it changes
   undo(): EditResult;
   redo(): EditResult;
   prepare(): Promise<void>;

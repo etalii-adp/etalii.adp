@@ -182,6 +182,11 @@
       "freemind/testdata/reference/spec001-test-inventory.md",
       "allure-results/**"
     ],
+    "etalii.adp.ide.notion": [
+      "src/fbl/**",
+      "test/examples/**",
+      "test/fixtures/**"
+    ],
     "etalii.adp.site": [
       "src/data/redirects.ts",
       "tests/reference/fixtures/dedl-aaef333/**",
