@@ -216,6 +216,870 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-08T00:20:34.656Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T037",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:22:22.337Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T027",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:23:34.699Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T036",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:23:34.896Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T030",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:26:32.670Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T022",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:28:58.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T023",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:28:58.876Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T024",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:28:59.016Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T025",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:28:59.173Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T026",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:28:59.343Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T031",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:28:59.480Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T033",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:28:59.635Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T034",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:28:59.795Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T035",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:28:59.944Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T041",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:29:09.437Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T028",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:29:09.596Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T042",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:34:38.033Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T043",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:36:56.683Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T044",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:36:56.829Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T039",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:43:32.695Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T040",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:43:32.866Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T046",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:43:33.057Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T047",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:43:33.220Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T048",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:43:33.380Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T053",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:51:08.237Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T054",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:51:08.395Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T049",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:52:55.870Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T051",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:52:56.027Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T050",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:59:58.542Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T052",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T00:59:58.692Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T057",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:13:16.866Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T063",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:13:17.084Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T056",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:13:25.508Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T065",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:13:25.663Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T066",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:13:25.842Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T067",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:13:26.032Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T068",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:13:26.193Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T055",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:29:31.951Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T059",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:29:32.134Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T060",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:29:32.322Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T061",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:29:32.501Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T062",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:29:32.665Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T064",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:29:32.846Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T069",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:29:33.003Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T079",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:57:34.568Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T080",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:57:34.755Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T101",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:57:34.945Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T087",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:57:35.140Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T088",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:57:35.313Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T093",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:57:35.501Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T058",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:58:45.790Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T070",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:58:45.987Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T071",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:58:46.179Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T072",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:58:46.373Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T073",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:58:46.538Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T074",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:58:46.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T075",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:58:46.898Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T076",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:58:47.085Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T077",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T01:58:47.269Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T084",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:05:01.555Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T085",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:05:01.742Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T086",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:05:01.930Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T081",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:05:02.126Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T102",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:19:56.091Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T103",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:19:56.300Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T112",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:19:56.507Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T109",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:19:56.696Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T114",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:19:56.879Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T115",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:19:57.077Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T116",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:19:57.286Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T082",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:28:38.475Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T089",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:28:38.657Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T090",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:28:38.845Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T091",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:28:39.028Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T094",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:28:39.209Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T095",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:28:39.408Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T096",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:28:39.613Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T110",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:28:40.031Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T111",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:28:40.214Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T113",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:28:40.390Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T092",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:30:14.575Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T097",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:30:14.752Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T098",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:30:14.933Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T083",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:49:46.653Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T099",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:49:46.838Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T100",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T02:49:47.038Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T105",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T08:06:24.526Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T11:33:37.942Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T106",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T11:33:38.345Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T118",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T11:35:02.816Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T104",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T11:57:26.521Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T107",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T11:57:26.837Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T139",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T12:02:04.943Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T108",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T12:03:12.260Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T119",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T12:06:05.711Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T117",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T12:06:17.097Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T124",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T12:06:17.449Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T032",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T13:36:50.870Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T029",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T13:36:51.215Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T038",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:04:50.797Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T045",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:04:51.217Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T078",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:17:33.947Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T128",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:42:47.518Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T129",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:42:47.905Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T125",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:59:45.041Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T126",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:59:45.481Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T127",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:59:45.803Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T130",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T14:59:46.112Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T141",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T16:17:09.409Z"
     }
   ],
   "last_action": "1101 tests pass and 9 are expected failures naming issue 97; branch pushed, pull request 2 not opened",
@@ -959,7 +1823,7 @@
     }
   },
   "approach": "A static add-on at /adp-notion/gartner-hype-cycle-graph/ is compiled from shared parts that name no tool type: a new DISL interpreter, the Visual Studio Code host's FBL library copied unchanged, a store that keeps a document as one row per element, a canvas, and Notion-styled panels. The store rebuilds the binding's document text in memory, so FBL plans every edit and keeps the undo history, and each edit is written back as row changes. A stateless Cloudflare Worker completes Notion's sign-in and forwards the calls with the viewer's token.",
-  "currentTask": "T020",
+  "currentTask": "T141",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -1061,6 +1925,800 @@
     "T020": {
       "status": "DONE",
       "did": "Validated, committed (350ec4c), pushed and opened pull request 95 into develop"
+    },
+    "T037": {
+      "status": "DONE",
+      "did": "Wrote the service's address: the local service for a page on localhost; the Worker's address is filled in by T029",
+      "files": [
+        "etalii.adp.ide.notion/src/frame/config.ts"
+      ]
+    },
+    "T027": {
+      "status": "DONE",
+      "did": "Defined Command, CommandResult, CommandHandler and HistoryEntry as readonly types, after the standalone application's EtAlii.Adp.History",
+      "files": [
+        "etalii.adp.ide.notion/src/history/command.ts"
+      ]
+    },
+    "T036": {
+      "status": "DONE",
+      "did": "Wrote the dispatcher and the history stack with 19 passing tests of the transitions table, the refusals and the listeners",
+      "files": [
+        "etalii.adp.ide.notion/src/history/dispatcher.ts",
+        "etalii.adp.ide.notion/src/history/historyStack.ts",
+        "etalii.adp.ide.notion/test/history/historyStack.test.ts"
+      ]
+    },
+    "T030": {
+      "status": "DONE",
+      "did": "Stated Notion's type, colours, spacing, corners, shadows and focus ring as 61 --notion- custom properties, light on :root and dark under :root[data-theme=dark], with a table of sources read 2026-10-08 and the values that are estimates or strengthened for WCAG AA",
+      "files": [
+        "etalii.adp.ide.notion/src/panels/notion.css"
+      ]
+    },
+    "T022": {
+      "status": "DONE",
+      "did": "sync-fbl.mjs copies src/core/fbl of the Visual Studio Code host from a git object into src/fbl/ with PROVENANCE.md; --check compares disk with the record",
+      "files": [
+        "etalii.adp.ide.notion/scripts/sync-fbl.mjs"
+      ]
+    },
+    "T023": {
+      "status": "DONE",
+      "did": "sync-specifications.mjs copies each add-on's specification from etalii.adp and its binding from the clone persistence.binding names, with PROVENANCE.md and --check",
+      "files": [
+        "etalii.adp.ide.notion/scripts/sync-specifications.mjs"
+      ]
+    },
+    "T024": {
+      "status": "DONE",
+      "did": "sync-examples.mjs copies the examples, the standalone fixtures and mindmap.dis, writes the places the Visual Studio Code host computes beside each example, with PROVENANCE.md and --check",
+      "files": [
+        "etalii.adp.ide.notion/scripts/sync-examples.mjs"
+      ]
+    },
+    "T025": {
+      "status": "DONE",
+      "did": "addon.json names the specification, its source in etalii.adp and the binding",
+      "files": [
+        "etalii.adp.ide.notion/addons/gartner-hype-cycle-graph/addon.json"
+      ]
+    },
+    "T026": {
+      "status": "DONE",
+      "did": "index.html is the page of the shared-parts contract, with no script or style of its own",
+      "files": [
+        "etalii.adp.ide.notion/addons/gartner-hype-cycle-graph/index.html"
+      ]
+    },
+    "T031": {
+      "status": "DONE",
+      "did": "A synchronous SHA-256 with createHash(algorithm).update(bytes).digest('hex'), tested against Node's own",
+      "files": [
+        "etalii.adp.ide.notion/src/shims/node-crypto.ts",
+        "etalii.adp.ide.notion/test/shims/node-crypto.test.ts"
+      ]
+    },
+    "T033": {
+      "status": "DONE",
+      "did": "Ran sync-fbl.mjs at etalii.adp.ide.vscode 271a92c: 47 files and PROVENANCE.md; --check passes",
+      "files": [
+        "etalii.adp.ide.notion/src/fbl/"
+      ]
+    },
+    "T034": {
+      "status": "DONE",
+      "did": "Ran sync-specifications.mjs at etalii.adp 350ec4c and etalii.adp.ide.standalone 70ac026: the .dis, the .fbl and PROVENANCE.md; --check passes",
+      "files": [
+        "etalii.adp.ide.notion/addons/gartner-hype-cycle-graph/gartner-hype-cycle-graph.dis",
+        "etalii.adp.ide.notion/addons/gartner-hype-cycle-graph/gartner-hype-cycle-graph.fbl",
+        "etalii.adp.ide.notion/addons/gartner-hype-cycle-graph/PROVENANCE.md"
+      ]
+    },
+    "T035": {
+      "status": "DONE",
+      "did": "Ran sync-examples.mjs: nine examples (27 files) with their places, 22 fixtures and mindmap.dis; --check passes",
+      "files": [
+        "etalii.adp.ide.notion/test/examples/",
+        "etalii.adp.ide.notion/test/fixtures/"
+      ]
+    },
+    "T041": {
+      "status": "DONE",
+      "did": "The in-memory Notion of the tests, at the level of HTTP in API version 2026-03-11, with its helpers, switches and 13 tests",
+      "files": [
+        "etalii.adp.ide.notion/test/support/memoryNotion.ts",
+        "etalii.adp.ide.notion/test/support/memoryNotion.test.ts"
+      ]
+    },
+    "T028": {
+      "status": "DONE",
+      "did": "The service as a handler that knows no platform, the local service that runs it with --memory, and 56 tests of the contract's rules",
+      "files": [
+        "etalii.adp.ide.notion/service/handler.ts",
+        "etalii.adp.ide.notion/scripts/service.mjs",
+        "etalii.adp.ide.notion/test/service/handler.test.ts"
+      ]
+    },
+    "T042": {
+      "status": "DONE",
+      "did": "words.test.ts: an exempt entry may carry an in path prefix; the use library requires in src/fbl/; segment is exempt there as the copied library's own word",
+      "files": [
+        "etalii.adp.ide.notion/test/words.test.ts",
+        "etalii.adp.ide.notion/test/words.exempt.json"
+      ]
+    },
+    "T043": {
+      "status": "DONE",
+      "did": "The calls to the service with one write queue: three requests a second, edits and their writes in order, Retry-After waited out, a failure stops the queue and discards what is behind it, status storing, offline, failed and idle; 30 tests through the real handler and the in-memory Notion",
+      "files": [
+        "etalii.adp.ide.notion/src/store/notion.ts",
+        "etalii.adp.ide.notion/test/store/notion.test.ts",
+        "etalii.adp.ide.notion/test/support/memoryService.ts"
+      ]
+    },
+    "T044": {
+      "status": "DONE",
+      "did": "The session: a token asked for only when needed, kept under adp-notion.token, granted in a window of its own with a random state and taken only from the service's origin with that state, renewed once through POST /refresh and removed when that fails or on disconnect; 18 tests",
+      "files": [
+        "etalii.adp.ide.notion/src/store/session.ts",
+        "etalii.adp.ide.notion/test/store/session.test.ts"
+      ]
+    },
+    "T039": {
+      "status": "DONE",
+      "did": "CEL on @marcbachmann/cel-js with DISL's helpers, elements and the specification's functions; all 312 expressions of the specification parse",
+      "files": [
+        "etalii.adp.ide.notion/src/disl/expressions.ts",
+        "etalii.adp.ide.notion/src/disl/model.ts",
+        "etalii.adp.ide.notion/test/disl/expressions.test.ts",
+        "etalii.adp.ide.notion/test/disl/expressionsOf.ts",
+        "etalii.adp.ide.notion/test/disl/tool.ts",
+        "etalii.adp.ide.notion/test/disl/disl.schema.json"
+      ]
+    },
+    "T040": {
+      "status": "DONE",
+      "did": "Types of a DISL specification and loadSpecification, which never throws",
+      "files": [
+        "etalii.adp.ide.notion/src/disl/specification.ts",
+        "etalii.adp.ide.notion/test/disl/specification.test.ts"
+      ]
+    },
+    "T046": {
+      "status": "DONE",
+      "did": "The twelve supported features and a finding for each required one that is not among them",
+      "files": [
+        "etalii.adp.ide.notion/src/disl/support.ts",
+        "etalii.adp.ide.notion/test/disl/support.test.ts"
+      ]
+    },
+    "T047": {
+      "status": "DONE",
+      "did": "Metamodel interpreted: diagram, enums, types with inheritance and defaults, relations with allowed ends",
+      "files": [
+        "etalii.adp.ide.notion/src/disl/metamodel.ts",
+        "etalii.adp.ide.notion/test/disl/metamodel.test.ts"
+      ]
+    },
+    "T048": {
+      "status": "DONE",
+      "did": "Persistence interpreted: binding and fragment, ids, typeMap; readModel and toBinding between the FBL reading and the model",
+      "files": [
+        "etalii.adp.ide.notion/src/disl/persistence.ts",
+        "etalii.adp.ide.notion/test/disl/persistence.test.ts"
+      ]
+    },
+    "T053": {
+      "status": "DONE",
+      "did": "build.mjs installs dependencies, refuses a folder the contract refuses, checks the copies, compiles src/ into addon.js and addon.css for every add-on and lists each by its language.label; the DISL schema of the tests is now a synced copy",
+      "files": [
+        "etalii.adp.ide.notion/scripts/build.mjs",
+        "etalii.adp.ide.notion/scripts/sync-examples.mjs",
+        "etalii.adp.ide.notion/test/fixtures/disl.schema.json",
+        "etalii.adp.ide.notion/test/fixtures/PROVENANCE.md",
+        "etalii.adp.ide.notion/test/disl/expressionsOf.ts",
+        "etalii.adp.ide.notion/test/disl/disl.schema.json"
+      ]
+    },
+    "T054": {
+      "status": "DONE",
+      "did": "Build has a test job (npm ci, test, lint, typecheck); the addons job runs check-tree.mjs (files of each folder, no name of a tool type in addon.js, nothing that reads as a secret) and the three sync checks; publish needs test",
+      "files": [
+        "etalii.adp.ide.notion/.github/workflows/build.yml",
+        "etalii.adp.ide.notion/scripts/check-tree.mjs",
+        "etalii.adp.ide.notion/test/check-tree.test.ts"
+      ]
+    },
+    "T049": {
+      "status": "DONE",
+      "did": "The page a part of the frame is given (specification, regions, state, status, selection, message, open document, session, calls, typed events) and onPage, with events held during the hand-over so that no part depends on the order; the types of the open document",
+      "files": [
+        "etalii.adp.ide.notion/src/frame/page.ts",
+        "etalii.adp.ide.notion/test/frame/page.test.ts",
+        "etalii.adp.ide.notion/src/store/document.ts"
+      ]
+    },
+    "T051": {
+      "status": "DONE",
+      "did": "The entry: store and theme from the address, data-theme following prefers-color-scheme, data-addon, data-state, addon.json and its two files loaded and interpreted, the regions laid out with --notion- properties only, the state setup with its steps and no call, the page handed to every part",
+      "files": [
+        "etalii.adp.ide.notion/src/frame/main.ts",
+        "etalii.adp.ide.notion/src/frame/frame.css",
+        "etalii.adp.ide.notion/test/frame/main.test.ts"
+      ]
+    },
+    "T050": {
+      "status": "DONE",
+      "did": "Store schema computed from the binding (kinds, title, Kind, Order, one typed property per key, relations with the kinds a reference allows), findings for a binding that cannot be stored, and missing/prepare for a database; 40 tests",
+      "files": [
+        "etalii.adp.ide.notion/src/store/schema.ts",
+        "etalii.adp.ide.notion/test/store/schema.test.ts",
+        "etalii.adp.ide.notion/test/support/memoryCalls.ts"
+      ]
+    },
+    "T052": {
+      "status": "DONE",
+      "did": "Rows to the binding's document and back through the FBL library: readRows builds the body by batched insertions and records which row is which entry, rowsOf and createRows put a document in; the nine examples read the same, only comments are not kept; 31 tests",
+      "files": [
+        "etalii.adp.ide.notion/src/store/rows.ts",
+        "etalii.adp.ide.notion/test/store/rows.test.ts",
+        "etalii.adp.ide.notion/test/support/memoryCalls.ts",
+        "etalii.adp.ide.notion/test/words.exempt.json"
+      ]
+    },
+    "T057": {
+      "status": "DONE",
+      "did": "Fixture test of the constraints: each rule-* fixture gives the findings the specification states (code, severity, sentence, element, line), in the order of its codes; three fixtures differ from the hosts and say why",
+      "files": [
+        "etalii.adp.ide.notion/test/disl/constraints.fixtures.test.ts"
+      ]
+    },
+    "T063": {
+      "status": "DONE",
+      "did": "interpretConstraints: check (rules, builtIn applied to the reading's findings, std.endpoints, oncePerGroup, defaults, order, timing), refusals (std.endpoints refusal, gesture constraints, preventing invariants) and blocksSave; a failing expression is a finding",
+      "files": [
+        "etalii.adp.ide.notion/src/disl/constraints.ts",
+        "etalii.adp.ide.notion/test/disl/constraints.test.ts"
+      ]
+    },
+    "T056": {
+      "status": "DONE",
+      "did": "Test of opening a store: empty, unreadable row, unreadable, unprepared, two data sources, read-only at the first 403, 518 rows in six calls, history and events (19 tests)",
+      "files": [
+        "etalii.adp.ide.notion/test/store/document.read.test.ts"
+      ]
+    },
+    "T065": {
+      "status": "DONE",
+      "did": "openDocument reads the whole store, decides the state, offers prepare and reload, tells its events and runs edits through its own history; storeOf gives the store's modules what a write needs",
+      "files": [
+        "etalii.adp.ide.notion/src/store/document.ts"
+      ]
+    },
+    "T066": {
+      "status": "DONE",
+      "did": "scripts/store.mjs put and take through the service with the code of src/store, tested against the in-memory Notion (8 tests) and run by hand against the local service with --memory",
+      "files": [
+        "etalii.adp.ide.notion/scripts/store.mjs",
+        "etalii.adp.ide.notion/test/scripts/store.test.ts"
+      ]
+    },
+    "T067": {
+      "status": "DONE",
+      "did": "The steps that set a graph up, what each state of the page means, and how a store is filled from a file",
+      "files": [
+        "etalii.adp.ide.notion/docs/set-up-a-graph.md"
+      ]
+    },
+    "T068": {
+      "status": "DONE",
+      "did": "The service documented: endpoints, configuration and secrets, what a maintainer does once, the local service with and without --memory, and that the Worker is not written yet",
+      "files": [
+        "etalii.adp.ide.notion/docs/service.md",
+        "etalii.adp.ide.notion/service/README.md"
+      ]
+    },
+    "T055": {
+      "status": "DONE",
+      "did": "Wrote the places test over the nine examples: nodes, parts and part-anchored edge ends have 0 differences; 148 numbers differ on ends drawn from the outline of a fixed anchor, where the specification and the Visual Studio Code host disagree",
+      "files": [
+        "etalii.adp.ide.notion/test/canvas/scene.examples.test.ts",
+        "etalii.adp.ide.notion/test/canvas/tool.ts"
+      ]
+    },
+    "T059": {
+      "status": "DONE",
+      "did": "Interpreted coordinates: axes, the month axis with its bound unit, systems, the default, both mappings and the ruler rows as data",
+      "files": [
+        "etalii.adp.ide.notion/src/disl/coordinates.ts",
+        "etalii.adp.ide.notion/test/disl/coordinates.test.ts",
+        "etalii.adp.ide.notion/src/disl/expressions.ts",
+        "etalii.adp.ide.notion/test/words.exempt.json"
+      ]
+    },
+    "T060": {
+      "status": "DONE",
+      "did": "Interpreted notation: text metric, theme tokens, styles, custom and composite shapes, nodes, edges, filters and legend",
+      "files": [
+        "etalii.adp.ide.notion/src/disl/notation.ts",
+        "etalii.adp.ide.notion/test/disl/notation.test.ts"
+      ]
+    },
+    "T061": {
+      "status": "DONE",
+      "did": "Interpreted layout, with the standard algorithms rowPacked and rows as general functions",
+      "files": [
+        "etalii.adp.ide.notion/src/disl/layout.ts",
+        "etalii.adp.ide.notion/test/disl/layout.test.ts"
+      ]
+    },
+    "T062": {
+      "status": "DONE",
+      "did": "Interpreted viewpoints and variants, each with its notation merged over the specification's",
+      "files": [
+        "etalii.adp.ide.notion/src/disl/viewpoints.ts",
+        "etalii.adp.ide.notion/test/disl/viewpoints.test.ts"
+      ]
+    },
+    "T064": {
+      "status": "DONE",
+      "did": "Wrote the geometry: points, boxes, paths, outlines, cubic curves and where a line or curve meets an outline",
+      "files": [
+        "etalii.adp.ide.notion/src/canvas/geometry.ts",
+        "etalii.adp.ide.notion/test/canvas/geometry.test.ts"
+      ]
+    },
+    "T069": {
+      "status": "DONE",
+      "did": "Wrote createScene: nodes with shape, parts, labels and style, edges with ends and line, filters and the layout-placed variant viewpoint, and arrangedRows",
+      "files": [
+        "etalii.adp.ide.notion/src/canvas/scene.ts",
+        "etalii.adp.ide.notion/test/canvas/scene.test.ts"
+      ]
+    },
+    "T079": {
+      "status": "DONE",
+      "did": "Test that each kind of edit writes exactly its rows and properties, in splice order, and that a refused or unresolvable edit writes nothing (15 tests pass)",
+      "files": [
+        "etalii.adp.ide.notion/test/store/editing.test.ts",
+        "etalii.adp.ide.notion/test/support/openExample.ts"
+      ]
+    },
+    "T080": {
+      "status": "DONE",
+      "did": "Test drift, a trashed row, 403, a partly stored edit, the queue, a 429 and a lost connection against the in-memory Notion (13 tests pass)",
+      "files": [
+        "etalii.adp.ide.notion/test/store/drift.test.ts"
+      ]
+    },
+    "T101": {
+      "status": "DONE",
+      "did": "Test 20 edits, 20 undos and 20 redos by the store contract's meaning of the same, one step per gesture, undo while queued, empty history after a reload (7 tests pass)",
+      "files": [
+        "etalii.adp.ide.notion/test/store/undo.test.ts"
+      ]
+    },
+    "T087": {
+      "status": "DONE",
+      "did": "Resolve the splices of one change to row writes from the binding alone, with the record of entries, places and trashed rows",
+      "files": [
+        "etalii.adp.ide.notion/src/store/writes.ts"
+      ]
+    },
+    "T088": {
+      "status": "DONE",
+      "did": "Ask for rows edited from the minute of the last read on and set aside those the store read or wrote itself",
+      "files": [
+        "etalii.adp.ide.notion/src/store/drift.ts"
+      ]
+    },
+    "T093": {
+      "status": "DONE",
+      "did": "Register the handlers of a change and of the splices that undo it; queue the row writes behind a drift check; reload on failure",
+      "files": [
+        "etalii.adp.ide.notion/src/store/handlers.ts",
+        "etalii.adp.ide.notion/src/store/document.ts"
+      ]
+    },
+    "T058": {
+      "status": "DONE",
+      "did": "Test of the page in each state of the address contract, the findings, the status, disconnect and a changed specification: 17 tests, written to fail first",
+      "files": [
+        "etalii.adp.ide.notion/test/frame/reading.test.ts"
+      ]
+    },
+    "T070": {
+      "status": "DONE",
+      "did": "Built-in, custom path and composite shapes as SVG, coloured from the theme tokens of the appearance in use",
+      "files": [
+        "etalii.adp.ide.notion/src/canvas/shapes.ts",
+        "etalii.adp.ide.notion/test/canvas/shapes.test.ts"
+      ]
+    },
+    "T071": {
+      "status": "DONE",
+      "did": "An edge as SVG: the scene's path and ends, its stroke and the marker at each end turned along the line",
+      "files": [
+        "etalii.adp.ide.notion/src/canvas/connectors.ts",
+        "etalii.adp.ide.notion/test/canvas/connectors.test.ts"
+      ]
+    },
+    "T072": {
+      "status": "DONE",
+      "did": "The ruler of an axis as SVG in screen pixels, its ticks and labels from rulerRows following the zoom",
+      "files": [
+        "etalii.adp.ide.notion/src/canvas/ruler.ts",
+        "etalii.adp.ide.notion/test/canvas/ruler.test.ts"
+      ]
+    },
+    "T073": {
+      "status": "DONE",
+      "did": "Labels as SVG text measured by the notation's text metric, wrapped and made to fit as overflow says",
+      "files": [
+        "etalii.adp.ide.notion/src/canvas/labels.ts",
+        "etalii.adp.ide.notion/test/canvas/labels.test.ts"
+      ]
+    },
+    "T074": {
+      "status": "DONE",
+      "did": "The controls of the notation's filters, the legend, and a filter applied by asking for the scene again",
+      "files": [
+        "etalii.adp.ide.notion/src/canvas/filters.ts",
+        "etalii.adp.ide.notion/test/canvas/filters.test.ts"
+      ]
+    },
+    "T075": {
+      "status": "DONE",
+      "did": "createCanvas: draw and show, viewport by pointer, wheel and keys, viewpoint toggle, selection by pointer and keyboard, hit testing, overlay; 50 nodes drawn well under 1 second",
+      "files": [
+        "etalii.adp.ide.notion/src/canvas/canvas.ts",
+        "etalii.adp.ide.notion/src/canvas/canvas.css",
+        "etalii.adp.ide.notion/test/canvas/canvas.test.ts"
+      ]
+    },
+    "T076": {
+      "status": "DONE",
+      "did": "The reading part: connect, unshared, unprepared, unreadable, ready and read-only, disconnect, findings, status, redraw on changed and reading again on focus",
+      "files": [
+        "etalii.adp.ide.notion/src/frame/parts/reading.ts",
+        "etalii.adp.ide.notion/src/frame/parts/reading.css",
+        "etalii.adp.ide.notion/test/words.exempt.json"
+      ]
+    },
+    "T077": {
+      "status": "DONE",
+      "did": "docs/disl-support.md: features and sections supported and not, the four interim rules, the issues raised, the known limits",
+      "files": [
+        "etalii.adp.ide.notion/docs/disl-support.md"
+      ]
+    },
+    "T084": {
+      "status": "DONE",
+      "did": "Interpreted toolbox: groups, tools with what they create and their initial values, relation ends, context tools and context menus; 12 tests",
+      "files": [
+        "etalii.adp.ide.notion/src/disl/toolbox.ts",
+        "etalii.adp.ide.notion/test/disl/toolbox.test.ts"
+      ]
+    },
+    "T085": {
+      "status": "DONE",
+      "did": "Interpreted forms: per form its types and usages, items with widget, options, visible, display, validate, parse and readOnly over a model and an element, and a generated form for a type or the diagram without one; 15 tests",
+      "files": [
+        "etalii.adp.ide.notion/src/disl/forms.ts",
+        "etalii.adp.ide.notion/test/disl/forms.test.ts"
+      ]
+    },
+    "T086": {
+      "status": "DONE",
+      "did": "Interpreted behavior: messages, hooks, operations with availability, deletion with confirmation, and every intent (create, connect, change, edit, label, move, resize, handle, end, remove, operate) as one list of changes or a refusal, with snapping by gesture and neighbour bounds; 49 tests",
+      "files": [
+        "etalii.adp.ide.notion/src/disl/behavior.ts",
+        "etalii.adp.ide.notion/test/disl/behavior.test.ts",
+        "etalii.adp.ide.notion/test/words.exempt.json"
+      ]
+    },
+    "T081": {
+      "status": "DONE",
+      "did": "Second layer: all 57 offers made against the in-memory Notion through modelChangesOf and document.edit, which now takes the changes of one intent as one command, and found in the rows read again",
+      "files": [
+        "etalii.adp.ide.notion/test/disl/offers.test.ts",
+        "etalii.adp.ide.notion/src/store/changes.ts",
+        "etalii.adp.ide.notion/test/store/changes.test.ts",
+        "etalii.adp.ide.notion/src/store/document.ts",
+        "etalii.adp.ide.notion/src/store/handlers.ts",
+        "etalii.adp.ide.notion/test/store/undo.test.ts",
+        "etalii.adp.ide.notion/test/support/openExample.ts"
+      ]
+    },
+    "T102": {
+      "status": "DONE",
+      "did": "Tests of undo and redo on the page: the two buttons, the keys with CTRL and Command, nothing to take, a text input, a refusal, and the states without a button (17 tests, written to fail first)",
+      "files": [
+        "etalii.adp.ide.notion/test/frame/undoRedo.test.ts"
+      ]
+    },
+    "T103": {
+      "status": "DONE",
+      "did": "The undo and redo part: the buttons id=undo and id=redo in the bar of a ready page, enabled as the document's history says, and the keys while the focus is inside the page",
+      "files": [
+        "etalii.adp.ide.notion/src/frame/parts/undoRedo.ts",
+        "etalii.adp.ide.notion/src/frame/parts/undoRedo.css"
+      ]
+    },
+    "T112": {
+      "status": "DONE",
+      "did": "The rules between the shared parts as a test that reads every import under src/ with the TypeScript parser, type-only imports counted; the service's paths, the token's key and the service's address only where the contract allows them",
+      "files": [
+        "etalii.adp.ide.notion/test/parts.test.ts"
+      ]
+    },
+    "T109": {
+      "status": "DONE",
+      "did": "The panels half only: with mindmap.dis the toolbox lists that type's tool and the property grid shows a node's attributes with the controls its form asks for; the test/disl/reuse.test.ts half is another worker's",
+      "files": [
+        "etalii.adp.ide.notion/test/panels/reuse.test.ts"
+      ]
+    },
+    "T114": {
+      "status": "DONE",
+      "did": "What a second add-on consists of and how it is made: the folder, the page, addon.json, sync-specifications, nothing under src/, what the build adds, and an unsupported feature as a finding",
+      "files": [
+        "etalii.adp.ide.notion/addons/README.md"
+      ]
+    },
+    "T115": {
+      "status": "DONE",
+      "did": "The README names the Gartner hype cycle graph with its address, says how the repository is built and tested, points at the documents, and says a page at etalii.net cannot open a store until the deployed service exists",
+      "files": [
+        "etalii.adp.ide.notion/README.md"
+      ]
+    },
+    "T116": {
+      "status": "DONE",
+      "did": "CLAUDE.md describes the shared parts and their rules with the tests that enforce them, the copies and their sync scripts, the scripts, the service and the tests",
+      "files": [
+        "etalii.adp.ide.notion/CLAUDE.md"
+      ]
+    },
+    "T082": {
+      "status": "DONE",
+      "did": "Tests of the toolbox, the property grid, the collapsed state in local storage and read-only, written first and failing, now 31 passing, with 8 more for the menu",
+      "files": [
+        "etalii.adp.ide.notion/test/panels/panels.test.ts",
+        "etalii.adp.ide.notion/test/panels/menu.test.ts",
+        "etalii.adp.ide.notion/test/panels/dom.ts"
+      ]
+    },
+    "T089": {
+      "status": "DONE",
+      "did": "What every panel shares: a named region, a toggle that stays in view, data-collapsed, and the state kept per add-on and per panel, expanded where the storage is refused",
+      "files": [
+        "etalii.adp.ide.notion/src/panels/panel.ts"
+      ]
+    },
+    "T090": {
+      "status": "DONE",
+      "did": "The controls of a form's widgets (text, multi-line, number, checkbox, select, a few choices, slider, tags, display), each a control of the browser with its label tied to it, and the icons table",
+      "files": [
+        "etalii.adp.ide.notion/src/panels/controls.ts",
+        "etalii.adp.ide.notion/src/panels/icons.ts"
+      ]
+    },
+    "T091": {
+      "status": "DONE",
+      "did": "The panels, controls and menu styled from the --notion- properties alone, every class adp-, focus by --notion-focus-ring",
+      "files": [
+        "etalii.adp.ide.notion/src/panels/panels.css"
+      ]
+    },
+    "T094": {
+      "status": "DONE",
+      "did": "createToolbox: every tool in its group and order with data-tool, label, icon and description, picked by pointer, Enter or Space, roving focus with the arrow keys",
+      "files": [
+        "etalii.adp.ide.notion/src/panels/toolbox.ts"
+      ]
+    },
+    "T095": {
+      "status": "DONE",
+      "did": "createPropertyGrid: the inspector form of the selection's type, the diagram's own for an empty selection, shared values for several elements, input through validate and parse, each change answered with the edit's result",
+      "files": [
+        "etalii.adp.ide.notion/src/panels/propertyGrid.ts"
+      ]
+    },
+    "T096": {
+      "status": "DONE",
+      "did": "openMenu: a popover with role menu, entries with icon, label and shortcut, arrow keys, Enter, Escape, typeahead, closing on a press outside, focus returned",
+      "files": [
+        "etalii.adp.ide.notion/src/panels/menu.ts"
+      ]
+    },
+    "T110": {
+      "status": "DONE",
+      "did": "34 tests over both tool types: every control named, reached with Tab or the arrow keys, used with the keyboard alone, and nothing answers a pointer only",
+      "files": [
+        "etalii.adp.ide.notion/test/panels/keyboard.test.ts"
+      ]
+    },
+    "T111": {
+      "status": "DONE",
+      "did": "No stylesheet but notion.css states a colour, size, spacing or corner; every class is adp-; an add-on's page has no style; and each pair of the panels keeps 4.5:1 or 3:1 in both appearances by the WCAG formula",
+      "files": [
+        "etalii.adp.ide.notion/test/styles.test.ts",
+        "etalii.adp.ide.notion/test/panels/contrast.ts"
+      ]
+    },
+    "T113": {
+      "status": "DONE",
+      "did": "docs/styling.md: every departure with its reason, the source and date of each value of notion.css, and the computed contrast of each pair in both appearances; says that nothing was measured in Notion and that T122 corrects it",
+      "files": [
+        "etalii.adp.ide.notion/docs/styling.md"
+      ]
+    },
+    "T092": {
+      "status": "DONE",
+      "did": "Snapping of a gesture along an axis in axis values (rule precedence node type and gesture over the coordinate system; grid, calendar, values, expression, ties, least and most), the snapped canvas point, a handle's share and the keyboard's step; compared in its test with where the behavior lands the same move, drop and handle",
+      "files": [
+        "etalii.adp.ide.notion/src/canvas/snapping.ts",
+        "etalii.adp.ide.notion/test/canvas/snapping.test.ts"
+      ]
+    },
+    "T097": {
+      "status": "DONE",
+      "did": "Canvas gestures from the interpreted behavior: tool drop (pointer, view centre by keys), move, resize, shape handle, drawing a relation (tool or pending connection, pointer and keys), dragging and sliding a relation end, removal with its confirmation, operation and tool keys, context menu request; each previewed from the behavior's outcome in the overlay and ending in one intent or a refusal; canvas.ts unchanged",
+      "files": [
+        "etalii.adp.ide.notion/src/canvas/gestures.ts",
+        "etalii.adp.ide.notion/test/canvas/gestures.test.ts",
+        "etalii.adp.ide.notion/src/canvas/canvas.css"
+      ]
+    },
+    "T098": {
+      "status": "DONE",
+      "did": "In-place label editor over the label's box (double press, Enter, F2): holds the label's editText, commits through behavior.editLabel on Enter and on losing the focus, Escape cancels, a refusal shows its sentence and keeps the field open",
+      "files": [
+        "etalii.adp.ide.notion/src/canvas/inPlaceEdit.ts",
+        "etalii.adp.ide.notion/test/canvas/inPlaceEdit.test.ts",
+        "etalii.adp.ide.notion/src/canvas/canvas.css"
+      ]
+    },
+    "T083": {
+      "status": "DONE",
+      "did": "Page test of editing: 16 cases in jsdom through the real service to the in-memory Notion (same-turn edit and storing, refusal, read-only, narrow embed, beforeunload, storage keys, one undo step for two elements, toolbox pick and drop, menu removal with confirmation, two pages and the drift check)",
+      "files": [
+        "etalii.adp.ide.notion/test/frame/editing.test.ts"
+      ]
+    },
+    "T099": {
+      "status": "DONE",
+      "did": "Editing part: handlers registered, gestures, in-place edit, context menus and confirmation attached; every intent one edit through modelChangesOf; refusals and reloads in the message; beforeunload and aria-busy while storing; canvas and interpreted parts shared through shared.ts; canvas keeps a multiple selection through a press",
+      "files": [
+        "etalii.adp.ide.notion/src/frame/parts/editing.ts",
+        "etalii.adp.ide.notion/src/frame/parts/editing.css",
+        "etalii.adp.ide.notion/src/frame/parts/shared.ts",
+        "etalii.adp.ide.notion/src/frame/parts/reading.ts",
+        "etalii.adp.ide.notion/src/store/document.ts",
+        "etalii.adp.ide.notion/src/canvas/canvas.ts",
+        "etalii.adp.ide.notion/test/canvas/canvas.test.ts"
+      ]
+    },
+    "T100": {
+      "status": "DONE",
+      "did": "Panels part: property grid in ready and read-only, toolbox in ready only, grid changes as one edit, armed tool shown, Enter drops at the centre, both collapsed in a narrow embed without overwriting the stored preference",
+      "files": [
+        "etalii.adp.ide.notion/src/frame/parts/panels.ts",
+        "etalii.adp.ide.notion/src/frame/parts/panels.css"
+      ]
+    },
+    "T105": {
+      "status": "DONE",
+      "did": "Renamed the first graph's entry and database to the display name and set the Diagram page's embed to the add-on's address with its store"
+    },
+    "T021": {
+      "status": "DONE",
+      "did": "The maintainer merged pull request 95 as c154a05"
+    },
+    "T106": {
+      "status": "DONE",
+      "did": "Created nine entries under the Showcase, each with its database and a Diagram page whose embed names that database"
+    },
+    "T118": {
+      "status": "DONE",
+      "did": "Pushed the branch and opened pull request 3 in etalii.adp.ide.notion, naming the feature's folder and etalii.adp commit c154a05"
+    },
+    "T104": {
+      "status": "DONE",
+      "did": "The maintainer gave a token of the integration ADP Local testing and shared the Showcase with it"
+    },
+    "T107": {
+      "status": "DONE",
+      "did": "Prepared the first graph's database and put the nine examples into their stores in Notion (1310 rows); each taken out again parses to the same document as its example, 0 differences; only comments were not kept"
+    },
+    "T139": {
+      "status": "DONE",
+      "did": "Hid the fourteen internal properties in the default view of each of the ten stores of the Showcase; thirteen stay shown"
+    },
+    "T108": {
+      "status": "DONE",
+      "did": "Checked the ten entries: each database is named by one Diagram page and no other, no two embeds name the same store, and each title is the display name; removed the second Diagram page of Warfare in Ukraine, which named another store"
+    },
+    "T119": {
+      "status": "DONE",
+      "did": "The maintainer merged pull request 3 of etalii.adp.ide.notion as 2c62337; Build passed on develop and the site's deployment published the add-on's address"
+    },
+    "T117": {
+      "status": "DONE",
+      "did": "Validated before pull request 2: 1101 tests and 9 expected failures, lint, type-check, build, tree check, the three copy checks byte for byte, no secret in the built tree, and etalii.adp's two checks"
+    },
+    "T124": {
+      "status": "DONE",
+      "did": "Checked the published tree: the index lists the add-on by its display name with no no-addons sentence and names revision 2c62337, every resource is relative, no response refuses a frame, and no file holds what reads as a token or a client secret"
+    },
+    "T032": {
+      "status": "DONE",
+      "did": "The maintainer created the Cloudflare account; the Worker's address is https://adp-notion.notion-adp.workers.dev"
+    },
+    "T029": {
+      "status": "DONE",
+      "did": "Wrapped the handler as a Cloudflare Worker, deployed it, wrote its address into config.ts and added the deploy job; pull request 4 of etalii.adp.ide.notion",
+      "files": [
+        "etalii.adp.ide.notion/service/worker.ts",
+        "etalii.adp.ide.notion/service/wrangler.toml",
+        "etalii.adp.ide.notion/src/frame/config.ts",
+        "etalii.adp.ide.notion/.github/workflows/build.yml"
+      ]
+    },
+    "T038": {
+      "status": "DONE",
+      "did": "The maintainer registered the public Notion integration with both redirect addresses"
+    },
+    "T045": {
+      "status": "DONE",
+      "did": "The maintainer set the Worker's two secrets and the repository's CLOUDFLARE_API_TOKEN; the Worker's /authorize now redirects to Notion's grant with a client id, and Notion answers it"
+    },
+    "T078": {
+      "status": "DONE",
+      "did": "The maintainer made the first pass in a Notion embed block against the deployed Worker: Connect to Notion granted access from inside the embed and the diagram of a store was drawn, with toolbox, property grid, filters, legend and the viewpoint toggle"
+    },
+    "T128": {
+      "status": "DONE",
+      "did": "The Tools row of the Gartner hype cycle graph states the Notion host as Work-in-progress, as the maintainer set it on 2026-10-08"
+    },
+    "T129": {
+      "status": "DONE",
+      "did": "Brought the section The Notion row up to date: the row's states per host, and what the tool is in the Notion host",
+      "files": [
+        "definitions/diagrams/gartner-hype-cycle-graph.md"
+      ]
+    },
+    "T125": {
+      "status": "DONE",
+      "did": "Created the site's worktree on features/012-notion-hype-cycle-addon from origin/develop and ran npm ci"
+    },
+    "T126": {
+      "status": "DONE",
+      "did": "Refreshed the notion entry of hosts.yaml from the Notion repository's README at 8f4671f: in-progress, with a link to the add-ons",
+      "files": [
+        "etalii.adp.site/src/data/hosts.yaml"
+      ]
+    },
+    "T127": {
+      "status": "DONE",
+      "did": "The catalogue reads the tool's Notion state from the Tools database, now Prototype; the Notion repository's screenshots are a source of the screenshot procedure",
+      "files": [
+        "etalii.adp.site/scripts/refresh/procedures/screenshots.mjs",
+        "etalii.adp.site/procedures/config/screenshots.json"
+      ]
+    },
+    "T130": {
+      "status": "DONE",
+      "did": "Ran the site's checks, pushed the branch and opened its pull request"
+    },
+    "T141": {
+      "status": "DONE",
+      "did": "Amended the Notion principles to 1.2.0: the service keeps no state but a grant in progress, for at most two minutes and handed over once",
+      "files": [
+        ".specify/memory/repositories/etalii.adp.ide.notion.md"
+      ]
     }
   },
   "verified": [

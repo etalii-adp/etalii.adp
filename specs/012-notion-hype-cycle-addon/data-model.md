@@ -514,12 +514,12 @@ One Cloudflare Worker beside the published pages.
 | jobs | start Notion's sign-in; exchange the code for a token and hand it to the page that asked; forward the store's calls to the Notion API |
 | allowed origin | `https://etalii.net` |
 | secrets | the Notion integration's client secret, held by the Worker; a Cloudflare token, held by the repository to deploy it |
-| state | none: it keeps no token and no document |
+| state | a grant in progress, for at most 120 seconds and until it is read once; no document, and nothing else |
 
 **Rules**
 
 - It forwards only the calls the store makes (D8). Its endpoints are in [contracts/service.md](contracts/service.md).
-- It stores nothing, so FR-006 holds for it as for the browser.
+- It stores no document, so FR-006 holds for it as for the browser. A token is kept only while a grant of access is handed over to the page that started it ([contracts/service.md](contracts/service.md), `POST /grant`).
 - Registering the integration and creating the Cloudflare account are done by a maintainer, before the Notion repository's pull request merges (plan, Delivery 2).
 - It is the reason the Notion repository's principles go to 1.1.0: publication is no longer by GitHub Pages only (plan, Complexity Tracking).
 

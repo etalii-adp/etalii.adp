@@ -2,7 +2,7 @@
 
 **Input**: [plan.md](plan.md), [notion-hype-cycle-addon.spec.md](notion-hype-cycle-addon.spec.md), [research.md](research.md), [data-model.md](data-model.md), [contracts/addon-address.md](contracts/addon-address.md), [contracts/store.md](contracts/store.md), [contracts/service.md](contracts/service.md), [contracts/published-tree.md](contracts/published-tree.md), [contracts/shared-parts.md](contracts/shared-parts.md)
 
-**Scale note**: 134 tasks over three repositories (`etalii.adp`, `etalii.adp.ide.notion`, `etalii.adp.site`) and the Notion workspace, about 110 files, four pull requests and ten sets of pages in the Showcase. Watch three things. The data model was reviewed after the contracts and the research were written and differs from them in four places; the analysis of 2026-10-08 brought the store contract, the shared-parts contract, the research and the plan in line (T011, T012, T015 and T016, ticked then), T013 and T014 finish that before any code is written, and the code follows the data model. The Cloudflare Worker comes last, as the maintainer asked on 2026-10-08: until Phase 8 the service is the local one of T028, a small Node process around the same handler the Worker wraps. Ten tasks are a maintainer's and are marked **Maintainer**: the Cloudflare account, the Notion integration, the secrets, a token for the Showcase, the first pass in Notion, timing the set-up steps, and the four merges. Nothing can be seen in a Notion page before T119, so the passes in Notion are in the last phase, not at the end of each story; the one exception is T078, the pass that shows whether access can be granted from an embed block at all, which is made before any story is built.
+**Scale note**: 134 tasks, and six more of an addendum in Phase 9, over three repositories (`etalii.adp`, `etalii.adp.ide.notion`, `etalii.adp.site`) and the Notion workspace, about 110 files, four pull requests and ten sets of pages in the Showcase. Watch three things. The data model was reviewed after the contracts and the research were written and differs from them in four places; the analysis of 2026-10-08 brought the store contract, the shared-parts contract, the research and the plan in line (T011, T012, T015 and T016, ticked then), T013 and T014 finish that before any code is written, and the code follows the data model. The Cloudflare Worker comes last, as the maintainer asked on 2026-10-08: until Phase 8 the service is the local one of T028, a small Node process around the same handler the Worker wraps. Ten tasks are a maintainer's and are marked **Maintainer**: the Cloudflare account, the Notion integration, the secrets, a token for the Showcase, the first pass in Notion, timing the set-up steps, and the four merges. Nothing can be seen in a Notion page before T119, so the passes in Notion are in the last phase, not at the end of each story; the one exception is T078, the pass that shows whether access can be granted from an embed block at all, which is made before any story is built.
 
 **Tests**: asked for by the plan (Testing, research D15). Each module is written with its unit test in the same task. The tests that state a story's outcome are under that story's `### Tests` and are written first, to fail.
 
@@ -77,7 +77,7 @@ Files in `etalii.adp.ide.notion`: `scripts/sync-fbl.mjs`, `scripts/sync-specific
 **⟶ Wait for Wave 1 to finish, then:**
 
 - [x] **T020** Run `python .github/scripts/validate-examples.py` and `python .github/scripts/licence-check.py`, commit, push the branch and open pull request 1 into `develop` · etalii.adp
-- [ ] **T021** **Maintainer**: merge pull request 1 with a merge commit · etalii.adp
+- [x] **T021** **Maintainer**: merge pull request 1 with a merge commit · etalii.adp
 
 ### Part B: `etalii.adp.ide.notion`
 
@@ -85,70 +85,70 @@ Part B starts when T011 to T016 are written. T034 waits for T020, whose commit i
 
 **Wave 1: independent (different files)**
 
-- [ ] **T022** [P] Copy `src/core/fbl` of the Visual Studio Code host at a given commit into `src/fbl/`, byte for byte, and write `PROVENANCE.md` with the commit and a SHA-256 per file; `--check` copies nothing and fails when a file differs from its record (research D4) · etalii.adp.ide.notion/scripts/sync-fbl.mjs
-- [ ] **T023** [P] For each `addons/<id>/addon.json`, copy the specification from `etalii.adp` and the binding from the repository its `persistence.binding` names, byte for byte, and write the folder's `PROVENANCE.md`; `--check` as T022 (research D6) · etalii.adp.ide.notion/scripts/sync-specifications.mjs
-- [ ] **T024** [P] Copy the examples and the test fixtures of each add-on's tool type into `test/examples/` and `test/fixtures/`, write beside each example the places the Visual Studio Code host computes for it, as the shared-parts contract says what a place is, and copy `mindmap.dis` from `etalii.adp` into `test/fixtures/` for T109; `--check` as T022 (research D14, D15) · etalii.adp.ide.notion/scripts/sync-examples.mjs
-- [ ] **T025** [P] Name the specification, its source in `etalii.adp` and the binding, as the published-tree contract gives it · etalii.adp.ide.notion/addons/gartner-hype-cycle-graph/addon.json
-- [ ] **T026** [P] Write the page of the shared-parts contract: `addon.css`, `addon.js`, `data-state="loading"`, no script or style of its own · etalii.adp.ide.notion/addons/gartner-hype-cycle-graph/index.html
-- [ ] **T027** [P] Define a command as plain data that cannot change, a handler with its result and inverse, and a history entry, after `ICommand`, `ICommandHandler`, `CommandResult` and `HistoryEntry` of the standalone application (data model: History) · etalii.adp.ide.notion/src/history/command.ts
-- [ ] **T028** [P] Write the service as a handler that knows no platform, taking a request and its configuration and answering a response, with its test: `/authorize`, `/callback`, `/refresh`, the preflight and `/notion/<path>` for the listed calls only, with the origin, the status codes and `Cache-Control` of the service contract, and no state. Write the local service that runs it, `node scripts/service.mjs`, on `http://localhost:8787`: it reads `NOTION_CLIENT_ID`, `NOTION_CLIENT_SECRET` and `ALLOWED_ORIGIN` from the environment, and with `--memory` it answers the Notion calls from the in-memory Notion of T041 and grants a token without Notion, so that an add-on can be seen working with no account anywhere (FR-010, research D8) · etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/scripts/service.mjs, etalii.adp.ide.notion/test/service/handler.test.ts
-- [ ] **T030** [P] State Notion's type, colours, spacing, corners and focus ring as `--notion-` custom properties, taken from Notion's web client with the source and date of each noted for `docs/styling.md` (T113), in a light set and a dark set under `:root[data-theme="dark"]` (NFR-001, NFR-003, research D13) · etalii.adp.ide.notion/src/panels/notion.css
-- [ ] **T031** [P] Write the digest esbuild puts in the place of `node:crypto` for the copied library (research D4) · etalii.adp.ide.notion/src/shims/node-crypto.ts
+- [x] **T022** [P] Copy `src/core/fbl` of the Visual Studio Code host at a given commit into `src/fbl/`, byte for byte, and write `PROVENANCE.md` with the commit and a SHA-256 per file; `--check` copies nothing and fails when a file differs from its record (research D4) · etalii.adp.ide.notion/scripts/sync-fbl.mjs
+- [x] **T023** [P] For each `addons/<id>/addon.json`, copy the specification from `etalii.adp` and the binding from the repository its `persistence.binding` names, byte for byte, and write the folder's `PROVENANCE.md`; `--check` as T022 (research D6) · etalii.adp.ide.notion/scripts/sync-specifications.mjs
+- [x] **T024** [P] Copy the examples and the test fixtures of each add-on's tool type into `test/examples/` and `test/fixtures/`, write beside each example the places the Visual Studio Code host computes for it, as the shared-parts contract says what a place is, and copy `mindmap.dis` from `etalii.adp` into `test/fixtures/` for T109; `--check` as T022 (research D14, D15) · etalii.adp.ide.notion/scripts/sync-examples.mjs
+- [x] **T025** [P] Name the specification, its source in `etalii.adp` and the binding, as the published-tree contract gives it · etalii.adp.ide.notion/addons/gartner-hype-cycle-graph/addon.json
+- [x] **T026** [P] Write the page of the shared-parts contract: `addon.css`, `addon.js`, `data-state="loading"`, no script or style of its own · etalii.adp.ide.notion/addons/gartner-hype-cycle-graph/index.html
+- [x] **T027** [P] Define a command as plain data that cannot change, a handler with its result and inverse, and a history entry, after `ICommand`, `ICommandHandler`, `CommandResult` and `HistoryEntry` of the standalone application (data model: History) · etalii.adp.ide.notion/src/history/command.ts
+- [x] **T028** [P] Write the service as a handler that knows no platform, taking a request and its configuration and answering a response, with its test: `/authorize`, `/callback`, `/refresh`, the preflight and `/notion/<path>` for the listed calls only, with the origin, the status codes and `Cache-Control` of the service contract, and no state. Write the local service that runs it, `node scripts/service.mjs`, on `http://localhost:8787`: it reads `NOTION_CLIENT_ID`, `NOTION_CLIENT_SECRET` and `ALLOWED_ORIGIN` from the environment, and with `--memory` it answers the Notion calls from the in-memory Notion of T041 and grants a token without Notion, so that an add-on can be seen working with no account anywhere (FR-010, research D8) · etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/scripts/service.mjs, etalii.adp.ide.notion/test/service/handler.test.ts
+- [x] **T030** [P] State Notion's type, colours, spacing, corners and focus ring as `--notion-` custom properties, taken from Notion's web client with the source and date of each noted for `docs/styling.md` (T113), in a light set and a dark set under `:root[data-theme="dark"]` (NFR-001, NFR-003, research D13) · etalii.adp.ide.notion/src/panels/notion.css
+- [x] **T031** [P] Write the digest esbuild puts in the place of `node:crypto` for the copied library (research D4) · etalii.adp.ide.notion/src/shims/node-crypto.ts
 
 **⟶ Wait for Wave 1 to finish, then:**
 
 **Wave 2: independent (different files)**
 
-- [ ] **T033** [P] Run `node scripts/sync-fbl.mjs` at the commit of T002 · etalii.adp.ide.notion/src/fbl/
-- [ ] **T034** [P] Run `node scripts/sync-specifications.mjs` at the `etalii.adp` commit of T020 and the commit of T003; it writes the `.dis`, the `.fbl` and `PROVENANCE.md` (FR-002, FR-003) · etalii.adp.ide.notion/addons/gartner-hype-cycle-graph/
-- [ ] **T035** [P] Run `node scripts/sync-examples.mjs` at the commits of T002 and T003: nine examples with their places, the fixtures and `mindmap.dis` · etalii.adp.ide.notion/test/examples/, etalii.adp.ide.notion/test/fixtures/
-- [ ] **T036** [P] Write the dispatcher (one handler per command type, records nothing) and the history stack (runs a command, keeps the entry when an inverse is reported, undoes and redoes by dispatching, tells its listeners what is available, can be cleared), with a test of the transitions table of the data model. Neither names Notion, a store or a tool type (FR-026, FR-028) · etalii.adp.ide.notion/src/history/dispatcher.ts, etalii.adp.ide.notion/src/history/historyStack.ts, etalii.adp.ide.notion/test/history/historyStack.test.ts
-- [ ] **T037** [P] Write the service's address, the one place in `src/` that names it: the local service's, `http://localhost:8787`, for a page served from `localhost`, and the Worker's for any other, written by T029 once T032 gives it · etalii.adp.ide.notion/src/frame/config.ts
-- [ ] **T038** [P] **Maintainer**: register the Notion integration as public, with the redirect address `http://localhost:8787/callback` of the local service and the capabilities to read, update and insert content, and give its client id and client secret to the local service through the environment. The Worker's `<service>/callback` is added as a second redirect address in T045 · Notion integrations
+- [x] **T033** [P] Run `node scripts/sync-fbl.mjs` at the commit of T002 · etalii.adp.ide.notion/src/fbl/
+- [x] **T034** [P] Run `node scripts/sync-specifications.mjs` at the `etalii.adp` commit of T020 and the commit of T003; it writes the `.dis`, the `.fbl` and `PROVENANCE.md` (FR-002, FR-003) · etalii.adp.ide.notion/addons/gartner-hype-cycle-graph/
+- [x] **T035** [P] Run `node scripts/sync-examples.mjs` at the commits of T002 and T003: nine examples with their places, the fixtures and `mindmap.dis` · etalii.adp.ide.notion/test/examples/, etalii.adp.ide.notion/test/fixtures/
+- [x] **T036** [P] Write the dispatcher (one handler per command type, records nothing) and the history stack (runs a command, keeps the entry when an inverse is reported, undoes and redoes by dispatching, tells its listeners what is available, can be cleared), with a test of the transitions table of the data model. Neither names Notion, a store or a tool type (FR-026, FR-028) · etalii.adp.ide.notion/src/history/dispatcher.ts, etalii.adp.ide.notion/src/history/historyStack.ts, etalii.adp.ide.notion/test/history/historyStack.test.ts
+- [x] **T037** [P] Write the service's address, the one place in `src/` that names it: the local service's, `http://localhost:8787`, for a page served from `localhost`, and the Worker's for any other, written by T029 once T032 gives it · etalii.adp.ide.notion/src/frame/config.ts
+- [x] **T038** [P] **Maintainer**: register the Notion integration as public, with the redirect address `http://localhost:8787/callback` of the local service and the capabilities to read, update and insert content, and give its client id and client secret to the local service through the environment. The Worker's `<service>/callback` is added as a second redirect address in T045 · Notion integrations
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T039** Evaluate CEL with `@marcbachmann/cel-js`, with DISL's helper functions and a specification's own `functions` registered on it. Its test parses every expression of the copied specification. If the library cannot take one, stop, write the evaluator of research D7's fallback here instead, and update D7 before T040 starts · etalii.adp.ide.notion/src/disl/expressions.ts, etalii.adp.ide.notion/test/disl/expressions.test.ts
+- [x] **T039** Evaluate CEL with `@marcbachmann/cel-js`, with DISL's helper functions and a specification's own `functions` registered on it. Its test parses every expression of the copied specification. If the library cannot take one, stop, write the evaluator of research D7's fallback here instead, and update D7 before T040 starts · etalii.adp.ide.notion/src/disl/expressions.ts, etalii.adp.ide.notion/test/disl/expressions.test.ts
 
 **⟶ Wait for T039 to finish, then:**
 
 **Wave 3: independent (different files)**
 
-- [ ] **T040** [P] Type a DISL specification and write `loadSpecification`, which returns the specification with the findings of loading it and never throws (shared-parts contract, Interfaces) · etalii.adp.ide.notion/src/disl/specification.ts, etalii.adp.ide.notion/test/disl/specification.test.ts
-- [ ] **T041** [P] Write the in-memory Notion of the tests: the calls of the service contract's table, rows with edit times and who made each edit, the trash, relations, pages of 100 rows, a database with two data sources, and a switch for `401`, `429` with `Retry-After`, and a lost connection (research D15) · etalii.adp.ide.notion/test/support/memoryNotion.ts
-- [ ] **T042** [P] Take the names of elements, attributes, relations, enum values and rules from every specification and binding under `addons/`, and fail when a file under `src/` holds one as a word of its own: a whole identifier, or a whole word of a string or template literal, whatever its case. A name that DISL, FBL, TypeScript or the web platform uses as a word too is exempt only by a line of `words.exempt.json` that names which of the four uses it, and a word of the copied FBL library's own code only inside `src/fbl/` (FR-004; shared-parts contract) · etalii.adp.ide.notion/test/words.test.ts, etalii.adp.ide.notion/test/words.exempt.json
-- [ ] **T043** [P] Write the calls to the service and their queue: at most three a second, the edits in order and the writes of one edit in the order of its splices, waiting out a `Retry-After`, stopping on a refusal and sending nothing that is queued behind it, and reporting `storing`, `offline` and `failed` (SC-004, research R2) · etalii.adp.ide.notion/src/store/notion.ts, etalii.adp.ide.notion/test/store/notion.test.ts
-- [ ] **T044** [P] Write the session: a token is asked for only when a call needs one, kept under `adp-notion.token` for as long as it is valid, renewed once through `POST /refresh` on a `401` and removed when that fails, and removed by `disconnect`; the grant opens a window of its own with a random `state`, and a message is taken only from the service's origin with that `state` (FR-010; data model: Access) · etalii.adp.ide.notion/src/store/session.ts, etalii.adp.ide.notion/test/store/session.test.ts
+- [x] **T040** [P] Type a DISL specification and write `loadSpecification`, which returns the specification with the findings of loading it and never throws (shared-parts contract, Interfaces) · etalii.adp.ide.notion/src/disl/specification.ts, etalii.adp.ide.notion/test/disl/specification.test.ts
+- [x] **T041** [P] Write the in-memory Notion of the tests: the calls of the service contract's table, rows with edit times and who made each edit, the trash, relations, pages of 100 rows, a database with two data sources, and a switch for `401`, `429` with `Retry-After`, and a lost connection (research D15) · etalii.adp.ide.notion/test/support/memoryNotion.ts
+- [x] **T042** [P] Take the names of elements, attributes, relations, enum values and rules from every specification and binding under `addons/`, and fail when a file under `src/` holds one as a word of its own: a whole identifier, or a whole word of a string or template literal, whatever its case. A name that DISL, FBL, TypeScript or the web platform uses as a word too is exempt only by a line of `words.exempt.json` that names which of the four uses it, and a word of the copied FBL library's own code only inside `src/fbl/` (FR-004; shared-parts contract) · etalii.adp.ide.notion/test/words.test.ts, etalii.adp.ide.notion/test/words.exempt.json
+- [x] **T043** [P] Write the calls to the service and their queue: at most three a second, the edits in order and the writes of one edit in the order of its splices, waiting out a `Retry-After`, stopping on a refusal and sending nothing that is queued behind it, and reporting `storing`, `offline` and `failed` (SC-004, research R2) · etalii.adp.ide.notion/src/store/notion.ts, etalii.adp.ide.notion/test/store/notion.test.ts
+- [x] **T044** [P] Write the session: a token is asked for only when a call needs one, kept under `adp-notion.token` for as long as it is valid, renewed once through `POST /refresh` on a `401` and removed when that fails, and removed by `disconnect`; the grant opens a window of its own with a random `state`, and a message is taken only from the service's origin with that `state` (FR-010; data model: Access) · etalii.adp.ide.notion/src/store/session.ts, etalii.adp.ide.notion/test/store/session.test.ts
 
 **⟶ Wait for Wave 3 to finish, then:**
 
 **Wave 4: independent (different files)**
 
-- [ ] **T046** [P] List the features the interpreter supports and report each feature of `requires.features` that is not among them as a finding that names it (FR-005, research D5) · etalii.adp.ide.notion/src/disl/support.ts, etalii.adp.ide.notion/test/disl/support.test.ts
-- [ ] **T047** [P] Interpret `metamodel`: the diagram, enums, types with their attributes and defaults, and relations with their allowed ends · etalii.adp.ide.notion/src/disl/metamodel.ts, etalii.adp.ide.notion/test/disl/metamodel.test.ts
-- [ ] **T048** [P] Interpret `persistence`: the binding it names and its fragment, `ids`, and `typeMap` from the binding's element rules to the metamodel's types · etalii.adp.ide.notion/src/disl/persistence.ts, etalii.adp.ide.notion/test/disl/persistence.test.ts
-- [ ] **T049** [P] Define the page a part of the frame is given (the interpreted specification, the open document, the regions for the canvas, the two panels, the bar and the findings, the selection, the message) and `onPage`, by which a module under `src/frame/parts/` attaches itself; parts hear the page's events and depend on no order · etalii.adp.ide.notion/src/frame/page.ts, etalii.adp.ide.notion/test/frame/page.test.ts
+- [x] **T046** [P] List the features the interpreter supports and report each feature of `requires.features` that is not among them as a finding that names it (FR-005, research D5) · etalii.adp.ide.notion/src/disl/support.ts, etalii.adp.ide.notion/test/disl/support.test.ts
+- [x] **T047** [P] Interpret `metamodel`: the diagram, enums, types with their attributes and defaults, and relations with their allowed ends · etalii.adp.ide.notion/src/disl/metamodel.ts, etalii.adp.ide.notion/test/disl/metamodel.test.ts
+- [x] **T048** [P] Interpret `persistence`: the binding it names and its fragment, `ids`, and `typeMap` from the binding's element rules to the metamodel's types · etalii.adp.ide.notion/src/disl/persistence.ts, etalii.adp.ide.notion/test/disl/persistence.test.ts
+- [x] **T049** [P] Define the page a part of the frame is given (the interpreted specification, the open document, the regions for the canvas, the two panels, the bar and the findings, the selection, the message) and `onPage`, by which a module under `src/frame/parts/` attaches itself; parts hear the page's events and depend on no order · etalii.adp.ide.notion/src/frame/page.ts, etalii.adp.ide.notion/test/frame/page.test.ts
 
 **⟶ Wait for Wave 4 to finish, then:**
 
 **Wave 5: independent (different files)**
 
-- [ ] **T050** [P] Compute a store's schema from a binding and a specification, naming no key: the kinds, the title property, `Kind`, `Order`, and one property per key with the type its attribute gives, a relation for a reference; say what a database lacks, and `prepare` it without changing or removing a property that exists (contracts/store.md; FR-007) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/test/store/schema.test.ts
-- [ ] **T051** [P] Write the entry: read `store` and `theme` from the address, set `data-theme` and follow a change of `prefers-color-scheme`, set `data-addon` and `data-state`, read `addon.json` and load the two files it names, lay out the regions, and hand the page to every part. With no valid `store` the state is `setup` and no call is made. The layout uses `--notion-` properties only (FR-009, NFR-003) · etalii.adp.ide.notion/src/frame/main.ts, etalii.adp.ide.notion/src/frame/frame.css, etalii.adp.ide.notion/test/frame/main.test.ts
+- [x] **T050** [P] Compute a store's schema from a binding and a specification, naming no key: the kinds, the title property, `Kind`, `Order`, and one property per key with the type its attribute gives, a relation for a reference; say what a database lacks, and `prepare` it without changing or removing a property that exists (contracts/store.md; FR-007) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/test/store/schema.test.ts
+- [x] **T051** [P] Write the entry: read `store` and `theme` from the address, set `data-theme` and follow a change of `prefers-color-scheme`, set `data-addon` and `data-state`, read `addon.json` and load the two files it names, lay out the regions, and hand the page to every part. With no valid `store` the state is `setup` and no call is made. The layout uses `--notion-` properties only (FR-009, NFR-003) · etalii.adp.ide.notion/src/frame/main.ts, etalii.adp.ide.notion/src/frame/frame.css, etalii.adp.ide.notion/test/frame/main.test.ts
 
 **⟶ Wait for Wave 5 to finish, then:**
 
 **Wave 6: independent (different files)**
 
-- [ ] **T052** [P] Turn rows into the document the binding describes and a document into rows, through the FBL library and the schema: kinds, `Order`, relations read as stored ids, the one-place kind, a row of an unknown kind or with unreadable values as a finding. Its test puts each of the nine examples into the in-memory Notion, takes it out and reads both through the binding: the same elements in the same order with the same attributes (FR-006, FR-007, SC-003) · etalii.adp.ide.notion/src/store/rows.ts, etalii.adp.ide.notion/test/store/rows.test.ts
-- [ ] **T053** [P] Add the compile step, keeping the command line: run `ensure-dependencies`, bundle `src/frame/main.ts` with every module directly under `src/frame/parts/` into `addon.js` and every stylesheet under `src/` into `addon.css`, write both into each add-on's folder beside its own files, list each add-on in the index by its specification's `language.label`, and fail on a folder the published-tree contract refuses (FR-001, FR-031, research D12) · etalii.adp.ide.notion/scripts/build.mjs
-- [ ] **T054** [P] Add a `test` job that runs `npm test`, `npm run lint` and `npm run typecheck`; extend the `addons` job's check with the files of each add-on's folder, the SHA-256 of every copy against its `PROVENANCE.md`, a search of `addon.js` for a name the words test collects, and a search of the tree for a secret; the job that deploys the Worker is T029's (contracts: published-tree, service) · etalii.adp.ide.notion/.github/workflows/build.yml
+- [x] **T052** [P] Turn rows into the document the binding describes and a document into rows, through the FBL library and the schema: kinds, `Order`, relations read as stored ids, the one-place kind, a row of an unknown kind or with unreadable values as a finding. Its test puts each of the nine examples into the in-memory Notion, takes it out and reads both through the binding: the same elements in the same order with the same attributes (FR-006, FR-007, SC-003) · etalii.adp.ide.notion/src/store/rows.ts, etalii.adp.ide.notion/test/store/rows.test.ts
+- [x] **T053** [P] Add the compile step, keeping the command line: run `ensure-dependencies`, bundle `src/frame/main.ts` with every module directly under `src/frame/parts/` into `addon.js` and every stylesheet under `src/` into `addon.css`, write both into each add-on's folder beside its own files, list each add-on in the index by its specification's `language.label`, and fail on a folder the published-tree contract refuses (FR-001, FR-031, research D12) · etalii.adp.ide.notion/scripts/build.mjs
+- [x] **T054** [P] Add a `test` job that runs `npm test`, `npm run lint` and `npm run typecheck`; extend the `addons` job's check with the files of each add-on's folder, the SHA-256 of every copy against its `PROVENANCE.md`, a search of `addon.js` for a name the words test collects, and a search of the tree for a secret; the job that deploys the Worker is T029's (contracts: published-tree, service) · etalii.adp.ide.notion/.github/workflows/build.yml
 
 **Checkpoint**: `npm test` passes, and `node scripts/build.mjs --out <dir>` writes the index and the add-on's folder with a page that reaches the state `setup`.
 
 **⟶ Wait for the checkpoint and T038, then:**
 
-- [ ] **T078** **Maintainer**: the first pass in Notion (research R4), made before any story is built, because every story needs the grant. Run the local service of T028 with the integration's client id and secret and `ALLOWED_ORIGIN` set to the address of the pass, and serve this branch's build at an HTTPS address a Notion page can embed, with a page of the pass's own, not kept, that asks the session of T044 for a token when it opens and shows whether it has one. Embed it in a Notion page and grant access from inside the embed block. Record whether the window opens and whether the embed has the token after a grant made in a tab. If neither gives the embed a token, stop: the plan returns to research D1 and no story is started · Notion workspace
+- [x] **T078** **Maintainer**: the first pass in Notion (research R4), made before any story is built, because every story needs the grant. Run the local service of T028 with the integration's client id and secret and `ALLOWED_ORIGIN` set to the address of the pass, and serve this branch's build at an HTTPS address a Notion page can embed, with a page of the pass's own, not kept, that asks the session of T044 for a token when it opens and shows whether it has one. Embed it in a Notion page and grant access from inside the embed block. Record whether the window opens and whether the embed has the token after a grant made in a tab. If neither gives the embed a token, stop: the plan returns to research D1 and no story is started · Notion workspace
 
 ---
 
@@ -166,48 +166,48 @@ Test files: `test/canvas/scene.examples.test.ts`, `test/store/document.read.test
 
 **Wave 1: independent (different files), written to fail first**
 
-- [ ] **T055** [P] [US1] For each of the nine examples, the scene has every element of the document at the place, with the name, phases and influences, that the Visual Studio Code host computes: 0 differences (SC-001, FR-012) · etalii.adp.ide.notion/test/canvas/scene.examples.test.ts
-- [ ] **T056** [P] [US1] Opening a store: an empty prepared store is an empty graph with no finding; a row that cannot be read is a finding and the rest is read; a document that cannot be read at all is `unreadable`; a database that lacks a property is `unprepared`; a database with two data sources is `unprepared` with its sentence; a person whose first write Notion refuses with `403` gets `read-only` from then on, and that write changes nothing (service contract); 518 rows are read in six calls (US1 scenarios 3 to 5, FR-013, FR-021) · etalii.adp.ide.notion/test/store/document.read.test.ts
-- [ ] **T057** [P] [US1] Each `rule-*` fixture gives the findings the specification states, with its severity, its sentence and its element, and `rules-clean` gives none (FR-014) · etalii.adp.ide.notion/test/disl/constraints.fixtures.test.ts
-- [ ] **T058** [P] [US1] The page reaches each state of the address contract with the identifiers that state shows: `connect` with `id="connect"` and `id="open-in-tab"`, `unshared`, `unprepared` with `id="prepare"`, `ready`, `read-only`, `unreadable` with its sentence; `id="findings"` has one item per finding; `id="status"` follows the document; `id="disconnect"` is there in every state that has a token; given a copy of the specification with one label and one default changed, the page shows both with no other change (US1 scenario 6; FR-013, FR-014, NFR-008) · etalii.adp.ide.notion/test/frame/reading.test.ts
+- [x] **T055** [P] [US1] For each of the nine examples, the scene has every element of the document at the place, with the name, phases and influences, that the Visual Studio Code host computes: 0 differences (SC-001, FR-012) · etalii.adp.ide.notion/test/canvas/scene.examples.test.ts
+- [x] **T056** [P] [US1] Opening a store: an empty prepared store is an empty graph with no finding; a row that cannot be read is a finding and the rest is read; a document that cannot be read at all is `unreadable`; a database that lacks a property is `unprepared`; a database with two data sources is `unprepared` with its sentence; a person whose first write Notion refuses with `403` gets `read-only` from then on, and that write changes nothing (service contract); 518 rows are read in six calls (US1 scenarios 3 to 5, FR-013, FR-021) · etalii.adp.ide.notion/test/store/document.read.test.ts
+- [x] **T057** [P] [US1] Each `rule-*` fixture gives the findings the specification states, with its severity, its sentence and its element, and `rules-clean` gives none (FR-014) · etalii.adp.ide.notion/test/disl/constraints.fixtures.test.ts
+- [x] **T058** [P] [US1] The page reaches each state of the address contract with the identifiers that state shows: `connect` with `id="connect"` and `id="open-in-tab"`, `unshared`, `unprepared` with `id="prepare"`, `ready`, `read-only`, `unreadable` with its sentence; `id="findings"` has one item per finding; `id="status"` follows the document; `id="disconnect"` is there in every state that has a token; given a copy of the specification with one label and one default changed, the page shows both with no other change (US1 scenario 6; FR-013, FR-014, NFR-008) · etalii.adp.ide.notion/test/frame/reading.test.ts
 
 ### Implementation
 
 **Wave 1: independent (different files)**
 
-- [ ] **T059** [P] [US1] Interpret `coordinates`: the axes, the `yearMonth` axis and its units, the systems and the default (`axis.yearMonth`) · etalii.adp.ide.notion/src/disl/coordinates.ts, etalii.adp.ide.notion/test/disl/coordinates.test.ts
-- [ ] **T060** [P] [US1] Interpret `notation`: the text metric, the theme tokens, styles, custom and composite shapes, nodes with bound placement, edges, and the canvas with its filters · etalii.adp.ide.notion/src/disl/notation.ts, etalii.adp.ide.notion/test/disl/notation.test.ts
-- [ ] **T061** [P] [US1] Interpret `layout`: the algorithms the specification names, when each runs, and what it respects · etalii.adp.ide.notion/src/disl/layout.ts, etalii.adp.ide.notion/test/disl/layout.test.ts
-- [ ] **T062** [P] [US1] Interpret `viewpoints` and their variants of the notation (`viewpoint.variants`) · etalii.adp.ide.notion/src/disl/viewpoints.ts, etalii.adp.ide.notion/test/disl/viewpoints.test.ts
-- [ ] **T063** [P] [US1] Interpret `constraints`: the defaults, the order, the built-in rules and the rules, each evaluated over a model into findings with the specification's sentence, and which findings refuse an edit (FR-014) · etalii.adp.ide.notion/src/disl/constraints.ts
-- [ ] **T064** [P] [US1] Write the geometry the drawing needs: points, boxes, outlines, Bézier curves and where a curve meets an outline · etalii.adp.ide.notion/src/canvas/geometry.ts, etalii.adp.ide.notion/test/canvas/geometry.test.ts
-- [ ] **T065** [P] [US1] Write `openDocument`: read the whole store in pages of 100 before anything is given, build the model and the findings, decide the state (`ready`, `read-only`, `unreadable`, `unprepared`), offer `prepare` and `reload`, tell listeners of `changed`, `status` and `reloaded`, and run `edit`, `undo` and `redo` through a history stack of its own whose dispatcher takes the handlers a part registers. A reload empties the history (FR-006, FR-013, FR-021; shared-parts contract) · etalii.adp.ide.notion/src/store/document.ts
-- [ ] **T066** [P] [US1] Write `put` and `take` with the code of `src/store/`: the token from `NOTION_TOKEN`, `--addon`, `--replace`, `--force`, `put` prepares first and reports what a store cannot hold, and the exit codes of the store contract; its test runs both against the in-memory Notion (FR-007, research D14) · etalii.adp.ide.notion/scripts/store.mjs, etalii.adp.ide.notion/test/scripts/store.test.ts
-- [ ] **T067** [P] [US1] Write the steps that set a graph up: the database, sharing it with the connection, the page with the embed address, granting access once (SC-009) · etalii.adp.ide.notion/docs/set-up-a-graph.md
-- [ ] **T068** [P] [US1] Document the service: its address, endpoints, secrets, what a maintainer does once, how the local service is run, with and without `--memory`, and how the Worker is deployed · etalii.adp.ide.notion/docs/service.md, etalii.adp.ide.notion/service/README.md
+- [x] **T059** [P] [US1] Interpret `coordinates`: the axes, the `yearMonth` axis and its units, the systems and the default (`axis.yearMonth`) · etalii.adp.ide.notion/src/disl/coordinates.ts, etalii.adp.ide.notion/test/disl/coordinates.test.ts
+- [x] **T060** [P] [US1] Interpret `notation`: the text metric, the theme tokens, styles, custom and composite shapes, nodes with bound placement, edges, and the canvas with its filters · etalii.adp.ide.notion/src/disl/notation.ts, etalii.adp.ide.notion/test/disl/notation.test.ts
+- [x] **T061** [P] [US1] Interpret `layout`: the algorithms the specification names, when each runs, and what it respects · etalii.adp.ide.notion/src/disl/layout.ts, etalii.adp.ide.notion/test/disl/layout.test.ts
+- [x] **T062** [P] [US1] Interpret `viewpoints` and their variants of the notation (`viewpoint.variants`) · etalii.adp.ide.notion/src/disl/viewpoints.ts, etalii.adp.ide.notion/test/disl/viewpoints.test.ts
+- [x] **T063** [P] [US1] Interpret `constraints`: the defaults, the order, the built-in rules and the rules, each evaluated over a model into findings with the specification's sentence, and which findings refuse an edit (FR-014) · etalii.adp.ide.notion/src/disl/constraints.ts
+- [x] **T064** [P] [US1] Write the geometry the drawing needs: points, boxes, outlines, Bézier curves and where a curve meets an outline · etalii.adp.ide.notion/src/canvas/geometry.ts, etalii.adp.ide.notion/test/canvas/geometry.test.ts
+- [x] **T065** [P] [US1] Write `openDocument`: read the whole store in pages of 100 before anything is given, build the model and the findings, decide the state (`ready`, `read-only`, `unreadable`, `unprepared`), offer `prepare` and `reload`, tell listeners of `changed`, `status` and `reloaded`, and run `edit`, `undo` and `redo` through a history stack of its own whose dispatcher takes the handlers a part registers. A reload empties the history (FR-006, FR-013, FR-021; shared-parts contract) · etalii.adp.ide.notion/src/store/document.ts
+- [x] **T066** [P] [US1] Write `put` and `take` with the code of `src/store/`: the token from `NOTION_TOKEN`, `--addon`, `--replace`, `--force`, `put` prepares first and reports what a store cannot hold, and the exit codes of the store contract; its test runs both against the in-memory Notion (FR-007, research D14) · etalii.adp.ide.notion/scripts/store.mjs, etalii.adp.ide.notion/test/scripts/store.test.ts
+- [x] **T067** [P] [US1] Write the steps that set a graph up: the database, sharing it with the connection, the page with the embed address, granting access once (SC-009) · etalii.adp.ide.notion/docs/set-up-a-graph.md
+- [x] **T068** [P] [US1] Document the service: its address, endpoints, secrets, what a maintainer does once, how the local service is run, with and without `--memory`, and how the Worker is deployed · etalii.adp.ide.notion/docs/service.md, etalii.adp.ide.notion/service/README.md
 
 **⟶ Wait for Wave 1 to finish, then:**
 
 **Wave 2: independent (different files)**
 
-- [ ] **T069** [P] [US1] Turn a model into a scene through the interpreted notation, coordinates, layout and viewpoint: every node and edge placed, with its shape, its parts and its labels (`placement.bound`, FR-012) · etalii.adp.ide.notion/src/canvas/scene.ts
-- [ ] **T070** [P] [US1] Draw a custom and a composite shape of the notation as SVG, coloured from the specification's theme tokens (`shape.custom`, `shape.composite`, NFR-002) · etalii.adp.ide.notion/src/canvas/shapes.ts, etalii.adp.ide.notion/test/canvas/shapes.test.ts
-- [ ] **T071** [P] [US1] Draw an edge as the notation asks, from and to a part of a shape (`edge.bezier`, `anchor.part`) · etalii.adp.ide.notion/src/canvas/connectors.ts, etalii.adp.ide.notion/test/canvas/connectors.test.ts
-- [ ] **T072** [P] [US1] Draw the ruler of an axis, with ticks and labels that follow the zoom (`ruler.adaptive`) · etalii.adp.ide.notion/src/canvas/ruler.ts, etalii.adp.ide.notion/test/canvas/ruler.test.ts
-- [ ] **T073** [P] [US1] Measure and draw text by the notation's text metric, with wrapping and clipping as it asks · etalii.adp.ide.notion/src/canvas/labels.ts, etalii.adp.ide.notion/test/canvas/labels.test.ts
-- [ ] **T074** [P] [US1] Draw the canvas's filters and legend from the notation and apply a filter to a scene (`canvas.filters`) · etalii.adp.ide.notion/src/canvas/filters.ts, etalii.adp.ide.notion/test/canvas/filters.test.ts
+- [x] **T069** [P] [US1] Turn a model into a scene through the interpreted notation, coordinates, layout and viewpoint: every node and edge placed, with its shape, its parts and its labels (`placement.bound`, FR-012) · etalii.adp.ide.notion/src/canvas/scene.ts
+- [x] **T070** [P] [US1] Draw a custom and a composite shape of the notation as SVG, coloured from the specification's theme tokens (`shape.custom`, `shape.composite`, NFR-002) · etalii.adp.ide.notion/src/canvas/shapes.ts, etalii.adp.ide.notion/test/canvas/shapes.test.ts
+- [x] **T071** [P] [US1] Draw an edge as the notation asks, from and to a part of a shape (`edge.bezier`, `anchor.part`) · etalii.adp.ide.notion/src/canvas/connectors.ts, etalii.adp.ide.notion/test/canvas/connectors.test.ts
+- [x] **T072** [P] [US1] Draw the ruler of an axis, with ticks and labels that follow the zoom (`ruler.adaptive`) · etalii.adp.ide.notion/src/canvas/ruler.ts, etalii.adp.ide.notion/test/canvas/ruler.test.ts
+- [x] **T073** [P] [US1] Measure and draw text by the notation's text metric, with wrapping and clipping as it asks · etalii.adp.ide.notion/src/canvas/labels.ts, etalii.adp.ide.notion/test/canvas/labels.test.ts
+- [x] **T074** [P] [US1] Draw the canvas's filters and legend from the notation and apply a filter to a scene (`canvas.filters`) · etalii.adp.ide.notion/src/canvas/filters.ts, etalii.adp.ide.notion/test/canvas/filters.test.ts
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T075** [US1] Write `createCanvas`: draw a scene into `id="canvas"` with `data-element` and `data-type`, pan and zoom, switch viewpoint, select by pointer and by keyboard with `data-selected`, take the keyboard focus, and choose the background and the selection mark from the `--notion-` properties. Its test draws a scene of 50 nodes of the largest shape in under 1 second (SC-002, FR-011, NFR-002) · etalii.adp.ide.notion/src/canvas/canvas.ts, etalii.adp.ide.notion/src/canvas/canvas.css, etalii.adp.ide.notion/test/canvas/canvas.test.ts
+- [x] **T075** [US1] Write `createCanvas`: draw a scene into `id="canvas"` with `data-element` and `data-type`, pan and zoom, switch viewpoint, select by pointer and by keyboard with `data-selected`, take the keyboard focus, and choose the background and the selection mark from the `--notion-` properties. Its test draws a scene of 50 nodes of the largest shape in under 1 second (SC-002, FR-011, NFR-002) · etalii.adp.ide.notion/src/canvas/canvas.ts, etalii.adp.ide.notion/src/canvas/canvas.css, etalii.adp.ide.notion/test/canvas/canvas.test.ts
 
 **⟶ Wait for T075 to finish, then:**
 
-- [ ] **T076** [US1] Attach reading to the page: open the document, show `connect`, `unshared`, `unprepared` and `unreadable` with their controls and sentences, offer `disconnect`, draw the canvas, list the findings with severity, sentence and element, show the status in Notion's manner, redraw on `changed`, and read again when the page regains the focus (FR-009, FR-013, FR-014, FR-021, NFR-008) · etalii.adp.ide.notion/src/frame/parts/reading.ts
+- [x] **T076** [US1] Attach reading to the page: open the document, show `connect`, `unshared`, `unprepared` and `unreadable` with their controls and sentences, offer `disconnect`, draw the canvas, list the findings with severity, sentence and element, show the status in Notion's manner, redraw on `changed`, and read again when the page regains the focus (FR-009, FR-013, FR-014, FR-021, NFR-008) · etalii.adp.ide.notion/src/frame/parts/reading.ts
 
 **⟶ Wait for T076 to finish, then:**
 
-- [ ] **T077** [US1] List what the interpreter supports of DISL and what it does not, generated from `src/disl/support.ts` where it can be, the four behaviours the specification leaves unstated, each with the interim rule the shared parts follow (research, Differences), and the known limits: the window between the drift check and a write, a store of more than about 250 rows and SC-002, a large arrangement and SC-004, and who sees the invitation to connect (FR-005; research R1 to R3, D10) · etalii.adp.ide.notion/docs/disl-support.md
+- [x] **T077** [US1] List what the interpreter supports of DISL and what it does not, generated from `src/disl/support.ts` where it can be, the four behaviours the specification leaves unstated, each with the interim rule the shared parts follow (research, Differences), and the known limits: the window between the drift check and a write, a store of more than about 250 rows and SC-002, a large arrangement and SC-004, and who sees the invitation to connect (FR-005; research R1 to R3, D10) · etalii.adp.ide.notion/docs/disl-support.md
 
 **Checkpoint**: T055 to T058 pass. A store filled with an example is drawn in jsdom as the Visual Studio Code host draws it, with its findings.
 
@@ -227,43 +227,43 @@ Test files: `test/store/editing.test.ts`, `test/store/drift.test.ts`, `test/disl
 
 **Wave 1: independent (different files), written to fail first**
 
-- [ ] **T079** [P] [US2] Each kind of edit writes exactly its rows and properties: an insertion one row with its `Kind`, `Order`, values and relations; a removal one row in the trash and the rows its cascade takes; a changed value one property; a changed reference one relation; a changed place the `Order` of the rows that moved. The writes of one edit are sent in the order of its splices. An edit the specification or the binding refuses writes nothing and answers the sentence. An edit with a splice that cannot be resolved is not written in part (FR-018, FR-019; data model: Edit) · etalii.adp.ide.notion/test/store/editing.test.ts
-- [ ] **T080** [P] [US2] A row edited or created by somebody else since the last read stops the write, and a write to a row somebody else trashed is refused; either tells the user, reads the store again and empties the history; a refused write does the same; a write that fails after others of the same edit were stored sends nothing later, takes nothing back, says that the edit was stored in part and reads the store again; an edit made while writes are queued is written behind them; a `429` is waited out; a lost connection shows `offline` and loses no edit unseen (FR-020, FR-022, research D10) · etalii.adp.ide.notion/test/store/drift.test.ts
-- [ ] **T081** [P] [US2] List every tool, gesture, operation and context action the specification offers, read from the specification, and make each against the in-memory Notion: 0 that cannot be done (FR-015, SC-006) · etalii.adp.ide.notion/test/disl/offers.test.ts
-- [ ] **T082** [P] [US2] The toolbox lists the specification's tools in their groups with `data-tool`, label, icon and description; the property grid shows the inspector form of the selection's type with `data-form` and `data-attribute` and honours `widget`, `visible`, `display`, `validate` and `parse`; each panel collapses, keeps that in local storage and restores it, and opens expanded when the storage is refused; `readOnly` shows no control that changes anything (FR-016, FR-017, FR-021) · etalii.adp.ide.notion/test/panels/panels.test.ts
-- [ ] **T083** [P] [US2] In the page: an edit is on the canvas in the same turn and `data-status` is `storing` until the store holds it; a refusal fills `id="message"` and changes nothing; `read-only` has no toolbox and no editing control; in an embed narrower than both panels they are collapsed and the canvas stays usable; while `data-status` is `storing` the page asks to be warned before it is left; after any edit the browser's storage holds the token and the panels' state and nothing else (FR-006, FR-011, FR-017, FR-019, SC-004) · etalii.adp.ide.notion/test/frame/editing.test.ts
+- [x] **T079** [P] [US2] Each kind of edit writes exactly its rows and properties: an insertion one row with its `Kind`, `Order`, values and relations; a removal one row in the trash and the rows its cascade takes; a changed value one property; a changed reference one relation; a changed place the `Order` of the rows that moved. The writes of one edit are sent in the order of its splices. An edit the specification or the binding refuses writes nothing and answers the sentence. An edit with a splice that cannot be resolved is not written in part (FR-018, FR-019; data model: Edit) · etalii.adp.ide.notion/test/store/editing.test.ts
+- [x] **T080** [P] [US2] A row edited or created by somebody else since the last read stops the write, and a write to a row somebody else trashed is refused; either tells the user, reads the store again and empties the history; a refused write does the same; a write that fails after others of the same edit were stored sends nothing later, takes nothing back, says that the edit was stored in part and reads the store again; an edit made while writes are queued is written behind them; a `429` is waited out; a lost connection shows `offline` and loses no edit unseen (FR-020, FR-022, research D10) · etalii.adp.ide.notion/test/store/drift.test.ts
+- [x] **T081** [P] [US2] List every tool, gesture, operation and context action the specification offers, read from the specification, and make each against the in-memory Notion: 0 that cannot be done (FR-015, SC-006) · etalii.adp.ide.notion/test/disl/offers.test.ts
+- [x] **T082** [P] [US2] The toolbox lists the specification's tools in their groups with `data-tool`, label, icon and description; the property grid shows the inspector form of the selection's type with `data-form` and `data-attribute` and honours `widget`, `visible`, `display`, `validate` and `parse`; each panel collapses, keeps that in local storage and restores it, and opens expanded when the storage is refused; `readOnly` shows no control that changes anything (FR-016, FR-017, FR-021) · etalii.adp.ide.notion/test/panels/panels.test.ts
+- [x] **T083** [P] [US2] In the page: an edit is on the canvas in the same turn and `data-status` is `storing` until the store holds it; a refusal fills `id="message"` and changes nothing; `read-only` has no toolbox and no editing control; in an embed narrower than both panels they are collapsed and the canvas stays usable; while `data-status` is `storing` the page asks to be warned before it is left; after any edit the browser's storage holds the token and the panels' state and nothing else (FR-006, FR-011, FR-017, FR-019, SC-004) · etalii.adp.ide.notion/test/frame/editing.test.ts
 
 ### Implementation
 
 **Wave 1: independent (different files)**
 
-- [ ] **T084** [P] [US2] Interpret `toolbox`: the groups, each tool with what it creates and where a keyboard drop goes, and the context menus · etalii.adp.ide.notion/src/disl/toolbox.ts, etalii.adp.ide.notion/test/disl/toolbox.test.ts
-- [ ] **T085** [P] [US2] Interpret `forms`: per type, the items with their widget, visibility, display, validation and parsing, and the form's usages · etalii.adp.ide.notion/src/disl/forms.ts, etalii.adp.ide.notion/test/disl/forms.test.ts
-- [ ] **T086** [P] [US2] Interpret `behavior`: the messages, hooks, operations with their gestures and keys, and deletion with its confirmations, each as a change to a model or a refusal with its sentence (`snap.byGesture`, `label.parse`) · etalii.adp.ide.notion/src/disl/behavior.ts, etalii.adp.ide.notion/test/disl/behavior.test.ts
-- [ ] **T087** [P] [US2] Resolve the splices of one change to row writes by the rule of the store contract, from the binding alone: the place gives the kind, the entry the row, the key the property. A splice that lands on nothing writes nothing; one that cannot be resolved refuses the whole change (FR-004, FR-018) · etalii.adp.ide.notion/src/store/writes.ts
-- [ ] **T088** [P] [US2] Ask the store for rows edited or created from the minute of the last read on, set aside the rows whose edit time and editor are those of its own last write, and say whether somebody else made a change; a row trashed by somebody else is found by the refused write or the next whole read, as the store contract says (FR-022) · etalii.adp.ide.notion/src/store/drift.ts
-- [ ] **T089** [P] [US2] Write what every panel shares: a region with an accessible name, its toggle that stays visible, `data-collapsed`, and the collapsed state kept in local storage per add-on and per panel under the key of T014 (FR-017, NFR-006) · etalii.adp.ide.notion/src/panels/panel.ts
-- [ ] **T090** [P] [US2] Write the controls a form's widgets ask for, each operable with the keyboard alone, named to assistive technology, and without a way to change when read-only (NFR-006) · etalii.adp.ide.notion/src/panels/controls.ts
-- [ ] **T091** [P] [US2] Style the panels, the controls and the menus from the `--notion-` properties alone, with every class beginning with `adp-` and the focus drawn with `--notion-focus-ring` (NFR-001, NFR-005) · etalii.adp.ide.notion/src/panels/panels.css
-- [ ] **T092** [P] [US2] Snap a dragged value as the specification asks for that gesture · etalii.adp.ide.notion/src/canvas/snapping.ts, etalii.adp.ide.notion/test/canvas/snapping.test.ts
+- [x] **T084** [P] [US2] Interpret `toolbox`: the groups, each tool with what it creates and where a keyboard drop goes, and the context menus · etalii.adp.ide.notion/src/disl/toolbox.ts, etalii.adp.ide.notion/test/disl/toolbox.test.ts
+- [x] **T085** [P] [US2] Interpret `forms`: per type, the items with their widget, visibility, display, validation and parsing, and the form's usages · etalii.adp.ide.notion/src/disl/forms.ts, etalii.adp.ide.notion/test/disl/forms.test.ts
+- [x] **T086** [P] [US2] Interpret `behavior`: the messages, hooks, operations with their gestures and keys, and deletion with its confirmations, each as a change to a model or a refusal with its sentence (`snap.byGesture`, `label.parse`) · etalii.adp.ide.notion/src/disl/behavior.ts, etalii.adp.ide.notion/test/disl/behavior.test.ts
+- [x] **T087** [P] [US2] Resolve the splices of one change to row writes by the rule of the store contract, from the binding alone: the place gives the kind, the entry the row, the key the property. A splice that lands on nothing writes nothing; one that cannot be resolved refuses the whole change (FR-004, FR-018) · etalii.adp.ide.notion/src/store/writes.ts
+- [x] **T088** [P] [US2] Ask the store for rows edited or created from the minute of the last read on, set aside the rows whose edit time and editor are those of its own last write, and say whether somebody else made a change; a row trashed by somebody else is found by the refused write or the next whole read, as the store contract says (FR-022) · etalii.adp.ide.notion/src/store/drift.ts
+- [x] **T089** [P] [US2] Write what every panel shares: a region with an accessible name, its toggle that stays visible, `data-collapsed`, and the collapsed state kept in local storage per add-on and per panel under the key of T014 (FR-017, NFR-006) · etalii.adp.ide.notion/src/panels/panel.ts
+- [x] **T090** [P] [US2] Write the controls a form's widgets ask for, each operable with the keyboard alone, named to assistive technology, and without a way to change when read-only (NFR-006) · etalii.adp.ide.notion/src/panels/controls.ts
+- [x] **T091** [P] [US2] Style the panels, the controls and the menus from the `--notion-` properties alone, with every class beginning with `adp-` and the focus drawn with `--notion-focus-ring` (NFR-001, NFR-005) · etalii.adp.ide.notion/src/panels/panels.css
+- [x] **T092** [P] [US2] Snap a dragged value as the specification asks for that gesture · etalii.adp.ide.notion/src/canvas/snapping.ts, etalii.adp.ide.notion/test/canvas/snapping.test.ts
 
 **⟶ Wait for Wave 1 to finish, then:**
 
 **Wave 2: independent (different files)**
 
-- [ ] **T093** [P] [US2] Write the commands of an open document and their handlers: a change is checked against the constraints that refuse an edit, planned as splices by the FBL library, resolved to row writes, applied to the model, reported with its inverse command, and queued after a drift check; a failure reloads the document. One gesture is one command (FR-018 to FR-020, FR-024, FR-026) · etalii.adp.ide.notion/src/store/handlers.ts
-- [ ] **T094** [P] [US2] Write `createToolbox` as the shared-parts contract gives it: every tool in its group and order, picked by pointer or with Enter · etalii.adp.ide.notion/src/panels/toolbox.ts
-- [ ] **T095** [P] [US2] Write `createPropertyGrid` as the shared-parts contract gives it: the form of the selection's type, the diagram's own form for an empty selection, each change answered with the edit's result · etalii.adp.ide.notion/src/panels/propertyGrid.ts
-- [ ] **T096** [P] [US2] Write the menu a context menu of the specification is shown in, in Notion's manner, operable with the keyboard · etalii.adp.ide.notion/src/panels/menu.ts
-- [ ] **T097** [P] [US2] Write the gestures of the canvas from the interpreted behavior: a drop from the toolbox, moving and resizing along an axis, dragging a part's boundary, drawing a relation between two elements, removing the selection, each ending in one change (FR-015, FR-024) · etalii.adp.ide.notion/src/canvas/gestures.ts, etalii.adp.ide.notion/test/canvas/gestures.test.ts
-- [ ] **T098** [P] [US2] Edit a label in place, parsed as the specification asks (`label.parse`) · etalii.adp.ide.notion/src/canvas/inPlaceEdit.ts, etalii.adp.ide.notion/test/canvas/inPlaceEdit.test.ts
+- [x] **T093** [P] [US2] Write the commands of an open document and their handlers: a change is checked against the constraints that refuse an edit, planned as splices by the FBL library, resolved to row writes, applied to the model, reported with its inverse command, and queued after a drift check; a failure reloads the document. One gesture is one command (FR-018 to FR-020, FR-024, FR-026) · etalii.adp.ide.notion/src/store/handlers.ts
+- [x] **T094** [P] [US2] Write `createToolbox` as the shared-parts contract gives it: every tool in its group and order, picked by pointer or with Enter · etalii.adp.ide.notion/src/panels/toolbox.ts
+- [x] **T095** [P] [US2] Write `createPropertyGrid` as the shared-parts contract gives it: the form of the selection's type, the diagram's own form for an empty selection, each change answered with the edit's result · etalii.adp.ide.notion/src/panels/propertyGrid.ts
+- [x] **T096** [P] [US2] Write the menu a context menu of the specification is shown in, in Notion's manner, operable with the keyboard · etalii.adp.ide.notion/src/panels/menu.ts
+- [x] **T097** [P] [US2] Write the gestures of the canvas from the interpreted behavior: a drop from the toolbox, moving and resizing along an axis, dragging a part's boundary, drawing a relation between two elements, removing the selection, each ending in one change (FR-015, FR-024) · etalii.adp.ide.notion/src/canvas/gestures.ts, etalii.adp.ide.notion/test/canvas/gestures.test.ts
+- [x] **T098** [P] [US2] Edit a label in place, parsed as the specification asks (`label.parse`) · etalii.adp.ide.notion/src/canvas/inPlaceEdit.ts, etalii.adp.ide.notion/test/canvas/inPlaceEdit.test.ts
 
 **⟶ Wait for Wave 2 to finish, then:**
 
 **Wave 3: independent (different files)**
 
-- [ ] **T099** [P] [US2] Attach editing to a page whose state is `ready`: register the handlers with the document, attach the gestures, the in-place edit, the context menus and the keys the behavior binds, show a refusal or a failure in `id="message"`, ask the browser to warn before the page is left while writes are queued, and show the progress of a long store (FR-015, FR-019, FR-020, NFR-008) · etalii.adp.ide.notion/src/frame/parts/editing.ts
-- [ ] **T100** [P] [US2] Attach the panels: the property grid in `ready` and `read-only`, the toolbox in `ready` only, the selection shown in the grid, a picked tool placed on the canvas, and both collapsed when the embed is narrower than both (FR-011, FR-016, FR-017, FR-021) · etalii.adp.ide.notion/src/frame/parts/panels.ts
+- [x] **T099** [P] [US2] Attach editing to a page whose state is `ready`: register the handlers with the document, attach the gestures, the in-place edit, the context menus and the keys the behavior binds, show a refusal or a failure in `id="message"`, ask the browser to warn before the page is left while writes are queued, and show the progress of a long store (FR-015, FR-019, FR-020, NFR-008) · etalii.adp.ide.notion/src/frame/parts/editing.ts
+- [x] **T100** [P] [US2] Attach the panels: the property grid in `ready` and `read-only`, the toolbox in `ready` only, the selection shown in the grid, a picked tool placed on the canvas, and both collapsed when the embed is narrower than both (FR-011, FR-016, FR-017, FR-021) · etalii.adp.ide.notion/src/frame/parts/panels.ts
 
 **Checkpoint**: T079 to T083 pass. Every edit of T081's list is made in jsdom and found in the rows of the in-memory Notion.
 
@@ -283,12 +283,12 @@ Test files: `test/store/undo.test.ts`, `test/frame/undoRedo.test.ts`
 
 **Wave 1: independent (different files), written to fail first**
 
-- [ ] **T101** [P] [US3] After a sequence of 20 edits of every kind, 20 undos leave the store the same as before the first, by the store contract's meaning of "the same", and 20 redos the same as after the last; a drag that changed several attributes and a removal with its cascade are each one step; a new edit after an undo leaves nothing to redo; an undo made while the writes of its edit are still queued is stored behind them and leaves the store the same; the history is empty after a reload (FR-024, FR-026, SC-005) · etalii.adp.ide.notion/test/store/undo.test.ts
-- [ ] **T102** [P] [US3] With the focus inside the page, `CTRL+Z` undoes, `CTRL+Y` and `CTRL+SHIFT+Z` redo, and Command+Z and Shift+Command+Z do the same on macOS; `id="undo"` and `id="redo"` do the same and are `disabled` when there is nothing to take; with nothing to take, a key changes and shows nothing; `read-only` has neither button (FR-023, FR-025) · etalii.adp.ide.notion/test/frame/undoRedo.test.ts
+- [x] **T101** [P] [US3] After a sequence of 20 edits of every kind, 20 undos leave the store the same as before the first, by the store contract's meaning of "the same", and 20 redos the same as after the last; a drag that changed several attributes and a removal with its cascade are each one step; a new edit after an undo leaves nothing to redo; an undo made while the writes of its edit are still queued is stored behind them and leaves the store the same; the history is empty after a reload (FR-024, FR-026, SC-005) · etalii.adp.ide.notion/test/store/undo.test.ts
+- [x] **T102** [P] [US3] With the focus inside the page, `CTRL+Z` undoes, `CTRL+Y` and `CTRL+SHIFT+Z` redo, and Command+Z and Shift+Command+Z do the same on macOS; `id="undo"` and `id="redo"` do the same and are `disabled` when there is nothing to take; with nothing to take, a key changes and shows nothing; `read-only` has neither button (FR-023, FR-025) · etalii.adp.ide.notion/test/frame/undoRedo.test.ts
 
 ### Implementation
 
-- [ ] **T103** [US3] Attach undo and redo to a page whose state is `ready`: the keys of the address contract while the focus is inside the page, and the two buttons, enabled as the history stack says (FR-023, FR-025) · etalii.adp.ide.notion/src/frame/parts/undoRedo.ts
+- [x] **T103** [US3] Attach undo and redo to a page whose state is `ready`: the keys of the address contract while the focus is inside the page, and the two buttons, enabled as the history stack says (FR-023, FR-025) · etalii.adp.ide.notion/src/frame/parts/undoRedo.ts
 
 **Checkpoint**: T101 and T102 pass.
 
@@ -304,17 +304,17 @@ Files: none in a repository. Pages: the entry "Gartner hype cycle graph" and nin
 
 **Wave 1: independent (different pages)**
 
-- [ ] **T104** [P] [US4] **Maintainer**: give a `NOTION_TOKEN` of an integration the Showcase is shared with, for `scripts/store.mjs`; it goes in the environment and in no file · Notion workspace
-- [ ] **T105** [P] [US4] Rename the first graph's pages to the tool type's display name, `Gartner hype cycle graph` and `Gartner hype cycle graph - Data`, keep `Diagram`, and set the embed of `Diagram` to `https://etalii.net/adp-notion/gartner-hype-cycle-graph/?store=3f2be2fd05b680f5bfe1d89398eabb4e`. The page "Root" is left as it is (FR-008, FR-030) · Notion workspace/Showcase/Gartner hype cycle graph
-- [ ] **T106** [P] [US4] Create nine entries under the Showcase, titled as the store contract lists them, each with a database `<title> - Data` and a page `Diagram` whose one embed block names that database (FR-029) · Notion workspace/Showcase
+- [x] **T104** [P] [US4] **Maintainer**: give a `NOTION_TOKEN` of an integration the Showcase is shared with, for `scripts/store.mjs`; it goes in the environment and in no file · Notion workspace
+- [x] **T105** [P] [US4] Rename the first graph's pages to the tool type's display name, `Gartner hype cycle graph` and `Gartner hype cycle graph - Data`, keep `Diagram`, and set the embed of `Diagram` to `https://etalii.net/adp-notion/gartner-hype-cycle-graph/?store=3f2be2fd05b680f5bfe1d89398eabb4e`. The page "Root" is left as it is (FR-008, FR-030) · Notion workspace/Showcase/Gartner hype cycle graph
+- [x] **T106** [P] [US4] Create nine entries under the Showcase, titled as the store contract lists them, each with a database `<title> - Data` and a page `Diagram` whose one embed block names that database (FR-029) · Notion workspace/Showcase
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T107** [US4] Prepare the first graph's database, and `put` each of the nine examples of `test/examples/` into its store. Then `take` each out and read it beside the example through the binding: 0 differences. Note what `put` reported as not kept (FR-007, FR-029, SC-003) · Notion workspace/Showcase
+- [x] **T107** [US4] Prepare the first graph's database, and `put` each of the nine examples of `test/examples/` into its store. Then `take` each out and read it beside the example through the binding: 0 differences. Note what `put` reported as not kept (FR-007, FR-029, SC-003) · Notion workspace/Showcase
 
 **⟶ Wait for T107 to finish, then:**
 
-- [ ] **T108** [US4] Check the ten entries: each database is named by one diagram page and no other, no two embeds name the same store, and each title is the example's display name (US4 scenarios 1 and 3) · Notion workspace/Showcase
+- [x] **T108** [US4] Check the ten entries: each database is named by one diagram page and no other, no two embeds name the same store, and each title is the example's display name (US4 scenarios 1 and 3) · Notion workspace/Showcase
 
 **Checkpoint**: ten stores hold their documents. The diagram pages show them once the add-on is published (T119, T120).
 
@@ -334,17 +334,17 @@ Test files: `test/panels/reuse.test.ts`, `test/disl/reuse.test.ts`, `test/panels
 
 **Wave 1: independent (different files)**
 
-- [ ] **T109** [P] [US5] Given `test/fixtures/mindmap.dis`, the toolbox lists that type's tools with their names, icons and descriptions and the property grid shows an element's attributes with the controls its forms ask for; and the interpreter loads that specification without throwing, with every feature it does not support as a finding that names it (US5 scenarios 1 and 2, FR-027, FR-028, SC-007) · etalii.adp.ide.notion/test/panels/reuse.test.ts, etalii.adp.ide.notion/test/disl/reuse.test.ts
-- [ ] **T110** [P] [US5] Every control of the toolbox and the property grid is reached with Tab and used with the keyboard alone, has an accessible name, and each panel is a named region: 0 controls that need a pointer (NFR-006, SC-012) · etalii.adp.ide.notion/test/panels/keyboard.test.ts
-- [ ] **T111** [P] [US5] No stylesheet under `src/` but `notion.css` states a literal colour, type size, spacing or corner; every class the shared parts write begins with `adp-`; the add-on's page has no style of its own (NFR-005, US5 scenario 5) · etalii.adp.ide.notion/test/styles.test.ts
-- [ ] **T112** [P] [US5] A part imports only parts above it in the shared-parts table; the panels import neither the store nor the canvas; the history imports no other part; only `src/store/session.ts` and `src/store/notion.ts` know the service or a token (FR-004, FR-028) · etalii.adp.ide.notion/test/parts.test.ts
+- [x] **T109** [P] [US5] Given `test/fixtures/mindmap.dis`, the toolbox lists that type's tools with their names, icons and descriptions and the property grid shows an element's attributes with the controls its forms ask for; and the interpreter loads that specification without throwing, with every feature it does not support as a finding that names it (US5 scenarios 1 and 2, FR-027, FR-028, SC-007) · etalii.adp.ide.notion/test/panels/reuse.test.ts, etalii.adp.ide.notion/test/disl/reuse.test.ts
+- [x] **T110** [P] [US5] Every control of the toolbox and the property grid is reached with Tab and used with the keyboard alone, has an accessible name, and each panel is a named region: 0 controls that need a pointer (NFR-006, SC-012) · etalii.adp.ide.notion/test/panels/keyboard.test.ts
+- [x] **T111** [P] [US5] No stylesheet under `src/` but `notion.css` states a literal colour, type size, spacing or corner; every class the shared parts write begins with `adp-`; the add-on's page has no style of its own (NFR-005, US5 scenario 5) · etalii.adp.ide.notion/test/styles.test.ts
+- [x] **T112** [P] [US5] A part imports only parts above it in the shared-parts table; the panels import neither the store nor the canvas; the history imports no other part; only `src/store/session.ts` and `src/store/notion.ts` know the service or a token (FR-004, FR-028) · etalii.adp.ide.notion/test/parts.test.ts
 
 ### Implementation
 
 **Wave 1: independent (different files)**
 
-- [ ] **T113** [P] [US5] List every departure from Notion's styling with its reason, the source and date of each value of `notion.css`, and the contrast of each pair of text and background in both appearances, computed from those values (NFR-004, NFR-007) · etalii.adp.ide.notion/docs/styling.md
-- [ ] **T114** [P] [US5] Say what a second add-on consists of and how it is made: a folder, the page, `addon.json`, `node scripts/sync-specifications.mjs`, and nothing under `src/` (FR-028) · etalii.adp.ide.notion/addons/README.md
+- [x] **T113** [P] [US5] List every departure from Notion's styling with its reason, the source and date of each value of `notion.css`, and the contrast of each pair of text and background in both appearances, computed from those values (NFR-004, NFR-007) · etalii.adp.ide.notion/docs/styling.md
+- [x] **T114** [P] [US5] Say what a second add-on consists of and how it is made: a folder, the page, `addon.json`, `node scripts/sync-specifications.mjs`, and nothing under `src/` (FR-028) · etalii.adp.ide.notion/addons/README.md
 
 **Checkpoint**: T109 to T112 pass with `git diff` empty under `src/panels/`.
 
@@ -358,34 +358,34 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 **Wave 1: independent (different files)**
 
-- [ ] **T115** [P] Name the add-on as published, with its address, and say how the repository is built and tested now; remove every sentence that says no tool is available (FR-031) · etalii.adp.ide.notion/README.md
-- [ ] **T116** [P] Describe the shared parts, the copies that are never edited, the scripts and the service · etalii.adp.ide.notion/CLAUDE.md
+- [x] **T115** [P] Name the add-on as published, with its address, and say how the repository is built and tested now; remove every sentence that says no tool is available (FR-031) · etalii.adp.ide.notion/README.md
+- [x] **T116** [P] Describe the shared parts, the copies that are never edited, the scripts and the service · etalii.adp.ide.notion/CLAUDE.md
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-**The Cloudflare Worker, last** (the maintainer's instruction of 2026-10-08): everything before this ran against the local service.
+**The Cloudflare Worker, last** (the maintainer's instruction of 2026-10-08): everything before this ran against the local service. Pull request 2 was opened on 2026-10-08 before these three tasks, so that the published address answers and the embed blocks of the Showcase can be seen in Notion; the Worker's address and the job that deploys it then travel in a pull request of their own into `develop` of `etalii.adp.ide.notion`, merged before T120.
 
-- [ ] **T032** **Maintainer**: create the Cloudflare account and note the Worker's address · Cloudflare
+- [x] **T032** **Maintainer**: create the Cloudflare account and note the Worker's address · Cloudflare
 
 
 **⟶ Wait for T032 to finish, then:**
 
-- [ ] **T029** Wrap the handler of T028 as a Cloudflare Worker and configure it: its name, `ALLOWED_ORIGIN` as `https://etalii.net`, and nothing of the handler's logic repeated. Write the Worker's address of T032 into `src/frame/config.ts`, and add to `Build` a job that runs `wrangler deploy` on a push to `develop` only, after the others pass (contracts: service) · etalii.adp.ide.notion/service/worker.ts, etalii.adp.ide.notion/service/wrangler.toml, etalii.adp.ide.notion/src/frame/config.ts, etalii.adp.ide.notion/.github/workflows/build.yml
+- [x] **T029** Wrap the handler of T028 as a Cloudflare Worker and configure it: its name, `ALLOWED_ORIGIN` as `https://etalii.net`, and nothing of the handler's logic repeated. Write the Worker's address of T032 into `src/frame/config.ts`, and add to `Build` a job that runs `wrangler deploy` on a push to `develop` only, after the others pass (contracts: service) · etalii.adp.ide.notion/service/worker.ts, etalii.adp.ide.notion/service/wrangler.toml, etalii.adp.ide.notion/src/frame/config.ts, etalii.adp.ide.notion/.github/workflows/build.yml
 
 **⟶ Wait for T029 to finish, then:**
 
-- [ ] **T045** **Maintainer**: add `<service>/callback` to the Notion integration as a second redirect address, set the Worker's secrets `NOTION_CLIENT_ID` and `NOTION_CLIENT_SECRET`, and the repository's Actions secret `CLOUDFLARE_API_TOKEN`, a token that may deploy this one Worker · Cloudflare, etalii.adp.ide.notion (GitHub settings)
+- [x] **T045** **Maintainer**: add `<service>/callback` to the Notion integration as a second redirect address, set the Worker's secrets `NOTION_CLIENT_ID` and `NOTION_CLIENT_SECRET`, and the repository's Actions secret `CLOUDFLARE_API_TOKEN`, a token that may deploy this one Worker · Cloudflare, etalii.adp.ide.notion (GitHub settings)
 
 
 **⟶ Wait for T045 to finish, then:**
 
-- [ ] **T117** Validate against the Success Criteria. In `etalii.adp.ide.notion`: `npm test`, `npm run lint`, `npm run typecheck`, `node scripts/build.mjs --out <temporary folder>` with the check of the `addons` job, and the three `sync` scripts with `--check`. The copied `.dis` and `.fbl` are byte for byte their sources: 0 lines (SC-008). No file of the built tree holds a secret (SC-010). In `etalii.adp`: `python .github/scripts/validate-examples.py` and `python .github/scripts/licence-check.py` · etalii.adp.ide.notion, etalii.adp
+- [x] **T117** Validate against the Success Criteria. In `etalii.adp.ide.notion`: `npm test`, `npm run lint`, `npm run typecheck`, `node scripts/build.mjs --out <temporary folder>` with the check of the `addons` job, and the three `sync` scripts with `--check`. The copied `.dis` and `.fbl` are byte for byte their sources: 0 lines (SC-008). No file of the built tree holds a secret (SC-010). In `etalii.adp`: `python .github/scripts/validate-examples.py` and `python .github/scripts/licence-check.py` · etalii.adp.ide.notion, etalii.adp
 
 
 **⟶ Wait for T117 and T021 to finish, then:**
 
-- [ ] **T118** Push the branch and open pull request 2 into `develop`; its description names `specs/012-notion-hype-cycle-addon/` and the `etalii.adp` commit of T021 · etalii.adp.ide.notion
-- [ ] **T119** **Maintainer**: merge pull request 2 with a merge commit. Check that `Build` passes on `develop` and deploys the Worker, and that the site's `deploy` publishes `https://etalii.net/adp-notion/gartner-hype-cycle-graph/` · etalii.adp.ide.notion
+- [x] **T118** Push the branch and open pull request 2 into `develop`; its description names `specs/012-notion-hype-cycle-addon/` and the `etalii.adp` commit of T021 · etalii.adp.ide.notion
+- [x] **T119** **Maintainer**: merge pull request 2 with a merge commit. Check that `Build` passes on `develop` and deploys the Worker, and that the site's `deploy` publishes `https://etalii.net/adp-notion/gartner-hype-cycle-graph/` · etalii.adp.ide.notion
 
 **⟶ Wait for T119 and T108 to finish, then:**
 
@@ -395,24 +395,24 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 - [ ] **T121** [P] [US2] In the first graph: make every edit of T081's list (SC-006), time one edit to the canvas and to the database (SC-004), make 20 edits and undo them with `CTRL+Z` (SC-005), edit a row in the table while the diagram is open (FR-022), open the same store in two pages, and press `CTRL+Z` with the focus in the Notion page · Notion workspace
 - [ ] **T122** [P] [US5] Set the panels beside Notion's own in the light and the dark appearance and with `?theme=`, and correct any value of `notion.css` that differs and add any departure that is not listed to `docs/styling.md`, in a pull request of its own into `develop` that is merged before T134 (SC-011, NFR-003, NFR-007); use every control with the keyboard alone (SC-012); open a diagram page on a phone and read it · Notion workspace
 - [ ] **T123** [P] **Maintainer**: set up a new graph by following `docs/set-up-a-graph.md` alone, timed: under 5 minutes, with no change to the add-on (SC-009) · Notion workspace
-- [ ] **T124** [P] Check the published tree: the index at `/adp-notion` lists the add-on by its display name and has no `id="no-addons"`, every resource is relative, no response refuses a frame, and no file holds a token or a client secret (FR-001, FR-010, SC-010) · https://etalii.net/adp-notion
+- [x] **T124** [P] Check the published tree: the index at `/adp-notion` lists the add-on by its display name and has no `id="no-addons"`, every resource is relative, no response refuses a frame, and no file holds a token or a client secret (FR-001, FR-010, SC-010) · https://etalii.net/adp-notion
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T125** Fetch `etalii.adp.site`, create a worktree on a new branch `features/012-notion-hype-cycle-addon` from `origin/develop`, and run `npm ci` · etalii.adp.site/.claude/worktrees/012-notion-hype-cycle-addon
+- [x] **T125** Fetch `etalii.adp.site`, create a worktree on a new branch `features/012-notion-hype-cycle-addon` from `origin/develop`, and run `npm ci` · etalii.adp.site/.claude/worktrees/012-notion-hype-cycle-addon
 
 **⟶ Wait for T125 to finish, then:**
 
 **Wave 3: independent (different files and pages)**
 
-- [ ] **T126** [P] Refresh the `notion` entry from the Notion repository's `README.md` at the merge commit of T119: its `state`, without `unavailableNote`, with the new `revision` and `taken` (FR-031) · etalii.adp.site/src/data/hosts.yaml
-- [ ] **T127** [P] Make the tool catalogue say the Gartner hype cycle graph is available in the Notion host, by the site's `procedures/refresh-catalogue.md` (FR-031) · etalii.adp.site/src/content/catalogue/
-- [ ] **T128** [P] State the tool's state in the Notion host on the Gartner hype cycle row of the "Tools" database (FR-032) · Notion workspace/Tools
-- [ ] **T129** [P] Bring the section "The Notion row" up to date with T128. The `.dis` is not touched. The change travels in pull request 4 · etalii.adp/definitions/diagrams/gartner-hype-cycle-graph.md
+- [x] **T126** [P] Refresh the `notion` entry from the Notion repository's `README.md` at the merge commit of T119: its `state`, without `unavailableNote`, with the new `revision` and `taken` (FR-031) · etalii.adp.site/src/data/hosts.yaml
+- [x] **T127** [P] Make the tool catalogue say the Gartner hype cycle graph is available in the Notion host, by the site's `procedures/refresh-catalogue.md` (FR-031) · etalii.adp.site/src/content/catalogue/
+- [x] **T128** [P] State the tool's state in the Notion host on the Gartner hype cycle row of the "Tools" database (FR-032) · Notion workspace/Tools
+- [x] **T129** [P] Bring the section "The Notion row" up to date with T128. The `.dis` is not touched. The change travels in pull request 4 · etalii.adp/definitions/diagrams/gartner-hype-cycle-graph.md
 
 **⟶ Wait for Wave 3 to finish, then:**
 
-- [ ] **T130** Run the site's checks, push the branch and open pull request 3 into `develop`; its description names `specs/012-notion-hype-cycle-addon/` and the `etalii.adp` commit of T021 · etalii.adp.site
+- [x] **T130** Run the site's checks, push the branch and open pull request 3 into `develop`; its description names `specs/012-notion-hype-cycle-addon/` and the `etalii.adp` commit of T021 · etalii.adp.site
 - [ ] **T131** **Maintainer**: merge pull request 3 with a merge commit · etalii.adp.site
 
 **⟶ Wait for T131 to finish, then:**
@@ -442,3 +442,32 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 - **Phase 6**: Wave 1 (T104 to T106) → T107 → T108.
 - **Phase 7**: tests (T109 to T112) beside Wave 1 (T113, T114).
 - **Phase 8**: Wave 1 (T115, T116) → T032 → T029 → T045 → T117 → T118 → T119 → Wave 2 (T120 to T124) → T125 → Wave 3 (T126 to T129) → T130 → T131 → T132 → T133 → T134.
+
+---
+
+## Phase 9: Addendum of 2026-10-09 (FR-033 to FR-037)
+
+**Purpose**: the two requirements the maintainer added while the feature was being finished: selecting a database when the add-on is added, with a check and a projection of its properties, and hiding the properties that hold internal information. One point is open in the specification (FR-033); T135 settles it before anything is built, and finds the rule by which the add-on tells an internal property from the specification alone, raising it in `etalii.adp` if the specification cannot say.
+
+- [ ] **T135** Settle the open point of FR-033 with the maintainer, remove its marker from the specification, and bring the address, store and service contracts and the data model in line: where a selected store is kept, the call that lists the databases a person's access reaches, what projecting a property means and where a projection is kept, and the rule that finds the internal properties from a specification · etalii.adp/specs/012-notion-hype-cycle-addon/
+
+**⟶ Wait for T135 to finish, then:**
+
+- [ ] **T136** [P] In the state `setup`, list the databases the person's access reaches and let the user select one; the service forwards the one call that lists them (FR-033) · etalii.adp.ide.notion/src/frame/parts/, etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/src/store/notion.ts
+- [ ] **T137** [P] Check a selected database against the schema, project the properties that can be, and ask the user about the ones that are missing before anything is changed (FR-034, FR-035) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
+- [ ] **T138** [P] Hide the internal properties in a database's views when the add-on or `scripts/store.mjs` prepares or fills it (FR-036, FR-037) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/scripts/store.mjs
+- [x] **T139** [P] Hide the internal properties in the views of the ten stores of the Showcase (FR-037) · Notion workspace/Showcase
+
+**⟶ Wait for T136 to T139 to finish, then:**
+
+- [ ] **T140** Deliver T136 to T138 in a pull request into `develop` of `etalii.adp.ide.notion` that names this folder and the etalii.adp commit of T135, and tick them once it is merged · etalii.adp.ide.notion
+
+---
+
+## Phase 10: The grant of access in the Notion desktop app (2026-10-09)
+
+**Purpose**: the first pass (T078) showed that the grant completes in a web browser and not in the Notion desktop app. The service hands a completed grant over to the page that started it (contracts/service.md, `POST /grant`).
+
+- [x] **T141** Amend the Notion repository's principles from 1.1.0 to 1.2.0 (MINOR) through `/speckit-constitution`: the service keeps no state but a grant of access in progress, for at most two minutes and handed over once · etalii.adp/.specify/memory/repositories/etalii.adp.ide.notion.md
+- [ ] **T142** Keep a completed grant for at most 120 seconds under its state and hand it over once to the verifier's holder, in the handler, the local service and the Worker with a Durable Object; have the session ask for it beside the message of the window it opened, and the page show the link to the grant and a way to stop waiting (FR-010, research R4) · etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/service/worker.ts, etalii.adp.ide.notion/service/wrangler.toml, etalii.adp.ide.notion/scripts/service.mjs, etalii.adp.ide.notion/src/store/session.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
+- [ ] **T143** **Maintainer**: in the Notion desktop app, connect a diagram page of the Showcase and say whether the diagram opens after the grant is approved in the browser · Notion desktop app

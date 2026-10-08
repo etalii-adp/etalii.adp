@@ -1,11 +1,11 @@
 <!--
 Sync Impact Report
-- Version: 1.0.0 → 1.1.0 (MINOR)
-- Modified: I. One Source of Truth (a binding is the one its specification names, wherever it lives; a copy taken byte for byte with its source recorded is not a restatement; `<id>` is the name of the tool type's specification file); IV. Simplicity (the service is named beside GitHub Pages); Publication and Technology Constraints (the service; the build installs what it needs; no secret in a page or a file).
+- Version: 1.1.0 → 1.2.0 (MINOR)
+- Modified: IV. Simplicity (the service keeps no state but a grant of access in progress, for at most two minutes and handed over once).
 - Added or removed sections: none.
-- Rationale for MINOR: guidance materially expanded for the first add-on, which reads and writes a Notion database through a service and is compiled from shared parts (etalii.adp spec 012-notion-hype-cycle-addon, task T017, plan Complexity Tracking); no principle removed or redefined.
+- Rationale for MINOR: the grant of access completes in a web browser and not in the Notion desktop app, which hands it to the system's browser; the service has to hand a completed grant over to the page that started it (etalii.adp spec 012-notion-hype-cycle-addon, task T141, the maintainer's decision of 2026-10-09). The rule is narrowed, not removed.
 - Templates: plan, spec and tasks templates unchanged; no follow-ups.
-- Earlier: template → 1.0.0, first ratification on 2026-10-07 by spec 011-notion-repository (task T007, FR-007).
+- Earlier: 1.0.0 → 1.1.0 on 2026-10-08 by spec 012 (task T017): the service beside GitHub Pages, the build that installs what it needs, the binding a specification names, `<id>` as the name of the specification's file. Template → 1.0.0, first ratification on 2026-10-07 by spec 011-notion-repository (task T007, FR-007).
 -->
 > These are the principles of [`etalii.adp.ide.notion`](https://github.com/etalii-adp/etalii.adp.ide.notion), written here on 2026-10-07 by spec [011-notion-repository](../../../specs/011-notion-repository/notion-repository.spec.md): that repository has no Spec Kit setup of its own, and its features are specified in etalii.adp. A plan whose code lands in `etalii.adp.ide.notion` checks them beside [etalii.adp's own](../constitution.md). Amend them here, with a pull request into etalii.adp.
 
@@ -45,7 +45,7 @@ Rationale: a reader who embeds an add-on on the strength of a claim that turns o
 
 ### IV. Simplicity
 
-Start with the smallest repository that publishes an add-on, and grow it by specification. A dependency, a build step or a hosting service MUST be justified by a current requirement, not an anticipated one. Pages are published by GitHub Pages only, through the deployment of `etalii.adp.site`. One service stands beside them, which completes Notion's grant of access and forwards an add-on's calls to the Notion API: a page in a browser can do neither. It MUST keep no state, and a second service MUST be justified as the first was.
+Start with the smallest repository that publishes an add-on, and grow it by specification. A dependency, a build step or a hosting service MUST be justified by a current requirement, not an anticipated one. Pages are published by GitHub Pages only, through the deployment of `etalii.adp.site`. One service stands beside them, which completes Notion's grant of access and forwards an add-on's calls to the Notion API: a page in a browser can do neither. It MUST keep no state but a grant of access in progress, which it hands once to the page that started the grant and MUST NOT keep for longer than two minutes: where a tool runs in the Notion desktop app, the grant is completed in another window, which has no other way back to the page. It MUST keep no document and no token beyond that. A second service MUST be justified as the first was.
 
 Rationale: a small add-on that honours principles I to III beats a large one that does not.
 
@@ -72,4 +72,4 @@ Rationale: a small add-on that honours principles I to III beats a large one tha
 
 This constitution supersedes other practices in this repository. Amendments are made through `/speckit-constitution`, recorded in version control, and versioned semantically: MAJOR for removing or redefining a principle, MINOR for adding a principle or materially expanding guidance, PATCH for clarifications. Reviews of plans and changes MUST verify compliance with the principles above; runtime guidance for agents lives in `CLAUDE.md`.
 
-**Version**: 1.1.0 | **Ratified**: 2026-10-07 | **Last Amended**: 2026-10-08
+**Version**: 1.2.0 | **Ratified**: 2026-10-07 | **Last Amended**: 2026-10-09

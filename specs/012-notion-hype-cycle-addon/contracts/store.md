@@ -175,17 +175,17 @@ One per graph, under the page "Showcase" of the Notion workspace.
 | The store | `<display name> - Data` | The database of this contract |
 | The diagram page | `Diagram` | One embed block with the address of [addon-address.md](addon-address.md) and `store` set to the database beside it |
 
-| Graph | Display name | Source in the other hosts |
-| --- | --- | --- |
-| The first graph | `Gartner hype cycle graph` | none: it starts empty |
-| | `Coal technologies` | `coal-technologies` |
-| | `Digital trends` | `digital-trends` |
-| | `Electric vehicles` | `electric-vehicles` |
-| | `Energy breakthroughs` | `energy-breakthroughs` |
-| | `Eras of innovation` | `eras-of-innovation` |
-| | `Internet evolution` | `internet-evolution` |
-| | `LLMs and agents` | `llms-and-agents` |
-| | `Technology trends` | `technology-trends` |
-| | `Warfare in Ukraine` | `warfare-in-ukraine` |
+| Graph | Display name | Source in the other hosts | Store (database id) |
+| --- | --- | --- | --- |
+| The first graph | `Gartner hype cycle graph` | none: it starts empty | `3f2be2fd05b680f5bfe1d89398eabb4e` |
+| | `Coal technologies` | `coal-technologies` | `313310a5f24f4d868c1ab936cd2a3032` |
+| | `Digital trends` | `digital-trends` | `3e462c74c6e54eb48a64351ea7056db9` |
+| | `Electric vehicles` | `electric-vehicles` | `4af5282d89984601a27156028aa667a2` |
+| | `Energy breakthroughs` | `energy-breakthroughs` | `03c3970d3f9e452b9248d098b2e27dfd` |
+| | `Eras of innovation` | `eras-of-innovation` | `d07aa5ddcb3d4775913e3ce231f8ed5d` |
+| | `Internet evolution` | `internet-evolution` | `83a9fe350828465393c5c9b4ffb1b133` |
+| | `LLMs and agents` | `llms-and-agents` | `c4e145bd3a1b49a792afa2ca5e358cc8` |
+| | `Technology trends` | `technology-trends` | `a509d7170d16428e88d571ed72ee0ba2` |
+| | `Warfare in Ukraine` | `warfare-in-ukraine` | `a9cf8c488c5846d6bd7b29e0640144b1` |
 
 The first graph's pages were found as "Gartner Hypecycle Graph", `Gartner HypeCycle Graph - Data` and `Diagram`. They are renamed to `Gartner hype cycle graph`, `Gartner hype cycle graph - Data` and `Diagram`, the tool type's display name (FR-030); their Notion ids, and so the `store` of every embed, do not change. No two entries share a store (US4 scenario 3).

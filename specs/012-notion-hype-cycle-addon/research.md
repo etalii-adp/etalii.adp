@@ -135,6 +135,8 @@ The first graph's pages are renamed to the display name, "Gartner hype cycle gra
 - **R3, FR-021.** A token reaches only what its person shared with the integration. Somebody who may read the database but may not share it sees the invitation to connect, not a read-only diagram. A read-only diagram is what a person gets whose grant allows reading only, or whose write Notion refuses.
 - **R4.** Sign-in opens a window from inside an embedded page. If Notion's embed block forbids that in some client, the invitation offers a link that opens the add-on in its own tab, where sign-in works, after which the embed has the token only if the browser shares storage between the two; it may not. If neither gives the embed a token, the work stops there and the plan returns to D1: no story is built on a sign-in that does not work. So this is checked in the first manual pass, before Story 1, as soon as the session, the service and the frame exist, against the local service.
 
+  **Found on 2026-10-09**: in a web browser the grant works from inside the embed block. In the Notion desktop app it does not: the app hands the grant to the system's browser, a window with no way back to the page. The maintainer chose that the service hands the grant over: it keeps a completed grant for at most 120 seconds, and the page asks for it with a verifier only it has (`POST /grant`). The service is therefore no longer without state, and the Notion repository's principles are amended.
+
 ## Differences to raise in `etalii.adp` (FR-003)
 
 Found while reading, raised as issues, settled nowhere in the add-on:
