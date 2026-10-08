@@ -207,7 +207,7 @@ Starts after T028: the host entry is sourced from a merged commit of the Notion 
 **⟶ Wait for T044 to finish, then:**
 
 - [x] **T045** On a branch `features/011-notion-repository` made again from `develop` of `etalii.adp`: correct the title of the requirements checklist to `/adp-notion`, tick the tasks whose pull requests are merged, and open pull request 5 into `develop`. **Maintainer**: merge it · etalii.adp/specs/011-notion-repository/checklists/requirements.md, etalii.adp/specs/011-notion-repository/tasks.md
-- [ ] **T046** Delete the branch `features/011-notion-repository` locally and on `origin` in each of the four repositories, and remove the worktrees of T001, T002 and T019 · the four clones
+- [x] **T046** Delete the branch `features/011-notion-repository` locally and on `origin` in each of the four repositories, and remove the worktrees of T001, T002 and T019 · the four clones
 
 ---
 
