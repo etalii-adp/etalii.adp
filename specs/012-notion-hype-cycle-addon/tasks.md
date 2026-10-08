@@ -379,13 +379,13 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 **⟶ Wait for T045 to finish, then:**
 
-- [ ] **T117** Validate against the Success Criteria. In `etalii.adp.ide.notion`: `npm test`, `npm run lint`, `npm run typecheck`, `node scripts/build.mjs --out <temporary folder>` with the check of the `addons` job, and the three `sync` scripts with `--check`. The copied `.dis` and `.fbl` are byte for byte their sources: 0 lines (SC-008). No file of the built tree holds a secret (SC-010). In `etalii.adp`: `python .github/scripts/validate-examples.py` and `python .github/scripts/licence-check.py` · etalii.adp.ide.notion, etalii.adp
+- [x] **T117** Validate against the Success Criteria. In `etalii.adp.ide.notion`: `npm test`, `npm run lint`, `npm run typecheck`, `node scripts/build.mjs --out <temporary folder>` with the check of the `addons` job, and the three `sync` scripts with `--check`. The copied `.dis` and `.fbl` are byte for byte their sources: 0 lines (SC-008). No file of the built tree holds a secret (SC-010). In `etalii.adp`: `python .github/scripts/validate-examples.py` and `python .github/scripts/licence-check.py` · etalii.adp.ide.notion, etalii.adp
 
 
 **⟶ Wait for T117 and T021 to finish, then:**
 
 - [x] **T118** Push the branch and open pull request 2 into `develop`; its description names `specs/012-notion-hype-cycle-addon/` and the `etalii.adp` commit of T021 · etalii.adp.ide.notion
-- [ ] **T119** **Maintainer**: merge pull request 2 with a merge commit. Check that `Build` passes on `develop` and deploys the Worker, and that the site's `deploy` publishes `https://etalii.net/adp-notion/gartner-hype-cycle-graph/` · etalii.adp.ide.notion
+- [x] **T119** **Maintainer**: merge pull request 2 with a merge commit. Check that `Build` passes on `develop` and deploys the Worker, and that the site's `deploy` publishes `https://etalii.net/adp-notion/gartner-hype-cycle-graph/` · etalii.adp.ide.notion
 
 **⟶ Wait for T119 and T108 to finish, then:**
 
@@ -395,7 +395,7 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 - [ ] **T121** [P] [US2] In the first graph: make every edit of T081's list (SC-006), time one edit to the canvas and to the database (SC-004), make 20 edits and undo them with `CTRL+Z` (SC-005), edit a row in the table while the diagram is open (FR-022), open the same store in two pages, and press `CTRL+Z` with the focus in the Notion page · Notion workspace
 - [ ] **T122** [P] [US5] Set the panels beside Notion's own in the light and the dark appearance and with `?theme=`, and correct any value of `notion.css` that differs and add any departure that is not listed to `docs/styling.md`, in a pull request of its own into `develop` that is merged before T134 (SC-011, NFR-003, NFR-007); use every control with the keyboard alone (SC-012); open a diagram page on a phone and read it · Notion workspace
 - [ ] **T123** [P] **Maintainer**: set up a new graph by following `docs/set-up-a-graph.md` alone, timed: under 5 minutes, with no change to the add-on (SC-009) · Notion workspace
-- [ ] **T124** [P] Check the published tree: the index at `/adp-notion` lists the add-on by its display name and has no `id="no-addons"`, every resource is relative, no response refuses a frame, and no file holds a token or a client secret (FR-001, FR-010, SC-010) · https://etalii.net/adp-notion
+- [x] **T124** [P] Check the published tree: the index at `/adp-notion` lists the add-on by its display name and has no `id="no-addons"`, every resource is relative, no response refuses a frame, and no file holds a token or a client secret (FR-001, FR-010, SC-010) · https://etalii.net/adp-notion
 
 **⟶ Wait for Wave 2 to finish, then:**
 

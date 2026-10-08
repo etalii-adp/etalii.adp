@@ -960,6 +960,30 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-08T12:03:12.260Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T119",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T12:06:05.711Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T117",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T12:06:17.097Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T124",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T12:06:17.449Z"
     }
   ],
   "last_action": "1101 tests pass and 9 are expected failures naming issue 97; branch pushed, pull request 2 not opened",
@@ -1703,7 +1727,7 @@
     }
   },
   "approach": "A static add-on at /adp-notion/gartner-hype-cycle-graph/ is compiled from shared parts that name no tool type: a new DISL interpreter, the Visual Studio Code host's FBL library copied unchanged, a store that keeps a document as one row per element, a canvas, and Notion-styled panels. The store rebuilds the binding's document text in memory, so FBL plans every edit and keeps the undo history, and each edit is written back as row changes. A stateless Cloudflare Worker completes Notion's sign-in and forwards the calls with the viewer's token.",
-  "currentTask": "T108",
+  "currentTask": "T124",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -2520,6 +2544,18 @@
     "T108": {
       "status": "DONE",
       "did": "Checked the ten entries: each database is named by one Diagram page and no other, no two embeds name the same store, and each title is the display name; removed the second Diagram page of Warfare in Ukraine, which named another store"
+    },
+    "T119": {
+      "status": "DONE",
+      "did": "The maintainer merged pull request 3 of etalii.adp.ide.notion as 2c62337; Build passed on develop and the site's deployment published the add-on's address"
+    },
+    "T117": {
+      "status": "DONE",
+      "did": "Validated before pull request 2: 1101 tests and 9 expected failures, lint, type-check, build, tree check, the three copy checks byte for byte, no secret in the built tree, and etalii.adp's two checks"
+    },
+    "T124": {
+      "status": "DONE",
+      "did": "Checked the published tree: the index lists the add-on by its display name with no no-addons sentence and names revision 2c62337, every resource is relative, no response refuses a frame, and no file holds what reads as a token or a client secret"
     }
   },
   "verified": [
