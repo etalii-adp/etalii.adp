@@ -447,9 +447,9 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 ## Phase 9: Addendum of 2026-10-09 (FR-033 to FR-037)
 
-**Purpose**: the two requirements the maintainer added while the feature was being finished: selecting a database when the add-on is added, with a check and a projection of its properties, and hiding the properties that hold internal information. Three points are open in the specification; T135 settles them before anything is built.
+**Purpose**: the two requirements the maintainer added while the feature was being finished: selecting a database when the add-on is added, with a check and a projection of its properties, and hiding the properties that hold internal information. Two points are open in the specification (FR-033 and FR-036); T135 settles them before anything is built.
 
-- [ ] **T135** Settle the three open points of FR-033, FR-035 and FR-036 with the maintainer, remove their markers from the specification, and bring the address, store and service contracts and the data model in line: where a selected store is kept, the call that lists the databases a person's access reaches, what projecting a property means and where a projection is kept, who adds a missing property, and which properties are internal · etalii.adp/specs/012-notion-hype-cycle-addon/
+- [ ] **T135** Settle the two open points of FR-033 and FR-036 with the maintainer, remove their markers from the specification, and bring the address, store and service contracts and the data model in line: where a selected store is kept, the call that lists the databases a person's access reaches, what projecting a property means and where a projection is kept, and which properties are internal · etalii.adp/specs/012-notion-hype-cycle-addon/
 
 **⟶ Wait for T135 to finish, then:**
 

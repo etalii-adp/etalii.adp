@@ -27,7 +27,7 @@ Three roles appear below. A **reader** opens a Notion page that holds the diagra
 
 ### Session 2026-10-09
 
-The maintainer added two requirements while the feature was being finished (FR-033 to FR-037). Three points of them are open and marked below.
+The maintainer added two requirements while the feature was being finished (FR-033 to FR-037). Two points of them are open and marked below. On 2026-10-09 the maintainer settled the third: the add-on adds the missing properties itself, once the user has agreed (FR-035).
 - The other hosts ship nine examples, not six: the plan step found `llms-and-agents`, `technology-trends` and `warfare-in-ukraine` beside the six named when this specification was written.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -160,7 +160,7 @@ A contributor starts a second Notion add-on for another tool type. They do not w
 
 - **FR-033**: When the add-on is added to a page without a store, it MUST ask the user to select a database, from the databases that user's access reaches, and MUST NOT need the user to find and type a database id. [NEEDS CLARIFICATION: an embedded page cannot change the address of its own embed block. Where is the choice kept: in the address, which the add-on then gives the user to paste into the block, or elsewhere?]
 - **FR-034**: For the selected database the add-on MUST check whether the properties the tool type needs are there, or can be projected from properties the database already has, such as an existing property of the right type under another name.
-- **FR-035**: Where properties are missing and cannot be projected, the add-on MUST tell the user which ones and ask the user to add them; it MUST NOT change a database before the user has agreed. [NEEDS CLARIFICATION: does the add-on add them itself once the user agrees, as `prepare` does today, or does the user add them by hand in Notion?]
+- **FR-035**: Where properties are missing and cannot be projected, the add-on MUST tell the user which ones and offer to add them. It adds them itself once the user has agreed, and MUST NOT change a database before that.
 - **FR-036**: The properties of a store that hold internal, technical information MUST be hidden in the database's views, so that a reader of the table sees what the graph is about. [NEEDS CLARIFICATION: which properties count as internal: the store's own `Kind` and `Order`, the stored id, also the properties of placement and attachment?]
 - **FR-037**: FR-036 MUST hold for every store that exists when this feature is delivered, the ten of the Showcase, and for every database the add-on prepares or fills from then on.
 
