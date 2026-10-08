@@ -365,7 +365,7 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 **The Cloudflare Worker, last** (the maintainer's instruction of 2026-10-08): everything before this ran against the local service. Pull request 2 was opened on 2026-10-08 before these three tasks, so that the published address answers and the embed blocks of the Showcase can be seen in Notion; the Worker's address and the job that deploys it then travel in a pull request of their own into `develop` of `etalii.adp.ide.notion`, merged before T120.
 
-- [ ] **T032** **Maintainer**: create the Cloudflare account and note the Worker's address · Cloudflare
+- [x] **T032** **Maintainer**: create the Cloudflare account and note the Worker's address · Cloudflare
 
 
 **⟶ Wait for T032 to finish, then:**
