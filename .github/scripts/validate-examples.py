@@ -18,7 +18,10 @@ Two FBL formats are not JSON documents and get their own treatment (spec 005, co
 registration under `specifications/fbl/` is parsed from its line form into `fbl.schema.json#/$defs/Registration`
 (FBL section 8). A `fixture.json` under `specifications/fbl/fixtures/` is validated against `$defs/Fixture` and then
 replayed: every step's splices must turn the document before the step into the document it expects, byte for byte,
-and an undo must return the document the undone edit started from (FBL section 15.3).
+and an undo must return the document the undone edit started from (FBL section 15.3). Every `*.fbl` that validates is
+then checked for its names (FBL section 14.1, step 4): every rule a `parent`, `cascade`, `reference.to`, `within` or
+`files` names exists in its binding, and a reference's `by` is an attribute every rule it names binds, or `id` when
+every rule it names stores its id with `id.from` (DISL reserves `id`, so it is never an attribute's name).
 
 Prints one line per example and exits 1 when any example is invalid or names an unknown schema.
 """
@@ -191,6 +194,49 @@ def replay_fixture(path: Path, fixture) -> str | None:
     return None
 
 
+def resolve_names(document) -> list[str]:
+    """Checks the names an FBL document's rules refer to (FBL section 14.1, step 4) and returns a problem per
+    unresolved name, each with the JSON Pointer of where it is used."""
+    problems = []
+    for binding_name, binding in document.get("bindings", {}).items():
+        base = f"/bindings/{binding_name}"
+        rules = {}
+        for kind in ("elements", "relations", "blocks"):
+            for index, rule in enumerate(binding.get(kind, [])):
+                rules[rule["name"]] = (rule, f"{base}/{kind}/{index}")
+        file_rules = {rule["name"] for rule in binding.get("body", {}).get("files", [])}
+
+        def known(names, pointer, allowed=()):
+            for name in names:
+                if name not in rules and name not in allowed:
+                    problems.append(f"at {pointer}: names the rule {name!r}, which this binding does not have")
+
+        for name, (rule, pointer) in rules.items():
+            known(rule.get("parent", {}).get("rules", []), pointer + "/parent/rules")
+            known(rule.get("remove", {}).get("cascade", []), pointer + "/remove/cascade")
+            known(rule.get("within", []), pointer + "/within", allowed=("^",))
+            for file_rule in rule.get("files", []):
+                if file_rule not in file_rules:
+                    problems.append(f"at {pointer}/files: names the file rule {file_rule!r}, which this binding does not have")
+            for attribute, attribute_binding in rule.get("attributes", {}).items():
+                reference = attribute_binding.get("reference") if isinstance(attribute_binding, dict) else None
+                if not reference:
+                    continue
+                at = f"{pointer}/attributes/{attribute}/reference"
+                known(reference.get("to", []), at + "/to")
+                by = reference.get("by")
+                for target in reference.get("to", []):
+                    if target not in rules or by is None:
+                        continue
+                    target_rule = rules[target][0]
+                    if by == "id":
+                        if "from" not in target_rule.get("id", {}):
+                            problems.append(f"at {at}/by: refers by id to the rule {target!r}, which stores no id ('id.from')")
+                    elif by not in target_rule.get("attributes", {}):
+                        problems.append(f"at {at}/by: the rule {target!r} binds no attribute {by!r}")
+    return problems
+
+
 def expected_reference(path: Path, document) -> tuple[str | None, list[str], str | None]:
     """Returns the schema reference to validate against, the deprecated aliases used, and a problem, if any."""
     aliases = []
@@ -263,6 +309,11 @@ for path in examples:
     elif reference == FBL_FIXTURE and (problem := replay_fixture(path, document)):
         failures += 1
         print(f"FAIL {name}: {problem}")
+    elif reference == FBL and (problems := resolve_names(document)):
+        failures += 1
+        print(f"FAIL {name}: {len(problems)} unresolved name(s)")
+        for problem in problems[:10]:
+            print(f"  {problem}")
     else:
         via = f" (legacy fixture, read through: {', '.join(aliases)})" if aliases else ""
         print(f"ok   {name}{via}")
