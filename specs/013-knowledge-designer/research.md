@@ -32,14 +32,18 @@ The knowledge file therefore keeps them as keys of the view, each written and re
 
 Nothing the design asks a view to store is lost, and no language changes. By its Requirement 1.7 the definition wins, and the standalone design is amended to match.
 
-## R4. Model attribute names avoid DISL's reserved names
+## R4. Model attribute names avoid DESL's reserved names
 
-DISL forbids `type`, `parent`, `target` and the other built-in fields as attribute names, and a binding's attribute names are the metamodel's unless `persistence.typeMap` maps them (DISL section 11.2). The file keeps its short keys, and the binding maps them to model names that are allowed: the key `type` of a property is the attribute `valueType`, `target` is `targetFile`, and `parent` is `isParent`.
+DESL forbids `type`, `parent` and the other members of an element as attribute names (DESL section 2.2), and a binding's attribute names are the metamodel's unless `persistence.typeMap` maps them (DESL section 5.2). The file keeps its short keys, and the binding maps them to model names that are allowed: the key `type` of a property is the attribute `valueType`, `parent` is `isParent`, and `target` is `targetFile`, so that it never reads as the `target` of an action.
 
 ## R5. Ids of entries without a stored id
 
-Properties, options, views and rows store a ShortGuid (`uuid-v4`, `base36`). The other types derive theirs (DISL section 11.5.2), and the fixtures list them in that form: a cell is `<row>/<property>`, a column `<view>/columns/<property>`, a sort `<view>/sorts/<property>`, a group setting `<view>/<list>/<key>`, a related row or option in a cell `<cell>/<value>`, and a filter condition or group `<view>/filter/<index>[/<index>…]`, which is ephemeral because it follows the entry's place. Nothing stores the id of a condition.
+Properties, options, views and rows store a ShortGuid (`uuid-v4`, `base36`). The other types derive theirs (DESL section 5.3.2), and the fixtures list them in that form: a cell is `<row>/<property>`, a column `<view>/columns/<property>`, a sort `<view>/sorts/<property>`, a group setting `<view>/<list>/<key>`, a related row or option in a cell `<cell>/<value>`, and a filter condition or group `<view>/filter/<index>[/<index>…]`, which is ephemeral because it follows the entry's place. Nothing stores the id of a condition.
 
 ## R6. The fixture format lacks FBL 0.2's move
 
 `$defs/Edit` in `fbl.schema.json` predates FBL 0.2: its `add` has `parent` and `after` but no `position`, and there is no `move`. FBL 0.2 defines both (section 11.2, `$defs/ModelChange`). Task 4's reorder steps need them, so FBL 0.3's schema lets a fixture's edit be `move` and an `add` carry `position`, in the shape `$defs/ModelChange` already gives. This adds no behaviour to FBL; it lets the fixtures test what 0.2 specifies.
+
+## R7. DESL stands on its own (Peter, 2026-10-09)
+
+The Knowledge designer is a designer, so DISL and DID are never used for it: DESL and DED are (Peter, in the project thread, 2026-10-09 00:21). This replaces language decision L4, by which DESL 0.1 adopted DISL's metamodel, ids, findings and transaction by reference. DESL 0.1 now defines each construct `knowledge.des` uses in its own sections and its own schema, with no reference to DISL's: element types, attributes, enumerations, containment and references (section 4), the type map and ids (section 5), constraints and findings (section 6), operations and actions (section 8), the CEL environment, in which the document is `document` and its elements are read with `elementsOfType` (section 9), and the processing model (section 10). FBL keeps serving every kind of tool: its schema no longer references DISL's, and its section 1.3 pairs every construct it relies on with its DISL section for a diagram and its DESL section for a designer. `knowledge.des` and `minimal-table.des` say `document` where they said `diagram`.

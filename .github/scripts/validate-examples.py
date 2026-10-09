@@ -21,7 +21,7 @@ replayed: every step's splices must turn the document before the step into the d
 and an undo must return the document the undone edit started from (FBL section 15.3). Every `*.fbl` that validates is
 then checked for its names (FBL section 14.1, step 4): every rule a `parent`, `cascade`, `reference.to`, `within` or
 `files` names exists in its binding, and a reference's `by` is an attribute every rule it names binds, or `id` when
-every rule it names stores its id with `id.from` (DISL reserves `id`, so it is never an attribute's name).
+every rule it names stores its id with `id.from` (the specification languages reserve `id`, so it is never an attribute's name).
 The fixtures under a folder named `*-equivalence` read one model in different formats: their `read` must be identical.
 
 Prints one line per example and exits 1 when any example is invalid or names an unknown schema.
@@ -362,24 +362,15 @@ def resolve_names(document) -> list[str]:
 
 
 def resolve_desl(path: Path, document) -> list[str]:
-    """Checks the names a DESL specification's surface and persistence refer to (DESL section 9.1, step 4) and
+    """Checks the names a DESL specification's surface and persistence refer to (DESL section 10.1, step 4) and
     returns a problem per unresolved name, each with the JSON Pointer of where it is used."""
     problems = []
     types = document.get("metamodel", {}).get("types", {})
     type_map = document.get("persistence", {}).get("typeMap", {})
 
     def attributes_of(name):
-        """The attributes of a node type, its supertypes' included (DISL section 4.7)."""
-        found, pending, seen = {}, [name], set()
-        while pending:
-            current = pending.pop()
-            if current in seen or current not in types:
-                continue
-            seen.add(current)
-            found.update(types[current].get("attributes", {}))
-            extends = types[current].get("extends", [])
-            pending.extend([extends] if isinstance(extends, str) else extends)
-        return found
+        """The attributes of an element type (DESL section 4.5)."""
+        return types.get(name, {}).get("attributes", {})
 
     def children_of(name):
         children = types.get(name, {}).get("children", {})
@@ -388,7 +379,7 @@ def resolve_desl(path: Path, document) -> list[str]:
             allowed.update(slot.get("allowed", []))
         return allowed
 
-    def node_type(name, pointer):
+    def element_type(name, pointer):
         if name not in types:
             problems.append(f"at {pointer}: names the type {name!r}, which the metamodel does not declare")
             return False
@@ -400,25 +391,25 @@ def resolve_desl(path: Path, document) -> list[str]:
 
     surface = document.get("surface", {})
     columns, cells, views = surface.get("columns", {}), surface.get("cells", {}), surface.get("views", {})
-    if node_type(columns.get("type"), "/surface/columns/type"):
+    if element_type(columns.get("type"), "/surface/columns/type"):
         for role in ("name", "valueType", "title", "parent"):
             attribute(columns["type"], columns.get(role), f"/surface/columns/{role}")
         options = columns.get("options")
-        if options and node_type(options["type"], "/surface/columns/options/type"):
+        if options and element_type(options["type"], "/surface/columns/options/type"):
             if options["type"] not in children_of(columns["type"]):
                 problems.append(f"at /surface/columns/options/type: {options['type']!r} is not contained in {columns['type']!r}")
             for role in ("name", "colour"):
                 attribute(options["type"], options.get(role), f"/surface/columns/options/{role}")
-    node_type(surface.get("rows", {}).get("type"), "/surface/rows/type")
-    if node_type(cells.get("type"), "/surface/cells/type"):
+    element_type(surface.get("rows", {}).get("type"), "/surface/rows/type")
+    if element_type(cells.get("type"), "/surface/cells/type"):
         attribute(cells["type"], cells.get("column"), "/surface/cells/column")
-        if "items" in cells and node_type(cells["items"], "/surface/cells/items") and cells["items"] not in children_of(cells["type"]):
+        if "items" in cells and element_type(cells["items"], "/surface/cells/items") and cells["items"] not in children_of(cells["type"]):
             problems.append(f"at /surface/cells/items: {cells['items']!r} is not contained in {cells['type']!r}")
-    if node_type(views.get("type"), "/surface/views/type"):
+    if element_type(views.get("type"), "/surface/views/type"):
         attribute(views["type"], views.get("name"), "/surface/views/name")
-        attribute("the document", views.get("active"), "/surface/views/active", document.get("metamodel", {}).get("diagram", {}).get("attributes", {}))
+        attribute("the document", views.get("active"), "/surface/views/active", document.get("metamodel", {}).get("document", {}).get("attributes", {}))
         for role, name in views.get("settings", {}).items():
-            node_type(name, f"/surface/views/settings/{role}")
+            element_type(name, f"/surface/views/settings/{role}")
     for name, value_type in surface.get("valueTypes", {}).items():
         holder = cells.get("items") if value_type.get("many") else cells.get("type")
         if holder in types:

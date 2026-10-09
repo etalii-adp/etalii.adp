@@ -23,7 +23,7 @@
     "icon": "mdi-table"
   },
   "metamodel": {
-    "diagram": {
+    "document": {
       "attributes": {
         "name": { "type": "string", "required": true, "doc": "The table's name, shown on its tab." },
         "activeView": { "type": "View", "doc": "The view the table was last left in; absent, the first view (Requirement 6.10)." }
@@ -71,11 +71,11 @@
         "labelAttribute": "name",
         "attributes": {
           "name": { "type": "string", "required": true, "doc": "Unique within the table (Requirement 3.9)." },
-          "valueType": { "type": "ValueType", "required": true, "doc": "Stored under the key `type`, which DISL reserves." },
+          "valueType": { "type": "ValueType", "required": true, "doc": "Stored under the key `type`, which DESL reserves." },
           "title": { "type": "bool", "default": false, "doc": "Marks the one text property whose value names a row (Requirement 3.7)." },
           "targetFile": {
             "type": "string",
-            "doc": "A relation's target knowledge file, relative to this file; `.` is this file. Stored under the key `target`, which DISL reserves."
+            "doc": "A relation's target knowledge file, relative to this file; `.` is this file. Stored under the key `target`; the model calls it targetFile so that it never reads as the `target` of an action."
           },
           "limit": { "type": "Limit", "default": "none", "doc": "How many rows a relation cell may hold." },
           "counterpart": {
@@ -90,7 +90,7 @@
           "isParent": {
             "type": "bool",
             "default": false,
-            "doc": "A relation to this file whose value is the row's parent (Requirement 5.9). Stored under the key `parent`, which DISL reserves."
+            "doc": "A relation to this file whose value is the row's parent (Requirement 5.9). Stored under the key `parent`, which DESL reserves."
           }
         },
         "children": { "allowed": ["Option"], "ordered": true, "slots": { "options": { "allowed": ["Option"] } } },
@@ -233,7 +233,7 @@
     },
     "typeMap": {
       "Table": {
-        "as": "diagram",
+        "as": "document",
         "hostAttributes": ["version"],
         "doc": "The root's keys are the table's own attributes; `version` is the header, read and checked by the binding."
       }
@@ -247,9 +247,9 @@
       {
         "id": "noTitle",
         "code": "knowledge.no-title",
-        "scope": "diagram",
+        "scope": "document",
         "severity": "warning",
-        "rule": "diagram.nodesOfType('Property').exists(p, p.title)",
+        "rule": "document.elementsOfType('Property').exists(p, p.title)",
         "message": "The table has no title property; mark one text property as the title."
       },
       {
@@ -258,7 +258,7 @@
         "scope": ["Property"],
         "when": "self.title",
         "severity": "warning",
-        "rule": "self.positionIn(diagram.nodesOfType('Property').filter(p, p.title)) == 0",
+        "rule": "self.positionIn(document.elementsOfType('Property').filter(p, p.title)) == 0",
         "message": { "cel": "'`' + self.name + '` is a second title property; a table has one.'" }
       },
       {
@@ -277,7 +277,7 @@
         "scope": ["Property"],
         "enforcement": "prevent-and-report",
         "severity": "error",
-        "rule": "self.positionIn(diagram.nodesOfType('Property').filter(p, p.name.lowerAscii() == self.name.lowerAscii())) == 0",
+        "rule": "self.positionIn(document.elementsOfType('Property').filter(p, p.name.lowerAscii() == self.name.lowerAscii())) == 0",
         "message": { "cel": "'A property named `' + self.name + '` already exists.'" }
       },
       {
@@ -352,9 +352,9 @@
       {
         "id": "lastView",
         "code": "knowledge.no-view",
-        "scope": "diagram",
+        "scope": "document",
         "severity": "warning",
-        "rule": "diagram.nodesOfType('View').size() > 0",
+        "rule": "document.elementsOfType('View').size() > 0",
         "message": "The table has no view; ADP shows it as if it had one view with no settings."
       }
     ],
@@ -467,7 +467,7 @@
   "operations": {
     "addProperty": {
       "label": "New property",
-      "for": "diagram",
+      "for": "document",
       "params": {
         "name": { "type": "string", "required": true },
         "valueType": { "type": "ValueType", "required": true, "default": "text" },
@@ -477,7 +477,7 @@
         {
           "create": {
             "type": "'Property'",
-            "attributes": { "name": "uniqueName(p.name, diagram.nodesOfType('Property').map(x, x.name))", "valueType": "p.valueType" },
+            "attributes": { "name": "uniqueName(p.name, document.elementsOfType('Property').map(x, x.name))", "valueType": "p.valueType" },
             "after": "p.after"
           },
           "when": "has(p.after)"
@@ -485,7 +485,7 @@
         {
           "create": {
             "type": "'Property'",
-            "attributes": { "name": "uniqueName(p.name, diagram.nodesOfType('Property').map(x, x.name))", "valueType": "p.valueType" }
+            "attributes": { "name": "uniqueName(p.name, document.elementsOfType('Property').map(x, x.name))", "valueType": "p.valueType" }
           },
           "when": "!has(p.after)"
         }
@@ -516,7 +516,7 @@
           "create": {
             "type": "'Property'",
             "attributes": {
-              "name": "uniqueName(self.name, diagram.nodesOfType('Property').map(x, x.name))",
+              "name": "uniqueName(self.name, document.elementsOfType('Property').map(x, x.name))",
               "valueType": "self.valueType",
               "targetFile": "self.targetFile",
               "limit": "self.limit"
@@ -539,7 +539,7 @@
       "params": { "after": { "type": "Property" } },
       "actions": [
         { "reorder": { "after": "p.after" }, "when": "has(p.after)" },
-        { "reorder": { "before": "diagram.nodesOfType('Property')[0]" }, "when": "!has(p.after)" }
+        { "reorder": { "before": "document.elementsOfType('Property')[0]" }, "when": "!has(p.after)" }
       ],
       "doc": "Dragging a column's header: the property moves after `after`, or to the front."
     },
@@ -549,12 +549,12 @@
       "unavailable": [{ "when": "self.title", "message": "The title property cannot be deleted." }],
       "confirm": {
         "message": { "cel": "'Delete `' + self.name + '` and its values in ' + string(count) + ' rows?'" },
-        "count": "diagram.nodesOfType('Cell').filter(c, c.property == self).size()",
+        "count": "document.elementsOfType('Cell').filter(c, c.property == self).size()",
         "threshold": 1
       },
       "actions": [
         {
-          "forEach": "diagram.nodesOfType('View').filter(v, v.groupBy == self)",
+          "forEach": "document.elementsOfType('View').filter(v, v.groupBy == self)",
           "as": "v",
           "do": [{ "forEach": "v.childrenOfType('GroupSetting')", "as": "g", "do": [{ "delete": "g" }] }, { "unset": ["groupBy"], "target": "v" }]
         },
@@ -567,14 +567,14 @@
       "for": ["Property"],
       "unavailable": [{ "when": "self.valueType != 'text'", "message": "Only a text property can be the title." }],
       "actions": [
-        { "forEach": "diagram.nodesOfType('Property').filter(x, x.title)", "as": "x", "do": [{ "unset": ["title"], "target": "x" }] },
+        { "forEach": "document.elementsOfType('Property').filter(x, x.title)", "as": "x", "do": [{ "unset": ["title"], "target": "x" }] },
         { "set": { "title": "true" } }
       ],
       "doc": "Moves the title to this text property."
     },
     "createRelation": {
       "label": "New relation",
-      "for": "diagram",
+      "for": "document",
       "params": {
         "name": { "type": "string", "required": true },
         "targetFile": { "type": "string", "required": true },
@@ -586,7 +586,7 @@
           "create": {
             "type": "'Property'",
             "attributes": {
-              "name": "uniqueName(p.name, diagram.nodesOfType('Property').map(x, x.name))",
+              "name": "uniqueName(p.name, document.elementsOfType('Property').map(x, x.name))",
               "valueType": "'relation'",
               "targetFile": "p.targetFile",
               "limit": "p.limit"
@@ -601,7 +601,7 @@
       "for": ["Property"],
       "unavailable": [{ "when": "self.valueType != 'relation' || self.targetFile != '.'", "message": "Only a relation to this file can be the parent." }],
       "actions": [
-        { "forEach": "diagram.nodesOfType('Property').filter(x, x.isParent)", "as": "x", "do": [{ "unset": ["isParent"], "target": "x" }] },
+        { "forEach": "document.elementsOfType('Property').filter(x, x.isParent)", "as": "x", "do": [{ "unset": ["isParent"], "target": "x" }] },
         { "set": { "isParent": "true", "limit": "'one'" } }
       ],
       "doc": "A relation to this file becomes the parent relation (Requirement 5.9)."
@@ -643,15 +643,18 @@
       "for": ["Option"],
       "confirm": {
         "message": { "cel": "string(count) + ' rows use `' + self.name + '`. Delete it and clear them?'" },
-        "count": "diagram.nodesOfType('Cell').filter(c, c.option == self).size() + diagram.nodesOfType('CellItem').filter(i, i.option == self).size()",
+        "count": "document.elementsOfType('Cell').filter(c, c.option == self).size() + document.elementsOfType('CellItem').filter(i, i.option == self).size()",
         "threshold": 1
       },
-      "actions": [{ "forEach": "diagram.nodesOfType('GroupSetting').filter(g, g.key == self.id)", "as": "g", "do": [{ "delete": "g" }] }, { "delete": "self" }],
+      "actions": [
+        { "forEach": "document.elementsOfType('GroupSetting').filter(g, g.key == self.id)", "as": "g", "do": [{ "delete": "g" }] },
+        { "delete": "self" }
+      ],
       "doc": "The binding's cascade clears the cells, items and conditions naming it (Requirement 3.6); the group settings keyed by it go too."
     },
     "addRow": {
       "label": "New row",
-      "for": "diagram",
+      "for": "document",
       "actions": [{ "create": { "type": "'Row'" } }],
       "doc": "The *new* row at the bottom of the table. In a group, the host also sets the value that puts the row there, in the same step (Requirement 4.2)."
     },
@@ -667,7 +670,7 @@
       "params": { "after": { "type": "Row" } },
       "actions": [
         { "reorder": { "after": "p.after" }, "when": "has(p.after)" },
-        { "reorder": { "before": "diagram.nodesOfType('Row')[0]" }, "when": "!has(p.after)" }
+        { "reorder": { "before": "document.elementsOfType('Row')[0]" }, "when": "!has(p.after)" }
       ],
       "doc": "Dragging a row, where the view has no sort."
     },
@@ -798,9 +801,9 @@
     "removeItem": { "label": "Remove value", "for": ["CellItem"], "actions": [{ "delete": "self" }], "doc": "One of several values." },
     "addView": {
       "label": "New view",
-      "for": "diagram",
+      "for": "document",
       "params": { "name": { "type": "string", "required": true, "default": "Table" } },
-      "actions": [{ "create": { "type": "'View'", "attributes": { "name": "p.name" } }, "as": "v" }, { "set": { "activeView": "v" }, "target": "diagram" }],
+      "actions": [{ "create": { "type": "'View'", "attributes": { "name": "p.name" } }, "as": "v" }, { "set": { "activeView": "v" }, "target": "document" }],
       "doc": "A new view with no settings, made the active one."
     },
     "renameView": {
@@ -954,16 +957,20 @@
       "params": { "after": { "type": "View" } },
       "actions": [
         { "reorder": { "after": "p.after" }, "when": "has(p.after)" },
-        { "reorder": { "before": "diagram.nodesOfType('View')[0]" }, "when": "!has(p.after)" }
+        { "reorder": { "before": "document.elementsOfType('View')[0]" }, "when": "!has(p.after)" }
       ],
       "doc": "Dragging a view's tab."
     },
     "deleteView": {
       "label": "Delete",
       "for": ["View"],
-      "unavailable": [{ "when": "diagram.nodesOfType('View').size() == 1", "message": "A table keeps at least one view." }],
+      "unavailable": [{ "when": "document.elementsOfType('View').size() == 1", "message": "A table keeps at least one view." }],
       "actions": [
-        { "set": { "activeView": "diagram.nodesOfType('View').filter(v, v != self)[0]" }, "target": "diagram", "when": "diagram.activeView == self" },
+        {
+          "set": { "activeView": "document.elementsOfType('View').filter(v, v != self)[0]" },
+          "target": "document",
+          "when": "document.activeView == self"
+        },
         { "delete": "self" }
       ],
       "doc": ""
@@ -971,7 +978,7 @@
     "switchView": {
       "label": "Open",
       "for": ["View"],
-      "actions": [{ "set": { "activeView": "self" }, "target": "diagram" }],
+      "actions": [{ "set": { "activeView": "self" }, "target": "document" }],
       "doc": "Clicking a view's tab; stored, so the file opens in it again (Requirement 6.10)."
     },
     "setColumn": {

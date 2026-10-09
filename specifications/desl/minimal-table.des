@@ -31,7 +31,7 @@
         "code": "reading-list.duplicate-field-name",
         "scope": ["Field"],
         "severity": "error",
-        "rule": "diagram.nodesOfType('Field').filter(f, f.name == self.name).size() == 1",
+        "rule": "document.elementsOfType('Field').filter(f, f.name == self.name).size() == 1",
         "message": "Two fields have this name."
       }
     ]
@@ -54,5 +54,5 @@
       }
     }
   },
-  "operations": { "addBook": { "label": "New book", "for": "diagram", "actions": [{ "create": { "type": "'Book'" } }] } }
+  "operations": { "addBook": { "label": "New book", "for": "document", "actions": [{ "create": { "type": "'Book'" } }] } }
 }

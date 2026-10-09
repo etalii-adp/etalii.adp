@@ -17,9 +17,9 @@
 
 ## Status of this document
 
-This is a draft, version 0.3. It is complete enough to implement a conforming validator of FBL documents and a host that reads and writes bodies through declared bindings, but individual constructs may still change before version 1.0. FBL 0.2 (2026-10-05, approved by the product owner as part of the DISL 0.3 additions) gives the model changes a persistence plugin plans their fields: an add with a position, a move and a retype (section 11.2), which declared bindings follow too (section 6.4); and it lets a DISL specification map a binding's own type and attribute names onto its metamodel (DISL §11.2, `persistence.typeMap`; section 5.1). Every valid 0.1 document is a valid 0.2 document with the same meaning, except that a plugin that does not declare `move` is sent a reorder or re-parent as a remove and an add. FBL 0.3 (2026-10-09, for the Knowledge designer, spec 013) changes no behaviour: it names the tool type's specification wherever 0.2 said DISL, since a DESL specification uses bindings too (DESL section 5); it lets a specification name one binding per format family, the body choosing among them by the files each claims (sections 1.2, 8.1); it spells a reference to a stored id as `by: "id"` (sections 5.2, 5.7); it lets a fixture's edit be a `move` or an `add` with a `position`, as section 11.2 already defines them (section 15.3); and it says how a container written on one line is created and removed around its entry (section 6.2). Every valid 0.2 document is a valid 0.3 document with the same meaning. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
+This is a draft, version 0.3. It is complete enough to implement a conforming validator of FBL documents and a host that reads and writes bodies through declared bindings, but individual constructs may still change before version 1.0. FBL 0.2 (2026-10-05, approved by the product owner as part of the DISL 0.3 additions) gives the model changes a persistence plugin plans their fields: an add with a position, a move and a retype (section 11.2), which declared bindings follow too (section 6.4); and it lets a DISL specification map a binding's own type and attribute names onto its metamodel (DISL §11.2, `persistence.typeMap`; section 5.1). Every valid 0.1 document is a valid 0.2 document with the same meaning, except that a plugin that does not declare `move` is sent a reorder or re-parent as a remove and an add. FBL 0.3 (2026-10-09, for the Knowledge designer, spec 013) changes no behaviour: it names the tool type's specification wherever 0.2 said DISL, since a DESL specification uses bindings too (DESL section 5), and pairs each construct it relies on with its DISL and its DESL section (section 1.3); it lets a specification name one binding per format family, the body choosing among them by the files each claims (sections 1.2, 8.1); it spells a reference to a stored id as `by: "id"` (sections 5.2, 5.7); it lets a fixture's edit be a `move` or an `add` with a `position`, as section 11.2 already defines them (section 15.3); and it says how a container written on one line is created and removed around its entry (section 6.2). Every valid 0.2 document is a valid 0.3 document with the same meaning. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
 
-FBL relies on constructs that DISL 0.2 and 0.3 define: id strategies and ephemeral ids (DISL §11.5), findings and their source locations (DISL §8.6), derived elements (DISL §4.11) and the tool type's origin (`language.origin`, DISL §3.2). Where this document names one of them, DISL is the definition; FBL defines none of its own. A DESL specification adopts the same sections by reference (DESL section 1.3), so they mean the same for a designer. Where this document says **the tool type's specification**, it means the DISL or DESL specification whose persistence names the binding.
+FBL relies on constructs that the specification language of the tool type's kind defines: id strategies and ephemeral ids, findings and their source locations, derived elements, the editing transaction and the tool type's origin. Where this document names one of them, the specification language is the definition; FBL defines none of its own. Where this document says **the tool type's specification**, it means the DISL specification of a diagram or the DESL specification of a designer whose persistence names the binding. Section 1.3 lists, for each construct, the section of DISL and of DESL that defines it; a citation of DISL in this document is read, for a designer, as a citation of the DESL section that table pairs it with.
 
 The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY** and **OPTIONAL** are to be interpreted as described in RFC 2119 and RFC 8174 when, and only when, they appear in bold capitals.
 
@@ -76,20 +76,29 @@ A host that opens a file first routes it to a binding (section 12), reads its re
 
 The same binding serves every host. The round-trip fixtures in `fixtures/` (section 15.3) are the shared test: a host that passes them reads and writes bodies the way every other host does.
 
-### 1.3 Relation to DISL *(informative)*
+### 1.3 Relation to the specification languages
 
-| Concern | Defined by |
-|---|---|
-| Metamodel, notation, toolbox, constraints, behavior, layout of a tool type | DISL |
-| Id strategies, derived ids, ephemeral (unstable) ids | DISL §11.5 (`persistence.ids`) |
-| Findings, their severities, codes and source locations; the built-in findings `std.unparseable`, `std.unreadableEntry`, `std.missingId`, `std.duplicateId`, `std.pluginMissing` | DISL §8.6 |
-| Derived elements, computed containment | DISL §4.11 |
-| A tool type's origin, `<vendor>/<type>` | DISL §3.2 (`language.origin`) |
-| A diagram stored as ADP's own definition file | DID |
-| A model stored in a file or folder another tool owns | **FBL** |
-| The `.adp` registration, view data of such a model, routing | **FBL** |
+FBL serves every kind of tool. What it reads a body into, and the constructs it relies on, are defined by the specification language of the tool type's kind: DISL for a diagram, DESL for a designer. Each language defines them on its own; neither takes them from the other.
 
-DISL's persistence layer names FBL with `format: "fbl"` and `binding` (DISL §11.2). With that format, DISL's writer settings (`files`, `indent`, `newline`, `ordering`, `precision` and the others DISL lists) do not apply: FBL writes by splices and keeps the file's own conventions.
+| Concern | For a diagram | For a designer |
+|---|---|---|
+| Metamodel, constraints, behaviour and presentation of a tool type | DISL | DESL |
+| Element types, attributes, containment, references ("node type" and "relation type" in this document) | DISL §4 | DESL section 4 (element types; a designer has no relation types) |
+| A binding's type and attribute names mapped onto the metamodel (`persistence.typeMap`) | DISL §11.2 | DESL section 5.2 |
+| Id strategies, derived ids, ephemeral (unstable) ids | DISL §11.5 (`persistence.ids`) | DESL section 5.3 (`persistence.ids`) |
+| Findings, their severities, codes and source locations; the built-in findings `std.unparseable`, `std.unreadableEntry`, `std.missingId`, `std.duplicateId` | DISL §8.6, §8.7 | DESL sections 6.3, 6.5 |
+| `std.pluginMissing`, derived elements, computed containment | DISL §8.7, §4.11 | none: DESL 0.1 has no plugins and no derived elements |
+| Reading order and `positionIn` | DISL §8.6, §12.4 | DESL sections 10.2, 9.4 |
+| The editing transaction | DISL §14.4 | DESL section 10.3 |
+| A tool type's origin, `<vendor>/<type>` | DISL §3.2 (`language.origin`) | DESL section 3.2 (`language.origin`) |
+| Localized text and documentation objects | DISL §2.3, §2.4 | DESL sections 2.3, 2.4 |
+| CEL, its cost limits and its determinism | DISL §2.5, §12 | DESL sections 2.5, 9 |
+| Extension properties | DISL §2.8 | DESL section 2.6 |
+| A document stored as ADP's own definition file | DID | DED |
+| A model stored in a file or folder another tool owns | **FBL** | **FBL** |
+| The `.adp` registration, view data of such a model, routing | **FBL** | **FBL** |
+
+DISL's persistence layer names FBL with `format: "fbl"` and `binding` (DISL §11.2); DESL's with `format: "fbl"` and `bindings` (DESL section 5). With that format, DISL's writer settings (`files`, `indent`, `newline`, `ordering`, `precision` and the others DISL lists) do not apply: FBL writes by splices and keeps the file's own conventions.
 
 ### 1.4 Design principles
 
@@ -103,7 +112,7 @@ DISL's persistence layer names FBL with `format: "fbl"` and `binding` (DISL §11
 ### 1.5 Non-goals
 
 - FBL is not a general grammar formalism. It covers the five format families of section 4, which are the ones today's tools need (constitution principle V).
-- FBL does not compute the model beyond reading it: which elements a view shows, derived elements and layouts are DISL's.
+- FBL does not compute the model beyond reading it: which elements a view shows, derived elements and layouts are the specification language's.
 - FBL does not merge concurrent edits. A body is edited by one host at a time; changes from anywhere else arrive as external changes (section 7.3).
 
 ---

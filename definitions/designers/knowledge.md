@@ -31,7 +31,7 @@ A knowledge document is exactly two files: the **knowledge file**, which holds e
 
 ## The table
 
-The model is the same in every format; only the writing differs. Names in brackets are the metamodel's where they differ from the file's key, because DISL reserves `type`, `target` and `parent` (research R4).
+The model is the same in every format; only the writing differs. Names in brackets are the metamodel's where they differ from the file's key, because DESL reserves `type` and `parent` (DESL section 2.2) and `targetFile` never reads as the `target` of an action (research R4).
 
 | Entry | Holds | Id |
 |---|---|---|
@@ -145,12 +145,12 @@ Reading never fails on content: what cannot be accepted is a finding at its plac
 | `knowledge.unknown-type` | warning | a property whose `type` is none of the nine; its cells are shown as text and cannot be edited | the host |
 | `knowledge.unresolved-target` | warning | a relation property whose target file is missing, unreadable or not a knowledge file | the host |
 | `knowledge.unresolved-row` | warning | a relation value naming a row that is not in the target file | the host |
-| `knowledge.parent-cycle` | error | a row that would be its own ancestor through the parent relation | the host: DISL's expressions do not recurse over values |
+| `knowledge.parent-cycle` | error | a row that would be its own ancestor through the parent relation | the host: DESL's expressions do not recurse over values |
 | `knowledge.missing-id` | info | a property, option, view or row without an id (section 10) | the host |
 | `knowledge.unknown-key` | info | a key or element the designer does not know; kept | the host |
 | `knowledge.newer-version` | warning | a file whose `knowledge` version is newer than 0.1; it opens read-only | the host |
 
-FBL's and DISL's own findings apply too: an entry that cannot be read is `std.unreadableEntry` and keeps its bytes; a file that is not well-formed is `std.unparseable`, opens empty and read-only, and is never written; a file without the `knowledge` header is unreadable; two entries with one id are `std.duplicateId`.
+FBL's and DESL's own findings apply too (DESL section 6.5): an entry that cannot be read is `std.unreadableEntry` and keeps its bytes; a file that is not well-formed is `std.unparseable`, opens empty and read-only, and is never written; a file without the `knowledge` header is unreadable; two entries with one id are `std.duplicateId`.
 
 ## Changing a property's type
 
@@ -188,7 +188,7 @@ Deleting a row that rows of other files relate to first says how many; their val
 
 ## Entries without an id
 
-A property, option, view or row written without an id (by hand or by a language model) is read with an id the host makes up, is shown, and is reported as `knowledge.missing-id` (info). The first edit made in ADP to the file writes a new ShortGuid into every such entry, in the same step (DISL `ids.missing: "assign"`), so references to it can be stored. Cells, items and view settings have no id of their own and never need one.
+A property, option, view or row written without an id (by hand or by a language model) is read with an id the host makes up, is shown, and is reported as `knowledge.missing-id` (info). The first edit made in ADP to the file writes a new ShortGuid into every such entry, in the same step (DESL `ids.missing: "assign"`, DESL section 5.3.4), so references to it can be stored. Cells, items and view settings have no id of their own and never need one.
 
 ## Gestures and operations
 
