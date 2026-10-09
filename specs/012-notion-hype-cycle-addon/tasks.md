@@ -413,7 +413,7 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 **⟶ Wait for Wave 3 to finish, then:**
 
 - [x] **T130** Run the site's checks, push the branch and open pull request 3 into `develop`; its description names `specs/012-notion-hype-cycle-addon/` and the `etalii.adp` commit of T021 · etalii.adp.site
-- [ ] **T131** **Maintainer**: merge pull request 3 with a merge commit · etalii.adp.site
+- [x] **T131** **Maintainer**: merge pull request 3 with a merge commit · etalii.adp.site
 
 **⟶ Wait for T131 to finish, then:**
 
@@ -447,15 +447,15 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 ## Phase 9: Addendum of 2026-10-09 (FR-033 to FR-037)
 
-**Purpose**: the two requirements the maintainer added while the feature was being finished: selecting a database when the add-on is added, with a check and a projection of its properties, and hiding the properties that hold internal information. One point is open in the specification (FR-033); T135 settles it before anything is built, and finds the rule by which the add-on tells an internal property from the specification alone, raising it in `etalii.adp` if the specification cannot say.
+**Purpose**: the two requirements the maintainer added while the feature was being finished: selecting a database when the add-on is added, with a check and a projection of its properties, and hiding the properties that hold internal information. The specification has no open point left (FR-033 was settled on 2026-10-09); T135 finds the rule by which the add-on tells an internal property from the specification alone, raising it in `etalii.adp` if the specification cannot say.
 
-- [ ] **T135** Settle the open point of FR-033 with the maintainer, remove its marker from the specification, and bring the address, store and service contracts and the data model in line: where a selected store is kept, the call that lists the databases a person's access reaches, what projecting a property means and where a projection is kept, and the rule that finds the internal properties from a specification · etalii.adp/specs/012-notion-hype-cycle-addon/
+- [x] **T135** Bring the address, store and service contracts in line with FR-033 to FR-037 as settled: how a selected store reaches the embed block, the calls that list the databases and find and set the block, what projecting a property means, and the rule that finds the internal properties from a specification · etalii.adp/specs/012-notion-hype-cycle-addon/
 
 **⟶ Wait for T135 to finish, then:**
 
-- [ ] **T136** [P] In the state `setup`, list the databases the person's access reaches and let the user select one; the service forwards the one call that lists them (FR-033) · etalii.adp.ide.notion/src/frame/parts/, etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/src/store/notion.ts
-- [ ] **T137** [P] Check a selected database against the schema, project the properties that can be, and ask the user about the ones that are missing before anything is changed (FR-034, FR-035) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
-- [ ] **T138** [P] Hide the internal properties in a database's views when the add-on or `scripts/store.mjs` prepares or fills it (FR-036, FR-037) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/scripts/store.mjs
+- [x] **T136** [P] In the state `setup`, list the databases the person's access reaches and let the user select one; the service forwards the one call that lists them (FR-033) · etalii.adp.ide.notion/src/frame/parts/, etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/src/store/notion.ts
+- [x] **T137** [P] Check a selected database against the schema, project the properties that can be, and ask the user about the ones that are missing before anything is changed (FR-034, FR-035) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
+- [x] **T138** [P] Hide the internal properties in a database's views when the add-on or `scripts/store.mjs` prepares or fills it (FR-036, FR-037) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/scripts/store.mjs
 - [x] **T139** [P] Hide the internal properties in the views of the ten stores of the Showcase (FR-037) · Notion workspace/Showcase
 
 **⟶ Wait for T136 to T139 to finish, then:**
@@ -469,5 +469,5 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 **Purpose**: the first pass (T078) showed that the grant completes in a web browser and not in the Notion desktop app. The service hands a completed grant over to the page that started it (contracts/service.md, `POST /grant`).
 
 - [x] **T141** Amend the Notion repository's principles from 1.1.0 to 1.2.0 (MINOR) through `/speckit-constitution`: the service keeps no state but a grant of access in progress, for at most two minutes and handed over once · etalii.adp/.specify/memory/repositories/etalii.adp.ide.notion.md
-- [ ] **T142** Keep a completed grant for at most 120 seconds under its state and hand it over once to the verifier's holder, in the handler, the local service and the Worker with a Durable Object; have the session ask for it beside the message of the window it opened, and the page show the link to the grant and a way to stop waiting (FR-010, research R4) · etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/service/worker.ts, etalii.adp.ide.notion/service/wrangler.toml, etalii.adp.ide.notion/scripts/service.mjs, etalii.adp.ide.notion/src/store/session.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
-- [ ] **T143** **Maintainer**: in the Notion desktop app, connect a diagram page of the Showcase and say whether the diagram opens after the grant is approved in the browser · Notion desktop app
+- [x] **T142** Keep a completed grant for at most 120 seconds under its state and hand it over once to the verifier's holder, in the handler, the local service and the Worker with a Durable Object; have the session ask for it beside the message of the window it opened, and the page show the link to the grant and a way to stop waiting (FR-010, research R4) · etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/service/worker.ts, etalii.adp.ide.notion/service/wrangler.toml, etalii.adp.ide.notion/scripts/service.mjs, etalii.adp.ide.notion/src/store/session.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
+- [x] **T143** **Maintainer**: in the Notion desktop app, connect a diagram page of the Showcase and say whether the diagram opens after the grant is approved in the browser · Notion desktop app

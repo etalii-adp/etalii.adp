@@ -3,7 +3,7 @@
   "specName": "A Notion Host Repository, Published at etalii.net/adp-notion",
   "branch": "features/011-notion-repository",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -448,9 +448,24 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-07T22:18:36.637Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T046",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T22:31:06.843Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-07T22:31:06.890Z"
     }
   ],
-  "last_action": "Pull request 5 open; T046 follows its merge",
+  "last_action": "All 46 tasks done; five pull requests merged; quickstart passes",
   "telemetryInstanceId": "f6af9078-e4ae-4464-87ac-696a9f4a77ac",
   "coverage": {
     "FR-001": {
@@ -795,6 +810,9 @@
     {
       "note": "The deploy run of #87 took 21m51s and waited behind a 13m run: SC-003 (15 minutes from merge to served) is at risk; step 6 will measure it",
       "step": "implement"
+    },
+    {
+      "note": "This change resolved no living-spec capability, so nothing was loaded before it and nothing was folded after it. Either the areas it touched belong to no capability yet, or a capability claims them and no requirement describes them — `living-validate` names which."
     }
   ],
   "step_summaries": {
@@ -806,12 +824,12 @@
       "summary": "46 tasks in 6 phases: setup, the glossary and rules (pull request 1), one phase per story across the Notion repository, the site and the profile, then validation and delivery; 7 are a maintainer's"
     },
     "implement": {
-      "summary": "Phases 1 and 2 built: glossary, rules, principles and amendments, in pull request 1; waiting for its merge"
+      "summary": "etalii.adp.ide.notion is a regular repository of the organization, its add-on index is served at https://etalii.net/adp-notion by the site deploy, and Notion is named as a host in the glossary, the site and both build tables"
     }
   },
   "approach": "Rename and set up etalii.adp.ide.notion with a Build workflow and a dependency-free Node build script that writes an index and one folder per add-on. The site's deploy workflow checks that repository out, builds it into dist/adp-notion and publishes it with the site; a publish job in the Notion repository starts that workflow with a token. The glossary, rules, constitution, site principles, both build tables and the site's host list name Notion as a host.",
   "assistant": "claude-vscode",
-  "currentTask": "T045",
+  "currentTask": "T046",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -1079,6 +1097,10 @@
         "specs/011-notion-repository/checklists/requirements.md",
         "specs/011-notion-repository/tasks.md"
       ]
+    },
+    "T046": {
+      "status": "DONE",
+      "did": "Feature branches deleted locally in the four clones (origin had deleted them on merge), the quickstart branch too; the three worktrees removed"
     }
   },
   "verified": [

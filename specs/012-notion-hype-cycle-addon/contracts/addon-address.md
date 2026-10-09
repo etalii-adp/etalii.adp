@@ -34,7 +34,7 @@ The page is in exactly one state, named in `data-state` on `<body>`.
 | `data-state` | When | What is shown | Requirement |
 | --- | --- | --- | --- |
 | `loading` | From the first paint until the store is read | The frame, and the status `loading` | NFR-008 |
-| `setup` | The address has no `store`, or its value is no database id | The steps of `docs/set-up-a-graph.md` in short, and nothing else. No call is made and no token is asked for | Edge case: no database to read; D11 |
+| `setup` | The address has no `store`, or its value is no database id | The steps of `docs/set-up-a-graph.md` in short, and `id="choose-store"`, which starts the selection of a database. No call is made and no token is asked for until that control is used | Edge case: no database to read; D11; FR-033 |
 | `connect` | No token is kept, or Notion refused the one kept | An invitation to grant access, with `id="connect"` | FR-010, D1 |
 | `unshared` | The token is valid and Notion says the database does not exist for it | A sentence saying the database is not shared with the connection, and `id="connect"` to grant again | Edge case: not shared; research R3 |
 | `unprepared` | The database lacks a property [store.md](store.md) asks for | What is missing, and `id="prepare"` when the person may change the database | D14 |
@@ -43,6 +43,16 @@ The page is in exactly one state, named in `data-state` on `<body>`.
 | `unreadable` | The document cannot be read at all | An empty canvas and the sentence `The graph could not be read, so it cannot be edited.` No editing control | FR-013, US1 scenario 4 |
 
 An empty database that has every property is `ready` with an empty graph and no finding (US1 scenario 5). An entry that cannot be read is a finding in `ready` or `read-only`, never a state of its own (FR-013).
+
+## Selecting a store
+
+| Step | What happens | Requirement |
+| --- | --- | --- |
+| The person uses `id="choose-store"` | Access is asked for where none is kept, then `id="stores"` lists the databases that access reaches | FR-033 |
+| The person chooses a database | Its properties are compared with what the binding asks. A missing property that an existing one of the right type can become is offered both ways in `id="properties"`; nothing of the database is changed yet | FR-034 |
+| The person agrees with `id="prepare"` | The chosen properties are renamed, the others added, and the internal ones hidden from the database's views where Notion lets a connection do so | FR-035, FR-036 |
+| The store is ready | The add-on looks on the page that holds the database, and on the pages directly under that page, for an embed block whose address is this add-on's without a `store`. Exactly one: its address is set to name the store. None or several: `id="store-address"` shows the address to put in the block | FR-033 |
+| Either way | The page goes to its own address with that `store`, so the diagram is shown at once | FR-033 |
 
 ## Identifiers
 
@@ -64,6 +74,10 @@ Elements a test may rely on. Each is present only in the states that show it.
 | `id="prepare"` | The control that adds the missing properties to the database |
 | `id="open-in-tab"` | While a grant of access is in progress: a link to the grant itself, for the person to open when no window opened, as in the Notion desktop app (research R4) |
 | `id="cancel-connect"` | While a grant of access is in progress: the control that stops waiting for it |
+| `id="choose-store"` | In `setup`: the control that starts the selection of a database. It asks for access first where none is kept |
+| `id="stores"` | The list of the databases the person's access reaches, one item per database with its title and the kind of place it is in; choosing one selects it. `id="find-store"` looks for one by name, `id="more-stores"` shows the next 25, and `id="connect"` grants access again, to reach a database that is not listed |
+| `id="properties"` | For a selected database that lacks properties: one item per missing property, each with the choice between a new property and an existing one of the right type, and `id="prepare"` to agree |
+| `id="store-address"`, `id="copy-store-address"` | Where the embed block could not be set: the address with its `store`, and the control that copies it. They are shown once, on the page of the store the add-on then goes to, with the reason |
 
 | Attribute | On | Value |
 | --- | --- | --- |
@@ -113,4 +127,4 @@ They act while the keyboard focus is inside the add-on's page. With the focus in
 | The specification or the binding is changed in its repository and the add-on is published again | The page follows it, with no change to this contract's address | US1 scenario 6 |
 | The page is shown in an embed block narrower than both panels | Both panels are collapsed and the canvas stays usable | FR-011, FR-017 |
 
-The page never navigates the frame it is in, never asks to leave it, and makes no request to any address but its own folder and the service of [service.md](service.md).
+The page never navigates the frame it is in to another page and never asks to leave it: the one navigation it makes is to its own address with the `store` just selected. It makes no request to any address but its own folder and the service of [service.md](service.md).

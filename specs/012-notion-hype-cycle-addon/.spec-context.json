@@ -1080,6 +1080,62 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-08T16:17:09.409Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T142",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T16:31:34.927Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T143",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T23:33:59.598Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T131",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-08T23:34:00.237Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T136",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-09T00:39:18.722Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T137",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-09T00:39:18.992Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T138",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-09T00:39:19.278Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T135",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-09T00:40:15.165Z"
     }
   ],
   "last_action": "1101 tests pass and 9 are expected failures naming issue 97; branch pushed, pull request 2 not opened",
@@ -1823,7 +1879,7 @@
     }
   },
   "approach": "A static add-on at /adp-notion/gartner-hype-cycle-graph/ is compiled from shared parts that name no tool type: a new DISL interpreter, the Visual Studio Code host's FBL library copied unchanged, a store that keeps a document as one row per element, a canvas, and Notion-styled panels. The store rebuilds the binding's document text in memory, so FBL plans every edit and keeps the undo history, and each edit is written back as row changes. A stateless Cloudflare Worker completes Notion's sign-in and forwards the calls with the viewer's token.",
-  "currentTask": "T141",
+  "currentTask": "T135",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -2718,6 +2774,91 @@
       "did": "Amended the Notion principles to 1.2.0: the service keeps no state but a grant in progress, for at most two minutes and handed over once",
       "files": [
         ".specify/memory/repositories/etalii.adp.ide.notion.md"
+      ]
+    },
+    "T142": {
+      "status": "DONE",
+      "did": "The service keeps a completed grant for at most 120 seconds and hands it once to the verifier's holder; the session asks for it and the page links to the sign-in while waiting; pull request 7 of etalii.adp.ide.notion",
+      "files": [
+        "etalii.adp.ide.notion/service/handler.ts",
+        "etalii.adp.ide.notion/service/worker.ts",
+        "etalii.adp.ide.notion/service/wrangler.toml",
+        "etalii.adp.ide.notion/scripts/service.mjs",
+        "etalii.adp.ide.notion/src/store/session.ts",
+        "etalii.adp.ide.notion/src/frame/parts/reading.ts"
+      ]
+    },
+    "T143": {
+      "status": "DONE",
+      "did": "The maintainer connected a diagram page in the Notion desktop app: after the grant was approved in the browser, the diagram opened"
+    },
+    "T131": {
+      "status": "DONE",
+      "did": "The maintainer merged pull request 98 of etalii.adp.site"
+    },
+    "T136": {
+      "status": "DONE",
+      "did": "In the state setup, choose-store asks for access where none is kept and lists the databases the access reaches (title, where, 25 at a time, found by name); the service forwards search, block children and block update, and the in-memory Notion answers them",
+      "files": [
+        "etalii.adp.ide.notion/src/frame/parts/selecting.ts",
+        "etalii.adp.ide.notion/src/frame/parts/selecting.css",
+        "etalii.adp.ide.notion/src/frame/parts/notices.ts",
+        "etalii.adp.ide.notion/src/frame/main.ts",
+        "etalii.adp.ide.notion/src/frame/parts/reading.ts",
+        "etalii.adp.ide.notion/src/store/notion.ts",
+        "etalii.adp.ide.notion/src/store/embed.ts",
+        "etalii.adp.ide.notion/service/handler.ts",
+        "etalii.adp.ide.notion/scripts/service.mjs",
+        "etalii.adp.ide.notion/test/frame/selecting.test.ts",
+        "etalii.adp.ide.notion/test/frame/main.test.ts",
+        "etalii.adp.ide.notion/test/store/embed.test.ts",
+        "etalii.adp.ide.notion/test/service/handler.test.ts",
+        "etalii.adp.ide.notion/test/support/memoryNotion.ts",
+        "etalii.adp.ide.notion/test/support/memoryNotion.test.ts",
+        "etalii.adp.ide.notion/docs/set-up-a-graph.md",
+        "etalii.adp.ide.notion/docs/service.md",
+        "etalii.adp.ide.notion/README.md"
+      ]
+    },
+    "T137": {
+      "status": "DONE",
+      "did": "A chosen or named database is checked through one flow: projectable() offers existing properties of the needed type, the properties list asks per property, and prepare renames the chosen and adds the rest in one write, only once the person agrees",
+      "files": [
+        "etalii.adp.ide.notion/src/store/schema.ts",
+        "etalii.adp.ide.notion/src/store/document.ts",
+        "etalii.adp.ide.notion/src/frame/parts/notices.ts",
+        "etalii.adp.ide.notion/src/frame/parts/reading.ts",
+        "etalii.adp.ide.notion/src/frame/parts/selecting.ts",
+        "etalii.adp.ide.notion/test/store/schema.test.ts",
+        "etalii.adp.ide.notion/test/store/document.read.test.ts",
+        "etalii.adp.ide.notion/test/frame/reading.test.ts",
+        "etalii.adp.ide.notion/test/frame/selecting.test.ts"
+      ]
+    },
+    "T138": {
+      "status": "DONE",
+      "did": "The internal properties are found from the notation (src/store/internal.ts) and hidden in every view that shows properties, through Notion's views API, when the add-on prepares a database and when scripts/store.mjs put fills one; the rule leaves a note's at shown",
+      "files": [
+        "etalii.adp.ide.notion/src/store/internal.ts",
+        "etalii.adp.ide.notion/src/store/schema.ts",
+        "etalii.adp.ide.notion/src/store/document.ts",
+        "etalii.adp.ide.notion/src/store/notion.ts",
+        "etalii.adp.ide.notion/service/handler.ts",
+        "etalii.adp.ide.notion/scripts/store.mjs",
+        "etalii.adp.ide.notion/test/store/internal.test.ts",
+        "etalii.adp.ide.notion/test/store/schema.test.ts",
+        "etalii.adp.ide.notion/test/scripts/store.test.ts",
+        "etalii.adp.ide.notion/test/support/memoryNotion.ts",
+        "etalii.adp.ide.notion/docs/disl-support.md",
+        "etalii.adp.ide.notion/docs/set-up-a-graph.md",
+        "etalii.adp.ide.notion/docs/service.md"
+      ]
+    },
+    "T135": {
+      "status": "DONE",
+      "did": "Settled FR-033 to FR-037 in the spec and brought the address, store, service and shared-parts contracts in line, with the rule that finds the internal properties",
+      "files": [
+        "specs/012-notion-hype-cycle-addon/"
       ]
     }
   },
