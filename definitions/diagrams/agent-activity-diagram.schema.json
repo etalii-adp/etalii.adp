@@ -9,10 +9,6 @@
       "description": "The header: the version of this format. A file of a later version opens read-only.",
       "const": 1
     },
-    "showArchived": {
-      "description": "Whether specifications whose status is archived are drawn: the canvas switch, set by the person. Absent means false. Agents leave it alone.",
-      "type": "boolean"
-    },
     "projects": {
       "type": "array",
       "items": {
@@ -43,19 +39,30 @@
         "$ref": "#/$defs/Environment"
       }
     },
-    "placements": {
-      "description": "Locked positions, one per locked element; an element without one is placed by the layout. Agents leave it alone.",
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/Placement"
-      }
-    },
-    "groups": {
-      "description": "Groups whose collapse state differs from their default, one entry per element and group. Agents leave it alone.",
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/GroupState"
-      }
+    "view": {
+      "description": "The person's part of the file: the canvas switch, locked positions and folded groups. ADP creates it with the first of them and removes it with the last. Agents leave it alone.",
+      "type": "object",
+      "properties": {
+        "showArchived": {
+          "description": "Whether specifications whose status is archived are drawn: the canvas switch, set by the person. Absent means false.",
+          "type": "boolean"
+        },
+        "placements": {
+          "description": "Locked positions, one per locked element; an element without one is placed by the layout.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Placement"
+          }
+        },
+        "groups": {
+          "description": "Groups whose collapse state differs from their default, one entry per element and group.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GroupState"
+          }
+        }
+      },
+      "additionalProperties": false
     }
   },
   "required": [
