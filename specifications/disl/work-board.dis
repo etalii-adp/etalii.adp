@@ -134,7 +134,7 @@
             "type": "string",
             "required": true
           },
-          "item": {
+          "assignedTo": {
             "type": "Item"
           }
         }
@@ -162,9 +162,9 @@
         "target": "Person",
         "allowParallel": false,
         "derived": {
-          "from": "diagram.nodesOfType('Person').filter(p, p.item != null)",
+          "from": "diagram.nodesOfType('Person').filter(p, p.assignedTo != null)",
           "id": "'works:' + item.id",
-          "source": "item.item",
+          "source": "item.assignedTo",
           "target": "item",
           "sources": "[item]",
           "edits": {
@@ -423,7 +423,7 @@
         "actions": [
           {
             "set": {
-              "item": "self.source"
+              "assignedTo": "self.source"
             },
             "target": "self.target"
           }
@@ -437,7 +437,7 @@
         "actions": [
           {
             "unset": [
-              "item"
+              "assignedTo"
             ],
             "target": "self.target"
           }

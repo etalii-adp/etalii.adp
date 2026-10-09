@@ -387,12 +387,13 @@
             "group": "Identity",
             "order": 1
           },
-          "kind": {
+          "environmentKind": {
             "type": "EnvironmentKind",
             "required": true,
             "default": "other",
             "group": "Identity",
-            "order": 2
+            "order": 2,
+            "doc": "What kind of system the environment is. Stored as the entry's `kind` key; the attribute is named otherwise because `kind` is reserved (DISL 2.2)."
           },
           "link": {
             "type": "uri",
@@ -1084,9 +1085,9 @@
             }
           },
           {
-            "id": "kind",
+            "id": "environmentKind",
             "text": {
-              "cel": "self.kind == 'localMachine' ? 'Local machine' : self.kind == 'wsl' ? 'WSL' : self.kind == 'cloud' ? 'Cloud' : self.kind == 'container' ? 'Container' : 'Other'"
+              "cel": "self.environmentKind == 'localMachine' ? 'Local machine' : self.environmentKind == 'wsl' ? 'WSL' : self.environmentKind == 'cloud' ? 'Cloud' : self.environmentKind == 'container' ? 'Container' : 'Other'"
             },
             "position": "bottom",
             "editable": false,
@@ -1247,7 +1248,7 @@
             "doc": "A system the work happens on.",
             "initial": {
               "name": "New environment",
-              "kind": "other"
+              "environmentKind": "other"
             },
             "after": "editLabel"
           }

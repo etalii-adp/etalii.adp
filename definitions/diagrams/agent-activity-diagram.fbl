@@ -160,7 +160,7 @@
           "attributes": {
             "unknownKeys": { "value": "entry.filter(k, !(k in ['id', 'name', 'kind', 'link']))" },
             "name": { "key": "name", "empty": "refuse" },
-            "kind": { "key": "kind", "empty": "refuse" },
+            "environmentKind": { "key": "kind", "empty": "refuse" },
             "link": { "key": "link", "empty": "remove" }
           },
           "insert": {
