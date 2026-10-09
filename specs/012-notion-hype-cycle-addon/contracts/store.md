@@ -144,7 +144,7 @@ An edit is planned by the FBL library as splices. Each comes to row writes by th
 
 ## Preparing a database
 
-`prepare` makes a database a store: it renames the title property after the id key, and adds `Kind`, `Order` and every key's property that is missing. It changes no property that exists with the right type, removes none, and touches no row. A property that exists with another type is reported and left alone, and the database stays `unprepared`. The add-on offers it through `id="prepare"`, and `scripts/store.mjs put` does it first.
+`prepare` makes a database a store: it renames the title property after the id key, gives each property the person chose to project the name of the key it becomes, and adds `Kind`, `Order` and every key's property that is still missing. It runs only once the person has agreed to what it will do (FR-035). It changes no property that exists with the right type, removes none, and touches no row. A property that exists with another type is reported and left alone, and the database stays `unprepared`. The add-on offers it through `id="prepare"`, and `scripts/store.mjs put` does it first.
 
 ## `scripts/store.mjs`
 

@@ -91,6 +91,9 @@ The calls the store makes, as the Notion API of that version names them:
 | `POST` | `v1/data_sources/<id>/query` | Reading the rows, and asking for rows edited since the last read |
 | `POST` | `v1/pages` | A new row |
 | `PATCH` | `v1/pages/<id>` | A changed row, and a row moved to or from the trash |
+| `POST` | `v1/search` | The databases a person's access reaches, for the selection of a store |
+| `GET` | `v1/blocks/<id>/children` | The blocks of the page that holds a database and of the pages directly under it, to find the embed block |
+| `PATCH` | `v1/blocks/<id>` | Setting the address of that embed block to name its store |
 
 `<id>` is 32 hexadecimal digits, with or without dashes. A call the store comes to need is added here first.
 
