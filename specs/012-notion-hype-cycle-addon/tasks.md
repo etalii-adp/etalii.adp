@@ -391,10 +391,10 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 **Wave 2: independent (passes in Notion)**
 
-- [ ] **T120** [P] [US1] Open each of the ten diagram pages and compare each example with the same one in the Visual Studio Code host: 0 differences (SC-001). Time the opening of a graph of 50 trends: within 3 seconds (SC-002). Open the add-on's address with no `store`, with a database that is not shared, and with an empty one · Notion workspace
-- [ ] **T121** [P] [US2] In the first graph: make every edit of T081's list (SC-006), time one edit to the canvas and to the database (SC-004), make 20 edits and undo them with `CTRL+Z` (SC-005), edit a row in the table while the diagram is open (FR-022), open the same store in two pages, and press `CTRL+Z` with the focus in the Notion page · Notion workspace
-- [ ] **T122** [P] [US5] Set the panels beside Notion's own in the light and the dark appearance and with `?theme=`, and correct any value of `notion.css` that differs and add any departure that is not listed to `docs/styling.md`, in a pull request of its own into `develop` that is merged before T134 (SC-011, NFR-003, NFR-007); use every control with the keyboard alone (SC-012); open a diagram page on a phone and read it · Notion workspace
-- [ ] **T123** [P] **Maintainer**: set up a new graph by following `docs/set-up-a-graph.md` alone, timed: under 5 minutes, with no change to the add-on (SC-009) · Notion workspace
+- [x] **T120** [P] [US1] Open each of the ten diagram pages and compare each example with the same one in the Visual Studio Code host: 0 differences (SC-001). Time the opening of a graph of 50 trends: within 3 seconds (SC-002). Open the add-on's address with no `store`, with a database that is not shared, and with an empty one · Notion workspace
+- [x] **T121** [P] [US2] In the first graph: make every edit of T081's list (SC-006), time one edit to the canvas and to the database (SC-004), make 20 edits and undo them with `CTRL+Z` (SC-005), edit a row in the table while the diagram is open (FR-022), open the same store in two pages, and press `CTRL+Z` with the focus in the Notion page · Notion workspace
+- [x] **T122** [P] [US5] Set the panels beside Notion's own in the light and the dark appearance and with `?theme=`, and correct any value of `notion.css` that differs and add any departure that is not listed to `docs/styling.md`, in a pull request of its own into `develop` that is merged before T134 (SC-011, NFR-003, NFR-007); use every control with the keyboard alone (SC-012); open a diagram page on a phone and read it · Notion workspace
+- [x] **T123** [P] **Maintainer**: set up a new graph by following `docs/set-up-a-graph.md` alone, timed: under 5 minutes, with no change to the add-on (SC-009) · Notion workspace
 - [x] **T124** [P] Check the published tree: the index at `/adp-notion` lists the add-on by its display name and has no `id="no-addons"`, every resource is relative, no response refuses a frame, and no file holds a token or a client secret (FR-001, FR-010, SC-010) · https://etalii.net/adp-notion
 
 **⟶ Wait for Wave 2 to finish, then:**
@@ -417,7 +417,7 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 **⟶ Wait for T131 to finish, then:**
 
-- [ ] **T132** Tick the tasks whose pull requests are merged, record the delivery with the four commits, and open pull request 4, which carries T129's change as well, into `develop` from a branch of this feature's name · etalii.adp/specs/012-notion-hype-cycle-addon/tasks.md
+- [x] **T132** Tick the tasks whose pull requests are merged, record the delivery with the four commits, and open pull request 4, which carries T129's change as well, into `develop` from a branch of this feature's name · etalii.adp/specs/012-notion-hype-cycle-addon/tasks.md
 - [ ] **T133** **Maintainer**: merge pull request 4 with a merge commit · etalii.adp
 - [ ] **T134** Delete the branch `features/012-notion-hype-cycle-addon` locally and on `origin` in the three repositories, and remove the worktrees of T001 and T125 · etalii.adp, etalii.adp.ide.notion, etalii.adp.site
 
@@ -460,7 +460,7 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 **⟶ Wait for T136 to T139 to finish, then:**
 
-- [ ] **T140** Deliver T136 to T138 in a pull request into `develop` of `etalii.adp.ide.notion` that names this folder and the etalii.adp commit of T135, and tick them once it is merged · etalii.adp.ide.notion
+- [x] **T140** Deliver T136 to T138 in a pull request into `develop` of `etalii.adp.ide.notion` that names this folder and the etalii.adp commit of T135, and tick them once it is merged · etalii.adp.ide.notion
 
 ---
 
@@ -471,3 +471,32 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 - [x] **T141** Amend the Notion repository's principles from 1.1.0 to 1.2.0 (MINOR) through `/speckit-constitution`: the service keeps no state but a grant of access in progress, for at most two minutes and handed over once · etalii.adp/.specify/memory/repositories/etalii.adp.ide.notion.md
 - [x] **T142** Keep a completed grant for at most 120 seconds under its state and hand it over once to the verifier's holder, in the handler, the local service and the Worker with a Durable Object; have the session ask for it beside the message of the window it opened, and the page show the link to the grant and a way to stop waiting (FR-010, research R4) · etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/service/worker.ts, etalii.adp.ide.notion/service/wrangler.toml, etalii.adp.ide.notion/scripts/service.mjs, etalii.adp.ide.notion/src/store/session.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
 - [x] **T143** **Maintainer**: in the Notion desktop app, connect a diagram page of the Showcase and say whether the diagram opens after the grant is approved in the browser · Notion desktop app
+
+---
+
+## Delivery
+
+The feature was delivered between 2026-10-08 and 2026-10-09. The task list planned four pull requests; the addendum, the Notion desktop app and what the first passes found made it fourteen. Each is merged with a merge commit, but the last, which carries this record.
+
+| Repository | Pull request | Merge commit | What it carries |
+| --- | --- | --- | --- |
+| etalii.adp | [95](https://github.com/etalii-adp/etalii.adp/pull/95) | `c154a05` | Pull request 1: the specification, the plan, the contracts and the tasks, the store in the terminology, and the Notion repository's principles 1.1.0 |
+| etalii.adp.ide.notion | [3](https://github.com/etalii-adp/etalii.adp.ide.notion/pull/3) | `2c62337` | Pull request 2: the add-on, the service and its local stand-in, the build and the checks |
+| etalii.adp.ide.notion | [4](https://github.com/etalii-adp/etalii.adp.ide.notion/pull/4) | `f91457f` | The deployed service: the Worker's address and its deployment |
+| etalii.adp.ide.notion | [5](https://github.com/etalii-adp/etalii.adp.ide.notion/pull/5) | `8f4671f` | The first view fits the canvas, and a new publication is seen at once |
+| etalii.adp.ide.notion | [6](https://github.com/etalii-adp/etalii.adp.ide.notion/pull/6) | `c15b2d0` | The screenshots and the script that takes them |
+| etalii.adp.site | [98](https://github.com/etalii-adp/etalii.adp.site/pull/98) | `d0bae7e` | Pull request 3: the Notion host has its first add-on, and its screenshots are a source |
+| etalii.adp | [100](https://github.com/etalii-adp/etalii.adp/pull/100) | `ebb1f58` | The delivery so far, the addendum (FR-033 to FR-037), and the tool's Notion row |
+| etalii.adp.site | [100](https://github.com/etalii-adp/etalii.adp.site/pull/100) | `610cdbd` | The catalogue says the tool is a prototype in Notion |
+| etalii.adp.ide.notion | [7](https://github.com/etalii-adp/etalii.adp.ide.notion/pull/7) | `b9c733f` | The service hands a completed grant over (T142) |
+| etalii.adp.ide.notion | [8](https://github.com/etalii-adp/etalii.adp.ide.notion/pull/8) | `25d3ca4` | The selection of a database from the diagram (T136 to T138) |
+| etalii.adp | [104](https://github.com/etalii-adp/etalii.adp/pull/104) | `e3c264f` | The desktop app's grant, the settled addendum, the contracts as built, and the principles 1.2.0 |
+| etalii.adp.ide.notion | [9](https://github.com/etalii-adp/etalii.adp.ide.notion/pull/9) | `4a0cdb4` | Hidden properties as Notion needs them, and connection handles on the canvas |
+| etalii.adp.site | [102](https://github.com/etalii-adp/etalii.adp.site/pull/102) | open on 2026-10-09 | The notes of the two Notion screenshots |
+| etalii.adp | [110](https://github.com/etalii-adp/etalii.adp/pull/110) | this pull request | Pull request 4: a note's date is internal, the addendum is delivered, and this record |
+
+The add-on is published at <https://etalii.net/adp-notion/gartner-hype-cycle-graph/> from `4a0cdb4`, and its service runs at `https://adp-notion.notion-adp.workers.dev`.
+
+The maintainer made the passes of T078, T120 to T123 and T143 in the Notion workspace and said on 2026-10-09 that they are done.
+
+What the build found and did not decide is asked in issues, which stay open beyond this feature: etalii.adp [91](https://github.com/etalii-adp/etalii.adp/issues/91), [92](https://github.com/etalii-adp/etalii.adp/issues/92), [93](https://github.com/etalii-adp/etalii.adp/issues/93), [94](https://github.com/etalii-adp/etalii.adp/issues/94), [96](https://github.com/etalii-adp/etalii.adp/issues/96), [97](https://github.com/etalii-adp/etalii.adp/issues/97) and [98](https://github.com/etalii-adp/etalii.adp/issues/98), and etalii.adp.ide.vscode [22](https://github.com/etalii-adp/etalii.adp.ide.vscode/issues/22). Issue 97 is the one difference between the specification and the Visual Studio Code host in where a trigger's line starts: nine tests in the Notion repository are marked as expected to fail and name it, and SC-001's count of 0 differences holds for everything but that until it is decided.
