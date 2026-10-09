@@ -195,7 +195,7 @@
         "allowSelfLoops": false,
         "allowParallel": true,
         "attributes": {
-          "kind": { "type": "ReferenceKind", "required": true, "readOnly": true },
+          "referenceKind": { "type": "ReferenceKind", "required": true, "readOnly": true },
           "label": { "type": "string", "readOnly": true, "doc": "The kind's name, or the referring row's path for a row-level `node` or `class` edge." }
         }
       }

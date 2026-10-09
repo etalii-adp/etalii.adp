@@ -79,8 +79,8 @@
         "labelAttribute": "key",
         "attributes": {
           "key": { "type": "string", "required": true, "key": true, "unique": "diagram", "minLength": 1, "doc": "`task_key`. Renaming it rewrites every `depends_on` reference to it." },
-          "type": { "type": "TaskType", "required": true, "readOnly": true },
-          "source": { "type": "string", "readOnly": true, "doc": "The principal source field of the task's type, in display form." },
+          "taskType": { "type": "TaskType", "required": true, "readOnly": true },
+          "taskSource": { "type": "string", "readOnly": true, "doc": "The principal source field of the task's type, in display form." },
           "clusterKey": { "type": "string", "doc": "`job_cluster_key`; absent means serverless." },
           "runIf": { "type": "RunIf", "doc": "`run_if`; absent means ALL_SUCCESS. Setting it to empty removes the key from the file." },
           "simulated": { "type": "SimulatedState", "transient": true, "readOnly": true, "doc": "Set only by a simulated run; never written." }
@@ -151,7 +151,7 @@
         ],
         "anchors": { "mode": "fixed", "points": [ { "id": "left", "x": 0, "y": 0.5 }, { "id": "right", "x": 1, "y": 0.5 } ] },
         "variants": [
-          { "when": "self.type == 'condition'", "style": { "cornerRadius": 16 }, "doc": "Condition tasks read differently at a glance: their outcomes branch." }
+          { "when": "self.taskType == 'condition'", "style": { "cornerRadius": 16 }, "doc": "Condition tasks read differently at a glance: their outcomes branch." }
         ],
         "conditions": [
           { "when": "has(self.simulated) && self.simulated == 'pending'", "style": "simPending" },
@@ -209,23 +209,23 @@
         { "id": "notebookTask", "label": "Notebook task", "icon": "mdi-notebook-outline", "creates": "Task", "mode": "click", "after": "none",
           "doc": "Runs a notebook. Drop on the canvas where it should sit.",
           "initial": {
-            "type": "'notebook'",
-            "key": "'notebook_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'notebook').size() + 1)",
-            "source": "'notebooks/notebook_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'notebook').size() + 1)"
+            "taskType": "'notebook'",
+            "key": "'notebook_' + string(diagram.nodesOfType('Task').filter(t, t.taskType == 'notebook').size() + 1)",
+            "taskSource": "'notebooks/notebook_' + string(diagram.nodesOfType('Task').filter(t, t.taskType == 'notebook').size() + 1)"
           } },
         { "id": "pythonTask", "label": "Python task", "icon": "mdi-language-python", "creates": "Task", "mode": "click", "after": "none",
           "doc": "Runs a Python file. Drop on the canvas where it should sit.",
           "initial": {
-            "type": "'python'",
-            "key": "'python_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'python').size() + 1)",
-            "source": "'scripts/python_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'python').size() + 1) + '.py'"
+            "taskType": "'python'",
+            "key": "'python_' + string(diagram.nodesOfType('Task').filter(t, t.taskType == 'python').size() + 1)",
+            "taskSource": "'scripts/python_' + string(diagram.nodesOfType('Task').filter(t, t.taskType == 'python').size() + 1) + '.py'"
           } },
         { "id": "conditionTask", "label": "Condition task", "icon": "mdi-call-split", "creates": "Task", "mode": "click", "after": "none",
           "doc": "Branches on a condition; downstream edges follow its true or false outcome.",
           "initial": {
-            "type": "'condition'",
-            "key": "'condition_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'condition').size() + 1)",
-            "source": "'EQUAL_TO'"
+            "taskType": "'condition'",
+            "key": "'condition_' + string(diagram.nodesOfType('Task').filter(t, t.taskType == 'condition').size() + 1)",
+            "taskSource": "'EQUAL_TO'"
           } }
       ] }
     ],
@@ -250,8 +250,8 @@
       "items": [
         { "kind": "section", "label": "Identity", "items": [
           { "attribute": "key", "label": "Key", "widget": "readonly", "doc": "Rename through the context menu, so every depends_on reference follows the key." },
-          { "attribute": "type", "label": "Type", "widget": "readonly", "doc": "The type is which *_task mapping the file carries; change it in the file." },
-          { "attribute": "source", "label": "Source", "widget": "readonly", "doc": "The type is which *_task mapping the file carries; change it in the file." }
+          { "attribute": "taskType", "label": "Type", "widget": "readonly", "doc": "The type is which *_task mapping the file carries; change it in the file." },
+          { "attribute": "taskSource", "label": "Source", "widget": "readonly", "doc": "The type is which *_task mapping the file carries; change it in the file." }
         ] },
         { "kind": "section", "label": "Execution", "items": [
           { "attribute": "runIf", "label": "Run if", "widget": "combobox", "placeholder": "ALL_SUCCESS" },

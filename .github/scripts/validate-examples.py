@@ -376,12 +376,31 @@ def resolve_names(document) -> list[str]:
     return problems
 
 
+# The names DISL section 2.2 reserves: the built-in fields of an element in CEL, and CEL's keywords. An attribute
+# with one of them would be shadowed by the field, so a host refuses the specification.
+DISL_RESERVED = {
+    "id", "type", "kind", "parent", "children", "descendants", "ancestors", "incoming", "outgoing", "source", "target",
+    "sourcePort", "targetPort", "ports", "owner", "view", "diagram", "self", "value", "item", "index", "env", "old",
+    "event", "detail",
+    "in", "as", "break", "const", "continue", "else", "for", "function", "if", "import", "let", "loop", "package",
+    "namespace", "return", "var", "void", "while", "true", "false", "null",
+}
+
+
 def resolve_disl(document) -> list[str]:
     """Checks the names DISL 0.4's constructs refer to (DISL section 14.1) and returns a problem per unresolved name,
     each with the JSON Pointer of where it is used."""
     problems = []
     metamodel = document.get("metamodel", {})
     types, enums = metamodel.get("types", {}), metamodel.get("enums", {})
+    for section in ("types", "relations"):
+        for type_name, declaration in metamodel.get(section, {}).items():
+            for attribute in declaration.get("attributes", {}):
+                if attribute in DISL_RESERVED or attribute[:1] in ("_", "$"):
+                    problems.append(f"at /metamodel/{section}/{type_name}/attributes/{attribute}: {attribute!r} is a reserved name (DISL section 2.2)")
+    for attribute in metamodel.get("diagram", {}).get("attributes", {}):
+        if attribute in DISL_RESERVED or attribute[:1] in ("_", "$"):
+            problems.append(f"at /metamodel/diagram/attributes/{attribute}: {attribute!r} is a reserved name (DISL section 2.2)")
 
     def attributes_of(name, seen=()):
         node = types.get(name, {})
@@ -596,7 +615,7 @@ for path in examples:
             print(f"  {problem}")
     elif reference in (FBL, DESL, DISL) and (problems := (resolve_names(document) if reference == FBL else resolve_desl(path, document) if reference == DESL else resolve_disl(document))):
         failures += 1
-        print(f"FAIL {name}: {len(problems)} unresolved name(s)")
+        print(f"FAIL {name}: {len(problems)} name problem(s)")
         for problem in problems[:10]:
             print(f"  {problem}")
     else:
