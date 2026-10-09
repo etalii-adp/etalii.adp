@@ -460,7 +460,7 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 **⟶ Wait for T136 to T139 to finish, then:**
 
-- [ ] **T140** Deliver T136 to T138 in a pull request into `develop` of `etalii.adp.ide.notion` that names this folder and the etalii.adp commit of T135, and tick them once it is merged · etalii.adp.ide.notion
+- [x] **T140** Deliver T136 to T138 in a pull request into `develop` of `etalii.adp.ide.notion` that names this folder and the etalii.adp commit of T135, and tick them once it is merged · etalii.adp.ide.notion
 
 ---
 

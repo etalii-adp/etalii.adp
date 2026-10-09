@@ -1136,6 +1136,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-09T00:40:15.165Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T140",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-09T15:10:01.908Z"
     }
   ],
   "last_action": "1101 tests pass and 9 are expected failures naming issue 97; branch pushed, pull request 2 not opened",
@@ -1879,7 +1887,7 @@
     }
   },
   "approach": "A static add-on at /adp-notion/gartner-hype-cycle-graph/ is compiled from shared parts that name no tool type: a new DISL interpreter, the Visual Studio Code host's FBL library copied unchanged, a store that keeps a document as one row per element, a canvas, and Notion-styled panels. The store rebuilds the binding's document text in memory, so FBL plans every edit and keeps the undo history, and each edit is written back as row changes. A stateless Cloudflare Worker completes Notion's sign-in and forwards the calls with the viewer's token.",
-  "currentTask": "T135",
+  "currentTask": "T140",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -2837,21 +2845,9 @@
     },
     "T138": {
       "status": "DONE",
-      "did": "The internal properties are found from the notation (src/store/internal.ts) and hidden in every view that shows properties, through Notion's views API, when the add-on prepares a database and when scripts/store.mjs put fills one; the rule leaves a note's at shown",
+      "did": "The rule now hides a note's date too: a placement on a time axis stays shown only where a form offers the attribute as a field; it gives the maintainer's fourteen properties",
       "files": [
-        "etalii.adp.ide.notion/src/store/internal.ts",
-        "etalii.adp.ide.notion/src/store/schema.ts",
-        "etalii.adp.ide.notion/src/store/document.ts",
-        "etalii.adp.ide.notion/src/store/notion.ts",
-        "etalii.adp.ide.notion/service/handler.ts",
-        "etalii.adp.ide.notion/scripts/store.mjs",
-        "etalii.adp.ide.notion/test/store/internal.test.ts",
-        "etalii.adp.ide.notion/test/store/schema.test.ts",
-        "etalii.adp.ide.notion/test/scripts/store.test.ts",
-        "etalii.adp.ide.notion/test/support/memoryNotion.ts",
-        "etalii.adp.ide.notion/docs/disl-support.md",
-        "etalii.adp.ide.notion/docs/set-up-a-graph.md",
-        "etalii.adp.ide.notion/docs/service.md"
+        "etalii.adp.ide.notion/src/store/internal.ts"
       ]
     },
     "T135": {
@@ -2860,6 +2856,10 @@
       "files": [
         "specs/012-notion-hype-cycle-addon/"
       ]
+    },
+    "T140": {
+      "status": "DONE",
+      "did": "The addendum was delivered in pull requests 8 and 9 of etalii.adp.ide.notion, both merged"
     }
   },
   "verified": [
