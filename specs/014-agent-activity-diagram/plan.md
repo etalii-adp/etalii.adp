@@ -4,7 +4,7 @@
 
 ## Summary
 
-Deliver the definition the standalone Agent activity diagram specification asks of this repository, in the order of its tasks 1 to 4: try the activity file's shape against FBL and DISL first, with each answer that is no put to the maintainer ([research.md](research.md)); then DISL 0.4 with the seven constructs its design decided (L1 to L7, and L9's item order); then the binding `aad` and its fixtures; then `agent-activity-diagram.dis`, `agent-activity-diagram.md`, the file's JSON Schema and the Notion page. Tasks 1 and 2 go in a first pull request and tasks 3 and 4 in a second, after the maintainer's answer on where the user's part of the file lives (research R3).
+Deliver the definition the standalone Agent activity diagram specification asks of this repository, in the order of its tasks 1 to 4: try the activity file's shape against FBL and DISL first, with each answer that is no put to the maintainer ([research.md](research.md)); then DISL 0.4 with the seven constructs its design decided (L1 to L7, and L9's item order); then the binding `aad` and its fixtures; then `agent-activity-diagram.dis`, `agent-activity-diagram.md`, the file's JSON Schema and the Notion page. The four tasks go in one pull request, since all of them wait on the maintainer's answer on where the user's part of the file lives (research R3); it is merged only after that answer, with the files amended to it.
 
 The approved design is followed with its language decisions at their defaults. Where reading FBL showed that a part of the file's shape could not be written the same way by every host, the shape changes and the language does not (R3, R5), as spec 013 did.
 
