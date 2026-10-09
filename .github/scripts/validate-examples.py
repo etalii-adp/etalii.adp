@@ -30,6 +30,10 @@ Every `*.dis` that validates is checked for the names DISL 0.4's constructs refe
 `groupBy` names an attribute of every item type it lists, of an enumeration type; a `force` layout's `tiers` name node
 types of the metamodel; and `persistence.view.bind` is used only with `format: "fbl"`, for kinds that `view.store` lists.
 
+A diagram type whose file has a JSON Schema beside its definition (`definitions/diagrams/<name>.schema.json`) shows a
+complete file in the first YAML block of its companion `<name>.md`; that example is validated against the schema, read
+without turning moments into timestamps.
+
 Prints one line per example and exits 1 when any example is invalid or names an unknown schema.
 """
 import json
@@ -610,6 +614,42 @@ for folder in sorted((root / "fbl" / "fixtures").glob("*-equivalence")):
         print(f"FAIL {folder.relative_to(repository).as_posix()}: " + (f"reads differently in {', '.join(differing)}" if differing else "an equivalence needs two fixtures or more"))
     else:
         print(f"ok   {folder.relative_to(repository).as_posix()}: {len(reads)} fixtures read the same {len(first.get('elements', []))} elements")
+
+# A diagram type whose file has a JSON Schema beside its definition (definitions/diagrams/<name>.schema.json) shows a
+# complete file in its companion <name>.md, in the first YAML block that starts with the schema's header key; that
+# example must be valid. YAML is read without turning moments into timestamps, as the format's binding reads them.
+def yaml_without_timestamps(text: str):
+    import yaml
+
+    class Loader(yaml.SafeLoader):
+        pass
+
+    Loader.yaml_implicit_resolvers = {
+        first: [(tag, pattern) for tag, pattern in resolvers if tag != "tag:yaml.org,2002:timestamp"]
+        for first, resolvers in yaml.SafeLoader.yaml_implicit_resolvers.items()
+    }
+    return yaml.load(text, Loader=Loader)  # noqa: S506 - a SafeLoader subclass
+
+
+for schema_path in sorted((repository / "definitions" / "diagrams").glob("*.schema.json")):
+    companion = schema_path.with_name(schema_path.name.removesuffix(".schema.json") + ".md")
+    name = companion.relative_to(repository).as_posix()
+    file_schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    header = next(iter(file_schema.get("required", [])), None)
+    blocks = companion.read_text(encoding="utf-8").split("```yaml\n")[1:] if companion.is_file() else []
+    example = next((block.split("```", 1)[0] for block in blocks if header and block.startswith(header + ":")), None)
+    if example is None:
+        failures += 1
+        print(f"FAIL {name}: shows no complete file starting with {header!r} for {schema_path.name}")
+        continue
+    errors = sorted(Draft202012Validator(file_schema, registry=registry).iter_errors(yaml_without_timestamps(example)), key=lambda e: list(e.absolute_path))
+    if errors:
+        failures += 1
+        print(f"FAIL {name}: its example has {len(errors)} error(s) against {schema_path.name}")
+        for error in errors[:10]:
+            print(f"  at {'/'.join(str(part) for part in error.absolute_path) or '(root)'}: {error.message}")
+    else:
+        print(f"ok   {name}: its example is valid against {schema_path.name}")
 
 print(f"{len(examples)} example(s), {failures} invalid.")
 sys.exit(1 if failures or not examples else 0)
