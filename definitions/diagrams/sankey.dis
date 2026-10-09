@@ -42,7 +42,7 @@
     "amount": {
       "params": [{ "name": "f", "type": "Element" }],
       "returns": "double",
-      "cel": "has(f.value) ? math.greatest(0.0, f.value) : 0.0",
+      "cel": "has(f.quantity) ? math.greatest(0.0, f.quantity) : 0.0",
       "doc": "What a flow carries: its value, with a missing or negative value counting as zero."
     },
     "isPaletteWord": {
@@ -104,7 +104,7 @@
       "params": [{ "name": "n", "type": "Element" }],
       "returns": "string",
       "uses": ["diagram"],
-      "cel": "formatValue(n.format != '' ? n.format : diagram.format, n.value)",
+      "cel": "formatValue(n.format != '' ? n.format : diagram.format, n.quantity)",
       "doc": "A node's value through its own format, or the diagram's when it states none."
     },
     "flowDisplay": {
@@ -123,7 +123,7 @@
     "stepOf": {
       "params": [{ "name": "f", "type": "Element" }],
       "returns": "double",
-      "cel": "has(f.step) && f.step > 0.0 ? f.step : defaultStep(has(f.value) ? f.value : 0.0)",
+      "cel": "has(f.step) && f.step > 0.0 ? f.step : defaultStep(has(f.quantity) ? f.quantity : 0.0)",
       "doc": "How much one + or - changes a flow's value: its own step, or the default step for its value when it states none or one that is not above zero."
     },
     "remainder": {
@@ -135,7 +135,7 @@
     "barHeight": {
       "params": [{ "name": "n", "type": "Element" }],
       "returns": "double",
-      "cel": "math.greatest(6.0, n.value * sankeyScale())",
+      "cel": "math.greatest(6.0, n.quantity * sankeyScale())",
       "doc": "A bar's height: its value on the diagram's scale, and at least 6 so a node nothing flows through can still be seen and picked."
     },
     "bandThickness": {
@@ -225,7 +225,7 @@
             "order": 3,
             "doc": "The one-based column the node is drawn in, or nothing to let the flows decide. A value that is not a whole number from 1 is reported and ignored; values above 1000 are read as 1000."
           },
-          "value": {
+          "quantity": {
             "type": "number",
             "label": "Value",
             "derived": "math.greatest(self.incomingOf('Flow').map(f, amount(f)).sum(), self.outgoingOf('Flow').map(f, amount(f)).sum())",
@@ -268,12 +268,12 @@
         "allowSelfLoops": false,
         "allowParallel": true,
         "attributes": {
-          "value": {
+          "quantity": {
             "type": "number",
             "label": "Value",
             "group": "Amount",
             "order": 0,
-            "doc": "How much flows, which is the band's thickness. A flow without one is drawn as a hairline and reported; a negative one is drawn as zero and reported. An edit refuses a negative value, and an empty value removes the key."
+            "doc": "How much flows, which is the band's thickness. A flow without one is drawn as a hairline and reported; a negative one is drawn as zero and reported. An edit refuses a negative value, and an empty value removes the key. Written in the document as `value`."
           },
           "step": {
             "type": "number",
@@ -464,7 +464,7 @@
             "doc": "auto, or a column from 1 to one past the last; auto removes the key." }
         ] },
         { "kind": "section", "title": "Amount", "items": [
-          { "kind": "computed", "label": "Value", "value": { "cel": "self.value" },
+          { "kind": "computed", "label": "Value", "value": { "cel": "self.quantity" },
             "doc": "Read-only: a node's value is what flows through it; change a flow's value instead." },
           { "attribute": "note" },
           { "attribute": "format" }
@@ -483,7 +483,7 @@
             "options": ["", "grey", "slate", "purple", "blue", "teal", "green", "lime", "yellow", "orange", "red", "pink", "brown"] }
         ] },
         { "kind": "section", "title": "Amount", "items": [
-          { "attribute": "value", "widget": "number" },
+          { "attribute": "quantity", "widget": "number" },
           { "attribute": "step", "widget": "number", "placeholder": { "cel": "string(stepOf(self))" } }
         ] }
       ]
@@ -542,7 +542,7 @@
         "id": "missingValue",
         "label": "Flow without a value",
         "scope": ["Flow"],
-        "rule": "has(self.value)",
+        "rule": "has(self.quantity)",
         "severity": "warning",
         "message": { "cel": "'The flow from `' + self.source.id + '` to `' + self.target.id + '` states no value, so it is drawn as a hairline.'" },
         "x-adp-ruleId": "sankey.missing-value"
@@ -551,7 +551,7 @@
         "id": "negativeValue",
         "label": "Negative value",
         "scope": ["Flow"],
-        "rule": "!has(self.value) || self.value >= 0.0",
+        "rule": "!has(self.quantity) || self.quantity >= 0.0",
         "severity": "warning",
         "message": { "cel": "'The flow from `' + self.source.id + '` to `' + self.target.id + '` has a negative value; it is drawn as zero.'" },
         "x-adp-ruleId": "sankey.negative-value"
@@ -599,7 +599,7 @@
         "label": "No negative amount",
         "kind": "change",
         "scope": ["Flow"],
-        "when": "attribute in ['value', 'step']",
+        "when": "attribute in ['quantity', 'step']",
         "rule": "newValue >= 0.0",
         "enforcement": "prevent",
         "message": { "cel": "'\\'' + string(newValue) + '\\' is not an amount this diagram can hold: a number of zero or more.'" }
@@ -664,9 +664,9 @@
         "id": "valueNewFlow",
         "on": "connect",
         "for": ["Flow"],
-        "when": "!has(self.value)",
+        "when": "!has(self.quantity)",
         "actions": [
-          { "set": { "value": "remainder(self.source)" } }
+          { "set": { "quantity": "remainder(self.source)" } }
         ],
         "doc": "A new flow carries on whatever its source has not yet passed on, or 1 when nothing is left over."
       }
@@ -692,7 +692,7 @@
         "shortcut": "+",
         "for": ["Flow"],
         "actions": [
-          { "set": { "value": "math.round((amount(self) + stepOf(self)) * 10000.0) / 10000.0" } }
+          { "set": { "quantity": "math.round((amount(self) + stepOf(self)) * 10000.0) / 10000.0" } }
         ],
         "doc": "Adds the flow's step to its value; a flow with no value, or a negative one, starts from zero. Rounded to four decimals, so ten steps of 0.1 come back to a whole number."
       },
@@ -704,7 +704,7 @@
         "enabled": "amount(self) > 0.0",
         "actions": [
           { "if": "amount(self) <= 0.0", "then": [ { "abort": { "message": "'The value is already zero.'" } } ] },
-          { "set": { "value": "math.greatest(0.0, math.round((amount(self) - stepOf(self)) * 10000.0) / 10000.0)" } }
+          { "set": { "quantity": "math.greatest(0.0, math.round((amount(self) - stepOf(self)) * 10000.0) / 10000.0)" } }
         ],
         "doc": "Takes the flow's step from its value, never below zero: a decrease that would pass zero lands on zero."
       },

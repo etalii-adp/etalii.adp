@@ -77,8 +77,8 @@
         "labelAttribute": "key",
         "attributes": {
           "key": { "type": "string", "required": true, "key": true, "minLength": 1, "readOnlyReasons": [ "Rename through the context menu, so every depends_on reference follows the key." ] },
-          "type": { "type": "TaskType", "required": true, "readOnly": true, "readOnlyReasons": [ "The type is which *_task mapping the file carries; change it in the file." ] },
-          "source": { "type": "string", "readOnly": true, "doc": "The notebook, script or query the task runs." },
+          "taskType": { "type": "TaskType", "required": true, "readOnly": true, "readOnlyReasons": [ "The type is which *_task mapping the file carries; change it in the file." ] },
+          "taskSource": { "type": "string", "readOnly": true, "doc": "The notebook, script or query the task runs." },
           "clusterKey": { "type": "string", "absentText": "serverless" },
           "runIf": { "type": "RunIf", "absentText": "ALL_SUCCESS (Databricks' default)" },
           "simulated": {
@@ -193,9 +193,9 @@
         "anchors": { "mode": "fixed", "points": [ { "id": "left", "x": 0, "y": 0.5 }, { "id": "right", "x": 1, "y": 0.5 } ] },
         "badgeLayout": { "start": "top-right", "offset": [-12, 12], "direction": "left", "spacing": 16 },
         "badges": [
-          { "id": "forEach", "pack": true, "text": "↻", "style": "indicator", "visible": { "cel": "self.type == 'for_each'" }, "tooltip": "Runs its inner task once per input." },
-          { "id": "runJob", "pack": true, "text": "⇢", "style": "indicator", "visible": { "cel": "self.type == 'run_job'" }, "tooltip": "Runs another job." },
-          { "id": "branch", "pack": true, "text": "⑂", "style": "indicator", "visible": { "cel": "self.type == 'condition'" }, "tooltip": "Branches on a condition." },
+          { "id": "forEach", "pack": true, "text": "↻", "style": "indicator", "visible": { "cel": "self.taskType == 'for_each'" }, "tooltip": "Runs its inner task once per input." },
+          { "id": "runJob", "pack": true, "text": "⇢", "style": "indicator", "visible": { "cel": "self.taskType == 'run_job'" }, "tooltip": "Runs another job." },
+          { "id": "branch", "pack": true, "text": "⑂", "style": "indicator", "visible": { "cel": "self.taskType == 'condition'" }, "tooltip": "Branches on a condition." },
           { "id": "runIf", "pack": true, "text": "≠", "style": "indicator", "visible": { "cel": "has(self.runIf) && self.runIf != 'ALL_SUCCESS'" }, "tooltip": { "cel": "'Runs if ' + enumLabel('RunIf', self.runIf).lowerAscii()" } },
           {
             "id": "finding",
@@ -207,7 +207,7 @@
             "doc": "Declaring a badge with id `finding` replaces the runtime's default finding mark: ✖ for an error, ⚠ for a warning, an error outranking a warning. A stand-in for azure-devops-pipeline."
           }
         ],
-        "variants": [ { "when": "self.type == 'condition'", "style": { "cornerRadius": 16 } } ],
+        "variants": [ { "when": "self.taskType == 'condition'", "style": { "cornerRadius": 16 } } ],
         "conditions": [
           { "when": "has(self.simulated) && self.simulated == 'pending'", "style": "simPending" },
           { "when": "has(self.simulated) && self.simulated == 'running'", "style": "simRunning" },
@@ -287,9 +287,9 @@
         "id": "tasks",
         "label": "Tasks",
         "tools": [
-          { "id": "notebookTask", "label": "Notebook task", "creates": "Task", "mode": "click", "initial": { "type": "'notebook'", "key": "'notebook_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'notebook').size() + 1)" } },
-          { "id": "pythonTask", "label": "Python task", "creates": "Task", "mode": "click", "initial": { "type": "'python'", "key": "'python_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'python').size() + 1)" } },
-          { "id": "conditionTask", "label": "Condition task", "creates": "Task", "mode": "click", "initial": { "type": "'condition'", "key": "'condition_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'condition').size() + 1)" } },
+          { "id": "notebookTask", "label": "Notebook task", "creates": "Task", "mode": "click", "initial": { "taskType": "'notebook'", "key": "'notebook_' + string(diagram.nodesOfType('Task').filter(t, t.taskType == 'notebook').size() + 1)" } },
+          { "id": "pythonTask", "label": "Python task", "creates": "Task", "mode": "click", "initial": { "taskType": "'python'", "key": "'python_' + string(diagram.nodesOfType('Task').filter(t, t.taskType == 'python').size() + 1)" } },
+          { "id": "conditionTask", "label": "Condition task", "creates": "Task", "mode": "click", "initial": { "taskType": "'condition'", "key": "'condition_' + string(diagram.nodesOfType('Task').filter(t, t.taskType == 'condition').size() + 1)" } },
           {
             "id": "dependency",
             "label": "Dependency",
@@ -298,16 +298,16 @@
             "createSource": {
               "type": "Task",
               "initial": {
-                "type": "notebook",
-                "key": { "cel": "'notebook_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'notebook').size() + 1)" }
+                "taskType": "notebook",
+                "key": { "cel": "'notebook_' + string(diagram.nodesOfType('Task').filter(t, t.taskType == 'notebook').size() + 1)" }
               }
             },
             "createTarget": {
               "type": "Task",
               "initial": {
-                "type": "notebook",
-                "key": { "cel": "'notebook_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'notebook').size() + 1)" },
-                "source": { "cel": "'notebooks/notebook_' + string(diagram.nodesOfType('Task').filter(t, t.type == 'notebook').size() + 1)" }
+                "taskType": "notebook",
+                "key": { "cel": "'notebook_' + string(diagram.nodesOfType('Task').filter(t, t.taskType == 'notebook').size() + 1)" },
+                "taskSource": { "cel": "'notebooks/notebook_' + string(diagram.nodesOfType('Task').filter(t, t.taskType == 'notebook').size() + 1)" }
               },
               "size": [200, 56]
             },
@@ -331,7 +331,7 @@
             "label": "Wait for…",
             "target": "pick",
             "candidates": "diagram.nodesOfType('Task').filter(t, t != self && !self.predecessors('Dependency').exists(p, p == t) && !(self in t.predecessors('Dependency')))",
-            "candidateLabel": { "cel": "item.key + ' (' + enumLabel('TaskType', item.type) + ')'" },
+            "candidateLabel": { "cel": "item.key + ' (' + enumLabel('TaskType', item.taskType) + ')'" },
             "pickerTitle": { "cel": "'What should \\'' + self.key + '\\' wait for?'" },
             "emptyText": "Every other task already waits for this one or is waited for, so there is nothing left to depend on."
           },
@@ -361,7 +361,7 @@
       "usage": ["inspector"],
       "items": [
         { "attribute": "key", "label": "Key", "widget": "readonly" },
-        { "attribute": "type", "label": "Type", "widget": "readonly" },
+        { "attribute": "taskType", "label": "Type", "widget": "readonly" },
         { "attribute": "runIf", "label": "Run if", "widget": "combobox", "showAbsent": true },
         { "attribute": "clusterKey", "label": "Cluster", "widget": "combobox", "showAbsent": true, "options": { "cel": "diagram.nodesOfType('JobCluster').map(c, c.key)" } },
         { "kind": "findings" }

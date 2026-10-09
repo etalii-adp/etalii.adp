@@ -58,7 +58,7 @@
         "doc": "One entry of the pipeline's `libraries` list: a source its transformations come from.",
         "labelAttribute": "path",
         "attributes": {
-          "kind": { "type": "LibraryKind", "required": true, "readOnly": true },
+          "libraryKind": { "type": "LibraryKind", "required": true, "readOnly": true },
           "path": { "type": "string", "required": true, "readOnly": true, "minLength": 1, "doc": "`path`, or `include` for a glob." },
           "simulated": { "type": "SimulatedState", "transient": true, "readOnly": true }
         }
@@ -136,7 +136,7 @@
         "size": { "fixed": [200, 56] },
         "labels": [
           { "id": "path", "text": { "attribute": "path" }, "position": { "anchor": [0, 0.5], "offset": [8, -4], "align": "start" }, "editable": false, "overflow": "ellipsis" },
-          { "id": "kind", "text": { "attribute": "kind" }, "position": { "anchor": [0, 1], "offset": [8, -8], "align": "start" }, "style": "badges" }
+          { "id": "kind", "text": { "attribute": "libraryKind" }, "position": { "anchor": [0, 1], "offset": [8, -8], "align": "start" }, "style": "badges" }
         ],
         "connectable": false,
         "conditions": [
@@ -282,8 +282,8 @@
         "rule": "size(diagram.nodesOfType('Library')) > 1",
         "message": "A pipeline needs at least one library; removing the last one is not allowed." },
       { "id": "unique_library", "kind": "create", "scope": "Library", "enforcement": "prevent",
-        "rule": "!diagram.nodesOfType('Library').exists(l, l.id != self.id && l.kind == self.kind && l.path == self.path)",
-        "message": { "cel": "'The ' + self.kind + ' library \\'' + self.path + '\\' is already there.'" } }
+        "rule": "!diagram.nodesOfType('Library').exists(l, l.id != self.id && l.libraryKind == self.libraryKind && l.path == self.path)",
+        "message": { "cel": "'The ' + self.libraryKind + ' library \\'' + self.path + '\\' is already there.'" } }
     ]
   },
 
@@ -293,13 +293,13 @@
         "label": "Add notebook library…",
         "for": "diagram",
         "params": { "path": { "type": "string", "required": true, "minLength": 1, "label": "Path" } },
-        "actions": [ { "create": { "type": "'Library'", "attributes": { "kind": "'notebook'", "path": "p.path" } } } ]
+        "actions": [ { "create": { "type": "'Library'", "attributes": { "libraryKind": "'notebook'", "path": "p.path" } } } ]
       },
       "addFileLibrary": {
         "label": "Add file library…",
         "for": "diagram",
         "params": { "path": { "type": "string", "required": true, "minLength": 1, "label": "Path" } },
-        "actions": [ { "create": { "type": "'Library'", "attributes": { "kind": "'file'", "path": "p.path" } } } ]
+        "actions": [ { "create": { "type": "'Library'", "attributes": { "libraryKind": "'file'", "path": "p.path" } } } ]
       },
       "simulateUpdate": {
         "label": "Start update (simulated)",

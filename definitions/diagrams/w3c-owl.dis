@@ -211,7 +211,7 @@
         "labelAttribute": "display",
         "doc": { "summary": "An anonymous class expression: a blank node that is the object of `rdfs:subClassOf`, `owl:equivalentClass` or `owl:disjointWith` with a named subject, or a blank filler or member nested inside one.", "rationale": "Its identity is structural and deterministic within one parse but deliberately unstable across edits, so it is drawn and selectable, and nothing about it is stored or edited from the diagram." },
         "attributes": {
-          "owner": { "type": "Term", "readOnly": true, "doc": "The named element whose axiom roots this expression; nested expressions share their root's owner." },
+          "axiomOwner": { "type": "Term", "readOnly": true, "doc": "The named element whose axiom roots this expression; nested expressions share their root's owner." },
           "axiom": { "type": "AxiomKind", "readOnly": true },
           "display": { "type": "string", "readOnly": true, "doc": "The rendering capped at two levels of nesting; deeper structure reads as `…`." },
           "text": {

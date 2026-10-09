@@ -865,7 +865,7 @@ With `ghg.peak` declared as `#f7e7a1` and, in the dark mode, `#6b5a17`, the hype
   "for_each": { "label": "For each", "value": "for-each" } } }
 ```
 
-A Databricks task of type `run-job` is read as `run_job`, compared in CEL as `self.type == 'run_job'`, and written back as `run-job`.
+A Databricks task of type `run-job` is read as `run_job`, compared in CEL as `self.taskType == 'run_job'`, and written back as `run-job`.
 
 ### 4.6 Node types
 

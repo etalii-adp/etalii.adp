@@ -74,7 +74,7 @@
         "doc": "One entry under `resources.jobs` or `resources.pipelines`.",
         "labelAttribute": "key",
         "attributes": {
-          "kind": { "type": "ResourceKind", "required": true, "readOnly": true },
+          "resourceKind": { "type": "ResourceKind", "required": true, "readOnly": true },
           "key": { "type": "string", "required": true, "readOnly": true, "minLength": 1, "doc": "The resource's key under its kind." },
           "simulated": { "type": "SimulatedState", "transient": true, "readOnly": true }
         }
@@ -145,7 +145,7 @@
         "size": { "fixed": [200, 56] },
         "labels": [
           { "id": "key", "text": { "attribute": "key" }, "position": { "anchor": [0, 0.5], "offset": [8, -4], "align": "start" }, "editable": false, "overflow": "ellipsis" },
-          { "id": "kind", "text": { "attribute": "kind" }, "position": { "anchor": [0, 1], "offset": [8, -8], "align": "start" }, "style": "badges" }
+          { "id": "kind", "text": { "attribute": "resourceKind" }, "position": { "anchor": [0, 1], "offset": [8, -8], "align": "start" }, "style": "badges" }
         ],
         "connectable": false,
         "deletable": false,
@@ -269,12 +269,12 @@
         "x-adp-ruleId": "databricks.multiple-default-targets" },
       { "id": "override_of_undeclared", "scope": "Target", "severity": "warning",
         "when": "size(diagram.includes) == 0",
-        "rule": "self.overrides.all(o, diagram.nodesOfType('Resource').exists(r, r.kind + '/' + r.key == o))",
-        "message": { "cel": "'Target \\'' + self.name + '\\' overrides ' + self.overrides.filter(o, !diagram.nodesOfType('Resource').exists(r, r.kind + '/' + r.key == o))[0] + ', which this bundle does not declare. Declare the resource or drop the override.'" },
+        "rule": "self.overrides.all(o, diagram.nodesOfType('Resource').exists(r, r.resourceKind + '/' + r.key == o))",
+        "message": { "cel": "'Target \\'' + self.name + '\\' overrides ' + self.overrides.filter(o, !diagram.nodesOfType('Resource').exists(r, r.resourceKind + '/' + r.key == o))[0] + ', which this bundle does not declare. Declare the resource or drop the override.'" },
         "x-adp-ruleId": "databricks.override-of-undeclared" },
       { "id": "unique_resource", "kind": "create", "scope": "Resource", "enforcement": "prevent",
-        "rule": "!diagram.nodesOfType('Resource').exists(r, r.id != self.id && r.kind == self.kind && r.key == self.key)",
-        "message": { "cel": "'A ' + self.kind + ' resource named \\'' + self.key + '\\' is already there.'" } }
+        "rule": "!diagram.nodesOfType('Resource').exists(r, r.id != self.id && r.resourceKind == self.resourceKind && r.key == self.key)",
+        "message": { "cel": "'A ' + self.resourceKind + ' resource named \\'' + self.key + '\\' is already there.'" } }
     ]
   },
 
@@ -290,14 +290,14 @@
         "label": "Add job resource…",
         "for": "diagram",
         "params": { "key": { "type": "string", "required": true, "minLength": 1, "label": "Key" } },
-        "actions": [ { "create": { "type": "'Resource'", "attributes": { "kind": "'jobs'", "key": "p.key" } } } ],
+        "actions": [ { "create": { "type": "'Resource'", "attributes": { "resourceKind": "'jobs'", "key": "p.key" } } } ],
         "doc": "Writes `resources.jobs.<key>` with `name: <key>` and one notebook task `main` at `notebooks/<key>`."
       },
       "addPipelineResource": {
         "label": "Add pipeline resource…",
         "for": "diagram",
         "params": { "key": { "type": "string", "required": true, "minLength": 1, "label": "Key" } },
-        "actions": [ { "create": { "type": "'Resource'", "attributes": { "kind": "'pipelines'", "key": "p.key" } } } ],
+        "actions": [ { "create": { "type": "'Resource'", "attributes": { "resourceKind": "'pipelines'", "key": "p.key" } } } ],
         "doc": "Writes `resources.pipelines.<key>` with `name: <key>` and one notebook library at `transformations/<key>`."
       },
       "simulateDeploy": {
