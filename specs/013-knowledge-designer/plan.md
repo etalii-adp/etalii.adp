@@ -22,7 +22,7 @@ The approved design is followed with its language decisions L1 to L5 at their de
 | II. Implementable from the document alone | DESL 0.1 comes with `desl.schema.json` and an example; the knowledge file with `knowledge.md`, `knowledge.schema.json` and an example per format; every binding with fixtures. Each change updates its document, schema and examples in the same pull request. |
 | III. Precise normative language | DESL uses the RFC 2119 key words; expressions are CEL; schemas are draft 2020-12. |
 | IV. Versioned specifications | FBL goes to 0.3 (draft) and DESL starts at 0.1 (draft); every 0.2 FBL document stays valid with its meaning. |
-| V. Simplicity | DESL holds what `knowledge.des` needs and cites DISL for the rest (L4); FBL gains no behaviour (L1 to L5); the one new DESL construct is `surface`. |
+| V. Simplicity | DESL holds what `knowledge.des` needs and nothing more, defined in its own sections and schema rather than taken from DISL (R7, which replaces L4); FBL gains no behaviour (L1 to L5). |
 | VI. No Rider warnings | No C# in this repository's change. |
 
 ## Complexity Tracking

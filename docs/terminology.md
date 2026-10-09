@@ -9,10 +9,12 @@ ADP offers new ways to visualize, enter and interact with data, mostly text-base
 | Kind | What it is | The test | Examples |
 |---|---|---|---|
 | **Diagram** | A visual arrangement of elements and the relations between them. | Are elements connected to each other? Then it is a diagram. | Mind map, Wardley map, C4 container diagram, causal loop diagram |
-| **Designer** | A form-based visual layout. More than text input, and not a diagram, because nothing in it is connected. | Is it laid out visually, with nothing connected, and filled in rather than typed? Then it is a designer. | None yet |
+| **Designer** | A form-based visual layout. More than text input, and not a diagram, because nothing in it is connected. | Is it laid out visually, with nothing connected, and filled in rather than typed? Then it is a designer. | Knowledge designer |
 | **Editor** | A way of working in which typing text is the core interaction. | Is typing text the main thing the user does? Then it is an editor. | Markdown editor, plain text editor |
 
 Apply the tests in the order editor, diagram, designer: a text format that is also drawn (a Mermaid file, for example) is a diagram when the user works in the drawing, and an editor when the user works in the text.
+
+A designer may hold relations as values and stays a designer: the Knowledge designer's relation cells name rows of other tables, but a relation there is a value in a cell, filled in like any other, and nothing is drawn connected. A diagram draws its relations; a designer only lists them.
 
 "Tool" replaces "designer" wherever all three kinds are meant: "ADP's tools", "the tool catalogue", "a tool type". "Designer" now means only the second kind.
 
@@ -29,7 +31,7 @@ A **tool engineer** specifies how one tool type functions and looks, in its kind
 - A **specification file** (`.dis`, `.des`, `.eds`) holds one tool type as a tool engineer specifies how it functions and looks: for example, what a state machine diagram's elements and relations are and how they are drawn.
 - A **definition file** (`.did`, `.ded`, `.edd`) holds one diagram, designer or editor a user created of such a type: for example, one particular state machine.
 
-DISL and DID have content; DESL, DED, EDSL and EDD are placeholders until a designer or an editor needs them. DID here always means ADP's Diagram Definition Language, not the W3C's Decentralized Identifiers.
+DISL, DID, DESL and DED have content; EDSL and EDD are placeholders until an editor needs them. DID here always means ADP's Diagram Definition Language, not the W3C's Decentralized Identifiers.
 
 History: DEDL became DISL and DID. What was one language, DEDL 0.1, holding both a language definition and the documents made with it, is now DISL (the specification of a diagram type) and DID (a stored diagram). The acronym DEDL is retired and has no current meaning; files, schema addresses and links in its old form are still read or redirected as DISL or DID. Specification files were named after their language (`.disl`, `.desl`, `.edsl`) until 2026-09-30, when they took `.dis`, `.des` and `.eds`, because a file holds a specification, not the language; `.disl` files are still read.
 
