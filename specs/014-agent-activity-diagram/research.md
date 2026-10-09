@@ -38,7 +38,9 @@ Put to the maintainer as a selection on 2026-10-09 (standalone Requirement 1.4):
 | **Template only:** keep `view:` and write it in every new file | A file without `view:` cannot be locked, folded or switched until someone adds it; ADP refuses with a reason. |
 | **Other** | |
 
-Until the answer, the binding and the fixtures follow the recommended option.
+Until the answer, the binding and the fixtures followed the recommended option, and were merged that way (#105).
+
+**Ruling (Peter, 2026-10-09 14:54): FBL 0.4.** The file keeps `view:`, as the approved design has it. FBL 0.4 (section 6.2, *Missing levels*) creates every missing level of a container placed `at: "end"`, an attribute reached through `child` gets the same `create` in yaml and json (section 5.2), and `remove-empty-levels` removes the levels an entry's removal leaves empty. The binding, the fixtures, the schema, the `.md` and the Notion page follow (T005, T006); every host's FBL runtime and the Notion host's copy follow in their own repositories.
 
 ## R4. Can a rule at `/` bind `showArchived` at the top level?
 

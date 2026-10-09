@@ -32,11 +32,12 @@
           "type": "string"
         },
         "fbl": {
-          "description": "The FBL version the document is written in: 0.1, 0.2, or 0.3 (draft), which names the tool type's specification in place of DISL, lets a specification name one binding per format family, and spells a reference to a stored id as by: \"id\". See FBL 0.3, section 2.7.",
+          "description": "The FBL version the document is written in: 0.1, 0.2, 0.3, or 0.4 (draft); 0.3 names the tool type's specification in place of DISL, lets a specification name one binding per format family, and spells a reference to a stored id as by: \"id\". 0.4 creates and removes the missing levels of a nested container or child mapping. See FBL 0.4, section 2.7.",
           "enum": [
             "0.1",
             "0.2",
-            "0.3"
+            "0.3",
+            "0.4"
           ]
         },
         "doc": {
@@ -1153,45 +1154,66 @@
           ]
         },
         "create": {
-          "description": "How a missing child that holds the value is written when a value is set, and where.",
-          "type": "object",
-          "properties": {
-            "emit": {
-              "type": "string"
-            },
-            "place": {
-              "anyOf": [
-                {
-                  "enum": [
-                    "first",
-                    "last"
-                  ]
+          "description": "How a missing child that holds the value is written when a value is set (section 5.2).",
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "emit": {
+                  "type": "string"
                 },
-                {
-                  "description": "Before the first child with this name.",
-                  "type": "object",
-                  "properties": {
-                    "before": {
-                      "type": "string"
+                "place": {
+                  "anyOf": [
+                    {
+                      "enum": [
+                        "first",
+                        "last"
+                      ]
+                    },
+                    {
+                      "description": "Before the first child with this name.",
+                      "type": "object",
+                      "properties": {
+                        "before": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "patternProperties": {
+                        "^x-": true
+                      },
+                      "required": [
+                        "before"
+                      ]
                     }
-                  },
-                  "additionalProperties": false,
-                  "patternProperties": {
-                    "^x-": true
-                  },
-                  "required": [
-                    "before"
                   ]
                 }
+              },
+              "additionalProperties": false,
+              "patternProperties": {
+                "^x-": true
+              },
+              "required": [
+                "emit"
+              ],
+              "description": "xml: how a missing child element that holds the value is written when a value is set, and where."
+            },
+            {
+              "description": "(FBL 0.4) yaml, json: on a slot with child, each missing level of the mapping child reaches is created at the end of the level above it, then the key is inserted into the innermost.",
+              "type": "object",
+              "properties": {
+                "at": {
+                  "const": "end"
+                }
+              },
+              "additionalProperties": false,
+              "patternProperties": {
+                "^x-": true
+              },
+              "required": [
+                "at"
               ]
             }
-          },
-          "additionalProperties": false,
-          "patternProperties": {
-            "^x-": true
-          },
-          "required": [
-            "emit"
           ]
         },
         "readOnly": {
@@ -1256,6 +1278,10 @@
               "anyOf": [
                 {
                   "const": "end-of-document"
+                },
+                {
+                  "description": "(FBL 0.4) After the last member of the container's parent, creating every missing level above the container first (section 6.2).",
+                  "const": "end"
                 },
                 {
                   "description": "Before the named key of the parent.",
@@ -1356,7 +1382,8 @@
         "container": {
           "enum": [
             "keep",
-            "remove-when-empty"
+            "remove-when-empty",
+            "remove-empty-levels"
           ]
         }
       },
