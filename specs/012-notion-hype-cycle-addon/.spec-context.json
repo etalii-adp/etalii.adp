@@ -3,7 +3,7 @@
   "specName": "The Gartner Hype Cycle Graph as a Notion Add-on",
   "branch": "features/012-notion-hype-cycle-addon",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -1184,9 +1184,32 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-09T16:37:10.495Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T133",
+      "kind": "complete",
+      "by": "user",
+      "at": "2026-10-09T19:06:56.704Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T134",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-09T19:07:04.286Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-09T19:07:19.204Z"
     }
   ],
-  "last_action": "1101 tests pass and 9 are expected failures naming issue 97; branch pushed, pull request 2 not opened",
+  "last_action": "143/143 tasks done; the branches and worktrees are removed",
   "telemetryInstanceId": "9795bf70-0de8-4781-9efc-f6e69a389dbe",
   "coverage": {
     "FR-001": {
@@ -1651,6 +1674,10 @@
     {
       "note": "The copied FBL library mis-indents a multi-line text in a new entry, throws on two attributes set in one change, and writes a list item with a comma unquoted (etalii.adp.ide.vscode issue 22); the store works around the first two",
       "step": "implement"
+    },
+    {
+      "note": "SC-001 reads 0 differences for everything but where a trigger line starts: issue 97 is undecided and nine tests are marked as expected to fail",
+      "step": "implement"
     }
   ],
   "expectations": [
@@ -1923,11 +1950,11 @@
       "summary": "134 tasks in 8 phases: Setup, Foundational (etalii.adp pull request 1, then the Notion repository's shared spine), five story phases, and Polish with delivery through four pull requests; ten tasks are a maintainer's"
     },
     "implement": {
-      "summary": "The add-on is built and tested in etalii.adp.ide.notion up to the page with editing and undo; what remains needs Notion, Cloudflare or a merge"
+      "summary": "The Gartner hype cycle graph is published as the first Notion add-on, with its service, its stores in the Showcase and its record"
     }
   },
   "approach": "A static add-on at /adp-notion/gartner-hype-cycle-graph/ is compiled from shared parts that name no tool type: a new DISL interpreter, the Visual Studio Code host's FBL library copied unchanged, a store that keeps a document as one row per element, a canvas, and Notion-styled panels. The store rebuilds the binding's document text in memory, so FBL plans every edit and keeps the undo history, and each edit is written back as row changes. A stateless Cloudflare Worker completes Notion's sign-in and forwards the calls with the viewer's token.",
-  "currentTask": "T132",
+  "currentTask": "T134",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -2923,6 +2950,14 @@
       "files": [
         "specs/012-notion-hype-cycle-addon/tasks.md"
       ]
+    },
+    "T133": {
+      "status": "DONE",
+      "did": "The maintainer merged pull request 110 with merge commit c1b7d7b"
+    },
+    "T134": {
+      "status": "DONE",
+      "did": "The feature's branches are deleted locally and on origin in the three repositories, and its worktrees are removed"
     }
   },
   "verified": [

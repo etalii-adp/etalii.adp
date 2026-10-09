@@ -418,8 +418,8 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 **⟶ Wait for T131 to finish, then:**
 
 - [x] **T132** Tick the tasks whose pull requests are merged, record the delivery with the four commits, and open pull request 4, which carries T129's change as well, into `develop` from a branch of this feature's name · etalii.adp/specs/012-notion-hype-cycle-addon/tasks.md
-- [ ] **T133** **Maintainer**: merge pull request 4 with a merge commit · etalii.adp
-- [ ] **T134** Delete the branch `features/012-notion-hype-cycle-addon` locally and on `origin` in the three repositories, and remove the worktrees of T001 and T125 · etalii.adp, etalii.adp.ide.notion, etalii.adp.site
+- [x] **T133** **Maintainer**: merge pull request 4 with a merge commit · etalii.adp
+- [x] **T134** Delete the branch `features/012-notion-hype-cycle-addon` locally and on `origin` in the three repositories, and remove the worktrees of T001 and T125 · etalii.adp, etalii.adp.ide.notion, etalii.adp.site
 
 ---
 
@@ -476,7 +476,7 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 ## Delivery
 
-The feature was delivered between 2026-10-08 and 2026-10-09. The task list planned four pull requests; the addendum, the Notion desktop app and what the first passes found made it fourteen. Each is merged with a merge commit, but the last, which carries this record.
+The feature was delivered between 2026-10-08 and 2026-10-09. The task list planned four pull requests; the addendum, the Notion desktop app and what the first passes found made it fourteen. Each is merged with a merge commit.
 
 | Repository | Pull request | Merge commit | What it carries |
 | --- | --- | --- | --- |
@@ -492,8 +492,8 @@ The feature was delivered between 2026-10-08 and 2026-10-09. The task list plann
 | etalii.adp.ide.notion | [8](https://github.com/etalii-adp/etalii.adp.ide.notion/pull/8) | `25d3ca4` | The selection of a database from the diagram (T136 to T138) |
 | etalii.adp | [104](https://github.com/etalii-adp/etalii.adp/pull/104) | `e3c264f` | The desktop app's grant, the settled addendum, the contracts as built, and the principles 1.2.0 |
 | etalii.adp.ide.notion | [9](https://github.com/etalii-adp/etalii.adp.ide.notion/pull/9) | `4a0cdb4` | Hidden properties as Notion needs them, and connection handles on the canvas |
-| etalii.adp.site | [102](https://github.com/etalii-adp/etalii.adp.site/pull/102) | open on 2026-10-09 | The notes of the two Notion screenshots |
-| etalii.adp | [110](https://github.com/etalii-adp/etalii.adp/pull/110) | this pull request | Pull request 4: a note's date is internal, the addendum is delivered, and this record |
+| etalii.adp.site | [102](https://github.com/etalii-adp/etalii.adp.site/pull/102) | `5339172` | The notes of the two Notion screenshots |
+| etalii.adp | [110](https://github.com/etalii-adp/etalii.adp/pull/110) | `c1b7d7b` | Pull request 4: a note's date is internal, the addendum is delivered, and this record |
 
 The add-on is published at <https://etalii.net/adp-notion/gartner-hype-cycle-graph/> from `4a0cdb4`, and its service runs at `https://adp-notion.notion-adp.workers.dev`.
 
