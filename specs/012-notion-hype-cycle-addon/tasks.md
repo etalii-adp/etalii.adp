@@ -449,13 +449,13 @@ Files: `etalii.adp.ide.notion/README.md`, `etalii.adp.ide.notion/CLAUDE.md`, `et
 
 **Purpose**: the two requirements the maintainer added while the feature was being finished: selecting a database when the add-on is added, with a check and a projection of its properties, and hiding the properties that hold internal information. The specification has no open point left (FR-033 was settled on 2026-10-09); T135 finds the rule by which the add-on tells an internal property from the specification alone, raising it in `etalii.adp` if the specification cannot say.
 
-- [ ] **T135** Bring the address, store and service contracts in line with FR-033 to FR-037 as settled: how a selected store reaches the embed block, the calls that list the databases and find and set the block, what projecting a property means, and the rule that finds the internal properties from a specification · etalii.adp/specs/012-notion-hype-cycle-addon/
+- [x] **T135** Bring the address, store and service contracts in line with FR-033 to FR-037 as settled: how a selected store reaches the embed block, the calls that list the databases and find and set the block, what projecting a property means, and the rule that finds the internal properties from a specification · etalii.adp/specs/012-notion-hype-cycle-addon/
 
 **⟶ Wait for T135 to finish, then:**
 
-- [ ] **T136** [P] In the state `setup`, list the databases the person's access reaches and let the user select one; the service forwards the one call that lists them (FR-033) · etalii.adp.ide.notion/src/frame/parts/, etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/src/store/notion.ts
-- [ ] **T137** [P] Check a selected database against the schema, project the properties that can be, and ask the user about the ones that are missing before anything is changed (FR-034, FR-035) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
-- [ ] **T138** [P] Hide the internal properties in a database's views when the add-on or `scripts/store.mjs` prepares or fills it (FR-036, FR-037) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/scripts/store.mjs
+- [x] **T136** [P] In the state `setup`, list the databases the person's access reaches and let the user select one; the service forwards the one call that lists them (FR-033) · etalii.adp.ide.notion/src/frame/parts/, etalii.adp.ide.notion/service/handler.ts, etalii.adp.ide.notion/src/store/notion.ts
+- [x] **T137** [P] Check a selected database against the schema, project the properties that can be, and ask the user about the ones that are missing before anything is changed (FR-034, FR-035) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/src/frame/parts/reading.ts
+- [x] **T138** [P] Hide the internal properties in a database's views when the add-on or `scripts/store.mjs` prepares or fills it (FR-036, FR-037) · etalii.adp.ide.notion/src/store/schema.ts, etalii.adp.ide.notion/scripts/store.mjs
 - [x] **T139** [P] Hide the internal properties in the views of the ten stores of the Showcase (FR-037) · Notion workspace/Showcase
 
 **⟶ Wait for T136 to T139 to finish, then:**

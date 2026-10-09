@@ -75,9 +75,9 @@ Elements a test may rely on. Each is present only in the states that show it.
 | `id="open-in-tab"` | While a grant of access is in progress: a link to the grant itself, for the person to open when no window opened, as in the Notion desktop app (research R4) |
 | `id="cancel-connect"` | While a grant of access is in progress: the control that stops waiting for it |
 | `id="choose-store"` | In `setup`: the control that starts the selection of a database. It asks for access first where none is kept |
-| `id="stores"` | The list of the databases the person's access reaches, one item per database with its title and where it is; choosing one selects it |
+| `id="stores"` | The list of the databases the person's access reaches, one item per database with its title and the kind of place it is in; choosing one selects it. `id="find-store"` looks for one by name, `id="more-stores"` shows the next 25, and `id="connect"` grants access again, to reach a database that is not listed |
 | `id="properties"` | For a selected database that lacks properties: one item per missing property, each with the choice between a new property and an existing one of the right type, and `id="prepare"` to agree |
-| `id="store-address"`, `id="copy-store-address"` | Where the embed block could not be set: the address with its `store`, and the control that copies it |
+| `id="store-address"`, `id="copy-store-address"` | Where the embed block could not be set: the address with its `store`, and the control that copies it. They are shown once, on the page of the store the add-on then goes to, with the reason |
 
 | Attribute | On | Value |
 | --- | --- | --- |

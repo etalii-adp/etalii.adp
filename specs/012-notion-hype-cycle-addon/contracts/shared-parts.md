@@ -113,7 +113,8 @@ export interface OpenDocument {
   edit(change: ModelChange | readonly ModelChange[]): EditResult;   // one gesture, one command, one step, however many entries it changes
   undo(): EditResult;
   redo(): EditResult;
-  prepare(): Promise<void>;
+  readonly lacking: readonly LackingProperty[];   // what an unprepared database lacks, each with the existing properties it could be projected from
+  prepare(project?: Readonly<Record<string, string>>): Promise<void>;   // needed name to existing name, for the properties the person chose to project
   reload(): Promise<void>;
   subscribe(listener: (event: DocumentEvent) => void): () => void;
   close(): void;

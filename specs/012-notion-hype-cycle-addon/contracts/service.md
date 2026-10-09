@@ -73,7 +73,7 @@ A page in a web browser gets its token from the window it opened. A page in the 
 | --- | --- |
 | The add-on sends the person's token as `Authorization: Bearer <token>`. The service forwards it and adds `Notion-Version: 2026-03-11`. A call without the header is `401` and is not forwarded | FR-010 |
 | The request's body and Notion's status, body and `Retry-After` are passed on unchanged | FR-020 |
-| A call with a query string is not forwarded: the table names none. When Notion cannot be reached the answer is `502` with the code `bad_gateway` | FR-020 |
+| A call with a query string is not forwarded, but for the two the table needs: `start_cursor` on `v1/blocks/<id>/children`, and `data_source_id` with an optional `start_cursor` on `v1/views`. When Notion cannot be reached the answer is `502` with the code `bad_gateway` | FR-020 |
 | Every answer of the service carries `Cache-Control: no-store` | FR-010 |
 | Only the calls of the table below are forwarded; any other method or path is `403` and reaches Notion never | D8 |
 | Answers carry `Access-Control-Allow-Origin: https://etalii.net` and `Vary: Origin`. A request from another origin gets no such header | FR-010 |
@@ -94,6 +94,9 @@ The calls the store makes, as the Notion API of that version names them:
 | `POST` | `v1/search` | The databases a person's access reaches, for the selection of a store |
 | `GET` | `v1/blocks/<id>/children` | The blocks of the page that holds a database and of the pages directly under it, to find the embed block |
 | `PATCH` | `v1/blocks/<id>` | Setting the address of that embed block to name its store |
+| `GET` | `v1/views?data_source_id=<id>` | The views of a store, to hide its internal properties |
+| `GET` | `v1/views/<id>` | Which properties a view shows |
+| `PATCH` | `v1/views/<id>` | Hiding the internal properties in that view |
 
 `<id>` is 32 hexadecimal digits, with or without dashes. A call the store comes to need is added here first.
 
