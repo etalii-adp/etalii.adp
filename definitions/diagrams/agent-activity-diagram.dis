@@ -1,0 +1,489 @@
+{
+  "$schema": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Specification",
+  "disl": "0.3",
+  "language": {
+    "id": "net.etalii.adp.etalii.agent-activity-diagram",
+    "version": "0.1.0",
+    "origin": "etalii/agent-activity-diagram",
+    "label": "Agent activity diagram",
+    "fileExtension": "aad",
+    "license": "Apache-2.0",
+    "authors": [
+      {
+        "name": "Peter Vrenken"
+      }
+    ],
+    "icon": "mdi-account-hard-hat-outline",
+    "doc": {
+      "summary": "Which agents work on which specification of which project, where (a branch and a folder) and on what system, in one picture that agents keep current.",
+      "description": "A draft holding the metamodel only, written to try the activity file's shape against DISL and FBL before anything is built on it (etalii.adp spec 014, task T001). The notation, toolbox, constraints, behavior, layout and persistence follow with DISL 0.4."
+    }
+  },
+  "metamodel": {
+    "doc": "Five element types, each stored as an entry of its own list; tasks are children of a specification and pull requests children of a location. A relation is a key on the element at its 'one' end, a reference attribute, and is drawn as a derived relation, one per reference that names an element.",
+    "diagram": {
+      "attributes": {
+        "showArchived": {
+          "type": "bool",
+          "default": false,
+          "doc": "Whether specifications whose status is Archived are drawn. Stored in the file as the top-level `showArchived` key, and set by the canvas switch of the same name."
+        }
+      }
+    },
+    "enums": {
+      "SpecificationStatus": {
+        "values": {
+          "pending": {
+            "label": "Pending",
+            "color": {
+              "token": "aad.pending"
+            },
+            "doc": "Specified, and nobody is working on it yet."
+          },
+          "progressing": {
+            "label": "Progressing",
+            "color": {
+              "token": "aad.progressing"
+            },
+            "doc": "An agent is working on it."
+          },
+          "inputRequired": {
+            "label": "Input Required",
+            "value": "input-required",
+            "color": {
+              "token": "aad.inputRequired"
+            },
+            "doc": "The work waits on a person."
+          },
+          "finished": {
+            "label": "Finished",
+            "color": {
+              "token": "aad.finished"
+            },
+            "doc": "The work is done."
+          },
+          "archived": {
+            "label": "Archived",
+            "color": {
+              "token": "aad.archived"
+            },
+            "doc": "Kept for the record and hidden unless the canvas switch shows archived specifications."
+          }
+        },
+        "doc": "Where a specification stands. The order is the order of the property grid's choices."
+      },
+      "TaskStatus": {
+        "ordered": true,
+        "values": {
+          "progressing": {
+            "label": "Progressing",
+            "color": {
+              "token": "aad.progressing"
+            },
+            "doc": "An agent is working on it."
+          },
+          "pending": {
+            "label": "Pending",
+            "color": {
+              "token": "aad.pending"
+            },
+            "doc": "Specified, and nobody is working on it yet."
+          },
+          "inputRequired": {
+            "label": "Input Required",
+            "value": "input-required",
+            "color": {
+              "token": "aad.inputRequired"
+            },
+            "doc": "The work waits on a person."
+          },
+          "finished": {
+            "label": "Finished",
+            "color": {
+              "token": "aad.finished"
+            },
+            "doc": "The work is done."
+          }
+        },
+        "doc": "Where a task stands. The declared order is the order of a specification's task groups: Progressing, Pending, Input Required, Finished."
+      },
+      "EnvironmentKind": {
+        "values": {
+          "localMachine": {
+            "label": "Local machine",
+            "value": "local-machine"
+          },
+          "cloud": {
+            "label": "Cloud"
+          },
+          "container": {
+            "label": "Container"
+          },
+          "wsl": {
+            "label": "WSL"
+          },
+          "other": {
+            "label": "Other"
+          }
+        },
+        "doc": "What kind of system an environment is."
+      }
+    },
+    "types": {
+      "Project": {
+        "label": "Project",
+        "icon": "mdi-folder-outline",
+        "labelAttribute": "name",
+        "doc": "One body of work, such as a repository or a product.",
+        "attributes": {
+          "name": {
+            "type": "string",
+            "required": true,
+            "group": "Identity",
+            "order": 1
+          },
+          "link": {
+            "type": "uri",
+            "schemes": [
+              "http",
+              "https"
+            ],
+            "group": "Link",
+            "order": 9,
+            "doc": "Where the project is: a web address or a path."
+          }
+        }
+      },
+      "Specification": {
+        "label": "Specification",
+        "icon": "mdi-file-document-outline",
+        "labelAttribute": "name",
+        "doc": "One piece of specified work in a project, with a status and its tasks.",
+        "attributes": {
+          "name": {
+            "type": "string",
+            "required": true,
+            "group": "Identity",
+            "order": 1
+          },
+          "status": {
+            "type": "SpecificationStatus",
+            "required": true,
+            "default": "pending",
+            "group": "Identity",
+            "order": 2
+          },
+          "project": {
+            "type": "Project",
+            "group": "Relations",
+            "order": 1,
+            "doc": "The project the specification belongs to: at most one (R1). Drawn as the relation `ProjectSpecification`."
+          },
+          "link": {
+            "type": "uri",
+            "schemes": [
+              "http",
+              "https"
+            ],
+            "group": "Link",
+            "order": 9,
+            "doc": "Where the specification is written: a web address or a path, typically its requirements document."
+          }
+        },
+        "children": {
+          "allowed": [
+            "Task"
+          ],
+          "slots": {
+            "tasks": {
+              "allowed": [
+                "Task"
+              ]
+            }
+          }
+        }
+      },
+      "Task": {
+        "label": "Task",
+        "icon": "mdi-checkbox-blank-outline",
+        "labelAttribute": "title",
+        "doc": "A task of a specification, listed inside it. Not drawn as an element: it has no position, no relation and no toolbox entry.",
+        "attributes": {
+          "title": {
+            "type": "string",
+            "required": true,
+            "group": "Identity",
+            "order": 1
+          },
+          "status": {
+            "type": "TaskStatus",
+            "required": true,
+            "default": "pending",
+            "group": "Identity",
+            "order": 2
+          },
+          "updated": {
+            "type": "datetime",
+            "timezone": "preserve",
+            "writtenPrecision": "preserve",
+            "newPrecision": "second",
+            "group": "Identity",
+            "order": 3,
+            "doc": "When the task was last changed, with its offset. Tasks are listed most recent first within their group; one without it comes after those that have one, in file order."
+          },
+          "link": {
+            "type": "uri",
+            "schemes": [
+              "http",
+              "https"
+            ],
+            "group": "Link",
+            "order": 9,
+            "doc": "Where the task's work can be seen: a web address or a path."
+          }
+        }
+      },
+      "Agent": {
+        "label": "Agent",
+        "icon": "mdi-robot-outline",
+        "labelAttribute": "name",
+        "doc": "One worker on a specification. A thread of a project chat is an agent.",
+        "attributes": {
+          "name": {
+            "type": "string",
+            "required": true,
+            "group": "Identity",
+            "order": 1
+          },
+          "specification": {
+            "type": "Specification",
+            "group": "Relations",
+            "order": 1,
+            "doc": "The specification the agent works on: at most one. Drawn as the relation `SpecificationAgent`."
+          },
+          "link": {
+            "type": "uri",
+            "schemes": [
+              "http",
+              "https"
+            ],
+            "group": "Link",
+            "order": 9,
+            "doc": "Where the agent can be reached: a web address or a path."
+          }
+        }
+      },
+      "Location": {
+        "label": "Location",
+        "icon": "mdi-source-branch",
+        "labelAttribute": "branch",
+        "doc": "Where an agent's work is: a branch, and a folder, the worktree's or `Default` for the repository's main checkout.",
+        "attributes": {
+          "branch": {
+            "type": "string",
+            "required": true,
+            "group": "Identity",
+            "order": 1
+          },
+          "folder": {
+            "type": "string",
+            "default": "Default",
+            "group": "Identity",
+            "order": 2,
+            "doc": "The worktree's folder; `Default` when the work is in the main checkout, which is also what an absent key reads as."
+          },
+          "agent": {
+            "type": "Agent",
+            "group": "Relations",
+            "order": 1,
+            "doc": "The agent whose work this is: at most one. Drawn as the relation `AgentLocation`."
+          },
+          "environment": {
+            "type": "Environment",
+            "group": "Relations",
+            "order": 2,
+            "doc": "The system the location is on: at most one. Drawn as the relation `LocationEnvironment`."
+          },
+          "branchLink": {
+            "type": "uri",
+            "schemes": [
+              "http",
+              "https"
+            ],
+            "group": "Link",
+            "order": 10,
+            "doc": "Where the branch can be seen, such as its page on a forge."
+          },
+          "folderLink": {
+            "type": "uri",
+            "schemes": [
+              "http",
+              "https"
+            ],
+            "group": "Link",
+            "order": 11,
+            "doc": "Where the folder is: a path, absolute or relative to the activity file."
+          }
+        },
+        "children": {
+          "allowed": [
+            "PullRequest"
+          ],
+          "slots": {
+            "pullRequests": {
+              "allowed": [
+                "PullRequest"
+              ]
+            }
+          }
+        }
+      },
+      "PullRequest": {
+        "label": "Pull request",
+        "icon": "mdi-source-pull",
+        "labelAttribute": "title",
+        "doc": "A pull request opened from a location, listed inside it. Not drawn as an element.",
+        "attributes": {
+          "title": {
+            "type": "string",
+            "required": true,
+            "group": "Identity",
+            "order": 1
+          },
+          "updated": {
+            "type": "datetime",
+            "timezone": "preserve",
+            "writtenPrecision": "preserve",
+            "newPrecision": "second",
+            "group": "Identity",
+            "order": 2,
+            "doc": "When the pull request was last changed, with its offset. Pull requests are listed most recent first."
+          },
+          "link": {
+            "type": "uri",
+            "schemes": [
+              "http",
+              "https"
+            ],
+            "group": "Link",
+            "order": 9,
+            "doc": "The pull request's page."
+          }
+        }
+      },
+      "Environment": {
+        "label": "Environment",
+        "icon": "mdi-server-outline",
+        "labelAttribute": "name",
+        "doc": "A system the work happens on: a local machine, a cloud environment, a container, a WSL system or another kind.",
+        "attributes": {
+          "name": {
+            "type": "string",
+            "required": true,
+            "group": "Identity",
+            "order": 1
+          },
+          "kind": {
+            "type": "EnvironmentKind",
+            "required": true,
+            "default": "other",
+            "group": "Identity",
+            "order": 2
+          },
+          "link": {
+            "type": "uri",
+            "schemes": [
+              "http",
+              "https"
+            ],
+            "group": "Link",
+            "order": 9,
+            "doc": "Where the environment can be reached or read about."
+          }
+        }
+      }
+    },
+    "relations": {
+      "ProjectSpecification": {
+        "label": "Project to specification",
+        "doc": "Drawn from Specification's `project` key: one line per specification whose `project` names a project. Drawing a line sets the key and removing a line clears it (operations `setProject` and `clearProject`).",
+        "source": "Project",
+        "target": "Specification",
+        "directed": true,
+        "allowSelfLoops": false,
+        "allowParallel": false,
+        "derived": {
+          "from": "diagram.nodesOfType('Specification').filter(e, e.project != null)",
+          "id": "'project:' + item.id",
+          "source": "item.project",
+          "target": "item",
+          "sources": "[item]",
+          "edits": {
+            "connect": "setProject",
+            "delete": "clearProject"
+          }
+        }
+      },
+      "SpecificationAgent": {
+        "label": "Specification to agent",
+        "doc": "Drawn from Agent's `specification` key: one line per agent whose `specification` names a specification. Drawing a line sets the key and removing a line clears it (operations `setSpecification` and `clearSpecification`).",
+        "source": "Specification",
+        "target": "Agent",
+        "directed": true,
+        "allowSelfLoops": false,
+        "allowParallel": false,
+        "derived": {
+          "from": "diagram.nodesOfType('Agent').filter(e, e.specification != null)",
+          "id": "'specification:' + item.id",
+          "source": "item.specification",
+          "target": "item",
+          "sources": "[item]",
+          "edits": {
+            "connect": "setSpecification",
+            "delete": "clearSpecification"
+          }
+        }
+      },
+      "AgentLocation": {
+        "label": "Agent to location",
+        "doc": "Drawn from Location's `agent` key: one line per location whose `agent` names an agent. Drawing a line sets the key and removing a line clears it (operations `setAgent` and `clearAgent`).",
+        "source": "Agent",
+        "target": "Location",
+        "directed": true,
+        "allowSelfLoops": false,
+        "allowParallel": false,
+        "derived": {
+          "from": "diagram.nodesOfType('Location').filter(e, e.agent != null)",
+          "id": "'agent:' + item.id",
+          "source": "item.agent",
+          "target": "item",
+          "sources": "[item]",
+          "edits": {
+            "connect": "setAgent",
+            "delete": "clearAgent"
+          }
+        }
+      },
+      "LocationEnvironment": {
+        "label": "Location to environment",
+        "doc": "Drawn from Location's `environment` key: one line per location whose `environment` names an environment. Drawing a line sets the key and removing a line clears it (operations `setEnvironment` and `clearEnvironment`).",
+        "source": "Location",
+        "target": "Environment",
+        "directed": true,
+        "allowSelfLoops": false,
+        "allowParallel": false,
+        "derived": {
+          "from": "diagram.nodesOfType('Location').filter(e, e.environment != null)",
+          "id": "'environment:' + item.id",
+          "source": "item",
+          "target": "item.environment",
+          "sources": "[item]",
+          "edits": {
+            "connect": "setEnvironment",
+            "delete": "clearEnvironment"
+          }
+        }
+      }
+    }
+  }
+}

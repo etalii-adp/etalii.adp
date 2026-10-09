@@ -26,6 +26,10 @@ then checked for its names (FBL section 14.1, step 4): every rule a `parent`, `c
 every rule it names stores its id with `id.from` (the specification languages reserve `id`, so it is never an attribute's name).
 The fixtures under a folder named `*-equivalence` read one model in different formats: their `read` must be identical.
 
+Every `*.dis` that validates is checked for the names DISL 0.4's constructs refer to (DISL section 14.1): a compartment's
+`groupBy` names an attribute of every item type it lists, of an enumeration type; a `force` layout's `tiers` name node
+types of the metamodel; and `persistence.view.bind` is used only with `format: "fbl"`, for kinds that `view.store` lists.
+
 Prints one line per example and exits 1 when any example is invalid or names an unknown schema.
 """
 import json
@@ -368,6 +372,58 @@ def resolve_names(document) -> list[str]:
     return problems
 
 
+def resolve_disl(document) -> list[str]:
+    """Checks the names DISL 0.4's constructs refer to (DISL section 14.1) and returns a problem per unresolved name,
+    each with the JSON Pointer of where it is used."""
+    problems = []
+    metamodel = document.get("metamodel", {})
+    types, enums = metamodel.get("types", {}), metamodel.get("enums", {})
+
+    def attributes_of(name, seen=()):
+        node = types.get(name, {})
+        extends = node.get("extends", [])
+        inherited = {}
+        for parent in [extends] if isinstance(extends, str) else extends:
+            if parent not in seen:
+                inherited.update(attributes_of(parent, seen + (name,)))
+        return {**inherited, **node.get("attributes", {})}
+
+    for type_name, notation in document.get("notation", {}).get("nodes", {}).items():
+        for index, compartment in enumerate(notation.get("compartments", [])):
+            group_by = compartment.get("groupBy")
+            if not group_by:
+                continue
+            pointer = f"/notation/nodes/{type_name}/compartments/{index}/groupBy/attribute"
+            items = compartment.get("items", {})
+            item_types = items.get("children") if isinstance(items, dict) else None
+            if not item_types:
+                problems.append(f"at {pointer}: groupBy needs items that are children of named types")
+                continue
+            for item_type in item_types:
+                attribute = attributes_of(item_type).get(group_by["attribute"])
+                if attribute is None:
+                    problems.append(f"at {pointer}: the type {item_type!r} has no attribute {group_by['attribute']!r}")
+                elif attribute.get("type") not in enums:
+                    problems.append(f"at {pointer}: the attribute {group_by['attribute']!r} of {item_type!r} is of type {attribute.get('type')!r}, which is not an enumeration")
+                else:
+                    for value in group_by.get("collapsed", {}):
+                        if value not in enums[attribute["type"]].get("values", {}):
+                            problems.append(f"at {pointer[:-len('attribute')]}collapsed/{value}: {attribute['type']!r} has no value {value!r}")
+    for name, config in document.get("layout", {}).get("algorithms", {}).items():
+        for index, tier in enumerate(config.get("force", {}).get("tiers", [])):
+            for type_name in [tier] if isinstance(tier, str) else tier:
+                if type_name not in types:
+                    problems.append(f"at /layout/algorithms/{name}/force/tiers/{index}: names the type {type_name!r}, which the metamodel does not declare")
+    persistence = document.get("persistence", {})
+    view = persistence.get("view", {})
+    for kind in view.get("bind", {}):
+        if persistence.get("format") != "fbl":
+            problems.append(f"at /persistence/view/bind/{kind}: view data is bound into a body only with format fbl")
+        if kind not in view.get("store", []):
+            problems.append(f"at /persistence/view/bind/{kind}: the kind {kind!r} is bound but view.store does not list it")
+    return problems
+
+
 def resolve_desl(path: Path, document) -> list[str]:
     """Checks the names a DESL specification's surface and persistence refer to (DESL section 10.1, step 4) and
     returns a problem per unresolved name, each with the JSON Pointer of where it is used."""
@@ -534,7 +590,7 @@ for path in examples:
         print(f"FAIL {name}: {len(problems)} finding(s) on reading")
         for problem in problems[:10]:
             print(f"  {problem}")
-    elif reference in (FBL, DESL) and (problems := (resolve_names(document) if reference == FBL else resolve_desl(path, document))):
+    elif reference in (FBL, DESL, DISL) and (problems := (resolve_names(document) if reference == FBL else resolve_desl(path, document) if reference == DESL else resolve_disl(document))):
         failures += 1
         print(f"FAIL {name}: {len(problems)} unresolved name(s)")
         for problem in problems[:10]:

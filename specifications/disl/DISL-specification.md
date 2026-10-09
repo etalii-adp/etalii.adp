@@ -1,10 +1,10 @@
 # DISL — Diagram Specification Language
 
-**Specification, version 0.3 (Draft)**
+**Specification, version 0.4 (Draft)**
 
 |                           |                                                                              |
 |---------------------------|------------------------------------------------------------------------------|
-| Date                      | 2026-10-06                                                                   |
+| Date                      | 2026-10-09                                                                   |
 | Specification schema      | `disl.schema.json` (JSON Schema, draft 2020-12), `$defs/Specification`       |
 | Definition language       | DID, the Diagram Definition Language, in [`../did/`](../did/DID-specification.md) |
 | Expression language       | CEL — Common Expression Language (https://cel.dev)                           |
@@ -16,7 +16,7 @@
 
 ## Status of this document
 
-This is a draft, version 0.3. It is complete enough to implement a conforming validator, a documentation generator and a reference runtime, but individual constructs may still change before version 1.0. DISL 0.1 continued the earlier combined format (DEDL became DISL and DID); section 18 lists the old identifiers that runtimes still read. DISL 0.2 adds declarative constructs to 0.1 (declared identity, findings that point at files, reasons the tool gives, derived elements, gestures and menus, view state, budgets, notation and time details). Every valid 0.1 specification is a valid 0.2 specification and keeps its meaning, except in the places listed in [Changes from 0.1](#changes-from-01), where 0.1 was silent or ambiguous and 0.2 now says what it means. DISL 0.3 adds the constructs that the Gartner hype cycle graph and Agent Behavior Modelling tools needed and 0.2 could not state (neighbour-aware bounds, standard row and tree layouts, a type map for format bindings, part tooltips, form fields that parse their own text, per-case built-in codes, geometric drop placement, typed retyping fields and pointer bindings for connect gestures, and, by the ruling of 2026-10-06, menu groups, form row ids, a declared order of findings, one finding per group of duplicates and the case of an endpoint finding); every valid 0.2 specification is a valid 0.3 specification with the same meaning, apart from the clarifications in [Changes from 0.2](#changes-from-02). Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
+This is a draft, version 0.4. It is complete enough to implement a conforming validator, a documentation generator and a reference runtime, but individual constructs may still change before version 1.0. DISL 0.1 continued the earlier combined format (DEDL became DISL and DID); section 18 lists the old identifiers that runtimes still read. DISL 0.2 adds declarative constructs to 0.1 (declared identity, findings that point at files, reasons the tool gives, derived elements, gestures and menus, view state, budgets, notation and time details). Every valid 0.1 specification is a valid 0.2 specification and keeps its meaning, except in the places listed in [Changes from 0.1](#changes-from-01), where 0.1 was silent or ambiguous and 0.2 now says what it means. DISL 0.3 adds the constructs that the Gartner hype cycle graph and Agent Behavior Modelling tools needed and 0.2 could not state (neighbour-aware bounds, standard row and tree layouts, a type map for format bindings, part tooltips, form fields that parse their own text, per-case built-in codes, geometric drop placement, typed retyping fields and pointer bindings for connect gestures, and, by the ruling of 2026-10-06, menu groups, form row ids, a declared order of findings, one finding per group of duplicates and the case of an endpoint finding); every valid 0.2 specification is a valid 0.3 specification with the same meaning, apart from the clarifications in [Changes from 0.2](#changes-from-02). DISL 0.4 adds what a diagram that agents write and a person arranges needs (items grouped inside a node with collapse defaults, a kept canvas filter, pinning as standard gestures, a layout in tiers, links that open, and view data kept in a format binding's body); every valid 0.3 specification is a valid 0.4 specification with the same meaning, apart from the clarifications in [Changes from 0.3](#changes-from-03). Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
 
 The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY** and **OPTIONAL** are to be interpreted as described in RFC 2119 and RFC 8174 when, and only when, they appear in bold capitals.
 
@@ -43,6 +43,7 @@ The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **
 17. [Complete examples](#17-complete-examples)
 - [Changes from 0.1](#changes-from-01)
 - [Changes from 0.2](#changes-from-02)
+- [Changes from 0.3](#changes-from-03)
 18. [Deprecated aliases](#18-deprecated-aliases)
 - [Appendix A — JSON Schema](#appendix-a--json-schema)
 - [Appendix B — Built-in catalogues](#appendix-b--built-in-catalogues)
@@ -350,7 +351,7 @@ Any object in a specification or DID definition MAY contain properties whose nam
 
 ### 2.9 Versioning
 
-- `disl` (required) is the version of DISL the specification targets, as `"major.minor"`: `"0.1"`, `"0.2"` or `"0.3"`. A runtime MUST refuse a specification with a higher major version than it supports and SHOULD warn for a higher minor version. The deprecated alias of section 18 is still read.
+- `disl` (required) is the version of DISL the specification targets, as `"major.minor"`: `"0.1"`, `"0.2"`, `"0.3"` or `"0.4"`. A runtime MUST refuse a specification with a higher major version than it supports and SHOULD warn for a higher minor version. The deprecated alias of section 18 is still read.
 - DISL 0.2 is a superset of 0.1. A 0.2 runtime **MUST** read a specification that declares `"disl": "0.1"`, or whose `$schema` names the 0.1 schema (`https://etalii.net/adp/disl/schema/0.1/disl.schema.json`), as a 0.2 specification with the same meaning, apart from the clarifications listed in [Changes from 0.1](#changes-from-01). A validator **MUST** validate such a specification against the 0.2 schema and **MUST NOT** report its 0.1 version or schema address as deprecated.
 - DISL 0.3 is a superset of 0.2. A 0.3 runtime **MUST** read a specification that declares `"disl": "0.1"` or `"disl": "0.2"` with its meaning, apart from the clarifications listed in [Changes from 0.2](#changes-from-02). While 0.3 is a draft, its schema is published at the 0.2 address (`https://etalii.net/adp/disl/schema/0.2/disl.schema.json`), which accepts every 0.2 specification unchanged; a specification that uses a construct new in 0.3 **SHOULD** declare `"disl": "0.3"`, and a 0.2 runtime **SHOULD** warn about it as a newer minor version.
 - `language.version` (required) is the semantic version (SemVer 2.0.0) of the defined language. DID definitions record the language version they were written with; this drives migrations (section 11.9).
@@ -637,10 +638,18 @@ The metamodel defines the abstract syntax of the language: the kinds of elements
 | `time`       | `duration` since midnight | `"HH:MM[:SS]"`      | `min`, `max`, `step`                                                            |
 | `duration`   | `duration`                | ISO 8601 duration   | `min`, `max`, `calendar` (allow `P1M`/`P1Y`)                                    |
 | `color`      | `string`                  | CSS color string    | `palette` (list of allowed colors), `alpha` (bool)                              |
-| `uri`        | `string`                  | URI string          | `schemes` (allowed schemes)                                                     |
+| `uri`        | `string`                  | URI string          | `schemes` (allowed schemes), `paths` (DISL 0.4: a path is accepted too, below) |
 | `expression` | `string`                  | CEL source          | `context` (name of the CEL context it will be evaluated in), `resultType`       |
 | `json`       | `dyn`                     | any JSON            | `schema` (inline JSON Schema)                                                   |
 | `binary`     | `bytes`                   | base64 string       | `mediaTypes`, `maxBytes`                                                        |
+
+**Paths in a `uri`** *(DISL 0.4)*. With `paths: true`, a `uri` value **MAY** also be a path: an absolute path of the platform it was written on (`C:/git/repo`, `/home/user/repo`), or a relative path, resolved against the folder of the file the value is stored in. A value is a URI when it starts with a scheme followed by `:` and is not a drive letter (`C:`), and a path otherwise; `schemes` restricts URIs only. A value that is a URI with a scheme outside `schemes` **MUST** be kept as written and reported by `std.facets` (8.7). Without `paths`, a `uri` is a URI, as in 0.3.
+
+```json
+"link": { "type": "uri", "schemes": ["http", "https"], "paths": true }
+```
+
+A task's link may be `https://github.com/org/repo/pull/150`, `docs/plan.md` beside the diagram's file, or `C:/git/repo/.claude/worktrees/kd`; `ftp://host/file` is kept and reported.
 
 Unit facets (`unit`) are informational strings (`"h"`, `"kg"`, `"EUR"`); runtimes SHOULD show them as field suffixes.
 
@@ -2280,18 +2289,58 @@ A hype cycle's phase boundary is a handle on its banner that writes the month th
 | `itemIcon`                 | Bindable IconRef                                           | Icon per item.                                                                                                               |
 | `itemStyle`                | StyleRef                                                   | Style of every item.                                                                                                         |
 | `itemConditions`           | `{when, style}`[]                                          | Conditional item styles; `when` sees `item` and `index` (for example primary-key columns underlined).                        |
+| `itemLink`                 | Bindable string                                            | *(DISL 0.4)* A link per item, drawn as a link symbol at the end of the item's line that opens it (below).                    |
+| `itemOrder`                | `{by, direction}`                                          | *(DISL 0.4)* The order items are listed in, computed when drawing (below). Default: the source list's order.                 |
+| `groupBy`                  | GroupBy                                                    | *(DISL 0.4)* Items listed under one collapsible heading per value of an enum attribute (below).                              |
 | `layout`                   | `"vertical"` (default), `"horizontal"`, `"grid"`, `"wrap"` | Arrangement of items.                                                                                                        |
 | `separator`                | Stroke or `"none"`                                         | Line above the compartment.                                                                                                  |
 | `size`                     | `"auto"` or number or `{min, max}`                         | Height.                                                                                                                      |
 | `overflow`                 | `"grow"`, `"clip"`, `"scroll"`, `"ellipsis"`               | When items exceed `max`. `ellipsis` shows "… 3 more".                                                                        |
 | `maxItems`                 | int                                                        | Items shown before overflow.                                                                                                 |
-| `collapsible`, `collapsed` | bool, Bindable bool                                        | Collapse state persisted in view data.                                                                                       |
+| `collapsible`, `collapsed` | bool, Bindable bool                                        | Collapse state persisted in view data. *(DISL 0.4)* `collapsed` is the default of that state (below).                        |
 | `emptyText`                | LocalizedText                                              | Placeholder when empty.                                                                                                      |
 | `editable`                 | `{add, remove, reorder, inline}` of bool                   | In-place editing of items.                                                                                                   |
 | `visible`                  | Bindable bool                                              |                                                                                                                              |
 | `padding`, `style`         |                                                            |                                                                                                                              |
 
-**NodeIcon**: `{ "icon": IconRef, "position": Position, "size": 16, "color": Paint, "flip": Bindable, "visible": Bindable }`. **Badge**: `{ "id", "pack": bool, "position": Position, "offset": [dx, dy], "shape": ShapeRef, "text": Bindable string, "icon": IconRef, "flip": Bindable, "style": StyleRef, "size", "visible": Bindable bool, "tooltip", "onClick": operation }` — for example a finding counter, a lock, a stereotype glyph, a progress ring. `flip` mirrors the icon: `"none"` (default), `"horizontal"`, `"vertical"` or `"both"`; hit testing is unchanged.
+**Grouped items** *(DISL 0.4)*. **GroupBy** (`$defs/GroupBy`) lists a compartment's items under headings:
+
+| Property    | Type                      | Default        | Description |
+|-------------|---------------------------|----------------|-------------|
+| `attribute` | attribute name            | **required**   | An attribute of every item type, whose type is an enumeration (4.5). |
+| `collapsed` | map enum value → bool     | every value `false` | Whether each group is collapsed by default, by the value's key. |
+| `count`     | bool                      | `true`         | Whether a heading shows how many items it holds. |
+| `empty`     | `"hide"`, `"show"`        | `"hide"`       | Whether a group with no item has a heading. |
+| `title`     | Message                   | the value's label | The heading's text; context `compartmentItem`, with `item` bound to the enum value's key and `index` to its position. |
+
+- The groups **MUST** be in the enumeration's declared order, and the items of a group in the compartment's item order. An item whose value is not one of the enumeration's (an unknown stored form, 4.5) is listed under a last group whose title is the value as written.
+- A heading **MUST** be hit-testable and focusable; activating it collapses or expands its group. A collapsed group shows its heading only, and the node's height follows: with `size: "auto"` and `autoSize` other than `"none"`, the compartment's height is the sum of the drawn headings and items, and relations attach to the node as resized.
+- An item that changes group **MUST NOT** change the collapse state of either group.
+- The **group key** of a group is the stored form of its value (4.5); a compartment without `groupBy` that is `collapsible` has one group whose key is the compartment's `id`. View data and the `view` action (9.4) name a group by the element's id and its group key.
+
+**Collapse defaults and stored states** *(DISL 0.4)*. A group's declared state (`groupBy.collapsed` for its value, or `collapsed` for a compartment without `groupBy`) is its **default**. When the view kind `groups` is stored (11.6), the stored state of a group **MUST** win over its default, and a runtime **MUST** store a group's state only while it differs from the default: setting a group to its default removes its stored state, in the same edit. A group nobody changed therefore follows the specification if its default changes. When `groups` is viewer state, a viewer starts from the defaults.
+
+**Item order** *(DISL 0.4)*. `itemOrder` is `{ "by": Expression, "direction": "ascending" | "descending" }`, default direction `ascending`, with `by` evaluated per item in the `compartmentItem` context. Items **MUST** be listed by their `by` values in that direction; items whose `by` is `null` or absent **MUST** come after all others; ties, and the items without a value, keep the source list's order. Ordering is drawing: it **MUST NOT** change the model or its stored order.
+
+**Links on items** *(DISL 0.4)*. `itemLink` is evaluated per item in the `compartmentItem` context. Where it is a non-empty string, a link symbol **MUST** be drawn at the end of the item's line, and nothing where it is empty or `null`. The symbol is activatable as a badge with `onClick` is (below): hovering or focusing it shows the link, and activating it runs the `open` action (9.4) on the link. A symbol that is not activated changes nothing.
+
+**Items are selectable** *(DISL 0.4)*. An item that is a child element (`items: {children}`) **MUST** be hit-testable, selectable under its own id and open its own context menu and form, as a node does; an item from an attribute or a CEL list is not.
+
+```json
+"compartments": [ {
+  "id": "tasks",
+  "items": { "children": ["Task"], "slot": "tasks" },
+  "itemText": { "attribute": "title" },
+  "itemLink": { "cel": "item.link" },
+  "itemOrder": { "by": "item.updated", "direction": "descending" },
+  "groupBy": { "attribute": "status", "collapsed": { "pending": true, "finished": true } },
+  "overflow": "ellipsis"
+} ]
+```
+
+A board item lists its tasks under Progressing, Pending, Input Required and Finished, in the enumeration's order, each heading with its count and the most recently updated task first; Pending and Finished start collapsed, and a task with a link ends in a link symbol.
+
+**NodeIcon**: `{ "icon": IconRef, "position": Position, "size": 16, "color": Paint, "flip": Bindable, "visible": Bindable }`. **Badge**: `{ "id", "pack": bool, "position": Position, "offset": [dx, dy], "shape": ShapeRef, "text": Bindable string, "icon": IconRef, "flip": Bindable, "style": StyleRef, "size", "visible": Bindable bool, "tooltip", "onClick": operation }` — for example a finding counter, a lock, a stereotype glyph, a progress ring. `flip` mirrors the icon: `"none"` (default), `"horizontal"`, `"vertical"` or `"both"`; hit testing is unchanged. *(DISL 0.4)* A badge with `onClick` **MUST** be hit-testable, a focus stop and activatable from the keyboard, and **MUST** show its `tooltip` on hover and on focus; activating it runs its operation with `self` bound to the node. A badge without `onClick` is drawn only.
 
 **Packed badges.** **BadgeLayout** (`$defs/BadgeLayout`) is `{ "start": Position, "offset": [dx, dy], "direction": "left" | "right" | "up" | "down", "spacing": number }`. Badges with `pack: true` whose `visible` holds **MUST** take consecutive slots in declaration order, the first at `start` moved by `offset`, each next one `spacing` canvas units further in `direction`; a badge that is not visible takes no slot. The `position` and `offset` of a packed badge are ignored. `badgeLayout` **MAY** also be set in a variant.
 
@@ -2753,6 +2802,7 @@ The title and key of a C4 view, the ambient-package notice of a .NET dependency 
 | `keep`      | Expression → bool                               | **required**             | True when `self` stays drawn; context `filter`. |
 | `effect`    | `"hide"`, `"dim"`                               | `"hide"`                 | `dim` applies the `filteredOut` state (6.6) instead of hiding. |
 | `position`  | Position                                        | the runtime's            | Where the control sits, outside the drawing surface. |
+| `persist`   | bool                                            | `false`                  | *(DISL 0.4)* The value is stored view data of the diagram, not viewer state (below). |
 | `doc`       | Doc                                             |                          | |
 
 The `filter` context binds `self`, `value` (the filter's current value), `match` (`"any"` or `"all"`), `diagram` and `env` (12.3); `filterValue(id)` (12.4) reads a filter's value in the `element` and `chrome` contexts.
@@ -2772,6 +2822,15 @@ The `filter` context binds `self`, `value` (the filter's current value), `match`
 ```
 
 A hype cycle's tag chips hide the trends and triggers without the chosen tags, and every influence to or from them; notes always stay.
+
+**Kept filters** *(DISL 0.4)*. A filter with `persist: true` keeps its value with the diagram: the value is view data of the kind `filters` (11.6), stored with the diagram and the same for every viewer, and `filters` **MUST** then be listed in `view.store`. Changing it is an edit: it is written, enters the undo history, and is refused in read-only mode. The filter's `default` applies while nothing is stored, and a runtime **MUST** store the value only while it differs from the default. A filter without `persist` is viewer state, as in 0.3. Filtering still **MUST NOT** change the model or the findings.
+
+```json
+"filters": { "archived": { "label": "Show archived", "control": "switch", "persist": true,
+  "appliesTo": ["Item"], "keep": "value || self.status != 'archived'" } }
+```
+
+A board's switch hides archived items until it is turned on, and is still on when the file is next opened, on any machine.
 ### 6.14 Icons
 
 `notation.icons` declares icons used by tools, nodes, badges and labels.
@@ -2965,7 +3024,7 @@ Context tools appear next to the selected element (a "quick bar" or radial menu)
 | `tools`     | ContextTool[]                                 | Items.                                    |
 | `runSingle` | bool                                          | When exactly one entry is available, run it without showing the set. Default `false`. |
 
-ContextTool kinds: `create-connected` (create a node of type `creates` connected via relation `via`, placed at `position` using the layout's spacing; `direction` `outgoing` or `incoming`), `connect` (start an edge of type `via` from this element), `create-child` (create a child of `creates` in `slot`), `operation`, `delete`, `duplicate`, `editLabel`, `openForm`, `plugin`, `moveUp` and `moveDown` (move the element one place earlier or later among its siblings with the `reorder` action, 9.4). All kinds accept `label`, `doc`, `icon`, `shortcut`, `enabled`, `position`, `visible`, `unavailable` and `group`:
+ContextTool kinds: `pin`, `unpin` and `unpinAll` (*DISL 0.4*, below), `create-connected` (create a node of type `creates` connected via relation `via`, placed at `position` using the layout's spacing; `direction` `outgoing` or `incoming`), `connect` (start an edge of type `via` from this element), `create-child` (create a child of `creates` in `slot`), `operation`, `delete`, `duplicate`, `editLabel`, `openForm`, `plugin`, `moveUp` and `moveDown` (move the element one place earlier or later among its siblings with the `reorder` action, 9.4). All kinds accept `label`, `doc`, `icon`, `shortcut`, `enabled`, `position`, `visible`, `unavailable` and `group`:
 
 | Property      | Type       | Description                                                                                                                                  |
 |---------------|------------|----------------------------------------------------------------------------------------------------------------------------------------------|
@@ -2999,6 +3058,14 @@ Right-click **context menus** are defined the same way under `toolbox.contextMen
 ```
 
 A hype cycle trigger's menu shows Rename… and Remove, then, set apart, Arrange diagram.
+
+**Pin and unpin** *(DISL 0.4)*. Three standard entries change which elements an automatic layout leaves where they are (10, `respect: "pinned"`); each is one edit when `pinned` is stored view data (11.6), and viewer state otherwise:
+
+- `pin`: pins the element at its current position. Offered for a node that is not pinned; default label "Lock position".
+- `unpin`: removes the element's pin and its stored position, after which the layout places it. Offered for a pinned node; default label "Unlock position".
+- `unpinAll`: in a set for `"diagram"` only; unpins every pinned element of the view, as one edit. Unavailable while nothing is pinned, with the reason the runtime gives; default label "Unlock all positions".
+
+A runtime **MUST** offer `pin` and `unpin` only where the specification lists them, and **MUST** refuse them for an element whose id is ephemeral (11.5.3). The `view` action sets `pinned` for the same effect (9.4).
 
 **Move up and move down.** `moveUp` at the first position among the siblings and `moveDown` at the last **MUST** be unavailable, with the reason `behavior.messages` gives for `std.atStart` or `std.atEnd` (9.1), or else the runtime's sentence. They are refused like any reorder by `reorder` gesture constraints (8.4).
 
@@ -3804,7 +3871,8 @@ Actions are a small, closed set of declarative steps. **All values in actions ar
 | `retype`    | `{ "retype": { "to": expr, "target": expr } }`                                                                            | Change the type, keeping compatible attributes and relations.                |
 | `reparent`  | `{ "reparent": { "target": expr, "parent": expr, "slot": expr, "after": expr, "before": expr } }`                          | `after` or `before` places it next to a sibling (below).                     |
 | `reorder`   | `{ "reorder": { "target": expr, "by": expr } }`, or with `after` or `before` in place of `by`                             | Change only the element's place among its siblings: `by` a signed number of places (−1 is one earlier), or directly after or before a sibling. |
-| `view`      | `{ "view": { "collapsed": expr, "filters": { "<id>": expr }, "viewpoint": expr }, "target": expr }`                        | Change viewer state (11.6) of `target` (default `self`): its collapsed state, the canvas filters' values (6.13.1), or the viewpoint variant shown (3.5). |
+| `view`      | `{ "view": { "collapsed": expr, "filters": { "<id>": expr }, "viewpoint": expr, "pinned": expr, "groups": { "<key>": expr } }, "target": expr }` | Change view data (11.6) of `target` (default `self`): its collapsed state, the canvas filters' values (6.13.1), the viewpoint variant shown (3.5), and *(DISL 0.4)* whether it is pinned (7.3) and the collapse state of its groups by group key (6.9). |
+| `open`      | `{ "open": expr }`                                                                                                        | *(DISL 0.4)* Open a link (below).                                                                                     |
 | `let`       | `{ "let": { "name": expr } }`                                                                                             | Bind a variable for later actions.                                           |
 | `if`        | `{ "if": expr, "then": [ … ], "else": [ … ] }`                                                                            | Conditional.                                                                 |
 | `forEach`   | `{ "forEach": expr, "as": "item", "do": [ … ] }`                                                                          | Iterate a list (bounded: lists are finite).                                  |
@@ -3835,7 +3903,20 @@ Every action MAY carry `when` (skip unless true) and `doc`.
 
 **Reorder.** A `reorder` action **MUST** change only the order among siblings and is a `reorder` gesture (8.4), refused by `reorder` constraints. A `by` that would move the element past the first or last place is an error that rolls the transaction back; `moveUp` and `moveDown` (7.3) are unavailable at the ends instead.
 
-**View actions.** A `view` action **MUST** change viewer state only. It is allowed in read-only mode, is never persisted and never enters the undo history. An operation whose actions are all `view`, `select`, `reveal` and `highlight` actions **MUST** be offered in read-only mode and **MUST NOT** create an undo step. A `set` action on a `transient: "viewer"` attribute (4.3) follows the same rules.
+**View actions.** *(DISL 0.4)* A `view` action that changes a kind of stored view data (`pinned`, `groups`, or a filter with `persist`, 11.6) is an edit: it is written, enters the undo history with the operation it belongs to, and is refused in read-only mode. Setting `pinned` to true pins the target at its current position; setting it to false removes the pin and the stored position. Setting a group's state to its default removes the stored state (6.9). The rest of this paragraph is the 0.3 rule for viewer state. A `view` action **MUST** change viewer state only. It is allowed in read-only mode, is never persisted and never enters the undo history. An operation whose actions are all `view`, `select`, `reveal` and `highlight` actions **MUST** be offered in read-only mode and **MUST NOT** create an undo step. A `set` action on a `transient: "viewer"` attribute (4.3) follows the same rules.
+
+**Open** *(DISL 0.4)*. `open` takes a link, a string, and **MUST** treat it as follows, never following a link the user did not activate:
+
+- An `http` or `https` URI is opened in the platform's browser, in a new tab or window, without giving the opened page access to the runtime (no opener, no referrer).
+- A path (4.2, `paths`) is resolved against the folder of the diagram's file when relative. When it lies inside the workspace the host shows, the host reveals it there, and opens it when it is a file the host has a tool for. Otherwise the host shows the path, says why it was not opened, and offers to copy it.
+- Anything else is not opened; the action is refused with a reason that names the link.
+
+`open` changes no model, no view data and no history, and is allowed in read-only mode.
+
+```json
+"openLink": { "label": "Open link", "for": ["Item"], "enabled": "self.link != ''",
+  "actions": [ { "open": "self.link" } ] }
+```
 
 ```json
 "toggleFold": { "label": { "cel": "self.view.collapsed ? 'Expand' : 'Collapse'" }, "for": ["Node"],
@@ -3941,7 +4022,7 @@ A Databricks job plays a mock run wave by wave: a task starts once its upstream 
 
 ## 10. Layer 7 — Layout
 
-Automatic layout arranges nodes and routes edges. DISL names layout algorithms, passes options, and declares when layout runs and how it interacts with user placement and bound coordinates. It does not define the algorithms it names, with three exceptions *(DISL 0.3)*: `rowPacked`, `rows` and `tidyTree` are **standard algorithms**, defined in 10.1 to 10.3, whose results are normative so that every runtime draws the same diagram; each takes its options in a LayoutConfig property of its own name.
+Automatic layout arranges nodes and routes edges. DISL names layout algorithms, passes options, and declares when layout runs and how it interacts with user placement and bound coordinates. It does not define the algorithms it names, with three exceptions *(DISL 0.3)*: `rowPacked`, `rows` and `tidyTree` are **standard algorithms**, defined in 10.1 to 10.3, whose results are normative so that every runtime draws the same diagram; each takes its options in a LayoutConfig property of its own name. *(DISL 0.4)* `force` with `tiers` (10.4) is not fully defined, but its result **MUST** have the properties 10.4 lists.
 
 ```json
 {
@@ -3988,6 +4069,7 @@ Automatic layout arranges nodes and routes edges. DISL names layout algorithms, 
 | `scope`           | `"all"`, `"selection"`, `"component"`  | Default scope when invoked.                                                                                                                                                                                                                                                                                                |
 | `includeViewOnly` | bool                                   | Whether notes and annotations take part.                                                                                                                                                                                                                                                                                   |
 | `rowPacked`, `rows`, `tidyTree` | RowPacked, RowsLayout, TidyTree | *(DISL 0.3)* The options of the standard algorithm of that name (10.1 to 10.3); given only with that `algorithm`. |
+| `force`           | ForceLayout                            | *(DISL 0.4)* The options of `force` (10.4); given only with that `algorithm`. |
 | `doc`             | Doc                                    |                                                                                                                                                                                                                                                                                                                            |
 
 **Interaction with coordinate systems.** Layout only assigns coordinates whose PlacementSource is `free` or `layout`. Bound coordinates (a task's start date) are never changed by layout; algorithms receive them as fixed constraints. For example, `"lanes"` on a schedule keeps x (time) fixed and only packs y within bands. Layout results are snapped with the rules of the coordinate system unless `options["dedl.snap"]` is `false`.
@@ -4092,6 +4174,38 @@ Three trends from 1800 to 1850, 1840 to 1900 and 1860 to 1900 on rows 0, 1 and 2
 
 An agent behavior model draws its tree top-down, its nodes 200 by 60: neighbouring subtrees 28 apart, each row of children 56 below its parent's bottom edge, and several roots side by side on one row, 56 apart. A node dragged past its sibling's centre swaps places with it in the Markdown, and a row dragged down keeps its new height for itself and everything beneath it; a row dragged up stops with its top 16 below its parent's bottom.
 
+
+---
+
+### 10.4 Force layout in tiers (`force` with `tiers`) *(DISL 0.4)*
+
+`force` pulls related elements together and pushes all elements apart. With `tiers` it also radiates by element type, from the centre outwards, as a picture of projects, then their work, then who does it and where, reads. **ForceLayout** (`$defs/ForceLayout`), the LayoutConfig property `force`:
+
+| Property  | Type                  | Default | Description |
+|-----------|-----------------------|---------|-------------|
+| `tiers`   | (TypeRef or TypeRef[])[] | –    | Node types from the centre outwards: the first entry is the centre, each next one a ring further out. An entry that is a list puts several types on one ring. A node type in no entry is placed by forces alone. |
+| `gap`     | number                | 24      | The least distance, in canvas units, between the bounds of any two nodes the layout places. |
+| `doc`     | Doc                   |         | |
+
+The algorithm itself is not defined here: a specification that uses `tiers` **SHOULD** describe a reference algorithm, with its numbers, where a second host can read it (its companion document), so that hosts draw close pictures. Whatever algorithm a runtime uses, its result **MUST** have these properties:
+
+1. **Tiers.** For two nodes of different tiers, both placed by the layout, the one of the inner tier is no further from the centre than the one of the outer tier, measured from the centre of their bounds to the centroid of the first tier's nodes (or the origin when the first tier is empty). A node without relations is still placed on its tier's ring.
+2. **No overlap.** No two nodes' bounds, each grown by `gap / 2`, intersect, whatever their sizes; this **MUST** hold again after a node's size changes (a group expanded, 6.9), by running the layout again.
+3. **Pinned nodes stay.** Under `respect: "pinned"`, a pinned node keeps its stored position and acts on the others as a fixed point; the layout **MUST NOT** move it, and property 2 is met by moving the others.
+4. **The same input, the same picture.** Opened from the same model and view data, the result **MUST** be the same on every run and every machine: the start positions follow from the tiers and the model order, the number of iterations is fixed, and nothing is random.
+5. **Little movement.** When the model changes while the view is open, the layout **MUST** start from the positions on screen rather than from the computed start, so that nodes the change does not touch move as little as the forces allow. The result after a run of live changes may therefore differ from the result the same model gives when opened (property 4 is about opening).
+6. **Positions are not data.** The positions the layout computes are not view data: they **MUST NOT** be written, unless the user pins a node (7.3).
+
+**A drag pins.** Under `respect: "pinned"` with a `trigger` other than `manual`, dragging a node the layout placed **MUST** pin it where it was dropped, as one edit with the move; dropping a new node from the toolbox pins it at the drop point. A node added by any other means (an edit of the file, an operation) is not pinned.
+
+```json
+"layout": {
+  "algorithms": { "rings": { "algorithm": "force", "force": { "tiers": ["Board", "Item", ["Person", "Team"]], "gap": 32 } } },
+  "default": "rings", "trigger": "onChange", "respect": "pinned", "animate": { "durationMs": 250 }
+}
+```
+
+Boards sit in the middle, their items around them and the people and teams who work on them outermost; a person dragged into a corner stays there and the others arrange themselves around.
 
 ---
 
@@ -4281,7 +4395,7 @@ A mind map node without an id gets `ID_` and a new id in memory, written with th
 
 ### 11.6 View data and style overrides
 
-`view.store` lists which kinds of view data are persisted: `bounds`, `waypoints`, `anchors`, `labelOffsets`, `collapsed`, `zIndex`, `rotation`, `params`, `ports`, `viewport`, `guides`, `pinned`, `settings`. Anything not listed is recomputed on load (by layout or defaults). A pure layout-driven language stores nothing but the model. DID, section 5, specifies the stored form.
+`view.store` lists which kinds of view data are persisted: `bounds`, `waypoints`, `anchors`, `labelOffsets`, `collapsed`, `zIndex`, `rotation`, `params`, `ports`, `viewport`, `guides`, `pinned`, `settings`, and *(DISL 0.4)* `groups` (the collapse states of a node's compartment groups, 6.9, by element and group key) and `filters` (the values of the canvas filters with `persist`, 6.13.1). Anything not listed is recomputed on load (by layout or defaults). A pure layout-driven language stores nothing but the model. DID, section 5, specifies the stored form.
 
 `view.styleOverrides` is `"none"` (default), `"all"`, or a list of style property paths users may override per element (`"fill"`, `"stroke.color"`, `"stroke.dash"`, `"font.size"`). Overrides are stored in `NodeView.style` / `EdgeView.style` and have the highest precedence (6.1).
 
@@ -4311,6 +4425,32 @@ No view data or style override is stored for an element with an ephemeral id (11
 ```
 
 A mind map's folds are each viewer's own, seeded from the file's folded flags the first time a viewer opens it; folding is allowed in read-only mode and is never undone. Without `viewer`, kinds not in `store` are recomputed on load, as in 0.1.
+
+**View data in the body** *(DISL 0.4)*. With `format: "fbl"`, view data is stored in the registration FBL defines (11.2), unless `view.bind` binds a stored kind onto entries of the body itself, which suits a file whose view data travels with it. `bind` maps a kind to a **ViewBind** (`$defs/ViewBind`):
+
+| Property     | Type                         | Description |
+|--------------|------------------------------|-------------|
+| `type`       | binding type                 | **Required.** The binding's type whose entries hold this kind. |
+| `element`    | binding attribute            | The attribute naming the element the entry is about, a reference by id. Required except for `filters`. |
+| `x`, `y`     | binding attribute            | `pinned`: the stored position, in the coordinates of the node's placement. |
+| `group`, `collapsed` | binding attribute    | `groups`: the group key (6.9) and its stored state. |
+| `values`     | map filter id → binding attribute | `filters`: the attribute holding each kept filter's value. |
+| `doc`        | Doc                          | |
+
+- The kinds that may be bound are `pinned` (an element is pinned exactly while an entry names it, and its position is the entry's), `groups` and `filters`. A bound kind **MUST** be listed in `view.store`.
+- A bound type is not part of the model: it **MUST NOT** be a metamodel type or a `typeMap` key with `as` naming one, its entries are not elements, and CEL reads them only as view data (`self.view.pinned`, a group's state, `filterValue()`). An entry is identified by the element it names and, for `groups`, the group key; where a host needs an id for it, it is `pinned:<element>` or `groups:<element>#<key>`. For `filters`, the type **MAY** be a type `typeMap` maps to the diagram (`as: "diagram"`), whose bound attributes are then mapped to `null`.
+- Changing bound view data is planned as the add, set or remove of such an entry (FBL section 6.4), in the same edit as the gesture, and is undone with it. An entry for an element that does not exist, or a second entry for the same key, is ignored and **MUST NOT** be reported; the runtime removes it with its next write of the body, and removing an element removes its entries in the same edit.
+- Entries change when the body changes from outside like any other entry (FBL section 7.3): the view follows them.
+
+```json
+"view": { "store": ["pinned", "groups", "filters"],
+  "bind": {
+    "pinned":  { "type": "Placement",  "element": "element", "x": "x", "y": "y" },
+    "groups":  { "type": "GroupState", "element": "element", "group": "group", "collapsed": "collapsed" },
+    "filters": { "type": "Board", "values": { "archived": "showArchived" } } } }
+```
+
+A board's file keeps a pinned item as `placements: [{ element: i7, x: 240, y: -80 }]`, a group opened against its default as `groups: [{ element: i7, group: pending, collapsed: false }]`, and the archived switch as the root key `showArchived`.
 
 ### 11.7 Ordering, precision and canonical form
 
@@ -4628,7 +4768,7 @@ An RDF graph shows prefixed names through its Turtle plugin, which knows the fil
 6. **Flatten inheritance**: compute C3 linearisations; merge attributes, ports, containment; check narrowing rules (4.7).
 7. **Derive built-ins**: generate built-in constraints (8.7), default notations, default forms and the default toolbox where absent.
 8. **Compile CEL**: parse and type-check every expression in its context (12.3); estimate costs against `language.limits.celCost`; check user functions for recursion other than the bounded self-recursion of 3.4, and plugin function names for clashes (13.1.1).
-9. **Check semantic rules** not expressible in JSON Schema: reserved attribute names, placement attribute types compatible with axes, snapping rules compatible with axis kinds, `x2` vs `width` exclusivity, handle parameters exist, label `editable` requires attribute binding, exactly one of `path`/`parts`/`svg`/`plugin` in shapes, and all other MUST statements of this document.
+9. **Check semantic rules** not expressible in JSON Schema: reserved attribute names, placement attribute types compatible with axes, snapping rules compatible with axis kinds, `x2` vs `width` exclusivity, handle parameters exist, label `editable` requires attribute binding, exactly one of `path`/`parts`/`svg`/`plugin` in shapes, *(DISL 0.4)* a compartment's `groupBy` names an enumeration attribute of every item type and its `collapsed` keys are values of that enumeration, a `force` layout's `tiers` name node types, `view.bind` is used only with `format: "fbl"` for kinds `view.store` lists, and all other MUST statements of this document.
 10. **Build** the runtime model.
 
 Validators report every error or warning in a specification with the JSON Pointer of its location, a severity (`error` makes the specification unusable; `warning` does not) and a message.
@@ -5944,6 +6084,32 @@ Five more constructs became standard on 2026-10-06, by Peter's ruling ("Spec all
 | `oncePerGroup` on a built-in: a group of duplicates reported once, at its second or its last member | `x-builtIn.oncePerGroup` | 8.1, 8.7 | `BuiltInSetting.oncePerGroup` |
 | `detail.violation` of `std.endpoints` (`source`, `target`, `selfLoop` or `parallel`), which a computed `code` reads | read as `detail.?violation`, not listed | 8.7 | – |
 
+## Changes from 0.3
+
+DISL 0.4 (draft, 2026-10-09) adds the constructs listed below, approved by the product owner with the Agent activity diagram's design on 2026-10-09 (its language decisions L1 to L7, and L9 ruled in chat the same day); each is optional, and its absence is the 0.3 behaviour. Every valid 0.3 specification is a valid 0.4 specification with the same meaning, apart from the clarifications in the second table.
+
+| Construct | Section | Schema |
+|-----------|---------|--------|
+| `paths` on a `uri` attribute: a path, absolute or relative to the file, as well as a URI (L6) | 4.2 | `Attribute.paths` |
+| `groupBy` on a compartment, with a collapse default per value (L1) | 6.9 | `Compartment.groupBy`, `$defs/GroupBy` |
+| A declared collapse state is the default; a stored state wins and is stored only while it differs (L2) | 6.9, 11.6 | – |
+| `itemOrder` on a compartment (L9) | 6.9 | `Compartment.itemOrder` |
+| `itemLink` on a compartment; a badge with `onClick` is focusable and activatable (L6) | 6.9 | `Compartment.itemLink` |
+| `persist` on a canvas filter, and the view kind `filters` in `view.store` (L3) | 6.13.1, 11.6 | `Filter.persist`, `$defs/ViewKind` |
+| The standard context entries `pin`, `unpin` and `unpinAll`; `pinned` on the `view` action; a drag pins under `respect: "pinned"` (L4) | 7.3, 9.4, 10.4 | `ContextTool.kind`, `Action.view.pinned` |
+| `groups` on the `view` action, and the view kind `groups` (L1, L2) | 9.4, 11.6 | `Action.view.groups`, `$defs/ViewKind` |
+| The `open` action (L6) | 9.4 | `Action.open` |
+| `force` with `tiers`, and the properties its result must have (L5) | 10.4 | `LayoutConfig.force`, `$defs/ForceLayout` |
+| `view.bind`: stored view data kept in entries of a format binding's body (L7) | 11.6 | `Persistence.view.bind`, `$defs/ViewBind` |
+
+| # | Change | 0.3 said | 0.4 says | Reason | Section |
+|---|--------|----------|----------|--------|---------|
+| 1 | A `view` action on stored view data | Changes viewer state only: never persisted, never undone. | A change to a stored kind (`pinned`, `groups`, a kept filter) is an edit: written, undone with its operation, refused in read-only mode. Viewer state keeps the 0.3 rule. | Locking a position and folding a group are kept in the file and undone like any edit. | 9.4 |
+| 2 | A compartment's `collapsed` | The collapse state, persisted in view data. | The default of the state; the stored state wins, and is stored only while it differs from the default. | A group nobody touched follows the specification, and the file stays small. | 6.9 |
+| 3 | Where view data of a format binding lives | In the registration (FBL section 8.3). | In the registration, unless `view.bind` binds a kind into the body. | A file agents write carries the user's arrangement with it. | 11.2, 11.6 |
+
+DISL 0.4 needs no change to FBL: a bound view kind is an ordinary entry of the body (FBL section 5), planned, undone and reloaded as any other. The worked example [`work-board.dis`](work-board.dis), with its binding [`../fbl/work-board.fbl`](../fbl/work-board.fbl), uses every construct of the first table.
+
 ---
 
 ## 18. Deprecated aliases
@@ -5985,15 +6151,15 @@ Rules that JSON Schema cannot express — name resolution, CEL type checking, in
 | Top level             | `Specification`, `Language`, `Import`, `Function`, `Viewpoint`, `Plugin`, **`Budget`**, **`BudgetWithhold`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | 1 · Metamodel         | `Metamodel`, `Attribute`, `DataType`, `Enum`, `EnumValue`, `NodeType`, `Containment`, `PortType`, `RelationType`, `RelationEnd`, **`OutOfRange`**, **`DerivedNode`**, **`DerivedRelation`**, *`NeighbourBounds`*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | 2 · Coordinates       | `Coordinates`, `Axis`, `AxisRef`, `Calendar`, `Category`, `Ruler`, `ZoomLevel`, `CoordinateSystem`, `GridDisplay`, `Guides`, `Placement`, `PlacementSource`, `Anchor`, `Snapping`, `SnappingRef`, `SnapRule`, `SnapRuleObject`, `AxisRules`, **`AxisRange`**, **`RulerTicks`**                                                                                                                                                                                                                                                                                                                                                                                             |
-| 3 · Notation          | `Notation`, `Theme`, `Paint`, `Gradient`, `Pattern`, `ImagePaint`, `Stroke`, `DashStyle`, `LineEffect`, `Font`, `Style`, `StyleRef`, `StyleRefs`, `States`, `Conditions`, `IconDef`, `IconRef`, `ShapeRef`, `ShapeInstance`, `ShapeDef`, `ShapeParam`, `PathDef`, `PathSegment`, `ShapePart`, `Handle`, `ScaleMode`, `Position`, `Label`, `Compartment`, `NodeIcon`, `Badge`, `PortNotation`, `AnchorSpec`, `ContainerSpec`, `SizeSpec`, `EmbeddedForm`, `LodRule`, `NodeNotation`, `NodeVariant`, `MarkerDef`, `MarkerInstance`, `MarkerRef`, `MidMarker`, `Routing`, `LineSpec`, `EndAnchor`, `EdgeNotation`, `EdgeVariant`, `Canvas`, **`ContrastRequirement`**, **`TextMetric`**, **`BadgeLayout`**, **`GestureRefusals`**, **`ConnectGesture`**, **`BezierSpec`**, **`Stub`**, **`ChromeBand`**, **`Notice`**, **`Filter`**, **`EmptyMessage`**, **`LegendComputed`**, *`GesturePointer`* |
+| 3 · Notation          | `Notation`, `Theme`, `Paint`, `Gradient`, `Pattern`, `ImagePaint`, `Stroke`, `DashStyle`, `LineEffect`, `Font`, `Style`, `StyleRef`, `StyleRefs`, `States`, `Conditions`, `IconDef`, `IconRef`, `ShapeRef`, `ShapeInstance`, `ShapeDef`, `ShapeParam`, `PathDef`, `PathSegment`, `ShapePart`, `Handle`, `ScaleMode`, `Position`, `Label`, `Compartment`, ***`GroupBy`***, `NodeIcon`, `Badge`, `PortNotation`, `AnchorSpec`, `ContainerSpec`, `SizeSpec`, `EmbeddedForm`, `LodRule`, `NodeNotation`, `NodeVariant`, `MarkerDef`, `MarkerInstance`, `MarkerRef`, `MidMarker`, `Routing`, `LineSpec`, `EndAnchor`, `EdgeNotation`, `EdgeVariant`, `Canvas`, **`ContrastRequirement`**, **`TextMetric`**, **`BadgeLayout`**, **`GestureRefusals`**, **`ConnectGesture`**, **`BezierSpec`**, **`Stub`**, **`ChromeBand`**, **`Notice`**, **`Filter`**, **`EmptyMessage`**, **`LegendComputed`**, *`GesturePointer`* |
 | 4 · Toolbox and forms | `Toolbox`, `ToolGroup`, `Tool`, `ContextToolSet`, `ContextTool`, `Template`, `FragmentNode`, `FragmentRelation`, `Form`, `FormItem`, `FieldValidation`, **`CreateEnd`**, **`DropSpec`**, **`DropTarget`**, *`FieldParse`*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | 5 · Constraints       | `Constraints`, `Constraint`, `QuickFix`, **`BuiltInSetting`**, **`SourceLocation`**, **`Finding`**, **`ValidatorOutput`**                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | 6 · Behavior          | `Behavior`, `Hook`, `Operation`, `Action`, `DeletionPolicy`, **`Confirmation`**, **`Simulation`**, *`ParentPlacement`*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| 7 · Layout            | `Layout`, `LayoutConfig`, *`RowPacked`*, *`RowsLayout`*, *`TidyTree`*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| 8 · Persistence       | `Persistence`, `Migration`, `MigrationStep`, **`IdStrategy`**, **`IdRule`**, **`ViewKind`**, *`TypeMapEntry`*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| 7 · Layout            | `Layout`, `LayoutConfig`, *`RowPacked`*, *`RowsLayout`*, *`TidyTree`*, ***`ForceLayout`***                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| 8 · Persistence       | `Persistence`, `Migration`, `MigrationStep`, **`IdStrategy`**, **`IdRule`**, **`ViewKind`**, *`TypeMapEntry`*, ***`ViewBind`***                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | Documents             | `Document`, `ElementRecord`, `RelationRecord`, `ViewRecord`, `NodeView`, `EdgeView`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
-In total the schema has 178 `$defs` entries; the 35 in bold are new in 0.2 and the 8 in italics in 0.3, and `Finding` and `ValidatorOutput` describe what a headless validator prints (8.6), not a specification. The stored-diagram structures `Document`, `ElementRecord`, `RelationRecord`, `ViewRecord`, `NodeView` and `EdgeView` of the earlier combined schema moved to DID's schema.
+In total the schema has 181 `$defs` entries; the 35 in bold are new in 0.2, the 8 in italics in 0.3 and the 3 in bold italics in 0.4, and `Finding` and `ValidatorOutput` describe what a headless validator prints (8.6), not a specification. The stored-diagram structures `Document`, `ElementRecord`, `RelationRecord`, `ViewRecord`, `NodeView` and `EdgeView` of the earlier combined schema moved to DID's schema.
 
 ### A.3 Excerpt: snapping
 
@@ -6812,6 +6978,8 @@ The algorithms whose results DISL defines *(DISL 0.3)*. Every other name of sect
 | `rows`      | `rows`           | nothing but the attributes in `writes`        | yes, `writes` only, as one undo step     | 10.2    |
 | `tidyTree`  | `tidyTree`       | both axes, from containment and model order   | only by a drag: order, and stored rows with `rows.stored` | 10.3 |
 
+*(DISL 0.4)* `force` with `tiers` (10.4) is not in this table: its result must have the properties 10.4 lists, but the positions themselves are the runtime's.
+
 ---
 
 ## Appendix C — Glossary
@@ -6885,4 +7053,4 @@ The questions 0.1 left open, and what 0.2 did with them. Items marked *answered*
 6. **Bidirectional text formats:** declaring a textual syntax (grammar) alongside the graphical one, to support round-tripping with textual DSLs such as PlantUML or Mermaid.
 7. **Accessibility conformance:** measurable requirements (contrast ratios of built-in tokens, keyboard coverage) as a conformance class of its own. *Partly answered in 0.2*: a specification can state and have validated the contrast of its own tokens (6.2); a conformance class is still open.
 8. **Constraint explanations:** machine-generated explanations of why a CEL rule failed (counterexample elements), beyond the declared `target`. *Partly answered in 0.2*: one finding per failing item with `forEach` (8.2), cycles named in loop order (12.4), `detail` in built-in messages and `violation` in built-in refusals (8.1), and reasons for every refusal (2.3); machine-generated counterexamples are still open.
-9. **Layouts:** declaring layout algorithms themselves (layered, banded, row-packed, compact, radial) rather than naming them for a plugin to supply (section 10), so that every host arranges a diagram the same way. The next open question after 0.2.
+9. **Layouts:** declaring layout algorithms themselves (layered, banded, row-packed, compact, radial) rather than naming them for a plugin to supply (section 10), so that every host arranges a diagram the same way. The next open question after 0.2. *Partly answered in 0.3 and 0.4*: three standard algorithms (10.1 to 10.3), and the properties a tiered force layout's result must have (10.4); a fully defined force layout is still open.
