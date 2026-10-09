@@ -198,7 +198,7 @@
               "key": "name",
               "empty": "refuse"
             },
-            "item": {
+            "assignedTo": {
               "key": "item",
               "empty": "remove",
               "reference": {
