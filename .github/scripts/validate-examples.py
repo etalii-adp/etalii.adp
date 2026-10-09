@@ -28,6 +28,7 @@ Prints one line per example and exits 1 when any example is invalid or names an 
 """
 import json
 import sys
+import xml.etree.ElementTree as ElementTree
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
@@ -44,8 +45,11 @@ FBL = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Document"
 DESL = "https://etalii.net/adp/desl/schema/0.1/desl.schema.json#/$defs/Specification"
 FBL_REGISTRATION = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Registration"
 FBL_FIXTURE = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Fixture"
+KNOWLEDGE = "https://etalii.net/adp/definitions/designers/knowledge.schema.json"
 CURRENT_EXTENSIONS = {".dis": DISL, ".did": DID, ".fbl": FBL, ".des": DESL}
-CURRENT_VERSION_KEYS = {"disl": DISL, "did": DID, "fbl": FBL, "desl": DESL}
+CURRENT_VERSION_KEYS = {"disl": DISL, "did": DID, "fbl": FBL, "desl": DESL, "knowledge": KNOWLEDGE}
+# A designer's examples are documents in the formats its bindings read (definitions/designers/examples/).
+designer_examples = repository / "definitions" / "designers" / "examples"
 
 # Alias table: each deprecated identifier and the current schema reference it is read as.
 LEGACY = "https://etalii.net/adp/dedl/schema/0.1/dedl.schema.json"
@@ -61,7 +65,7 @@ PREVIOUS_SCHEMA_IDS = {
 }
 
 schemas = {}
-for path in sorted(root.rglob("*.schema.json")):
+for path in sorted([*root.rglob("*.schema.json"), *(repository / "definitions").rglob("*.schema.json")]):
     schema = json.loads(path.read_text(encoding="utf-8"))
     schemas[schema["$id"]] = schema
 registry = Registry().with_resources(
@@ -80,7 +84,125 @@ def is_example(path: Path) -> bool:
         return is_fbl_file(path)
     if is_fbl_file(path) and "fixtures" in path.relative_to(root / "fbl").parts and path.name != "fixture.json":
         return False  # a fixture's input and expected bodies are checked through its fixture.json
+    if designer_examples in path.parents and path.suffix in (".yaml", ".yml", ".xml"):
+        return True
     return path.suffix in CURRENT_EXTENSIONS or path.suffix in ALIAS_EXTENSIONS or path.suffix == ".json"
+
+
+KNOWLEDGE_BOOLEANS = {"title", "computed", "parent", "visible", "wrap", "hideEmptyGroups", "checked"}
+KNOWLEDGE_NUMBERS = {"width", "number"}
+
+
+def knowledge_from_xml(text: str):
+    """Reads a knowledge file's XML form into its YAML and JSON form (knowledge.md, section 3), so that one schema and
+    one check serve the three."""
+    root_element = ElementTree.fromstring(text)
+
+    def attributes(element):
+        out = {}
+        for key, value in element.attrib.items():
+            if key in KNOWLEDGE_BOOLEANS:
+                out[key] = value == "true"
+            elif key in KNOWLEDGE_NUMBERS:
+                out[key] = float(value) if "." in value else int(value)
+            else:
+                out[key] = value
+        return out
+
+    def listed(entry, key, items):
+        if items:
+            entry[key] = items
+
+    def conditions(element):
+        out = []
+        for child in element:
+            if child.tag == "condition":
+                out.append(attributes(child))
+            elif child.tag == "filterGroup":
+                group = attributes(child)
+                listed(group, "conditions", conditions(child))
+                out.append(group)
+        return out
+
+    table = {"knowledge": root_element.get("version")}
+    table.update({k: v for k, v in attributes(root_element).items() if k != "version"})
+    table["properties"] = []
+    for element in root_element.findall("properties/property"):
+        entry = attributes(element)
+        listed(entry, "options", [attributes(o) for o in element.findall("option")])
+        table["properties"].append(entry)
+    table["views"] = []
+    for element in root_element.findall("views/view"):
+        entry = attributes(element)
+        for key, tag in (("columns", "column"), ("sorts", "sort")):
+            listed(entry, key, [attributes(c) for c in element.findall(tag)])
+        listed(entry, "filter", conditions(element))
+        for key, tag in (("groupOrder", "groupOrder"), ("hiddenGroups", "hiddenGroup"), ("collapsed", "collapsed")):
+            listed(entry, key, [attributes(g) for g in element.findall(tag)])
+        table["views"].append(entry)
+    table["rows"] = []
+    for element in root_element.findall("rows/row"):
+        entry = attributes(element)
+        cells = []
+        for cell_element in element.findall("cell"):
+            cell = attributes(cell_element)
+            listed(cell, "options", [attributes(i) for i in cell_element.findall("item") if "option" in i.attrib])
+            listed(cell, "rows", [attributes(i) for i in cell_element.findall("item") if "row" in i.attrib])
+            cells.append(cell)
+        listed(entry, "cells", cells)
+        table["rows"].append(entry)
+    return table
+
+
+def check_knowledge(table) -> list[str]:
+    """What reading a knowledge example must find nothing of (knowledge.md, section 7): every id a cell, a view
+    setting or the table names is in the file, one property is the title, and no id is used twice."""
+    problems = []
+    properties = {p["id"]: p for p in table.get("properties", [])}
+    options = {o["id"]: p["id"] for p in table.get("properties", []) for o in p.get("options", [])}
+    views = {v["id"] for v in table.get("views", [])}
+    ids = list(properties) + list(options) + [v["id"] for v in table.get("views", [])] + [r["id"] for r in table.get("rows", [])]
+    for duplicate in sorted({i for i in ids if ids.count(i) > 1}):
+        problems.append(f"the id {duplicate!r} is used twice")
+    if sum(1 for p in properties.values() if p.get("title")) != 1:
+        problems.append("the table does not have exactly one title property")
+    if "activeView" in table and table["activeView"] not in views:
+        problems.append(f"/activeView names no view: {table['activeView']!r}")
+
+    def named(pointer, property_id):
+        if property_id not in properties:
+            problems.append(f"{pointer} names no property: {property_id!r}")
+            return None
+        return properties[property_id]
+
+    def option_of(pointer, property_id, option_id):
+        if options.get(option_id) != property_id:
+            problems.append(f"{pointer} names no option of {property_id!r}: {option_id!r}")
+
+    def filter_entries(pointer, entries):
+        for index, entry in enumerate(entries):
+            if "conditions" in entry or "match" in entry:
+                filter_entries(f"{pointer}/{index}/conditions", entry.get("conditions", []))
+            elif named(f"{pointer}/{index}/property", entry["property"]) and "option" in entry:
+                option_of(f"{pointer}/{index}/option", entry["property"], entry["option"])
+
+    for v_index, view in enumerate(table.get("views", [])):
+        for key in ("columns", "sorts"):
+            for index, setting in enumerate(view.get(key, [])):
+                named(f"/views/{v_index}/{key}/{index}/property", setting["property"])
+        filter_entries(f"/views/{v_index}/filter", view.get("filter", []))
+        if "groupBy" in view:
+            named(f"/views/{v_index}/groupBy", view["groupBy"])
+    for r_index, row in enumerate(table.get("rows", [])):
+        for index, cell in enumerate(row.get("cells", [])):
+            pointer = f"/rows/{r_index}/cells/{index}"
+            if not named(f"{pointer}/property", cell["property"]):
+                continue
+            if "option" in cell:
+                option_of(f"{pointer}/option", cell["property"], cell["option"])
+            for i, item in enumerate(cell.get("options", [])):
+                option_of(f"{pointer}/options/{i}/option", cell["property"], item["option"])
+    return problems
 
 
 def parse_registration(data: bytes):
@@ -364,6 +486,19 @@ for path in examples:
     if path.suffix == ".adp":
         document, problem = parse_registration(path.read_bytes())
         reference, aliases = FBL_REGISTRATION, []
+    elif path.suffix in (".yaml", ".yml", ".xml"):
+        try:
+            if path.suffix == ".xml":
+                document = knowledge_from_xml(path.read_text(encoding="utf-8"))
+            else:
+                import yaml  # only the designers' examples need it
+
+                document = yaml.safe_load(path.read_text(encoding="utf-8"))
+        except Exception as error:  # noqa: BLE001 - any parse error fails the example
+            print(f"FAIL {name}: not readable: {error}")
+            failures += 1
+            continue
+        reference, aliases, problem = expected_reference(path, document)
     else:
         try:
             document = json.loads(path.read_text(encoding="utf-8"))
@@ -394,6 +529,11 @@ for path in examples:
     elif reference == FBL_FIXTURE and (problem := replay_fixture(path, document)):
         failures += 1
         print(f"FAIL {name}: {problem}")
+    elif reference == KNOWLEDGE and (problems := check_knowledge(document)):
+        failures += 1
+        print(f"FAIL {name}: {len(problems)} finding(s) on reading")
+        for problem in problems[:10]:
+            print(f"  {problem}")
     elif reference in (FBL, DESL) and (problems := (resolve_names(document) if reference == FBL else resolve_desl(path, document))):
         failures += 1
         print(f"FAIL {name}: {len(problems)} unresolved name(s)")

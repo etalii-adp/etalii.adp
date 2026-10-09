@@ -218,7 +218,7 @@ A **value type** says what a column's cells hold and how the surface treats it:
 | Conversion | From → to | Result |
 |------------|-----------|--------|
 | `written-form` | any → a text type | The value's written form: the text a cell shows. |
-| `parse` | text → number, date, date and time, time | The value parsed in its target type's ISO form; a text that does not parse is not converted. |
+| `parse` | text → number, checkbox, date, date and time, time | The value parsed in its target type's form (a number as JSON writes one, `true` or `false`, ISO 8601); a text that does not parse is not converted. |
 | `match-option` | text → a choice | The option whose name equals the text, ignoring case, created when there is none. |
 | `wrap` | one value → several | The one value as the only item. |
 | `unwrap` | several → one value | The only item, when the cell holds exactly one. |
