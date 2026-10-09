@@ -9,4 +9,4 @@ This folder holds the files for ADP's designer types, the form-based visual layo
 |---|---|---|
 | Knowledge | `etalii/knowledge` | `knowledge.des`, `knowledge.md`, `knowledge.fbl`, `knowledge.schema.json`, `examples/` |
 
-DED, the Designer Definition Language (`.ded`), is still a placeholder ([DED](../../specifications/ded/DED-specification.md)): designer documents are stored through FBL. The words used here are defined in [docs/terminology.md](../../docs/terminology.md).
+A designer's documents are DED definitions ([DED](../../specifications/ded/DED-specification.md)): each begins with DED's envelope, naming DED's version and its designer type, and is read and written through the FBL bindings of its designer type's specification. The words used here are defined in [docs/terminology.md](../../docs/terminology.md).

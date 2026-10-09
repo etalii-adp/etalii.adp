@@ -1,5 +1,6 @@
 {
-  "knowledge": "0.1",
+  "ded": "0.1",
+  "designer": "etalii/knowledge",
   "name": "Cities",
   "activeView": "v1",
   "properties": [

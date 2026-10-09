@@ -22,10 +22,10 @@
 
 ## The two files
 
-A knowledge document is exactly two files: the **knowledge file**, which holds everything, and its **registration** beside it, which only identifies it.
+A knowledge document is exactly two files: the **knowledge file**, which holds everything, and its **registration** beside it, which only identifies it. The knowledge file is a DED 0.1 definition ([DED](../../specifications/ded/DED-specification.md)): it begins with DED's envelope, which names DED's version and the designer type `etalii/knowledge`.
 
 - The registration is an `.adp` file whose first line is `etalii/knowledge`, followed by `body: <file name>` when the names differ (FBL section 8). It holds nothing else: no property, row, view, width or position. Deleting it and creating it again changes nothing; the bindings set `createOnFirstPlacement: false` and store no layout.
-- The knowledge file is YAML (`.yaml`, `.yml`), JSON (`.json`) or XML (`.xml`). Each extension is claimed `shared` and `registrationOnly`: a `.json` file is a knowledge file only when a registration names it, so ordinary YAML, JSON and XML files are never taken for one.
+- The knowledge file is YAML (`.yaml`, `.yml`), JSON (`.json`, or DED's own `.ded`) or XML (`.xml`). Each extension is claimed `shared`, with DED's envelope as its marker (DED section 4): a file is a knowledge file only when its envelope names `etalii/knowledge`, so ordinary YAML, JSON and XML files are never taken for one, and a knowledge file is recognised without its registration.
 - The format is chosen when the document is added, from the three bindings' templates, and is never changed afterwards (DESL section 5): a change of format would rewrite every byte.
 - A new document is one title property named `Name`, one view named `Table` and no rows; its ids are new ShortGuids.
 
@@ -35,7 +35,7 @@ The model is the same in every format; only the writing differs. Names in bracke
 
 | Entry | Holds | Id |
 |---|---|---|
-| The root | `knowledge` (the version, `0.1`), `name`, `activeView` (a view's id) | none: it is the table |
+| The root | DED's envelope, `ded` (`0.1`) and `designer` (`etalii/knowledge`), then `name`, `activeView` (a view's id) | none: it is the table |
 | `properties` | One entry per property, in column order: `id`, `name`, `type` (valueType), `title`, `target` (targetFile), `limit`, `counterpart`, `computed`, `parent` (isParent), and `options` for a selection | stored |
 | `properties/*/options` | One entry per option, in order: `id`, `name`, `colour` | stored |
 | `views` | One entry per view, in tab order: `id`, `name`, `filterMatch`, `columns`, `sorts`, `filter`, `groupBy`, `hideEmptyGroups`, `groupOrder`, `hiddenGroups`, `collapsed` | stored |
@@ -56,11 +56,11 @@ Only `id`, `name` and `type` of a property, `id` and `name` of an option and of 
 
 All three are written with CRLF line endings and two-space indentation when ADP creates them; a file written otherwise keeps its own style, and new entries follow the style of their siblings (FBL section 6.3).
 
-**YAML.** A mapping with the root keys above, then `properties:`, `views:` and `rows:` as block sequences of mappings. A string that would read as something else (a date, a time, a number, `true`) is double-quoted; dates and times are always strings. Keys of a new entry are written in the order of the table above.
+**YAML.** A mapping with the envelope first and the root keys above, then `properties:`, `views:` and `rows:` as block sequences of mappings. A string that would read as something else (a date, a time, a number, `true`) is double-quoted; dates and times are always strings. Keys of a new entry are written in the order of the table above.
 
 **JSON.** One object with the same keys. ADP writes each property, view and row as one line, with its options, settings and cells inside it on that line, so a row is one line of the file and a diff shows one line per changed row. A list written on one line is created with its first item and removed with its last (FBL section 6.2, 0.3). Comments are not allowed in JSON, so a JSON knowledge file has none.
 
-**XML.** The root element `<knowledge version="0.1" name="…" activeView="…">` holds `<properties>`, `<views>` and `<rows>`. Every key becomes an attribute; every list becomes repeated child elements, named in the singular:
+**XML.** The root element is DED's, `<ded version="0.1" designer="etalii/knowledge" name="…" activeView="…">`, and holds `<properties>`, `<views>` and `<rows>`. Every key becomes an attribute; every list becomes repeated child elements, named in the singular:
 
 | YAML and JSON | XML |
 |---|---|
@@ -148,9 +148,9 @@ Reading never fails on content: what cannot be accepted is a finding at its plac
 | `knowledge.parent-cycle` | error | a row that would be its own ancestor through the parent relation | the host: DESL's expressions do not recurse over values |
 | `knowledge.missing-id` | info | a property, option, view or row without an id (section 10) | the host |
 | `knowledge.unknown-key` | info | a key or element the designer does not know; kept | the host |
-| `knowledge.newer-version` | warning | a file whose `knowledge` version is newer than 0.1; it opens read-only | the host |
+| `knowledge.newer-version` | warning | a file whose DED version (`ded`) is newer than 0.1; it opens read-only (DED section 4) | the host |
 
-FBL's and DESL's own findings apply too (DESL section 6.5): an entry that cannot be read is `std.unreadableEntry` and keeps its bytes; a file that is not well-formed is `std.unparseable`, opens empty and read-only, and is never written; a file without the `knowledge` header is unreadable; two entries with one id are `std.duplicateId`.
+FBL's and DESL's own findings apply too (DESL section 6.5): an entry that cannot be read is `std.unreadableEntry` and keeps its bytes; a file that is not well-formed is `std.unparseable`, opens empty and read-only, and is never written; a file without DED's envelope is unreadable; two entries with one id are `std.duplicateId`.
 
 ## Changing a property's type
 
@@ -227,7 +227,8 @@ The examples in [examples/](examples/) are one table, the Cities of the Low Coun
 ### YAML ([examples/cities.yaml](examples/cities.yaml))
 
 ```yaml
-knowledge: "0.1"
+ded: "0.1"
+designer: etalii/knowledge
 # Cities of the Low Countries, kept by hand and by ADP.
 name: Cities
 activeView: v1
@@ -330,7 +331,8 @@ rows:
 
 ```json
 {
-  "knowledge": "0.1",
+  "ded": "0.1",
+  "designer": "etalii/knowledge",
   "name": "Cities",
   "activeView": "v1",
   "properties": [
@@ -358,7 +360,7 @@ rows:
 ### XML ([examples/cities.xml](examples/cities.xml))
 
 ```xml
-<knowledge version="0.1" name="Cities" activeView="v1">
+<ded version="0.1" designer="etalii/knowledge" name="Cities" activeView="v1">
   <!-- Cities of the Low Countries, kept by hand and by ADP. -->
   <properties>
     <property id="p1" name="Name" type="text" title="true"/>
@@ -410,5 +412,5 @@ rows:
       </cell>
     </row>
   </rows>
-</knowledge>
+</ded>
 ```

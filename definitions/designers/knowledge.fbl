@@ -1,21 +1,21 @@
 {
   "$schema": "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Document",
   "fbl": "0.3",
-  "doc": "The knowledge file of the Knowledge designer (definitions/designers/knowledge.des, knowledge.md): one table of typed properties, rows and views, in YAML, JSON or XML, one binding per format family. The file is ADP's own; every id is stored in it, a cell names its property by id and holds its value under a key named for its type, and several values are several entries.",
+  "doc": "The knowledge file of the Knowledge designer (definitions/designers/knowledge.des, knowledge.md): one table of typed properties, rows and views, in YAML, JSON or XML, one binding per format family. Every knowledge file is a DED definition: it opens with `ded` and `designer`, which are also the marker that lets a host recognise it without a registration. The file is ADP's own; every id is stored in it, a cell names its property by id and holds its value under a key named for its type, and several values are several entries.",
   "bindings": {
     "yaml": {
       "title": "Knowledge file, YAML",
       "claims": {
         "extensions": [".yaml", ".yml"],
         "shared": true,
-        "registrationOnly": true,
+        "marker": { "rootKey": "designer", "value": "etalii/knowledge" },
         "origins": ["etalii/knowledge"],
-        "suggest": { "contains": ["knowledge:"] }
+        "suggest": { "contains": ["designer: etalii/knowledge"] }
       },
       "body": { "kind": "file", "family": "yaml" },
       "reader": "declared",
       "text": { "newline": "crlf", "indent": 2, "finalNewline": true, "sequenceIndent": "indented", "quote": "double" },
-      "header": { "key": "knowledge", "value": "0.1", "required": true },
+      "header": { "key": "ded", "value": "0.1", "required": true },
       "elements": [
         {
           "name": "table",
@@ -23,7 +23,8 @@
           "doc": "The root mapping: the table's own settings. A rule at '/' binds the root's keys, as databricks-pipeline.fbl's 'pipeline' rule does.",
           "at": "/",
           "attributes": {
-            "version": { "key": "knowledge", "readOnly": "The version is written when the file is created and changed by nobody but a migration." },
+            "version": { "key": "ded", "readOnly": "The version is written when the file is created and changed by nobody but a migration." },
+            "designer": { "key": "designer", "readOnly": "The designer type is written when the file is created and changed by nobody." },
             "name": { "key": "name", "empty": "keep" },
             "activeView": { "key": "activeView", "empty": "remove", "reference": { "to": ["view"], "by": "id" } }
           }
@@ -282,22 +283,22 @@
       ],
       "registration": { "createOnFirstPlacement": false },
       "template": {
-        "text": "knowledge: \"0.1\"\r\nname: {base}\r\nproperties:\r\n  - id: {newid:property}\r\n    name: Name\r\n    type: text\r\n    title: true\r\nviews:\r\n  - id: {newid:view}\r\n    name: Table\r\n"
+        "text": "ded: \"0.1\"\r\ndesigner: etalii/knowledge\r\nname: {base}\r\nproperties:\r\n  - id: {newid:property}\r\n    name: Name\r\n    type: text\r\n    title: true\r\nviews:\r\n  - id: {newid:view}\r\n    name: Table\r\n"
       }
     },
     "json": {
       "title": "Knowledge file, JSON",
       "claims": {
-        "extensions": [".json"],
+        "extensions": [".json", ".ded"],
         "shared": true,
-        "registrationOnly": true,
+        "marker": { "rootKey": "designer", "value": "etalii/knowledge" },
         "origins": ["etalii/knowledge"],
-        "suggest": { "contains": ["\"knowledge\""] }
+        "suggest": { "contains": ["\"designer\": \"etalii/knowledge\""] }
       },
       "body": { "kind": "file", "family": "json" },
       "reader": "declared",
       "text": { "newline": "crlf", "indent": 2, "finalNewline": true },
-      "header": { "key": "knowledge", "value": "0.1", "required": true },
+      "header": { "key": "ded", "value": "0.1", "required": true },
       "elements": [
         {
           "name": "table",
@@ -305,7 +306,8 @@
           "doc": "The root mapping: the table's own settings. A rule at '/' binds the root's keys, as databricks-pipeline.fbl's 'pipeline' rule does.",
           "at": "/",
           "attributes": {
-            "version": { "key": "knowledge", "readOnly": "The version is written when the file is created and changed by nobody but a migration." },
+            "version": { "key": "ded", "readOnly": "The version is written when the file is created and changed by nobody but a migration." },
+            "designer": { "key": "designer", "readOnly": "The designer type is written when the file is created and changed by nobody." },
             "name": { "key": "name", "empty": "keep" },
             "activeView": { "key": "activeView", "empty": "remove", "reference": { "to": ["view"], "by": "id" } }
           }
@@ -584,24 +586,31 @@
       ],
       "registration": { "createOnFirstPlacement": false },
       "template": {
-        "text": "{\r\n  \"knowledge\": \"0.1\",\r\n  \"name\": \"{base}\",\r\n  \"properties\": [\r\n    { \"id\": \"{newid:property}\", \"name\": \"Name\", \"type\": \"text\", \"title\": true }\r\n  ],\r\n  \"views\": [\r\n    { \"id\": \"{newid:view}\", \"name\": \"Table\" }\r\n  ],\r\n  \"rows\": [\r\n  ]\r\n}\r\n"
+        "text": "{\r\n  \"ded\": \"0.1\",\r\n  \"designer\": \"etalii/knowledge\",\r\n  \"name\": \"{base}\",\r\n  \"properties\": [\r\n    { \"id\": \"{newid:property}\", \"name\": \"Name\", \"type\": \"text\", \"title\": true }\r\n  ],\r\n  \"views\": [\r\n    { \"id\": \"{newid:view}\", \"name\": \"Table\" }\r\n  ],\r\n  \"rows\": [\r\n  ]\r\n}\r\n"
       }
     },
     "xml": {
       "title": "Knowledge file, XML",
-      "claims": { "extensions": [".xml"], "shared": true, "registrationOnly": true, "origins": ["etalii/knowledge"], "suggest": { "contains": ["<knowledge"] } },
+      "claims": {
+        "extensions": [".xml"],
+        "shared": true,
+        "marker": { "pattern": "^<ded\\s[^>]*designer=\"etalii/knowledge\"" },
+        "origins": ["etalii/knowledge"],
+        "suggest": { "contains": ["designer=\"etalii/knowledge\""] }
+      },
       "body": { "kind": "file", "family": "xml" },
       "reader": "declared",
       "text": { "newline": "crlf", "indent": 2, "finalNewline": true },
-      "header": { "line": "^<knowledge(?:\\s|/|>)", "required": true },
+      "header": { "line": "^<ded(?:\\s|/|>)", "required": true },
       "elements": [
         {
           "name": "table",
           "type": "Table",
           "doc": "The root element: the table's own settings.",
-          "at": "/knowledge",
+          "at": "/ded",
           "attributes": {
             "version": { "attribute": "version", "readOnly": "The version is written when the file is created and changed by nobody but a migration." },
+            "designer": { "attribute": "designer", "readOnly": "The designer type is written when the file is created and changed by nobody." },
             "name": { "attribute": "name", "empty": "keep" },
             "activeView": { "attribute": "activeView", "empty": "remove", "reference": { "to": ["view"], "by": "id" } }
           }
@@ -609,7 +618,7 @@
         {
           "name": "property",
           "type": "Property",
-          "at": "/knowledge/properties/property",
+          "at": "/ded/properties/property",
           "id": { "from": { "attribute": "id" } },
           "attributes": {
             "name": { "attribute": "name", "empty": "refuse" },
@@ -623,7 +632,7 @@
           },
           "insert": {
             "place": "after-last",
-            "container": "/knowledge/properties",
+            "container": "/ded/properties",
             "emit": "<property id=\"{id}\" name=\"{name}\" type=\"{valueType}\"[ title=\"{title}\"][ target=\"{targetFile}\"][ limit=\"{limit}\"][ counterpart=\"{counterpart}\"][ computed=\"{computed}\"][ parent=\"{isParent}\"]/>"
           },
           "remove": { "cascade": ["cell", "column", "sort", "condition1", "condition2", "condition3"] }
@@ -631,7 +640,7 @@
         {
           "name": "option",
           "type": "Option",
-          "at": "/knowledge/properties/property/option",
+          "at": "/ded/properties/property/option",
           "parent": { "rules": ["property"], "slot": "options" },
           "id": { "from": { "attribute": "id" } },
           "attributes": { "name": { "attribute": "name", "empty": "refuse" }, "colour": { "attribute": "colour", "empty": "remove", "default": "default" } },
@@ -641,7 +650,7 @@
         {
           "name": "view",
           "type": "View",
-          "at": "/knowledge/views/view",
+          "at": "/ded/views/view",
           "id": { "from": { "attribute": "id" } },
           "attributes": {
             "name": { "attribute": "name", "empty": "refuse" },
@@ -651,7 +660,7 @@
           },
           "insert": {
             "place": "after-last",
-            "container": "/knowledge/views",
+            "container": "/ded/views",
             "emit": "<view id=\"{id}\" name=\"{name}\"[ filterMatch=\"{filterMatch}\"][ groupBy=\"{groupBy}\"][ hideEmptyGroups=\"{hideEmptyGroups}\"]/>"
           },
           "remove": {}
@@ -659,7 +668,7 @@
         {
           "name": "column",
           "type": "Column",
-          "at": "/knowledge/views/view/column",
+          "at": "/ded/views/view/column",
           "parent": { "rules": ["view"], "slot": "columns" },
           "attributes": {
             "property": { "attribute": "property", "empty": "refuse", "reference": { "to": ["property"], "by": "id" } },
@@ -673,7 +682,7 @@
         {
           "name": "sort",
           "type": "Sort",
-          "at": "/knowledge/views/view/sort",
+          "at": "/ded/views/view/sort",
           "parent": { "rules": ["view"], "slot": "sorts" },
           "attributes": {
             "property": { "attribute": "property", "empty": "refuse", "reference": { "to": ["property"], "by": "id" } },
@@ -685,7 +694,7 @@
         {
           "name": "condition1",
           "type": "Condition",
-          "at": "/knowledge/views/view/condition",
+          "at": "/ded/views/view/condition",
           "parent": { "rules": ["view"], "slot": "filter" },
           "attributes": {
             "property": { "attribute": "property", "empty": "refuse", "reference": { "to": ["property"], "by": "id" } },
@@ -707,7 +716,7 @@
         {
           "name": "filterGroup1",
           "type": "FilterGroup",
-          "at": "/knowledge/views/view/filterGroup",
+          "at": "/ded/views/view/filterGroup",
           "parent": { "rules": ["view"], "slot": "filter" },
           "attributes": { "match": { "attribute": "match", "empty": "refuse" } },
           "insert": { "place": "last-child", "emit": "<filterGroup match=\"{match}\"/>" },
@@ -716,7 +725,7 @@
         {
           "name": "condition2",
           "type": "Condition",
-          "at": "/knowledge/views/view/filterGroup/condition",
+          "at": "/ded/views/view/filterGroup/condition",
           "parent": { "rules": ["filterGroup1"], "slot": "conditions" },
           "attributes": {
             "property": { "attribute": "property", "empty": "refuse", "reference": { "to": ["property"], "by": "id" } },
@@ -738,7 +747,7 @@
         {
           "name": "filterGroup2",
           "type": "FilterGroup",
-          "at": "/knowledge/views/view/filterGroup/filterGroup",
+          "at": "/ded/views/view/filterGroup/filterGroup",
           "parent": { "rules": ["filterGroup1"], "slot": "conditions" },
           "attributes": { "match": { "attribute": "match", "empty": "refuse" } },
           "insert": { "place": "last-child", "emit": "<filterGroup match=\"{match}\"/>" },
@@ -747,7 +756,7 @@
         {
           "name": "condition3",
           "type": "Condition",
-          "at": "/knowledge/views/view/filterGroup/filterGroup/condition",
+          "at": "/ded/views/view/filterGroup/filterGroup/condition",
           "parent": { "rules": ["filterGroup2"], "slot": "conditions" },
           "attributes": {
             "property": { "attribute": "property", "empty": "refuse", "reference": { "to": ["property"], "by": "id" } },
@@ -769,7 +778,7 @@
         {
           "name": "groupOrder",
           "type": "GroupSetting",
-          "at": "/knowledge/views/view/groupOrder",
+          "at": "/ded/views/view/groupOrder",
           "parent": { "rules": ["view"], "slot": "groupOrder" },
           "attributes": { "key": { "attribute": "key", "empty": "refuse" } },
           "insert": { "place": "last-child", "emit": "<groupOrder key=\"{key}\"/>" },
@@ -778,7 +787,7 @@
         {
           "name": "hiddenGroup",
           "type": "GroupSetting",
-          "at": "/knowledge/views/view/hiddenGroup",
+          "at": "/ded/views/view/hiddenGroup",
           "parent": { "rules": ["view"], "slot": "hiddenGroups" },
           "attributes": { "key": { "attribute": "key", "empty": "refuse" } },
           "insert": { "place": "last-child", "emit": "<hiddenGroup key=\"{key}\"/>" },
@@ -787,7 +796,7 @@
         {
           "name": "collapsedGroup",
           "type": "GroupSetting",
-          "at": "/knowledge/views/view/collapsed",
+          "at": "/ded/views/view/collapsed",
           "parent": { "rules": ["view"], "slot": "collapsed" },
           "attributes": { "key": { "attribute": "key", "empty": "refuse" } },
           "insert": { "place": "last-child", "emit": "<collapsed key=\"{key}\"/>" },
@@ -796,16 +805,16 @@
         {
           "name": "row",
           "type": "Row",
-          "at": "/knowledge/rows/row",
+          "at": "/ded/rows/row",
           "id": { "from": { "attribute": "id" } },
           "attributes": {},
-          "insert": { "place": "after-last", "container": "/knowledge/rows", "emit": "<row id=\"{id}\"/>" },
+          "insert": { "place": "after-last", "container": "/ded/rows", "emit": "<row id=\"{id}\"/>" },
           "remove": {}
         },
         {
           "name": "cell",
           "type": "Cell",
-          "at": "/knowledge/rows/row/cell",
+          "at": "/ded/rows/row/cell",
           "parent": { "rules": ["row"], "slot": "cells" },
           "attributes": {
             "property": { "attribute": "property", "empty": "refuse", "reference": { "to": ["property"], "by": "id" } },
@@ -826,7 +835,7 @@
         {
           "name": "cellOption",
           "type": "CellItem",
-          "at": "/knowledge/rows/row/cell/item",
+          "at": "/ded/rows/row/cell/item",
           "when": "has(entry.option)",
           "parent": { "rules": ["cell"], "slot": "items" },
           "attributes": { "option": { "attribute": "option", "empty": "refuse", "reference": { "to": ["option"], "by": "id" } } },
@@ -837,7 +846,7 @@
           "name": "cellRow",
           "type": "CellItem",
           "doc": "A related row, by its id in the target file. Not a reference: the target is another file, which the designer resolves (L5).",
-          "at": "/knowledge/rows/row/cell/item",
+          "at": "/ded/rows/row/cell/item",
           "when": "has(entry.row)",
           "parent": { "rules": ["cell"], "slot": "items" },
           "attributes": { "row": { "attribute": "row", "empty": "refuse" } },
@@ -847,7 +856,7 @@
       ],
       "registration": { "createOnFirstPlacement": false },
       "template": {
-        "text": "<knowledge version=\"0.1\" name=\"{base}\">\r\n  <properties>\r\n    <property id=\"{newid:property}\" name=\"Name\" type=\"text\" title=\"true\"/>\r\n  </properties>\r\n  <views>\r\n    <view id=\"{newid:view}\" name=\"Table\"/>\r\n  </views>\r\n  <rows/>\r\n</knowledge>\r\n"
+        "text": "<ded version=\"0.1\" designer=\"etalii/knowledge\" name=\"{base}\">\r\n  <properties>\r\n    <property id=\"{newid:property}\" name=\"Name\" type=\"text\" title=\"true\"/>\r\n  </properties>\r\n  <views>\r\n    <view id=\"{newid:view}\" name=\"Table\"/>\r\n  </views>\r\n  <rows/>\r\n</ded>\r\n"
       }
     }
   }

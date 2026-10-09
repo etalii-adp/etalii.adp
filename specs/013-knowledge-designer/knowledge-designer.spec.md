@@ -17,7 +17,7 @@ This feature is that definition. It specifies nothing the standalone documents d
 - **FR-002** Fixtures under `specifications/fbl/fixtures/` that prove, per format, reading and every kind of edit the standalone requirements name, with an undo; one that reads the same table from all three formats; and one that keeps an unknown key and an unreadable cell (Requirement 1.3).
 - **FR-003** The validator resolves the names an FBL document's rules refer to (FBL section 14.1, step 4), so that a rule naming a rule its binding lacks fails the build.
 - **FR-004** FBL 0.3: wording that covers a specification in DISL or in DESL, each construct FBL relies on paired with its DISL and its DESL section, and a binding chosen by the body's format family, with no change of behaviour (language decision L3, and R7 in place of L4).
-- **FR-005** DESL 0.1, with its schema and a minimal example, holding only what `knowledge.des` needs, each construct named for what it does; DED stays a placeholder (Requirement 1.2).
+- **FR-005** DESL 0.1, with its schema and a minimal example, holding only what `knowledge.des` needs, each construct named for what it does; and DED 0.1, the envelope every knowledge file begins with (`ded: "0.1"`, `designer: etalii/knowledge`), with its schema and an example (R7; Requirement 1.2 kept DED a placeholder before 2026-10-09).
 - **FR-006** `definitions/designers/knowledge.des`, `knowledge.md`, `knowledge.schema.json` and one example per format, validated in the Build workflow (Requirements 1.1, 1.5, 1.7, 1.8, 2.8, 7.7, 8.4).
 - **FR-007** `docs/terminology.md` says why a tool whose cells hold relations is a designer, and names the Knowledge designer as the example of a designer (Requirement 1.5, Q7).
 

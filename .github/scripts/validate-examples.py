@@ -2,9 +2,11 @@
 schema (constitution principle II).
 
 An example is a DISL specification (`*.dis`), a DID definition (`*.did`), an FBL document (`*.fbl`), a DESL
-specification (`*.des`), or a `*.json` file that names its schema in `$schema`. The extension decides the schema: `*.dis` against
+specification (`*.des`), a DED definition (`*.ded`), or a `*.json` file that names its schema in `$schema`. The extension decides the schema: `*.dis` against
 `disl.schema.json#/$defs/Specification`, `*.did` against `did.schema.json#/$defs/Definition`, `*.fbl` against
-`fbl.schema.json#/$defs/Document`, `*.des` against `desl.schema.json#/$defs/Specification`. A `$schema` the example names must agree with that; its part before `#`
+`fbl.schema.json#/$defs/Document`, `*.des` against `desl.schema.json#/$defs/Specification`, `*.ded` against `ded.schema.json#/$defs/Definition`. A DED definition
+whose designer type has a file schema in definitions/designers/ (DESIGNERS below) is validated against that one, which
+refines DED's. A `$schema` the example names must agree with that; its part before `#`
 is matched against the `$id` of a `*.schema.json` in this repository, so the schemas in the same commit are used,
 never the published ones. All schemas are loaded into one registry, so DID's references to DISL resolve. A `$schema`
 naming an earlier version of DISL or DID (0.1) is read against the current schema, because 0.2 keeps every 0.1 document valid.
@@ -45,9 +47,12 @@ FBL = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Document"
 DESL = "https://etalii.net/adp/desl/schema/0.1/desl.schema.json#/$defs/Specification"
 FBL_REGISTRATION = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Registration"
 FBL_FIXTURE = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Fixture"
+DED = "https://etalii.net/adp/ded/schema/0.1/ded.schema.json#/$defs/Definition"
 KNOWLEDGE = "https://etalii.net/adp/definitions/designers/knowledge.schema.json"
-CURRENT_EXTENSIONS = {".dis": DISL, ".did": DID, ".fbl": FBL, ".des": DESL}
-CURRENT_VERSION_KEYS = {"disl": DISL, "did": DID, "fbl": FBL, "desl": DESL, "knowledge": KNOWLEDGE}
+CURRENT_EXTENSIONS = {".dis": DISL, ".did": DID, ".fbl": FBL, ".des": DESL, ".ded": DED}
+CURRENT_VERSION_KEYS = {"disl": DISL, "did": DID, "fbl": FBL, "desl": DESL, "ded": DED}
+# The file schema of each designer type whose DED definitions have one, by the origin in their `designer` key.
+DESIGNERS = {"etalii/knowledge": KNOWLEDGE}
 # A designer's examples are documents in the formats its bindings read (definitions/designers/examples/).
 designer_examples = repository / "definitions" / "designers" / "examples"
 
@@ -95,7 +100,7 @@ KNOWLEDGE_NUMBERS = {"width", "number"}
 
 def knowledge_from_xml(text: str):
     """Reads a knowledge file's XML form into its YAML and JSON form (knowledge.md, section 3), so that one schema and
-    one check serve the three."""
+    one check serve the three. The root's `version` and `designer` are DED's envelope (DED section 3)."""
     root_element = ElementTree.fromstring(text)
 
     def attributes(element):
@@ -124,8 +129,10 @@ def knowledge_from_xml(text: str):
                 out.append(group)
         return out
 
-    table = {"knowledge": root_element.get("version")}
-    table.update({k: v for k, v in attributes(root_element).items() if k != "version"})
+    if root_element.tag != "ded":
+        raise ValueError(f"the root element is <{root_element.tag}>, not <ded>")
+    table = {"ded": root_element.get("version"), "designer": root_element.get("designer")}
+    table.update({k: v for k, v in attributes(root_element).items() if k not in ("version", "designer")})
     table["properties"] = []
     for element in root_element.findall("properties/property"):
         entry = attributes(element)
@@ -464,6 +471,8 @@ def expected_reference(path: Path, document) -> tuple[str | None, list[str], str
         return None, aliases, "names no schema ($schema, extension or version key)"
     if by_schema and by_schema != reference:
         return None, aliases, f"$schema {declared!r} does not match the schema its extension requires ({reference})"
+    if reference == DED and fields.get("designer") in DESIGNERS:
+        reference = DESIGNERS[fields["designer"]]
     if reference.partition("#")[0] not in schemas:
         return None, aliases, f"schema {reference!r} is not in this repository"
     return reference, aliases, None

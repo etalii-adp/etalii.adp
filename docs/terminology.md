@@ -31,7 +31,7 @@ A **tool engineer** specifies how one tool type functions and looks, in its kind
 - A **specification file** (`.dis`, `.des`, `.eds`) holds one tool type as a tool engineer specifies how it functions and looks: for example, what a state machine diagram's elements and relations are and how they are drawn.
 - A **definition file** (`.did`, `.ded`, `.edd`) holds one diagram, designer or editor a user created of such a type: for example, one particular state machine.
 
-DISL, DID and DESL have content; DED, EDSL and EDD are placeholders until a designer or an editor needs them. DID here always means ADP's Diagram Definition Language, not the W3C's Decentralized Identifiers.
+DISL, DID, DESL and DED have content; EDSL and EDD are placeholders until an editor needs them. DID here always means ADP's Diagram Definition Language, not the W3C's Decentralized Identifiers.
 
 History: DEDL became DISL and DID. What was one language, DEDL 0.1, holding both a language definition and the documents made with it, is now DISL (the specification of a diagram type) and DID (a stored diagram). The acronym DEDL is retired and has no current meaning; files, schema addresses and links in its old form are still read or redirected as DISL or DID. Specification files were named after their language (`.disl`, `.desl`, `.edsl`) until 2026-09-30, when they took `.dis`, `.des` and `.eds`, because a file holds a specification, not the language; `.disl` files are still read.
 

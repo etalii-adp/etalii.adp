@@ -28,7 +28,7 @@
         "name": { "type": "string", "required": true, "doc": "The table's name, shown on its tab." },
         "activeView": { "type": "View", "doc": "The view the table was last left in; absent, the first view (Requirement 6.10)." }
       },
-      "doc": "The table: the root of a knowledge file. Its version mark (`knowledge`, or `version` in XML) is the binding's header and not an attribute."
+      "doc": "The table: the root of a knowledge file. Its DED envelope (`ded` and `designer`; `version` and `designer` in XML, DED section 2) is the binding's header and host attributes, not attributes of the model."
     },
     "enums": {
       "ValueType": {
@@ -234,8 +234,8 @@
     "typeMap": {
       "Table": {
         "as": "document",
-        "hostAttributes": ["version"],
-        "doc": "The root's keys are the table's own attributes; `version` is the header, read and checked by the binding."
+        "hostAttributes": ["version", "designer"],
+        "doc": "The root's keys are the table's own attributes, after the DED envelope: `version` and `designer` are the envelope, read and checked by the binding."
       }
     },
     "doc": "A knowledge file is YAML, JSON or XML, chosen when it is added and never changed (DESL section 5). `knowledge.md` describes each format."

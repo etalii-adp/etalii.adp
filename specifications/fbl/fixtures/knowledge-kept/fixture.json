@@ -45,7 +45,7 @@
     "findings": [
       {
         "rule": "std.unreadableEntry",
-        "line": 27
+        "line": 28
       }
     ]
   },
@@ -70,12 +70,12 @@
       "splices": [
         {
           "operation": "replace-value",
-          "start": 379,
-          "end": 385,
+          "start": 401,
+          "end": 407,
           "text": "931300"
         }
       ],
-      "expect": "knowledge: \"0.1\"\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: All cities\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerp\r\n      - property: p3\r\n        number: about half a million\r\n"
+      "expect": "ded: \"0.1\"\r\ndesigner: etalii/knowledge\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: All cities\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerp\r\n      - property: p3\r\n        number: about half a million\r\n"
     },
     {
       "doc": "A cell next to the unreadable one is changed; the unreadable cell is not touched.",
@@ -90,12 +90,12 @@
       "splices": [
         {
           "operation": "replace-value",
-          "start": 495,
-          "end": 502,
+          "start": 517,
+          "end": 524,
           "text": "Antwerpen"
         }
       ],
-      "expect": "knowledge: \"0.1\"\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: All cities\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
+      "expect": "ded: \"0.1\"\r\ndesigner: etalii/knowledge\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: All cities\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
     },
     {
       "doc": "Renaming a view keeps the setting this version does not know, and its comment.",
@@ -110,12 +110,12 @@
       "splices": [
         {
           "operation": "replace-value",
-          "start": 188,
-          "end": 198,
+          "start": 210,
+          "end": 220,
           "text": "Every city"
         }
       ],
-      "expect": "knowledge: \"0.1\"\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: Every city\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
+      "expect": "ded: \"0.1\"\r\ndesigner: etalii/knowledge\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: Every city\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
     },
     {
       "doc": "Removing a cell removes its lines only; the row's unknown key stays.",
@@ -127,12 +127,12 @@
       "splices": [
         {
           "operation": "remove-entry",
-          "start": 294,
-          "end": 341,
+          "start": 316,
+          "end": 363,
           "text": ""
         }
       ],
-      "expect": "knowledge: \"0.1\"\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: Every city\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
+      "expect": "ded: \"0.1\"\r\ndesigner: etalii/knowledge\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: Every city\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
     },
     {
       "doc": "Removing a row removes its entry, the unknown key inside it included.",
@@ -144,12 +144,12 @@
       "splices": [
         {
           "operation": "remove-entry",
-          "start": 270,
-          "end": 388,
+          "start": 292,
+          "end": 410,
           "text": ""
         }
       ],
-      "expect": "knowledge: \"0.1\"\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: Every city\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
+      "expect": "ded: \"0.1\"\r\ndesigner: etalii/knowledge\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: Every city\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
     },
     {
       "doc": "Undo restores the bytes before the edit.",
@@ -157,12 +157,12 @@
       "splices": [
         {
           "operation": "remove-entry",
-          "start": 270,
-          "end": 270,
+          "start": 292,
+          "end": 292,
           "text": "  - id: r1\r\n    cells:\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n"
         }
       ],
-      "expect": "knowledge: \"0.1\"\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: Every city\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
+      "expect": "ded: \"0.1\"\r\ndesigner: etalii/knowledge\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: Every city\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
     },
     {
       "doc": "Undo restores the bytes before the edit.",
@@ -170,12 +170,12 @@
       "splices": [
         {
           "operation": "remove-entry",
-          "start": 294,
-          "end": 294,
+          "start": 316,
+          "end": 316,
           "text": "      - property: p1\r\n        text: Amsterdam\r\n"
         }
       ],
-      "expect": "knowledge: \"0.1\"\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: Every city\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
+      "expect": "ded: \"0.1\"\r\ndesigner: etalii/knowledge\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: Every city\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
     },
     {
       "doc": "Undo restores the bytes before the edit.",
@@ -183,12 +183,12 @@
       "splices": [
         {
           "operation": "replace-value",
-          "start": 188,
-          "end": 198,
+          "start": 210,
+          "end": 220,
           "text": "All cities"
         }
       ],
-      "expect": "knowledge: \"0.1\"\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: All cities\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
+      "expect": "ded: \"0.1\"\r\ndesigner: etalii/knowledge\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: All cities\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerpen\r\n      - property: p3\r\n        number: about half a million\r\n"
     },
     {
       "doc": "Undo restores the bytes before the edit.",
@@ -196,12 +196,12 @@
       "splices": [
         {
           "operation": "replace-value",
-          "start": 495,
-          "end": 504,
+          "start": 517,
+          "end": 526,
           "text": "Antwerp"
         }
       ],
-      "expect": "knowledge: \"0.1\"\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: All cities\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerp\r\n      - property: p3\r\n        number: about half a million\r\n"
+      "expect": "ded: \"0.1\"\r\ndesigner: etalii/knowledge\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: All cities\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931300\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerp\r\n      - property: p3\r\n        number: about half a million\r\n"
     },
     {
       "doc": "Undo restores the bytes before the edit.",
@@ -209,12 +209,12 @@
       "splices": [
         {
           "operation": "replace-value",
-          "start": 379,
-          "end": 385,
+          "start": 401,
+          "end": 407,
           "text": "931298"
         }
       ],
-      "expect": "knowledge: \"0.1\"\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: All cities\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931298\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerp\r\n      - property: p3\r\n        number: about half a million\r\n"
+      "expect": "ded: \"0.1\"\r\ndesigner: etalii/knowledge\r\nname: Cities\r\nproperties:\r\n  - id: p1\r\n    name: Name\r\n    type: text\r\n    title: true\r\n  - id: p3\r\n    name: Population\r\n    type: number\r\nviews:\r\n  - id: v1\r\n    name: All cities\r\n    density: compact   # a setting this version does not know\r\nrows:\r\n  - id: r1\r\n    cells:\r\n      - property: p1\r\n        text: Amsterdam\r\n      - property: p3\r\n        number: 931298\r\n    source: census 2024   # not modelled, kept\r\n  - id: r2\r\n    cells:\r\n      - property: p1\r\n        text: Antwerp\r\n      - property: p3\r\n        number: about half a million\r\n"
     }
   ]
 }

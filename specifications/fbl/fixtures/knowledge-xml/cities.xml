@@ -1,4 +1,4 @@
-<knowledge version="0.1" name="Cities" activeView="v1">
+<ded version="0.1" designer="etalii/knowledge" name="Cities" activeView="v1">
   <!-- Cities of the Low Countries, kept by hand and by ADP. -->
   <properties>
     <property id="p1" name="Name" type="text" title="true"/>
@@ -50,4 +50,4 @@
       </cell>
     </row>
   </rows>
-</knowledge>
+</ded>

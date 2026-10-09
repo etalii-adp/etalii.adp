@@ -1,4 +1,5 @@
-knowledge: "0.1"
+ded: "0.1"
+designer: etalii/knowledge
 name: Cities
 properties:
   - id: p1
