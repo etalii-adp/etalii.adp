@@ -7,21 +7,23 @@ The agent activity diagram gives developers one picture of where what work is ha
 ```mermaid
 flowchart LR
   accTitle: Agent activity diagram at a glance
-  accDescr: Five element types, joined by four kinds of relation. A project has specifications, each with a status and its tasks listed by status. A specification has agents working on it, and an agent at most one specification. An agent has locations, each a branch and a folder with the pull requests opened from it. A location runs on one environment, a system such as a local machine, a cloud environment, a container or WSL, which many locations can share. Agents write all of this into one .aad file as they work; the person keeps only the view part of the same file, with locked positions, folded groups and whether archived specifications are shown, and agents leave it alone.
-  project["<b>Project</b><br/>one body of work,<br/>such as a repository"]
-  specification["<b>Specification</b><br/>status<br/>───<br/>tasks, by status"]
-  agent["<b>Agent</b><br/>one worker,<br/>such as a chat thread"]
-  location["<b>Location</b><br/>branch · folder<br/>───<br/>pull requests"]
-  environment["<b>Environment</b><br/>local machine · cloud<br/>container · WSL · other"]
-  project -- "has" --> specification
-  specification -- "worked on by" --> agent
-  agent -- "works in" --> location
-  location -- "runs on" --> environment
+  accDescr: Five element types, joined by four kinds of relation. A project has specifications, each with a status and its tasks listed by status. A specification has agents working on it, and an agent at most one specification. An agent has locations, each a branch and a folder with the pull requests opened from it. A location runs on one environment, a system such as a local machine, a cloud environment, a container or WSL, which many locations can share. All of it is kept in one .aad file. Agents write the elements, tasks and pull requests as they work; the person keeps only the view part of the same file, with locked positions, folded groups and whether archived specifications are shown, and agents leave it alone.
+  agents["<b>Agents</b><br/>write the elements,<br/>tasks and pull requests"]
+  person["<b>The person</b><br/>keeps the view:<br/>locked positions · folded groups<br/>show archived"]
   subgraph file["One .aad file"]
     direction TB
-    agents["<b>Agents</b> write the elements,<br/>tasks and pull requests"]
-    person["<b>The person</b> keeps the view:<br/>locked positions · folded groups<br/>show archived"]
+    project["<b>Project</b><br/>one body of work,<br/>such as a repository"]
+    specification["<b>Specification</b><br/>status<br/>───<br/>tasks, by status"]
+    agent["<b>Agent</b><br/>one worker,<br/>such as a chat thread"]
+    location["<b>Location</b><br/>branch · folder<br/>───<br/>pull requests"]
+    environment["<b>Environment</b><br/>local machine · cloud<br/>container · WSL · other"]
+    project -- "has" --> specification
+    specification -- "worked on by" --> agent
+    agent -- "works in" --> location
+    location -- "runs on" --> environment
   end
+  agents --> file
+  person --> file
 ```
 
 In the diagram itself the projects sit in the middle and every other type forms a ring around them, in the order of the picture: specifications, then agents, then locations, then environments. Relations are straight lines without a label.
