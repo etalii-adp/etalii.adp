@@ -1,0 +1,316 @@
+{
+  "workflow": "speckit",
+  "specName": "Backend Project Decomposition",
+  "branch": "develop of etalii.adp.ide.standalone",
+  "status": "completed",
+  "currentStep": "implement",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.378Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.497Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.603Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T011",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:44.706Z"
+    }
+  ],
+  "currentTask": "T011",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "Removed the orphan Hierarchy/hierarchy.proto, landed inside merge 747d34a6 (task commit 2a08d29d).",
+      "files": [
+        "src/backend/EtAlii.Adp.Backend/Hierarchy/hierarchy.proto"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "Created the empty EtAlii.Adp.Common project beneath Backend, landed inside merge 747d34a6 (task commit 58c27566).",
+      "files": [
+        "src/backend/EtAlii.Adp.slnx",
+        "src/backend/EtAlii.Adp.Backend/EtAlii.Adp.Backend.csproj",
+        "src/backend/EtAlii.Adp.Common/EtAlii.Adp.Common.csproj"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "Task 3 landed on develop as merge 5ee334dd (ff from 09835fbf): shared.proto, connection.proto and elements.proto move from EtAlii.Adp.Backend to EtAlii.Adp.Common, generating under the EtAlii.Adp.Common.Wire namespace per the ruled .Wire-as-namespace model.",
+      "files": [
+        "src/api/shared.proto",
+        "src/api/connection.proto",
+        "src/api/elements.proto",
+        "src/backend/EtAlii.Adp.Common/EtAlii.Adp.Common.csproj",
+        "src/backend/EtAlii.Adp.Common/ShortGuid.Cast.cs",
+        "src/backend/EtAlii.Adp.Backend/EtAlii.Adp.Backend.csproj",
+        "src/backend/EtAlii.Adp.Backend/Context/ContextSelectionResolver.cs",
+        "src/backend/EtAlii.Adp.Backend/Context/ContextSelectionStore.cs",
+        "src/backend/EtAlii.Adp.Backend/Context/ContextService.Actions.cs",
+        "src/backend/EtAlii.Adp.Backend/Problems/ProblemBroadcaster.cs",
+        "src/backend/EtAlii.Adp.Backend/Projects/ProjectService.cs",
+        "src/backend/EtAlii.Adp.Backend.Diagrams/DiagramService.cs",
+        "src/backend/EtAlii.Adp.Backend.Diagrams/DiagramService.Open.cs",
+        "src/client/src/generated/shared_pb.ts",
+        "src/client/src/generated/connection_pb.ts",
+        "src/client/src/generated/elements_pb.ts",
+        "src/diagrams/c4/backend/EtAlii.Adp.Diagram.C4/C4ParseState.cs",
+        "src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/NamespaceProviders.Tests.cs"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "Task 4 landed on develop as merge 6e7a78a8 (ff from d1276ad4): the command/history contract moves to EtAlii.Adp.Common.",
+      "files": [
+        "src/backend/EtAlii.Adp.Common/History/ICommand.cs",
+        "src/backend/EtAlii.Adp.Common/History/ICommandHandler.cs",
+        "src/backend/EtAlii.Adp.Common/History/ICommandDispatcher.cs",
+        "src/backend/EtAlii.Adp.Common/History/IHistoryStack.cs",
+        "src/backend/EtAlii.Adp.Common/History/IHistoryStackStore.cs",
+        "src/backend/EtAlii.Adp.Common/History/IContextNoticeSink.cs",
+        "src/backend/EtAlii.Adp.Common/History/_Model/CommandResult.cs",
+        "src/backend/EtAlii.Adp.Common/History/_Model/HistoryEntry.cs",
+        "src/backend/EtAlii.Adp.Common/History/_Model/HistoryAvailability.cs",
+        "src/backend/EtAlii.Adp.Common/History/_Model/HistoryChangedEventArgs.cs",
+        "src/backend/EtAlii.Adp.Backend/History/ServiceCollection.AddCommands.cs",
+        "src/backend/EtAlii.Adp.Backend/Context/ContextSelectionResolver.cs",
+        "src/backend/EtAlii.Adp.Backend/Projects/ProjectService.cs",
+        "src/backend/EtAlii.Adp.Backend.Tests/Unit Tests/Context/ContextSelectionResolver.Tests.cs",
+        "src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/SourceLineEndings.Tests.cs",
+        "src/backend/EtAlii.Adp.Common/EtAlii.Adp.Common.csproj.DotSettings"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "Task 5 landed on develop as merge 9f2b01e5 (ff from cab95000): the Line document family and file helpers move to EtAlii.Adp.Common as Common/Documents.",
+      "files": [
+        "src/backend/EtAlii.Adp.Common/Documents/Line.cs",
+        "src/backend/EtAlii.Adp.Common/Documents/LineDocument.cs",
+        "src/backend/EtAlii.Adp.Common/Documents/LineRange.cs",
+        "src/backend/EtAlii.Adp.Common/Documents/LineSegment.cs",
+        "src/backend/EtAlii.Adp.Common/Documents/LineSplice.cs",
+        "src/backend/EtAlii.Adp.Common/Documents/AdpFileWriter.cs",
+        "src/backend/EtAlii.Adp.Common/Documents/SharedDocumentReader.cs",
+        "src/backend/EtAlii.Adp.Common/Documents/_Model/AdpFileWriteResult.cs",
+        "src/backend/EtAlii.Adp.Common/Documents/_Model/AdpFileCreated.cs",
+        "src/backend/EtAlii.Adp.Common/Documents/_Model/AdpFileNameTaken.cs",
+        "src/backend/EtAlii.Adp.Common/Documents/_Model/AdpFileWriteFailed.cs",
+        "src/backend/EtAlii.Adp.Common/EtAlii.Adp.Common.csproj.DotSettings",
+        "src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/ShapeOfFileAccess.Tests.cs",
+        "docs/creating-a-diagram-module.md"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "Task 6 landed on develop as merge 01c16f8f (ff from d806aa19): SessionContext and ISessionStore move to EtAlii.Adp.Common as Common/Sessions (sessions skip entry keeps the root namespace), making Authentication-Sessions acyclic.",
+      "files": [
+        "src/backend/EtAlii.Adp.Common/Sessions/SessionContext.cs",
+        "src/backend/EtAlii.Adp.Common/Sessions/ISessionStore.cs",
+        "src/backend/EtAlii.Adp.Common/EtAlii.Adp.Common.csproj",
+        "src/backend/EtAlii.Adp.Common/EtAlii.Adp.Common.csproj.DotSettings",
+        "src/Directory.Packages.props",
+        "src/backend/EtAlii.Adp.Backend/Authentication/AuthenticationService.cs",
+        "src/backend/EtAlii.Adp.Backend/Context/ContextService.Actions.cs",
+        "docs/dependencies.md"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "Task 7 landed on develop as merge 9abd2151 (ff from 8398e891): the 22 Backend->Diagram back-edges are eliminated and the exception budget closes EMPTY - no retained edge, nothing blocking task 8's merge.",
+      "files": [
+        "src/backend/EtAlii.Adp.Common/Diagrams/IDiagramDefinitionCatalog.cs",
+        "src/backend/EtAlii.Adp.Common/Diagrams/DiagramDocumentFactories.cs",
+        "src/backend/EtAlii.Adp.Common/Diagrams/DiagramValidators.cs",
+        "src/backend/EtAlii.Adp.Common/Diagrams/IDiagramDocumentFactory.cs",
+        "src/backend/EtAlii.Adp.Common/Diagrams/IDiagramValidator.cs",
+        "src/backend/EtAlii.Adp.Common/Diagrams/_Model/DiagramDefinition.cs",
+        "src/backend/EtAlii.Adp.Common/Diagrams/_Model/DiagramOrigin.cs",
+        "src/backend/EtAlii.Adp.Common/Diagrams/_Model/DiagramSubject.cs",
+        "src/backend/EtAlii.Adp.Common/Diagrams/_Model/DiagramProblem.cs",
+        "src/backend/EtAlii.Adp.Common/Diagrams/_Model/DiagramValidationRequest.cs",
+        "src/backend/EtAlii.Adp.Common/EtAlii.Adp.Common.csproj",
+        "src/backend/EtAlii.Adp.Common/EtAlii.Adp.Common.csproj.DotSettings",
+        "src/backend/EtAlii.Adp.Diagram/EtAlii.Adp.Diagram.csproj",
+        "src/backend/EtAlii.Adp.Backend/EtAlii.Adp.Backend.csproj"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "Task 8 landed on develop as merge ba267eb3 (ff from ed1a9cfa): EtAlii.Adp.Backend.Diagrams merges into EtAlii.Adp.Diagram and the diagram wire becomes EtAlii.Adp.Diagram.Wire - the specification's headline mandate, legal because task 7 emptied the back-edges.",
+      "files": [
+        "src/api/diagrams.proto",
+        "src/api/deltas.proto",
+        "src/backend/EtAlii.Adp.Diagram/EtAlii.Adp.Diagram.csproj",
+        "src/backend/EtAlii.Adp.Diagram/DiagramService.cs",
+        "src/backend/EtAlii.Adp.Diagram/DiagramService.Open.cs",
+        "src/backend/EtAlii.Adp.Diagram/DiagramService.View.cs",
+        "src/backend/EtAlii.Adp.Diagram/ServiceCollection.AddDiagrams.cs",
+        "src/backend/EtAlii.Adp.Diagram/DiagramDefinitionDiscovery.cs",
+        "src/backend/EtAlii.Adp.Editor/EditorDefinitionDiscovery.cs",
+        "src/backend/EtAlii.Adp.Editor/EtAlii.Adp.Editor.csproj",
+        "src/backend/EtAlii.Adp/EtAlii.Adp.csproj",
+        "src/backend/EtAlii.Adp.Backend/EtAlii.Adp.Backend.csproj",
+        "src/backend/EtAlii.Adp.slnx",
+        "src/backend/EtAlii.Adp.Diagram.Tests/DiagramDocumentReloadBridge.Tests.cs",
+        "src/backend/EtAlii.Adp.Diagram.Tests/EditorSessionAdapter.Tests.cs",
+        "src/backend/EtAlii.Adp.Diagram.Tests/DiagramDefinitionDiscovery.Walk.Tests.cs",
+        "src/backend/EtAlii.Adp/ApplicationAssemblies.cs",
+        "src/backend/EtAlii.Adp.Tests/ApplicationAssemblies.Tests.cs"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "Task 9 landed on develop as merge ef574883 (ff from ab59c38c): Client extracts to EtAlii.Adp.Client - the first area extraction, chosen first because it is clean.",
+      "files": [
+        "src/backend/EtAlii.Adp.Client/ClientAppOptions.cs",
+        "src/backend/EtAlii.Adp.Client/ClientDevServerProxy.cs",
+        "src/backend/EtAlii.Adp.Client/ServiceCollection.AddClientAppHosting.cs",
+        "src/backend/EtAlii.Adp.Backend.Service/EtAlii.Adp.Backend.Service.csproj",
+        "src/backend/EtAlii.Adp.Backend.Service/Program.cs",
+        "src/backend/EtAlii.Adp.slnx",
+        "src/backend/EtAlii.Adp.Editor/EtAlii.Adp.Editor.csproj",
+        "src/backend/EtAlii.Adp.Diagram.Tests/DiagramDefinitionDiscovery.Walk.Tests.cs",
+        "src/client/src/generated/deltas_pb.ts",
+        "src/client/src/generated/diagrams_pb.ts",
+        "src/backend/EtAlii.Adp.Client/EtAlii.Adp.Client.csproj"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "Task 10 area 1 of 6 landed on develop as merge a9d3fc1c (ff from 2e7977a5): Projects extracts to EtAlii.Adp.Projects with EtAlii.Adp.Projects.Wire.",
+      "files": [
+        "src/api/projects.proto",
+        "src/backend/EtAlii.Adp.Projects/ProjectService.cs",
+        "src/backend/EtAlii.Adp.Projects/FileProjectStore.cs",
+        "src/backend/EtAlii.Adp.Projects/IProjectStore.cs",
+        "src/backend/EtAlii.Adp.Projects/ProjectRootResolver.cs",
+        "src/backend/EtAlii.Adp.Projects/ServiceCollection.AddProjects.cs",
+        "src/backend/EtAlii.Adp.Backend/EtAlii.Adp.Backend.csproj",
+        "src/backend/EtAlii.Adp.Backend.Service/EtAlii.Adp.Backend.Service.csproj",
+        "src/backend/EtAlii.Adp.slnx",
+        "src/backend/EtAlii.Adp.Projects/EtAlii.Adp.Projects.csproj",
+        "src/backend/EtAlii.Adp.Projects/EtAlii.Adp.Projects.csproj.DotSettings"
+      ]
+    },
+    "T011": {
+      "status": "DONE",
+      "did": "Task 11 landed on develop as merge 8561f0e4 - the verification task, closing the specification, and the verification found the constraint EXCEEDED rather than met.",
+      "files": [
+        "src/backend/EtAlii.Adp.Backend/EtAlii.Adp.Backend.csproj"
+      ]
+    }
+  },
+  "intent": "Migrated from the archived spec-workflow specification backend-project-decomposition of etalii.adp.ide.standalone (commit 9a64600); completed there before migration",
+  "last_action": "Migrated to Spec Kit on 2026-10-10; every task was already done",
+  "verified": [
+    {
+      "what": "Verified in etalii.adp.ide.standalone when it was built: each task's gates and guards are recorded in implementation-logs/. On migration (2026-10-10) every paragraph, list item, table row and heading of the source requirements, design, tasks and findings was checked to be present in this folder, and every task to be ticked."
+    }
+  ]
+}

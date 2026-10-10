@@ -1,0 +1,202 @@
+{
+  "workflow": "speckit",
+  "specName": "Architecture Documentation for Agents",
+  "branch": "develop of etalii.adp.ide.standalone",
+  "status": "completed",
+  "currentStep": "implement",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.250Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.364Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.481Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.580Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.580Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.580Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.580Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.580Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.580Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.580Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.580Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.580Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.580Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:52.580Z"
+    }
+  ],
+  "currentTask": "T010",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "docs/architecture.md, 95 lines, one mermaid flowchart LR (browser client, the one ASP.NET Core process EtAlii.Adp.Backend.Service with its two legs, the workspace folder).",
+      "files": [
+        "docs/architecture.md"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "docs/solution-structure.md, 112 lines, one mermaid flowchart.",
+      "files": [
+        "docs/solution-structure.md"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "ArchitecturePages.Tests guards both pages: repo paths exist, EtAlii.Adp.* names are solution projects, counts recompute in BOTH directions, size limits, floors.",
+      "files": [
+        "src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/ArchitecturePages.Tests.cs"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "DocumentationLinks.Tests now checks both new pages plus CLAUDE.md and the four steering documents (structure.md, tech.md, product.md, roles.md), so a link left dangling by the removal pass reddens the build.",
+      "files": [
+        "src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/DocumentationLinks.Tests.cs"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "ArchitecturePages.Tests applies its path and project-name checks to CLAUDE.md, structure.md, tech.md, product.md and roles.md too.",
+      "files": [
+        "src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/ArchitecturePages.Tests.cs"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "The removal pass, committed on develop in two halves on either side of the pages' landing.",
+      "files": [
+        ".spec-workflow/steering/structure.md",
+        ".spec-workflow/steering/tech.md",
+        "docs/architecture.md"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "CLAUDE.md gains \"The architecture pages\": it names docs/architecture.md and docs/solution-structure.md, says when to read them (on arriving at an unfamiliar area, and before counting or classifying anything about the solution), says they are descriptive rather than normative, and names the update ru",
+      "files": [
+        "CLAUDE.md"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "readme.md links both pages under Going deeper (R6.2), and docs/guards.md gains the ArchitecturePages row, whose third column says what the guard answers and what it cannot tell (R5.6).",
+      "files": [
+        "readme.md",
+        "docs/guards.md"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "WHICH ROUTE HELD: the manual one. module-client-api-readme task 1, the mermaid-parse spike, has not run (its tasks.md still shows [ ] 1), and this specification added no mermaid dependency. tests.md carries the procedure (landed at bd0907c4).",
+      "files": [
+        "tests.md",
+        "docs/solution-structure.md"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "THE FINAL CHECK, RUN AGAINST DEVELOP AFTER d8cc2667, not taken from any task's promise. 24 criteria groups were each traced to a file and a string by a scripted check.",
+      "files": [
+        "docs/architecture.md",
+        "docs/solution-structure.md"
+      ]
+    }
+  },
+  "intent": "Migrated from the archived spec-workflow specification architecture-documentation of etalii.adp.ide.standalone (commit 9a64600); completed there before migration",
+  "last_action": "Migrated to Spec Kit on 2026-10-10; every task was already done",
+  "verified": [
+    {
+      "what": "Verified in etalii.adp.ide.standalone when it was built: each task's gates and guards are recorded in implementation-logs/. On migration (2026-10-10) every paragraph, list item, table row and heading of the source requirements, design, tasks and findings was checked to be present in this folder, and every task to be ticked."
+    }
+  ]
+}
