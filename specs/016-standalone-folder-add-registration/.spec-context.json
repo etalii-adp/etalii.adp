@@ -1,0 +1,201 @@
+{
+  "workflow": "speckit",
+  "specName": "Adding a diagram to a folder writes a bare `.adp` registration",
+  "branch": "develop of etalii.adp.ide.standalone",
+  "status": "completed",
+  "currentStep": "implement",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:35.376Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:35.497Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:35.611Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:35.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:35.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:35.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:35.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:35.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:35.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:35.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:35.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:35.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:35.713Z"
+    }
+  ],
+  "currentTask": "T009",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "Added ContextOption.name_suppressed_reason = 8 and ContextOption.unavailable_reason = 9, mirrored on ContextOptionNode at the end of its optional tail, and carried through the record-to-wire mapper.",
+      "files": [
+        "src/api/context.proto",
+        "src/backend/EtAlii.Adp.Backend/Context/_Model/ContextOptionNode.cs",
+        "src/backend/EtAlii.Adp.Backend/Context/ContextService.Actions.cs"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "DiagramOptionTree.Build now takes Func<DiagramDefinition, ContextOptionAnnotations>? annotate in place of Func<DiagramOrigin, string>? suggest, with a new record carrying SuggestedValue, NameSuppressedReason and UnavailableReason together.",
+      "files": [
+        "src/backend/EtAlii.Adp.Backend/Hierarchy/DiagramOptionTree.cs",
+        "src/backend/EtAlii.Adp.Backend/Hierarchy/AddDiagramContextActionProvider.cs",
+        "src/backend/EtAlii.Adp.Backend.Tests/Unit Tests/Hierarchy/DiagramOptionTree.Tests.cs",
+        "src/backend/EtAlii.Adp.Backend/Context/_Model/ContextOptionAnnotations.cs"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "PROMPT SIDE: the folder's existing folder-subject registration is computed ONCE for the whole tree — every folder-subject type asks the same question of the same folder, and the answer cannot change while one prompt is being built — and each option is annotated from it.",
+      "files": [
+        "src/backend/EtAlii.Adp.Backend/Hierarchy/AddDiagramContextActionProvider.cs",
+        "src/backend/EtAlii.Adp.Backend/Hierarchy/ServiceCollection.AddHierarchy.cs",
+        "src/backend/EtAlii.Adp.Backend.Tests/Unit Tests/Hierarchy/AddDiagramContextActionProvider.Tests.cs",
+        "src/backend/EtAlii.Adp.Backend.Tests/Unit Tests/Hierarchy/AddDiagramContextActionProvider.Registration.Tests.cs",
+        "src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/AddDiagramFlow.Tests.cs",
+        "src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/CreateDiagramFileFlow.Tests.cs"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "A derived nameSuppressionFor beside descriptionFor and suggestionFor, plus unavailableReasonFor, both expressed through one shared findOption rather than two more tree walkers (the file already had three).",
+      "files": [
+        "src/client/src/shell/context/ChoicePromptDialog.tsx",
+        "src/client/src/shell/context/ChoicePromptDialog.test.tsx",
+        "src/client/src/index.css"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "CREATION (Requirement 5.2): an end-to-end guard that a folder-subject type creates exactly \".adp\", taken through the whole dialog — open the Add prompt over the connection, find the option whose name is suppressed, submit with no name, and assert both the reported CreatedPath and the ENTIRE folder l",
+      "files": [
+        "src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/CreateDiagramFileFlow.Tests.cs",
+        "src/backend/EtAlii.Adp.Backend.Tests/Unit Tests/Hierarchy/EntryDiagramStates.Tests.cs"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "Phase 1 (tasks 1-5) gated and merged as 99e7b3a2."
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "The thirteen named folder-subject registrations renamed to a bare .adp, committed e5da7b01 on claude/far as \"13 files changed, 0 insertions(+), 0 deletions(-)\" — git mv only, and every rename shows R100 in git's own detection, which proves the byte-identity the task demands (content, MIME first line",
+      "files": [
+        "src/diagrams/ansible-structure/examples/example 1/infrastructure/.adp",
+        "src/diagrams/helm-charts/examples/hello-world/.adp",
+        "src/diagrams/helm-charts/examples/nginx/.adp",
+        "src/diagrams/helm-charts/examples/prometheus/.adp",
+        "src/examples/diagrams/ansible-structure/example 1/infrastructure/.adp",
+        "src/examples/diagrams/ansible-structure/jboss-standalone/.adp",
+        "src/examples/diagrams/ansible-structure/phillips_hue/.adp",
+        "src/examples/diagrams/ansible-structure/rust-module-hello-world/.adp",
+        "src/examples/diagrams/ansible-structure/tomcat-memcached-failover/.adp",
+        "src/examples/diagrams/ansible-structure/wordpress-nginx_rhel7/.adp",
+        "src/examples/diagrams/helm-charts/hello-world/.adp",
+        "src/examples/diagrams/helm-charts/nginx/.adp",
+        "src/examples/diagrams/helm-charts/prometheus/.adp"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "The shipped-examples guard, committed 240b8bbe on claude/far: NoShippedFolderSubjectRegistrationCarriesAName, placed inside ExampleRegistrationTests so it reuses the existing two-tree walk (every module's examples/ folder plus src/examples) and the WebApplicationFactory fixture whose catalog is the",
+      "files": [
+        "src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/ExampleRegistration.Tests.cs"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "Phase 2 gated and merged as 64a72303, and a renamed example observed opening in the running app."
+    }
+  },
+  "intent": "Migrated from the archived spec-workflow specification folder-add-registration of etalii.adp.ide.standalone (commit 9a64600); completed there before migration",
+  "last_action": "Migrated to Spec Kit on 2026-10-10; every task was already done",
+  "verified": [
+    {
+      "what": "Verified in etalii.adp.ide.standalone when it was built: each task's gates and guards are recorded in implementation-logs/. On migration (2026-10-10) every paragraph, list item, table row and heading of the source requirements, design, tasks and findings was checked to be present in this folder, and every task to be ticked."
+    }
+  ]
+}

@@ -1,0 +1,175 @@
+{
+  "workflow": "speckit",
+  "specName": "Drag-and-Drop Centralization and Gesture Frame Cost",
+  "branch": "develop of etalii.adp.ide.standalone",
+  "status": "completed",
+  "currentStep": "implement",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:42.327Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:42.459Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:42.598Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:42.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:42.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:42.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:42.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:42.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:42.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:42.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:42.713Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:42.713Z"
+    }
+  ],
+  "currentTask": "T008",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "The gesture-frame scheduler (src/client/src/canvas/library/gestureFrame.ts): the surface rect cached at gesture start (Requirement 1.3), a requestAnimationFrame coalescer applying the latest value once per displayed frame (Requirement 1.2), live-write handles that each know how to undo themselves, a",
+      "files": [
+        "src/client/src/canvas/library/gestureFrame.ts",
+        "src/client/src/canvas/library/gestureFrame.test.ts"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "Reposition routed through the gesture-frame scheduler under the scoped re-render the user chose and the amended design records.",
+      "files": [
+        "src/client/src/canvas/library/DiagramCanvas.tsx",
+        "src/client/src/canvas/library/DiagramCanvas.test.tsx",
+        "src/client/src/canvas/library/gestureFrame.ts",
+        "src/client/src/canvas/library/gestureFrame.test.ts"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "Pan and connect preview routed through the gesture-frame scheduler (Requirements 1.1, 1.5, 2.1-2.3).",
+      "files": [
+        "src/client/src/canvas/library/DiagramCanvas.tsx",
+        "src/client/src/canvas/library/DiagramCanvas.test.tsx"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "The guard (src/client/src/canvas/library/dragCost.test.tsx), keyed on the defect: it counts what rendered and times what a frame cost, so any mechanism that reintroduces per-element per-frame cost fails it.",
+      "files": [
+        "src/client/src/canvas/library/dragCost.test.tsx"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "The measurements and the manual check (Requirements 4.1-4.3).",
+      "files": [
+        "src/client/src/canvas/library/DiagramCanvas.tsx",
+        "tests.md"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "Gate and merge, landed as 058bb0ca on develop inside the Scrum master's coordinated hold.",
+      "files": [
+        ".spec-workflow/specs/drag-and-drop-centralization/tasks.md"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "Span resize and connection-adjust routed through the gesture-frame scheduler, closing R1.5's corrected boundary (Requirements 1.1, 1.3, 1.5, 2.1-2.3, 3.1, 3.3).",
+      "files": [
+        "src/client/src/canvas/library/DiagramCanvas.tsx",
+        "src/client/src/canvas/library/DiagramCanvas.test.tsx",
+        "src/client/src/canvas/library/dragCost.test.tsx"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "Gate and merge the amendment, landed as 353f4d6a on develop (Requirement 2.1).",
+      "files": [
+        ".spec-workflow/specs/drag-and-drop-centralization/tasks.md"
+      ]
+    }
+  },
+  "intent": "Migrated from the archived spec-workflow specification drag-and-drop-centralization of etalii.adp.ide.standalone (commit 9a64600); completed there before migration",
+  "last_action": "Migrated to Spec Kit on 2026-10-10; every task was already done",
+  "verified": [
+    {
+      "what": "Verified in etalii.adp.ide.standalone when it was built: each task's gates and guards are recorded in implementation-logs/. On migration (2026-10-10) every paragraph, list item, table row and heading of the source requirements, design, tasks and findings was checked to be present in this folder, and every task to be ticked."
+    }
+  ]
+}

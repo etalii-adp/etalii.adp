@@ -1,0 +1,145 @@
+{
+  "workflow": "speckit",
+  "specName": "Selection After a Drag",
+  "branch": "develop of etalii.adp.ide.standalone",
+  "status": "completed",
+  "currentStep": "implement",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:40.742Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:40.843Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:40.962Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:41.059Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:41.059Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:41.059Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:41.059Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:41.059Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:41.059Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:41.059Z"
+    }
+  ],
+  "currentTask": "T006",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "The gesture arbiter, committed b47b35da on claude/sad, landing dark: no canvas consumes it yet. src/client/src/canvas/gesture/ holds usePointerGesture (the state machine and hook in one file), GESTURE_MOVEMENT_THRESHOLD_PX = 4 by hypotenuse with strictly-greater semantics (a press moving exactly the",
+      "files": [
+        "src/client/src/canvas/gesture/usePointerGesture.ts",
+        "src/client/src/canvas/gesture/usePointerGesture.test.tsx",
+        "src/client/src/canvas/gesture/readme.md"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "Converted C4Canvas onto the shared usePointerGesture arbiter and deleted the trailing-click latch machinery.",
+      "files": [
+        "src/diagrams/c4/client/C4Canvas.tsx",
+        "src/diagrams/c4/client/C4Canvas.test.tsx"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "Converted MindmapCanvas onto usePointerGesture, deleting both latch faces.",
+      "files": [
+        "src/diagrams/mindmap/client/MindmapCanvas.tsx",
+        "src/diagrams/mindmap/client/MindmapCanvas.test.tsx"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "Relations everywhere converted from raw click to the arbiter's press wiring.",
+      "files": [
+        "src/client/src/canvas/connections/interactive-bezier/InteractiveBezierConnection.tsx",
+        "src/diagrams/dependency-graph/client/DependencyGraphCanvas.tsx",
+        "src/diagrams/dependency-graph/client/DependencyGraphCanvas.test.tsx",
+        "src/diagrams/timeline/client/TimelineCanvas.tsx",
+        "src/diagrams/timeline/client/TimelineCanvas.test.tsx",
+        "src/diagrams/causal-loop/client/CausalLoopCanvas.tsx",
+        "src/diagrams/causal-loop/client/CausalLoopCanvas.test.tsx"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "Converted PipelineCanvas's pan and background press onto usePointerGesture and deleted panJustEndedRef with its arming site and guard, plus panRef and the whole mouse handler block (onSurfacePointerDown/Move/Up, onBackgroundClick).",
+      "files": [
+        "src/diagrams/azure-pipeline/client/PipelineCanvas.tsx",
+        "src/diagrams/azure-pipeline/client/PipelineCanvas.test.tsx"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "Gated and landed the specification."
+    }
+  },
+  "intent": "Migrated from the archived spec-workflow specification selection-after-drag of etalii.adp.ide.standalone (commit 9a64600); completed there before migration",
+  "last_action": "Migrated to Spec Kit on 2026-10-10; every task was already done",
+  "verified": [
+    {
+      "what": "Verified in etalii.adp.ide.standalone when it was built: each task's gates and guards are recorded in implementation-logs/. On migration (2026-10-10) every paragraph, list item, table row and heading of the source requirements, design, tasks and findings was checked to be present in this folder, and every task to be ticked."
+    }
+  ]
+}

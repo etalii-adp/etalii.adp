@@ -1,0 +1,200 @@
+{
+  "workflow": "speckit",
+  "specName": "Inline rename adopted by every diagram whose label is its own",
+  "branch": "develop of etalii.adp.ide.standalone",
+  "status": "completed",
+  "currentStep": "implement",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:37.436Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:37.552Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:37.679Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:37.794Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:37.794Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:37.794Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:37.794Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:37.794Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:37.794Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:37.794Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:37.794Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:37.794Z"
+    }
+  ],
+  "currentTask": "T008",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "Extracted three pure placement helpers into the shared canvas label library, so the fourth canvas to adopt inline renaming does not copy C4's a fourth time. centredLabelPlacement, insetLabelPlacement and midpointLabelPlacement contain no React, no DOM and no module vocabulary.",
+      "files": [
+        "src/diagrams/c4/client/C4Canvas.tsx",
+        "src/client/src/canvas/label/readme.md",
+        "src/client/src/canvas/label/labelPlacement.ts",
+        "src/client/src/canvas/label/labelPlacement.test.ts"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "timeline adopts inline renaming for elements and connections, and the shared placement library grows a fourth shape the task did not anticipate.",
+      "files": [
+        "src/diagrams/timeline/backend/EtAlii.Adp.Diagram.Timeline/TimelineContextActionProvider.cs",
+        "src/diagrams/timeline/backend/EtAlii.Adp.Diagram.Timeline.Tests/TimelineContextActionProvider.Tests.cs",
+        "src/diagrams/timeline/client/TimelineCanvas.tsx",
+        "src/diagrams/timeline/client/TimelineCanvas.test.tsx",
+        "src/client/src/canvas/label/labelPlacement.ts",
+        "src/client/src/canvas/label/labelPlacement.test.ts"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "dependency-graph adopts inline renaming for nodes and relations, following the pattern task 2 landed.",
+      "files": [
+        "src/diagrams/dependency-graph/backend/EtAlii.Adp.Diagram.DependencyGraph/DependencyGraphContextActionProvider.cs",
+        "src/diagrams/dependency-graph/backend/EtAlii.Adp.Diagram.DependencyGraph.Tests/DependencyGraphContextActionProvider.Tests.cs",
+        "src/diagrams/dependency-graph/client/DependencyGraphCanvas.tsx",
+        "src/diagrams/dependency-graph/client/DependencyGraphCanvas.test.tsx"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "databricks adopts inline renaming across all three readings, since JobCanvas, BundleCanvas and PipelineCanvas wrap one canvas. rename-task and rename-bundle are marked; set-run-if, assign-cluster and the three add prompts are not, and one contrast test covers all six together. rename-bundle was the",
+      "files": [
+        "src/diagrams/databricks/backend/EtAlii.Adp.Diagram.Databricks/DatabricksContextActionProvider.cs",
+        "src/diagrams/databricks/backend/EtAlii.Adp.Diagram.Databricks.Tests/DatabricksContextActionProvider.Tests.cs",
+        "src/diagrams/databricks/client/DatabricksCanvas.tsx",
+        "src/diagrams/databricks/client/JobCanvas.test.tsx",
+        "src/diagrams/databricks/client/BundleCanvas.test.tsx",
+        "src/diagrams/databricks/client/PipelineCanvas.test.tsx",
+        "src/diagrams/databricks/client/DatabricksViewReport.test.tsx",
+        "src/client/src/canvas/label/readme.md"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "azure-pipeline adopts inline renaming and gains the F2 it never had — plus a field-reported core fix landed in the same merge: renaming an element flattened every .adp nested under its diagram.",
+      "files": [
+        "src/diagrams/azure-pipeline/backend/EtAlii.Adp.Diagram.AzurePipeline/PipelineContextActionProvider.cs",
+        "src/diagrams/azure-pipeline/backend/EtAlii.Adp.Diagram.AzurePipeline.Tests/PipelineContextActionProvider.Tests.cs",
+        "src/diagrams/azure-pipeline/client/PipelineCanvas.tsx",
+        "src/diagrams/azure-pipeline/client/PipelineCanvas.test.tsx",
+        "src/backend/EtAlii.Adp.Backend/Hierarchy/HierarchyModel.cs",
+        "src/backend/EtAlii.Adp.Backend.Tests/Unit Tests/Hierarchy/HierarchyModel.PublishSurvivesNesting.Tests.cs"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "wardley-map becomes selectable — the prerequisite, not the adoption.",
+      "files": [
+        "src/diagrams/wardley-map/client/WardleyCanvas.tsx",
+        "src/diagrams/wardley-map/client/WardleyCanvas.test.tsx"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "wardley-map adopts inline renaming on the selection task 6 gave it. wardley.rename is marked (the component's Name is the drawn label); the adds and evolve are not, and the marker test asks all three together, seen to fail both ways.",
+      "files": [
+        "src/diagrams/wardley-map/backend/EtAlii.Adp.Diagram.WardleyMap/WardleyContextActionProvider.cs",
+        "src/diagrams/wardley-map/backend/EtAlii.Adp.Diagram.WardleyMap.Tests/WardleyContextActionProvider.Tests.cs",
+        "src/diagrams/wardley-map/client/WardleyCanvas.tsx",
+        "src/diagrams/wardley-map/client/WardleyCanvas.test.tsx"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "Documentation, manual checks, the two-way coverage diff, and the final merge. docs/creating-a-diagram-module.md gains a paragraph naming the four shared placement helpers so the next module author does not compute the rectangle by hand; the label library's readme records the azure-pipeline and wardl",
+      "files": [
+        "docs/creating-a-diagram-module.md",
+        "src/client/src/canvas/label/readme.md",
+        "src/diagrams/ansible-structure/client/readme.md",
+        "src/diagrams/helm-charts/client/readme.md",
+        "tests.md",
+        "src/diagrams/rdf/client/readme.md",
+        "src/diagrams/sparql/client/readme.md"
+      ]
+    }
+  },
+  "intent": "Migrated from the archived spec-workflow specification inline-rename-adoption of etalii.adp.ide.standalone (commit 9a64600); completed there before migration",
+  "last_action": "Migrated to Spec Kit on 2026-10-10; every task was already done",
+  "verified": [
+    {
+      "what": "Verified in etalii.adp.ide.standalone when it was built: each task's gates and guards are recorded in implementation-logs/. On migration (2026-10-10) every paragraph, list item, table row and heading of the source requirements, design, tasks and findings was checked to be present in this folder, and every task to be ticked."
+    }
+  ]
+}

@@ -1,0 +1,324 @@
+{
+  "workflow": "speckit",
+  "specName": "The .NET Project and Package Dependency Graph",
+  "branch": "develop of etalii.adp.ide.standalone",
+  "status": "completed",
+  "currentStep": "implement",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.627Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.758Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.858Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T011",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:46.976Z"
+    }
+  ],
+  "currentTask": "T013",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "The module skeleton at src/diagrams/dotnet-dependency-graph/ with api/, backend/, client/ and examples/ (Requirements 1.1, 1.2).",
+      "files": [
+        "src/backend/EtAlii.Adp.slnx",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/Diagram.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/ServiceCollection.AddDotNetDependencyGraph.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/EtAlii.Adp.Diagram.DotNetDependencyGraph.csproj",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/EtAlii.Adp.Diagram.DotNetDependencyGraph.csproj.DotSettings",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/Diagram.Tests.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests.csproj",
+        "src/diagrams/dotnet-dependency-graph/api/readme.md",
+        "src/diagrams/dotnet-dependency-graph/client/readme.md",
+        "src/diagrams/dotnet-dependency-graph/examples/readme.md"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "SolutionReader plus its reading model (SolutionProject, SolutionFailure, SolutionReading under _Model/), reading both serializations (Requirements 2.1, 2.2, 2.4).",
+      "files": [
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests.csproj",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/SolutionReader.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/_Model/SolutionProject.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/_Model/SolutionFailure.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/_Model/SolutionReading.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/SolutionReader.Tests.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/Fixtures/solution/Both.sln",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/Fixtures/solution/Both.slnx",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/Fixtures/solution/Broken.slnx",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/Fixtures/solution/Alpha.csproj",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/Fixtures/solution/nested/Beta.csproj"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "ProjectReader plus ProjectReferenceReading / PackageReferenceReading / ProjectReading (Requirements 3.2, 3.3, 3.6).",
+      "files": [
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/ProjectReader.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/_Model/ProjectReferenceReading.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/_Model/PackageReferenceReading.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/_Model/ProjectReading.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/ProjectReader.Tests.cs",
+        "src/diagrams/dotnet-dependency-graph/readme.md"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "DependencyGraph plus ProjectNode / PackageNode / DependsOnEdge / DependencyGraphModel (Requirements 3.1, 3.4, 3.5, 6.7).",
+      "files": [
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/DependencyGraph.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/_Model/ProjectNode.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/_Model/PackageNode.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/_Model/DependsOnEdge.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/_Model/DependencyGraphModel.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/DependencyGraph.Tests.cs"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "PackageDescriptionReader, local NuGet cache only (Requirements 5.2, 5.3, 5.4).",
+      "files": [
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/PackageDescriptionReader.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/PackageDescriptionReader.Tests.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/Fixtures/cache/cached/1.0.0/cached.nuspec",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/Fixtures/cache/emptydescription/1.0.0/emptydescription.nuspec"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "DotNetContextPropertyProvider, every row read-only (Requirements 4.1-4.4, 5.1).",
+      "files": [
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests.csproj",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/DotNetContextPropertyProvider.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/DotNetContextPropertyProvider.Tests.cs"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "Session, factory, source resolver and the element mapper they need (Requirement 2.3).",
+      "files": [
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/SolutionReader.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/ServiceCollection.AddDotNetDependencyGraph.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/EtAlii.Adp.Diagram.DotNetDependencyGraph.csproj",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/SolutionReader.Tests.cs",
+        "src/diagrams/dotnet-dependency-graph/api/dotnet-dependency-graph.proto",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/DependencyElementMapper.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/DotNetDependencyGraphSession.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/DotNetDependencyGraphSessionFactory.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/DotNetContextSourceResolver.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/DotNetDependencyGraphSession.Tests.cs"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "Layout adopted rather than redefined (Requirements 6.1-6.6).",
+      "files": [
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/DotNetDependencyGraphLayout.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/DependencyGraphStore.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/IDependencyGraphStore.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/DotNetDependencyGraphLayout.Tests.cs"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "Refresh, automatic and explicit (Requirements 7.1-7.4).",
+      "files": [
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/DotNetDependencyGraphSession.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/SolutionWatcher.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/SolutionWatcher.Tests.cs"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "The client canvas.",
+      "files": [
+        "src/client/package.json",
+        "src/diagrams/dotnet-dependency-graph/client/DotNetDependencyGraphCanvas.tsx",
+        "src/diagrams/dotnet-dependency-graph/client/dotnetDependencyGraphModel.ts",
+        "src/diagrams/dotnet-dependency-graph/client/dotnetDependencyGraphModel.test.ts",
+        "src/diagrams/dotnet-dependency-graph/client/useDotNetDependencyGraphStream.ts",
+        "src/diagrams/dotnet-dependency-graph/client/register.ts",
+        "src/diagrams/dotnet-dependency-graph/client/register.test.ts",
+        "src/diagrams/dotnet-dependency-graph/client/dotnet-dependency-graph.css",
+        "src/diagrams/dotnet-dependency-graph/client/package.json"
+      ]
+    },
+    "T011": {
+      "status": "DONE",
+      "did": "Examples (Requirements 8.1-8.3).",
+      "files": [
+        "src/diagrams/dotnet-dependency-graph/examples/readme.md",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/SolutionReader.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/ServiceCollection.AddDotNetDependencyGraph.cs",
+        "src/package-lock.json",
+        "src/diagrams/dotnet-dependency-graph/examples/example 1/pipeline-toolkit/PipelineToolkit.slnx",
+        "src/diagrams/dotnet-dependency-graph/examples/example 1/pipeline-toolkit/PipelineToolkit.adp",
+        "src/diagrams/dotnet-dependency-graph/examples/example 1/pipeline-toolkit/Directory.Packages.props",
+        "src/diagrams/dotnet-dependency-graph/examples/example 1/pipeline-toolkit/src/Pipeline.Core/Pipeline.Core.csproj",
+        "src/diagrams/dotnet-dependency-graph/examples/example 1/pipeline-toolkit/src/Pipeline.Storage/Pipeline.Storage.csproj",
+        "src/diagrams/dotnet-dependency-graph/examples/example 1/pipeline-toolkit/src/Pipeline.Cli/Pipeline.Cli.csproj",
+        "src/diagrams/dotnet-dependency-graph/examples/example 1/pipeline-toolkit/tests/Pipeline.Core.Tests/Pipeline.Core.Tests.csproj",
+        "src/examples/diagrams/dotnet-dependency-graph/pipeline-toolkit/",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/DotNetSolutionDocumentFactory.cs"
+      ]
+    },
+    "T012": {
+      "status": "DONE",
+      "did": "Documentation (Requirements 1.4, 7.4).",
+      "files": [
+        "docs/diagrams.md",
+        "src/diagrams/dotnet-dependency-graph/readme.md"
+      ]
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "SCALE, measured against EtAlii.Adp.slnx rather than asserted. / Scale, the ruled answer.",
+      "files": [
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/DotNetDependencyGraphLayout.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/ProjectReader.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/DotNetDependencyGraphLayout.Tests.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/ProjectReader.Tests.cs",
+        "src/diagrams/dotnet-dependency-graph/readme.md",
+        "src/diagrams/dotnet-dependency-graph/api/dotnet-dependency-graph.proto",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/DependencyGraph.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/DependencyElementMapper.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph/_Model/PackageNode.cs",
+        "src/diagrams/dotnet-dependency-graph/backend/EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests/DependencyGraph.Tests.cs",
+        "src/diagrams/dotnet-dependency-graph/client/dotnetDependencyGraphModel.ts",
+        "src/diagrams/dotnet-dependency-graph/client/dotnetDependencyGraphModel.test.ts",
+        "src/diagrams/dotnet-dependency-graph/client/DotNetDependencyGraphCanvas.tsx",
+        "src/diagrams/dotnet-dependency-graph/client/dotnet-dependency-graph.css"
+      ]
+    }
+  },
+  "intent": "Migrated from the archived spec-workflow specification dotnet-dependency-graph of etalii.adp.ide.standalone (commit 9a64600); completed there before migration",
+  "last_action": "Migrated to Spec Kit on 2026-10-10; every task was already done",
+  "verified": [
+    {
+      "what": "Verified in etalii.adp.ide.standalone when it was built: each task's gates and guards are recorded in implementation-logs/. On migration (2026-10-10) every paragraph, list item, table row and heading of the source requirements, design, tasks and findings was checked to be present in this folder, and every task to be ticked."
+    }
+  ]
+}

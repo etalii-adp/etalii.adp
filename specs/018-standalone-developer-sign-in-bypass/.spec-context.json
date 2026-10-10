@@ -1,0 +1,134 @@
+{
+  "workflow": "speckit",
+  "specName": "A developer build opens without a sign-in form",
+  "branch": "develop of etalii.adp.ide.standalone",
+  "status": "completed",
+  "currentStep": "implement",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:39.299Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:39.440Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:39.553Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:39.660Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:39.660Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:39.660Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:39.660Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:39.660Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-10T14:01:39.660Z"
+    }
+  ],
+  "currentTask": "T005",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "The backend hands a developer build a real session.",
+      "files": [
+        "src/api/authentication.proto",
+        "src/backend/EtAlii.Adp.Backend/Authentication/AuthenticationService.cs",
+        "src/backend/EtAlii.Adp.Backend/Authentication/_Model/LocalAuthenticatorOptions.cs",
+        "src/backend/EtAlii.Adp.Backend/Sessions/SessionInterceptor.cs",
+        "src/backend/EtAlii.Adp.Backend.Tests/Unit Tests/Authentication/DeveloperSession.Tests.cs"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "AuthProvider asks once on mount whether this build hands out a session without a credential, and sets the two values it already had on the transport it already had.",
+      "files": [
+        "src/client/src/auth/AuthContext.tsx",
+        "src/client/src/auth/AuthContext.test.tsx",
+        "src/client/src/components/AppHeader.tsx",
+        "src/client/src/index.css",
+        "src/client/src/shell/WorkspaceShell.test.tsx",
+        "src/client/src/auth/developerSession.ts"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "A release-job step refuses to publish a build carrying the bypass, inspecting the Release-published assembly's metadata before it is zipped.",
+      "files": [
+        ".github/workflows/build.yml",
+        ".github/tools/developer-session-guard/DeveloperSessionGuard.csproj",
+        ".github/tools/developer-session-guard/Program.cs"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "IN PROGRESS, not complete. / Second increment, task still in progress. / Finished the task-4 pass.",
+      "files": [
+        "tests.md",
+        "src/examples/diagrams/shacl/w3c-shacl/readme.md"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "Gated and merged, and proved the credential path still works AND still refuses with the bypass compiled in.",
+      "files": [
+        "src/backend/EtAlii.Adp.Backend.Tests/Unit Tests/Authentication/DeveloperSession.Tests.cs"
+      ]
+    }
+  },
+  "intent": "Migrated from the archived spec-workflow specification developer-sign-in-bypass of etalii.adp.ide.standalone (commit 9a64600); completed there before migration",
+  "last_action": "Migrated to Spec Kit on 2026-10-10; every task was already done",
+  "verified": [
+    {
+      "what": "Verified in etalii.adp.ide.standalone when it was built: each task's gates and guards are recorded in implementation-logs/. On migration (2026-10-10) every paragraph, list item, table row and heading of the source requirements, design, tasks and findings was checked to be present in this folder, and every task to be ticked."
+    }
+  ]
+}
