@@ -1768,6 +1768,10 @@
                 "parent": {
                   "type": "string"
                 },
+                "slot": {
+                  "description": "(FBL 0.5) The parent's slot the element fills, as an add of section 11.2 names it.",
+                  "type": "string"
+                },
                 "after": {
                   "type": "string"
                 },
