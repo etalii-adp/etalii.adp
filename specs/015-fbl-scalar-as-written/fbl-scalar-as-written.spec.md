@@ -2,7 +2,7 @@
 
 **Feature Branch**: `features/015-fbl-scalar-as-written`
 **Created**: 2026-10-09
-**Status**: Draft
+**Status**: Implemented as FBL 0.5 ([plan.md](plan.md), [tasks.md](tasks.md))
 **Input**: The first language gap of seven conversion specifications of `etalii.adp.ide.standalone`, which plans with spec-workflow. Each is in that repository at commit `2680f361` under `.spec-workflow/specs/<name>/requirements.md`: `timeline-disl-fbl` (finding B1), `dependency-graph-disl-fbl` (B1, B2), `supply-chain-disl-fbl` (B1, B2), `sankey-disl-fbl` (B1 to B3), `functional-decomposition-graph-disl-fbl` (B1, B2), `databricks-disl-fbl` (B4) and `azure-devops-pipeline-disl-fbl` (B1). The maintainer asked on 2026-10-09 for the work that those specifications wait on to proceed.
 
 ## Context

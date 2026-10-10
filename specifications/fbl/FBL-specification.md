@@ -1,10 +1,10 @@
 # FBL — Format Binding Language
 
-**Specification, version 0.4 (Draft)**
+**Specification, version 0.5 (Draft)**
 
 |                          |                                                                                              |
 |--------------------------|----------------------------------------------------------------------------------------------|
-| Date                     | 2026-10-09                                                                                   |
+| Date                     | 2026-10-10                                                                                   |
 | Document schema          | `fbl.schema.json` (JSON Schema, draft 2020-12), `$defs/Document`                             |
 | Also in the schema       | `$defs/Registration` (the parsed `.adp` registration), `$defs/Fixture` (round-trip fixtures) |
 | Serves                   | every kind of tool: [DISL](../disl/DISL-specification.md) through `persistence.binding`, [DESL](../desl/DESL-specification.md) through `persistence.bindings` |
@@ -17,7 +17,7 @@
 
 ## Status of this document
 
-This is a draft, version 0.4. It is complete enough to implement a conforming validator of FBL documents and a host that reads and writes bodies through declared bindings, but individual constructs may still change before version 1.0. FBL 0.2 (2026-10-05, approved by the product owner as part of the DISL 0.3 additions) gives the model changes a persistence plugin plans their fields: an add with a position, a move and a retype (section 11.2), which declared bindings follow too (section 6.4); and it lets a DISL specification map a binding's own type and attribute names onto its metamodel (DISL §11.2, `persistence.typeMap`; section 5.1). Every valid 0.1 document is a valid 0.2 document with the same meaning, except that a plugin that does not declare `move` is sent a reorder or re-parent as a remove and an add. FBL 0.3 (2026-10-09, for the Knowledge designer, spec 013) changes no behaviour: it names the tool type's specification wherever 0.2 said DISL, since a DESL specification uses bindings too (DESL section 5), and pairs each construct it relies on with its DISL and its DESL section (section 1.3); it lets a specification name one binding per format family, the body choosing among them by the files each claims (sections 1.2, 8.1); it spells a reference to a stored id as `by: "id"` (sections 5.2, 5.7); it lets a fixture's edit be a `move` or an `add` with a `position`, as section 11.2 already defines them (section 15.3); and it says how a container written on one line is created and removed around its entry (section 6.2). Every valid 0.2 document is a valid 0.3 document with the same meaning. FBL 0.4 (2026-10-09, for the Agent activity diagram, spec 014, by the ruling of 2026-10-09) lets a binding keep its entries and values in a nested mapping that the body may not have yet: an insert whose container is placed `at: "end"` creates every missing level of its selector (section 6.2), an attribute reached through `child` is written into a mapping it creates the same way in yaml and json (section 5.2), and `remove-empty-levels` removes the levels an entry's removal leaves empty (section 6.2). Every valid 0.3 document is a valid 0.4 document with the same meaning. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
+This is a draft, version 0.5. It is complete enough to implement a conforming validator of FBL documents and a host that reads and writes bodies through declared bindings, but individual constructs may still change before version 1.0. FBL 0.2 (2026-10-05, approved by the product owner as part of the DISL 0.3 additions) gives the model changes a persistence plugin plans their fields: an add with a position, a move and a retype (section 11.2), which declared bindings follow too (section 6.4); and it lets a DISL specification map a binding's own type and attribute names onto its metamodel (DISL §11.2, `persistence.typeMap`; section 5.1). Every valid 0.1 document is a valid 0.2 document with the same meaning, except that a plugin that does not declare `move` is sent a reorder or re-parent as a remove and an add. FBL 0.3 (2026-10-09, for the Knowledge designer, spec 013) changes no behaviour: it names the tool type's specification wherever 0.2 said DISL, since a DESL specification uses bindings too (DESL section 5), and pairs each construct it relies on with its DISL and its DESL section (section 1.3); it lets a specification name one binding per format family, the body choosing among them by the files each claims (sections 1.2, 8.1); it spells a reference to a stored id as `by: "id"` (sections 5.2, 5.7); it lets a fixture's edit be a `move` or an `add` with a `position`, as section 11.2 already defines them (section 15.3); and it says how a container written on one line is created and removed around its entry (section 6.2). Every valid 0.2 document is a valid 0.3 document with the same meaning. FBL 0.4 (2026-10-09, for the Agent activity diagram, spec 014, by the ruling of 2026-10-09) lets a binding keep its entries and values in a nested mapping that the body may not have yet: an insert whose container is placed `at: "end"` creates every missing level of its selector (section 6.2), an attribute reached through `child` is written into a mapping it creates the same way in yaml and json (section 5.2), and `remove-empty-levels` removes the levels an entry's removal leaves empty (section 6.2). Every valid 0.3 document is a valid 0.4 document with the same meaning. FBL 0.5 (2026-10-10, spec 015, for the tools whose YAML files people write by hand) says what a slot reads from a scalar: it defines a scalar's **written text** (section 4.1.5), lets an attribute binding read it with `read` and makes it what a text attribute, an id and a reference read (sections 5.2, 5.3), presents it to CEL as `text` and `style` beside `entry` (section 2.4), lets a binding keep an entry readable when one value does not convert, with `fallback`, and read a quoted number, with `quoted` (sections 5.2, 7.4), and lets a fixture state the attribute values a reading yields (section 15.3). Every valid 0.4 document is a valid 0.5 document; section 5.2 lists the two places where 0.5 gives a meaning that 0.4 left open. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
 
 FBL relies on constructs that the specification language of the tool type's kind defines: id strategies and ephemeral ids, findings and their source locations, derived elements, the editing transaction and the tool type's origin. Where this document names one of them, the specification language is the definition; FBL defines none of its own. Where this document says **the tool type's specification**, it means the DISL specification of a diagram or the DESL specification of a designer whose persistence names the binding. Section 1.3 lists, for each construct, the section of DISL and of DESL that defines it; a citation of DISL in this document is read, for a designer, as a citation of the DESL section that table pairs it with.
 
@@ -126,7 +126,7 @@ An FBL document is a JSON document (RFC 8259) encoded in UTF-8, validated by `fb
 | Property   | Type                 | Description                                                    |
 |------------|----------------------|----------------------------------------------------------------|
 | `$schema`  | URI                  | Optional; the schema's `$id` with `#/$defs/Document`.          |
-| `fbl`      | `"0.1"`, `"0.2"`, `"0.3"`, `"0.4"` | Required. The FBL version the document is written in.    |
+| `fbl`      | `"0.1"`, `"0.2"`, `"0.3"`, `"0.4"`, `"0.5"` | Required. The FBL version the document is written in.    |
 | `doc`      | Doc                  | Documentation, as in DISL §2.4.                                |
 | `bindings` | map Name → Binding   | Required, at least one. Each binding is described in section 3. |
 
@@ -147,6 +147,8 @@ Wherever FBL needs a condition or a computed value it uses CEL, as DISL does (DI
 | Variable       | Type                     | Available in                                   | Meaning |
 |----------------|--------------------------|------------------------------------------------|---------|
 | `entry`        | map                      | rule `when`, slot `value`, sidecar `key`       | The entry the rule matched, as CEL values (section 4.1.4). |
+| `text`         | map                      | same, yaml and json *(FBL 0.5)*                | The same entry with every scalar as its written text (section 4.1.5): `text.label` is `"yes"` where `entry.label` is `true`. |
+| `style`        | map                      | same, yaml and json *(FBL 0.5)*                | The same entry with every scalar as the name of the style it is written in: `plain`, `single`, `double`, `literal` or `folded`; json strings are `double`, other json scalars `plain`. |
 | `parent`       | map or null              | same                                           | The nearest enclosing entry matched by any rule of the binding, or null. |
 | `path`         | map string → string      | tree and xml rules                             | The values of the selector's `{capture}` segments (section 4.2). |
 | `groups`       | map string → string      | lines and blocks rules                         | The named groups of the rule's `line` that took part in the match; a group that did not is absent, so `has(groups.x)` tests it. |
@@ -173,7 +175,7 @@ A body file is UTF-8, with or without a byte-order mark. A byte-order mark, if p
 
 ### 2.7 Versioning
 
-`fbl` names the version of FBL a document is written in: `"0.1"`, `"0.2"`, `"0.3"` or `"0.4"`. Each is a superset of the one before, and a host **MUST** read a document of an earlier minor version with its meaning. While 0.4 is a draft, its schema is published at the 0.1 address (`https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json`), which accepts every 0.1 document unchanged. A host **MUST** refuse a document whose major version it does not support, and **SHOULD** read a document of a newer minor version, ignoring what it does not know, with a warning. Before 1.0 any construct may change (constitution principle IV).
+`fbl` names the version of FBL a document is written in: `"0.1"`, `"0.2"`, `"0.3"`, `"0.4"` or `"0.5"`. Each is a superset of the one before, and a host **MUST** read a document of an earlier minor version with its meaning. While 0.5 is a draft, its schema is published at the 0.1 address (`https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json`), which accepts every 0.1 document unchanged. A host **MUST** refuse a document whose major version it does not support, and **SHOULD** read a document of a newer minor version, ignoring what it does not know, with a warning. Before 1.0 any construct may change (constitution principle IV).
 
 ---
 
@@ -264,6 +266,25 @@ Entries have **document order**, the order of their first bytes. Reading order i
 #### 4.1.4 Entries as CEL values
 
 An entry is presented to CEL (section 2.4) as follows. A yaml or json mapping is a map from key to value; a sequence is a list; a scalar is a string, int, double, bool or null by the YAML 1.2 core schema (JSON by its own types). An xml element is a map from attribute name to string, plus the key `text` holding its text content. A lines or blocks statement is presented as its `groups`.
+
+A key that is present with no value is present in the map with the value null, so `has(entry.end)` is true for `end:` and false where the key is absent.
+
+#### 4.1.5 Written text *(FBL 0.5)*
+
+Every scalar of a yaml or json body has, beside the typed value of section 4.1.4, a **written text**: what its author wrote.
+
+| Scalar | Written text |
+|--------|--------------|
+| yaml plain scalar | Its characters, without leading and trailing spaces and without a comment; a plain scalar over several lines is folded as YAML folds it. |
+| yaml quoted scalar (single or double) | Its content, without the quotes, with its escapes resolved. |
+| yaml block scalar (`\|`, `>`) | Its content as YAML defines it for its indicators. |
+| yaml key with no value (`end:`) | The empty text. |
+| json string | Its content, with its escapes resolved. |
+| json number, `true`, `false`, `null` | Its literal characters. |
+
+A tag does not change the written text. A scalar reached through an alias or a merge key has the written text of the scalar it stands for. The members of a flow collection have a written text each, by the same rules. The `xml`, `lines` and `blocks` families read text and nothing else, so there the value a slot reads is already what was written.
+
+So `yes`, `"yes"` and `'yes'` have the written text `yes`; `007` has `007`; `1.0` has `1.0`; `0x10` has `0x10`. The typed value of each is what the YAML 1.2 core schema gives: a bool, a string, a string, the int 7, the double 1.0, the int 16.
 
 ### 4.2 Selectors
 
@@ -396,6 +417,38 @@ An **attribute binding** is a slot bound to one attribute of the rule's type, wi
 | `content`   | `"text"`, `"html-paragraphs"` | xml text slots (section 4.5). |
 | `create`    | `{emit, place}`, *(FBL 0.4)* `{at: "end"}` | xml: how a missing child element holding the value is written: `emit` with `{value}` as the placeholder, placed `first`, `last` or `{before: name}` among the element's children. Emptying the value removes the child with the line span it has (`remove-key`). *(FBL 0.4)* yaml, json, on a `{key}` slot with `child`: when a level of the mapping `child` reaches is missing, setting a value creates every missing level as an insert's `at: "end"` does (section 6.2), then inserts the key into the innermost (`insert-key`), all at one offset; into a mapping that exists, the key goes right after the last key of that mapping the rule binds before it, or as its first key when there is none. Emptying the value (`empty: "remove"`) then also removes the levels the key leaves empty, as `remove-empty-levels` does. |
 | `readOnly`  | bool or LocalizedText | Section 3.4. |
+| `read`      | `"text"`, `"typed"` | *(FBL 0.5)* yaml, json: what the slot reads from a scalar. `text`: its written text (section 4.1.5). `typed`: its typed value (section 4.1.4), converted to the attribute's type. Absent: `text` for an attribute whose type is a string, `typed` for every other (below). |
+| `quoted`    | `"text"` (default), `"convert"` | *(FBL 0.5)* yaml, with `read: "typed"`: whether a quoted scalar converts to a number or a bool from its written text (`"12"` reads as 12) or stays a text that does not convert. |
+| `fallback`  | `{value, report}` | *(FBL 0.5)* What the attribute is when its slot is present and its value does not convert to the attribute's type: `value`. The entry stays readable and the bytes of the slot are kept. `report` (default `true`): whether the finding `fbl.unconverted-value` is reported (section 7.4). |
+
+**Reading a scalar** *(FBL 0.5)*. What a slot of a yaml or json body reads is settled by `read`, and without it by the attribute's type in the tool type's specification:
+
+| The scalar is written | A string attribute, an id, a reference; or `read: "text"` | An int or number attribute | A bool attribute | An attribute of any other type, without `read` |
+|---|---|---|---|---|
+| `yes` | `"yes"` | does not convert | `true` | its typed value, `true`, converted |
+| `1.0` | `"1.0"` | 1.0 (an int attribute: 1) | does not convert | 1.0, converted |
+| `007` | `"007"` | 7 | does not convert | 7, converted |
+| `"12"` | `"12"` | does not convert; 12 with `quoted: "convert"` | does not convert | `"12"`, converted |
+| nothing (`key:`) | `""` | null: the attribute is absent, and `default` applies | the same | the same |
+| the key is absent | the attribute is absent: `default` applies | the same | the same | the same |
+
+- A slot read as text **MUST** give the written text, whatever the scalar's typed value. `map` translates the written text. An id (section 5.3) and a reference (section 5.7) are read and compared as written text, with or without `read`.
+- A slot read as typed converts the typed value to the attribute's type. A conversion that loses nothing succeeds (the int 1 to a number, the double 1.0 to an int); any other does not convert. With `quoted: "convert"`, a quoted scalar is first read by the core schema from its written text.
+- A value that does not convert makes its entry unreadable (section 7.4), unless the binding gives the attribute a `fallback`.
+- A binding type the tool type's specification maps with `typeMap`, and a host attribute, have the type of the attribute they map to; a host attribute, which has none, is read as text.
+- `read`, `quoted` and `fallback` **MUST NOT** be given on a slot of the `xml`, `lines` or `blocks` family, nor on a `value` or `capture` slot; `fallback` applies there in no case, since a text always reads.
+
+These are the two places where 0.5 gives a meaning that 0.4 left open. 0.4 said what CEL sees of a scalar (section 4.1.4) and that a value which "does not convert to the attribute's type" makes an entry unreadable, and did not say what a string attribute reads from a scalar that the core schema types otherwise, nor how an id written `007` compares. Hosts read them differently; 0.5 settles both as the written text, which is what the tools that own such files do.
+
+```json
+"attributes": {
+  "label": { "key": "label", "empty": "keep" },
+  "begin": { "key": "begin", "read": "text", "time": "keep-precision" },
+  "row":   { "key": "row", "default": 0, "quoted": "convert", "fallback": { "value": 0, "report": false } }
+}
+```
+
+`label` is a string attribute and reads the written text unasked. `begin` is a date-time attribute that this tool keeps as the text it was written with, so that it can report a time it cannot read in its own words. `row: wide` reads as row 0 and the element is still drawn; `row: "3"` reads as 3.
 
 An attribute of the node type that no binding names is not stored in the body: it takes its DISL default, or is derived as DISL says. A DISL attribute marked `fixed` (DISL §4.3) **MUST NOT** be bound.
 
@@ -403,7 +456,7 @@ An attribute of the node type that no binding names is not stored in the body: i
 
 How ids are made, derived and whether they are ephemeral is DISL's (`persistence.ids`, DISL §11.5). FBL says only where an id is stored, with the rule's `id`:
 
-- `{"from": Slot}`: the id is the value of the slot. It is read from it, and written to it when the element is created (with a new id DISL's strategy generates, once, when the gesture happens, so a redo re-creates the element under the same id). A rename of the id is a `replace-value` plus the reference rewrites of section 5.7.
+- `{"from": Slot}`: the id is the value of the slot. It is read from it, and written to it when the element is created (with a new id DISL's strategy generates, once, when the gesture happens, so a redo re-creates the element under the same id). A rename of the id is a `replace-value` plus the reference rewrites of section 5.7. *(FBL 0.5)* The id is the slot's written text (section 4.1.5): an entry written `id: 007` has the id `007`, and a reference written `7` does not name it.
 - `{"sidecar": {"key": cel}}`: the id is kept in the registration's `identities` block (section 8.6), keyed by the value of `key`, for formats whose entries have no id of their own (a Wardley map's components are named, not identified).
 - No `id`: the id is the one DISL derives (`strategy: "derived"`), from the element's attributes and, through `self.location()`, its place in the file.
 
@@ -485,7 +538,7 @@ New text follows the body's own conventions where the body shows them, and the b
 
 **Indentation.** A new entry is indented like its previous sibling in the container, or, when it has none, like its next sibling, or, when it has neither, one indentation step deeper than its parent entry. The step is the difference between the parent's and a child's indentation anywhere in the body, the first such pair in document order; else `text.indent` (default 2, or a tab). A new yaml sequence item under a key follows `text.sequenceIndent` when the body shows no example: `indented` (default) puts `-` one step deeper than the key, `flush` in the key's column. Keys of a new mapping item align with the column after `- `.
 
-**yaml scalars.** A replaced value keeps its style (plain, single, double, literal, folded) when the new value can be written in it; else, and for a new value, the style is chosen in this order: the attribute's `style`; plain if **plain-safe**; else `text.quote` (default `double`). A string is plain-safe when it is not empty; has no leading or trailing whitespace; contains no line break or control character; does not start with any of ``- ? : , [ ] { } # & * ! | > ' " % @ ` ``; contains neither `: ` nor ` #` and does not end with `:`; and would be read back as the same string under the YAML 1.2 core schema and as a string under YAML 1.1 (so not `null`, `~`, `true`, `false`, `yes`, `no`, `on`, `off`, `y`, `n` in any case, a number, or a date or date-time), unless the attribute's DISL type is the type it would read as. Double-quoted strings escape `\`, `"` and control characters (`\n`, `\t`, `\r`, `\uXXXX`); single-quoted strings double `'`. A multi-line string with style `literal` is written `|-` with its lines indented one step deeper than its key. A list with style `flow` is written `[a, b]`, its items by the same rules; an empty list is `[]`.
+**yaml scalars.** A replaced value keeps its style (plain, single, double, literal, folded) when the new value can be written in it; else, and for a new value, the style is chosen in this order: the attribute's `style`; plain if **plain-safe**; else `text.quote` (default `double`). A string is plain-safe when it is not empty; has no leading or trailing whitespace; contains no line break or control character; does not start with any of ``- ? : , [ ] { } # & * ! | > ' " % @ ` ``; contains neither `: ` nor ` #` and does not end with `:`; and would be read back as the same string under the YAML 1.2 core schema and as a string under YAML 1.1 (so not `null`, `~`, `true`, `false`, `yes`, `no`, `on`, `off`, `y`, `n` in any case, a number, or a date or date-time), unless the attribute's DISL type is the type it would read as. Double-quoted strings escape `\`, `"` and control characters (`\n`, `\t`, `\r`, `\uXXXX`); single-quoted strings double `'`. A multi-line string with style `literal` is written `|-` with its lines indented one step deeper than its key. A list with style `flow` is written `[a, b]`, its items by the same rules; an empty list is `[]`. *(FBL 0.5)* A value written for a slot read as text **MUST** read back through the same binding as the same text. The plain-safe test above still holds for it, so the text `yes` or `1.0` is written quoted, and a file another tool reads keeps its meaning there; an attribute whose `style` is `plain` is written plain whenever YAML's syntax allows it, for a format whose every reader takes the written text.
 
 **json values.** Strings are written with the escapes RFC 8785 uses; numbers as below; `true`, `false`, `null` as such. A new member of an object or item of an array that is written one per line starts on a new line indented like its sibling; one in a container written on one line (or given by `emit`) is written after `, ` on the same line. The separator of the previous last entry is written as part of the new entry's splice.
 
@@ -531,7 +584,7 @@ A host watches every open body. When a body changes from outside and the host ha
 
 ### 7.4 Tolerant reading
 
-Reading **MUST NOT** fail on the content of a body. Every entry a rule matches but cannot read (a missing required slot, a value that does not convert to the attribute's type, a sequence item that is not a mapping) is an **unreadable entry**: it is reported as DISL's `std.unreadableEntry` at its source location, it produces no element (or an element with the readable attributes, when the binding's language says so through DISL's tolerant loading), and its bytes are kept untouched. Other entries are read as usual.
+Reading **MUST NOT** fail on the content of a body. Every entry a rule matches but cannot read (a missing required slot, a value that does not convert to the attribute's type and has no `fallback` (section 5.2), a sequence item that is not a mapping) is an **unreadable entry**: it is reported as DISL's `std.unreadableEntry` at its source location, it produces no element (or an element with the readable attributes, when the binding's language says so through DISL's tolerant loading), and its bytes are kept untouched. Other entries are read as usual.
 
 FBL's own finding codes:
 
@@ -541,6 +594,7 @@ FBL's own finding codes:
 | `fbl.dangling-reference`    | warning  | A reference or relation end names nothing (section 5.4). |
 | `fbl.header-mismatch`       | warning  | The header is missing or has another value (section 5.6). |
 | `fbl.duplicate-key`         | warning  | A json object or yaml mapping repeats a key; the first is bound. |
+| `fbl.unconverted-value`     | warning  | *(FBL 0.5)* A value does not convert to its attribute's type and the attribute is read as its `fallback` (section 5.2), unless the fallback's `report` is `false`. Its location is the value's span, and its detail carries `attribute` and the written `text`. |
 | `fbl.missing-body`          | error    | A registration's body does not exist (section 8.2). |
 | `fbl.stale-view-data`       | info     | A registration stores view data for an id the body no longer has (section 8.5). |
 | `fbl.unknown-header`        | info     | A registration has a header neither FBL nor the binding declares (section 8.1). |
@@ -832,10 +886,10 @@ A host that cannot watch files reads bodies on open and on request only, and say
 |-----------|-------------|
 | `binding` | The binding under test, relative to the fixture. |
 | `input`   | The input body, a file beside the fixture, compared byte for byte (the repository keeps these files from line-ending conversion). |
-| `read`    | What reading the input yields: `elements` (`id`, `type`), `findings` (`rule`, `line`), `unreadable`. |
+| `read`    | What reading the input yields: `elements` (`id`, `type`, and *(FBL 0.5)* optionally `attributes`, the values read for the attributes it names, a JSON string for a text and a JSON number, bool or null otherwise), `findings` (`rule`, `line`), `unreadable`. |
 | `steps`   | In order: an `edit` (add, set, remove, *(FBL 0.3)* move, place, or save without change; an add or a move carries a `position` as section 11.2 gives it), an `undo` or a `redo`; the `splices` it must produce, as `{operation, start, end, text}` with UTF-8 byte offsets into the document before the step; the document after it (`expect`, or `expectFile`); `refused` with the reason when the edit must be refused and write nothing. |
 
-A host passes a fixture when reading the input gives what `read` lists and every step produces exactly its splices and its document. For a refused step it passes when it refuses the edit and writes nothing: the text of `refused` is informative, because FBL leaves a refusal's wording to the host except where a binding gives the reason itself (`readOnly`, section 3.4), and then it is that reason. The repository's validator checks every fixture's consistency: each step's splices turn the document before it into its `expect`, and back by their inverses; an undo returns the document the undone edit started from; a save and a refused edit change nothing. Undo steps list the inverse splices under the operation of the splice each inverts.
+A host passes a fixture when reading the input gives what `read` lists (for an element with `attributes`, each attribute named there has that value and that JSON type; attributes not named are not compared) and every step produces exactly its splices and its document. For a refused step it passes when it refuses the edit and writes nothing: the text of `refused` is informative, because FBL leaves a refusal's wording to the host except where a binding gives the reason itself (`readOnly`, section 3.4), and then it is that reason. The repository's validator checks every fixture's consistency: each step's splices turn the document before it into its `expect`, and back by their inverses; an undo returns the document the undone edit started from; a save and a refused edit change nothing. Undo steps list the inverse splices under the operation of the splice each inverts.
 
 Together the fixtures exercise every operation of section 6.1.
 
