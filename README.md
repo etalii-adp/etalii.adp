@@ -12,7 +12,7 @@ The specifications of the formats and languages that the ADP tools implement. A 
 
 When a tool's model lives in another tool's file, such as a Structurizr workspace, a Freeplane mind map or an Azure Pipelines YAML file, the tool's specification points at a binding in [FBL, the Format Binding Language](specifications/fbl/FBL-specification.md) (`.fbl`), which says how that file is read and how edits are written back into it without disturbing the rest.
 
-DISL, DID and FBL have content; the other four are placeholders. [DISL at a glance](docs/disl-overview.md) shows DISL's main concepts and how they group together. Every `etalii-adp` repository but `etalii.adp.ide.standalone` is changed through a GitHub Spec Kit feature in [specs/](specs/README.md). The Build workflow validates every example against its schema. The words used here are defined in [docs/terminology.md](docs/terminology.md).
+DISL, DID and FBL have content; the other four are placeholders. [DISL at a glance](docs/disl-overview.md) shows DISL's main concepts and how they group together. [Agent activity diagram at a glance](docs/agent-activity-diagram.md) shows what the agent activity diagram, one of the tool definitions in [definitions/](definitions/), is for and how its parts fit together. Every `etalii-adp` repository but `etalii.adp.ide.standalone` is changed through a GitHub Spec Kit feature in [specs/](specs/README.md). The Build workflow validates every example against its schema. The words used here are defined in [docs/terminology.md](docs/terminology.md).
 
 ADP, A Different Perspective, is a range of task-focused tools: diagrams, designers and editors. The site is at <https://etalii.net/adp/>.
 
