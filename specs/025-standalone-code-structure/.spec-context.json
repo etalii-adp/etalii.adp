@@ -1,0 +1,31 @@
+{
+  "workflow": "speckit",
+  "specName": "The Structure of the Standalone Host's C# Code",
+  "branch": "claude/project-thread-do34w2",
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-11T14:50:13.669Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-11T14:50:14.151Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-11T14:50:14.590Z"
+    }
+  ],
+  "telemetryInstanceId": "fc66c938-9708-4194-ad90-f2b87739bf8c"
+}
