@@ -53,7 +53,7 @@ Ten milestones restructure the C# code of `etalii.adp.ide.standalone` in the ord
 |---|---|
 | Vocabulary: a name that serves every kind says *tool* | M4's generic types are `ToolDefinition…`, `ToolRouter`, `ToolOrigin` (FR-057, FR-058, FR-060). "Designer" is used only for the form-based kind. |
 | Every question to the user is a selection | The six decision points of the spec are tables of options with the assumed one marked; a review that needs a ruling asks in the same shape ([contracts/milestone-review.md](contracts/milestone-review.md)). |
-| Roles: one Developer owns a specification until every task is done | FR-006 and DP-6. Architects write the review records; a Tester does T032, the check in the running application. |
+| Roles: one Developer owns a specification until every task is done | FR-006; DP-6 was ruled (a), one owner at a time. Architects write the review records; a Tester does T032, the check in the running application. |
 | Worktrees: all implementation on `features/<name>` in `.claude/worktrees/<name>/` | FR-003, and step 1 of [quickstart.md](quickstart.md). |
 | Specification documents are written on `develop` in the main checkout | Does not apply: this feature's documents are Spec Kit files in `etalii.adp`. Nothing is written under standalone's `.spec-workflow/`. |
 | Delivery: four gates exit zero, pull request, merge commit, `retire.sh` | FR-003, [contracts/pull-request.md](contracts/pull-request.md). |
@@ -65,14 +65,14 @@ Ten milestones restructure the C# code of `etalii.adp.ide.standalone` in the ord
 | Backend code style: no blocking call in an `async` method | FR-070 removes the remaining ones the report found; `ReadWithRetry` with `Thread.Sleep` goes with FR-050. |
 | Line endings: CRLF in the working tree, byte-compared fixtures `-text` | No fixture is rewritten. The line-document work (FR-042) is where line endings are decided, and it is held by the existing byte round-trip fixtures. |
 | Every bug leaves a guard | FR-005. |
-| `tech.md`, *Declaring a diagram definition*: the stub shape | **Conflict with report 2.1**, which is why it is decision point DP-1 and why the stub tasks come last and change `tech.md` first. |
+| `tech.md`, *Declaring a diagram definition*: the stub shape | **Conflict with report 2.1**, which was decision point DP-1, ruled (a) on 2026-10-11: one catalog project. The stub tasks come last and change `tech.md` first. |
 | `tech.md`, *Registering a diagram module's services*: one `ServiceCollection.AddX.cs`, split only for a consumer | Kept. FR-030 makes the file shorter; it does not split it. |
 | `structure.md`: core must never depend on a diagram type | SC-013 makes it measurable: no `InternalsVisibleTo` from a core project to a module (two today, in the documents project). |
 | `structure.md`: prefer small, composable projects; a `PackageReference` goes in the highest parent that uses it | The new projects below; R8 places the one new package. |
 | `tech.md`, *JetBrains Rider warnings* | As principle VI above. |
-| The ruling of 2026-09-15 (`backend-centralization`): identical one-line members are not shared | **Tension with FR-028 and FR-032**, which is decision point DP-3. The other four rulings of that day are followed: core's line document wins a tie (behaviour-changes.md, B-05), sessions use the shared diff (FR-031), a save returns a result the caller must inspect (FR-033). |
+| The ruling of 2026-09-15 (`backend-centralization`): identical one-line members are not shared | **Tension with FR-028 and FR-032**, which was decision point DP-3, ruled (a) on 2026-10-11: the ruling stands for sharing a line and does not stand in the way of deleting a class. The other four rulings of that day are followed: core's line document wins a tie (behaviour-changes.md, B-05), sessions use the shared diff (FR-031), a save returns a result the caller must inspect (FR-033). |
 
-Two gates need the maintainer before the tasks they block can start: DP-1 and DP-3. Neither blocks M0.
+No gate waits on the maintainer's decision points any more: all six were ruled on 2026-10-11 (spec, *Decision points*). The open rows of [behaviour-changes.md](behaviour-changes.md) still block their own tasks.
 
 ## Decisions
 
@@ -89,9 +89,10 @@ Each is argued in [research.md](research.md).
 9. **Where the shared types live** (R9, [data-model.md](data-model.md)): the report's proposals, with one correction it did not see. A resolver base cannot live in a diagram-abstractions project that depends on the documents project only, so M4 gives the module-facing bases a project of their own.
 10. **New projects** (R10): `EtAlii.Adp.TestSupport.Host` (M0), `EtAlii.Adp.Layout` (M3), `EtAlii.Adp.Workspace`, `EtAlii.Adp.Diagram.Modules` and `EtAlii.Adp.Files` (M4), `EtAlii.Adp.Specification.Json` (M6) and, by DP-1, `EtAlii.Adp.Diagram.Catalog` (M8). Removed: `EtAlii.Adp.Backend` (M4) and, by DP-1, 48 stub projects.
 11. **Behaviour changes are registered and ruled** (R11, [behaviour-changes.md](behaviour-changes.md)). Eleven are known before the work starts.
-12. **The conversions come after M2** (R12), assumed under DP-2.
+12. **The conversions come after M2** (R12), ruled under DP-2.
 13. **A wire change is out of scope** (R13); three of the report's advices become review candidates for that reason.
 14. **What a milestone review does** (R14, [contracts/milestone-review.md](contracts/milestone-review.md)), and the candidates already foreseeable at each.
+15. **What the sessions project holds** (R17), by the ruling on DP-5: the sign-in session code and the tool-session contracts from M4, the lifetime scopes from M5. It references the thin diagram project, and the module projects reference it.
 
 ## Project Structure
 
@@ -132,10 +133,10 @@ etalii.adp.ide.standalone/
     │   ├── EtAlii.Adp.Documents/              store contract and base, entry, reloader; LineDocument, LineIndex, YamlAccess, LineLexer, ParseOutcome
     │   ├── EtAlii.Adp.Layout/                 new (M3): Rect, layering, ordering, grid packer, overlap resolver, row and text geometry
     │   ├── EtAlii.Adp.Files/                  new (M4): the file writer, watched file and folder, project file events
-    │   ├── EtAlii.Adp.Diagram/                thinned (M4): module contracts, definition, origin, registration
-    │   ├── EtAlii.Adp.Diagram.Modules/        new (M4): the session, resolver, handler and provider bases of M1
+    │   ├── EtAlii.Adp.Diagram/                thinned (M4): module contracts but the session ones, definition, origin, registration
+    │   ├── EtAlii.Adp.Diagram.Modules/        new (M4): the resolver, handler and provider bases of M1
     │   ├── EtAlii.Adp.Workspace/              new (M4): the gRPC services, connections, stream pumps
-    │   ├── EtAlii.Adp.Sessions/               gets its content in M5 (DP-5), or is deleted
+    │   ├── EtAlii.Adp.Sessions/               the sign-in session code and the tool-session contracts (M4), the lifetime scopes (M5), by DP-5
     │   ├── EtAlii.Adp.Backend/                folded into EtAlii.Adp.Backend.Service (M4)
     │   ├── EtAlii.Adp.History/                CommandResult.FromSave, the edit handler base (until M4)
     │   ├── EtAlii.Adp.Hierarchy/              the tool router (M4); HierarchyModel decomposed (M5)
@@ -159,21 +160,22 @@ etalii.adp.ide.standalone/
 | M1 Middle layer, piloted | T043 to T066 | The four pilot modules have the shape of report 1.7; the seven base types each serve four modules | Whether each base type fitted four modules without a switch; whether the estimates per role hold (and SC-006 with them); whether the rollout order of M2 should change; whether the entry type can carry a parse outcome already |
 | M2 Rollout and siblings | T067 to T117 | SC-006 to SC-009; FR-036 for all 19 modules | Whether the action and property providers can become generic once FBL bindings and DISL definitions describe the edits; whether timeline and dependency-graph should share a model base or simply wait for their conversions; which M3 utilities the rollout already removed; whether a module's remaining `ServiceCollection.AddX.cs` can be derived |
 | M3 Shared utilities | T118 to T154 | SC-004, SC-010, SC-011 | Whether tools should agree on one cycle policy (a product decision, to be put as a selection); whether the watchers can now be one per project root everywhere; which module layouts are small enough to be data |
-| M4 Core project graph | T155 to T184 | SC-012, SC-015, SC-016 | Whether the problems project still needs the hierarchy project; whether the gRPC services of the context, hierarchy, history and projects projects should move to the host project too; the three wire candidates (a `text` stream member, renaming the wire `Path`, removing the legacy calls); whether the editor and designer projects still earn their own project |
-| M5 Core hotspots | T185 to T206 | SC-013, SC-017, SC-018; D10 closed | Whether the three retained stores collapse into the connection session; whether `IContextWatchHooks` can go; what is left of `ContextService` |
+| M4 Core project graph | T155 to T184, T265, T266 | SC-012, SC-015, SC-016; SC-028 for the sign-in code and the contracts | Whether the sessions project can be kept free of the hosting packages; whether the problems project still needs the hierarchy project; whether the gRPC services of the context, hierarchy, history and projects projects should move to the host project too; the three wire candidates (a `text` stream member, renaming the wire `Path`, removing the legacy calls); whether the editor and designer projects still earn their own project |
+| M5 Core hotspots | T185 to T206 | SC-013, SC-017, SC-018; SC-028 for the lifetime; D10 closed | Whether the three retained stores collapse into the connection session; whether `IContextWatchHooks` can go; what is left of `ContextService` |
 | M6 Specification projects | T207 to T230 | SC-019 to SC-022; D9 closed | Which conversions are now unblocked and in what order; whether the hand-written XML parser is still justified; whether DISL still needs to reference FBL at all |
 | M7 Module internals | T231 to T244 | The methods FR-086 to FR-092 name are under the lengths of SC-023, or struck under FR-012 | Which of these modules a conversion has overtaken; whether the budgeted graph builder serves SPARQL as well |
 | M8 Tests and stubs | T245 to T260 | SC-005, SC-027; FR-093 to FR-097 | Whether any per-module test helper is left; whether the catalog should be generated from `docs/tools.md` |
-| M9 Close | T261 to T264 | SC-023 to SC-026; FR-098 | What becomes a follow-up feature; the ruling on DP-4 |
+| M9 Close | T261 to T264 | SC-023 to SC-026; FR-098 | What becomes a follow-up feature |
 
 ## Complexity Tracking
 
 | Deviation | Why it is needed | The simpler alternative, and why it was not taken |
 |---|---|---|
-| A standalone feature specified here, against the constitution's *Structure and Naming* | The maintainer asked for exactly this on 2026-10-11 (spec, *Input*). | A spec-workflow specification in standalone, as the convention says. Not taken because the request was explicit. The convention's text is left unchanged; DP-4 asks whether it should change. |
+| A standalone feature specified here, against the constitution's *Structure and Naming* | The maintainer asked for exactly this on 2026-10-11 (spec, *Input*). | A spec-workflow specification in standalone, as the convention says. Not taken because the request was explicit. The convention's text is left unchanged; DP-4 was ruled (a), so it stays. |
 | Five new core projects and one new specification project (principle V) | Each has a consumer today: the flow tests (`TestSupport.Host`), nine rectangle copies and six layerings (`Layout`), the services that make the diagram-abstractions project a host (`Workspace`), the module bases that need the context project (`Diagram.Modules`), the file writer and three watchers (`Files`), two loaders with the same helpers (`Specification.Json`). | Folders inside existing projects. Not taken for `Workspace`, `Diagram.Modules` and `TestSupport.Host` because the point is what a referencing project pulls in; taken as the fallback for `Layout`, `Files` and `Specification.Json` if the M3, M4 or M6 pull request shows the project would hold fewer than a handful of types. |
-| Base classes where the 2026-09-15 ruling preferred copies of one line | The classes removed are whole files of forwarding (16 reloaders, 21 session factories), not single lines. | Leaving them. DP-3 lets the maintainer choose that. |
-| 264 tasks in one feature | The report is one reading and its findings lean on each other; one sequence of reviews needs one task list. | One feature per milestone. DP-6 (b) lets the maintainer choose that; the milestones are cut so that it can be done without rewriting the tasks. |
+| Base classes where the 2026-09-15 ruling preferred copies of one line | The classes removed are whole files of forwarding (16 reloaders, 21 session factories), not single lines. | Leaving them. The maintainer ruled against that under DP-3 (a). |
+| The tool-session contracts in the sessions project, beside the sign-in interceptor | The maintainer ruled on 2026-10-11 that the sessions project owns all session-related logic and types (DP-5). | The contracts in the thin diagram project, as first planned. Not taken, by the ruling. Its cost is that a module referencing the contracts references what the interceptor needs; the M4 review asks whether that can be confined (R17). |
+| 266 tasks in one feature | The report is one reading and its findings lean on each other; one sequence of reviews needs one task list. | One feature per milestone. The maintainer ruled for one feature and one owner under DP-6 (a); the milestones stay cut so that a later split would not rewrite the tasks. |
 
 ## What is not done here
 
