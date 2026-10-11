@@ -84,7 +84,7 @@ In M4 the session base, the resolver base, the handler base and the provider fra
 | `EtAlii.Adp.Workspace` | `DiagramService*`, `WorkspaceService`, `EditorService`, `DesignerService`, `WorkspaceConnections`, the table wire, the reload bridge | new project | Those types in the diagram project | FR-054 |
 | `EtAlii.Adp.Diagram.Modules` | The M1 bases a module derives from | new project | Their M1 home | FR-054, R9 |
 | `EtAlii.Adp.Files` | The file writer, the watchers, the project file events, the Restart Manager and NTFS calls | new project | That part of the documents project | FR-056 |
-| `IToolDefinition` | What a diagram, designer and editor definition have in common | `EtAlii.Adp/` | Nothing | FR-057 |
+| `IToolDefinition` | What the definitions of the three tool kinds have in common | `EtAlii.Adp/` | Nothing | FR-057 |
 | `ToolDefinitionDiscovery`, `ToolDefinitionCatalog<T>`, `ToolSessionFactories<TKey, TFactory>`, `AddToolDefinitions<T>` | Discovery with one dedupe-and-log, a catalog, a factory registry and a registration, for any tool kind | `EtAlii.Adp/` | Three of each | FR-057 |
 | `ToolRouter.Route(path, root)` and `ToolRouting` | Which tool serves a path: `DiagramRouted`, `DesignerRouted`, `EditorRouted`, `Unreadable`, `None` | `EtAlii.Adp.Hierarchy/`, the lowest project that sees all three catalogs | Three routers and four codings of the precedence | FR-058 |
 | `ProjectRoot`, `ProjectPath` | A root and a path within it, normalized once | `EtAlii.Adp/` | `string rootPath` as a key in five stores; wraps `PathContainment` | FR-059 |

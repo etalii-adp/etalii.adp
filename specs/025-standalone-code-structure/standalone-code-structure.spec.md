@@ -109,7 +109,7 @@ A developer opening the solution can tell from a project's name and its referenc
 
 **Why this priority**: every module reference and every architecture page rests on it, and it is the largest move of code between projects, which is why it waits until the modules are small.
 
-**Independent Test**: the project graph of the measurement scripts shows the diagram-abstractions project referencing only the documents project and the shared primitives; no project without code; no core project naming a tool module; and a search finds the precedence of diagram, designer and editor decided in one method.
+**Independent Test**: the project graph of the measurement scripts shows the diagram-abstractions project referencing only the documents project and the shared primitives; no project without code; no core project naming a tool module; and a search finds the precedence between the three tool kinds (diagrams, then designers, then editors) decided in one method.
 
 **Acceptance Scenarios**:
 
@@ -292,7 +292,7 @@ At the end of each milestone the owner runs the measurements again, compares the
 - **FR-055**: The client-hosting project of 146 lines MUST be folded into the service project (4.2).
 - **FR-056**: The documents project MUST be split into its wire, layout and file-system parts, and no core project MUST grant `InternalsVisibleTo` to a tool module (4.2).
 - **FR-057**: Discovery, catalog, session-factory registry and registration MUST be generic over one tool-definition contract, each catalog registered once in its own family's registration (4.3).
-- **FR-058**: One router MUST decide which tool serves a path, and the precedence of diagram, designer and editor MUST be coded there and nowhere else (4.3).
+- **FR-058**: One router MUST decide which tool serves a path, and the precedence between the three tool kinds (diagrams, then designers, then editors) MUST be coded there and nowhere else (4.3).
 - **FR-059**: A project root and a path within it MUST be value types that normalize once and carry the containment of FR-024 (4.5).
 - **FR-060**: One origin type MUST serve all three tool kinds (4.5).
 - **FR-061**: One type MUST own the `.adp` registration (the MIME line, the headers, the layout), with a cache keyed on modification time, and the registration layout MUST move to the diagram-abstractions project so that no module references the hierarchy project for it (4.6).
@@ -405,7 +405,7 @@ Every count is taken by the scripts of FR-009 against the baseline. The figures 
 - **SC-012**: The diagram-abstractions project references the documents project and the shared primitives, no other core project (8 at the report's reading), and no web or gRPC hosting package. At the end of M4.
 - **SC-013**: No project of the solution is without code; no core project names a tool module, in a reference, in `InternalsVisibleTo` or in code. At the end of M5.
 - **SC-014**: One implementation decides path containment (7), and it is exercised on Linux and on Windows by guards for case and for an escaping link. From M0.
-- **SC-015**: The precedence of diagram, designer and editor is decided in one method (4 places); one discovery, one catalog type and one session-factory registry serve three families (3 of each). At the end of M4.
+- **SC-015**: The precedence between the three tool kinds (diagrams, then designers, then editors) is decided in one method (4 places); one discovery, one catalog type and one session-factory registry serve three families (3 of each). At the end of M4.
 - **SC-016**: `projects.json` is read at most once per request, and at most once per user between writes (8 call sites that read it each time). At the end of M4.
 - **SC-017**: The hierarchy model is at most half its size (918 lines), does no input or output and raises no event while holding its lock. At the end of M5.
 - **SC-018**: Every channel is bounded; a search finds no blocking wait on asynchronous work and no task started and left unobserved in the places report 5.3 lists. At the end of M5.
