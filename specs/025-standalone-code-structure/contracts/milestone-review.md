@@ -50,6 +50,7 @@ A review answers every one of its rows, even where the answer is "no".
 | M3 | The findings of every module as one `ParseOutcome` flow into the problems project | Four styles became one |
 | M4 | Does the problems project still need the hierarchy project? | It needed the diagram project only for `IDiagramValidator`, and the router has moved |
 | M4 | Move the gRPC services of the context, hierarchy, history and projects projects to the host project | So that a module references domain projects only and carries no hosting package |
+| M4 | Keep the sessions project free of the hosting packages | It holds the sign-in interceptor beside the tool-session contracts every module references (DP-5) |
 | M4 | A `text` member on the workspace stream (report 4.4) | A wire change; the host project and the stream pump make its cost readable |
 | M4 | Rename the wire message `Path` and retire the `IoPath` alias in 417 files (report 5.4) | A wire change with a mechanical follow-through |
 | M4 | Remove the three legacy calls kept for tests (report 5.4) | The flow harness of M0 may no longer need them |
@@ -66,7 +67,7 @@ A review answers every one of its rows, even where the answer is "no".
 | M7 | Which module-internal tasks a conversion overtook | FR-012 |
 | M7 | The budgeted graph builder for SPARQL as well | SPARQL already uses a nested builder |
 | M7 | The longest methods that are left | The method-length count after M7 |
-| M8 | Generate the catalog from `docs/tools.md` | DP-1 (b), if (a) was ruled |
+| M8 | Generate the catalog from `docs/tools.md` | DP-1 (b), not taken when (a) was ruled; the hand-written list now exists to be judged |
 | M8 | Per-module test helpers that are left | The clone scan over the test code |
 | M9 | Everything recorded as a follow-up feature | It is listed once, in order of value, for the maintainer |
 

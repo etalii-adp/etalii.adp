@@ -40,6 +40,16 @@ Run after the tasks were written, over the specification, the plan and the tasks
 - Findings corrected during the analysis: the tool router's home (the hierarchy project, not the host project, because the hierarchy model must switch on its result); the order inside M4 that follows from it; SC-012 (a module with real code still references projects that hold gRPC services, so the criterion is about the diagram-abstractions project itself and the rest is a candidate of the M4 review); SC-017 (a size target for every core type was this specification's invention and was reduced to the hierarchy model); the project count in the plan.
 - Open, and the maintainer's: DP-1 to DP-6, and the open rows of [behaviour-changes.md](../behaviour-changes.md).
 
+## Refinement (2026-10-11)
+
+Run after the maintainer ruled the six decision points, over the specification, the plan, the research, the data model, the review contract and the tasks.
+
+- All sixteen items above still hold, and none changed state. DP-1 to DP-6 are no longer open: each has its ruling in the specification's *Decision points* table and its question and answer under *Clarifications*.
+- The ruling on DP-5 went further than the option the plan had assumed. It changed FR-054, FR-065 and FR-067, added SC-028, two edge cases, two key entities, tasks T265 and T266, research R17 and one candidate of the M4 review.
+- The rulings on DP-1 and DP-4 removed conditions: FR-097 and SC-027 no longer say "if", T255 no longer has a branch that strikes it, and the close tasks no longer wait on DP-4.
+- Every requirement FR-001 to FR-098 and every criterion SC-001 to SC-028 still has its tasks in [tasks.md](../tasks.md), *Coverage*.
+- Open, and the maintainer's: the open rows of [behaviour-changes.md](../behaviour-changes.md).
+
 ## Notes
 
 - Constitution: one recorded deviation, the standalone feature being specified here, by the maintainer's request (plan, *Complexity Tracking*).

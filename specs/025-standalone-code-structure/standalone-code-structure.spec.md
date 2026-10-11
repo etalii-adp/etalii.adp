@@ -1,11 +1,11 @@
 # Feature Specification: The Structure of the Standalone Host's C# Code
 
-**Feature Branch**: `claude/project-thread-do34w2` in `etalii.adp` (the branch this session's harness handed it); in `etalii.adp.ide.standalone`, one `features/025-<task>` branch per pull request
+**Feature Branch**: in `etalii.adp`, `claude/project-thread-do34w2` for the specification (the branch that session's harness handed it) and `features/025-standalone-code-structure` for its refinement; in `etalii.adp.ide.standalone`, one `features/025-<task>` branch per pull request
 **Created**: 2026-10-11
-**Status**: Draft, for the maintainer's review ([plan.md](plan.md), [tasks.md](tasks.md))
+**Status**: Refined on 2026-10-11, with the six decision points ruled by the maintainer ([plan.md](plan.md), [tasks.md](tasks.md))
 **Input**: The maintainer's request of 2026-10-11, verbatim: "In the etalii.adp repo, create a expansive and elaborate Spec Kit specification for this work. The work itself should of course be executed in the etalii.adp.ide.standalone repo. Be thorough. List the work you already have tracked but also do not be shy to at specific milestones in the process review if there are new refactorings that now all of a sudden also make sense." *This work* is the code analysis of the C# code of `etalii.adp.ide.standalone` at `develop` `fcb64c9`, read on 2026-10-10, kept verbatim beside this file as [analysis-2026-10-10.md](analysis-2026-10-10.md) and called **the report** below.
 
-**A convention is set aside here, on purpose.** This repository's `CLAUDE.md`, its constitution and [specs/README.md](../README.md) say that `etalii.adp.ide.standalone` plans with spec-workflow in its own `.spec-workflow/`. The maintainer asked for this change as a Spec Kit feature in this repository, and that explicit request is followed. Those three documents are not changed by this feature: whether the convention itself changes is decision point DP-4. The folders `016-standalone-*` to `024-standalone-*` are migrated history, every task ticked before it arrived here; this is the first standalone feature that is live work in this folder.
+**A convention is set aside here, on purpose.** This repository's `CLAUDE.md`, its constitution and [specs/README.md](../README.md) say that `etalii.adp.ide.standalone` plans with spec-workflow in its own `.spec-workflow/`. The maintainer asked for this change as a Spec Kit feature in this repository, and that explicit request is followed. Those three documents are not changed by this feature, and the convention stands for standalone's other features: the maintainer ruled so on 2026-10-11 (DP-4). The folders `016-standalone-*` to `024-standalone-*` are migrated history, every task ticked before it arrived here; this is the first standalone feature that is live work in this folder.
 
 ## Context
 
@@ -39,14 +39,14 @@ The work is cut into ten milestones. Each ends with a **milestone review** (User
 | M1 | The module middle layer, piloted | The seven shared role types exist in core, shaped against four modules: sankey, supply-chain, functional-decomposition-graph and gartner-hype-cycle-graph | 1.1 to 1.7, 8.4 |
 | M2 | The middle layer in every module, and the sibling modules | The other fifteen modules stand on the same types; the watched-folder modules, the RDF family and the timeline and dependency-graph pair share what they copied | 1, 2 |
 | M3 | Shared utilities | One implementation of each utility the report found copied | 3, 8.5 |
-| M4 | The core project graph | A thin diagram-abstractions project and a host project; generic tool families; one router; typed paths, origins and registrations | 4 |
-| M5 | Core hotspots | No disk work and no event under the hierarchy lock; one owner of a connection's lifetime; an injectable file writer; one stream pump | 5 |
+| M4 | The core project graph | A thin diagram-abstractions project and a host project; the sessions project holding the sign-in session code and the tool-session contracts; generic tool families; one router; typed paths, origins and registrations | 4 |
+| M5 | Core hotspots | No disk work and no event under the hierarchy lock; the sessions project as the one owner of a connection's and a project's lifetime; an injectable file writer; one stream pump | 5 |
 | M6 | The specification projects | One loader infrastructure, one CEL cache, one write template; DISL typed at load; parsers on libraries where a library serves | 6 |
 | M7 | Module internals | The projection, parser, layout and session god types of the largest modules decomposed | 7 |
-| M8 | Test consolidation and the stub modules | One transcript harness; module flows out of the core test project; the stub modules in the shape the maintainer rules | 2.1, 8.3, 8.6, 8.7 |
+| M8 | Test consolidation and the stub modules | One transcript harness; module flows out of the core test project; the 48 stub definitions in one catalog project | 2.1, 8.3, 8.6, 8.7 |
 | M9 | Close | The final measurement against every success criterion; the follow-up features written down | all |
 
-The order is the report's roadmap with two changes it suggested itself: the test safety net moves to the front "given past CI flakiness", and the stub modules go last because they wait on a steering decision.
+The order is the report's roadmap with two changes it suggested itself: the test safety net moves to the front "given past CI flakiness", and the stub modules go last because their move rewrites a steering rule and nothing else waits on it.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -105,7 +105,7 @@ A developer who needs a line document, an offset-to-line index, a rectangle, a l
 
 ### User Story 4 - The project graph says what the architecture says (Priority: P2)
 
-A developer opening the solution can tell from a project's name and its references what it is for. The project that holds the diagram contracts does not hold the web host. A rule that holds for every tool kind is written once and says *tool*.
+A developer opening the solution can tell from a project's name and its references what it is for. The project that holds the diagram contracts does not hold the web host. Whatever is a session is found in the sessions project. A rule that holds for every tool kind is written once and says *tool*.
 
 **Why this priority**: every module reference and every architecture page rests on it, and it is the largest move of code between projects, which is why it waits until the modules are small.
 
@@ -117,6 +117,7 @@ A developer opening the solution can tell from a project's name and its referenc
 2. **Given** a path under a project root, **When** any part of the backend asks which tool serves it, **Then** it asks one router and switches on one result.
 3. **Given** a path a client sends, **When** it is resolved against a project root, **Then** one implementation decides containment, compares names as the operating system does, and refuses a link that leaves the root.
 4. **Given** an `.adp` registration, **When** it is read or written anywhere, **Then** one owning type parsed or produced it.
+5. **Given** a type of core whose job is a session (a sign-in session, the lifetime of a connection or a project, or the contract through which a tool session is opened and driven), **When** a developer looks for it, **Then** it is declared in the sessions project and in no other core project.
 
 ---
 
@@ -140,7 +141,7 @@ A user works in a large project with several clients connected. A change on disk
 
 A developer changing how a DISL construct behaves changes the typed node for it, and finds the schema knowledge in the loader and nowhere else. A developer adding a format family writes its parser and three slot operations, and inherits the write loop.
 
-**Why this priority**: it is contained in three projects with strong test suites and blocks nobody, but the fifteen conversions build on these libraries, so its order against them is decision point DP-2.
+**Why this priority**: it is contained in three projects with strong test suites and blocks nobody, but the fifteen conversions build on these libraries, so its order against them was ruled under DP-2: the conversions follow M2, and M6 is re-read at its review for what they removed.
 
 **Independent Test**: the conformance fixtures of FBL vendored from this repository and the DISL test suite pass unchanged; a search of DISL's derivation code finds no raw JSON access; and one cache serves every compiled expression.
 
@@ -204,6 +205,8 @@ At the end of each milestone the owner runs the measurements again, compares the
 - **A base type that does not fit a module.** Mindmap reacts to the kind of structural change, SPARQL is read-only, C4 keeps a boolean failure flag, and four modules read registration headers. A module that cannot adopt a shared type keeps its own and its adoption task records why, in one sentence, in the code and in the milestone review. A base type is never bent with a switch on the module to make it fit.
 - **A copy that differs on purpose.** Before two copies are joined, their difference is read. A difference that is a decision stays, as a parameter with a name (a cycle policy, a comment rule). A difference that is drift goes into the behaviour-change register.
 - **A conversion to FBL arrives first.** A task that restructures a parser, a writer, or an action or property provider of a module whose `*-disl-fbl` specification has started is not done; the review records it as overtaken.
+- **A stub that becomes an implemented module.** Its definition leaves the catalog in the same pull request that gives the module a project of its own, so that discovery finds the type exactly once at every commit. That pull request belongs to the feature that implements the type, not to this one.
+- **A session type that cannot move.** A module's own session class stays in its module. A shared session type that needs a project the sessions project cannot reference without closing a cycle stays where it is, and the M4 or M5 review names it with the reference that stood in the way.
 - **Pull request 167 is closed without merging.** D1, D3, D7 and D8 then come back into this feature as guard-first tasks, added at the next review.
 - **A guard cannot be made to fail.** Then the defect is not shown. The task records what was tried and the defect is struck from the list as unconfirmed, as the report itself allows ("none was confirmed with a failing test").
 - **A count on the architecture pages changes.** The pull request that changes a project count, a project name or a path updates `docs/architecture.md` and `docs/solution-structure.md` and the figures `ArchitecturePages.Tests` holds, or its gates do not pass.
@@ -228,8 +231,8 @@ At the end of each milestone the owner runs the measurements again, compares the
 - **FR-009**: The report's measurement method MUST be kept as runnable scripts in `etalii.adp.ide.standalone`: line counts per project, the normalized clone scan, the method-length count and the project graph. Their output for the commit the work starts from is this feature's baseline.
 - **FR-010**: After the last task of each milestone, a milestone review MUST be carried out and recorded as `reviews/M<n>-review.md` in this folder, following [contracts/milestone-review.md](contracts/milestone-review.md). It re-runs the measurements, compares them with the previous record, answers each candidate named for that review, and asks what else has become worth doing. No task of the next milestone starts before the record is merged.
 - **FR-011**: A refactoring a review finds MUST become new tasks in `tasks.md` when it serves this feature's requirements, or a written follow-up feature when it does not. A planned task a review finds unnecessary MUST be struck with a reference to the review. Nothing is dropped without a line saying so.
-- **FR-012**: Before a task restructures the parser, the writer, the action provider or the property provider of a diagram module, the state of that module's `*-disl-fbl` specification in `etalii.adp.ide.standalone` MUST be read. Where that specification has implementation under way, or is ordered ahead of the task by DP-2, the task is reduced to what survives the conversion, and the review records it.
-- **FR-013**: A task that depends on a decision point of section *Decision points* MUST NOT start before the maintainer's ruling is recorded in this specification.
+- **FR-012**: Before a task restructures the parser, the writer, the action provider or the property provider of a diagram module, the state of that module's `*-disl-fbl` specification in `etalii.adp.ide.standalone` MUST be read. By the ruling on DP-2, M0 to M2 come before the conversions, and the conversions' implementation follows the M2 review. Where a conversion has nevertheless started, or from M3 on has reached the module first, the task is reduced to what survives the conversion, and the review records it.
+- **FR-013**: A task that depends on a decision point of section *Decision points* MUST NOT start before the maintainer's ruling is recorded in this specification. The six of this specification were ruled on 2026-10-11; the rule holds for every decision point a review adds.
 - **FR-014**: A task is ticked in `tasks.md` only when the pull request in `etalii.adp.ide.standalone` that carries it is merged.
 
 #### M0: the safety net (report 8.1, 8.2, 8.6, 11 step 1)
@@ -288,7 +291,7 @@ At the end of each milestone the owner runs the measurements again, compares the
 
 #### M4: the core project graph (report 4)
 
-- **FR-054**: The diagram-abstractions project MUST hold the module contracts and the diagram definition and origin, and depend on the documents project only. The gRPC services, the connection registry, the table wire and the reload bridge MUST move to a host project (4.1).
+- **FR-054**: The diagram-abstractions project MUST hold the module contracts other than the tool-session contracts (FR-065) and the diagram definition and origin, and depend on the documents project only. The gRPC services, the connection registry, the table wire and the reload bridge MUST move to a host project (4.1).
 - **FR-055**: The client-hosting project of 146 lines MUST be folded into the service project (4.2).
 - **FR-056**: The documents project MUST be split into its wire, layout and file-system parts, and no core project MUST grant `InternalsVisibleTo` to a tool module (4.2).
 - **FR-057**: Discovery, catalog, session-factory registry and registration MUST be generic over one tool-definition contract, each catalog registered once in its own family's registration (4.3).
@@ -299,12 +302,12 @@ At the end of each milestone the owner runs the measurements again, compares the
 - **FR-062**: `projects.json` MUST be cached per user, invalidated on write, written under a lock, and a request MUST resolve its project once. The project text file moves to the projects project (4.6).
 - **FR-063**: Entry names MUST be validated by one validator (4.6).
 - **FR-064**: History and Context MUST NOT depend on each other in both directions: the notice sink is owned by History, the broadcasters are hosted services, and the diagram catalog is not registered by the command registration (4.7).
-- **FR-065**: The sessions project MUST NOT stay empty: by the end of M5 it is deleted or it owns connection and project lifetime, as DP-5 rules.
+- **FR-065**: The sessions project MUST own every type of core whose job is a session, by the ruling on DP-5. By the end of M4 that is the sign-in session code that sits in the authentication project (the session store, the session context, the interceptor and their registration) and the tool-session contracts of the three tool kinds with their factory contracts and factory registries. By the end of M5 it is also the lifetime of a connection and of a project (FR-067). A shared session base (FR-031, FR-053) lives there too, unless a review records the reference that prevents it. A module's own session class stays in its module.
 
 #### M5: core hotspots (report 5)
 
 - **FR-066**: The hierarchy model MUST be decomposed into an event normalizer, an index with children-by-parent lookup and a state decorator; MUST do no disk work under its lock; MUST raise events after the lock is released (FR-026); and MUST have required dependencies in place of the optional ones kept "for older tests" (5.1).
-- **FR-067**: One scope MUST acquire and release what a connection and a project hold (history, problem watching, the hierarchy model), and the gRPC services MUST delegate to domain services and not to each other (5.2).
+- **FR-067**: One scope, owned by the sessions project (FR-065), MUST acquire and release what a connection and a project hold (history, problem watching, the hierarchy model), and the gRPC services MUST delegate to domain services and not to each other (5.2).
 - **FR-068**: The file writer MUST be injectable, with asynchronous, reference-counted locks per path that are released when unused (5.4).
 - **FR-069**: Opening, pumping and closing a stream MUST be one helper for diagram and table streams, which checks once that the connection exists and belongs to the user and awaits its tasks on close (5.3).
 - **FR-070**: Every channel MUST be bounded with a stated drop policy; no task MUST be left unobserved; no asynchronous work MUST be blocked on (5.3).
@@ -343,7 +346,7 @@ At the end of each milestone the owner runs the measurements again, compares the
 - **FR-094**: The hand-written test dispatchers, the hand-built temporary folders and the copies of the repository-root locator MUST be replaced by the testing project of FR-015 (8.6).
 - **FR-095**: Flows that test one module MUST live with that module, and the two hand-kept per-module type catalogues MUST be derived or removed (8.7).
 - **FR-096**: The tests of `gate.sh` and `land.sh`, a process `CLAUDE.md` of that repository says no longer applies, MUST leave the product test suite (8.7).
-- **FR-097**: The 48 stub modules MUST take the shape DP-1 rules. Where that changes the stub shape `.spec-workflow/steering/tech.md` mandates, the steering document and the architecture pages are changed in the same pull request as the first stub that moves.
+- **FR-097**: The definitions of the 48 stub modules MUST move into one catalog project that holds them as one hand-written list, by the ruling on DP-1, and their 48 projects and folders MUST be removed. The stub shape `.spec-workflow/steering/tech.md` mandates and the "a type is a folder" sentences of the architecture pages are changed in the same pull request as the first stub that moves. `docs/tools.md` still names every type, and what a user sees of a cataloged type does not change.
 
 #### M9: close
 
@@ -356,23 +359,25 @@ At the end of each milestone the owner runs the measurements again, compares the
 - **Milestone review**: the measurement, comparison and reconsideration at a milestone's end, with its record in `reviews/`.
 - **Baseline**: the output of the measurement scripts for the commit the work starts from.
 - **Behaviour-change register**: [behaviour-changes.md](behaviour-changes.md), every place where sharing changes what a tool does.
-- **Decision point**: a choice that is the maintainer's, with the tasks it blocks.
+- **Decision point**: a choice that is the maintainer's, with the tasks it blocks and, once given, its ruling.
+- **Session**: the host uses the word for three things, and the sessions project owns all three (FR-065). A *sign-in session* says who a call is made by. A *lifetime session* is what a connection or a project holds while it lives. A *tool session* is one open diagram, designer or editor, driven through a contract that a module implements.
+- **Catalog project**: the one project that holds the definitions (origin, title, description, icon) of the cataloged tool types that have no implementation yet (FR-097).
 - **Role class**: one of the ten classes every diagram module repeats: source resolver, session, session factory, document store, entry, changed-event args, reloader, document factory, edit helper, command handler.
 - **Pilot module**: sankey, supply-chain, functional-decomposition-graph or gartner-hype-cycle-graph.
 - **Conversion specification**: one of the fifteen `*-disl-fbl` spec-workflow specifications of `etalii.adp.ide.standalone`.
 
 ## Decision points
 
-Each is the maintainer's to rule. The plan assumes the option marked *assumed* so that work which does not depend on the ruling can be planned, and FR-013 holds the tasks that do.
+Each was the maintainer's to rule, and each was ruled on 2026-10-11 (*Clarifications*, the second session of that day). The options not taken stay in the table as the record of what was weighed. A decision point that a milestone review adds is put in the same shape, and FR-013 holds the tasks that depend on it until it is ruled.
 
-| # | Decision | Options | Blocks |
-|---|---|---|---|
-| DP-1 | The shape of the 48 stub modules. `.spec-workflow/steering/tech.md` (*Declaring a diagram definition*) mandates one project per stub, and the architecture pages say "a type is a folder". | (a) one catalog project holding all 48 definitions: 188 files and 47 projects fewer, no core change (*assumed*); (b) the catalog generated from `docs/tools.md`; (c) the stubs stay as they are | FR-097, the stub tasks of M8 |
-| DP-2 | The order of this feature against the fifteen conversion specifications. | (a) M0 to M2 first, then the conversions, with M3, M6 and M7 re-read at their reviews for what the conversions removed (*assumed*); (b) the conversions first; (c) module by module, whichever reaches a module first | FR-012, the parser, writer and provider tasks of M2, M3, M6 and M7 |
-| DP-3 | The ruling of 2026-09-15 in `backend-centralization` declined to share one-line members that are identical across modules, the reloader forwarders among them. FR-028 and FR-032 remove those classes whole. | (a) the ruling stands for sharing a line and does not stand in the way of deleting the class, so FR-028 and FR-032 proceed (*assumed*); (b) the ruling stands as written and the reloaders and one-line members stay per module | The reloader tasks of M1 and M2 |
-| DP-4 | Whether standalone's planning convention changes. | (a) this feature only; `CLAUDE.md`, the constitution and `specs/README.md` stay as they are (*assumed*); (b) standalone's new features are Spec Kit features here from now on, with those three documents changed and a principles file `.specify/memory/repositories/etalii.adp.ide.standalone.md` written | Nothing in this feature; the close task of M9 records the ruling |
-| DP-5 | The empty sessions project. | (a) it becomes the owner of connection and project lifetime in M5 (*assumed*, since report 5.2 needs a home for exactly that and the architecture page already says so); (b) it is deleted in M4 and the lifetime scope lives in the host project | FR-065, FR-067 |
-| DP-6 | Ownership of a feature this long. | (a) one developer at a time, with handover only at a milestone review (*assumed*); (b) the milestones become features of their own, so that M6 and M7, which touch other code than M1 to M5, can run beside them under other owners | FR-006 |
+| # | Decision | Options | Ruling | Blocked until ruled |
+|---|---|---|---|---|
+| DP-1 | The shape of the 48 stub modules. `.spec-workflow/steering/tech.md` (*Declaring a diagram definition*) mandates one project per stub, and the architecture pages say "a type is a folder". | (a) one catalog project holding all 48 definitions: 188 files and 47 projects fewer, no core change; (b) the catalog generated from `docs/tools.md`; (c) the stubs stay as they are | **(a)**. Generating the catalog stays a candidate of the M8 review | FR-097, the stub tasks of M8 |
+| DP-2 | The order of this feature against the fifteen conversion specifications. | (a) M0 to M2 first, then the conversions, with M3, M6 and M7 re-read at their reviews for what the conversions removed; (b) the conversions first; (c) module by module, whichever reaches a module first | **(a)** | FR-012, the parser, writer and provider tasks of M2, M3, M6 and M7 |
+| DP-3 | The ruling of 2026-09-15 in `backend-centralization` declined to share one-line members that are identical across modules, the reloader forwarders among them. FR-028 and FR-032 remove those classes whole. | (a) the ruling stands for sharing a line and does not stand in the way of deleting the class, so FR-028 and FR-032 proceed; (b) the ruling stands as written and the reloaders and one-line members stay per module | **(a)** | The reloader tasks of M1 and M2 |
+| DP-4 | Whether standalone's planning convention changes. | (a) this feature only; `CLAUDE.md`, the constitution and `specs/README.md` stay as they are; (b) standalone's new features are Spec Kit features here from now on, with those three documents changed and a principles file `.specify/memory/repositories/etalii.adp.ide.standalone.md` written | **(a)** | Nothing in this feature |
+| DP-5 | The empty sessions project. | (a) it becomes the owner of connection and project lifetime in M5, since report 5.2 needs a home for exactly that and the architecture page already says so; (b) it is deleted in M4 and the lifetime scope lives in the host project | **(a), widened**, in the maintainer's words: "it should own all session related logic and types." Asked which of the three things the host calls a session that covers, the maintainer ruled all three: the lifetime of a connection and a project, the sign-in session code now in the authentication project, and the tool-session contracts with their factories (FR-065) | FR-054, FR-065, FR-067 |
+| DP-6 | Ownership of a feature this long. | (a) one developer at a time, with handover only at a milestone review; (b) the milestones become features of their own, so that M6 and M7, which touch other code than M1 to M5, can run beside them under other owners | **(a)** | FR-006 |
 
 ## Success Criteria *(mandatory)*
 
@@ -408,6 +413,7 @@ Every count is taken by the scripts of FR-009 against the baseline. The figures 
 - **SC-015**: The precedence between the three tool kinds (diagrams, then designers, then editors) is decided in one method (4 places); one discovery, one catalog type and one session-factory registry serve three families (3 of each). At the end of M4.
 - **SC-016**: `projects.json` is read at most once per request, and at most once per user between writes (8 call sites that read it each time). At the end of M4.
 - **SC-017**: The hierarchy model is at most half its size (918 lines), does no input or output and raises no event while holding its lock. At the end of M5.
+- **SC-028**: Every session type of core is declared in the sessions project. A search of the other core projects finds no sign-in session type and no tool-session contract, factory contract or factory registry (declared in four projects at standalone's `b62b7f8`: authentication, diagram abstractions, designer and editor), at the end of M4; and no retaining or releasing of what a connection or a project holds outside the lifetime scope (5 types), at the end of M5. Added on 2026-10-11 with the ruling on DP-5.
 - **SC-018**: Every channel is bounded; a search finds no blocking wait on asynchronous work and no task started and left unobserved in the places report 5.3 lists. At the end of M5.
 
 **The specification projects**
@@ -426,7 +432,7 @@ Every count is taken by the scripts of FR-009 against the baseline. The figures 
 - **SC-024**: Ten milestone reviews are on record, each merged before the next milestone's first task started, each with its measurements and an answer for every named candidate.
 - **SC-025**: Every pull request of the feature passed the four gates and the inspection job, and none left `docs/architecture.md` or `docs/solution-structure.md` describing something that is no longer so.
 - **SC-026**: Every defect D1 to D10 is closed with a guard seen to fail, or struck with the evidence that it is not a defect.
-- **SC-027**: The solution holds 47 projects fewer (129) if DP-1 is ruled (a) or (b). At the end of M8.
+- **SC-027**: The solution holds 47 projects fewer through the catalog project (129 at the report's reading, 48 of them stubs), and discovery reports the same 48 origins, titles and icons as before. At the end of M8.
 
 ## Assumptions
 
@@ -435,7 +441,7 @@ Every count is taken by the scripts of FR-009 against the baseline. The figures 
 - Standalone has no principles file under `.specify/memory/repositories/`. Its principles are its own `CLAUDE.md` and `.spec-workflow/steering/*.md`, and the plan's constitution check reads those and says that it does. No principles file is written by this feature (DP-4).
 - The plan's placement of each shared type is the report's proposal. In `backend-centralization` the maintainer kept placement as his own judgement; the review of this feature's pull request is where that judgement is given, and a placement he changes there changes [data-model.md](data-model.md) only.
 - Out of scope, as the report's own method excludes them: the TypeScript client, the `.proto` contracts and generated code. Three of the report's advices need a change to a contract and are therefore not requirements here but named candidates of the M4 review: a `text` member on the workspace stream so that editors stop posing as one-element diagrams (4.4), renaming the wire message `Path` so that the `IoPath` alias can go from 417 files (5.4), and removing the three legacy calls kept for tests (5.4).
-- A module with real code references the context, history and hierarchy projects besides the diagram abstractions, and those projects hold their own gRPC services. FR-054 therefore does not by itself free a module of the hosting packages. Whether the services of those projects move to the host project as well is a named candidate of the M4 review.
+- A module with real code references the context, history and hierarchy projects besides the diagram abstractions, and those projects hold their own gRPC services. FR-054 therefore does not by itself free a module of the hosting packages. Whether the services of those projects move to the host project as well is a named candidate of the M4 review. The ruling on DP-5 adds to this: the sessions project holds the sign-in interceptor beside the tool-session contracts, so a module that references it for a contract references what the interceptor needs. Whether the sessions project can be kept free of the hosting packages is a named candidate of the M4 review as well.
 - Giving functional-decomposition-graph a bundled definition (report 2, last row) is the work of its conversion specification and not of this feature.
 - Making tools agree on one cycle policy for layering would change how diagrams are drawn. This feature gives each tool the policy it has; agreeing on one is a product decision outside it.
 - The application's users are not asked to do anything, and no file of theirs is migrated.
@@ -452,3 +458,14 @@ No question was put to the maintainer in this session. The points below were ope
 - Q: Are comments that record history cleaned up in one pass? → A: No. Only in files a task touches (FR-007).
 - Q: Where do the stream sleeps go in the order? → A: To the front, in M0, because of the flakiness seen before (Milestones).
 - Q: Who answers when a milestone review finds new work? → A: The review adds tasks or writes a follow-up feature, and its record is a pull request the maintainer reviews (FR-010, FR-011).
+
+### Session 2026-10-11, the decision points
+
+The six decision points were put to the maintainer as selections, each with a recommended option. DP-1 was asked a second time, after the maintainer asked what a catalog project is and was shown one stub module beside the catalog that would replace it. DP-5 was asked a second time, to settle which of the three things the host calls a session the ruling covers.
+
+- Q: What shape should the 48 stub diagram modules take? → A: One catalog project, holding all 48 definitions as one hand-written list (DP-1 (a); FR-097, SC-027).
+- Q: In what order should this restructuring run against the fifteen conversion specifications? → A: M0 to M2 first, then the conversions, with M3, M6 and M7 re-read at their reviews (DP-2 (a); FR-012).
+- Q: Does the ruling of 2026-09-15 stand in the way of deleting the 16 reloader classes and the one-line resolver members whole? → A: No. It stands for sharing a single line; a class that only forwards may be replaced by one generic type (DP-3 (a); FR-028, FR-032).
+- Q: What happens to the empty sessions project? → A: "It should own all session related logic and types." That is the sign-in session code, the lifetime of a connection and a project, and the tool-session contracts with their factories (DP-5; FR-054, FR-065, FR-067, SC-028).
+- Q: How should a feature this long be owned? → A: By one developer at a time, with handover only at a milestone review (DP-6 (a); FR-006).
+- Q: Are standalone's new features specified here with Spec Kit from now on? → A: No, this feature only. `CLAUDE.md`, the constitution and `specs/README.md` stay as they are (DP-4 (a)).
