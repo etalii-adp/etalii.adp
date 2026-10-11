@@ -27,5 +27,6 @@
       "at": "2026-10-11T14:50:14.590Z"
     }
   ],
-  "telemetryInstanceId": "fc66c938-9708-4194-ad90-f2b87739bf8c"
+  "telemetryInstanceId": "fc66c938-9708-4194-ad90-f2b87739bf8c",
+  "assistant": "claude-vscode"
 }
