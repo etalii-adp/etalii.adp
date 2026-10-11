@@ -85,7 +85,7 @@ The primary research is the report, [analysis-2026-10-10.md](analysis-2026-10-10
 | `EtAlii.Adp.Specification.Json` | M6 | Shared by two specification projects that must not reference each other for it (FR-074) |
 | `EtAlii.Adp.Diagram.Catalog` | M8 | DP-1 (a) |
 | removed: `EtAlii.Adp.Backend` | M4 | 146 lines of client hosting, folded into the service project (FR-055) |
-| removed: 48 stub projects | M8 | DP-1 (a) or (b) |
+| removed: 48 stub projects | M8 | DP-1 (a) |
 
 Each project name was checked against `structure.md`: `EtAlii.Adp.<Area>`, singular `Diagram`, no `Backend` segment. A guard in standalone rejects an `EtAlii.Adp.*` name in `structure.md` that is not a project in the solution, so these names appear there only in the pull request that creates the project.
 
@@ -100,7 +100,7 @@ Each project name was checked against `structure.md`: `EtAlii.Adp.<Area>`, singu
 - **What was read**: `.spec-workflow/specs/` in standalone holds fifteen `*-disl-fbl` specifications, one per diagram module, each with requirements and a design, and all but the timeline's with tasks; none has an implementation log. Each ends with "the parser and the writer gone from the product code" and the toolbox, menus, rows and findings derived from a bundled DISL definition.
 - **What they overlap**: everything this feature would do to a module's parser, writer, action provider or property provider. That is FR-034 (the provider frame), FR-039, parts of FR-042 to FR-049 (line document, YAML access, number format, lexer, parse outcome), FR-052 (the DISL adapter), FR-084, and FR-089 to FR-091.
 - **What they do not touch**: the store, the entry, the reloader, the session, the factories, the resolver, the command pipeline, the tests' harnesses, and all of core. That is M0, bands A and B of M1 and M2, M4 and M5.
-- **Decision** (assumed under DP-2): M0 to M2 first. The middle layer makes each conversion smaller, because a converted module still needs a store, a session and a resolver, and those are the copies. After M2 the conversions can proceed, and each of M3, M6 and M7 re-reads at its start which of its tasks a conversion has overtaken (FR-012).
+- **Decision** (ruled under DP-2 (a) on 2026-10-11): M0 to M2 first. The middle layer makes each conversion smaller, because a converted module still needs a store, a session and a resolver, and those are the copies. After M2 the conversions can proceed, and each of M3, M6 and M7 re-reads at its start which of its tasks a conversion has overtaken (FR-012).
 - **Band C in M2** is the exposed part: a handler base is worth having either way, because a converted module still has commands; a provider frame may not be, where DISL derives the menus. So in M2, band C is done for every module's command handlers, and for its providers only where the module has no DISL definition yet and its conversion has not started.
 - **Alternatives considered**: conversions first. It would leave fifteen converted modules that still each carry ten copied role classes, and convert them through fifteen copies of the same store.
 
@@ -130,7 +130,16 @@ Each project name was checked against `structure.md`: `EtAlii.Adp.<Area>`, singu
 
 ## R16. What the report says that this plan does not follow
 
-- **"Steps 2 and 4 are large enough to deserve a spec-workflow specification each."** One Spec Kit feature instead (R1), cut so that DP-6 (b) can split it.
+- **"Steps 2 and 4 are large enough to deserve a spec-workflow specification each."** One Spec Kit feature instead (R1), and one it stays: DP-6 was ruled (a).
 - **"Write failing tests for D1 to D8, then fix them"** as step 1. D4 moves to M1 and M2 with its correction; D1, D3, D7 and D8 are elsewhere (R15).
-- **The catalog "generated from `docs/tools.md`".** Offered as DP-1 (b), not assumed: it adds a build step to remove a list.
+- **The catalog "generated from `docs/tools.md`".** Offered as DP-1 (b) and not taken: the maintainer ruled (a), and it adds a build step to remove a list. It stays a candidate of the M8 review.
 - **`OrderByBarycentre`.** Kept in the layout library's list, but only added when a module's existing ordering is moved onto it without changing its fixtures; otherwise struck at the M3 review (FR-008: no type ahead of a consumer).
+
+## R17. What the sessions project holds
+
+- **The ruling** (DP-5, 2026-10-11): "it should own all session related logic and types." Asked which of the three things the host calls a session that covers, the maintainer ruled all three: the sign-in session, the lifetime of a connection and a project, and the tool sessions' contracts.
+- **What was read**, at standalone's `b62b7f8`: `EtAlii.Adp.Sessions` holds a project file and no code, and references `EtAlii.Adp` and `EtAlii.Adp.Authentication`. The sign-in session code is five files in `EtAlii.Adp.Authentication/Sessions/`. The diagram session contract and the three factory registries are in `EtAlii.Adp.Diagram`; the designer and editor session and factory contracts are in `EtAlii.Adp.Designer` and `EtAlii.Adp.Editor`.
+- **Decision**: three moves. In M4 the sign-in session code moves in, and the reference between the two projects turns round (T265). In M4, after the diagram project is thinned, the tool-session contracts, their factory contracts and registries and the document-session base move in (T266); the sessions project references `EtAlii.Adp.Diagram`, `EtAlii.Adp.Designer` and `EtAlii.Adp.Editor` for the types the contracts speak in. In M5 the lifetime scopes are added (T192), acquiring through contracts the sessions project declares wherever a direct reference to the history, problems or hierarchy project would close a cycle.
+- **What stays out**: a module's own session class, which is the module's; and `EditorSessionAdapter`, which is host plumbing and goes to `EtAlii.Adp.Workspace` with the rest of it.
+- **The cost, stated**: every module with real code references the sessions project for the contracts, and the sessions project holds a gRPC interceptor. FR-054 keeps the thin diagram project free of the hosting packages; it no longer keeps a module free of them through that one reference. The specification's assumptions already say a module is not free of them while the context, history and hierarchy projects hold services, so nothing that held before is lost, and the M4 review asks whether the interceptor's needs can be confined.
+- **Alternatives considered**: the plan's first assumption, the lifetime scopes only, with the contracts in the thin diagram project. Not taken, by the ruling. Deleting the project (DP-5 (b)). Not taken, by the ruling.

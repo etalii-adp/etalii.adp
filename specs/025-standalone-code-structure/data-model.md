@@ -80,12 +80,14 @@ In M4 the session base, the resolver base, the handler base and the provider fra
 
 | Type or project | What it is for | Home | Replaces | Requirement |
 |---|---|---|---|---|
-| `EtAlii.Adp.Diagram` (thin) | The module contracts, `DiagramDefinition`, `DiagramOrigin`, the registration layout | project | The same project with eight core references and every streaming service | FR-054 |
+| `EtAlii.Adp.Diagram` (thin) | The module contracts other than the tool-session contracts, `DiagramDefinition`, `DiagramOrigin`, the registration layout | project | The same project with eight core references and every streaming service | FR-054 |
 | `EtAlii.Adp.Workspace` | `DiagramService*`, `WorkspaceService`, `EditorService`, `DesignerService`, `WorkspaceConnections`, the table wire, the reload bridge | new project | Those types in the diagram project | FR-054 |
-| `EtAlii.Adp.Diagram.Modules` | The M1 bases a module derives from | new project | Their M1 home | FR-054, R9 |
+| `EtAlii.Adp.Diagram.Modules` | The M1 bases a module derives from, the session base excepted | new project | Their M1 home | FR-054, R9 |
+| `EtAlii.Adp.Sessions` (sign-in) | The session store, the session context, the interceptor and `AddSessions` | the project that was empty | Those types in `EtAlii.Adp.Authentication/Sessions/` | FR-065, R17 |
+| `EtAlii.Adp.Sessions` (tool sessions) | The session contracts of the three tool kinds, their factory contracts, `ToolSessionFactories<TKey, TFactory>`, `AddDiagramSession` and `DocumentDiagramSession<TStore, TModel>` | the same project | Those types in the `EtAlii.Adp.Diagram`, `EtAlii.Adp.Designer` and `EtAlii.Adp.Editor` projects | FR-065, FR-057, R17 |
 | `EtAlii.Adp.Files` | The file writer, the watchers, the project file events, the Restart Manager and NTFS calls | new project | That part of the documents project | FR-056 |
 | `IToolDefinition` | What the definitions of the three tool kinds have in common | `EtAlii.Adp/` | Nothing | FR-057 |
-| `ToolDefinitionDiscovery`, `ToolDefinitionCatalog<T>`, `ToolSessionFactories<TKey, TFactory>`, `AddToolDefinitions<T>` | Discovery with one dedupe-and-log, a catalog, a factory registry and a registration, for any tool kind | `EtAlii.Adp/` | Three of each | FR-057 |
+| `ToolDefinitionDiscovery`, `ToolDefinitionCatalog<T>`, `ToolSessionFactories<TKey, TFactory>`, `AddToolDefinitions<T>` | Discovery with one dedupe-and-log, a catalog, a factory registry and a registration, for any tool kind | `EtAlii.Adp/`; the factory registry goes on to `EtAlii.Adp.Sessions/` with the contracts | Three of each | FR-057 |
 | `ToolRouter.Route(path, root)` and `ToolRouting` | Which tool serves a path: `DiagramRouted`, `DesignerRouted`, `EditorRouted`, `Unreadable`, `None` | `EtAlii.Adp.Hierarchy/`, the lowest project that sees all three catalogs | Three routers and four codings of the precedence | FR-058 |
 | `ProjectRoot`, `ProjectPath` | A root and a path within it, normalized once | `EtAlii.Adp/` | `string rootPath` as a key in five stores; wraps `PathContainment` | FR-059 |
 | `ToolOrigin(vendor, type, subtype)` | The identity of a tool type, for all three kinds | `EtAlii.Adp/` | `DiagramOrigin`, a `"vendor/type"` string, a string id | FR-060 |
@@ -101,7 +103,7 @@ In M4 the session base, the resolver base, the handler base and the provider fra
 | `WatcherEventNormalizer` | Turns watcher events into changes: rename echoes, scratch files | `EtAlii.Adp.Hierarchy/` | Part of `HierarchyModel` | FR-066 |
 | `HierarchyIndex` | Ids, paths and children by parent | `EtAlii.Adp.Hierarchy/` | Three indexes and the linear scans | FR-066 |
 | `DiagramStateDecorator` | Colours entries by their tool state | `EtAlii.Adp.Hierarchy/` | `RefreshDiagramStates` | FR-066 |
-| `ConnectionSession`, `ProjectSession` | What a connection and a project hold, acquired and released as one scope | `EtAlii.Adp.Sessions/` (DP-5) | Retain and release spread over five types | FR-067, FR-023 |
+| `ConnectionSession`, `ProjectSession` | What a connection and a project hold, acquired and released as one scope | `EtAlii.Adp.Sessions/` (DP-5) | Retain and release spread over five types | FR-065, FR-067, FR-023 |
 | `IFileWriter` | Publishes a file, with asynchronous per-path locks that are released | `EtAlii.Adp.Files/` | The static `AdpFileWriter` with its ever-growing lock dictionary | FR-068 |
 | `WorkspaceConnection.OpenStream(streamId, session, map)` | Owns the pump, the ended message and the clean-up of a stream | `EtAlii.Adp.Workspace/` | The pump in `WorkspaceService` and in `DesignerService`; four ownership checks | FR-069 |
 | `DiagramAddOptions`, `DesignerAddOptions` (strategies) | How a tool of one family is added | `EtAlii.Adp.Workspace/` | Four workflows in `CommitAsync` | FR-071 |
@@ -145,6 +147,7 @@ In M4 the session base, the resolver base, the handler base and the provider fra
 - `DiagramDocumentReloader<TStore>` needs `IDiagramDocumentStore`; `LifecycleDocumentStore` implements it; `DocumentDiagramSession` and `DiagramElementSourceResolver` take a store; `DocumentEditHandler` takes an entry. Hence bands A, B, C.
 - The contract tests need the light testing project to be reachable from module test projects. Hence M0 before M1.
 - `ProjectPath` wraps `PathContainment`; `ToolRouter` returns `ToolOrigin`; `AdpRegistration` is what the router reads, and it lives in the diagram project, which the hierarchy project can reference only after the diagram project is thinned. Hence the order inside M4.
-- `ConnectionSession` uses `RetainedRegistry` (M3) and lives where DP-5 says. `WorkspaceConnection.OpenStream` needs `EtAlii.Adp.Workspace` (M4).
+- The tool-session contracts speak in the types of the thin diagram project, so `EtAlii.Adp.Sessions` can take them only after that project is thinned, and it references `EtAlii.Adp.Diagram`, `EtAlii.Adp.Designer` and `EtAlii.Adp.Editor`, never the reverse.
+- `ConnectionSession` uses `RetainedRegistry` (M3) and lives in `EtAlii.Adp.Sessions`, as DP-5 was ruled. `WorkspaceConnection.OpenStream` needs `EtAlii.Adp.Workspace` (M4).
 - `WatchedFile` (M3) is what `KnowledgeSession` is split onto (M7) and what `TextEditorSession` reads through (M3).
 - `CelProgramCache` comes before typed DISL nodes, which hold compiled programs.

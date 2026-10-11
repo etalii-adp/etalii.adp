@@ -2,7 +2,7 @@
 
 **Input**: [standalone-code-structure.spec.md](standalone-code-structure.spec.md), [plan.md](plan.md), [research.md](research.md), [data-model.md](data-model.md), [behaviour-changes.md](behaviour-changes.md), [contracts/](contracts/), and the report, [analysis-2026-10-10.md](analysis-2026-10-10.md).
 
-**264 tasks in ten milestones.** Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
+**266 tasks in ten milestones.** T265 and T266 were added on 2026-10-11 with the ruling on DP-5 and stand in M4. Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
 
 ## How to read a task
 
@@ -11,14 +11,14 @@
 - The requirement and, where there is one, the report section, success criterion or register row stand at the end of the task.
 - **Every task follows** [contracts/pull-request.md](contracts/pull-request.md): its own `features/025-<task>` worktree and `agent-<N>-<task>` identity, no behaviour change outside a defect or a ruled register row, the documentation it makes false in the same pull request, comments in touched files reduced to what and why, the four gates and the inspection at exit zero, a merge commit.
 - **A task is ticked only when its pull request in `etalii.adp.ide.standalone` is merged** (FR-014). A task a review finds unnecessary is struck, with the review named, and never ticked.
-- A task that names FR-012 reads its module's `*-disl-fbl` specification first. A task that names a `DP-n` waits for that ruling (FR-013).
+- A task that names FR-012 reads its module's `*-disl-fbl` specification first. A task that names a `DP-n` waits for that ruling (FR-013); DP-1 to DP-6 were ruled on 2026-10-11.
 - **No task of a milestone starts before the previous milestone's review is merged** (FR-010).
 
 ## M0: the safety net
 
 ### Decisions and baseline
 
-- [ ] T001 [US9] Put decision points DP-1 to DP-6 to the maintainer as selections (options, what each means, the recommended one with its reason, an "other") and record each ruling, with its date, in the *Decision points* table of `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` (FR-013).
+- [x] T001 [US9] Put decision points DP-1 to DP-6 to the maintainer as selections (options, what each means, the recommended one with its reason, an "other") and record each ruling, with its date, in the *Decision points* table of `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` (FR-013). Done on 2026-10-11 in `etalii.adp`: (a) for each, DP-5 widened.
 - [ ] T002 [P] [US1] Write `etalii.adp.ide.standalone/.github/tools/analysis/lines.py`: lines and files per project of `src/backend/EtAlii.Adp.slnx`, split into production and test and into core and the three tool kinds, classifying core by the absence of a leading `../` as `docs/solution-structure.md` warns (FR-009; report *Method*).
 - [ ] T003 [P] [US1] Write `etalii.adp.ide.standalone/.github/tools/analysis/clones.py`: the normalized clone scan over production code, hashing 10-line windows with module prefixes, string literals and numbers normalized, reporting shared windows per role pair and the twenty largest clone families; a second mode scans the test code (FR-009; report 1, *Method*).
 - [ ] T004 [P] [US1] Write `etalii.adp.ide.standalone/.github/tools/analysis/methods.py`: brace-matched method lengths in code lines, the counts over 50 and over 80, the twenty longest, and the largest types per project (FR-009; report 7, *Method*).
@@ -77,7 +77,7 @@
 
 ### Band A: persistence (report 1.3, 1.4)
 
-- [ ] T043 [US2] Add `IDiagramDocumentStore` (reload, body deleted, forget) and `DiagramDocumentReloader<TStore>` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/`, with the abstract `DocumentReloaderContract` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/`; sankey adopts: delete `etalii.adp.ide.standalone/src/diagrams/sankey/backend/EtAlii.Adp.Diagram.Sankey/SankeyDocumentReloader.cs`, reduce `ISankeyDocumentStore.cs` to a marker, and derive its reloader tests from the contract. Needs DP-3 (FR-028, FR-035, FR-008).
+- [ ] T043 [US2] Add `IDiagramDocumentStore` (reload, body deleted, forget) and `DiagramDocumentReloader<TStore>` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/`, with the abstract `DocumentReloaderContract` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/`; sankey adopts: delete `etalii.adp.ide.standalone/src/diagrams/sankey/backend/EtAlii.Adp.Diagram.Sankey/SankeyDocumentReloader.cs`, reduce `ISankeyDocumentStore.cs` to a marker, and derive its reloader tests from the contract. DP-3 is ruled (a) (FR-028, FR-035, FR-008).
 - [ ] T044 [US2] Add `DocumentEntry<TBody, TModel>` with one failure field, `DocumentChangedEventArgs` and `LifecycleDocumentStore<TEntry, TBody>` (abstract `Read`, `TextOf`, `Rebuild`) to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/`, with the abstract `DocumentStoreContract` (lost edit, own save ignored, last good document kept, deleted body) in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/`; sankey adopts: `etalii.adp.ide.standalone/src/diagrams/sankey/backend/EtAlii.Adp.Diagram.Sankey/SankeyDocumentStore.cs` becomes a subclass, `_Model/SankeyDocumentEntry.cs` and its event args go, its lost-edit tests derive from the contract (FR-029, FR-035).
 - [ ] T045 [US2] Add `AddDiagramSession(origin, factory)` over a delegate-based `DiagramSessionFactory` and `AddEmptyDocument(origin, text)` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/`; sankey adopts in `etalii.adp.ide.standalone/src/diagrams/sankey/backend/EtAlii.Adp.Diagram.Sankey/ServiceCollection.AddSankey.cs` and loses `SankeySessionFactory.cs` and `SankeyDocumentFactory.cs`; update the persistence section of `etalii.adp.ide.standalone/docs/creating-a-diagram-module.md` (FR-030, FR-004).
 - [ ] T046 [P] [US2] supply-chain adopts band A in `etalii.adp.ide.standalone/src/diagrams/supply-chain/backend/EtAlii.Adp.Diagram.SupplyChain/`: the generic reloader, the store base and entry, the session and empty-document registrations, and the two contract tests; anything a base type could not carry is taken up in the base, never with a switch on the module (FR-028, FR-029, FR-030, FR-035).
@@ -239,8 +239,10 @@
 
 - [ ] T155 [US4] Create `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Workspace/EtAlii.Adp.Workspace.csproj` and move into it `DiagramService*`, `WorkspaceService`, `EditorService`, `DesignerService`, `WorkspaceConnections`, the designer table wire, the editor plumbing and the reload bridge from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/`, with their tests; build a freshly created worktree before trusting the gates, because generated code moves; solution, `etalii.adp.ide.standalone/docs/architecture.md` (*which project owns which concern*), `etalii.adp.ide.standalone/docs/solution-structure.md`, `ArchitecturePages.Tests` (FR-054, FR-004).
 - [ ] T156 [US4] Move the registrations of `HierarchyService`, `ContextService` and the editor catalog out of `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/ServiceCollection.AddDiagrams.cs`: each to its own project's registration, the composition to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Workspace/` (FR-054, FR-057).
-- [ ] T157 [US4] Create `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram.Modules/EtAlii.Adp.Diagram.Modules.csproj` and move into it the M1 bases that need the context or history projects (`DocumentDiagramSession`, `DiagramElementSourceResolver`, `DocumentEditHandler`, `DocumentEditRun`, the provider frame, `DislDiagramDefinition`); the 19 module projects reference it; `etalii.adp.ide.standalone/docs/creating-a-diagram-module.md` (FR-054, FR-004; research R9).
+- [ ] T157 [US4] Create `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram.Modules/EtAlii.Adp.Diagram.Modules.csproj` and move into it the M1 bases that need the context or history projects (`DiagramElementSourceResolver`, `DocumentEditHandler`, `DocumentEditRun`, the provider frame, `DislDiagramDefinition`); the 19 module projects reference it; `etalii.adp.ide.standalone/docs/creating-a-diagram-module.md` (FR-054, FR-004; research R9).
 - [ ] T158 [US4] Make `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/EtAlii.Adp.Diagram.csproj` reference `EtAlii.Adp.Documents` and `EtAlii.Adp` only, with no `Microsoft.AspNetCore.App` and no gRPC package: `DiagramDefinition` moves up into it from the documents project, and `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Problems/` takes `IDiagramValidator` from the thin project (FR-054; SC-012).
+- [ ] T265 [P] [US4] Move the sign-in session code (`ISessionStore`, `InMemorySessionStore`, `SessionContext`, `SessionInterceptor`, `ServiceCollection.AddSessions.cs`) from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Authentication/Sessions/` into `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Sessions/`, and turn the reference round: the authentication project references the sessions project, and what the interceptor needs of authentication comes through a contract the sessions project declares; `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Sessions.Tests/` then tests the project it is named for; `etalii.adp.ide.standalone/docs/architecture.md` (*which project owns which concern*), `etalii.adp.ide.standalone/docs/solution-structure.md`, `ArchitecturePages.Tests` (FR-065, FR-004; SC-013, SC-028; DP-5).
+- [ ] T266 [US4] Move the tool-session contracts into `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Sessions/`: the diagram session contract and its factory contract from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/`, the designer session and factory contracts from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Designer/`, the editor session and factory contracts from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Editor/`, and with them the factory registry of T166, `AddDiagramSession` and `DocumentDiagramSession`; the sessions project references the thin diagram project and the designer and editor projects, never the reverse, and the module projects reference it; a shared session type that cannot move without closing a cycle stays and is named in the M4 review; the three `etalii.adp.ide.standalone/docs/creating-a-*-module.md` guides, `etalii.adp.ide.standalone/docs/architecture.md`, `etalii.adp.ide.standalone/docs/solution-structure.md`, `ArchitecturePages.Tests` (FR-065, FR-054, FR-004; SC-028; DP-5).
 - [ ] T159 [P] [US4] Fold `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend/` (146 lines of client hosting) into `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Service/` and remove the project from the solution; `etalii.adp.ide.standalone/docs/solution-structure.md` (which lists it under *Host and composition*), `etalii.adp.ide.standalone/docs/architecture.md`, `ArchitecturePages.Tests` (FR-055, FR-004).
 - [ ] T160 [US4] Create `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Files/EtAlii.Adp.Files.csproj` and move into it `AdpFileWriter.cs`, the Restart Manager and NTFS calls, `WatchedFile`, `WatchedFolder`, `WatchedFolderStore` and `ProjectFileEvents` from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/`; if it would hold fewer than a handful of types, keep a folder instead and record that in the M4 review (FR-056, FR-004; research R10).
 - [ ] T161 [US4] Leave `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/` with the wire vocabulary and the document types: the last layout code goes to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Layout/`, and its reference to `Microsoft.AspNetCore.Hosting.Abstractions` goes if nothing left uses it (FR-056).
@@ -251,7 +253,7 @@
 - [ ] T163 [US4] Add `ToolOrigin(vendor, type, subtype)` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp/` and make it the origin of diagrams, designers and editors: `DiagramOrigin` becomes it or wraps it, the designer's `"vendor/type"` string and the editor's string id are parsed once at the edge, and the parsing back in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Problems/ProjectValidator.cs` goes (FR-060).
 - [ ] T164 [US4] Add `IToolDefinition` and one generic `ToolDefinitionDiscovery` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp/`, with the dedupe-and-log block written once; `DiagramDefinitionDiscovery.cs`, `EditorDefinitionDiscovery.cs` and `DesignerDefinitionDiscovery.cs` use it (FR-057).
 - [ ] T165 [US4] Add `ToolDefinitionCatalog<T>` and `AddToolDefinitions<T>`; the three catalogs become it, and each is registered once, in its own family's registration: the diagram catalog leaves `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.History/ServiceCollection.AddCommands.cs`, and the designer catalog is no longer registered twice (FR-057, FR-064).
-- [ ] T166 [P] [US4] Add `ToolSessionFactories<TKey, TFactory>` and replace the three session-factory registries (FR-057; SC-015).
+- [ ] T166 [P] [US4] Add `ToolSessionFactories<TKey, TFactory>` and replace the three session-factory registries; T266 takes it on to the sessions project (FR-057; SC-015).
 - [ ] T167 [US4] Add `ToolRouter.Route(path, root)` returning `DiagramRouted`, `DesignerRouted`, `EditorRouted`, `Unreadable` or `None` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/`, the lowest project that sees all three catalogs and the one that holds `DiagramFilePair`, with the precedence between the three tool kinds (diagrams, then designers, then editors) coded there; the three routers delegate to it (FR-058).
 - [ ] T168 [US4] Make `DiagramService.Open.cs` switch on `ToolRouter`'s result; one open reads `projects.json` and the registration once (FR-058, FR-062).
 - [ ] T169 [US4] Make `HierarchyModel.RefreshDiagramStates`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Problems/ProjectValidator.cs` and `DeleteEntryCommandHandler` switch on `ToolRouter`'s result; a search finds the precedence in one method (FR-058; SC-015).
@@ -294,8 +296,8 @@
 
 ### Lifetimes, writers and streams (report 5.2, 5.3, 5.4)
 
-- [ ] T192 [US5] By DP-5: (a) add `ConnectionSession` and `ProjectSession` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Sessions/`, acquiring and releasing the history stack, the problem watch and the hierarchy model as one scope, move `AddSessions` and `SessionInterceptor` there from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Authentication/` if they belong, and make `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Sessions.Tests/` test it; or (b) delete the project and its test project and put the scope in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Workspace/`. Either way `etalii.adp.ide.standalone/docs/architecture.md` says what is so (FR-065, FR-067, FR-004).
-- [ ] T193 [US5] Make `ContextService.RunWatchAsync`, `WorkspaceConnections`, `HierarchyModelStore`, `ContextSelectionStore` and `HistoryStackStore` acquire through the scope; the guards of T034 still pass and the leak is now impossible by construction (FR-067, FR-023).
+- [ ] T192 [US5] By DP-5 as ruled: add `ConnectionSession` and `ProjectSession` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Sessions/`, acquiring and releasing the history stack, the problem watch and the hierarchy model as one scope, through contracts the sessions project declares wherever a direct reference would close a cycle; `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Sessions.Tests/` tests the scope, and `etalii.adp.ide.standalone/docs/architecture.md` says what the project owns (FR-065, FR-067, FR-004; SC-028).
+- [ ] T193 [US5] Make `ContextService.RunWatchAsync`, `WorkspaceConnections`, `HierarchyModelStore`, `ContextSelectionStore` and `HistoryStackStore` acquire through the scope; the guards of T034 still pass and the leak is now impossible by construction, and a search finds no retaining or releasing outside the scope (FR-067, FR-023; SC-028).
 - [ ] T194 [P] [US5] Make `WorkspaceService` delegate to domain services in place of composing two gRPC service classes (FR-067).
 - [ ] T195 [US5] Add `IFileWriter` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Files/` with asynchronous, reference-counted locks per path that are released when unused, registered in the host; `AdpFileWriter`'s static dictionary of locks goes; a guard that the lock table is empty after writes to many paths, seen to fail first (FR-068, FR-005).
 - [ ] T196 [US5] Inject `IFileWriter` into the stores and handlers that call the static writer, and remove the `Task.Run` wrappers that existed only because its locks blocked (FR-068).
@@ -394,9 +396,9 @@
 - [ ] T253 [P] [US8] Derive `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Unit Tests/ElementTypeCatalog.cs` and the catalogue in `DrawnConnections.Tests.cs` from the tool definitions, or remove them if the module's own tests cover the same (FR-095).
 - [ ] T254 [P] [US8] Move `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/GateScript.Tests.cs` out of the product test suite: beside the scripts under `etalii.adp.ide.standalone/.github/tools/gate/` if `retire.sh` is still tested by it, and deleted for `gate.sh` and `land.sh`, which no longer apply (FR-096).
 
-### The stub modules (report 2.1); needs DP-1
+### The stub modules (report 2.1); DP-1 is ruled (a)
 
-- [ ] T255 [US2] By DP-1 (a) or (b): in one pull request, change *Declaring a diagram definition* in `etalii.adp.ide.standalone/.spec-workflow/steering/tech.md`, the "a type is a folder" sentences of `etalii.adp.ide.standalone/docs/architecture.md` and `etalii.adp.ide.standalone/docs/solution-structure.md`, create `etalii.adp.ide.standalone/src/diagrams/catalog/backend/EtAlii.Adp.Diagram.Catalog/` with a `Definitions` array, and move the first stub into it, with the test that discovery still finds its title and icon. By DP-1 (c): strike this task and the next two (FR-097, FR-004, FR-013).
+- [ ] T255 [US2] By DP-1 (a): in one pull request, change *Declaring a diagram definition* in `etalii.adp.ide.standalone/.spec-workflow/steering/tech.md`, the "a type is a folder" sentences of `etalii.adp.ide.standalone/docs/architecture.md` and `etalii.adp.ide.standalone/docs/solution-structure.md`, create `etalii.adp.ide.standalone/src/diagrams/catalog/backend/EtAlii.Adp.Diagram.Catalog/` with a `Definitions` array, and move the first stub into it, with the test that discovery still finds its origin, title and icon (FR-097, FR-004).
 - [ ] T256 [US2] Move the other 47 stub definitions into the catalog and delete their projects and readmes from `etalii.adp.ide.standalone/src/diagrams/` and from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.slnx`; `etalii.adp.ide.standalone/docs/tools.md` still names every type, and the counts of `etalii.adp.ide.standalone/docs/solution-structure.md` and `ArchitecturePages.Tests` are corrected (FR-097, FR-004; SC-027).
 - [ ] T257 [US2] Rewrite the part of `etalii.adp.ide.standalone/docs/creating-a-diagram-module.md` that says how a cataloged type becomes an implemented module: its definition leaves the catalog when its own project gains a `Build` delegate (FR-097, FR-004).
 
@@ -412,21 +414,21 @@
 
 - [ ] T261 [US9] Run `measure.sh` on the last merge and the stability workflow of T026 once more; save `etalii.adp/specs/025-standalone-code-structure/reviews/M9-measurements.json` (FR-009, FR-098; SC-002).
 - [ ] T262 [US9] Read `etalii.adp.ide.standalone/docs/architecture.md`, `etalii.adp.ide.standalone/docs/solution-structure.md` and the three `creating-a-*-module.md` guides from start to end against the code; correct what is false (FR-004; SC-025).
-- [ ] T263 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M9-review.md`: every success criterion SC-001 to SC-027 as met, amended (with the review that amended it) or missed (with the reason); every defect D1 to D10 as closed or struck; the follow-up features of all reviews in one list, in order of value; the ruling on DP-4 (FR-098, FR-010; SC-024, SC-026).
-- [ ] T264 [US9] Tick the last tasks in `etalii.adp/specs/025-standalone-code-structure/tasks.md`, set the status line of `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md`, and, if DP-4 was ruled (b), open the feature that changes `CLAUDE.md`, the constitution and `specs/README.md` and writes `.specify/memory/repositories/etalii.adp.ide.standalone.md` (FR-098, FR-014).
+- [ ] T263 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M9-review.md`: every success criterion SC-001 to SC-028 as met, amended (with the review that amended it) or missed (with the reason); every defect D1 to D10 as closed or struck; the follow-up features of all reviews in one list, in order of value (FR-098, FR-010; SC-024, SC-026).
+- [ ] T264 [US9] Tick the last tasks in `etalii.adp/specs/025-standalone-code-structure/tasks.md`, set the status line of `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` (FR-098, FR-014).
 
 ## Dependencies and order
 
-- **Milestones run in order**, M0 to M9, each gated by the review before it. The one planned exception is DP-6 (b): if ruled, M6 and M7 can run beside M3 to M5 under other owners, because they touch the specification projects and module internals only; M6 still needs T207, and M7 still needs the layout library of M3 for T239 and `WatchedFile` for T235.
+- **Milestones run in order**, M0 to M9, each gated by the review before it. DP-6 was ruled (a), one owner at a time, so no milestone runs beside another. Should that ruling ever change: M6 and M7 touch the specification projects and module internals only and could run beside M3 to M5; M6 still needs T207, and M7 still needs the layout library of M3 for T239 and `WatchedFile` for T235.
 - **M0**: T002 to T006 are independent; T007 needs them; T008 and T009 need T007. T011 comes before T012, T013, T014 and T015; T016 before T017, T018 and T019; T020 and T021 before T025; T025 before T026. T035 before T036 and T037. T031 waits on pull request 167. T033 needs T032.
-- **M1**: band A (T043, T044, T045, then the three pilots, then T049) before band B (T050, T051, the pilots, T055) before band C (T056, T057, T058, the pilots). T043 needs DP-3 and T011.
+- **M1**: band A (T043, T044, T045, then the three pilots, then T049) before band B (T050, T051, the pilots, T055) before band C (T056, T057, T058, the pilots). T043 needs T011.
 - **M2**: within a module, band A before B before C. Modules are independent of each other, except: T103 before T104 and T105; timeline's band C adds the lines-restore handler that dependency-graph's band C uses. The order of modules is the list's, and the M1 review may change it.
 - **M3**: T118 before every other layout task; T121 before T122 and T123; T131 before T132; T133 before T134; T136 before T137; T139 before T140; T141 before T142, T143 and T145; T144 before T145; T146 before T147; T150 before T151.
-- **M4**: T155 and T156 before T157 before T158; T158 before T174 and T167, because the hierarchy project can reference the diagram project only once the diagram project no longer references it. T163 before T164 before T165 and T166; T173 before T167 before T168 and T169; T170 before T171 and T172; T176 before T177. T178 needs the ruling on B-07.
-- **M5**: T185 first; T186, T187 and T188 before T189 before T190; T192 needs DP-5 and comes before T193; T195 before T196; T197 before T198.
+- **M4**: T155 and T156 before T157 before T158; T158 before T174 and T167, because the hierarchy project can reference the diagram project only once the diagram project no longer references it. T163 before T164 before T165 and T166; T173 before T167 before T168 and T169; T170 before T171 and T172; T176 before T177. T178 needs the ruling on B-07. T265 stands alone; T266 needs T158 and T166 and comes after T157.
+- **M5**: T185 first; T186, T187 and T188 before T189 before T190; T192 needs T266 and comes before T193; T195 before T196; T197 before T198.
 - **M6**: T207 and T208 first. T209 before T210 and T211; T212 before the three DISL typing tasks; T215 before T216, which needs T038; T220 before T221; T226 last of the code tasks.
 - **M7**: T231 before T232; T233 before T234.
-- **M8**: T245 before T246; T251 before T252; T255 needs DP-1 and comes before T256 and T257.
+- **M8**: T245 before T246; T251 before T252; T255 comes before T256 and T257.
 
 ## Coverage
 
@@ -437,7 +439,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-001 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md) (*No behaviour change*), and checked at every review by the unchanged fixtures and transcripts. |
 | FR-002 | T039, T132, T135, T137, T146, T178, T211 |
 | FR-003 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md). |
-| FR-004 | 19 tasks, T016 to T262 |
+| FR-004 | 21 tasks, T016 to T266 |
 | FR-005 | T033, T034, T035, T056, T176, T185, T195, T212, T216, T217 |
 | FR-006 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md) (the identity) and by the *Ownership* section of every review record (the owner). |
 | FR-007 | T029 |
@@ -446,7 +448,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-010 | 28 tasks, T040 to T263 |
 | FR-011 | 18 tasks, T041 to T260 |
 | FR-012 | 44 tasks, T010 to T259 |
-| FR-013 | T001, T255 |
+| FR-013 | T001 |
 | FR-014 | T042, T066, T117, T154, T184, T206, T230, T244, T260, T264 |
 | FR-015 | T011, T012, T013, T014, T015, T016, T149 |
 | FR-016 | T017, T018, T022, T023, T024 |
@@ -487,7 +489,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-051 | T141, T142, T143, T149 |
 | FR-052 | T150, T151 |
 | FR-053 | T144 |
-| FR-054 | T155, T156, T157, T158 |
+| FR-054 | T155, T156, T157, T158, T266 |
 | FR-055 | T159 |
 | FR-056 | T160, T161, T162 |
 | FR-057 | T156, T164, T165, T166 |
@@ -498,7 +500,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-062 | T168, T172, T176, T177 |
 | FR-063 | T178 |
 | FR-064 | T165, T179, T180 |
-| FR-065 | T192 |
+| FR-065 | T192, T265, T266 |
 | FR-066 | T186, T187, T188, T189, T190, T191 |
 | FR-067 | T192, T193, T194 |
 | FR-068 | T195, T196 |
@@ -549,7 +551,7 @@ FR-002, FR-004, FR-005, FR-007 and FR-008 are rules of [contracts/pull-request.m
 | SC-010 | T119, T120, T134, T145 | M3 |
 | SC-011 | T121, T239 | M3, M7 |
 | SC-012 | T158 | M4 |
-| SC-013 | T162 | M5 |
+| SC-013 | T162, T265 | M5 |
 | SC-014 | T037 | M0 |
 | SC-015 | T166, T169 | M4 |
 | SC-016 | T177 | M4 |
@@ -564,6 +566,7 @@ FR-002, FR-004, FR-005, FR-007 and FR-008 are rules of [contracts/pull-request.m
 | SC-025 | T262 | M9 |
 | SC-026 | The defect tasks of M0, M1, M2, M5 and M6; T263 | M9 |
 | SC-027 | T256, T263 | M8 |
+| SC-028 | T192, T193, T265, T266 | M4, M5 |
 
 Requirements named by a task that the specification does not define: none.
 
