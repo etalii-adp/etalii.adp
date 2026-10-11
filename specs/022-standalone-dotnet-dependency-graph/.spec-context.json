@@ -320,5 +320,6 @@
     {
       "what": "Verified in etalii.adp.ide.standalone when it was built: each task's gates and guards are recorded in implementation-logs/. On migration (2026-10-10) every paragraph, list item, table row and heading of the source requirements, design, tasks and findings was checked to be present in this folder, and every task to be ticked."
     }
-  ]
+  ],
+  "telemetryInstanceId": "e2c4429f-1b32-47ed-893a-8fb58c0399e3"
 }
