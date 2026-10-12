@@ -70,6 +70,7 @@
         "filter": { "type": "array", "items": { "oneOf": [{ "$ref": "#/$defs/Condition" }, { "$ref": "#/$defs/FilterGroup2" }] } },
         "groupBy": { "description": "The property the rows are grouped by, by id.", "$ref": "#/$defs/Id" },
         "hideEmptyGroups": { "type": "boolean" },
+        "freeze": { "description": "The last property, by id, of the columns that stay in sight when the table scrolls sideways.", "$ref": "#/$defs/Id" },
         "groupOrder": {
           "description": "The groups in the order shown; groups not listed follow in their natural order.",
           "type": "array",
@@ -108,13 +109,34 @@
       "additionalProperties": false
     },
     "Column": {
-      "description": "One property's place, visibility, width and wrapping in a view.",
+      "description": "One property's place, visibility, width, wrapping and calculation in a view.",
       "type": "object",
       "properties": {
         "property": { "$ref": "#/$defs/Id" },
         "visible": { "type": "boolean" },
         "width": { "type": "integer", "minimum": 32 },
-        "wrap": { "type": "boolean" }
+        "wrap": { "type": "boolean" },
+        "calculate": {
+          "description": "The calculation shown under the column.",
+          "enum": [
+            "count-all",
+            "count-values",
+            "count-unique",
+            "count-empty",
+            "count-not-empty",
+            "percent-empty",
+            "percent-not-empty",
+            "earliest",
+            "latest",
+            "date-range",
+            "sum",
+            "average",
+            "median",
+            "min",
+            "max",
+            "range"
+          ]
+        }
       },
       "required": ["property"],
       "additionalProperties": false
