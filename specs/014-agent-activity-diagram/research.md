@@ -53,3 +53,7 @@ The design's new file has "the header, five empty lists". In YAML an empty list 
 ## R6. Where a list created inside an entry goes
 
 A specification's `tasks` and a location's `pullRequests` are created by `insert.create` with `{after: key}`, right after a key every entry has: `status` for a specification and `branch` for a location. So the keys are ordered `id, project, name, link, status, tasks` and `id, agent, environment, folder, folderLink, branchLink, branch, pullRequests`, the list last, which the binding's `insert.keys` and the example in `agent-activity-diagram.md` follow.
+
+## R7. An attribute's name must not be one DISL reserves (2026-10-09)
+
+`kind` and `item` are built-in fields of an element in CEL (DISL section 2.2), so neither can be an attribute's name. The validator did not check it, and T004's `Environment.kind` and T002's `Person.item` passed here and were refused by the standalone host's loader. The model names changed (`environmentKind`, `assignedTo`) and the file keys did not, the binding mapping one to the other, as spec 013 did for `type` and `parent` (013 research R4). Peter then chose, on a card, that the validator checks reserved names in every DISL specification and that the seven definitions already using one are renamed; that is not this feature's and is in pull request 108.

@@ -28,3 +28,7 @@ Each task names the defect its guard was seen to fail against before it was trus
   - The binding at FBL 0.4 reads `view.showArchived`, `view.placements` and `view.groups`; `agent-activity-new` creates `view` with the first pin and removes it with the last, creates it with the switch, and adds placements and groups at its end; `agent-activity-edits` edits each under `view` and keeps `view` while it holds the switch.
   - Guard: the validator replays both edit fixtures and validates the `.md`'s example against the schema with `view`.
   - Seen to fail against: the same fault as T005, which is this binding's fixture.
+- [x] **T007** Two attributes off DISL's reserved names · etalii.adp/definitions/diagrams/agent-activity-diagram.dis, .fbl, etalii.adp/specifications/disl/work-board.dis, etalii.adp/specifications/fbl/work-board.fbl, research R7 (pull request [106](https://github.com/etalii-adp/etalii.adp/pull/106))
+  - `Environment.kind` becomes `environmentKind` and `Person.item` becomes `assignedTo`; the bindings keep the file keys, so no file, schema or fixture changes. Recorded here after the fact: it was merged between T004 and T005.
+  - Guard: the validator's check of reserved attribute names, added for every DISL specification in pull request [108](https://github.com/etalii-adp/etalii.adp/pull/108).
+  - Seen to fail against: the standalone host's `DislLoader`, which refused the specification at `/metamodel/types/Environment/attributes/kind`; and, for the validator's check, `kind` put back on another definition's type.
