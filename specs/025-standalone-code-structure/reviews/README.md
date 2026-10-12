@@ -4,7 +4,7 @@ One record per milestone, written when the milestone's last task is merged in `e
 
 | File | Written when |
 |---|---|
-| `baseline-measurements.json` | The first task of M0: the measurements of the commit the work starts from |
+| `baseline-measurements.json`, `baseline.md` | The first task of M0: the measurements of the commit the work starts from, and the success criteria restated against them |
 | `M0-review.md`, `M0-measurements.json` | M0, the safety net, is merged |
 | `M1-review.md`, `M1-measurements.json` | The four pilot modules stand on the middle layer |
 | `M2-review.md`, `M2-measurements.json` | All 19 modules do, and the sibling modules share what they copied |
@@ -16,4 +16,3 @@ One record per milestone, written when the milestone's last task is merged in `e
 | `M8-review.md`, `M8-measurements.json` | The tests are consolidated and the stub modules have their ruled shape |
 | `M9-review.md`, `M9-measurements.json` | The close: every success criterion measured, the follow-up features listed |
 
-None exists yet: this folder holds only this file until the work starts.
