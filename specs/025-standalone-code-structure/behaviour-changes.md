@@ -28,3 +28,4 @@ Add a row here, with the next number, before going on with the task that found i
 
 | # | Where | Today | If joined | Recommended | Guard | Status |
 |---|---|---|---|---|---|---|
+| B-12 | The layout of a new entry in the JSON family, found by T038 | `JsonFamily.Insert` writes a new entry on one line, `{ "id": "c2", ... }`; FBL 0.6's `insert-empty-json` fixture expects one key per line, as the entries beside it are | T216 moves `JsonFamily.Write` onto the template, so the layout is whatever the template writes | Follow the fixture: T216 writes a new entry in the layout of the entries beside it, so the plain fixture run is its guard. Without this, correcting D9 alone leaves `insert-empty-json` failing | `InsertEmptyFixturesTests` (standalone #188) records the one-line layout until T216 replaces it with the fixture run | open |
