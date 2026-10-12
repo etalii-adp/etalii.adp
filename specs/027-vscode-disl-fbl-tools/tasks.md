@@ -36,7 +36,7 @@
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T003** Commit this folder on `features/027-vscode-disl-fbl-tools`, push it and open a pull request into `develop`, merged with a merge commit · etalii.adp/specs/027-vscode-disl-fbl-tools/
+- [x] **T003** Commit this folder on `features/027-vscode-disl-fbl-tools`, push it and open a pull request into `develop`, merged with a merge commit · etalii.adp/specs/027-vscode-disl-fbl-tools/
 
 **Checkpoint**: the specification is on `develop`; six issues are open.
 
@@ -70,28 +70,28 @@ Files: `etalii.adp.ide.vscode/src/core/fbl/**`, `fixtures/fbl/**`, `test/core/fb
 
 **Wave 3: independent (different files):**
 
-- [ ] **T013** [P] Port `Documents/` and `FblModel.cs`: versions 0.1 to 0.6, several bindings in one document, the new model types and the new finding · etalii.adp.ide.vscode/src/core/fbl/documents/documentLoader.ts, documents/types.ts, model.ts, finding.ts
-- [ ] **T014** [P] Port `Planning/_Model/ModelChange.cs` and `Plan.cs`: `move {id, parent, position?}` and a position on `add` · etalii.adp.ide.vscode/src/core/fbl/planning/modelChange.ts, planning/plan.ts
-- [ ] **T015** [P] Add every sentence the range added to the source, verbatim · etalii.adp.ide.vscode/src/core/fbl/messages.ts
+- [x] **T013** [P] Port `Documents/` and `FblModel.cs`: versions 0.1 to 0.6, several bindings in one document, the new model types and the new finding · etalii.adp.ide.vscode/src/core/fbl/documents/documentLoader.ts, documents/types.ts, model.ts, finding.ts
+- [x] **T014** [P] Port `Planning/_Model/ModelChange.cs` and `Plan.cs`: `move {id, parent, position?}` and a position on `add` · etalii.adp.ide.vscode/src/core/fbl/planning/modelChange.ts, planning/plan.ts
+- [x] **T015** [P] Add every sentence the range added to the source, verbatim · etalii.adp.ide.vscode/src/core/fbl/messages.ts
 
 **⟶ Wait for Wave 3 to finish, then Wave 4: independent (different files):**
 
-- [ ] **T016** [P] Port `Rules/`: `BodyReading`, `FamilyReader`, `TreeFamily` and the new `TypedValue` · etalii.adp.ide.vscode/src/core/fbl/rules/bodyReading.ts, rules/familyReader.ts, rules/treeFamily.ts, rules/typedValue.ts
-- [ ] **T017** [P] Port `Plugins/`: the plan and read requests a plugin is given · etalii.adp.ide.vscode/src/core/fbl/plugins/persistencePlugin.ts, plugins/pluginBody.ts
-- [ ] **T018** [P] Port `Routing/Router.cs` and `Registration/` · etalii.adp.ide.vscode/src/core/fbl/routing/router.ts, registration/bodyLocator.ts, registration/openRegistration.ts, registration/registrationDocument.ts
+- [x] **T016** [P] Port `Rules/`: `BodyReading`, `FamilyReader`, `TreeFamily` and the new `TypedValue` · etalii.adp.ide.vscode/src/core/fbl/rules/bodyReading.ts, rules/familyReader.ts, rules/treeFamily.ts, rules/typedValue.ts
+- [x] **T017** [P] Port `Plugins/`: the plan and read requests a plugin is given · etalii.adp.ide.vscode/src/core/fbl/plugins/persistencePlugin.ts, plugins/pluginBody.ts
+- [x] **T018** [P] Port `Routing/Router.cs` and `Registration/` · etalii.adp.ide.vscode/src/core/fbl/routing/router.ts, registration/bodyLocator.ts, registration/openRegistration.ts, registration/registrationDocument.ts
 
 **⟶ Wait for Wave 4 to finish, then Wave 5: independent (different files):**
 
-- [ ] **T019** [P] Port `Files/Yaml/` · etalii.adp.ide.vscode/src/core/fbl/families/yaml/yamlFamily.ts, yamlParser.ts, yamlScalars.ts, flowReader.ts
-- [ ] **T020** [P] Port `Files/Json/` · etalii.adp.ide.vscode/src/core/fbl/families/json/jsonFamily.ts
-- [ ] **T021** [P] Port `Files/Xml/` and `Files/Lines/` · etalii.adp.ide.vscode/src/core/fbl/families/xml/xmlFamily.ts, families/lines/linesFamily.ts
+- [x] **T019** [P] Port `Files/Yaml/` · etalii.adp.ide.vscode/src/core/fbl/families/yaml/yamlFamily.ts, yamlParser.ts, yamlScalars.ts, flowReader.ts
+- [x] **T020** [P] Port `Files/Json/` · etalii.adp.ide.vscode/src/core/fbl/families/json/jsonFamily.ts
+- [x] **T021** [P] Port `Files/Xml/` and `Files/Lines/` · etalii.adp.ide.vscode/src/core/fbl/families/xml/xmlFamily.ts, families/lines/linesFamily.ts
 
 **⟶ Wait for Wave 5 to finish, then:**
 
-- [ ] **T022** Port `Planning/EditPlanner.cs`, `NewText.cs` and `History/OpenBody.cs` · etalii.adp.ide.vscode/src/core/fbl/planning/editPlanner.ts, planning/newText.ts, history/openBody.ts
-- [ ] **T023** Export what is new, and bring the record up to date: the version read, what "not built" no longer lists, each difference from standalone found · etalii.adp.ide.vscode/src/core/fbl/index.ts, etalii.adp.ide.vscode/docs/fbl.md
-- [ ] **T024** Run `npm test`: the nineteen fixtures pass splice for splice, the baseline is complete, and every test under `test/vscode/` passes untouched · etalii.adp.ide.vscode
-- [ ] **T025** Push, open pull request 1 naming this folder and the etalii.adp commit, and merge it with a merge commit once the Build passes. Open an issue in `etalii.adp.ide.notion` saying its copy of the library is behind. Delete the branch, then tick T004 to T025 here through a pull request · etalii.adp.ide.vscode (pull request 1), etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md
+- [x] **T022** Port `Planning/EditPlanner.cs`, `NewText.cs` and `History/OpenBody.cs` · etalii.adp.ide.vscode/src/core/fbl/planning/editPlanner.ts, planning/newText.ts, history/openBody.ts
+- [x] **T023** Export what is new, and bring the record up to date: the version read, what "not built" no longer lists, each difference from standalone found · etalii.adp.ide.vscode/src/core/fbl/index.ts, etalii.adp.ide.vscode/docs/fbl.md
+- [x] **T024** Run `npm test`: the nineteen fixtures pass splice for splice, the baseline is complete, and every test under `test/vscode/` passes untouched · etalii.adp.ide.vscode
+- [x] **T025** Push, open pull request 1 naming this folder and the etalii.adp commit, and merge it with a merge commit once the Build passes. Open an issue in `etalii.adp.ide.notion` saying its copy of the library is behind. Delete the branch, then tick T004 to T025 here through a pull request · etalii.adp.ide.vscode (pull request 1), etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md
 
 **Checkpoint**: the library reads and plans FBL 0.6; no user-visible change.
 
