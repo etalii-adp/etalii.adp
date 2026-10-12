@@ -135,12 +135,11 @@ In M4 the session base, the resolver base, the handler base and the provider fra
 | `SparqlScopeAnalyzer`, `SparqlTokenCursor` | `src/diagrams/sparql/backend/EtAlii.Adp.Diagram.Sparql/` | Part of a parser of 1,432 lines | FR-090 |
 | `C4BoundaryPacker` | `src/diagrams/c4/backend/EtAlii.Adp.Diagram.C4/` | Part of a static class of 694 lines | FR-091 |
 
-## M8: tests and stubs
+## M8: tests
 
 | Type | Home | Replaces | Requirement |
 |---|---|---|---|
 | `TranscriptHarness`, `TranscriptText`, `TranscriptTests<TAdapter>` | `EtAlii.Adp.TestSupport.Host/` | Six harnesses, six canonical-JSON writers, six identical test files | FR-093 |
-| `EtAlii.Adp.Diagram.Catalog` with one `Definitions` array | `src/diagrams/catalog/backend/` (DP-1) | 48 stub projects, 192 files | FR-097 |
 
 ## Relationships that constrain the order
 

@@ -43,10 +43,10 @@ The work is cut into ten milestones. Each ends with a **milestone review** (User
 | M5 | Core hotspots | No disk work and no event under the hierarchy lock; the sessions project as the one owner of a connection's and a project's lifetime; an injectable file writer; one stream pump | 5 |
 | M6 | The specification projects | One loader infrastructure, one CEL cache, one write template; DISL typed at load; parsers on libraries where a library serves | 6 |
 | M7 | Module internals | The projection, parser, layout and session god types of the largest modules decomposed | 7 |
-| M8 | Test consolidation and the stub modules | One transcript harness; module flows out of the core test project; the 48 stub definitions in one catalog project | 2.1, 8.3, 8.6, 8.7 |
+| M8 | Test consolidation | One transcript harness; module flows out of the core test project. The 48 stub modules stay as they are (DP-1 (c)) | 8.3, 8.6, 8.7 |
 | M9 | Close | The final measurement against every success criterion; the follow-up features written down | all |
 
-The order is the report's roadmap with two changes it suggested itself: the test safety net moves to the front "given past CI flakiness", and the stub modules go last because their move rewrites a steering rule and nothing else waits on it.
+The order is the report's roadmap with two changes it suggested itself: the test safety net moves to the front "given past CI flakiness", and the stub modules, which the report put last, stay as they are by the ruling on DP-1.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -205,7 +205,7 @@ At the end of each milestone the owner runs the measurements again, compares the
 - **A base type that does not fit a module.** Mindmap reacts to the kind of structural change, SPARQL is read-only, C4 keeps a boolean failure flag, and four modules read registration headers. A module that cannot adopt a shared type keeps its own and its adoption task records why, in one sentence, in the code and in the milestone review. A base type is never bent with a switch on the module to make it fit.
 - **A copy that differs on purpose.** Before two copies are joined, their difference is read. A difference that is a decision stays, as a parameter with a name (a cycle policy, a comment rule). A difference that is drift goes into the behaviour-change register.
 - **A conversion to FBL arrives first.** A task that restructures a parser, a writer, or an action or property provider of a module whose `*-disl-fbl` specification has started is not done; the review records it as overtaken.
-- **A stub that becomes an implemented module.** Its definition leaves the catalog in the same pull request that gives the module a project of its own, so that discovery finds the type exactly once at every commit. That pull request belongs to the feature that implements the type, not to this one.
+- **A stub that becomes an implemented module.** Its project gains the implementation in place, as today; that pull request belongs to the feature that implements the type, not to this one.
 - **A session type that cannot move.** A module's own session class stays in its module. A shared session type that needs a project the sessions project cannot reference without closing a cycle stays where it is, and the M4 or M5 review names it with the reference that stood in the way.
 - **Pull request 167 is closed without merging.** D1, D3, D7 and D8 then come back into this feature as guard-first tasks, added at the next review.
 - **A guard cannot be made to fail.** Then the defect is not shown. The task records what was tried and the defect is struck from the list as unconfirmed, as the report itself allows ("none was confirmed with a failing test").
@@ -340,13 +340,13 @@ At the end of each milestone the owner runs the measurements again, compares the
 - **FR-091**: The C4 layout MUST use the shared layering and overlap resolver (FR-045) and a boundary packer of its own.
 - **FR-092**: Each of FR-086 to FR-091 is subject to FR-012, and the long methods the report lists besides them (7, last paragraph) MUST be brought under the lengths of SC-023 or named in the M7 review as left on purpose.
 
-#### M8: test consolidation and the stub modules (report 2.1, 8.3, 8.6, 8.7)
+#### M8: test consolidation (report 8.3, 8.6, 8.7)
 
 - **FR-093**: The six parity-transcript harnesses MUST be one harness with a module adapter, with one canonical-JSON writer and one abstract transcript test (8.3).
 - **FR-094**: The hand-written test dispatchers, the hand-built temporary folders and the copies of the repository-root locator MUST be replaced by the testing project of FR-015 (8.6).
 - **FR-095**: Flows that test one module MUST live with that module, and the two hand-kept per-module type catalogues MUST be derived or removed (8.7).
 - **FR-096**: The tests of `gate.sh` and `land.sh`, a process `CLAUDE.md` of that repository says no longer applies, MUST leave the product test suite (8.7).
-- **FR-097**: The definitions of the 48 stub modules MUST move into one catalog project that holds them as one hand-written list, by the ruling on DP-1, and their 48 projects and folders MUST be removed. The stub shape `.spec-workflow/steering/tech.md` mandates and the "a type is a folder" sentences of the architecture pages are changed in the same pull request as the first stub that moves. `docs/tools.md` still names every type, and what a user sees of a cataloged type does not change.
+- **FR-097**: The 48 stub modules MUST stay as they are, one project per stub as `.spec-workflow/steering/tech.md` mandates, by the ruling on DP-1 (c). This feature MUST NOT move, merge or remove them.
 
 #### M9: close
 
@@ -361,7 +361,6 @@ At the end of each milestone the owner runs the measurements again, compares the
 - **Behaviour-change register**: [behaviour-changes.md](behaviour-changes.md), every place where sharing changes what a tool does.
 - **Decision point**: a choice that is the maintainer's, with the tasks it blocks and, once given, its ruling.
 - **Session**: the host uses the word for three things, and the sessions project owns all three (FR-065). A *sign-in session* says who a call is made by. A *lifetime session* is what a connection or a project holds while it lives. A *tool session* is one open diagram, designer or editor, driven through a contract that a module implements.
-- **Catalog project**: the one project that holds the definitions (origin, title, description, icon) of the cataloged tool types that have no implementation yet (FR-097).
 - **Role class**: one of the ten classes every diagram module repeats: source resolver, session, session factory, document store, entry, changed-event args, reloader, document factory, edit helper, command handler.
 - **Pilot module**: sankey, supply-chain, functional-decomposition-graph or gartner-hype-cycle-graph.
 - **Conversion specification**: one of the fifteen `*-disl-fbl` spec-workflow specifications of `etalii.adp.ide.standalone`.
@@ -372,7 +371,7 @@ Each was the maintainer's to rule, and each was ruled on 2026-10-11 (*Clarificat
 
 | # | Decision | Options | Ruling | Blocked until ruled |
 |---|---|---|---|---|
-| DP-1 | The shape of the 48 stub modules. `.spec-workflow/steering/tech.md` (*Declaring a diagram definition*) mandates one project per stub, and the architecture pages say "a type is a folder". | (a) one catalog project holding all 48 definitions: 188 files and 47 projects fewer, no core change; (b) the catalog generated from `docs/tools.md`; (c) the stubs stay as they are | **(a)**. Generating the catalog stays a candidate of the M8 review | FR-097, the stub tasks of M8 |
+| DP-1 | The shape of the 48 stub modules. `.spec-workflow/steering/tech.md` (*Declaring a diagram definition*) mandates one project per stub, and the architecture pages say "a type is a folder". | (a) one catalog project holding all 48 definitions: 188 files and 47 projects fewer, no core change; (b) the catalog generated from `docs/tools.md`; (c) the stubs stay as they are | **(c)**, the stubs stay (2026-10-11, on the decision card in the thread *Standalone C# code analysis*; it replaces (a), recorded earlier that day). The stub tasks of M8 are struck | FR-097, SC-027, T255 to T257 (struck) |
 | DP-2 | The order of this feature against the fifteen conversion specifications. | (a) M0 to M2 first, then the conversions, with M3, M6 and M7 re-read at their reviews for what the conversions removed; (b) the conversions first; (c) module by module, whichever reaches a module first | **(a)** | FR-012, the parser, writer and provider tasks of M2, M3, M6 and M7 |
 | DP-3 | The ruling of 2026-09-15 in `backend-centralization` declined to share one-line members that are identical across modules, the reloader forwarders among them. FR-028 and FR-032 remove those classes whole. | (a) the ruling stands for sharing a line and does not stand in the way of deleting the class, so FR-028 and FR-032 proceed; (b) the ruling stands as written and the reloaders and one-line members stay per module | **(a)** | The reloader tasks of M1 and M2 |
 | DP-4 | Whether standalone's planning convention changes. | (a) this feature only; `CLAUDE.md`, the constitution and `specs/README.md` stay as they are; (b) standalone's new features are Spec Kit features here from now on, with those three documents changed and a principles file `.specify/memory/repositories/etalii.adp.ide.standalone.md` written | **(a)** | Nothing in this feature |
@@ -432,7 +431,7 @@ Every count is taken by the scripts of FR-009 against the baseline. The figures 
 - **SC-024**: Ten milestone reviews are on record, each merged before the next milestone's first task started, each with its measurements and an answer for every named candidate.
 - **SC-025**: Every pull request of the feature passed the four gates and the inspection job, and none left `docs/architecture.md` or `docs/solution-structure.md` describing something that is no longer so.
 - **SC-026**: Every defect D1 to D10 is closed with a guard seen to fail, or struck with the evidence that it is not a defect.
-- **SC-027**: The solution holds 47 projects fewer through the catalog project (129 at the report's reading, 48 of them stubs), and discovery reports the same 48 origins, titles and icons as before. At the end of M8.
+- **SC-027**: The 48 stub modules are unchanged: discovery reports the same 48 origins, titles and icons as at the baseline, from the same 48 projects. At the end of M8 (DP-1 (c)).
 
 ## Assumptions
 
@@ -463,7 +462,7 @@ No question was put to the maintainer in this session. The points below were ope
 
 The six decision points were put to the maintainer as selections, each with a recommended option. DP-1 was asked a second time, after the maintainer asked what a catalog project is and was shown one stub module beside the catalog that would replace it. DP-5 was asked a second time, to settle which of the three things the host calls a session the ruling covers.
 
-- Q: What shape should the 48 stub diagram modules take? → A: One catalog project, holding all 48 definitions as one hand-written list (DP-1 (a); FR-097, SC-027).
+- Q: What shape should the 48 stub diagram modules take? → A: Keep the stubs as they are (DP-1 (c); FR-097, SC-027). The maintainer first chose (a), one catalog project, and later the same day answered the decision card with (c), which stands.
 - Q: In what order should this restructuring run against the fifteen conversion specifications? → A: M0 to M2 first, then the conversions, with M3, M6 and M7 re-read at their reviews (DP-2 (a); FR-012).
 - Q: Does the ruling of 2026-09-15 stand in the way of deleting the 16 reloader classes and the one-line resolver members whole? → A: No. It stands for sharing a single line; a class that only forwards may be replaced by one generic type (DP-3 (a); FR-028, FR-032).
 - Q: What happens to the empty sessions project? → A: "It should own all session related logic and types." That is the sign-in session code, the lifetime of a connection and a project, and the tool-session contracts with their factories (DP-5; FR-054, FR-065, FR-067, SC-028).

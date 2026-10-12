@@ -11,7 +11,7 @@ The primary research is the report, [analysis-2026-10-10.md](analysis-2026-10-10
 
 ## R2. The order of the milestones
 
-- **Decision**: M0 tests and defects; M1 and M2 the modules; M3 utilities; M4 the project graph; M5 hotspots; M6 the specification projects; M7 module internals; M8 remaining tests and the stubs; M9 close.
+- **Decision**: M0 tests and defects; M1 and M2 the modules; M3 utilities; M4 the project graph; M5 hotspots; M6 the specification projects; M7 module internals; M8 remaining tests (the stubs stay, DP-1 (c)); M9 close.
 - **Rationale**:
   - *Tests first.* Every later step is judged by the suite, and the suite has a known race in 25 places. The report says the sleeps "could move earlier, given past CI flakiness".
   - *Modules before utilities.* The middle layer deletes some utility copies by itself (the per-module `Edits.Run`, the unsubscribers, several `LineOf`), so doing utilities first would refactor code about to go.
@@ -83,9 +83,7 @@ The primary research is the report, [analysis-2026-10-10.md](analysis-2026-10-10
 | `EtAlii.Adp.Diagram.Modules` | M4 | R9 |
 | `EtAlii.Adp.Files` | M4 | The file-system part of the documents project: the writer with its P/Invoke, the watchers, the project file events (FR-056) |
 | `EtAlii.Adp.Specification.Json` | M6 | Shared by two specification projects that must not reference each other for it (FR-074) |
-| `EtAlii.Adp.Diagram.Catalog` | M8 | DP-1 (a) |
 | removed: `EtAlii.Adp.Backend` | M4 | 146 lines of client hosting, folded into the service project (FR-055) |
-| removed: 48 stub projects | M8 | DP-1 (a) |
 
 Each project name was checked against `structure.md`: `EtAlii.Adp.<Area>`, singular `Diagram`, no `Backend` segment. A guard in standalone rejects an `EtAlii.Adp.*` name in `structure.md` that is not a project in the solution, so these names appear there only in the pull request that creates the project.
 
@@ -132,7 +130,7 @@ Each project name was checked against `structure.md`: `EtAlii.Adp.<Area>`, singu
 
 - **"Steps 2 and 4 are large enough to deserve a spec-workflow specification each."** One Spec Kit feature instead (R1), and one it stays: DP-6 was ruled (a).
 - **"Write failing tests for D1 to D8, then fix them"** as step 1. D4 moves to M1 and M2 with its correction; D1, D3, D7 and D8 are elsewhere (R15).
-- **The catalog "generated from `docs/tools.md`".** Offered as DP-1 (b) and not taken: the maintainer ruled (a), and it adds a build step to remove a list. It stays a candidate of the M8 review.
+- **The catalog "generated from `docs/tools.md`".** Offered as DP-1 (b) and not taken: the maintainer ruled (c), keep the stubs.
 - **`OrderByBarycentre`.** Kept in the layout library's list, but only added when a module's existing ordering is moved onto it without changing its fixtures; otherwise struck at the M3 review (FR-008: no type ahead of a consumer).
 
 ## R17. What the sessions project holds
