@@ -2,7 +2,7 @@
 
 **Input**: [standalone-code-structure.spec.md](standalone-code-structure.spec.md), [plan.md](plan.md), [research.md](research.md), [data-model.md](data-model.md), [behaviour-changes.md](behaviour-changes.md), [contracts/](contracts/), and the report, [analysis-2026-10-10.md](analysis-2026-10-10.md).
 
-**266 tasks in ten milestones.** T265 and T266 were added on 2026-10-11 with the ruling on DP-5 and stand in M4. Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
+**266 tasks in ten milestones.** T265 and T266 were added on 2026-10-11 with the ruling on DP-5 and stand in M4. T255 to T257 were struck on 2026-10-12 by the ruling on DP-1 (c), keep the stubs, so 263 remain. Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
 
 ## How to read a task
 
@@ -18,7 +18,7 @@
 
 ### Decisions and baseline
 
-- [x] T001 [US9] Put decision points DP-1 to DP-6 to the maintainer as selections (options, what each means, the recommended one with its reason, an "other") and record each ruling, with its date, in the *Decision points* table of `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` (FR-013). Done on 2026-10-11 in `etalii.adp`: (a) for each, DP-5 widened.
+- [x] T001 [US9] Put decision points DP-1 to DP-6 to the maintainer as selections (options, what each means, the recommended one with its reason, an "other") and record each ruling, with its date, in the *Decision points* table of `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` (FR-013). Done on 2026-10-11 in `etalii.adp`: (a) for each, DP-5 widened; DP-1 later ruled (c), keep the stubs.
 - [ ] T002 [P] [US1] Write `etalii.adp.ide.standalone/.github/tools/analysis/lines.py`: lines and files per project of `src/backend/EtAlii.Adp.slnx`, split into production and test and into core and the three tool kinds, classifying core by the absence of a leading `../` as `docs/solution-structure.md` warns (FR-009; report *Method*).
 - [ ] T003 [P] [US1] Write `etalii.adp.ide.standalone/.github/tools/analysis/clones.py`: the normalized clone scan over production code, hashing 10-line windows with module prefixes, string literals and numbers normalized, reporting shared windows per role pair and the twenty largest clone families; a second mode scans the test code (FR-009; report 1, *Method*).
 - [ ] T004 [P] [US1] Write `etalii.adp.ide.standalone/.github/tools/analysis/methods.py`: brace-matched method lengths in code lines, the counts over 50 and over 80, the twenty longest, and the largest types per project (FR-009; report 7, *Method*).
@@ -381,7 +381,7 @@
 - [ ] T243 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M7-review.md` by `etalii.adp/specs/025-standalone-code-structure/contracts/milestone-review.md`: the comparison with the previous record, the exit condition of M7 (the module internals are decomposed) and the success criteria due, an answer for every candidate named for the M7 review, what the clone scan and the method-length count show that nobody named, the tasks under FR-012 marked *stands*, *reduced* or *overtaken*, and the open rows of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` that M8 needs (FR-010, FR-011, FR-012).
 - [ ] T244 [US9] In the same pull request into `etalii.adp`, update `etalii.adp/specs/025-standalone-code-structure/tasks.md`: tick what is merged, add the tasks the review produced with new numbers, strike what it found unnecessary; amend a success criterion in `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` only with this review named beside it. No task of the next milestone starts before this pull request is merged (FR-010, FR-011, FR-014).
 
-## M8: test consolidation and the stub modules
+## M8: test consolidation
 
 ### Tests (report 8.3, 8.6, 8.7)
 
@@ -396,16 +396,16 @@
 - [ ] T253 [P] [US8] Derive `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Unit Tests/ElementTypeCatalog.cs` and the catalogue in `DrawnConnections.Tests.cs` from the tool definitions, or remove them if the module's own tests cover the same (FR-095).
 - [ ] T254 [P] [US8] Move `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/GateScript.Tests.cs` out of the product test suite: beside the scripts under `etalii.adp.ide.standalone/.github/tools/gate/` if `retire.sh` is still tested by it, and deleted for `gate.sh` and `land.sh`, which no longer apply (FR-096).
 
-### The stub modules (report 2.1); DP-1 is ruled (a)
+### The stub modules (report 2.1); struck, DP-1 is ruled (c)
 
-- [ ] T255 [US2] By DP-1 (a): in one pull request, change *Declaring a diagram definition* in `etalii.adp.ide.standalone/.spec-workflow/steering/tech.md`, the "a type is a folder" sentences of `etalii.adp.ide.standalone/docs/architecture.md` and `etalii.adp.ide.standalone/docs/solution-structure.md`, create `etalii.adp.ide.standalone/src/diagrams/catalog/backend/EtAlii.Adp.Diagram.Catalog/` with a `Definitions` array, and move the first stub into it, with the test that discovery still finds its origin, title and icon (FR-097, FR-004).
-- [ ] T256 [US2] Move the other 47 stub definitions into the catalog and delete their projects and readmes from `etalii.adp.ide.standalone/src/diagrams/` and from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.slnx`; `etalii.adp.ide.standalone/docs/tools.md` still names every type, and the counts of `etalii.adp.ide.standalone/docs/solution-structure.md` and `ArchitecturePages.Tests` are corrected (FR-097, FR-004; SC-027).
-- [ ] T257 [US2] Rewrite the part of `etalii.adp.ide.standalone/docs/creating-a-diagram-module.md` that says how a cataloged type becomes an implemented module: its definition leaves the catalog when its own project gains a `Build` delegate (FR-097, FR-004).
+- [ ] ~~T255 [US2] By DP-1 (a): in one pull request, change *Declaring a diagram definition* in `etalii.adp.ide.standalone/.spec-workflow/steering/tech.md`, the "a type is a folder" sentences of `etalii.adp.ide.standalone/docs/architecture.md` and `etalii.adp.ide.standalone/docs/solution-structure.md`, create `etalii.adp.ide.standalone/src/diagrams/catalog/backend/EtAlii.Adp.Diagram.Catalog/` with a `Definitions` array, and move the first stub into it, with the test that discovery still finds its origin, title and icon (FR-097, FR-004).~~ Struck: DP-1 ruled (c), keep the stubs (maintainer, 2026-10-11).
+- [ ] ~~T256 [US2] Move the other 47 stub definitions into the catalog and delete their projects and readmes from `etalii.adp.ide.standalone/src/diagrams/` and from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.slnx`; `etalii.adp.ide.standalone/docs/tools.md` still names every type, and the counts of `etalii.adp.ide.standalone/docs/solution-structure.md` and `ArchitecturePages.Tests` are corrected (FR-097, FR-004; SC-027).~~ Struck: DP-1 ruled (c), keep the stubs (maintainer, 2026-10-11).
+- [ ] ~~T257 [US2] Rewrite the part of `etalii.adp.ide.standalone/docs/creating-a-diagram-module.md` that says how a cataloged type becomes an implemented module: its definition leaves the catalog when its own project gains a `Build` delegate (FR-097, FR-004).~~ Struck: DP-1 ruled (c), keep the stubs (maintainer, 2026-10-11).
 
 ### Review
 
 - [ ] T258 [US9] Run `etalii.adp.ide.standalone/.github/tools/analysis/measure.sh` on the merge commit of M8's last pull request, in a freshly created worktree, and save its output as `etalii.adp/specs/025-standalone-code-structure/reviews/M8-measurements.json` (FR-009, FR-010).
-- [ ] T259 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M8-review.md` by `etalii.adp/specs/025-standalone-code-structure/contracts/milestone-review.md`: the comparison with the previous record, the exit condition of M8 (the tests are consolidated and the stub modules have their ruled shape) and the success criteria due, an answer for every candidate named for the M8 review, what the clone scan and the method-length count show that nobody named, the tasks under FR-012 marked *stands*, *reduced* or *overtaken*, and the open rows of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` that M9 needs (FR-010, FR-011, FR-012).
+- [ ] T259 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M8-review.md` by `etalii.adp/specs/025-standalone-code-structure/contracts/milestone-review.md`: the comparison with the previous record, the exit condition of M8 (the tests are consolidated and the stub modules unchanged) and the success criteria due, an answer for every candidate named for the M8 review, what the clone scan and the method-length count show that nobody named, the tasks under FR-012 marked *stands*, *reduced* or *overtaken*, and the open rows of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` that M9 needs (FR-010, FR-011, FR-012).
 - [ ] T260 [US9] In the same pull request into `etalii.adp`, update `etalii.adp/specs/025-standalone-code-structure/tasks.md`: tick what is merged, add the tasks the review produced with new numbers, strike what it found unnecessary; amend a success criterion in `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` only with this review named beside it. No task of the next milestone starts before this pull request is merged (FR-010, FR-011, FR-014).
 
 ## M9: close
@@ -428,7 +428,7 @@
 - **M5**: T185 first; T186, T187 and T188 before T189 before T190; T192 needs T266 and comes before T193; T195 before T196; T197 before T198.
 - **M6**: T207 and T208 first. T209 before T210 and T211; T212 before the three DISL typing tasks; T215 before T216, which needs T038; T220 before T221; T226 last of the code tasks.
 - **M7**: T231 before T232; T233 before T234.
-- **M8**: T245 before T246; T251 before T252; T255 comes before T256 and T257.
+- **M8**: T245 before T246; T251 before T252.
 
 ## Coverage
 
@@ -532,7 +532,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-094 | T247, T248, T249, T250 |
 | FR-095 | T251, T252, T253 |
 | FR-096 | T254 |
-| FR-097 | T255, T256, T257 |
+| FR-097 | none: satisfied by leaving the stubs as they are (DP-1 (c)); T255 to T257 struck |
 | FR-098 | T261, T263, T264 |
 
 FR-002, FR-004, FR-005, FR-007 and FR-008 are rules of [contracts/pull-request.md](contracts/pull-request.md) that every task holds; the tasks listed beside them are the ones whose text names a particular page, guard, register row or first consumer.
@@ -565,7 +565,7 @@ FR-002, FR-004, FR-005, FR-007 and FR-008 are rules of [contracts/pull-request.m
 | SC-024 | The three review tasks of each milestone; T263 | M0 to M9 |
 | SC-025 | T262 | M9 |
 | SC-026 | The defect tasks of M0, M1, M2, M5 and M6; T263 | M9 |
-| SC-027 | T256, T263 | M8 |
+| SC-027 | T263 | M8 |
 | SC-028 | T192, T193, T265, T266 | M4, M5 |
 
 Requirements named by a task that the specification does not define: none.

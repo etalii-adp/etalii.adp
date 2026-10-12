@@ -67,7 +67,6 @@ A review answers every one of its rows, even where the answer is "no".
 | M7 | Which module-internal tasks a conversion overtook | FR-012 |
 | M7 | The budgeted graph builder for SPARQL as well | SPARQL already uses a nested builder |
 | M7 | The longest methods that are left | The method-length count after M7 |
-| M8 | Generate the catalog from `docs/tools.md` | DP-1 (b), not taken when (a) was ruled; the hand-written list now exists to be judged |
 | M8 | Per-module test helpers that are left | The clone scan over the test code |
 | M9 | Everything recorded as a follow-up feature | It is listed once, in order of value, for the maintainer |
 

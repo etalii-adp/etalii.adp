@@ -6,7 +6,7 @@
 
 ## Summary
 
-Ten milestones restructure the C# code of `etalii.adp.ide.standalone` in the order that keeps each step small and checked: a safety net for the tests first (M0), then the missing middle layer of the diagram modules, piloted on four modules (M1) and rolled out to fifteen more (M2), then the shared utilities (M3), the core project graph (M4), the core hotspots (M5), the specification projects (M6), the internals of the largest modules (M7), the rest of the test code and the stub modules (M8), and a close (M9). Every milestone ends in a review that measures the code again and decides in writing what to add and what to drop. Nothing is implemented by this plan: it and its tasks are the specification of work for a developer in the standalone repository.
+Ten milestones restructure the C# code of `etalii.adp.ide.standalone` in the order that keeps each step small and checked: a safety net for the tests first (M0), then the missing middle layer of the diagram modules, piloted on four modules (M1) and rolled out to fifteen more (M2), then the shared utilities (M3), the core project graph (M4), the core hotspots (M5), the specification projects (M6), the internals of the largest modules (M7), the rest of the test code (M8), and a close (M9). Every milestone ends in a review that measures the code again and decides in writing what to add and what to drop. Nothing is implemented by this plan: it and its tasks are the specification of work for a developer in the standalone repository.
 
 ## Technical Context
 
@@ -26,7 +26,7 @@ Ten milestones restructure the C# code of `etalii.adp.ide.standalone` in the ord
 
 **Constraints**: no change a user can see (FR-001); the wire contracts in `src/api/*.proto` and the TypeScript client are not changed; every pull request passes the four gates and the inspection job; the architecture pages stay true in the same pull request (FR-004).
 
-**Scale/Scope**: about 121,000 production lines and 125,000 test lines. The report's estimates add up to about 12,000 production lines (9,000 to 10,000 of them in the module middle layer) and 6,000 to 7,000 test lines reclaimable. [tasks.md](tasks.md) holds 264 tasks; most are one pull request each, and several of the M1 and M2 tasks for one module may travel in one.
+**Scale/Scope**: about 121,000 production lines and 125,000 test lines. The report's estimates add up to about 12,000 production lines (9,000 to 10,000 of them in the module middle layer) and 6,000 to 7,000 test lines reclaimable. [tasks.md](tasks.md) holds 263 tasks (266, three struck by DP-1); most are one pull request each, and several of the M1 and M2 tasks for one module may travel in one.
 
 ## Constitution Check
 
@@ -65,7 +65,7 @@ Ten milestones restructure the C# code of `etalii.adp.ide.standalone` in the ord
 | Backend code style: no blocking call in an `async` method | FR-070 removes the remaining ones the report found; `ReadWithRetry` with `Thread.Sleep` goes with FR-050. |
 | Line endings: CRLF in the working tree, byte-compared fixtures `-text` | No fixture is rewritten. The line-document work (FR-042) is where line endings are decided, and it is held by the existing byte round-trip fixtures. |
 | Every bug leaves a guard | FR-005. |
-| `tech.md`, *Declaring a diagram definition*: the stub shape | **Conflict with report 2.1**, which was decision point DP-1, ruled (a) on 2026-10-11: one catalog project. The stub tasks come last and change `tech.md` first. |
+| `tech.md`, *Declaring a diagram definition*: the stub shape | **Conflict with report 2.1**, which was decision point DP-1, ruled (c) on 2026-10-11: the stubs stay, so `tech.md` stands and the stub tasks are struck. |
 | `tech.md`, *Registering a diagram module's services*: one `ServiceCollection.AddX.cs`, split only for a consumer | Kept. FR-030 makes the file shorter; it does not split it. |
 | `structure.md`: core must never depend on a diagram type | SC-013 makes it measurable: no `InternalsVisibleTo` from a core project to a module (two today, in the documents project). |
 | `structure.md`: prefer small, composable projects; a `PackageReference` goes in the highest parent that uses it | The new projects below; R8 places the one new package. |
@@ -87,7 +87,7 @@ Each is argued in [research.md](research.md).
 7. **Stream readiness is proven by a probe, not announced by the server** (R7), because an announcement is a contract change.
 8. **The clock is `TimeProvider`** (R8).
 9. **Where the shared types live** (R9, [data-model.md](data-model.md)): the report's proposals, with one correction it did not see. A resolver base cannot live in a diagram-abstractions project that depends on the documents project only, so M4 gives the module-facing bases a project of their own.
-10. **New projects** (R10): `EtAlii.Adp.TestSupport.Host` (M0), `EtAlii.Adp.Layout` (M3), `EtAlii.Adp.Workspace`, `EtAlii.Adp.Diagram.Modules` and `EtAlii.Adp.Files` (M4), `EtAlii.Adp.Specification.Json` (M6) and, by DP-1, `EtAlii.Adp.Diagram.Catalog` (M8). Removed: `EtAlii.Adp.Backend` (M4) and, by DP-1, 48 stub projects.
+10. **New projects** (R10): `EtAlii.Adp.TestSupport.Host` (M0), `EtAlii.Adp.Layout` (M3), `EtAlii.Adp.Workspace`, `EtAlii.Adp.Diagram.Modules` and `EtAlii.Adp.Files` (M4), `EtAlii.Adp.Specification.Json` (M6) Removed: `EtAlii.Adp.Backend` (M4). The 48 stub projects stay (DP-1 (c)).
 11. **Behaviour changes are registered and ruled** (R11, [behaviour-changes.md](behaviour-changes.md)). Eleven are known before the work starts.
 12. **The conversions come after M2** (R12), ruled under DP-2.
 13. **A wire change is out of scope** (R13); three of the report's advices become review candidates for that reason.
@@ -124,7 +124,6 @@ Paths in [tasks.md](tasks.md) are prefixed `etalii.adp.ide.standalone/`. The clo
 etalii.adp.ide.standalone/
 ├── .github/tools/analysis/                    new (M0): the measurement scripts
 ├── docs/                                      architecture.md, solution-structure.md, creating-a-*-module.md: changed with the code
-├── .spec-workflow/steering/tech.md            changed once, by DP-1 (M8)
 └── src/
     ├── Directory.Build.targets                attaches the testing project to every *.Tests project (M0)
     ├── TestSupport/                           LogCapture stays compiled in; TestFolder moves out (M0)
@@ -145,12 +144,11 @@ etalii.adp.ide.standalone/
     │   ├── EtAlii.Adp.TestSupport/            reachable from every test project (M0)
     │   └── EtAlii.Adp.TestSupport.Host/       new (M0): HostFixture, FlowSession, StreamProbe; TranscriptHarness (M8)
     ├── diagrams/<type>/backend/               19 modules with real code lose their role classes (M1, M2)
-    ├── diagrams/catalog/                      new by DP-1 (M8): one project for the 48 stub definitions
     ├── designers/knowledge/                   M7
     └── editors/{markdown,plain}/              one text editor session (M3)
 ```
 
-**Structure Decision**: the solution stays one flat list of projects, as `structure.md` requires. Six projects are added and one is folded away; with DP-1 ruled (a), 48 stub projects become one catalog project and the solution ends at about 87 projects, from 129. Every one of those changes updates `docs/solution-structure.md` and the counts in `ArchitecturePages.Tests` in its own pull request.
+**Structure Decision**: the solution stays one flat list of projects, as `structure.md` requires. Six projects are added and one is folded away; with DP-1 ruled (c), the 48 stub projects stay and the solution ends at about 134 projects, from 129. Every one of those changes updates `docs/solution-structure.md` and the counts in `ArchitecturePages.Tests` in its own pull request.
 
 ## Milestones, their exits and their reviews
 
@@ -164,7 +162,7 @@ etalii.adp.ide.standalone/
 | M5 Core hotspots | T185 to T206 | SC-013, SC-017, SC-018; SC-028 for the lifetime; D10 closed | Whether the three retained stores collapse into the connection session; whether `IContextWatchHooks` can go; what is left of `ContextService` |
 | M6 Specification projects | T207 to T230 | SC-019 to SC-022; D9 closed | Which conversions are now unblocked and in what order; whether the hand-written XML parser is still justified; whether DISL still needs to reference FBL at all |
 | M7 Module internals | T231 to T244 | The methods FR-086 to FR-092 name are under the lengths of SC-023, or struck under FR-012 | Which of these modules a conversion has overtaken; whether the budgeted graph builder serves SPARQL as well |
-| M8 Tests and stubs | T245 to T260 | SC-005, SC-027; FR-093 to FR-097 | Whether any per-module test helper is left; whether the catalog should be generated from `docs/tools.md` |
+| M8 Tests and stubs | T245 to T260 | SC-005, SC-027; FR-093 to FR-097 | Whether any per-module test helper is left |
 | M9 Close | T261 to T264 | SC-023 to SC-026; FR-098 | What becomes a follow-up feature |
 
 ## Complexity Tracking
