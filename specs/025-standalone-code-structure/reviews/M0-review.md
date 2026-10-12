@@ -205,11 +205,15 @@ None. Every finding of M0 serves a requirement of this feature or belongs to ano
 - (c) Now, with all five recorded at the M1 review. Fastest; SC-014 stays unproven on Windows through M1, which changes no containment code.
 - (d) Other.
 
+*Ruled (chat, 2026-10-12): (a), after T267, T268 and T269.*
+
 **2. How is SC-014 shown on Windows (T267)?**
 
 - (a) **A `windows-latest` job in standalone's Build workflow that runs the containment guards only** and fails when one of them is skipped. *Recommended*: SC-014 holds "from M0", so it should be checked while M4 wraps containment in typed paths, and the hosted Windows runner may create symbolic links, so the link guards run; on a public repository the minutes cost nothing.
 - (b) The maintainer runs the containment guards once on his Windows machine and the result is recorded here. One command; it proves today only, and the link guards skip unless the machine is in developer mode.
 - (c) Other.
+
+*Ruled (chat, 2026-10-12): (b), the maintainer runs the containment guards once on his Windows machine, in developer mode so the link guards run; the M1 review records the result.*
 
 **3. B-13: a client cancelling during the project-actions discovery.** Since T034 (standalone pull request 176) the call ends through the `catch` for a client that closed the stream, as a cancellation while streaming always did, instead of the cancellation leaving the method. The client cancelled, so it sees a cancelled call either way; the host logs "closed by the client" at Debug instead of the cancellation.
 
@@ -223,12 +227,16 @@ None. Every finding of M0 serves a requirement of this feature or belongs to ano
 - (b) No: the scripts stay, and the M9 review adds the two projects to the test figures by hand. No work now; every review in between reads figures that need a footnote.
 - (c) Other.
 
+*Ruled (chat, 2026-10-12): (a).*
+
 **5. How often does the Stability workflow run by itself (T271)?**
 
 - (a) **Nightly**, at an hour no pull request runs. *Recommended*: a flake shows within a day of the merge that brought it, while the merge is still easy to find; the minutes are free on a public repository.
 - (b) Weekly. Fewer runs to read; a flake can hide behind a week of merges.
 - (c) Only by hand, at each review. As today; nothing watches SC-002 between reviews.
 - (d) Other.
+
+*Ruled (chat, 2026-10-12): (a), nightly.*
 
 ## Ownership
 
