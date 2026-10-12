@@ -65,7 +65,7 @@
 - [x] T036 [P] [US4] Move `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Problems/ProjectValidator.cs` and `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Problems/ProblemMaintenance.cs` onto `PathContainment`, each with a guard for the escaping link (FR-024).
 - [x] T037 [P] [US4] Move `HierarchyModel.cs`, `HierarchyModelStore.cs`, `DiagramFilePair.cs` and `HierarchyContextSourceResolver.cs` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/` onto `PathContainment`; `graph.py` or a search finds no other containment test (FR-024; SC-014).
 - [ ] T038 [US6] D9: read what `etalii.adp/specifications/fbl/FBL-specification.md` says about a computed or empty value on insert, write the fixture pair that shows `JsonFamily.WireValue` and `YamlFamily.WireValue` disagreeing, and record the answer in `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` (B-09); if the specification is silent, write up the question as a feature for `etalii.adp` and leave the code unchanged (FR-025; report D9).
-- [ ] T039 [US9] Put rows B-01, B-02, B-04, B-05 and B-06 of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` to the maintainer as selections and record the rulings (FR-002).
+- [x] T039 [US9] Put rows B-01, B-02, B-04, B-05 and B-06 of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` to the maintainer as selections and record the rulings (FR-002).
 
 ### Review
 
