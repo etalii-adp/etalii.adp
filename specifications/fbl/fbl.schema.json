@@ -32,13 +32,14 @@
           "type": "string"
         },
         "fbl": {
-          "description": "The FBL version the document is written in: 0.1, 0.2, 0.3, 0.4, or 0.5 (draft); 0.3 names the tool type's specification in place of DISL, lets a specification name one binding per format family, and spells a reference to a stored id as by: \"id\". 0.4 creates and removes the missing levels of a nested container or child mapping. 0.5 defines a scalar's written text, read with read, and adds quoted and fallback to an attribute binding. See FBL 0.5, section 2.7.",
+          "description": "The FBL version the document is written in: 0.1, 0.2, 0.3, 0.4, 0.5, or 0.6 (draft); 0.3 names the tool type's specification in place of DISL, lets a specification name one binding per format family, and spells a reference to a stored id as by: \"id\". 0.4 creates and removes the missing levels of a nested container or child mapping. 0.5 defines a scalar's written text, read with read, and adds quoted and fallback to an attribute binding. 0.6 applies an attribute binding's empty rule to an insert as well as to a set. See FBL 0.6, section 2.7.",
           "enum": [
             "0.1",
             "0.2",
             "0.3",
             "0.4",
-            "0.5"
+            "0.5",
+            "0.6"
           ]
         },
         "doc": {

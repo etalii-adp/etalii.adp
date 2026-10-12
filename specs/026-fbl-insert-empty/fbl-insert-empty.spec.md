@@ -2,7 +2,7 @@
 
 **Feature Branch**: `features/026-fbl-insert-empty`
 **Created**: 2026-10-12
-**Status**: Draft, specified, planned and split into tasks ([plan.md](plan.md), [tasks.md](tasks.md))
+**Status**: Implemented as FBL 0.6 ([plan.md](plan.md), [tasks.md](tasks.md))
 **Input**: Finding D9 of [spec 025](../025-standalone-code-structure/), row B-09 of its [behaviour-change register](../025-standalone-code-structure/behaviour-changes.md). The JSON and YAML families of `etalii.adp.ide.standalone` disagree on whether a new entry gets a key for an attribute whose value is empty, and FBL 0.5 does not say which is right. The maintainer ruled on 2026-10-12, on a decision card in the project thread, that FBL is amended so that an insert applies the binding's `empty` rule, with the same defaults as a set.
 
 ## Context
