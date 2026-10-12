@@ -332,6 +332,12 @@
       "path": "src/client/src/canvas/library/disl/disTypes.ts",
       "regex": "document\\.disl\\b",
       "reason": "the DISL version key read from a parsed specification, not a file extension"
+    },
+    {
+      "repository": "etalii.adp",
+      "path": ".specify/assessments/hierarchical-requirement-designer/intake.md",
+      "regex": "^  > Its the designers own document\\.",
+      "reason": "the maintainer's words quoted verbatim; there 'designer' is the designer kind, not the umbrella"
     }
   ]
 }
