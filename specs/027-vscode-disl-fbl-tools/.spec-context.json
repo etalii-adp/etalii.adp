@@ -3,8 +3,8 @@
   "specName": "027-vscode-disl-fbl-tools",
   "branch": "027-vscode-disl-fbl-tools",
   "selectedAt": "2026-10-12T20:39:44.693Z",
-  "currentStep": "tasks",
-  "status": "tasking",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -54,6 +54,64 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-10-12T21:12:30.759Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T21:19:03.155Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T21:19:27.627Z"
+    },
+    {
+      "step": "analyze",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-12T21:19:33.911Z"
+    },
+    {
+      "step": "analyze",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T21:21:54.956Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "user",
+      "at": "2026-10-12T21:27:33.198Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-12T21:27:59.394Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T21:29:14.286Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T21:30:01.058Z"
     }
   ],
   "telemetryInstanceId": "dc5f5bb0-d20a-4e36-9cc2-dc702a232be5",
@@ -111,13 +169,266 @@
     },
     {
       "note": "{\"concern\": \"The specification's User Story 2 says dragged positions are kept in the registration; the agent activity diagram's definition keeps them in the file\"}"
+    },
+    {
+      "note": "The story phases share files (the interpreter, toolTypeFrom, the support record), so they run one after another and implement cannot fan them out to parallel workers; tasks.md lists them under Extends"
+    },
+    {
+      "note": "T053 lets a hand-coded type win for its origin until Phase 7 (T131) removes that line, so the hype cycle graph and Agent Behavior Modelling definitions can be copied in Phase 3 without changing what users see"
+    },
+    {
+      "note": "Analyze C1: T076 (link picker) and T079 (drawing a fold, the fold, reparent and clipboard gestures in the webview) have no test task before them, against FR-016 and principle IV of etalii.adp.ide.vscode",
+      "step": "analyze"
+    },
+    {
+      "note": "Analyze C2: mixed line endings are normalised by the editor, which FR-006, SC-001 and principle II do not allow; the plan marks principle II PASS without a Complexity Tracking row, the specification has no exception and no task tests it",
+      "step": "analyze"
+    },
+    {
+      "note": "Analyze H1: scenario 5 of User Story 1 and the .mm part of SC-003 cannot be met; an issue is filed (T002) but no task changes the mind map definition, so the feature closes with a P1 scenario skipped",
+      "step": "analyze"
+    },
+    {
+      "note": "Analyze H2: the project link picker needs a platform dialog, but the contract has no request or outcome for picking a link and the plugin registry is in src/core, which may not import vscode",
+      "step": "analyze"
+    },
+    {
+      "note": "Analyze H3: T003 is overtaken: specification, plan and research reached origin/develop in the direct commit b0e00a4, not through a pull request; only tasks.md and .spec-context.json are still uncommitted",
+      "step": "analyze"
+    },
+    {
+      "note": "Analyze M5: checklists/migration.md has 46 open items and /speckit-implement reads checklist state as a gate",
+      "step": "analyze"
     }
   ],
   "step_summaries": {
     "plan": {
       "summary": "Planned six pull requests: FBL 0.6, the interpreter and the mind map, the agent activity diagram, the Knowledge designer, the two existing diagrams, the closing record",
       "key_finding": "The plug-in's FBL library is FBL 0.1 and three of the five tool types need 0.2 to 0.4, so the library goes to 0.6 before any tool is connected"
+    },
+    "tasks": {
+      "summary": "143 tasks in 8 phases: setup, the FBL library at 0.6, the definition foundation, one phase per user story (mind map, agent activity diagram, Knowledge designer, the two existing diagrams) and polish, one pull request each from Phase 2 on except Phases 3 and 4, which share pull request 2"
     }
   },
-  "approach": "The plug-in reads each tool type from its copied definition: a DISL interpreter taken from the Notion add-ons and a new DESL interpreter turn a definition, its FBL binding and its plugins into one value of a generic frame contract. Edits are FBL splices applied as one edit of the text document, after the FBL library is brought from 0.1 to 0.6. Delivery is six pull requests into etalii.adp.ide.vscode."
+  "approach": "The plug-in reads each tool type from its copied definition: a DISL interpreter taken from the Notion add-ons and a new DESL interpreter turn a definition, its FBL binding and its plugins into one value of a generic frame contract. Edits are FBL splices applied as one edit of the text document, after the FBL library is brought from 0.1 to 0.6. Delivery is six pull requests into etalii.adp.ide.vscode.",
+  "coverage": {
+    "FR-001": {
+      "title": "The plug-in holds an unchanged copy of each definition with its provenance recorded",
+      "tasks": [
+        "T039",
+        "T040",
+        "T046",
+        "T062",
+        "T084",
+        "T100"
+      ]
+    },
+    "FR-002": {
+      "title": "A check on every pull request and one command that refreshes the copies",
+      "tasks": [
+        "T027",
+        "T040",
+        "T058"
+      ]
+    },
+    "FR-003": {
+      "title": "What a tool type shows and does is read from its copied definition; tool-specific code is listed with its reason",
+      "tasks": [
+        "T033",
+        "T035",
+        "T042",
+        "T043",
+        "T052",
+        "T059",
+        "T080",
+        "T097",
+        "T117",
+        "T133"
+      ]
+    },
+    "FR-004": {
+      "title": "A support record lists the features and plugins implemented and every difference",
+      "tasks": [
+        "T036",
+        "T059",
+        "T080",
+        "T097",
+        "T117",
+        "T133",
+        "T141"
+      ]
+    },
+    "FR-005": {
+      "title": "Adding a tool type needs only copying its definition and registering its files",
+      "tasks": [
+        "T033",
+        "T040",
+        "T053",
+        "T105"
+      ]
+    },
+    "FR-006": {
+      "title": "Documents are read and written through their binding; no edit leaves the file byte-identical",
+      "tasks": [
+        "T005",
+        "T006",
+        "T013",
+        "T022",
+        "T033",
+        "T052",
+        "T067",
+        "T087",
+        "T104"
+      ]
+    },
+    "FR-007": {
+      "title": "Every edit is an edit of the text document; one gesture is one undo step",
+      "tasks": [
+        "T034",
+        "T050",
+        "T055",
+        "T068",
+        "T089",
+        "T107"
+      ]
+    },
+    "FR-008": {
+      "title": "A file opens in a tool type only when its binding claims it by extension and marker",
+      "tasks": [
+        "T031",
+        "T038",
+        "T048",
+        "T054",
+        "T107",
+        "T111"
+      ]
+    },
+    "FR-009": {
+      "title": "Dragged positions kept in a registration are written to the .adp, never into the document",
+      "tasks": [
+        "T018",
+        "T055",
+        "T087",
+        "T096"
+      ]
+    },
+    "FR-010": {
+      "title": "Findings in the Problems panel on their line; refusals show the definition's sentence; native confirmations",
+      "tasks": [
+        "T033",
+        "T052",
+        "T055",
+        "T087",
+        "T089",
+        "T138"
+      ]
+    },
+    "FR-011": {
+      "title": "The mind map, the agent activity diagram and the Knowledge designer are offered for the files their bindings claim",
+      "tasks": [
+        "T062",
+        "T081",
+        "T084",
+        "T096",
+        "T100",
+        "T115",
+        "T116"
+      ]
+    },
+    "FR-012": {
+      "title": "The Knowledge designer is the table surface its definition declares, with every operation and ADP Properties",
+      "tasks": [
+        "T101",
+        "T102",
+        "T103",
+        "T106",
+        "T108",
+        "T109",
+        "T110",
+        "T112",
+        "T115"
+      ]
+    },
+    "FR-013": {
+      "title": "The hype cycle graph and Agent Behavior Modelling are read from their definitions and pass their existing tests",
+      "tasks": [
+        "T121",
+        "T122",
+        "T123",
+        "T124",
+        "T126",
+        "T127",
+        "T128",
+        "T129",
+        "T130",
+        "T131",
+        "T132",
+        "T135"
+      ]
+    },
+    "FR-014": {
+      "title": "Every tool type is tested against standalone's examples and fixtures, copied with their source recorded",
+      "tasks": [
+        "T041",
+        "T067",
+        "T087",
+        "T104"
+      ]
+    },
+    "FR-015": {
+      "title": "Tests in a real Visual Studio Code for each new tool type, and the native dialogs seen once",
+      "tasks": [
+        "T038",
+        "T068",
+        "T089",
+        "T107",
+        "T138"
+      ]
+    },
+    "FR-016": {
+      "title": "Every test is written first and seen to fail; a test that cannot run is reported skipped with its reason",
+      "tasks": [
+        "T005",
+        "T006",
+        "T068",
+        "T082",
+        "T142"
+      ]
+    },
+    "FR-017": {
+      "title": "The documentation and docs/tools.md list each tool type with kind, display name and origin",
+      "tasks": [
+        "T080",
+        "T097",
+        "T117",
+        "T133",
+        "T139",
+        "T140"
+      ]
+    },
+    "FR-018": {
+      "title": "Every difference and missing construct is reported to etalii.adp as a candidate change",
+      "tasks": [
+        "T001",
+        "T002",
+        "T059",
+        "T133",
+        "T141"
+      ]
+    }
+  },
+  "currentTask": "T002",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "User Story 2 now says the file's view mapping keeps dragged positions",
+      "files": [
+        "specs/027-vscode-disl-fbl-tools/vscode-disl-fbl-tools.spec.md"
+      ]
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "Filed issues 140 to 145 in etalii-adp/etalii.adp for research R14 items 1, 2, 3, 4, 5 and 7"
+    }
+  }
 }
