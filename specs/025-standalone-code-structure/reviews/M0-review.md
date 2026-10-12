@@ -221,6 +221,8 @@ None. Every finding of M0 serves a requirement of this feature or belongs to ano
 - (b) Restore the old path for the discovery: the cancellation leaves the method again, the release still runs. Costs a second `catch` that exists only to keep a difference nobody sees.
 - (c) Other.
 
+*Ruled (chat, 2026-10-12): (a), kept and recorded in the register.*
+
 **4. Should the two testing projects count as test code in the measurements (T270)?**
 
 - (a) **Yes: T270 changes `lines.py`, `methods.py` and `waits.py` to count `EtAlii.Adp.TestSupport` and `EtAlii.Adp.TestSupport.Host` as test code, makes `graph.py` read `Directory.Build.targets`, and measures the baseline and M0 again**, with [baseline.md](baseline.md) restated where a figure moves. *Recommended*: otherwise every helper M1 and M8 move into them reads as test code removed and production code added, SC-005 is met on paper, and a `Thread.Sleep` in a test helper fails SC-010.
