@@ -1,5 +1,7 @@
 {
   "deniedMcpServers": [
-    { "serverName": "spec-workflow" }
+    {
+      "serverName": "spec-workflow"
+    }
   ]
 }

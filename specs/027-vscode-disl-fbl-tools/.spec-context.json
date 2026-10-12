@@ -1,0 +1,123 @@
+{
+  "workflow": "companion",
+  "specName": "027-vscode-disl-fbl-tools",
+  "branch": "027-vscode-disl-fbl-tools",
+  "selectedAt": "2026-10-12T20:39:44.693Z",
+  "currentStep": "tasks",
+  "status": "tasking",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "user",
+      "at": "2026-10-12T20:50:29.775Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "user",
+      "at": "2026-10-12T20:50:49.604Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-12T20:50:59.328Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T20:58:38.817Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T21:01:50.492Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T21:02:12.044Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-12T21:12:30.759Z"
+    }
+  ],
+  "telemetryInstanceId": "dc5f5bb0-d20a-4e36-9cc2-dc702a232be5",
+  "assistant": "claude-vscode",
+  "decisions": [
+    {
+      "decision": "Bring the plug-in's FBL library from 0.1 to 0.6 first, as its own pull request",
+      "why": "The mind map needs FBL 0.2 (plugin move and positioned add) and the agent activity diagram and Knowledge bindings are FBL 0.4; etalii.adp's fixtures are written for 0.6",
+      "rejected": "A separate feature, or porting only what each story needs as it arrives"
+    },
+    {
+      "decision": "Take the DISL interpreter from the Notion add-ons (src/disl at 4a0cdb4) and own it in the plug-in",
+      "why": "4,967 tested lines with no DOM or Notion imports, resting on a byte-for-byte copy of this plug-in's FBL library",
+      "rejected": "Porting standalone's client compiler, or keeping Notion's files unedited"
+    },
+    {
+      "decision": "Compute a scene in src/core/scene (Notion's scene, geometry, snapping) and give the webview one renderer for it",
+      "why": "It already draws custom and composite shapes, part anchors and rulers from interpreted notation and is tested against the nine hype cycle examples",
+      "rejected": "Translating notation into the webview's hand-written DiagramDefinition"
+    },
+    {
+      "decision": "Make the frame contract generic: ToolType<View, Request>, a diagram and a designer differing only in what they show and ask",
+      "why": "Findings, properties, toolbox, actions and outcomes are the same for a table as for a canvas",
+      "rejected": "A second DesignerType contract beside DiagramType"
+    },
+    {
+      "decision": "An edit is FBL splices converted to one WorkspaceEdit; FBL's own history is not used",
+      "why": "Visual Studio Code's undo restores the text exactly and the editor holds the only copy",
+      "rejected": "A custom editor over bytes, or two histories kept in step"
+    },
+    {
+      "decision": "A claimed file of a shared extension is reopened in its tool with vscode.openWith; the designer is registered as an option",
+      "why": "A manifest selects by file name only, and whether a YAML file is a Knowledge document is in its text",
+      "rejected": "Default priority for every YAML and JSON file, or writing workbench.editorAssociations"
+    },
+    {
+      "decision": "Definitions ship as files, are read from the install folder at start, and sync-definitions.mjs also writes the manifest's contributions",
+      "why": "Removing or adding a folder is then the whole of removing or adding a tool type (FR-005, SC-005)",
+      "rejected": "Bundling definitions as JSON modules imported by name"
+    },
+    {
+      "decision": "The mind map's persistence plugin plans its edits here, unlike standalone's, which refuses every plan",
+      "why": "Every edit in this host has to be splices of the text document",
+      "rejected": "Editing the XML in place as standalone's commands do"
+    },
+    {
+      "decision": "Keep two CEL evaluators: the FBL library's own and @marcbachmann/cel-js for DISL",
+      "why": "DISL 12 needs macros, optionals and a function library; FBL's evaluator is the subset FBL names and is copied byte for byte into Notion",
+      "rejected": "Extending the FBL evaluator, or moving FBL onto cel-js"
+    }
+  ],
+  "concerns": [
+    {
+      "note": "{\"concern\": \"The mind map's binding has no marker, so User Story 1 scenario 5 cannot hold until the definition is changed in etalii.adp\"}"
+    },
+    {
+      "note": "{\"concern\": \"The specification's User Story 2 says dragged positions are kept in the registration; the agent activity diagram's definition keeps them in the file\"}"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "Planned six pull requests: FBL 0.6, the interpreter and the mind map, the agent activity diagram, the Knowledge designer, the two existing diagrams, the closing record",
+      "key_finding": "The plug-in's FBL library is FBL 0.1 and three of the five tool types need 0.2 to 0.4, so the library goes to 0.6 before any tool is connected"
+    }
+  },
+  "approach": "The plug-in reads each tool type from its copied definition: a DISL interpreter taken from the Notion add-ons and a new DESL interpreter turn a definition, its FBL binding and its plugins into one value of a generic frame contract. Edits are FBL splices applied as one edit of the text document, after the FBL library is brought from 0.1 to 0.6. Delivery is six pull requests into etalii.adp.ide.vscode."
+}
