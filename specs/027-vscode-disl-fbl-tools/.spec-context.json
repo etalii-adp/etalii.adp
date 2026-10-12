@@ -296,6 +296,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-12T22:30:41.840Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T026",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:31:55.298Z"
     }
   ],
   "telemetryInstanceId": "dc5f5bb0-d20a-4e36-9cc2-dc702a232be5",
@@ -601,7 +609,7 @@
       ]
     }
   },
-  "currentTask": "T025",
+  "currentTask": "T026",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -792,6 +800,14 @@
     "T025": {
       "status": "DONE",
       "did": "Pull request 23 merged into etalii.adp.ide.vscode develop as a6c6580 after the Build passed; etalii.adp.ide.notion issue 10 says its copy is behind; the remote branch is deleted"
+    },
+    "T026": {
+      "status": "DONE",
+      "did": "Branch fast-forwarded to origin/develop a6c6580; @marcbachmann/cel-js ^8 added as a bundled dependency",
+      "files": [
+        "etalii.adp.ide.vscode/package.json",
+        "etalii.adp.ide.vscode/package-lock.json"
+      ]
     }
   }
 }

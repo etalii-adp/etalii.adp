@@ -10,7 +10,7 @@ What the frame asks of a tool type and what the extension registers for it (FR-0
 |---|---|---|---|
 | core | `src/core/` | other core files, `yaml`, `@marcbachmann/cel-js` | `vscode`, the DOM, `src/extension/`, `src/webview/` |
 | extension | `src/extension/` | core, `vscode` | the DOM, `src/webview/` |
-| webview | `src/webview/` | `src/core/frame/`, `src/core/scene/` (types only) | `vscode`, `src/extension/`, anything that reads a definition |
+| webview | `src/webview/` | `src/core/frame/`, `src/core/scene/` (types only), and the functions of `src/core/scene/geometry.ts`, which is arithmetic on points and paths and reads nothing | `vscode`, `src/extension/`, anything that reads a definition |
 
 Nothing under `src/core/disl/`, `src/core/desl/`, `src/core/scene/` or `src/core/tool/` names a tool type: no origin, no type, attribute or message id of a copied definition. One test reads those folders for every such name and fails on a match. Code that belongs to one tool type lives only under `src/core/plugins/<plugin>/` and is reached only through the plugin registry.
 
@@ -41,7 +41,7 @@ export interface ToolType<View, Request> {
   /** The rows of ADP Properties for a selection; empty when there is nothing to show. */
   fields(source: Source, selection: readonly string[]): Field[];
   /** What can be done to the selection, or to the document when it is empty. */
-  actions(source: Source, selection: readonly string[]): Action[];
+  actions(source: Source, selection: readonly string[], options?: ViewOptions): Action[];
   /** Applies one request to the document as it is now. `confirmed` answers an earlier `confirm`. */
   edit(source: Source, request: Request, options: ViewOptions, confirmed: boolean): EditOutcome;
   /** The text of a new document, from the binding's template. */
@@ -75,7 +75,7 @@ export interface Source {
 export function viewTypeOf(type: Pick<ToolType<unknown, unknown>, 'origin'>): string;
 ```
 
-`Finding`, `Severity`, `Box`, `ViewOptions`, `ToolboxEntry`, `Control`, `Field`, `Action` and `EditRequest` keep the shapes they have in `diagramType.ts` today. `ViewElement`, `ViewRelation` and `ViewModel` are removed with the two hand-coded diagrams (User Story 4); until then `DiagramType` stays as `ToolType<ViewModel, EditRequest>`.
+`Finding`, `Severity`, `Box`, `ToolboxEntry`, `Control`, `Field` and `Action` keep the shapes they have in `diagramType.ts` today. `ViewOptions` gains what a definition names and a viewer keeps: the `viewpoint`, the `filters` by id, and `collapsed`, the nodes this viewer folded or unfolded. An applied outcome may carry `viewOptions`, which replace what the editor holds; an outcome with them and no splices writes nothing and is no undo step. `EditRequest` gains `reparent`, `fold`, `pin` and `openLink`, and an `action` request the point it was asked at. `ViewElement`, `ViewRelation` and `ViewModel` are removed with the two hand-coded diagrams (User Story 4); until then `DiagramType` stays as `ToolType<ViewModel, EditRequest>`.
 
 `Scene` is what `src/core/scene/` computes: plain data, every node placed with its shape, parts and labels, every edge with its ends and its line. `TableView` and `TableRequest` are what `src/core/tool/` declares for DESL's `table` surface: properties, rows and cells with the views, sorts, filters and groups of the definition, and a request that names one of the definition's operations with its arguments. Both carry `readOnly` and an optional `notice`, as `ViewModel` does today.
 
@@ -84,7 +84,7 @@ export function viewTypeOf(type: Pick<ToolType<unknown, unknown>, 'origin'>): st
 ```ts
 export type EditOutcome =
   /** The splices of the gesture, and the registration's new text when the edit changed it (null removes it). */
-  | { readonly kind: 'applied'; readonly splices: readonly TextSplice[]; readonly registration?: string | null; readonly select?: string; readonly editLabel?: boolean; readonly multiline?: boolean }
+  | { readonly kind: 'applied'; readonly splices: readonly TextSplice[]; readonly viewOptions?: ViewOptions; readonly registration?: string | null; readonly select?: string; readonly editLabel?: boolean; readonly multiline?: boolean }
   /** Nothing changed, and this is the definition's sentence to show. */
   | { readonly kind: 'refused'; readonly sentence: string }
   /** Ask first; when confirmed, the same request is made again with `confirmed`. */
@@ -94,7 +94,9 @@ export type EditOutcome =
   /** The request is answered in ADP Properties: the named field is where the user goes on. */
   | { readonly kind: 'showField'; readonly field: string }
   /** A linked file or folder is opened by the extension, with `vscode.open`; nothing is written. */
-  | { readonly kind: 'open'; readonly path: string };
+  | { readonly kind: 'open'; readonly path: string }
+  /** A path is asked with the platform's file and folder dialog; chosen, it is set as the named field, relative to the document. */
+  | { readonly kind: 'pickPath'; readonly id: string; readonly field: string };
 
 /** One FBL splice of the body: a range of UTF-8 bytes of `Source.text` and what replaces it. */
 export interface TextSplice {
@@ -181,7 +183,7 @@ Only a tab on a file of the workspace is reopened: never a diff, a file from ver
 
 | Command | For |
 |---|---|
-| `etalii.adp.new.<vendor>.<type>` | every tool type whose binding has a template: a new document |
+| `etalii.adp.new.<vendor>.<type>` | every tool type whose binding has a template or is read by a plugin, which gives the template then (FBL 13): a new document |
 | `etalii.adp.openAs.<vendor>.<type>` | every tool type with a `shared` claim: open the active file in the tool |
 | `etalii.adp.openAsText` | every tool type: the file in the text editor, and for a claimed shared file, text for the session |
 
