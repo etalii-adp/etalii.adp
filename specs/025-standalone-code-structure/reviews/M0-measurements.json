@@ -15,16 +15,16 @@
         "code_lines": 54462
       },
       "core/production": {
-        "projects": 19,
-        "files": 425,
-        "lines": 39126,
-        "code_lines": 25843
+        "projects": 17,
+        "files": 408,
+        "lines": 37458,
+        "code_lines": 24836
       },
       "core/test": {
-        "projects": 19,
-        "files": 301,
-        "lines": 44504,
-        "code_lines": 28619
+        "projects": 21,
+        "files": 318,
+        "lines": 46172,
+        "code_lines": 29626
       },
       "designer": {
         "projects": 2,
@@ -81,16 +81,16 @@
         "code_lines": 532
       },
       "production": {
-        "projects": 89,
-        "files": 1413,
-        "lines": 132409,
-        "code_lines": 85030
+        "projects": 87,
+        "files": 1396,
+        "lines": 130741,
+        "code_lines": 84023
       },
       "test": {
-        "projects": 41,
-        "files": 740,
-        "lines": 127290,
-        "code_lines": 80382
+        "projects": 43,
+        "files": 757,
+        "lines": 128958,
+        "code_lines": 81389
       }
     },
     "production_lines_per_module": {
@@ -421,7 +421,7 @@
       {
         "project": "EtAlii.Adp.TestSupport",
         "kind": "core",
-        "group": "production",
+        "group": "test",
         "module": null,
         "files": 12,
         "lines": 1227,
@@ -430,7 +430,7 @@
       {
         "project": "EtAlii.Adp.TestSupport.Host",
         "kind": "core",
-        "group": "production",
+        "group": "test",
         "module": null,
         "files": 5,
         "lines": 441,
@@ -2152,9 +2152,9 @@
   },
   "methods": {
     "scope": "production",
-    "methods": 3441,
-    "over_50": 184,
-    "over_80": 45,
+    "methods": 3391,
+    "over_50": 182,
+    "over_80": 44,
     "longest": [
       {
         "method": "Project",
@@ -2259,12 +2259,6 @@
         "code_lines": 98
       },
       {
-        "method": "ProblemsAsync",
-        "file": "src/backend/EtAlii.Adp.TestSupport/DrawnConnections.cs",
-        "line": 86,
-        "code_lines": 97
-      },
-      {
         "method": "ExecuteAsync",
         "file": "src/diagrams/wardley-map/backend/EtAlii.Adp.Diagram.WardleyMap/WardleyContextActionProvider.cs",
         "line": 117,
@@ -2275,6 +2269,12 @@
         "file": "src/designers/knowledge/backend/EtAlii.Adp.Designer.Knowledge/KnowledgeViewEngine.cs",
         "line": 139,
         "code_lines": 94
+      },
+      {
+        "method": "Check",
+        "file": "src/backend/EtAlii.Adp.Specification.Fbl/Documents/FblDocumentLoader.cs",
+        "line": 539,
+        "code_lines": 93
       }
     ],
     "largest_types_per_project": {
@@ -3254,53 +3254,20 @@
           "file": "src/backend/EtAlii.Adp.Specification.Fbl/Files/Lines/LinesFamily.cs",
           "code_lines": 526
         }
-      ],
-      "EtAlii.Adp.TestSupport": [
-        {
-          "type": "TranscriptText",
-          "file": "src/backend/EtAlii.Adp.TestSupport/TranscriptText.cs",
-          "code_lines": 229
-        },
-        {
-          "type": "DrawnConnections",
-          "file": "src/backend/EtAlii.Adp.TestSupport/DrawnConnections.cs",
-          "code_lines": 207
-        },
-        {
-          "type": "TestFolder",
-          "file": "src/backend/EtAlii.Adp.TestSupport/TestFolder.cs",
-          "code_lines": 97
-        }
-      ],
-      "EtAlii.Adp.TestSupport.Host": [
-        {
-          "type": "FlowExtensions",
-          "file": "src/backend/EtAlii.Adp.TestSupport.Host/FlowExtensions.cs",
-          "code_lines": 74
-        },
-        {
-          "type": "StreamProbe",
-          "file": "src/backend/EtAlii.Adp.TestSupport.Host/StreamProbe.cs",
-          "code_lines": 63
-        },
-        {
-          "type": "HostFixture",
-          "file": "src/backend/EtAlii.Adp.TestSupport.Host/HostFixture.cs",
-          "code_lines": 41
-        }
       ]
     }
   },
   "graph": {
     "projects": 130,
     "edges_per_kind": {
-      "ProjectReference": 272,
+      "ProjectReference": 313,
       "PackageReference": 227,
       "FrameworkReference": 9,
       "InternalsVisibleTo": 41
     },
     "referenced_by": {
       "EtAlii.Adp.Diagram": 73,
+      "EtAlii.Adp.TestSupport": 42,
       "EtAlii.Adp.Documents": 37,
       "EtAlii.Adp.History": 27,
       "EtAlii.Adp.Context": 16,
@@ -3313,8 +3280,7 @@
       "EtAlii.Adp.Designer": 5,
       "EtAlii.Adp.Projects": 5,
       "EtAlii.Adp.Backend.Service": 3,
-      "EtAlii.Adp.Problems": 3,
-      "EtAlii.Adp.Specification.Cel": 3
+      "EtAlii.Adp.Problems": 3
     },
     "without_cs_file": [
       "EtAlii.Adp.Sessions"
@@ -3533,6 +3499,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Documents.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Editor",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp"
@@ -3598,6 +3570,12 @@
         "to": "Microsoft.AspNetCore.App"
       },
       {
+        "from": "EtAlii.Adp.Designer.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Editor.Tests",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Editor"
@@ -3621,6 +3599,12 @@
         "from": "EtAlii.Adp.Editor.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.Editor.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Designer.Knowledge",
@@ -3683,6 +3667,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Designer.Knowledge.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Editor.Plain",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Editor"
@@ -3721,6 +3711,12 @@
         "from": "EtAlii.Adp.Editor.Plain.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.Editor.Plain.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Editor.Markdown",
@@ -3763,6 +3759,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Editor.Markdown.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Diagram.Tests",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Diagram"
@@ -3788,6 +3790,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Diagram.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Tests",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp"
@@ -3808,6 +3816,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Client.Tests",
         "kind": "PackageReference",
         "to": "Microsoft.NET.Test.Sdk"
@@ -3826,6 +3840,12 @@
         "from": "EtAlii.Adp.Client.Tests",
         "kind": "PackageReference",
         "to": "Serilog"
+      },
+      {
+        "from": "EtAlii.Adp.Client.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Backend.Service",
@@ -3968,6 +3988,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Backend.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.HostLogging.Tests",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Backend.Service"
@@ -3991,6 +4017,12 @@
         "from": "EtAlii.Adp.HostLogging.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.HostLogging.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Authentication",
@@ -4051,6 +4083,12 @@
         "from": "EtAlii.Adp.Authentication.Tests",
         "kind": "PackageReference",
         "to": "Grpc.Core.Testing"
+      },
+      {
+        "from": "EtAlii.Adp.Authentication.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Sessions",
@@ -4136,6 +4174,12 @@
         "from": "EtAlii.Adp.Context.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.Context.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Problems",
@@ -4228,6 +4272,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.History.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.TestSupport",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp"
@@ -4303,6 +4353,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Projects.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Sessions.Tests",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Sessions"
@@ -4328,6 +4384,12 @@
         "to": "Grpc.Core.Testing"
       },
       {
+        "from": "EtAlii.Adp.Sessions.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Repository.Tests",
         "kind": "PackageReference",
         "to": "Microsoft.NET.Test.Sdk"
@@ -4346,6 +4408,12 @@
         "from": "EtAlii.Adp.Repository.Tests",
         "kind": "PackageReference",
         "to": "Serilog"
+      },
+      {
+        "from": "EtAlii.Adp.Repository.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Problems.Tests",
@@ -4371,6 +4439,12 @@
         "from": "EtAlii.Adp.Problems.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.Problems.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Specification.Cel",
@@ -4401,6 +4475,12 @@
         "from": "EtAlii.Adp.Specification.Cel.Tests",
         "kind": "PackageReference",
         "to": "Serilog"
+      },
+      {
+        "from": "EtAlii.Adp.Specification.Cel.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Specification.Disl",
@@ -4441,6 +4521,12 @@
         "from": "EtAlii.Adp.Specification.Disl.Tests",
         "kind": "PackageReference",
         "to": "Serilog"
+      },
+      {
+        "from": "EtAlii.Adp.Specification.Disl.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Specification.Fbl",
@@ -4501,6 +4587,12 @@
         "from": "EtAlii.Adp.Specification.Fbl.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.Specification.Fbl.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Hierarchy",
@@ -4606,6 +4698,12 @@
         "from": "EtAlii.Adp.Hierarchy.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.Hierarchy.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Projects",
@@ -4728,6 +4826,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Diagram.AnsibleStructure.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Diagram.Mindmap",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Documents"
@@ -4788,6 +4892,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Diagram.Mindmap.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Diagram.C4",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Documents"
@@ -4843,6 +4953,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Diagram.C4.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Diagram.AzureDevOpsPipeline",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Documents"
@@ -4896,6 +5012,12 @@
         "from": "EtAlii.Adp.Diagram.AzureDevOpsPipeline.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.Diagram.AzureDevOpsPipeline.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Diagram.Databricks",
@@ -4958,6 +5080,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Diagram.Databricks.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Diagram.HelmChart",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Documents"
@@ -5011,6 +5139,12 @@
         "from": "EtAlii.Adp.Diagram.HelmChart.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.Diagram.HelmChart.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Diagram.Rdf",
@@ -5068,6 +5202,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Diagram.Rdf.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Diagram.CausalLoopDiagram",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Documents"
@@ -5118,6 +5258,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Diagram.CausalLoopDiagram.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Diagram.Sparql",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Documents"
@@ -5166,6 +5312,12 @@
         "from": "EtAlii.Adp.Diagram.Sparql.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.Diagram.Sparql.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Diagram.ArchimateApplication",
@@ -5308,6 +5460,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Diagram.DependencyGraph.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Diagram.DfdDataFlow",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Diagram"
@@ -5386,6 +5544,12 @@
         "from": "EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.Diagram.DotNetDependencyGraph.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Diagram.ErdEntityRelationship",
@@ -5473,6 +5637,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Diagram.AgentActivityDiagram.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Diagram.AgentBehaviorModelling",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Documents"
@@ -5558,6 +5728,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Diagram.AgentBehaviorModelling.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Diagram.FunctionalDecompositionGraph",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Documents"
@@ -5626,6 +5802,12 @@
         "from": "EtAlii.Adp.Diagram.FunctionalDecompositionGraph.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.Diagram.FunctionalDecompositionGraph.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Diagram.GartnerHypeCycleGraph",
@@ -5706,6 +5888,12 @@
         "from": "EtAlii.Adp.Diagram.GartnerHypeCycleGraph.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.Diagram.GartnerHypeCycleGraph.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Diagram.GcpArchitecture",
@@ -5853,6 +6041,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Diagram.SupplyChain.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Diagram.Sankey",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Documents"
@@ -5923,6 +6117,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Diagram.Sankey.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Diagram.Timeline",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Documents"
@@ -5991,6 +6191,12 @@
         "from": "EtAlii.Adp.Diagram.Timeline.Tests",
         "kind": "PackageReference",
         "to": "xunit.runner.visualstudio"
+      },
+      {
+        "from": "EtAlii.Adp.Diagram.Timeline.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
       },
       {
         "from": "EtAlii.Adp.Diagram.TogafAdm",
@@ -6118,6 +6324,12 @@
         "to": "xunit.runner.visualstudio"
       },
       {
+        "from": "EtAlii.Adp.Diagram.WardleyMap.Tests",
+        "kind": "ProjectReference",
+        "to": "EtAlii.Adp.TestSupport",
+        "via": "src/Directory.Build.targets"
+      },
+      {
         "from": "EtAlii.Adp.Diagram.ZachmanMatrix",
         "kind": "ProjectReference",
         "to": "EtAlii.Adp.Diagram"
@@ -6126,8 +6338,8 @@
   },
   "waits": {
     "waits": {
-      "test": 49,
-      "production": 10
+      "test": 52,
+      "production": 7
     },
     "polling_helpers": 10,
     "wait_sites": {
@@ -6250,6 +6462,21 @@
         {
           "file": "src/backend/EtAlii.Adp.History.Tests/HistoryStackStore.Tests.cs",
           "line": 145,
+          "call": "Task.Delay"
+        },
+        {
+          "file": "src/backend/EtAlii.Adp.TestSupport/Eventually.cs",
+          "line": 67,
+          "call": "Task.Delay"
+        },
+        {
+          "file": "src/backend/EtAlii.Adp.TestSupport/TestFolder.cs",
+          "line": 135,
+          "call": "Thread.Sleep"
+        },
+        {
+          "file": "src/backend/EtAlii.Adp.TestSupport.Host/StreamProbe.cs",
+          "line": 62,
           "call": "Task.Delay"
         },
         {
@@ -6402,21 +6629,6 @@
         {
           "file": "src/backend/EtAlii.Adp.Problems/ProjectValidator.cs",
           "line": 366,
-          "call": "Task.Delay"
-        },
-        {
-          "file": "src/backend/EtAlii.Adp.TestSupport/Eventually.cs",
-          "line": 67,
-          "call": "Task.Delay"
-        },
-        {
-          "file": "src/backend/EtAlii.Adp.TestSupport/TestFolder.cs",
-          "line": 135,
-          "call": "Thread.Sleep"
-        },
-        {
-          "file": "src/backend/EtAlii.Adp.TestSupport.Host/StreamProbe.cs",
-          "line": 62,
           "call": "Task.Delay"
         },
         {
