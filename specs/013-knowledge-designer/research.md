@@ -53,3 +53,20 @@ A knowledge file is a DED definition (Peter, in the project thread, 2026-10-09).
 ## R8. Duplicating a view is a transaction, not a copy of bytes (2026-10-09)
 
 Running the fixtures through the standalone host's FBL runtime found that their step "Duplicating a view" expected one splice holding a byte copy of the original view, with a hint (`x-copyOf`) that neither FBL nor `knowledge.md` defines, while `duplicateView` in `knowledge.des` is a transaction of creates: the copy, then each column, sort and filter entry. The operation is right: FBL has no copy, and a copy of bytes would carry the original's unknown keys and comments along. The three fixtures now take the transaction's changes as steps of their own, and the YAML and JSON bindings create a view's `columns`, `sorts` and `filter` at the end of the view (FBL 0.4, `at: "end"`) rather than right after `name`, so a copy's lists come in the original's order in all three formats, as XML's last-child placement already did.
+
+## R9. A fixture's add names the slot it fills (Peter, 2026-10-10)
+
+A group setting fills one of three slots of a view: `groupOrder`, `hiddenGroups` or `collapsed`. FBL section 11.2's model change has `slot` for exactly that, but a fixture's `add` (`$defs/Edit`) did not, so the three fixtures carried an undefined `x-slot`. Peter chose, on a card in the Knowledge designer thread, that the fixture format gains the field rather than that each host guesses the slot: FBL 0.5's section 15.3 and `$defs/Fixture` let an `add` name its `slot`, and the fixtures use it on four steps each. No binding and no host's reading changes.
+
+## R10. The examples follow the showcase (Peter, 2026-10-11)
+
+Peter added cities by hand to the standalone showcase's copy of the example, and a standalone test requires the showcase to equal the module's example, which is copied from `definitions/designers/examples/`. He chose that the examples follow, so that every copy downstream stays one table. Country gains the options Germany, France, Finland and Italy, and the table the rows Sevenum, Venlo, Berlin, Paris, Helsinki, Venice and Ahlen, in all three formats. The YAML is his file byte for byte; the `knowledge-equivalence` fixture lists the new elements, and `knowledge.md` shows the files as they are.
+
+## R11. The Knowledge designer follows Notion, calculate, freeze and search included (Peter, 2026-10-12)
+
+The standalone browser pass listed nine differences from Notion's table that its Requirement 7.7 does not name, and left them for a ruling. Peter ruled that the designer follows Notion in all nine. Most are gestures, which need nothing stored that the file did not already hold. Two need a key:
+
+- **`calculate`** on a view's column: what the line under the column shows of the rows in sight. The file writes Notion's sixteen names (`count-all`, `percent-empty`, `date-range` and the others). A DESL enumeration's values are identifiers, so `Calculation` in `knowledge.des` spells them in camel case (`countAll`) and each binding maps between the two with FBL's `map`. Which calculation suits which value type is `knowledge.md`'s.
+- **`freeze`** on a view: a reference by id to the last property whose column stays in sight. Being a reference, it is rewritten and reported like every other property slot of a view (R1). Deleting the property unfreezes the view in the same transaction, since a view must not go with its property, and `freezeMissingProperty` warns about a file written otherwise.
+
+Both are optional, removed when empty, and copied by `duplicateView`. Search is the third part of the ruling and stores nothing: `knowledge.md` describes it as the bar's, kept for as long as the view is open. A calculation belongs to a column of one view and a freeze to one view, so two views of one table can differ in both.

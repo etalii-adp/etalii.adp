@@ -15,15 +15,15 @@ The previous record is the baseline at `1217e1d97`. M0 changed the tool modules'
 | Projects | 129 | 130 (`EtAlii.Adp.TestSupport.Host` added) | about 134 at the end (plan) |
 | Files, all | 2,138 | 2,153 | |
 | Lines, all | 262,088 | 259,699 (−2,389) | |
-| Lines, core production (18 → 19 projects) | 37,631 | 39,126 (+1,495; of which +1,240 are the two testing projects, see below) | |
-| Lines, core test | 47,209 | 44,504 (−2,705) | |
+| Lines, core production (17 projects) | 37,203 | 37,458 (+255) | |
+| Lines, core test (20 → 21 projects, the testing projects included) | 47,637 | 46,172 (−1,465) | |
 | Lines, diagram production | 87,306 | 87,245 (−61) | SC-006: 9,000 smaller at M2 |
 | Lines, diagram test | 78,842 | 76,590 (−2,252) | |
 | Lines, designer production | 4,878 | 5,575 (+697: the knowledge designer's own work, pull request 179, outside this feature) | |
 | Lines, designer test | 4,746 | 5,261 (+515, the same) | |
 | Lines, editor production / test | 463 / 1,013 | 463 / 935 | |
-| Lines, production | 130,278 | 132,409 (+2,131) | |
-| Lines, test | 131,810 | 127,290 (−4,520) | SC-005: 5,273 smaller at M9 |
+| Lines, production | 129,850 | 130,741 (+891) | |
+| Lines, test | 132,238 | 128,958 (−3,280) | SC-005: 5,290 smaller at M9 |
 | Clone scan, production: shared windows / files | 1,566 / 330 | 1,564 / 330 | |
 | Context-source-resolver windows | 291 | 291 | SC-008: fewer than 31 at M2 |
 | Session-factory windows | 54 | 54 | fewer than 9 at M2 |
@@ -31,29 +31,29 @@ The previous record is the baseline at `1217e1d97`. M0 changed the tool modules'
 | Document-store windows | 98 | 98 | fewer than 43 at M2 |
 | Action-provider windows | 80 | 80 | fewer than 41 at M2 |
 | Clone scan, test: shared windows / files | 2,502 / 307 | 1,766 / 261 (−30%) | |
-| Methods | 3,384 | 3,441 | |
-| Methods over 50 code lines | 180 | 184 | SC-023: at most 124 at M9 |
-| Methods over 80 code lines | 45 | 45 | SC-023: at most 22 at M9 |
-| `ProjectReference` edges | 288 | 272 | |
+| Methods | 3,375 | 3,391 | |
+| Methods over 50 code lines | 179 | 182 | SC-023: at most 123 at M9 |
+| Methods over 80 code lines | 44 | 44 | SC-023: at most 22 at M9 |
+| `ProjectReference` edges | 288 | 313 (41 of them the reference `Directory.Build.targets` gives every `*.Tests` project) | |
 | `PackageReference` edges | 225 | 227 | |
 | `InternalsVisibleTo` edges | 41 | 41 | |
 | Projects without a `.cs` file | 1 (`EtAlii.Adp.Sessions`) | 1 (`EtAlii.Adp.Sessions`) | SC-013: none at M5 |
 | Core references naming a tool module | 11 | 11 | SC-013: none at M5 |
 | Projects referencing `EtAlii.Adp.Backend` | 16 | 2 (`Backend.Service`, `Backend.Tests`) | |
-| `Task.Delay` and `Thread.Sleep`, test code | 85 | 49 | |
-| `Task.Delay` and `Thread.Sleep`, production code | 7 | 10 | SC-010: no `Thread.Sleep` at M3 |
+| `Task.Delay` and `Thread.Sleep`, test code | 85 | 52 | |
+| `Task.Delay` and `Thread.Sleep`, production code | 7 | 7 | SC-010: no `Thread.Sleep` at M3 |
 | Polling helpers | 16 | 10 | SC-003: one, amended to M3 |
 
 **Clone families.** The twenty largest production families are the same twenty as at the baseline. In the test code the largest family of the baseline, five copies of `TranscriptText.cs` (159 windows), is gone, and so are the families of the flow classes: `DatabricksFlow`/`RdfFlow` fell from 161 shared windows to 21, `OwlFlow`/`RdfFlow` from 156 to 16, and the pairs of the core flows (`AddDiagramFlow`, `ContextSelectionFlow`, `ExplorerContextActionsFlow`, `UndoRedoFlow`, 37 to 45 windows each) left the forty largest pairs. The largest test family now is `DependencyGraphDocument.Tests`/`TimelineDocument.Tests` (98 windows).
 
-**Long methods.** Four methods newly exceed 50 code lines and none left the list: `KnowledgeCalculations.Of` (63) and `KnowledgeEdits.AddRelation` (51) are the knowledge designer's own work; `ContextService.RunWatchAsync` (54) grew by T034, whose retain moved inside the `try`, and is restructured by T193 in M5; `TranscriptText.Hunks` (53) arrived in `EtAlii.Adp.TestSupport` with pull request 186. The twenty longest are the baseline's twenty, two of the knowledge designer's lines shifted.
+**Long methods.** Three methods newly exceed 50 code lines and none left the list: `KnowledgeCalculations.Of` (63) and `KnowledgeEdits.AddRelation` (51) are the knowledge designer's own work; `ContextService.RunWatchAsync` (54) grew by T034, whose retain moved inside the `try`, and is restructured by T193 in M5. `TranscriptText.Hunks` (53), which arrived in `EtAlii.Adp.TestSupport` with pull request 186, is test code since T270. The twenty longest are the baseline's twenty, two of the knowledge designer's lines shifted.
 
-**Project graph.** Removed: the references to `EtAlii.Adp.Backend` from `EtAlii.Adp.Diagram` and from 13 diagram modules (T027), the `InternalsVisibleTo` from `EtAlii.Adp.Diagram` to `EtAlii.Adp.Backend.Service` (T029), and the five references to `EtAlii.Adp.TestSupport` in `.csproj` files, which `src/Directory.Build.targets` now attaches to every `*.Tests` project (T011). Added: `EtAlii.Adp.TestSupport.Host` with its references to `EtAlii.Adp.Backend.Service`, `EtAlii.Adp.TestSupport`, `Grpc.Net.Client` and `Microsoft.AspNetCore.Mvc.Testing`, the reference of `EtAlii.Adp.Backend.Tests` to it, and an `InternalsVisibleTo` from `EtAlii.Adp.TestSupport` to `EtAlii.Adp.Tests`. `EtAlii.Adp.Diagram` now references eight core projects.
+**Project graph.** Removed: the references to `EtAlii.Adp.Backend` from `EtAlii.Adp.Diagram` and from 13 diagram modules (T027), the `InternalsVisibleTo` from `EtAlii.Adp.Diagram` to `EtAlii.Adp.Backend.Service` (T029), and the five references to `EtAlii.Adp.TestSupport` in `.csproj` files, which `src/Directory.Build.targets` now attaches to every `*.Tests` project (T011). Added: `EtAlii.Adp.TestSupport.Host` with its references to `EtAlii.Adp.Backend.Service`, `EtAlii.Adp.TestSupport`, `Grpc.Net.Client` and `Microsoft.AspNetCore.Mvc.Testing`, the reference of `EtAlii.Adp.Backend.Tests` to it, and an `InternalsVisibleTo` from `EtAlii.Adp.TestSupport` to `EtAlii.Adp.Tests`. `EtAlii.Adp.Diagram` now references eight core projects. Since T270 the graph reads `src/Directory.Build.targets`, so the reference to `EtAlii.Adp.TestSupport` it gives each of the 41 `*.Tests` projects is an edge: `EtAlii.Adp.TestSupport` is referenced by 42 projects (5 at the baseline), the second most referenced after `EtAlii.Adp.Diagram`.
 
-**What the scripts count wrongly now.** Two classifications of the scripts no longer hold after M0, and both are taken up by T270:
+**What the scripts counted wrongly.** Two classifications of the scripts no longer held after M0. Both are resolved by T270 (standalone pull request 195), and the figures above are measured again with its scripts:
 
-- `lines.py`, `methods.py` and `waits.py` count a project as test code only when its name ends in `.Tests`, so `EtAlii.Adp.TestSupport` (428 → 1,227 lines) and `EtAlii.Adp.TestSupport.Host` (441 lines) are counted as production code. Moving a helper out of a test project into them therefore shows as test code removed and production code added. Counted as test code, the test code is 3,280 lines smaller than the baseline, not 4,520. The three new production waits are all theirs (`Eventually.cs:67`, `TestFolder.cs:135`, `StreamProbe.cs:62`), and so is the 97-line `DrawnConnections.ProblemsAsync` among the twenty longest methods. SC-005, SC-010 and SC-023 read these figures.
-- `graph.py` reads `.csproj` files only, so the reference that `Directory.Build.targets` gives every test project is not an edge of the graph.
+- *Resolved by T270.* `lines.py`, `methods.py` and `waits.py` counted a project as test code only when its name ended in `.Tests`, so `EtAlii.Adp.TestSupport` (428 → 1,227 lines) and `EtAlii.Adp.TestSupport.Host` (441 lines) were counted as production code. Moving a helper out of a test project into them therefore showed as test code removed and production code added. Counted as test code, the test code is 3,280 lines smaller than the baseline, not the 4,520 first recorded. The three new production waits were all theirs (`Eventually.cs:67`, `TestFolder.cs:135`, `StreamProbe.cs:62`), and so is the 97-line `DrawnConnections.ProblemsAsync` among the twenty longest methods. SC-005, SC-010 and SC-023 read these figures.
+- *Resolved by T270.* `graph.py` read `.csproj` files only, so the reference that `Directory.Build.targets` gives every test project was not an edge of the graph.
 
 ## Exit condition and success criteria
 
@@ -101,7 +101,7 @@ Pull request 187 corrected the rename race: .NET's `FileSystemWatcher` on Linux 
 
 **From the clone scan.** Every production family of the twenty largest is covered by a remaining task: the resolver families by T051 to T054 and the band B tasks of M2, the session families by T050 and band B, `AnsibleWatchedFolder`/`HelmWatchedFolder` by the watched-folder tasks of M2, `DependencyGraphContextActionProvider`/`TimelineContextActionProvider` and the three `*Edits` by band C, `C4Document`/`WardleyDocument` by T127 and T128, `SankeyWriter`/`SupplyChainWriter` by T138, the 40 stub `Diagram.cs` by the ruling on DP-1 (c). `SankeyLayout`/`SupplyChainLayout` (30 windows) is answered **no** for now: T123 moves supply-chain's layering and T124 reads sankey's columns onto the layout library, and the M3 review sees what is left of the pair. In the test code the largest families are the timeline and dependency-graph pairs (document, writer, parser, resolver tests), which the M2 candidate on a shared model base for the two covers, and the transcripts, which T245 and T246 cover. `BundledDefinition.Tests` in seven modules (12 windows) is answered **no** for now: the seven test the definition that T150 and T151 make one type, and the M3 review is where a contract for it can be judged; it is added to that review's candidates in [../contracts/milestone-review.md](../contracts/milestone-review.md).
 
-**From the method-length count.** Nothing new: the four methods that crossed 50 lines are explained under *Measurements*, and the twenty longest are those FR-086 to FR-092 name or the knowledge designer's.
+**From the method-length count.** Nothing new: the three methods that crossed 50 lines are explained under *Measurements*, and the twenty longest are those FR-086 to FR-092 name or the knowledge designer's.
 
 **What M0 made cheap.** Moving a module's flows into its own test project (T251, T252) is now a file move, because every flow stands on `HostFixture` and `FlowSession`. A contract test has a home every test project already references. Measuring is one command. `SplitMoveJoiner` (pull request 187) is the normalisation that T147's `ProjectFileEvents` needs on Linux, and should move into it rather than be repeated beside it; it is added to the M3 review's candidates beside the one on a watcher per project root.
 

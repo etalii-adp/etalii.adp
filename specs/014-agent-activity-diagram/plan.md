@@ -4,7 +4,7 @@
 
 ## Summary
 
-Deliver the definition the standalone Agent activity diagram specification asks of this repository, in the order of its tasks 1 to 4: try the activity file's shape against FBL and DISL first, with each answer that is no put to the maintainer ([research.md](research.md)); then DISL 0.4 with the seven constructs its design decided (L1 to L7, and L9's item order); then the binding `aad` and its fixtures; then `agent-activity-diagram.dis`, `agent-activity-diagram.md`, the file's JSON Schema and the Notion page. The four tasks go in one pull request, since all of them wait on the maintainer's answer on where the user's part of the file lives (research R3); it is merged only after that answer, with the files amended to it.
+Deliver the definition the standalone Agent activity diagram specification asks of this repository, in the order of its tasks 1 to 4: try the activity file's shape against FBL and DISL first, with each answer that is no put to the maintainer ([research.md](research.md)); then DISL 0.4 with the seven constructs its design decided (L1 to L7, and L9's item order); then the binding `aad` and its fixtures; then `agent-activity-diagram.dis`, `agent-activity-diagram.md`, the file's JSON Schema and the Notion page. The four tasks went in one pull request, since all of them waited on the maintainer's answer on where the user's part of the file lives (research R3). It was merged before that answer, with the recommended flat keys ([105](https://github.com/etalii-adp/etalii.adp/pull/105)); the answer came the same day, and a second pull request amended the files to it ([109](https://github.com/etalii-adp/etalii.adp/pull/109), T005 and T006). Between the two, the two attributes that used DISL's reserved names were renamed ([106](https://github.com/etalii-adp/etalii.adp/pull/106), T007).
 
 The approved design is followed with its language decisions at their defaults. Where reading FBL showed that a part of the file's shape could not be written the same way by every host, the shape changes and the language does not (R5), as spec 013 did; for the user's part (R3) the maintainer ruled that the language changes instead, and FBL goes to 0.4.
 
@@ -12,7 +12,7 @@ The approved design is followed with its language decisions at their defaults. W
 
 - **Languages**: JSON (FBL, DISL, JSON Schema draft 2020-12), CEL for expressions, Markdown for prose; the activity file in YAML 1.2.
 - **Checks**: `python .github/scripts/validate-examples.py`, which this feature extends with the names DISL 0.4's constructs refer to (DISL section 14.1, step 9) and the activity file's own schema; the terminology and licence checks of the Build workflow.
-- **Consumers**: the standalone host first (its tasks 5 to 29, which wait on these files being merged), then the other hosts.
+- **Consumers**: the standalone host first (its tasks 5 to 29, all done on 2026-10-12, task 7 retired), then the other hosts.
 
 ## Constitution Check
 
