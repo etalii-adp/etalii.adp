@@ -48,6 +48,8 @@ A review answers every one of its rows, even where the answer is "no".
 | M3 | One watcher per project root for every consumer, the editors and the knowledge designer included | `ProjectFileEvents` exists |
 | M3 | Module layouts that are now a few calls into the layout library, expressed as data | DISL already has an arrangement plugin for the timeline |
 | M3 | The findings of every module as one `ParseOutcome` flow into the problems project | Four styles became one |
+| M3 | One contract test for the seven modules' `BundledDefinition.Tests` | They test the definition that T150 and T151 make one type; 12 shared windows in seven files (M0 review) |
+| M3 | `SplitMoveJoiner` of standalone pull request 187 inside `ProjectFileEvents` | The Linux rename normalisation serves every consumer of file events, not the hierarchy alone (M0 review) |
 | M4 | Does the problems project still need the hierarchy project? | It needed the diagram project only for `IDiagramValidator`, and the router has moved |
 | M4 | Move the gRPC services of the context, hierarchy, history and projects projects to the host project | So that a module references domain projects only and carries no hosting package |
 | M4 | Keep the sessions project free of the hosting packages | It holds the sign-in interceptor beside the tool-session contracts every module references (DP-5) |

@@ -14,6 +14,7 @@ Every pull request that carries a task of this feature meets all of this (FR-003
 - **No behaviour change**, unless the change is a defect's correction or a ruled row of [behaviour-changes.md](../behaviour-changes.md) (FR-001, FR-002). A row found on the way is added to the register, and the task waits for its ruling.
 - **A guard seen to fail** for every defect corrected, with the failing output in the description (FR-005). A guard that passes against the defect is deleted, not kept.
 - **The documentation it makes false**: `docs/architecture.md`, `docs/solution-structure.md`, `docs/creating-a-diagram-module.md`, `docs/creating-a-designer-module.md`, `docs/creating-an-editor-module.md`, `docs/dependencies.md` for a package, `docs/tools.md` for a tool type's state, and the figures in `ArchitecturePages.Tests` (FR-004).
+- **A bundled definition's text** (a module's `definition/*.md`, a byte copy of `etalii.adp/definitions/`) that names a file the change deletes or renames is corrected in `etalii.adp` first, and the module re-bundles it in the same pull request. Found by T028 (M0 review).
 - **Comments in the files it touches**: what the code does and why stays; when and under which task goes to the commit message (FR-007). No file is opened only for this.
 - **A module that keeps a type of its own** where a shared one exists says why in one sentence at that type.
 - **`.DotSettings` entries** move with the folders they name, and a new project gets its own.
