@@ -2,7 +2,7 @@
 
 **Feature Branch**: `claude/project-thread-rmr2na` (a cloud session's branch, in place of `features/013-knowledge-designer`)
 **Created**: 2026-10-09
-**Status**: Implementing
+**Status**: Completed (2026-10-12). The definition was merged on 2026-10-09 (pull requests [101](https://github.com/etalii-adp/etalii.adp/pull/101) and [102](https://github.com/etalii-adp/etalii.adp/pull/102)) and amended four times since ([111](https://github.com/etalii-adp/etalii.adp/pull/111), [116](https://github.com/etalii-adp/etalii.adp/pull/116), [120](https://github.com/etalii-adp/etalii.adp/pull/120), [124](https://github.com/etalii-adp/etalii.adp/pull/124)); `etalii.adp.ide.standalone` has built the designer from it, with its tasks 6 to 33 ticked.
 **Input**: Tasks 1 to 5 of the Knowledge designer specification of `etalii.adp.ide.standalone`, which plans with spec-workflow: [requirements.md](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/fdcff792dc8c7ed3948311c4bfc7395de5594f80/.spec-workflow/specs/knowledge-designer/requirements.md), [design.md](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/fdcff792dc8c7ed3948311c4bfc7395de5594f80/.spec-workflow/specs/knowledge-designer/design.md) and [tasks.md](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/fdcff792dc8c7ed3948311c4bfc7395de5594f80/.spec-workflow/specs/knowledge-designer/tasks.md), approved in its dashboard on 2026-10-08 and read at that repository's commit `fdcff79`. The maintainer said "proceed" in the project's thread "Knowledge Designer spec" on 2026-10-08.
 
 ## Context
@@ -21,7 +21,31 @@ This feature is that definition. It specifies nothing the standalone documents d
 - **FR-006** `definitions/designers/knowledge.des`, `knowledge.md`, `knowledge.schema.json` and one example per format, validated in the Build workflow (Requirements 1.1, 1.5, 1.7, 1.8, 2.8, 7.7, 8.4).
 - **FR-007** `docs/terminology.md` says why a tool whose cells hold relations is a designer, and names the Knowledge designer as the example of a designer (Requirement 1.5, Q7).
 
+### Added after the definition was first merged
+
+Each was found or ruled while the standalone host built the designer, and is in `definitions/designers/` and the fixtures today.
+
+- **FR-008** Duplicating a view is `duplicateView`'s transaction of creates, not a copy of bytes: the fixtures take its changes as steps of their own, and the YAML and JSON bindings create a view's `columns`, `sorts` and `filter` at the end of the view, so `knowledge.fbl` is written in FBL 0.4 ([research.md](research.md) R8; pull request [111](https://github.com/etalii-adp/etalii.adp/pull/111)).
+- **FR-009** A fixture's `add` names the slot of its parent that the new element fills, with `slot` (FBL 0.5, section 15.3), in place of the undefined `x-slot` the knowledge fixtures carried for a view's three lists of group settings (R9; pull request [116](https://github.com/etalii-adp/etalii.adp/pull/116)).
+- **FR-010** The three examples hold the table of the standalone showcase: four more options of Country and seven more rows, the same in YAML, JSON and XML (R10; pull request [120](https://github.com/etalii-adp/etalii.adp/pull/120)).
+- **FR-011** A view's column may carry `calculate`, one of Notion's sixteen calculations, and a view may carry `freeze`, the last property whose column stays in sight when the table scrolls sideways. Both are optional and removed when empty; a search typed in the bar is never stored. `knowledge.des` gains the enumeration `Calculation`, the operations `calculate`, `removeCalculation`, `freeze` and `unfreeze` and the constraint `freezeMissingProperty`; the bindings, `knowledge.schema.json`, `knowledge.md` and the fixtures follow (R11; pull request [124](https://github.com/etalii-adp/etalii.adp/pull/124)).
+
 ## Success criteria
 
 - **SC-001** `python .github/scripts/validate-examples.py` passes on every binding, fixture, example and the DESL specification, and fails on the planted defect each task names.
 - **SC-002** A second host can build the Knowledge designer from `definitions/designers/` alone (Requirement 1.8).
+
+## Where it stands (2026-10-12)
+
+- **SC-001 holds.** The validator passes on the bindings, the five knowledge fixture folders, the three examples and DESL and DED.
+- **SC-002 is not shown yet.** One host has built the designer, the standalone host, and it wrote the requirements. Its copies of `knowledge.des`, `knowledge.fbl`, `knowledge.md` and the three examples are equal to this repository's, byte for byte apart from line endings (compared at standalone `eae4c22` and etalii.adp `07a9583`).
+- **What the standalone host built** is specified in its own documents and not here: a knowledge file opens and is edited as a table (pull requests [150](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/150) and [158](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/158)), with the follow-ups [162](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/162), [164](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/164), [166](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/166), [169](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/169), [170](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/170) and [172](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/172), the nine differences from Notion corrected ([179](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/179)) and ten fixes from the maintainer's report ([191](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/191)).
+- **Behaviour the host has that the definition does not state**, because it belongs to one host's shell and not to the tool type:
+  - While edits are being saved, a note floats at the bottom right of the table, over the rows, and no row moves ([191](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/191)).
+  - The project tree shows a knowledge document as one node: the `.adp` registration is nested under the knowledge file it names ([191](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/191)).
+  - Menus, the option list, the new-column panel and the relation editor are drawn above every other part of the table, and the option list closes on a press outside it ([191](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/191)).
+  - The date and time pickers' icons follow the theme ([191](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/191)).
+  - A column's calculation stays under its column, aligned left, also when the view lists only some of its columns ([191](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/191)). `knowledge.md` says where the calculation line is; the host keeps a column's setting from moving that column.
+  - An entry written by hand without an id is given one with the first edit of the file, in the same undoable step ([172](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/172)).
+  - *Open as text* on both files of a knowledge document is written and not merged: standalone pull request [194](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/194) is open.
+- **One difference left in the standalone documents.** Their requirements still list calculations under a column and frozen columns as out of scope (requirements.md, *Out of scope*, at `eae4c22`), which the ruling of 2026-10-12 (R11) and FR-011 replace. By their Requirement 1.7 the definition wins, and the standalone document is to be amended there.
