@@ -2,7 +2,7 @@
 
 **Input**: [standalone-code-structure.spec.md](standalone-code-structure.spec.md), [plan.md](plan.md), [research.md](research.md), [data-model.md](data-model.md), [behaviour-changes.md](behaviour-changes.md), [contracts/](contracts/), and the report, [analysis-2026-10-10.md](analysis-2026-10-10.md).
 
-**266 tasks in ten milestones.** T265 and T266 were added on 2026-10-11 with the ruling on DP-5 and stand in M4. T255 to T257 were struck on 2026-10-12 by the ruling on DP-1 (c), keep the stubs, so 263 remain. Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
+**271 tasks in ten milestones.** T265 and T266 were added on 2026-10-11 with the ruling on DP-5 and stand in M4. T255 to T257 were struck on 2026-10-12 by the ruling on DP-1 (c), keep the stubs. The M0 review added T267 to T271 to M0 and struck T021, so 267 remain. Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
 
 ## How to read a task
 
@@ -25,9 +25,9 @@
 - [x] T005 [P] [US1] Write `etalii.adp.ide.standalone/.github/tools/analysis/graph.py`: every `ProjectReference`, `PackageReference`, `FrameworkReference` and `InternalsVisibleTo` as an edge list, the projects without a `.cs` file, and the core projects that name a tool module (FR-009; report 4).
 - [x] T006 [P] [US1] Write `etalii.adp.ide.standalone/.github/tools/analysis/waits.py`: every `Task.Delay` and `Thread.Sleep` in test and in production code, with its file and line, and every polling helper (FR-009; report 8.2, 8.5).
 - [x] T007 [US1] Write `etalii.adp.ide.standalone/.github/tools/analysis/measure.sh`, which runs the five scripts on the checked-out commit and writes `measurements.json` and `measurements.md`, with `--self-test` on a small fixture tree kept beside it and a `readme.md` saying what each figure means; the scripts are tools and are not added to the product test suite (FR-009).
-- [ ] T008 [US1] Run `measure.sh` on `fcb64c9` and compare each figure with the report's (lines per group, the role-pair table of section 1, 145 and 40 long methods, 129 projects, 84 waits); explain every difference over 5% in the M0 review before any figure is used as a target (FR-009).
+- [x] T008 [US1] Run `measure.sh` on `fcb64c9` and compare each figure with the report's (lines per group, the role-pair table of section 1, 145 and 40 long methods, 129 projects, 84 waits); explain every difference over 5% in the M0 review before any figure is used as a target (FR-009).
 - [x] T009 [US1] Run `measure.sh` on the `develop` commit the work starts from and save it as `etalii.adp/specs/025-standalone-code-structure/reviews/baseline-measurements.json`; restate SC-005 to SC-023 against it where the baseline differs from the report (FR-009).
-- [ ] T010 [US9] Read the state of the fifteen `etalii.adp.ide.standalone/.spec-workflow/specs/*-disl-fbl/` specifications and of `fbl-implementation` and `fbl-written-text` (approved, tasks written, implementation logs present), and list in the M0 review which tasks of this feature fall under FR-012 for each module (FR-012).
+- [x] T010 [US9] Read the state of the fifteen `etalii.adp.ide.standalone/.spec-workflow/specs/*-disl-fbl/` specifications and of `fbl-implementation` and `fbl-written-text` (approved, tasks written, implementation logs present), and list in the M0 review which tasks of this feature fall under FR-012 for each module (FR-012).
 
 ### The testing projects
 
@@ -41,12 +41,12 @@
 - [x] T018 [US1] Add `FlowSession` (sign in, add a project, create a channel, the message timeout, the baseline) and `FlowConstants` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport.Host/`, and move the same flow class onto them (FR-016; report 8.1).
 - [x] T019 [US1] Generalize `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/HierarchyWatchProbe.cs` into `StreamProbe.WaitUntilLiveAsync(stream, provoke, recognize)` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport.Host/`, keeping its rule of returning on the last probe provoked; the hierarchy flows use it (FR-017; report 8.2; research R7).
 - [x] T020 [US1] Give `StreamProbe` a provocation for context watches and replace every fixed wait before a context stream is read in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/`; if a context stream has nothing harmless to provoke, stop and report it for the M0 review (FR-017; report 8.2).
-- [ ] T021 [US1] Give `StreamProbe` a provocation for diagram streams and replace every fixed wait before a diagram stream is read, the six in `DiagramElementActionFlow.Tests.cs` first (FR-017; report 8.2).
+- [ ] ~~T021 [US1] Give `StreamProbe` a provocation for diagram streams and replace every fixed wait before a diagram stream is read, the six in `DiagramElementActionFlow.Tests.cs` first (FR-017; report 8.2).~~ struck by the M0 review: no fixed wait preceded a diagram stream; the six waits of `DiagramElementActionFlow.Tests.cs` stood before context watches and went with T020 (standalone pull request 178).
 - [x] T022 [US1] Move the flow classes of the core areas (hierarchy, context, history, projects, problems, sign-in) in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/` onto `HostFixture`, `FlowSession` and `FlowConstants`, deleting their private `LoginAsync`, `AddProjectAsync`, `CreateChannel`, `CreateMessageTimeout` and `BaselineAsync` (FR-016; report 8.1).
 - [x] T023 [P] [US1] Move the first half of the module flow classes in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/` (in alphabetical order, `RdfFlow` and `OwlFlow` in the same pull request so that their 606 shared lines meet) onto the harness (FR-016; report 8.1).
 - [x] T024 [P] [US1] Move the second half of the module flow classes onto the harness; after it no file under `Integration Tests/` declares a `WebApplicationFactory` or a user constant of its own (FR-016; report 8.1).
 - [x] T025 [US1] Delete the `StreamStartupGrace` constant in every file of `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/` that declares it (500 ms, and 250 ms in two files); `waits.py` reports no fixed wait before a stream read (FR-017; SC-001).
-- [ ] T026 [US1] Add a manually triggered workflow `etalii.adp.ide.standalone/.github/workflows/stability.yml` that runs `dotnet test` twenty times on the GitHub runner and reports every run's result; run it and record the twenty results in the M0 review (SC-002).
+- [x] T026 [US1] Add a manually triggered workflow `etalii.adp.ide.standalone/.github/workflows/stability.yml` that runs `dotnet test` twenty times on the GitHub runner and reports every run's result; run it and record the twenty results in the M0 review (SC-002).
 
 ### Quick wins
 
@@ -58,8 +58,8 @@
 ### Possible defects
 
 - [x] T031 [US1] Confirm that pull request 167 of `etalii.adp.ide.standalone` is merged and that D1, D3, D7 and D8 each have their guard on `develop` (in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents.Tests/`, the causal-loop module's tests and `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Cel.Tests/`); if it was closed unmerged, add the four as guard-first tasks in the M0 review (FR-020).
-- [ ] T032 [US1] A Tester checks D2 in the running application: in an agent-behavior-modelling diagram and in a mindmap, press each shortcut that `etalii.adp.ide.standalone/src/diagrams/agent-behavior-modelling/backend/` (`AbmDefinition.cs`) and the mindmap module send with a key such as `Alt+Up` and no modifier flags, and record whether the action runs (FR-021; report D2).
-- [ ] T033 [US1] If T032 shows a shortcut that does not work: write a guard that fails on `ContextShortcutDefinition.Matches` for that shape, then send the modifiers as timeline, dependency-graph and gartner-hype-cycle-graph do. If it works: strike D2 in the M0 review with the evidence and correct the report's reading in a comment at `AbmDefinition` (FR-021, FR-005).
+- [x] T032 [US1] A Tester checks D2 in the running application: in an agent-behavior-modelling diagram and in a mindmap, press each shortcut that `etalii.adp.ide.standalone/src/diagrams/agent-behavior-modelling/backend/` (`AbmDefinition.cs`) and the mindmap module send with a key such as `Alt+Up` and no modifier flags, and record whether the action runs (FR-021; report D2).
+- [x] T033 [US1] If T032 shows a shortcut that does not work: write a guard that fails on `ContextShortcutDefinition.Matches` for that shape, then send the modifiers as timeline, dependency-graph and gartner-hype-cycle-graph do. If it works: strike D2 in the M0 review with the evidence and correct the report's reading in a comment at `AbmDefinition` (FR-021, FR-005).
 - [x] T034 [US5] D5, guard first: a test in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Context.Tests/` in which the first `DiscoverAsync` of a watch throws, and one in which it is cancelled, each asserting that the history stack and the problem watch are released; see both fail; then move the retain in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Context/ContextService.cs` inside the `try` (FR-023, FR-005; report 5.2).
 - [x] T035 [US4] D6, guard first: tests in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Tests/` for a path that differs from the root only in case (accepted on Windows, refused on Linux) and for a symbolic link that leaves the root (refused on both), written against `ProjectTextFile.TryResolve` and seen to fail; then add `PathContainment` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp/` with an operating-system-correct comparer and a link check, and make `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/ProjectTextFile.cs` use it (FR-024, FR-005; report 4.5; behaviour-changes B-10, B-11).
 - [x] T036 [P] [US4] Move `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Problems/ProjectValidator.cs` and `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Problems/ProblemMaintenance.cs` onto `PathContainment`, each with a guard for the escaping link (FR-024).
@@ -69,9 +69,17 @@
 
 ### Review
 
-- [ ] T040 [US9] Run `etalii.adp.ide.standalone/.github/tools/analysis/measure.sh` on the merge commit of M0's last pull request, in a freshly created worktree, and save its output as `etalii.adp/specs/025-standalone-code-structure/reviews/M0-measurements.json` (FR-009, FR-010).
-- [ ] T041 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M0-review.md` by `etalii.adp/specs/025-standalone-code-structure/contracts/milestone-review.md`: the comparison with the previous record, the exit condition of M0 (the safety net) and the success criteria due, an answer for every candidate named for the M0 review, what the clone scan and the method-length count show that nobody named, the tasks under FR-012 marked *stands*, *reduced* or *overtaken*, and the open rows of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` that M1 needs (FR-010, FR-011, FR-012).
-- [ ] T042 [US9] In the same pull request into `etalii.adp`, update `etalii.adp/specs/025-standalone-code-structure/tasks.md`: tick what is merged, add the tasks the review produced with new numbers, strike what it found unnecessary; amend a success criterion in `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` only with this review named beside it. No task of the next milestone starts before this pull request is merged (FR-010, FR-011, FR-014).
+- [x] T040 [US9] Run `etalii.adp.ide.standalone/.github/tools/analysis/measure.sh` on the merge commit of M0's last pull request, in a freshly created worktree, and save its output as `etalii.adp/specs/025-standalone-code-structure/reviews/M0-measurements.json` (FR-009, FR-010).
+- [x] T041 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M0-review.md` by `etalii.adp/specs/025-standalone-code-structure/contracts/milestone-review.md`: the comparison with the previous record, the exit condition of M0 (the safety net) and the success criteria due, an answer for every candidate named for the M0 review, what the clone scan and the method-length count show that nobody named, the tasks under FR-012 marked *stands*, *reduced* or *overtaken*, and the open rows of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` that M1 needs (FR-010, FR-011, FR-012).
+- [x] T042 [US9] In the same pull request into `etalii.adp`, update `etalii.adp/specs/025-standalone-code-structure/tasks.md`: tick what is merged, add the tasks the review produced with new numbers, strike what it found unnecessary; amend a success criterion in `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` only with this review named beside it. No task of the next milestone starts before this pull request is merged (FR-010, FR-011, FR-014).
+
+### Added by the M0 review
+
+- [ ] T267 [US4] Run the containment guards on Windows: `PathContainment.Tests` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Tests/` and the link guards of T036 and T037, once, by the maintainer on his Windows machine in developer mode so the link guards are not skipped (ruled on question 2 of the M0 review, chat, 2026-10-12). The M1 review records the result (FR-024; SC-014).
+- [ ] T268 [US1] A Tester checks azure-devops-pipeline's Move up and Move down in the running application: select a step, press Alt+Up and Alt+Down, which `etalii.adp.ide.standalone/src/diagrams/azure-devops-pipeline/backend/EtAlii.Adp.Diagram.AzureDevOpsPipeline/PipelineContextActionProvider.cs` sends as the key `"Alt+Up"` and `"Alt+Down"` with no modifier flag, and record whether the step moves and the file is rewritten, with the context menu as control (FR-021; report D2).
+- [ ] T269 [US1] If T268 shows a shortcut that does not work: a guard that fails on `ContextShortcutDefinition.Matches` for Alt with `ArrowUp` and with `ArrowDown`, then send `ContextShortcutDefinition("ArrowUp", Alt: true)` and `ContextShortcutDefinition("ArrowDown", Alt: true)` from `PipelineContextActionProvider.cs`, and see both shortcuts work in the running application. If they work: the M1 review strikes this task with T268's evidence (FR-021, FR-005; report D2).
+- [ ] T270 [US1] As ruled on question 4 of the M0 review (chat, 2026-10-12): make `lines.py`, `methods.py` and `waits.py` in `etalii.adp.ide.standalone/.github/tools/analysis/` count `EtAlii.Adp.TestSupport` and `EtAlii.Adp.TestSupport.Host` as test code and `graph.py` read the references of `src/Directory.Build.targets`, with the self-test fixture extended for both and `readme.md` saying so; then measure `1217e1d97` and `d5278a3c6` again and replace `etalii.adp/specs/025-standalone-code-structure/reviews/baseline-measurements.json` and `M0-measurements.json`, restating `etalii.adp/specs/025-standalone-code-structure/reviews/baseline.md` where a figure moves (FR-009; SC-005, SC-010, SC-023).
+- [ ] T271 [US1] Add a `schedule` trigger to `etalii.adp.ide.standalone/.github/workflows/stability.yml`, nightly (ruled on question 5 of the M0 review, chat, 2026-10-12), beside the manual one; each review reads the runs since the previous review (SC-002).
 
 ## M1: the module middle layer, piloted
 
@@ -385,12 +393,12 @@
 
 ### Tests (report 8.3, 8.6, 8.7)
 
-- [ ] T245 [US8] Add `TranscriptHarness` with a module adapter, one `TranscriptText` canonical-JSON writer and the abstract `TranscriptTests<TAdapter>` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport.Host/`, with gartner-hype-cycle-graph as first consumer; its `Parity/*.transcript.json` is unchanged (FR-093).
+- [ ] T245 [US8] Add `TranscriptHarness` with a module adapter, one `TranscriptText` canonical-JSON writer and the abstract `TranscriptTests<TAdapter>` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport.Host/`, with gartner-hype-cycle-graph as first consumer; its `Parity/*.transcript.json` is unchanged (FR-093). Reduced by the M0 review to the harness, the module adapter and `TranscriptTests<TAdapter>`: `TranscriptText` is one writer in `EtAlii.Adp.TestSupport` since standalone pull request 186.
 - [ ] T246 [P] [US8] Move the transcripts of dependency-graph, mindmap, timeline, agent-behavior-modelling and the sixth module onto the harness, one module per pull request; no transcript file changes (FR-093).
 - [ ] T247 [P] [US8] Replace the 8 hand-written `*TestDispatcher.cs` with `TestHistory.For` (FR-094).
 - [ ] T248 [P] [US8] Replace the hand-built temporary folders in the core test projects under `etalii.adp.ide.standalone/src/backend/` with `TestFolder.Create` (FR-094).
 - [ ] T249 [P] [US8] Replace the hand-built temporary folders in the module test projects under `etalii.adp.ide.standalone/src/diagrams/`, `etalii.adp.ide.standalone/src/designers/` and `etalii.adp.ide.standalone/src/editors/` with `TestFolder.Create`; 273 at the report's reading, in all (FR-094).
-- [ ] T250 [P] [US8] Replace the 63 copies of the repository-root locator with `RepositoryPaths` (FR-094).
+- [ ] T250 [P] [US8] Replace the 63 copies of the repository-root locator with `RepositoryPaths` (FR-094). Reduced by the M0 review to the copies that are left: 44 test files use `RepositoryPaths` since standalone pull request 186; the M8 review counts the rest.
 - [ ] T251 [US8] Move the flows that test one module out of `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/` into that module's test project, referencing `EtAlii.Adp.TestSupport.Host`: the first half of about 5,300 lines (FR-095).
 - [ ] T252 [US8] Move the second half; `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/` holds no flow that tests one module, and `etalii.adp.ide.standalone/docs/solution-structure.md` (*where tests and fixtures live*) says so (FR-095, FR-004).
 - [ ] T253 [P] [US8] Derive `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Unit Tests/ElementTypeCatalog.cs` and the catalogue in `DrawnConnections.Tests.cs` from the tool definitions, or remove them if the module's own tests cover the same (FR-095).
@@ -420,7 +428,7 @@
 ## Dependencies and order
 
 - **Milestones run in order**, M0 to M9, each gated by the review before it. DP-6 was ruled (a), one owner at a time, so no milestone runs beside another. Should that ruling ever change: M6 and M7 touch the specification projects and module internals only and could run beside M3 to M5; M6 still needs T207, and M7 still needs the layout library of M3 for T239 and `WatchedFile` for T235.
-- **M0**: T002 to T006 are independent; T007 needs them; T008 and T009 need T007. T011 comes before T012, T013, T014 and T015; T016 before T017, T018 and T019; T020 and T021 before T025; T025 before T026. T035 before T036 and T037. T031 waits on pull request 167. T033 needs T032.
+- **M0**: T002 to T006 are independent; T007 needs them; T008 and T009 need T007. T011 comes before T012, T013, T014 and T015; T016 before T017, T018 and T019; T020 and T021 before T025; T025 before T026. T035 before T036 and T037. T031 waits on pull request 167. T033 needs T032. T269 needs T268; T270 comes before T064, which measures M1.
 - **M1**: band A (T043, T044, T045, then the three pilots, then T049) before band B (T050, T051, the pilots, T055) before band C (T056, T057, T058, the pilots). T043 needs T011.
 - **M2**: within a module, band A before B before C. Modules are independent of each other, except: T103 before T104 and T105; timeline's band C adds the lines-restore handler that dependency-graph's band C uses. The order of modules is the list's, and the M1 review may change it.
 - **M3**: T118 before every other layout task; T121 before T122 and T123; T131 before T132; T133 before T134; T136 before T137; T139 before T140; T141 before T142, T143 and T145; T144 before T145; T146 before T147; T150 before T151.
@@ -440,11 +448,11 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-002 | T039, T132, T135, T137, T146, T178, T211 |
 | FR-003 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md). |
 | FR-004 | 21 tasks, T016 to T266 |
-| FR-005 | T033, T034, T035, T056, T176, T185, T195, T212, T216, T217 |
+| FR-005 | T033, T034, T035, T056, T176, T185, T195, T212, T216, T217, T269 |
 | FR-006 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md) (the identity) and by the *Ownership* section of every review record (the owner). |
 | FR-007 | T029 |
 | FR-008 | T043 |
-| FR-009 | 18 tasks, T002 to T261 |
+| FR-009 | 19 tasks, T002 to T261, and T270 |
 | FR-010 | 28 tasks, T040 to T263 |
 | FR-011 | 18 tasks, T041 to T260 |
 | FR-012 | 44 tasks, T010 to T259 |
@@ -452,14 +460,14 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-014 | T042, T066, T117, T154, T184, T206, T230, T244, T260, T264 |
 | FR-015 | T011, T012, T013, T014, T015, T016, T149 |
 | FR-016 | T017, T018, T022, T023, T024 |
-| FR-017 | T019, T020, T021, T025 |
+| FR-017 | T019, T020, T025; T021 struck by the M0 review |
 | FR-018 | T027, T028, T029 |
 | FR-019 | T030 |
 | FR-020 | T031 |
-| FR-021 | T032, T033 |
+| FR-021 | T032, T033, T268, T269 |
 | FR-022 | 19 tasks, T056 to T111 |
 | FR-023 | T034, T193 |
-| FR-024 | T035, T036, T037 |
+| FR-024 | T035, T036, T037, T267 |
 | FR-025 | T038, T216 |
 | FR-026 | T185, T190 |
 | FR-027 | T049, T055 |
@@ -540,7 +548,7 @@ FR-002, FR-004, FR-005, FR-007 and FR-008 are rules of [contracts/pull-request.m
 | Success criterion | Where it is worked for | Measured at the review of |
 |---|---|---|
 | SC-001 | T025, T263 | M0 |
-| SC-002 | T026, T261 | M0, M9 |
+| SC-002 | T026, T261, T271 | M0, M9 |
 | SC-003 | T149 | M0, M3 |
 | SC-004 | T142, T143, T149 | M3 |
 | SC-005 | The test-code tasks of M0, M1 (contracts) and M8; T009 | M9 |
@@ -552,7 +560,7 @@ FR-002, FR-004, FR-005, FR-007 and FR-008 are rules of [contracts/pull-request.m
 | SC-011 | T121, T239 | M3, M7 |
 | SC-012 | T158 | M4 |
 | SC-013 | T162, T265 | M5 |
-| SC-014 | T037 | M0 |
+| SC-014 | T037, T267 | M0, M1 |
 | SC-015 | T166, T169 | M4 |
 | SC-016 | T177 | M4 |
 | SC-017 | T189, T190 | M5 |

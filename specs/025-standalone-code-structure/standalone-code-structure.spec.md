@@ -388,7 +388,7 @@ Every count is taken by the scripts of FR-009 against the baseline. The figures 
 
 - **SC-001**: No fixed wait for a stream to become live remains in the tests (25), and the constant that named it is gone. From M0.
 - **SC-002**: Twenty consecutive runs of the suite on the GitHub runner give twenty identical results, at the end of M0 and again at M9.
-- **SC-003**: One sign-in helper, one add-project helper and one channel helper exist in the tests (23, 23 and 24 copies); one wait-until helper (13). From M0.
+- **SC-003**: One sign-in helper, one add-project helper and one channel helper exist in the tests (23, 23 and 24 copies), from M0; one wait-until helper (13), from M3. Amended by the [M0 review](reviews/M0-review.md), 2026-10-12: the wait-until helper was due at M0 here and at M3 in the tasks (T149).
 - **SC-004**: No test waits in real time for a debounce, an idle eviction or a retry. From M3.
 - **SC-005**: Test code is at least 5,000 lines smaller than the baseline, with no test removed that was not replaced by a contract or harness test that covers it. At M9.
 
