@@ -22,6 +22,8 @@
 | Agent activity diagram | Diagram | `etalii/agent-activity-diagram` | `agent-activity-diagram.dis` (DISL 0.4) | `agent-activity-diagram.fbl`, beside it | `.aad` | No |
 | Knowledge | Designer | `etalii/knowledge` | `knowledge.des` (DESL 0.1) | `knowledge.fbl`, beside it, three bindings | `.yaml`, `.yml`, `.json`, `.ded`, `.xml` | No |
 
+Two of the five name plugins that the plug-in has to carry as code: the mind map reads `.mm` files through the plugin `net.etalii.adp.freeplane.mm` and lays them out with `net.etalii.adp.freeplane.mindmapLayout`, and Agent Behavior Modelling reads Markdown through `net.etalii.adp.etalii.abmMarkdown`. The agent activity diagram and the Knowledge designer name none. No host other than standalone implements DESL yet, and standalone implements the Knowledge designer in code; this host's designer is the first that reads it from its DESL file.
+
 Three more diagram types, the timeline, the dependency graph and the .NET dependency graph, have DISL specifications but read their files through a plugin of their own rather than an FBL binding; the `timeline-disl-fbl`, `dependency-graph-disl-fbl` and `dotnet-dependency-graph-disl-fbl` specifications in standalone move them onto FBL. They are out of scope here and join a later feature once their definitions persist through FBL.
 
 **What "migrating" means.** The organization's direction (2026-09-26) is that every tool has a definition, and a core in each IDE interprets the definitions, with code added only where a definition cannot say something. Visual Studio Code does not do that yet: its two diagrams are coded by hand from their definitions, and it reads no `.dis` or `.des` file. So migrating a tool to Visual Studio Code means that its definition files, copied unchanged from this repository, are what the plug-in reads to know the tool type, and its documents are read and written through its FBL binding by the FBL implementation of spec 009. The Notion add-ons (`etalii.adp.ide.notion`, spec 012) already interpret a DISL specification this way, and their record of what they support is the model for this host's.
@@ -72,7 +74,7 @@ A user opens an `.aad` file. It opens in the agent activity diagram, drawn as it
 
 ### User Story 3 - Work in the Knowledge designer (Priority: P2)
 
-A user opens a Knowledge document, a YAML, JSON or XML file whose envelope names the Knowledge designer. It opens in the designer, a form-based layout with nothing connected, as its definition describes. They add, edit, reorder and remove what the definition offers. Any other YAML, JSON or XML file still opens as text.
+A user opens a Knowledge document, a YAML, JSON or XML file whose envelope names the Knowledge designer. It opens in the designer, shown as the surface its definition declares: a table of properties, rows and cells, with its views, sorts, filters and groups. They add, edit, reorder and remove what the definition offers. Any other YAML, JSON or XML file still opens as text.
 
 **Why this priority**: it is the first designer in this host, so it needs a surface the diagrams do not, and its files share extensions with every other YAML, JSON and XML file in a workspace. It comes after the two diagrams because they need only what the hand-coded diagrams already built.
 
@@ -135,7 +137,7 @@ A contributor changes a sentence, a colour or a rule in one of the two existing 
 #### The tools
 
 - **FR-011**: The mind map, the agent activity diagram and the Knowledge designer MUST each be offered for the files their bindings claim, with what their definitions describe.
-- **FR-012**: The Knowledge designer MUST be shown as a form-based layout, and the toolbox and properties views the diagrams use MUST serve it where its definition calls for them.
+- **FR-012**: The Knowledge designer MUST be shown as the surface its definition declares (DESL's `table`), with every operation its definition lists, and the properties view the diagrams use MUST serve it where its definition calls for them.
 - **FR-013**: The Gartner hype cycle graph and Agent Behavior Modelling MUST be read from their definitions as FR-003 says, and MUST pass the plug-in's existing tests of their behaviour. A test that named a hand-coded part MAY be rewritten to name the same behaviour.
 
 #### Tests and reporting
