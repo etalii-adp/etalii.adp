@@ -56,7 +56,7 @@ A user opens a FreeMind or Freeplane `.mm` file in Visual Studio Code. It opens 
 
 ### User Story 2 - Work on an agent activity diagram (Priority: P1)
 
-A user opens an `.aad` file. It opens in the agent activity diagram, drawn as its definition says, with its states, its lanes and its findings. They add, rename, move and remove what the definition's toolbox offers, and the registration beside the file keeps the positions they drag.
+A user opens an `.aad` file. It opens in the agent activity diagram, drawn as its definition says, with its states, its lanes and its findings. They add, rename, move and remove what the definition's toolbox offers, and the file itself keeps the positions they drag, in its `view` mapping, so a drag is an edit of the file like any other.
 
 **Why this priority**: it is the first tool type on DISL 0.4, and the one specified most recently with every host in mind (spec 014), so it tests that the interpreter follows the newest language version and not only what the first tools needed.
 
@@ -66,7 +66,7 @@ A user opens an `.aad` file. It opens in the agent activity diagram, drawn as it
 
 1. **Given** an `.aad` file, **When** it is opened, **Then** it opens in the agent activity diagram by default.
 2. **Given** any example, **When** it is opened, **Then** what is drawn, the toolbox, the properties and the findings are those the definition gives.
-3. **Given** an open diagram, **When** the user saves without editing, **Then** the file and its registration are byte for byte what they were.
+3. **Given** an open diagram, **When** the user saves without editing, **Then** the file, which holds the dragged positions in its `view` mapping, is byte for byte what it was, and so is its registration.
 4. **Given** an edit the definition refuses, **When** the user attempts it, **Then** nothing is written and the user is shown the definition's sentence for that refusal.
 5. **Given** a rule the definition states, **When** a document breaks it, **Then** the finding is in the Problems panel with the line it concerns.
 
