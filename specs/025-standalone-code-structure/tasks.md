@@ -337,7 +337,7 @@
 ### FBL (report 6.1, 6.2, 6.6, 6.7)
 
 - [ ] T215 [US6] Add a non-virtual `FamilyReader.Write` with `RemoveSlot`, `ReplaceSlot` and `InsertSlot` hooks, one `InsertValues` resolver and one `KeyOrder` helper on `Rule.WireOrder()` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/`, with `YamlFamily` as first consumer (FR-076).
-- [ ] T216 [US6] Move `JsonFamily.Write`, `LinesFamily.Write` and `XmlFamily.Write` onto the template; D9 is corrected here as T038 settled it, with its fixture pair as the guard (FR-076, FR-025, FR-005; SC-020; behaviour-changes B-09).
+- [ ] T216 [US6] Move `JsonFamily.Write`, `LinesFamily.Write` and `XmlFamily.Write` onto the template; D9 is corrected here as T038 settled it, and a new JSON entry is written in the layout of the entries beside it, with its fixture pair as the guard (FR-076, FR-025, FR-005; SC-020; behaviour-changes B-09, B-12).
 - [ ] T217 [US6] Split `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/FblDocumentLoader.cs` into `BindingReader` and `BindingChecker`, breaking up `ReadRule` and `Check`, and use `TryGetProperty` so that schema-invalid input is collected as problems; a guard with such input, seen to throw first (FR-077, FR-005).
 - [ ] T218 [US6] Make `Slot` a closed record hierarchy in place of ten nullable fields, and parse `Empty`, `Place`, `Quote`, `Style` and `IdStrategy` once into enumerations; the 14 string comparisons in the families go (FR-078).
 - [ ] T219 [US6] Rebuild JSON reading in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/` on `Utf8JsonReader`, as `JsonBodyParser` beside `JsonFamily`, in place of the 210-line byte-level parser; split the other families into `XxxParser` and `XxxFamily` (FR-080).
