@@ -888,6 +888,342 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-13T13:46:34.130Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T100",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:14:32.967Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T101",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:14:33.239Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T102",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:14:33.507Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T103",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:14:33.796Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T104",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:14:34.138Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T105",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:14:34.455Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T108",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:14:34.766Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T112",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:14:35.046Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T106",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:32:42.323Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T107",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:32:42.604Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T109",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:32:42.889Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T110",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:32:43.202Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T111",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:32:43.484Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T113",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:32:43.756Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T114",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:32:44.032Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T115",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:32:44.307Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T116",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:32:44.582Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T117",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:32:44.855Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T118",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T14:32:45.133Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T119",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T18:44:04.212Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T120",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T18:44:28.113Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T121",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T19:39:45.976Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T122",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:25.182Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T123",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:25.544Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T124",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:25.977Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T125",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:26.373Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T126",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:26.777Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T127",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:27.102Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T128",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:27.414Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T129",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:27.731Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T130",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:28.050Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T131",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:28.389Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T132",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:28.701Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T133",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:29.016Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T134",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:29.328Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T135",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:06:29.639Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T139",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:21:45.396Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T140",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:21:45.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T141",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:21:46.058Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T142",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:21:46.372Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T136",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T21:03:10.292Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T137",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T21:03:10.788Z"
     }
   ],
   "telemetryInstanceId": "dc5f5bb0-d20a-4e36-9cc2-dc702a232be5",
@@ -967,6 +1303,26 @@
       "decision": "Every operation is offered in a menu where its for says, and a cell is edited by the quick change of DESL 10.3",
       "why": "DESL ties no gesture to an operation by name",
       "rejected": "Gesture to operation tables in the webview, which would name the tool type"
+    },
+    {
+      "decision": "Wire ids are read from a definition x- mapping found by its shape",
+      "why": "The real-editor tests of the two diagrams pass untouched and ask by those ids",
+      "rejected": "Keeping the specification names and rewriting those tests"
+    },
+    {
+      "decision": "A pin no entry of the document holds is a corner of the registration layout, written whole",
+      "why": "FBL registration module plans a place only, and an arrange and a renamed id need entries removed",
+      "rejected": "OpenRegistration place steps"
+    },
+    {
+      "decision": "The tidy tree lives in src/core/scene so the canvas may preview a drag with it",
+      "why": "The webview may import no interpreter code",
+      "rejected": "A second copy in the webview"
+    },
+    {
+      "decision": "The Polish tasks that need neither the merge nor a person (T139 to T142) are done ahead, as four commits on a local, unpushed branch features/027-vscode-disl-fbl-tools-polish on top of pull request 5",
+      "why": "Pull request 5 waits for its merge and the documents checked are those it leaves on develop; T137 then is a rebase of these commits onto origin/develop under the feature branch name",
+      "rejected": "Pushing them to the open pull request 5, which would change what is reviewed; waiting idle for the merge"
     }
   ],
   "concerns": [
@@ -1036,6 +1392,30 @@
     },
     {
       "note": "simplified: the id a reader derives is evaluated with the siblings standing in as elements of the element's own type, and only the parent of its ancestors",
+      "step": "implement"
+    },
+    {
+      "note": "Compact in the hype cycle graph leaves no room for labels, as the definition rowPacked states it; raised in issue 165",
+      "step": "implement"
+    },
+    {
+      "note": "T136 waits for Peter to merge etalii.adp.ide.vscode pull request 27; T120 to T136 stay unticked until then",
+      "step": "implement"
+    },
+    {
+      "note": "The worktree of etalii.adp.ide.vscode stands on the local branch features/027-vscode-disl-fbl-tools-polish (e2adb5d, four commits on d52d465, not pushed). After pull request 27 is merged: reset features/027-vscode-disl-fbl-tools to origin/develop, rebase the four commits onto it, and delete the polish branch",
+      "step": "implement"
+    },
+    {
+      "note": "T138 still needs a person at a real window: the mind map Delete branch? confirmation and its Link to picker, the Knowledge designer two Delete confirmations, and the save prompt of the three new tool types",
+      "step": "implement"
+    },
+    {
+      "note": "Pull request 5 puts the row of issue 165 in the Knowledge designer table of docs/disl-support.md; the polish branch moves it and holds it with a test",
+      "step": "implement"
+    },
+    {
+      "note": "Settled 2026-10-13: pull request 27 is merged, the polish branch is gone and its four commits are on features/027-vscode-disl-fbl-tools as etalii.adp.ide.vscode pull request 28, a draft. Left: T138, which Peter does in the Development build and reports with the Visual Studio Code version; then its row in docs/parity.md, the draft made ready, and T143",
       "step": "implement"
     }
   ],
@@ -1255,7 +1635,7 @@
       ]
     }
   },
-  "currentTask": "T099",
+  "currentTask": "T137",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -1809,6 +2189,331 @@
     "T099": {
       "status": "DONE",
       "did": "Pull request 25 merged into etalii.adp.ide.vscode develop as ad802c0 after the Build passed; its branch is deleted on origin"
+    },
+    "T100": {
+      "status": "DONE",
+      "did": "Branch cut from origin/develop ad802c0; definitions/knowledge copied from etalii.adp 5062bde with its three bindings, the manifest's custom editor and commands written from it",
+      "files": [
+        "etalii.adp.ide.vscode/definitions/knowledge/",
+        "etalii.adp.ide.vscode/package.json"
+      ]
+    },
+    "T101": {
+      "status": "DONE",
+      "did": "Test of DESL reading knowledge.des and minimal-table.des, the table surface and the CEL of DESL 9, written first and seen failing",
+      "files": [
+        "etalii.adp.ide.vscode/test/core/desl/specification.test.ts"
+      ]
+    },
+    "T102": {
+      "status": "DONE",
+      "did": "Test of the 55 operations, each one transaction, with ids, conversions and quick changes, written first and seen failing",
+      "files": [
+        "etalii.adp.ide.vscode/test/core/desl/operations.test.ts"
+      ]
+    },
+    "T103": {
+      "status": "DONE",
+      "did": "Test of the table view: columns, rows, cells, the view shown and the operations offered, written first and seen failing",
+      "files": [
+        "etalii.adp.ide.vscode/test/core/tool/tableView.test.ts"
+      ]
+    },
+    "T104": {
+      "status": "DONE",
+      "did": "Test of the Knowledge designer against the three format fixtures, knowledge-kept and knowledge-equivalence, written first and seen failing",
+      "files": [
+        "etalii.adp.ide.vscode/test/core/tool/knowledge.test.ts"
+      ]
+    },
+    "T105": {
+      "status": "DONE",
+      "did": "Test that minimal-table.des with its binding in a temporary definitions folder is a tool type that opens a document, written first and seen failing",
+      "files": [
+        "etalii.adp.ide.vscode/test/core/tool/addToolType.test.ts"
+      ]
+    },
+    "T108": {
+      "status": "DONE",
+      "did": "loadDesigner gives a .des file to the DISL interpreter in its names; interpretSurface reads the table kind with the name checks of DESL 10.1",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/desl/specification.ts",
+        "etalii.adp.ide.vscode/src/core/desl/surface.ts"
+      ]
+    },
+    "T112": {
+      "status": "DONE",
+      "did": "Operations run by the DISL behavior, with derived ids, value type conversions, quick changes and the two storing rules",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/desl/operations.ts",
+        "etalii.adp.ide.vscode/src/core/disl/behavior.ts",
+        "etalii.adp.ide.vscode/src/core/disl/expressions.ts"
+      ]
+    },
+    "T106": {
+      "status": "DONE",
+      "did": "Test of the table surface in jsdom, written first and seen failing: 45 tests",
+      "files": [
+        "etalii.adp.ide.vscode/test/webview/table/table.test.ts"
+      ]
+    },
+    "T107": {
+      "status": "DONE",
+      "did": "Test of the Knowledge designer in a real Visual Studio Code: 14 tests; written after reopening.ts, against FR-016",
+      "files": [
+        "etalii.adp.ide.vscode/test/vscode/knowledge.test.ts"
+      ]
+    },
+    "T109": {
+      "status": "DONE",
+      "did": "TableView, TableRequest and tableReader: the table of a model, with the view a tool type's ViewLogic applies",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/tool/tableView.ts"
+      ]
+    },
+    "T110": {
+      "status": "DONE",
+      "did": "The table surface: grid role, keyboard, nine editors, menus and the parameter form",
+      "files": [
+        "etalii.adp.ide.vscode/src/webview/table/main.ts",
+        "etalii.adp.ide.vscode/src/webview/table/table.ts",
+        "etalii.adp.ide.vscode/src/webview/table/editors.ts",
+        "etalii.adp.ide.vscode/src/webview/table/table.css"
+      ]
+    },
+    "T111": {
+      "status": "DONE",
+      "did": "A text tab on a workspace file its binding claims is reopened with vscode.openWith",
+      "files": [
+        "etalii.adp.ide.vscode/src/extension/reopening.ts"
+      ]
+    },
+    "T113": {
+      "status": "DONE",
+      "did": "The table webview bundled as table.js and table.css; the editor gives a designer that page",
+      "files": [
+        "etalii.adp.ide.vscode/esbuild.mjs",
+        "etalii.adp.ide.vscode/src/extension/toolEditor.ts"
+      ]
+    },
+    "T114": {
+      "status": "DONE",
+      "did": "A folder's persistence.bindings are read, one binding for each format family",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/tool/definitionFolder.ts"
+      ]
+    },
+    "T115": {
+      "status": "DONE",
+      "did": "toolTypeFrom makes a designer: read by format, shown as a table, edited by operations and quick changes, with ADP Properties for a selected row",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/tool/toolTypeFrom.ts",
+        "etalii.adp.ide.vscode/src/core/tool/modelChanges.ts",
+        "etalii.adp.ide.vscode/src/core/tool/pluginRegistry.ts",
+        "etalii.adp.ide.vscode/src/core/plugins/knowledge-views/index.ts"
+      ]
+    },
+    "T116": {
+      "status": "DONE",
+      "did": "The custom editor serves a designer with the table webview, and the reopening is wired at activation",
+      "files": [
+        "etalii.adp.ide.vscode/src/extension/toolEditor.ts",
+        "etalii.adp.ide.vscode/src/extension/extension.ts",
+        "etalii.adp.ide.vscode/src/extension/toolTypes.ts",
+        "etalii.adp.ide.vscode/src/extension/commands.ts"
+      ]
+    },
+    "T117": {
+      "status": "DONE",
+      "did": "DESL 0.1 in the support record with its sections, what this host decides, the Knowledge designer's differences and issue 162; the tool list's row",
+      "files": [
+        "etalii.adp.ide.vscode/docs/disl-support.md",
+        "etalii.adp.ide.vscode/docs/tools.md"
+      ]
+    },
+    "T118": {
+      "status": "DONE",
+      "did": "npm test passes: check, 3132 unit tests, 67 tests in a real Visual Studio Code with one skipped (issue 140)",
+      "files": [
+        "etalii.adp.ide.vscode"
+      ]
+    },
+    "T119": {
+      "status": "DONE",
+      "did": "Pull request 4 (etalii-adp/etalii.adp.ide.vscode#26) is merged into develop as 893a4f8 and its branch deleted",
+      "files": [
+        "etalii.adp.ide.vscode",
+        "etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md"
+      ]
+    },
+    "T120": {
+      "status": "DONE",
+      "did": "The branch was cut again from origin/develop at 893a4f8 for pull request 5",
+      "files": [
+        "etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools"
+      ]
+    },
+    "T121": {
+      "status": "DONE",
+      "did": "The definition's own test: no finding, derived ids, the tidy tree, anchor sides and shapes, parent placements, the menus, re-parenting, retyping and a drag in a tree; written first and seen failing",
+      "files": [
+        "etalii.adp.ide.vscode/test/core/disl/definitions/agentBehaviorModelling.test.ts"
+      ]
+    },
+    "T122": {
+      "status": "DONE",
+      "did": "The parser and writer cases moved to the plugin and driven through PluginBody, 46 cases, written first",
+      "files": [
+        "etalii.adp.ide.vscode/test/core/plugins/abm-markdown/behaviorModel.test.ts"
+      ]
+    },
+    "T123": {
+      "status": "DONE",
+      "did": "After abm.arrange the scene's places are the tidy tree's, held against what the old layout gave for the four examples",
+      "files": [
+        "etalii.adp.ide.vscode/test/core/plugins/abm-arrange/arrange.test.ts"
+      ]
+    },
+    "T124": {
+      "status": "DONE",
+      "did": "Every test that named a hand-written function names the same behaviour through the tool type; listed in pull request 27",
+      "files": [
+        "etalii.adp.ide.vscode/test/core/gartner-hypecycle-graph/",
+        "etalii.adp.ide.vscode/test/core/agent-behavior-modelling/",
+        "etalii.adp.ide.vscode/test/webview/"
+      ]
+    },
+    "T125": {
+      "status": "DONE",
+      "did": "A label, a colour and a refusal sentence changed in a copy of each definition show in the tool type, and nothing else changes",
+      "files": [
+        "etalii.adp.ide.vscode/test/core/tool/definitionChange.test.ts"
+      ]
+    },
+    "T126": {
+      "status": "DONE",
+      "did": "Derived ids recomputed after every transaction, and retyping with the form item of kind type",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/disl/persistence.ts",
+        "etalii.adp.ide.vscode/src/core/disl/behavior.ts",
+        "etalii.adp.ide.vscode/src/core/disl/forms.ts"
+      ]
+    },
+    "T127": {
+      "status": "DONE",
+      "did": "anchor.sides, right-angled lines, superellipse and parallelogram, and parent placements",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/disl/support.ts",
+        "etalii.adp.ide.vscode/src/core/scene/scene.ts",
+        "etalii.adp.ide.vscode/src/core/disl/behavior.ts"
+      ]
+    },
+    "T128": {
+      "status": "DONE",
+      "did": "The tidyTree layout with stored rows and its drag",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/scene/tidyTree.ts",
+        "etalii.adp.ide.vscode/src/core/disl/layout.ts"
+      ]
+    },
+    "T129": {
+      "status": "DONE",
+      "did": "The Markdown reader and writer as the persistence plugin abmMarkdown",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/plugins/abm-markdown/"
+      ]
+    },
+    "T130": {
+      "status": "DONE",
+      "did": "Arrange diagram as the action plugin abmArrange: the registration without its layout block",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/plugins/abm-arrange/",
+        "etalii.adp.ide.vscode/src/core/tool/registrationLayout.ts"
+      ]
+    },
+    "T131": {
+      "status": "DONE",
+      "did": "Both plugins registered; the tool types are the folders of definitions/ alone",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/plugins/index.ts",
+        "etalii.adp.ide.vscode/src/extension/toolTypes.ts"
+      ]
+    },
+    "T132": {
+      "status": "DONE",
+      "did": "The hand-written modules, the view model and the DiagramDefinition path removed; the canvas draws scenes only",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/",
+        "etalii.adp.ide.vscode/src/webview/"
+      ]
+    },
+    "T133": {
+      "status": "DONE",
+      "did": "The support record and the parity record updated; etalii.adp issue 165 holds the nineteen differences",
+      "files": [
+        "etalii.adp.ide.vscode/docs/disl-support.md",
+        "etalii.adp.ide.vscode/docs/parity.md"
+      ]
+    },
+    "T134": {
+      "status": "DONE",
+      "did": "The line, YAML and registration helpers and the old diagram geometry removed with their tests",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/text/",
+        "etalii.adp.ide.vscode/src/core/registration/",
+        "etalii.adp.ide.vscode/src/core/diagram/"
+      ]
+    },
+    "T135": {
+      "status": "DONE",
+      "did": "npm test passes: check, 3182 unit tests, 67 tests in a real Visual Studio Code with one skipped (issue 140); the two diagrams' tests untouched but for the order of the view types",
+      "files": [
+        "etalii.adp.ide.vscode"
+      ]
+    },
+    "T139": {
+      "status": "DONE",
+      "did": "The tool list holds the five tool types with kind, display name and origin, checked against definitions/; it says once that each is read from its definition and links the Knowledge designer's definition and examples; on the local branch features/027-vscode-disl-fbl-tools-polish, ahead of pull request 5's merge",
+      "files": [
+        "etalii.adp.ide.vscode/docs/tools.md"
+      ]
+    },
+    "T140": {
+      "status": "DONE",
+      "did": "The README lists the five tool types, the folders a definition is read through, how a tool type is added and removed, and cel-js among the libraries shipped; CLAUDE.md holds the rules that keep a tool type its definition; on the local branch features/027-vscode-disl-fbl-tools-polish, ahead of pull request 5's merge",
+      "files": [
+        "etalii.adp.ide.vscode/README.md",
+        "etalii.adp.ide.vscode/CLAUDE.md"
+      ]
+    },
+    "T141": {
+      "status": "DONE",
+      "did": "R14's seven are issues 140 to 145 and the corrected User Story 2; every issue a document cites is a row, but 165 stood in the Knowledge designer's table: moved, and a test written first now holds the section; nothing was missing in etalii.adp; on the local branch features/027-vscode-disl-fbl-tools-polish, ahead of pull request 5's merge",
+      "files": [
+        "etalii.adp.ide.vscode/docs/disl-support.md",
+        "etalii.adp.ide.vscode/test/core/tool/supportRecord.test.ts"
+      ]
+    },
+    "T142": {
+      "status": "DONE",
+      "did": "npm test passes at e2adb5d: check, 3184 unit tests, 67 in a real Visual Studio Code with one skipped (issue 140); sync-definitions --check holds 5; SC-005: without definitions/mindmap the command takes 18 lines out of package.json, check passes and 4 tool types are offered, and --add gives the tree back byte for byte; on the local branch features/027-vscode-disl-fbl-tools-polish, ahead of pull request 5's merge",
+      "files": [
+        "etalii.adp.ide.vscode"
+      ]
+    },
+    "T136": {
+      "status": "DONE",
+      "did": "etalii.adp.ide.vscode pull request 27 merged by Peter as 9849baf on 2026-10-13, its branch deleted on origin; T120 to T136 ticked",
+      "files": [
+        "etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md"
+      ]
+    },
+    "T137": {
+      "status": "DONE",
+      "did": "The branch was cut again from origin/develop at 9849baf, with the four Polish commits prepared ahead put on it; the tree is the one validated at e2adb5d",
+      "files": [
+        "etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools"
+      ]
     }
   },
   "verified": [
@@ -1841,7 +2546,48 @@
       "exitCode": 0,
       "durationSeconds": 2.9,
       "result": "   Start at  16:32:47 ·    Duration  1.78s (tests 46%, transform 34%, import 19%) · JUNIT report written to C:/git/etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools/reports/unit.xml"
+    },
+    {
+      "what": "npm test in etalii.adp.ide.vscode at d52d465: check, unit and the packaged plug-in",
+      "command": "npm test",
+      "result": "exit 0: 3182 unit tests passed, 67 tests in a real Visual Studio Code with one skipped (issue 140)"
+    },
+    {
+      "what": "Polish at e2adb5d: the copied definitions match their records and package.json",
+      "command": "cd ../../../../etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools && npm run sync-definitions -- --check",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.6,
+      "result": "> adp@0.1.0 sync-definitions · > node scripts/sync-definitions.mjs --check · 5 tool types match their records and package.json."
+    },
+    {
+      "what": "Polish at e2adb5d: the support record's test, with every issue a difference names a row of the differences raised",
+      "command": "cd ../../../../etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools && npx vitest run test/core/tool/supportRecord.test.ts",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.9,
+      "result": "   Start at  22:21:57 ·    Duration  780ms (transform 74%, import 24%, tests 1%) · JUNIT report written to C:/git/etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools/reports/unit.xml"
+    },
+    {
+      "what": "Polish at e2adb5d: the skipped-tests report holds only scenario 5 of User Story 1",
+      "command": "cd ../../../../etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools && node scripts/skipped-tests.mjs",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.2,
+      "result": "1 test(s) skipped: · - A mind map in Visual Studio Code: a .mm file that is no mind map opens as text, with nothing reported (the binding of the mind map has no marker yet: etalii-adp/etalii.adp issue 140)"
+    },
+    {
+      "what": "Polish at e2adb5d: npm test of etalii.adp.ide.vscode, check, unit and the packaged plug-in in a real Visual Studio Code",
+      "command": "cd ../../../../etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools && npm test",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 75.9,
+      "result": "Unknown channel: agentHostClientProxy · (node:1445912) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities. · (Use `Code --trace-deprecation ...` to show where the warning was created)"
+    },
+    {
+      "what": "SC-005 at e2adb5d: definitions/mindmap deleted and the sync command run at the recorded commits takes the tool type out of package.json (18 lines) and changes nothing else; check passes and four tool types are offered; --add definitions/diagrams/mindmap.dis gives the working tree back with no difference",
+      "result": "seen in this session; the tree was left clean"
     }
   ],
-  "last_action": "Pull request 4 is open (etalii.adp.ide.vscode 26), npm test green; T100 to T118 journaled"
+  "last_action": "T120 to T136 ticked; etalii.adp.ide.vscode pull request 28 (Polish) is a draft that waits for T138, a person at a real window"
 }
