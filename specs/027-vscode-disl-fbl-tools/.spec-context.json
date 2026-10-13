@@ -2440,5 +2440,5 @@
       "result": "exit 0: 3182 unit tests passed, 67 tests in a real Visual Studio Code with one skipped (issue 140)"
     }
   ],
-  "last_action": "Pull request 4 is open (etalii.adp.ide.vscode 26), npm test green; T100 to T118 journaled"
+  "last_action": "pull request 27 open in etalii.adp.ide.vscode; T121 to T135 journaled"
 }
