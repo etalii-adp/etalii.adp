@@ -231,6 +231,18 @@
   "allowedLines": [
     {
       "repository": "etalii.adp",
+      "path": ".specify/assessments/host-agnostic-tool-language/intake.md",
+      "regex": "DEDL",
+      "reason": "the assessment quotes the idea in its owner's words, and names DEDL as the retired name it is"
+    },
+    {
+      "repository": "etalii.adp",
+      "path": ".specify/assessments/host-agnostic-tool-language/notes/one-declarative-tool-language.md",
+      "regex": "as they read `\\.disl` today",
+      "reason": "names the old extension that loaders still read"
+    },
+    {
+      "repository": "etalii.adp",
       "path": ".specify/memory/repositories/etalii.adp.site.md",
       "regex": "reference for DEDL\\)",
       "reason": "the site constitution's amendment history, moved here with it"
