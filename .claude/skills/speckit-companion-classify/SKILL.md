@@ -1,16 +1,11 @@
 ---
 name: speckit-companion-classify
-description: Classify the change size (simple | normal | oversized) so the Companion
-  workflow can right-size the pipeline
+description: Classify the change size (simple | normal | oversized) so the Companion workflow can right-size the pipeline
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
   author: alfredoperez
-  source: extension:companion
-user-invocable: true
-disable-model-invocation: false
+  source: companion:commands/speckit.companion.classify.md
 ---
-
-# Companion Classify Skill
 
 # Classify Change Size
 
@@ -27,7 +22,7 @@ edit any spec files; it only reports a size.
 Estimate the scope of the change from `spec.md` (and `plan.md`/`tasks.md` if they already exist):
 
 <!-- speckit-companion:part sizing -->
-- **small**: the change plausibly touches **≤ 5 files** and decomposes into **≤ 10 tasks**.
+- **small**: the change plausibly touches **≤ 5 files** and decomposes into **≤ 10 tasks**, and is easy to undo and easy to check. A change that is hard to reverse (a migration, deleted stored data, a published contract) or hard to verify is never small, whatever its file count.
 - **oversized**: the change clearly exceeds the small bar by a wide margin (broad multi-subsystem
   work, many new files, or a long task list).
 - **normal**: anything in between (the default).

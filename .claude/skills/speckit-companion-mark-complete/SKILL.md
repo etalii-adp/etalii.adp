@@ -1,16 +1,11 @@
 ---
 name: speckit-companion-mark-complete
-description: 'Mark the active spec completed — the Companion workflow''s terminal
-  step (writes status: completed)'
+description: 'Mark the active spec completed — the Companion workflow''s terminal step (writes status: completed)'
 compatibility: Requires spec-kit project structure with .specify/ directory
 metadata:
   author: alfredoperez
-  source: extension:companion
-user-invocable: true
-disable-model-invocation: false
+  source: companion:commands/speckit.companion.mark-complete.md
 ---
-
-# Companion Mark Complete Skill
 
 # Mark Spec Complete
 
@@ -44,6 +39,8 @@ Pass `--feature-dir specs/<NNN>-<slug>` when you already know it.
 `--mark-complete` keeps `currentStep` at `implement` (the last real step) and sets `status:
 completed`, preserving the canonical invariant that the last `history` entry's step equals
 `currentStep`. It is the only sanctioned writer of `completed`.
+
+A spec whose record holds no verification and no concern explaining why still completes. The script records one concern, `finished, unverified`, and prints a `[companion] Warning:` line. That line reports a completed spec, not a failed command: do not retry it.
 
 ### Fold living-spec deltas (opt-in, best-effort)
 
