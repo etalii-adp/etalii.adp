@@ -1176,6 +1176,38 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-13T20:06:29.639Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T139",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:21:45.396Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T140",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:21:45.706Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T141",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:21:46.058Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T142",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T20:21:46.372Z"
     }
   ],
   "telemetryInstanceId": "dc5f5bb0-d20a-4e36-9cc2-dc702a232be5",
@@ -1270,6 +1302,11 @@
       "decision": "The tidy tree lives in src/core/scene so the canvas may preview a drag with it",
       "why": "The webview may import no interpreter code",
       "rejected": "A second copy in the webview"
+    },
+    {
+      "decision": "The Polish tasks that need neither the merge nor a person (T139 to T142) are done ahead, as four commits on a local, unpushed branch features/027-vscode-disl-fbl-tools-polish on top of pull request 5",
+      "why": "Pull request 5 waits for its merge and the documents checked are those it leaves on develop; T137 then is a rebase of these commits onto origin/develop under the feature branch name",
+      "rejected": "Pushing them to the open pull request 5, which would change what is reviewed; waiting idle for the merge"
     }
   ],
   "concerns": [
@@ -1347,6 +1384,18 @@
     },
     {
       "note": "T136 waits for Peter to merge etalii.adp.ide.vscode pull request 27; T120 to T136 stay unticked until then",
+      "step": "implement"
+    },
+    {
+      "note": "The worktree of etalii.adp.ide.vscode stands on the local branch features/027-vscode-disl-fbl-tools-polish (e2adb5d, four commits on d52d465, not pushed). After pull request 27 is merged: reset features/027-vscode-disl-fbl-tools to origin/develop, rebase the four commits onto it, and delete the polish branch",
+      "step": "implement"
+    },
+    {
+      "note": "T138 still needs a person at a real window: the mind map Delete branch? confirmation and its Link to picker, the Knowledge designer two Delete confirmations, and the save prompt of the three new tool types",
+      "step": "implement"
+    },
+    {
+      "note": "Pull request 5 puts the row of issue 165 in the Knowledge designer table of docs/disl-support.md; the polish branch moves it and holds it with a test",
       "step": "implement"
     }
   ],
@@ -1566,7 +1615,7 @@
       ]
     }
   },
-  "currentTask": "T135",
+  "currentTask": "T142",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -2401,6 +2450,36 @@
       "files": [
         "etalii.adp.ide.vscode"
       ]
+    },
+    "T139": {
+      "status": "DONE",
+      "did": "The tool list holds the five tool types with kind, display name and origin, checked against definitions/; it says once that each is read from its definition and links the Knowledge designer's definition and examples; on the local branch features/027-vscode-disl-fbl-tools-polish, ahead of pull request 5's merge",
+      "files": [
+        "etalii.adp.ide.vscode/docs/tools.md"
+      ]
+    },
+    "T140": {
+      "status": "DONE",
+      "did": "The README lists the five tool types, the folders a definition is read through, how a tool type is added and removed, and cel-js among the libraries shipped; CLAUDE.md holds the rules that keep a tool type its definition; on the local branch features/027-vscode-disl-fbl-tools-polish, ahead of pull request 5's merge",
+      "files": [
+        "etalii.adp.ide.vscode/README.md",
+        "etalii.adp.ide.vscode/CLAUDE.md"
+      ]
+    },
+    "T141": {
+      "status": "DONE",
+      "did": "R14's seven are issues 140 to 145 and the corrected User Story 2; every issue a document cites is a row, but 165 stood in the Knowledge designer's table: moved, and a test written first now holds the section; nothing was missing in etalii.adp; on the local branch features/027-vscode-disl-fbl-tools-polish, ahead of pull request 5's merge",
+      "files": [
+        "etalii.adp.ide.vscode/docs/disl-support.md",
+        "etalii.adp.ide.vscode/test/core/tool/supportRecord.test.ts"
+      ]
+    },
+    "T142": {
+      "status": "DONE",
+      "did": "npm test passes at e2adb5d: check, 3184 unit tests, 67 in a real Visual Studio Code with one skipped (issue 140); sync-definitions --check holds 5; SC-005: without definitions/mindmap the command takes 18 lines out of package.json, check passes and 4 tool types are offered, and --add gives the tree back byte for byte; on the local branch features/027-vscode-disl-fbl-tools-polish, ahead of pull request 5's merge",
+      "files": [
+        "etalii.adp.ide.vscode"
+      ]
     }
   },
   "verified": [
@@ -2438,7 +2517,43 @@
       "what": "npm test in etalii.adp.ide.vscode at d52d465: check, unit and the packaged plug-in",
       "command": "npm test",
       "result": "exit 0: 3182 unit tests passed, 67 tests in a real Visual Studio Code with one skipped (issue 140)"
+    },
+    {
+      "what": "Polish at e2adb5d: the copied definitions match their records and package.json",
+      "command": "cd ../../../../etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools && npm run sync-definitions -- --check",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.6,
+      "result": "> adp@0.1.0 sync-definitions · > node scripts/sync-definitions.mjs --check · 5 tool types match their records and package.json."
+    },
+    {
+      "what": "Polish at e2adb5d: the support record's test, with every issue a difference names a row of the differences raised",
+      "command": "cd ../../../../etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools && npx vitest run test/core/tool/supportRecord.test.ts",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.9,
+      "result": "   Start at  22:21:57 ·    Duration  780ms (transform 74%, import 24%, tests 1%) · JUNIT report written to C:/git/etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools/reports/unit.xml"
+    },
+    {
+      "what": "Polish at e2adb5d: the skipped-tests report holds only scenario 5 of User Story 1",
+      "command": "cd ../../../../etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools && node scripts/skipped-tests.mjs",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.2,
+      "result": "1 test(s) skipped: · - A mind map in Visual Studio Code: a .mm file that is no mind map opens as text, with nothing reported (the binding of the mind map has no marker yet: etalii-adp/etalii.adp issue 140)"
+    },
+    {
+      "what": "Polish at e2adb5d: npm test of etalii.adp.ide.vscode, check, unit and the packaged plug-in in a real Visual Studio Code",
+      "command": "cd ../../../../etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools && npm test",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 75.9,
+      "result": "Unknown channel: agentHostClientProxy · (node:1445912) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities. · (Use `Code --trace-deprecation ...` to show where the warning was created)"
+    },
+    {
+      "what": "SC-005 at e2adb5d: definitions/mindmap deleted and the sync command run at the recorded commits takes the tool type out of package.json (18 lines) and changes nothing else; check passes and four tool types are offered; --add definitions/diagrams/mindmap.dis gives the working tree back with no difference",
+      "result": "seen in this session; the tree was left clean"
     }
   ],
-  "last_action": "pull request 27 open in etalii.adp.ide.vscode; T121 to T135 journaled"
+  "last_action": "T139 to T142 journaled from a local branch; etalii.adp.ide.vscode pull request 27 and etalii.adp pull request 166 wait for their merge; T138 waits for a person"
 }
