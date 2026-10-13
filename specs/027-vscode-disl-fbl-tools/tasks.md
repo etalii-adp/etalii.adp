@@ -380,19 +380,19 @@ Extends: `src/core/disl/{metamodel,notation,layout,support}.ts`, `src/core/plugi
 
 Files: `etalii.adp.ide.vscode/README.md`, `CLAUDE.md`.
 
-- [ ] **T137** Cut the branch again from `origin/develop` · etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools
+- [x] **T137** Cut the branch again from `origin/develop` · etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools
 
 **⟶ Wait for T137 to finish, then Wave 1: independent (different files):**
 
-- [ ] **T138** [P] See each native dialog the three new tool types raise in a real Visual Studio Code window: the confirmation before a removal, the file and folder picker of a link, the save prompt. Record who saw it, the date and the version (FR-015) · etalii.adp.ide.vscode/docs/parity.md
-- [ ] **T139** [P] Check the tool list against the five tool types, each with kind, display name and origin (FR-017) · etalii.adp.ide.vscode/docs/tools.md
-- [ ] **T140** [P] Describe how a tool type is added, and the new folders · etalii.adp.ide.vscode/README.md, etalii.adp.ide.vscode/CLAUDE.md
-- [ ] **T141** [P] Check research R14's seven and every difference found since against "Differences raised and not settled here"; file what is missing in etalii.adp (SC-006) · etalii.adp.ide.vscode/docs/disl-support.md
+- [x] **T138** [P] See each native dialog the three new tool types raise in a real Visual Studio Code window: the confirmation before a removal, the file and folder picker of a link, the save prompt. Record who saw it, the date and the version (FR-015) · etalii.adp.ide.vscode/docs/parity.md
+- [x] **T139** [P] Check the tool list against the five tool types, each with kind, display name and origin (FR-017) · etalii.adp.ide.vscode/docs/tools.md
+- [x] **T140** [P] Describe how a tool type is added, and the new folders · etalii.adp.ide.vscode/README.md, etalii.adp.ide.vscode/CLAUDE.md
+- [x] **T141** [P] Check research R14's seven and every difference found since against "Differences raised and not settled here"; file what is missing in etalii.adp (SC-006) · etalii.adp.ide.vscode/docs/disl-support.md
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T142** Validate against the Success Criteria: `npm test` (check, unit and the packaged plug-in), `npm run sync-definitions -- --check`, the skipped-tests report holding only scenario 5 of User Story 1 or nothing, and SC-005 by deleting and restoring one folder of `definitions/` · etalii.adp.ide.vscode
-- [ ] **T143** Push, open pull request 6, merge it once the Build passes, then tick T137 to T143 here through a pull request, and delete the branch and the worktree in both repositories · etalii.adp.ide.vscode (pull request 6), etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md
+- [x] **T142** Validate against the Success Criteria: `npm test` (check, unit and the packaged plug-in), `npm run sync-definitions -- --check`, the skipped-tests report holding only scenario 5 of User Story 1 or nothing, and SC-005 by deleting and restoring one folder of `definitions/` · etalii.adp.ide.vscode
+- [x] **T143** Push, open pull request 6, merge it once the Build passes, then tick T137 to T143 here through a pull request, and delete the branch and the worktree in both repositories · etalii.adp.ide.vscode (pull request 6), etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md
 
 ---
 
