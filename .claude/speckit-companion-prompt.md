@@ -1,1 +1,1 @@
-/speckit-companion-resume specs/027-vscode-disl-fbl-tools
+/speckit-companion-specify c:\Users\vrenk\AppData\Roaming\Code\User\globalStorage\alfredoperez.speckit-companion\spec-editor\1791927705643-8dcb22s\spec.md
