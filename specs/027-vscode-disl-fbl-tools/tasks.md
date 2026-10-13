@@ -231,36 +231,36 @@ Extends: `src/core/disl/{notation,behavior,persistence,metamodel,layout,support}
 
 ### Tests (first, seen failing)
 
-- [ ] **T084** [US2] Cut the branch again, run the sync command with `--add definitions/diagrams/agent-activity-diagram.dis`, and commit · etalii.adp.ide.vscode/definitions/agent-activity-diagram/, etalii.adp.ide.vscode/package.json
+- [x] **T084** [US2] Cut the branch again, run the sync command with `--add definitions/diagrams/agent-activity-diagram.dis`, and commit · etalii.adp.ide.vscode/definitions/agent-activity-diagram/, etalii.adp.ide.vscode/package.json
 
 **⟶ Wait for T084 to finish, then Wave 1: independent (different files):**
 
-- [ ] **T085** [P] [US2] The definition reads with no `disl.unsupported-*` finding: compartments with `groupBy`, `itemOrder` and `itemLink`, a kept filter, `pin`, `unpin` and `unpinAll`, the `open` action, `persistence.view.bind`, `paths` on a `uri` attribute, the shapes `folder` and `hexagon`, and icons · etalii.adp.ide.vscode/test/core/disl/definitions/agentActivityDiagram.test.ts
-- [ ] **T086** [P] [US2] The `force` layout with the companion document's algorithm and numbers: tiers, `onChange`, the same file gives the same picture, a pinned node never moves, and the recorded places of the three examples · etalii.adp.ide.vscode/test/core/disl/forceLayout.test.ts
-- [ ] **T087** [P] [US2] The tool type: each example opens and saves with file and registration byte-identical; every toolbox gesture gives the bytes of etalii.adp's `agent-activity-edits` fixture and undoes exactly; a refused edit writes nothing and carries the definition's sentence; each of `Fixtures/findings/*.aad` gives its finding on its line; a dragged position is a splice of the file's `view` mapping · etalii.adp.ide.vscode/test/core/tool/agentActivityDiagram.test.ts
-- [ ] **T088** [P] [US2] Draw compartments with their items, the two shapes, icons and a pinned node · etalii.adp.ide.vscode/test/webview/diagram/compartments.test.ts
-- [ ] **T089** [P] [US2] In a real Visual Studio Code: an `.aad` file opens in the diagram by default; undo and redo; save; a rule's finding in Problems on its line; a refusal shows its sentence · etalii.adp.ide.vscode/test/vscode/agent-activity-diagram.test.ts
+- [x] **T085** [P] [US2] The definition reads with no `disl.unsupported-*` finding: compartments with `groupBy`, `itemOrder` and `itemLink`, a kept filter, `pin`, `unpin` and `unpinAll`, the `open` action, `persistence.view.bind`, `paths` on a `uri` attribute, the shapes `folder` and `hexagon`, and icons · etalii.adp.ide.vscode/test/core/disl/definitions/agentActivityDiagram.test.ts
+- [x] **T086** [P] [US2] The `force` layout with the companion document's algorithm and numbers: tiers, `onChange`, the same file gives the same picture, a pinned node never moves, and the recorded places of the three examples · etalii.adp.ide.vscode/test/core/disl/forceLayout.test.ts
+- [x] **T087** [P] [US2] The tool type: each example opens and saves with file and registration byte-identical; every toolbox gesture gives the bytes of etalii.adp's `agent-activity-edits` fixture and undoes exactly; a refused edit writes nothing and carries the definition's sentence; each of `Fixtures/findings/*.aad` gives its finding on its line; a dragged position is a splice of the file's `view` mapping · etalii.adp.ide.vscode/test/core/tool/agentActivityDiagram.test.ts
+- [x] **T088** [P] [US2] Draw compartments with their items, the two shapes, icons and a pinned node · etalii.adp.ide.vscode/test/webview/diagram/compartments.test.ts
+- [x] **T089** [P] [US2] In a real Visual Studio Code: an `.aad` file opens in the diagram by default; undo and redo; save; a rule's finding in Problems on its line; a refusal shows its sentence · etalii.adp.ide.vscode/test/vscode/agent-activity-diagram.test.ts
 
 ### Implementation
 
 **Wave 2: independent (different files):**
 
-- [ ] **T090** [P] [US2] The `force` layout · etalii.adp.ide.vscode/src/core/disl/forceLayout.ts
-- [ ] **T091** [P] [US2] Compartments, the kept filter, `folder`, `hexagon` and icons · etalii.adp.ide.vscode/src/core/disl/notation.ts
-- [ ] **T092** [P] [US2] `pin`, `unpin`, `unpinAll` and `open` · etalii.adp.ide.vscode/src/core/disl/behavior.ts
-- [ ] **T093** [P] [US2] `persistence.view.bind`, and `paths` on a `uri` attribute · etalii.adp.ide.vscode/src/core/disl/persistence.ts, etalii.adp.ide.vscode/src/core/disl/metamodel.ts
+- [x] **T090** [P] [US2] The `force` layout · etalii.adp.ide.vscode/src/core/disl/forceLayout.ts
+- [x] **T091** [P] [US2] Compartments, the kept filter, `folder`, `hexagon` and icons · etalii.adp.ide.vscode/src/core/disl/notation.ts
+- [x] **T092** [P] [US2] `pin`, `unpin`, `unpinAll` and `open` · etalii.adp.ide.vscode/src/core/disl/behavior.ts
+- [x] **T093** [P] [US2] `persistence.view.bind`, and `paths` on a `uri` attribute · etalii.adp.ide.vscode/src/core/disl/persistence.ts, etalii.adp.ide.vscode/src/core/disl/metamodel.ts
 
 **⟶ Wait for Wave 2 to finish, then Wave 3: independent (different files):**
 
-- [ ] **T094** [P] [US2] Use the `force` layout with `respect: "pinned"`, and carry compartments, icons and pins in the scene · etalii.adp.ide.vscode/src/core/disl/layout.ts, etalii.adp.ide.vscode/src/core/scene/scene.ts
-- [ ] **T095** [P] [US2] Draw them, with the menu entries for pinning · etalii.adp.ide.vscode/src/webview/diagram/scene.ts, etalii.adp.ide.vscode/src/webview/diagram/canvas.ts
-- [ ] **T096** [P] [US2] Pinning and a dragged position as splices where `persistence.view.bind` keeps them · etalii.adp.ide.vscode/src/core/tool/toolTypeFrom.ts
-- [ ] **T097** [P] [US2] Add what DISL 0.4 brought to the support record, and the diagram's row to the tool list · etalii.adp.ide.vscode/src/core/disl/support.ts, etalii.adp.ide.vscode/docs/disl-support.md, etalii.adp.ide.vscode/docs/tools.md
+- [x] **T094** [P] [US2] Use the `force` layout with `respect: "pinned"`, and carry compartments, icons and pins in the scene · etalii.adp.ide.vscode/src/core/disl/layout.ts, etalii.adp.ide.vscode/src/core/scene/scene.ts
+- [x] **T095** [P] [US2] Draw them, with the menu entries for pinning · etalii.adp.ide.vscode/src/webview/diagram/scene.ts, etalii.adp.ide.vscode/src/webview/diagram/canvas.ts
+- [x] **T096** [P] [US2] Pinning and a dragged position as splices where `persistence.view.bind` keeps them · etalii.adp.ide.vscode/src/core/tool/toolTypeFrom.ts
+- [x] **T097** [P] [US2] Add what DISL 0.4 brought to the support record, and the diagram's row to the tool list · etalii.adp.ide.vscode/src/core/disl/support.ts, etalii.adp.ide.vscode/docs/disl-support.md, etalii.adp.ide.vscode/docs/tools.md
 
 **⟶ Wait for Wave 3 to finish, then:**
 
-- [ ] **T098** [US2] Run `npm test` · etalii.adp.ide.vscode
-- [ ] **T099** [US2] Push, open pull request 3, merge it once the Build passes, delete the branch, then tick T084 to T099 here through a pull request · etalii.adp.ide.vscode (pull request 3), etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md
+- [x] **T098** [US2] Run `npm test` · etalii.adp.ide.vscode
+- [x] **T099** [US2] Push, open pull request 3, merge it once the Build passes, delete the branch, then tick T084 to T099 here through a pull request · etalii.adp.ide.vscode (pull request 3), etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md
 
 **Checkpoint**: the agent activity diagram works from its definition, and the interpreter reads DISL 0.4.
 
