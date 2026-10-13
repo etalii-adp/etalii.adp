@@ -1,221 +1,128 @@
-# Causal loop diagram
+# Causal loop diagram: what DISL does not express
 
-[causal-loop-diagram.dis](causal-loop-diagram.dis) specifies ADP's **Causal loop diagram** (`systems/causal-loop-diagram`, extension `.cld`) in DISL. This page holds everything about the tool that DISL 0.1 cannot express, or can express only approximately, so that an IDE implementing the tool from the specification ends up with the tool that exists today. Each aspect names the code or document that shows it.
+This document accompanies [causal-loop-diagram.dis](causal-loop-diagram.dis), the DISL 0.3 specification of the causal loop diagram (`systems/causal-loop-diagram`, extension `.cld`), and its FBL binding, [`specifications/fbl/causal-loop-diagram.fbl#cld`](../../specifications/fbl/causal-loop-diagram.fbl). The specification holds everything DISL 0.3 can state: the metamodel, the notation with its curved links, the toolbox with its drops, the menus with their counts and reasons, the forms with their parsing, the seven findings with the tool's own codes, sentences and order, the operations and their confirmations, and the body read and written through the binding. What DISL 0.3 and FBL 0.2 cannot state is listed here in [Language gaps](#language-gaps), each with its evidence and what would resolve it. The wire ids, which DISL does not carry by ruling, are declared under `x-cld` in the specification.
 
-The reference implementation is the standalone module [`src/diagrams/causal-loop-diagram/`](https://github.com/etalii-adp/etalii.adp.ide.standalone/tree/develop/src/diagrams/causal-loop-diagram) in etalii.adp.ide.standalone. Its original requirements and design live in that repository's history (`.spec-workflow/archive/specs/causal-loop-diagram/requirements.md` and `design.md`, last present in the parent of `53f68611`); requirement numbers below (R3.5 and so on) refer to that document. The Notion "Tools" row for the tool ("Causal loop diagram") files it under the family *Knowledge & informal modeling*, with the focus areas *Systems and strategy*, *Psychological and societal insights* and *Technology assessment*, rarity *Adoption from concept* and state WIP. The project's conversations hold one thread about the tool, which wrote that Notion page; the diagram predates the project, so no other decision about it was taken in conversation.
+The tool it describes is the standalone module `src/diagrams/causal-loop-diagram/` in [etalii-adp/etalii.adp.ide.standalone](https://github.com/etalii-adp/etalii.adp.ide.standalone/tree/develop/src/diagrams/causal-loop-diagram). Every sentence, label and code in the specification is taken from that module's parity transcript, `backend/EtAlii.Adp.Diagram.CausalLoopDiagram.Tests/Parity/causal-loop.transcript.json`, recorded over the fixtures beside it (`backend/EtAlii.Adp.Diagram.CausalLoopDiagram.Tests/Fixtures/*.cld`) and the two examples. The conversion that brings the module onto this specification is the standalone repository's spec-workflow specification `causal-loop-disl-fbl`; finding numbers below (A3, B1 and so on) are those of its requirements document. Paths are relative to the module unless they say otherwise.
 
-Paths below are relative to `src/diagrams/causal-loop-diagram/` in the standalone repository, and backend files are in `backend/EtAlii.Adp.Diagram.CausalLoopDiagram/`, unless stated otherwise.
+## Contents
+
+1. [How the specification maps the tool](#how-the-specification-maps-the-tool)
+2. [What the definition now states](#what-the-definition-now-states)
+3. [Language gaps](#language-gaps)
+4. [Other differences a runtime will meet](#other-differences-a-runtime-will-meet)
+5. [Pending with the owner](#pending-with-the-owner)
+6. [What stays code](#what-stays-code)
 
 ## How the specification maps the tool
 
 | Tool concept | In causal-loop-diagram.dis | Notes |
 | --- | --- | --- |
-| Variable | node type `Variable` | Wire kind `systems/causal-loop+variable`; element id is the variable's identifier. The identifier attribute is called `name` because `id` is reserved in DISL. |
-| Causal link | relation `CausalLink` | Wire kind `systems/causal-loop+link`; element id `link:{from}\|{to}`. The link's free text is called `note` (the standalone's `Label`, shown in the grid as "Note"), because a link's `label` would read as its caption. |
-| Loop (a claim) | node type `Loop` | Wire kind `systems/causal-loop+loop`; element id `loop:{identifier}`. The descriptive name is `title` in DISL because `name` is taken by the key convention the variable uses; the grid calls it "Name". |
+| Variable | node type `Variable` | Key attribute `name` (the tool's identifier; `id` is reserved in DISL), `label` its caption, derived `display`. Element id `variable:<name>`. |
+| Causal link | relation `CausalLink` | Keyed by `causeName` and `effectName`, which the binding reads from the link's two ends; element id `link:<from>\|<to>`. The free text is `note`, shown as "Note". |
+| Loop (a claim about a cycle) | node type `Loop` | Key attribute `identifier`; `title` is shown as "Name"; `members` lists the variables in loop order. Element id `loop:<identifier>`. It is a node because DISL has no construct for a claim about a path. |
 | Link polarity | enum `Polarity` | `positive`, `negative`, `unstated`. |
-| Computed loop polarity | enum `LoopPolarity`, derived attribute `Loop.computed` | Reinforcing, balancing, undecidable (`LoopPolarity.cs`, `_Model/LoopPolarityResult.cs`). |
-| Loop claim from its letter | derived `Loop.stated` | `_Model/CausalLoopLoop.cs`, `ClaimsReinforcing`. |
-| Cycle enumeration | plugin CEL function `elementaryCycles` | Not expressible in CEL; see *Cycles* below. |
-| Ring layout | layout algorithm `ring` (`circular` with `adp.ring.*` options) | Details below. |
-| Arrange diagram | operation `arrange` using layout `selfOrganizing` (plugin) | Details below. |
-| `.cld` + `.adp` files | persistence `format: plugin:net.etalii.adp.systems.cld` | Grammar below. |
+| Computed loop polarity | enum `LoopPolarity`, derived `Loop.computed` | Reinforcing, balancing, undecidable, from the count of negative links around the cycle. |
+| Cycle enumeration | `diagram.cycles('CausalLink', 1000)` and `diagram.cyclesTruncated` | DISL 12.4. |
+| The body | `persistence.format: "fbl"`, binding `cld` | The standalone module's own copy of the binding; `typeMap` maps its entry types onto the metamodel. |
+| Positions | `persistence.view.store: ["bounds"]` | Stored in the `.adp` registration's `layout:` block under the element ids, never in the body. |
+| Ring layout | layout `ring`, `circular` with `adp.ring.*` options | See [gap 5](#5-disl-the-seating-order-and-radius-of-circular). |
+| Arrange diagram | operation `arrange`, layout `selfOrganizing` from the plugin `net.etalii.adp.systems.cld` | The layout stays code; the plugin provides it alone and is not required to read the document. |
 
-A loop is modelled as a node because DISL has no "claim about a path" construct: it is not a relation (it has no two ends), and a group would imply containment. As a node it has no position of its own; DISL's computed `placement` puts it at the centroid of its members, which is what the standalone does.
+## What the definition now states
 
-## The document on disk
+The previous companion, written against DISL 0.1, listed twelve aspects DISL could not express. DISL 0.2 and 0.3 express each, and the specification now states it with the construct named:
 
-DISL's `persistence` layer describes a DID definition. The causal loop diagram does not store DID: it stores its own line-oriented format, so the whole file format is documented here, and the plugin `net.etalii.adp.systems.cld` reads and writes it.
+| Aspect | Construct |
+| --- | --- |
+| Enumerating the cycles the links form, bounded at 1000 | `diagram.cycles`, `diagram.cyclesTruncated` (the function `feedbackCycles()` and the rule `cycleBoundReached`) |
+| One finding per cycle no loop claims | the rule `unlabelledLoop`, `forEach` over the unclaimed cycles, `enforcement: report` |
+| The order of the findings | `constraints.order`: unreadable lines, dangling links and the cycle bound first; the rest by line; findings without a line last |
+| The tool's own finding codes | `code` on every rule and on `std.unreadableEntry` and `std.references`, the latter computed per finding |
+| A reason on an entry that does not apply | `unavailable` with a `reason` on Arrange diagram, Same direction (+) and Opposite direction (−) |
+| Labels that change with state | CEL Message labels on Add delay / Remove delay and Curve the other way / Curve back |
+| A count in a menu label | `'Remove variable (with ' + n + ' references)'`, with `n` from `removalCount` |
+| A toolbox entry dropped onto a variable | `drop.targets` on the Link and Loop tools, `elsewhere: refuse` with "Drop a link or a loop onto a variable." |
+| The empty-canvas sentence | `canvas.empty`: "This causal loop diagram states no variables yet." |
+| The mirrored marker of a balancing loop | NodeIcon `flip: horizontal` under a condition on `computed` |
+| Fields that read `+`, `s`, `-`, `o` and weights | FormItem `parse` with `accepts`, `write` and `refusal` on polarity and weight |
+| Arrange's refusal when nothing is drawn | `layout` action `refusals.nothingDrawn` |
 
-**Two files.** A diagram is `<name>.adp`, whose first line is the origin `systems/causal-loop-diagram`, plus a sibling body `<name>.cld` (R1.1, R1.4; `Diagram.cs`). Positions the author sets, by dragging or by Arrange diagram, are stored in the `.adp` registration's shared `layout:` block, keyed `variable:<identifier>`, and never in the body (`Commands/ArrangeCausalLoopCommand.cs`; design, *Technical Standards*).
+The rest of the rewrite is the same move: a link is `routing: "curved"` with `curvature: 0.2` (finding A3; DISL 0.2 made `arc` a circular arc), with a `-0.2` variant for a flipped link; the body is read through the binding with a `typeMap` instead of a plugin (A4, B3); the element ids carry a prefix per type (B10); the wire ids are in `x-cld` (A5); and `std.duplicateId`, `std.unique` and `std.endpoints` are off, with the tool's gesture rules declared in their place, so that the findings and refusals are the tool's list and no more (A7, Q4).
 
-**Why its own format and not XMILE (R1.2).** XMILE, the OASIS interchange standard for system dynamics, was weighed and rejected on three grounds recorded in the design: it is a model format carrying stocks, flows and equations a causal loop diagram states none of; it has no first-class representation of the R/B loop, which is this notation's central artifact; and the extension was fixed as `.cld`, so an XMILE payload would be a third spelling of a format that already has two (`.xmile`, `.stmx`). Converting a `.cld` to XMILE, the stock-and-flow step, remains a possible later specification.
+## Language gaps
 
-**Grammar (R1.3; `CausalLoopParser.cs`).** One statement per line, so adding a link is a one-line diff:
+Each gap is a candidate change to DISL or FBL. None is worked around in the specification by stating something the tool does not do; where the specification and the tool differ because of one, the tool's behaviour is the one described here.
 
-```text
-causal-loop 1
+### 1. FBL: a reason for a statement that almost matched
 
-variable population "Population"
-variable births "Births"
+Finding B2. A rule says what it matches, not what a line that starts like it and fails should be told. The binding's last rule, of entry type `Unreadable`, takes every statement no other rule read, and the specification maps it to `unreadable`, so DISL reports it once on its line under `causal-loop.unreadable-line` with the reason `std.unreadableEntry` gives. The tool says why, in four sentences of its own, recorded over `unreadable-lines.cld`:
 
-link population -> births +
-link births -> population + delayed weight=2 "seasonal"
+- line 9, `bogus statement`: "'bogus' is not a statement this reading knows."
+- line 10, `link a b`: "A link reads 'link <from> -> <to>', optionally followed by a polarity, 'delayed', 'flipped', a weight and a label."
+- line 11, `link a -> b weight=heavy`: "'weight=heavy' does not read as a weight."
+- line 12, `variable ""`: "A variable needs an id of at least one character."
 
-loop R1 "Births beget births" population births
-```
+The lines are the same under the binding; the sentences are not. **Would resolve it:** a `fallback` on a `lines` or `blocks` rule, a looser expression with a message, tried when no rule matched.
 
-- `causal-loop 1` is the header. A line whose first word is `causal-loop` is skipped; the reader does not require the header, and does not check the version.
-- Blank lines and lines starting with `#` are comments and state nothing.
-- A line is split into words on whitespace; a double-quoted run is one word with its quotes dropped. This is how a label with spaces survives, and why no name and no label can contain a double quote.
-- `variable <id> ["<Label>"]`. An empty id is a problem: "A variable needs an id of at least one character." (`CausalLoopEmptyVariableId.Tests.cs`).
-- `link <from> -> <to> [polarity] [delayed] [flipped] [weight=<n>] ["<note>"]`. The words after the arrow may come in any order. `+` and `s` both mean positive, `-` and `o` both mean negative (R2.2). A polarity nobody wrote is **unstated**, not positive (R3.6). `weight=` takes an invariant-culture floating-point number; one that does not parse is a problem ("'weight=x' does not read as a weight."). Any other word is taken as the note, the last one winning. A malformed link reads: "A link reads 'link <from> -> <to>', optionally followed by a polarity, 'delayed', 'flipped', a weight and a label."
-- `loop <Identifier> "<Name>" <variable> <variable> …` needs at least four words: the identifier, the name and at least one variable. The variables are the cycle in the order it runs; the last links back to the first.
-- Any other line is recorded as a problem and not dropped: "'<word>' is not a statement this reading knows." (validator id `causal-loop.unreadable-line`, warning). A diagram that quietly ignores a line its author wrote is worse than one that says it could not read it.
+### 2. FBL: a tolerant word grammar
 
-**Writing splices lines and never reserializes (R4.1; `CausalLoopWriter.cs`).** Every edit replaces, inserts or removes whole lines of the document it read, so comments, blank lines, statement order, the `s`/`o` spelling of untouched links and every untouched byte survive, and each command's inverse restores the file byte for byte. An implementation must reproduce:
+Findings B1 and B12. The binding reads every spelling of `lenient-spellings.cld` that a regular expression can state: an unquoted label, a quoted identifier, leading whitespace, an unquoted loop name, and `S` and `O` as polarity. Three things the tool does are beyond it:
 
-- A new statement goes after the last existing statement of its kind (`AfterLast`); when there is none, at the end of the file.
-- Statements are written in one canonical shape: `variable <id> "<label>"` (the quoted label only when not empty); `link <from> -> <to>` followed, in this order and only when present, by ` +` or ` -`, ` delayed`, ` flipped`, ` weight=<n>` and ` "<note>"`; `loop <Identifier> "<Name>" <members…>`. A rewritten link is written in this shape, so an edited `s` link becomes `+`.
-- A name must be at least one character with no whitespace and no double quote, or the edit is refused: "A name needs at least one character and no whitespace, because a statement is read as words on one line." DISL's `pattern` states the rule; the sentence is the standalone's.
-- Line endings are CRLF, and a new document is exactly the starter below, CRLF throughout with a final newline (`CausalLoopDocumentFactory.cs`).
+- **A bare word as a note.** The tool reads `link a -> indented + bareNote` with the note `bareNote`; the binding's `note` slot takes a quoted word only, so that link has no note.
+- **The last candidate wins.** The tool reads `link a -> b + "first note" "second note"` with the note "second note" and `link b -> a - firstBare "second quoted"` with "second quoted" (`two-notes.cld`); a `word` slot takes the first word that matches, so the binding reads "first note" for the first.
+- **Quotes are optional when the value has no space.** The tool reads `variable a Label` and `loop R1 Unquoted a indented`; the binding reads them too, but its `emit` templates quote a label and a loop name, so a new statement is written with quotes where the file's own spelling had none.
 
-**Findings the DID model cannot produce.** Two validator findings concern the text and not the model, so they belong to the format plugin and have no rule in the specification: an unreadable line (above), and a **dangling link**, a link naming a variable the document does not declare. The standalone reports the latter as "The link from '<from>' to '<to>' names '<end>', which this document does not declare as a variable, so the link is not drawn." (warning, `CausalLoopValidator.cs`) and does not draw it, because an arrow to nothing is worse than an absent arrow. In DID a relation cannot have a missing end.
+**Would resolve it:** a word grammar for `lines` that can say "any other word is the note, the last one winning" and "quote a value only when it needs it", short of regular expressions that restate the tool's tokenizer.
 
-## Cycles, and why a plugin
+### 3. FBL: placing several new entries of different rules as one group
 
-DISL's CEL library has `reachable`, `inCycle` and `hasCycle`, but nothing that **enumerates** cycles, and a user-defined function may not recurse. The whole check this tool exists for (R3.1) needs the elementary cycles, so the plugin `net.etalii.adp.systems.cld` declares two CEL functions:
+Finding B6. Drawing a link that closes cycles writes the link and its loop claims together, after the last link; the binding places each new entry after the last of its own rule, so the claims go after the last loop, and a first statement of a kind goes after the last entry rather than at the end of the file. The difference shows when a file ends in comments or blank lines, as `spellings-kept.cld` and `trailing-comments.cld` do. **Would resolve it:** an `insert` that places entries of several rules made by one change as one group. Needed only if the owner rules that the tool's present placement is kept (Q1).
 
-- `elementaryCycles(relationType)`: Johnson's elementary-cycles algorithm over the causal links, bounded at **1,000 cycles** (`CycleFinder.cs`, `CycleFinder.DefaultBound`). Self-links are cycles of one variable. The result order must be stable, so that findings and auto-claimed identifiers are the same on every run.
-- `cycleSearchTruncated(relationType)`: whether the search stopped at the bound (R3.5).
+### 4. DISL: a wavy underline
 
-DISL does not say how an expression calls a plugin's CEL function, and the schema requires the declared name to be a simple identifier, so the specification calls them by their bare names.
+Finding A8. A loop whose stated letter disagrees with its arrows is underlined with a **wavy** line (`client/causal-loop.css`, `text-decoration: underline wavy`). DISL's text decoration has `underline` and no wavy form; the specification states the underline and documents the difference on the condition. **Would resolve it:** a `style` on a text decoration (`solid`, `wavy`, `dotted`, `dashed`), as CSS has.
 
-**Cycle identity.** Two statements of the same cycle entered at different variables are the same loop. The standalone compares cycles by a signature: the member identifiers rotated to start at the ordinally least one and joined (`CycleFinder.CanonicalSignature`, joined with `\0`). The specification's `signature` function does the same with a space as separator, which is safe because an identifier cannot contain whitespace. Direction matters, so the signature rotates rather than sorts.
+### 5. DISL: the seating order and radius of `circular`
 
-**Polarity (R3.2, R3.6; `LoopPolarity.cs`).** Computed from the links along the cycle: undecidable as soon as any step has no link or an unstated one; otherwise reinforcing on an even count of negative links, zero included, and balancing on an odd count. This part is expressed in plain CEL functions (`cycleSteps`, `decidable`, `negativeCount`, `cyclePolarity`).
+Finding A9; DISL D.2, open question 9. The ring a document opens on seats the variables in a depth-first walk of the links in declaration order, starting at the top and running clockwise, on a radius that grows with the widest variable and the count so that no two overlap. DISL names `circular` and defines neither; the specification carries both as `adp.ring.*` options, which no runtime is required to read. **Would resolve it:** an order and a radius rule for `circular` in DISL's standard layouts, or a way for a definition to state them.
 
-**The claim (`_Model/CausalLoopLoop.cs`).** A loop identifier starting with `R` or `r` claims reinforcing, `B` or `b` balancing, anything else claims nothing and is never compared.
+### 6. DISL: a committed value that did not change
 
-## Validation
+Finding A10. Committing a value equal to the current one succeeds and changes nothing: setting a loop's variables to the cycle it already runs through, and setting Delayed on a link that is already delayed, each answer success with no change written and nothing on the undo stack. DISL makes every committed field one transaction and does not say that an unchanged value lands none. **Would resolve it:** a sentence in DISL that a transaction which changes no value is not recorded.
 
-The rules in the specification carry DISL identifiers (camelCase, as the schema requires). The standalone's ids and severities are:
+### 7. DISL: whether a size sent on the wire is a layout-time measurement
 
-| Standalone id | In causal-loop-diagram.dis | Severity | Differences |
-| --- | --- | --- | --- |
-| `causal-loop.unreadable-line` | none | warning | Format plugin; see above. |
-| `causal-loop.dangling-link` | none | warning | Format plugin; see above. |
-| `causal-loop.loop-is-not-a-cycle` | `loopIsNotACycle` | warning | None. |
-| `causal-loop.undecidable-loop` | `undecidableLoop` | warning | None. |
-| `causal-loop.label-disagrees` | `labelDisagrees` | warning | None; the message names the loop, the stated and the computed polarity and the count of negative links (R3.3). |
-| `causal-loop.unlabelled-loop` | `unlabelledLoop` | info | The standalone reports **one finding per unclaimed cycle**, naming its path and its polarity. A DISL rule with `scope: diagram` yields one problem, so the specification joins every unclaimed cycle into one message. An implementation should report them separately. |
-| `causal-loop.cycle-bound-reached` | `cycleBoundReached` | info | The standalone's message ends "…covers only those." with "below", because it is reported before the unlabelled-loop findings; DISL has no ordering of problems. |
+Finding A11. A variable's width is measured on the backend from its label, and the positions the layouts compute depend on it. DISL 0.3 limits `textMetric` to layout-time measurement, and does not say whether a node's `autoSize: "fitWidth"`, sent on the wire, is such a measurement. **Would resolve it:** a statement in DISL of where a fitted size is measured, and whether a host may send it.
 
-**Nothing is corrected (R3.3, non-goal).** No rule has a quick fix that changes an identifier or an arrow, because the label may be the intent and an arrow the mistake. The grid's loop identifier is the one place an author accepts the arithmetic, by retyping it.
+## Other differences a runtime will meet
 
-## Editing
+These are not language gaps. Each is a place the transcript shows the tool doing something a runtime of this specification might do otherwise, recorded so that a host does not have to find it again.
 
-Every edit is one command with a byte-restoring inverse, one undo away (R4.1, R4.5; `Commands/`). DISL's undo model covers the model; the byte-for-byte guarantee is the format plugin's.
+- **The order of cycles.** DISL 12.4 orders cycles by first member in model order and then by member order. The module's finder is Johnson's algorithm, and its order differs: over `weight-forms.cld` it reports the cycle a → b → c → d before a → b. That order decides the order of the unlabelled-loop findings and which cycle Claim a loop picks. The standalone conversion compares the two over its corpus before the module's finder is removed.
+- **Numbers.** A weight is shown and written in .NET's shortest round-trip form: `1E+21`, `1E-07`, `1E-06`, `1.2345678901234568E+29` (`weight-forms.cld`). The binding's `number: "shortest"` is ECMAScript's (`1e+21`, `1e-7`). The two agree on ordinary values (finding B11).
+- **One attribute, two refusals.** A variable's label is refused with the quote sentence of `std.facets` in the property grid, and with "A name needs at least one character, and cannot contain a quote or a line break." in the inline rename dialog. A label `parse` takes no `accepts` or `refusal`, so the specification states the grid's.
+- **A reason sent with an entry that applies.** The menus carry a reason on entries that are enabled as well: Arrange diagram is sent "on (There is nothing to arrange until this diagram has two variables.)" with two variables present, and Opposite direction (−) "on (This link already states −.)" on a positive link. The specification states each reason with its `unavailable` condition only.
+- **Reasons no definition states.** Arrange diagram on a document that cannot be read answers "This causal loop diagram could not be read, so there is nothing to arrange."; on one that is not open, "This diagram is not open on this connection, so there is nothing to arrange."; the self-organizing layout has its own budget and overlap sentences. An edit of a link's end answers "'causal-loop.link-from' cannot be edited on this selection.", an action of another tool "That action is not this diagram's.", and the empty target gets no menu. These are the host's and the plugin's, not the definition's.
+- **Moving a loop or a link.** "Only a variable can be moved; a link is drawn between its ends and a loop label among its members." The specification states it as each type's `refusals.move`.
+- **Adding a variable at a point.** Add variable on the canvas writes the statement and its position as one undo step (`AddVariableAtCommand`). A DISL operation's `create` and a registration write are two changes.
+- **The link's names are read, not written.** `causeName` and `effectName` are read-only `value` slots of the binding that the specification keys a link by. A new link's are given by the operation's `connect` attributes; a runtime **MUST NOT** plan those as writes to the body, since the `from` and `to` reference attributes the link is written from already carry them.
+- **The declared order.** `constraints.order` lists three codes. The other codes share one position after them, sorted by line, and the findings of `unlabelledLoop`, which have no line, come last. That is one reading of DISL's rule for unlisted codes and for findings without a line; the transcript records the order the tool gives, which a runtime checks itself against.
+- **A loop that is not a cycle.** `std.references` reports a loop member that names no variable under `causal-loop.loop-is-not-a-cycle`; no fixture of the corpus has such a loop, so that case is not in the transcript.
 
-**Auto-claiming loops when a link is drawn (`CausalLoopWriter.AddLinkAndClaimLoops`).** In the same edit that states a link, every cycle the new link closes that no loop already claims is claimed, as one undo step. Only decidable cycles are claimed, each named for its computed polarity so it never lands disagreeing with itself; a cycle through an unstated link is left for the author. Numbering: the highest number already used behind `R` (and behind `B`, separately, case-insensitive, digits only) is found once, and each new claim in the edit takes the next one, in the order the cycle finder returns the cycles. The name is empty. The specification's hook `claimClosedLoops` expresses this with `forEach`; it relies on each iteration seeing the loops created by the previous ones, which DISL does not state. The statements are inserted after the last link, the link first and its loops after it. A second link between the same two variables is refused: "That link is already stated in this diagram."
+## Pending with the owner
 
-**Claiming a loop by hand (`CausalLoopContextActionProvider.cs`).** "Claim a loop from here…" on a variable asks for an identifier, proposing the lowest `R<n>` no loop uses (not one past the highest, which auto-claim uses), and refuses a duplicate with "A loop of that identifier is already stated in this diagram." It claims the shortest cycle through the variable, or the variable alone where it lies on none, and uses the identifier as the loop's name too.
+Two findings are put to the owner and are not settled here.
 
-**Renaming.** The canvas's Rename on a variable, and a double-click on it (two clicks under 400 ms, `client/CausalLoopCanvas.tsx`), edit its **label** inline and leave the identifier alone. Retyping the **identifier** in the grid renames the variable and every link and loop that names it (`RenameVariableCommand`), so no link is left dangling. Renaming a loop from its menu changes its name only.
+- **A quote in a label (B13).** The transcript shows the property grid refusing a quote in a variable's label and in a loop's name, and the rename dialog rejecting one. The specification's `pattern` on `label`, `title` and `note` forbids it.
+- **Two variables of one name (A7).** `duplicate-variable.cld` declares `a` twice. The module reports no finding for it; the transcript records its loop rows as throwing "System.ArgumentException: An item with the same key has already been added. Key: a". The specification switches `std.duplicateId` off, so the findings are the module's.
 
-**Removing.** Removing a variable removes the links and loops that name it; its menu entry says how many ("Remove variable (with 3 references)") and asks for confirmation (R4.5; `RemoveVariableCommand`). DISL's deletion policy states the cascade and a fixed confirmation sentence, but not a count in the menu label. Removing a loop leaves its links, because a link belongs to the diagram and not to the loop that happens to traverse it (R4.4). Removing a link leaves the loops through it, which then report `loopIsNotACycle`.
+## What stays code
 
-**Loop membership (R4.3).** The grid's "Runs through" row on a loop is a choice (ruled by Peter, 2026-10-08, "Editable row"; `CausalLoopContextPropertyProvider.cs`, `MembershipChoices`). It offers the loop's current cycle first, exactly as written and selected, even where the arrows no longer close it, and after it every other elementary cycle the cycle finder returns that passes through at least one of the loop's variables and that no loop already claims (compared by `CycleFinder.CanonicalSignature`), in the finder's order. Each is shown as its variables joined by ` → `. Choosing one dispatches `SetLoopMembershipCommand` through the project's history, as one undo step whose inverse restores the bytes from before the edit. A value the row did not offer is refused before anything is written: "'…' is not a cycle this loop can run through: choose one the arrows form through its variables that no other loop claims." Choosing the current cycle again succeeds and puts nothing on the undo stack. The specification expresses the row as a `select` field on `members` whose `options` list the same cycles and whose `validate` refuses anything else with the same sentence. DISL makes every committed field one transaction and does not say that a commit of the unchanged value lands nothing on the undo stack; the standalone compares the chosen text with the offered texts, where the specification compares lists of variables.
-
-**Refusals (R4.6, R5.4).** Every action that cannot apply is shown disabled with its reason rather than hidden, and the same sentence is used wherever the refusal is reachable: "No variable of that name is in this diagram, so there is nothing to change." (and the link and loop equivalents, `CausalLoopWriter.NoSuchVariable`, `NoSuchLink`, `NoSuchLoop`), "A variable of that name is already declared in this diagram.", and for a document that does not parse "This causal loop diagram could not be read, so nothing can be edited until it is fixed." Same direction is disabled on a positive link and opposite direction on a negative one. DISL's `enabled` has no reason text.
-
-## Context actions and the toolbox
-
-| Standalone action id | Target | In causal-loop-diagram.dis |
-| --- | --- | --- |
-| `causal-loop.add-variable` | canvas | toolbox tool `variable` (the canvas menu entry has no DISL counterpart beside the palette) |
-| `causal-loop.arrange` | canvas | operation `arrange`; disabled with "There is nothing to arrange until this diagram has two variables." |
-| `causal-loop.add-link` | variable | context tool `connect` via `CausalLink` ("Add link from here…") |
-| `causal-loop.add-loop` | variable | operation `claimLoop` |
-| `causal-loop.rename-variable` | variable | context tool `editLabel` |
-| `causal-loop.remove-variable` | variable | context tool `delete`, shortcut Delete, styled as dangerous |
-| `causal-loop.make-positive`, `causal-loop.make-negative` | link | operations `makePositive`, `makeNegative` |
-| `causal-loop.toggle-delay` | link | operation `toggleDelay`; the label reads "Delayed" or "Not delayed" by state |
-| `causal-loop.flip-curvature` | link | operation `flipCurve`; the label reads "Flip the curve" or "Curve back the other way" by state |
-| `causal-loop.remove-link` | link | context tool `delete` |
-| `causal-loop.rename-loop` | loop | operation `renameLoop` |
-| `causal-loop.remove-loop` | loop | context tool `delete` |
-
-Labels that change with state are not expressible in DISL; the specification gives both readings in one label.
-
-**Connecting on the canvas.** Dragging with the right mouse button from one variable to another creates a link stating the same direction (positive), and the background menu is enabled (`client/CausalLoopCanvas.tsx`). The toolbox link tool arrives positive too.
-
-**Toolbox (R5.5; `CausalLoopToolboxProvider.cs`).** Three entries: Variable (`mdi-circle-outline`), Causal link (`mdi-arrow-right-thin`) and Feedback loop (`mdi-sync`). The link and loop entries are **dropped onto a variable**, not dragged between two: dropping the link starts a link from that variable and dropping the loop claims a loop through it. A drop anywhere else is refused with "Drop a link or a loop onto a variable." DISL's tool modes (`click`, `drag`) have no "drop onto a node of type" mode. A dropped variable is named `variable<n>` / "Variable <n>" with the lowest free number (`CausalLoopWriter.NextVariableName`), placed at the drop point (`AddVariableAtCommand`).
-
-## Notation details DISL approximates
-
-**Link arcs (`client/causalLoopArc.ts`).** A link is a quadratic curve whose control point sits at `ArcBow = 0.2` times the chord length off the chord's midpoint, **to the left of the direction of travel**, so A → B and B → A bow to opposite sides and a two-variable loop draws as an ellipse. A flipped link bows by −0.2. The ends meet the variables' boxes where the line toward the control point leaves them. DISL's `routing: arc` with `curvature: 0.2` is the nearest construct; DISL does not define which side a positive curvature bows to, nor that it is relative to the chord. A self-link is drawn as two quadratic segments above the variable, leaving its top edge 15% of its width left of centre and returning 15% right of it, and peaking 52 units (twice the self-loop radius of 26) above that edge; DISL's `selfLoop` with size 26 on the top side is the nearest construct.
-
-**Polarity mark.** Drawn at 0.86 along the arc, 11 units off it, as `+` for positive and `−` (U+2212) for negative, and not at all for unstated: drawing a `+` would put a claim on the canvas the document does not make.
-
-**Delay mark (R2.3).** Two short strokes across the arc at 0.44 and 0.56, each reaching 8 units either side of the line. The specification uses the built-in `bar` mid-marker.
-
-**Weight (R8.3; design, *What the shared canvas does not offer*).** A coarse ladder of three steps and never a continuous width: light (stroke 1) at or below 0.5, heavy (stroke 2.5) at or above 2, normal otherwise and when absent. The client registers six relation types, each step in both bow directions (`link-<step>` and `link-<step>-flipped`). A weight is recorded and never evaluated; absent and zero differ, and clearing the grid field removes it.
-
-**Loop badge.** No body; a circular arrow of radius 13 around the identifier, turning **clockwise for a reinforcing loop and anticlockwise otherwise**, with the identifier and the name beside it. Reinforcing is `#0369a1`, balancing `#c2410c`, undecidable muted (`client/causal-loop.css`). A loop whose label disagrees with its arrows gets a **wavy** underline. DISL icons cannot be mirrored, so the balancing variant repeats `mdi-sync` and the direction is lost; the custom marker `loopSweep` describes the arrow but no node construct places a marker on a node. The underline is DISL's plain `underline`.
-
-**Variables.** Pills sized from the label: font size 14, horizontal padding 14, vertical padding 10, minimum width 90, height 14 × 1.4 + 2 × 10 = 39.6 (`_Model/CausalLoopMetrics.cs`). The width is measured on the backend from the label, so every host must measure text the same way for layouts to agree.
-
-**Empty diagram.** "This causal loop diagram states no variables yet." DISL has no empty-canvas message.
-
-## Layout
-
-**The ring (`CausalLoopLayout.cs`).** What a document opens with, and never written to the file:
-
-- The seating order is a depth-first walk of the links treated as undirected, starting from the first-declared variable and always taking the earliest-declared unvisited neighbour; unconnected variables start a new walk in declaration order.
-- The first seat is at the top and seats run clockwise.
-- Each seat is `slot = widest variable + 40` wide; the radius is `max(slot, n × slot / 2π)`, so no two variables overlap.
-- A single variable sits at the origin.
-- Positions the author has set (the `.adp` `layout:` block) override the ring variable by variable.
-
-DISL's `circular` algorithm has no seating order or radius rule, so they are carried as `adp.ring.*` options only a runtime that knows them reads.
-
-**Arrange diagram (R6; `SelfOrganizingLayout.cs`).** Meyer's self-organizing graphs, invoked from the canvas menu and never run on open, with every source of randomness replaced so the result is a pure function of the document and identical across processes (R6.2, R6.3):
-
-- Start: a phyllotaxis spiral (golden angle 2.39996…) seeded by each variable's index in document order.
-- Stimuli: the iteration's point in a two-dimensional Halton sequence (bases 2 and 3), mapped onto the spiral's extent padded by half the largest box plus 40.
-- 2,000 iterations. Learning rate from 0.9 to 0.01 and neighbourhood radius from 3.0 to 0.35 hops, both geometric in the iteration index. Influence `rate × exp(−d² / 2r²)` with `d` the graph distance in hops, links undirected.
-- The best-matching unit is the variable nearest the stimulus, ties broken by document order. Variables in another component than the winner are not pulled.
-- A separation pass then pushes overlapping boxes apart in document order, nudge 0.5, for up to 200 rounds. If any overlap remains the action is refused, the diagram is left as it is, and the reason names the size: "This layout could not arrange 40 variables without 2 of them overlapping, so the diagram has been left as it is." (R6.5, R6.7; `_Model/SelfOrganizingResult.cs`). Other refusals: "This diagram has no variables to arrange.", "This causal loop diagram could not be read, so there is nothing to arrange."
-- The layout runs only within the budget of 1,000 variables (R6.4).
-- The result is written as centres into the `.adp` registration's `layout:` block as one command whose undo restores the registration byte for byte (R6.8; `Commands/ArrangeCausalLoopCommand.cs`).
-
-## What is drawn, and where (R7, R10)
-
-- A variable with no position is not drawn, rather than drawn at (0, 0) (R7.1, R7.2; `CausalLoopElementMapper.cs`).
-- The whole document is laid out and then filtered by the viewport, never the visible part laid out alone (R10.3).
-- A link has no position of its own: it is shown when the rectangle around its two ends' boxes intersects the viewport (R7.3).
-- A loop is shown only when every one of its members is drawn, at their centroid.
-- Panning reports the viewport through the shared view-report path and the backend answers with what came into and left view (R10.1, R10.2).
-
-DISL has no viewport or streaming model, so none of this is in the specification.
-
-## The wire
-
-`api/causal-loop.proto` carries a variable payload (the displayed text, the identifier, and the measured width and height), a link payload (both ends' element ids, polarity, delayed, weight with a `has_weight` flag because proto3 cannot tell an absent double from zero, the note, flipped) and a loop payload (identifier, name, computed polarity, whether the stated polarity disagrees, and the members' element ids). The proto is a transport of the standalone host and is outside DISL.
-
-## Property grid (R8; `CausalLoopContextPropertyProvider.cs`)
-
-The specification's three forms follow the grid's rows and groups (Identity, Causality, Feedback). What DISL does not carry:
-
-- A read-only row says **why** it is read-only (R8.5): the link's ends, "A link is identified by the two variables it joins. Draw a new link on the canvas rather than changing an end here.", and the computed polarity, "Counted from the polarity of the links around the cycle. Change an arrow to change this." The members are not read-only; see *Loop membership*. The specification puts these sentences in the form items' `doc`.
-- The **stated polarity** row appears only when it disagrees with the computed one, and its reason names both: "'R3' claims this, and the arrows say balancing. Neither is corrected for you: change the identifier or change an arrow." A permanent "Stated: reinforcing" beside "Computed: reinforcing" is noise that trains a reader to stop looking.
-- The polarity field accepts `positive`, `+`, `s`, `negative`, `-`, `o`, `unstated` or empty, case-insensitively.
-- The weight field accepts an invariant-culture number; anything else, blank included, clears the weight.
-
-## Starter and examples
-
-**New document.** The document factory creates the starter the specification's `starter` template describes, as text (R5.1, R5.2):
-
-```text
-causal-loop 1
-
-variable population "Population"
-variable births "Births"
-
-link population -> births +
-link births -> population +
-
-loop R1 "Births beget births" population births
-```
-
-**Examples (R11; `examples/readme.md`).** Two projects, `reference/` (every construct, including `R3`, whose label deliberately disagrees with its arrows, and `B4`, deliberately undecidable) and `on-call/` (why an on-call rotation gets worse on its own). Both were **authored for ADP** and attribute nothing: five candidate sources were checked and rejected on licence grounds (nocomplexity/causalloopdiagram GPL-3.0, AutoCLD with no licence, Wikipedia CC BY-SA, the MetaSD library with per-model permission and stock-and-flow content, System-Dynamics-Bot CC BY-NC-4.0). Johnson's algorithm is cited from its publication, not from AutoCLD's code.
-
-## Identity and catalogue
-
-- The origin is `systems/causal-loop-diagram`: "causal", not "casual", and the `-diagram` suffix was kept deliberately (requirements, *The identifier, settled*). The DISL language id is `net.etalii.adp.systems.causal-loop-diagram`.
-- The standalone catalogue row is in `docs/tools.md`.
-
-## Not part of this tool
-
-The non-goals from the requirements, which an implementation must not add: no simulation (no integration over time, no equations; a weight is an annotation), no stock-and-flow conversion, no automatic correction of a mislabelled loop, no layout on open, and no private appearance, scrollbars or view report beside the host's shared ones.
+| Part | Why |
+| --- | --- |
+| The self-organizing layout and Arrange diagram's command | The specification names the layout as a plugin. |
+| The ring layout | Gap 5. |
+| The stand-in for unreadable lines | Gap 1. |
+| Adding a variable at a point | One undo step for a body change and a position. |
+| The payloads, the measured widths, the viewport filter | The host's wire (findings A11 and A12). |
+| The session, the document store and reloading | The shared document lifecycle. |
