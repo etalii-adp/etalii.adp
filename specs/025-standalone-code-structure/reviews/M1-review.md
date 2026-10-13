@@ -160,6 +160,8 @@ None. Every finding of M1 serves a requirement of this feature.
 
 ## Questions for the maintainer
 
+**Ruled 2026-10-13 (Peter, decision card in the thread):** question 1 (a), keep SC-006 as written and amend it at the M2 review; question 2 (a), B-14's ruling covers every module the rollout puts on the frames, and each band C pull request names the modules whose behaviour changes.
+
 **1. SC-006 asks for 250 fewer files at the end of M2. The pilots suggest about 100.** The line target looks safe; the file target counts files that the rollout does not delete, because a module keeps one file per type of report 1.7.
 
 - (a) **Keep SC-006 as written and amend it at the M2 review**, with the figure of nineteen modules rather than four. *Recommended*: the fifteen modules differ more than the four pilots did (the RDF family, the watched folders), so the M2 measurement is the better ground for a new number, and the criterion is not judged before then.
