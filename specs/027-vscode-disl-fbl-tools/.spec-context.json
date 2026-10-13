@@ -809,6 +809,21 @@
       "decision": "Keep two CEL evaluators: the FBL library's own and @marcbachmann/cel-js for DISL",
       "why": "DISL 12 needs macros, optionals and a function library; FBL's evaluator is the subset FBL names and is copied byte for byte into Notion",
       "rejected": "Extending the FBL evaluator, or moving FBL onto cel-js"
+    },
+    {
+      "decision": "A stored position is the element top-left corner",
+      "why": "DISL 11.6 gives top-left for a definition without placement.anchor",
+      "rejected": "The centre, as standalone stores it; raised in etalii.adp issue 159"
+    },
+    {
+      "decision": "The passes of the force layout that part overlaps run until none is left",
+      "why": "The companion document 50 passes leave overlaps at 37 elements, against DISL 10.4",
+      "rejected": "Stopping at 50 passes as the reference algorithm states"
+    },
+    {
+      "decision": "A file of a later version opens editable with fbl.header-mismatch as a warning",
+      "why": "Nothing in the binding or FBL states read-only",
+      "rejected": "Read-only, as the companion document says"
     }
   ],
   "concerns": [
@@ -847,6 +862,26 @@
     {
       "note": "Analyze M5: checklists/migration.md has 46 open items and /speckit-implement reads checklist state as a gate",
       "step": "analyze"
+    },
+    {
+      "note": "simplified: the whole Material Design icon set is bundled in the canvas and toolbox webviews, about 3.2 MB each; the .vsix is 4.6 MB",
+      "step": "implement"
+    },
+    {
+      "note": "Pull request 3 (etalii.adp.ide.vscode 25): nothing was seen by eye in a Visual Studio Code window, high contrast included, and opening a link has no automated test",
+      "step": "implement"
+    },
+    {
+      "note": "Steps 13 and 14 of the agent-activity-edits fixture store group states equal to their defaults; the tests hold them to the bytes a gesture gives, not the fixture (issue 159)",
+      "step": "implement"
+    },
+    {
+      "note": "updated is not set on a rename or a link change of a task or pull request, which the companion document asks of a host",
+      "step": "implement"
+    },
+    {
+      "note": "README.md of etalii.adp.ide.vscode still says two diagrams and that no tool uses FBL; T140 covers it",
+      "step": "implement"
     }
   ],
   "step_summaries": {
@@ -1493,5 +1528,30 @@
       "status": "DONE",
       "did": "Pull request 24 merged into etalii.adp.ide.vscode develop as d5d314b after the Build passed; its branch is deleted on origin"
     }
-  }
+  },
+  "verified": [
+    {
+      "what": "Pull request 3: type-check, lint and the unit suite at 6121f65",
+      "command": "cd /c/git/etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools && npm run check && npx vitest run",
+      "source": "derived",
+      "exitCode": 1,
+      "durationSeconds": 0.0,
+      "result": "The system cannot find the path specified.",
+      "warnings": [
+        "exited 1"
+      ]
+    },
+    {
+      "what": "Pull request 3: the copied definitions match their records",
+      "command": "cd /c/git/etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools && npm run sync-definitions -- --check",
+      "source": "derived",
+      "exitCode": 1,
+      "durationSeconds": 0.1,
+      "result": "The system cannot find the path specified.",
+      "warnings": [
+        "exited 1"
+      ]
+    }
+  ],
+  "last_action": "Phase 5 built and pushed as etalii.adp.ide.vscode pull request 25; T084 to T098 journaled, unticked until it is merged"
 }
