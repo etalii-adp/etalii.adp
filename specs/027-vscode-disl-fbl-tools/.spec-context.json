@@ -1224,6 +1224,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-13T21:03:10.788Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T138",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T21:20:20.269Z"
     }
   ],
   "telemetryInstanceId": "dc5f5bb0-d20a-4e36-9cc2-dc702a232be5",
@@ -1635,7 +1643,7 @@
       ]
     }
   },
-  "currentTask": "T137",
+  "currentTask": "T138",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -2514,6 +2522,13 @@
       "files": [
         "etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools"
       ]
+    },
+    "T138": {
+      "status": "DONE",
+      "did": "Peter Vrenken saw the native dialogs of the three new tool types on 2026-10-13 in Visual Studio Code 1.141.0, in the Development build at 9849baf: the mind map Delete branch? and Link to picker, the Knowledge designer two delete confirmations, the save prompt of all three; recorded in the parity record",
+      "files": [
+        "etalii.adp.ide.vscode/docs/parity.md"
+      ]
     }
   },
   "verified": [
@@ -2587,7 +2602,11 @@
     {
       "what": "SC-005 at e2adb5d: definitions/mindmap deleted and the sync command run at the recorded commits takes the tool type out of package.json (18 lines) and changes nothing else; check passes and four tool types are offered; --add definitions/diagrams/mindmap.dis gives the working tree back with no difference",
       "result": "seen in this session; the tree was left clean"
+    },
+    {
+      "what": "FR-015: the native dialogs of the mind map, the agent activity diagram and the Knowledge designer, seen by Peter Vrenken in Visual Studio Code 1.141.0 on 2026-10-13",
+      "result": "his report: everything looks fine"
     }
   ],
-  "last_action": "T120 to T136 ticked; etalii.adp.ide.vscode pull request 28 (Polish) is a draft that waits for T138, a person at a real window"
+  "last_action": "T138 journaled; etalii.adp.ide.vscode pull request 28 is ready and waits for its merge, then T137 to T143 are ticked and the branches and worktrees removed"
 }
