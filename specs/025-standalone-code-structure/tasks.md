@@ -121,15 +121,15 @@
 
 ### Added by the M1 review
 
-- [ ] T275 [US1] Make the nightly schedule of `etalii.adp.ide.standalone/.github/workflows/stability.yml` fire: by the M1 review it had not run once since T271, every run having been started by hand. Find why, correct it, see a scheduled run on `develop`, and read the runs since the previous review at each review (SC-002).
-- [ ] T276 [US1] The M1 stability run failed once (run 16 of 20) in the first case of `etalii.adp.ide.standalone/src/editors/yaml/client/yamlScalarColour.test.tsx`, which found no highlighted text: make its `mount` wait until CodeMirror has parsed the document, having seen the case fail without the wait first, and run the Stability workflow again (SC-002, FR-005).
+- [x] T275 [US1] Make the nightly schedule of `etalii.adp.ide.standalone/.github/workflows/stability.yml` fire: by the M1 review it had not run once since T271, every run having been started by hand. Find why, correct it, see a scheduled run on `develop`, and read the runs since the previous review at each review (SC-002). Done on 2026-10-13: nothing needed correcting. The cron (`30 2 * * *`) and the workflow's state were right, and run 7 of the Stability workflow was started by the schedule on `develop` (at 09:41 UTC, GitHub starting scheduled runs late), on commit `bb41003`.
+- [x] T276 [US1] The M1 stability run failed once (run 16 of 20) in the first case of `etalii.adp.ide.standalone/src/editors/yaml/client/yamlScalarColour.test.tsx`, which found no highlighted text: make its `mount` wait until CodeMirror has parsed the document, having seen the case fail without the wait first, and run the Stability workflow again (SC-002, FR-005). Done in standalone pull request 226 (2026-10-13); runs 6 and 7 of the Stability workflow on `bb41003` were both green, 40 of 40.
 
 ## M2: the middle layer in every module, and the sibling modules
 
 ### Added by the M1 review, before band B of any module
 
-- [ ] T273 [US2] Add the abstract `DiagramElementSourceResolverContract` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/` and derive the resolver tests of sankey, supply-chain, functional-decomposition-graph and gartner-hype-cycle-graph from it; the band B tasks of M2 then use it (FR-030, FR-035).
-- [ ] T274 [US2] `DiagramElementSourceResolver` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/` takes the document store and gives `Load` and a default `Follow` itself; the pilots drop those overrides, supply chain keeping its own `Follow` (FR-027, FR-030).
+- [x] T273 [US2] Add the abstract `DiagramElementSourceResolverContract` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/` and derive the resolver tests of sankey, supply-chain, functional-decomposition-graph and gartner-hype-cycle-graph from it; the band B tasks of M2 then use it (FR-030, FR-035). Done in standalone pull request 227 (2026-10-13); every sabotage of the base resolver was seen to turn the contract red.
+- [x] T274 [US2] `DiagramElementSourceResolver` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/` takes the document store and gives `Load` and a default `Follow` itself; the pilots drop those overrides, supply chain keeping its own `Follow` (FR-027, FR-030). Done in standalone pull request 228 (2026-10-13); supply chain's `Follow` now adds to the base's.
 
 ### Document-based modules, one module per pull request (report 1)
 
