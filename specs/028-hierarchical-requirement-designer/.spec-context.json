@@ -1,0 +1,361 @@
+{
+  "workflow": "companion",
+  "telemetryInstanceId": "5fcc7787-1bbf-4e1b-af58-47ca7b2b494c",
+  "specName": "Hierarchical Requirement Designer",
+  "branch": "features/028-hierarchical-requirement-designer",
+  "selectedAt": "2026-10-13T21:41:45.662Z",
+  "currentStep": "tasks",
+  "status": "tasking",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-13T21:41:45.662Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-13T21:50:32.115Z"
+    },
+    {
+      "step": "clarify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T22:38:24.821Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-13T22:38:39.387Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T22:55:46.218Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T23:05:11.331Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T23:06:04.095Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-13T23:23:10.697Z"
+    }
+  ],
+  "last_action": "living specs evaluated — no capabilities matched",
+  "coverage": {
+    "FR-001": {
+      "title": "Users MUST see the designer type named \"Hierarchical Requirement Designer\" wherever a tool type's name is shown."
+    },
+    "FR-002": {
+      "title": "A requirement document MUST be one Markdown file of nested bullets that is the designer's own document, in which every item and every requirement is one bullet and the nesting of the bullets is the hierarchy."
+    },
+    "FR-003": {
+      "title": "The Markdown file MUST hold everything an agent needs to read and change the requirements: every item and requirement with its number, title and description, the tags it carries, a requirement's category and state, the references and the assessments."
+    },
+    "FR-004": {
+      "title": "The document's registration MUST hold what an agent does not need to read, and only that: the colours and order of the tag, category and state lists, what is collapsed, and the stored filters with their sorting."
+    },
+    "FR-005": {
+      "title": "The designer MUST work the same after the registration is deleted and created again, apart from what FR-004 lists."
+    },
+    "FR-006": {
+      "title": "A document the designer creates MUST begin with a legend that tells an agent how the file is written, complete enough for an agent that has never seen the tool to add an item, a requirement, a tag, a reference and an assessment correctly."
+    },
+    "FR-007": {
+      "title": "A document the designer creates MUST be filled with a starting structure at most two levels deep with at most three requirements in each item, every part of which the person can rename, move and delete as any other."
+    },
+    "FR-008": {
+      "title": "The hierarchy MUST have no maximum depth, and a requirement MUST be allowed in an item at any depth."
+    },
+    "FR-009": {
+      "title": "Every item MUST carry a number of the form `ITEM-000x` and every requirement one of the form `REQ-000x`, written as the prefix of its bullet and shown beside its title."
+    },
+    "FR-010": {
+      "title": "Items and requirements MUST be counted apart, each count per document and counted up, so that `ITEM-0003` and `REQ-0003` name different entries."
+    },
+    "FR-011": {
+      "title": "A number MUST NOT change once given, whatever happens to its entry: a move, a change of its text, tags, category or state, or a change to anything above or beside it."
+    },
+    "FR-012": {
+      "title": "The designer MUST NOT give a new entry a number that it has given or read before in that document, also after the entry that carried it was deleted."
+    },
+    "FR-013": {
+      "title": "An entry written as text without a number MUST be shown, MUST be reported as having no number yet, and MUST be given the next number with the next edit the designer writes, never when the document is only opened."
+    },
+    "FR-014": {
+      "title": "Of several entries that carry one number, the first in reading order MUST keep it, each later one MUST be shown with a finding, and the designer MUST NOT change a number to resolve this except by the person's action."
+    },
+    "FR-015": {
+      "title": "The designer MUST show the whole document as one page that scrolls from top to bottom, with no separate tree beside it."
+    },
+    "FR-016": {
+      "title": "An item MUST be shown as a box with its requirements and its sub-items to its right, the requirements above the sub-items, and MUST be as high as what stands to its right, with neighbouring boxes sharing their borders."
+    },
+    "FR-017": {
+      "title": "The page MUST show as many levels as fit its width, MUST mark an item whose deeper levels do not fit, and MUST let the person make any item the left edge of the page, with a trail of the items above it that leads back to each of them."
+    },
+    "FR-018": {
+      "title": "Every item and requirement MUST have a title, which is the one line on its bullet and for a requirement states the requirement itself, and MAY have a description below it that clarifies it."
+    },
+    "FR-019": {
+      "title": "Every item and requirement MUST be collapsible by a control to the left of its title, and a collapsed entry MUST show only its number, title, tags and assessment icon."
+    },
+    "FR-020": {
+      "title": "What is collapsed MUST be the same when the document is opened again."
+    },
+    "FR-021": {
+      "title": "The designer MUST take its looks from the Knowledge designer: its colours, typography, spacing, the way tags are drawn and the way menus and lists open."
+    },
+    "FR-022": {
+      "title": "The person MUST be able to add an item or a requirement from where they are on the page, by a control at the end of every item's content and by the keyboard from a selected entry, without a dialog."
+    },
+    "FR-023": {
+      "title": "The person MUST be able to move an item with everything in it, or a requirement, to another item or another place by dragging it."
+    },
+    "FR-024": {
+      "title": "Deleting an entry that contains anything, or that a reference or an assessment names, MUST ask for confirmation first."
+    },
+    "FR-025": {
+      "title": "Every edit in the designer MUST be one undoable step and MUST change only the bytes of the entries it concerns."
+    },
+    "FR-026": {
+      "title": "Items and requirements MUST be able to carry tags from one list per document, shown below the title in each tag's colour."
+    },
+    "FR-027": {
+      "title": "Typing in a tag field MUST narrow the list, a name equal to a tag's name in any case MUST pick that tag, and a name that equals none MUST create a tag on Enter."
+    },
+    "FR-028": {
+      "title": "The person MUST be able to rename, recolour, reorder and delete a tag, and a rename or a delete MUST update every entry that carries it in the same undoable step."
+    },
+    "FR-029": {
+      "title": "A tag written in the file that the list does not hold MUST be shown on its entry and added to the list, with no action required of its writer outside the Markdown file."
+    },
+    "FR-030": {
+      "title": "A requirement MUST be able to carry one category from a list the person can add to, rename, reorder and delete from, which starts as functional, non-functional and technical."
+    },
+    "FR-031": {
+      "title": "A requirement MUST be able to carry one state from a list the person can add to, rename, reorder and delete from, which starts as proposed, accepted, rejected and done, and which the person sets in the designer or an agent in the file."
+    },
+    "FR-032": {
+      "title": "The file MUST have one part for assessments, set apart from the hierarchy, in which each assessment names the entry it concerns by number and has a kind and a text."
+    },
+    "FR-033": {
+      "title": "The kinds of assessment MUST be at least question, remark, warning and idea, each with an icon of its own."
+    },
+    "FR-034": {
+      "title": "An agent MUST be able to write an assessment as text in the file, and a person MUST be able to write one in the designer."
+    },
+    "FR-035": {
+      "title": "An assessment MUST name exactly one requirement or one item of the same document, and MUST be shown at that entry."
+    },
+    "FR-036": {
+      "title": "The top right of an entry MUST show the icon of the kind when it has one unresolved assessment, an icon that stands for several when it has more, and a way to add the first when it has none; a collapsed item's icon MUST also stand for the unresolved assessments of everything hidden inside it."
+    },
+    "FR-037": {
+      "title": "Pressing the icon MUST open the assessments it stands for as a list, each with the entry it names, in which the person can add, change, remove and resolve each."
+    },
+    "FR-038": {
+      "title": "A resolved assessment MUST stay in the file, marked as resolved, and MUST no longer count towards the icon."
+    },
+    "FR-039": {
+      "title": "An assessment whose entry no longer exists MUST be kept in the file and reported as a finding."
+    },
+    "FR-040": {
+      "title": "Typing `#` in a description MUST open a lookup of the requirements and items of the same document, narrowed by number or title as the person types."
+    },
+    "FR-041": {
+      "title": "A picked reference MUST be written in the file as a link that names the target's number, and MUST be shown in the text as a box with the target's number and current title."
+    },
+    "FR-042": {
+      "title": "Selecting a reference box MUST show its target, expanding what hides it."
+    },
+    "FR-043": {
+      "title": "The lookup MUST offer only entries of the same document, and a link that points anywhere else MUST be shown as an ordinary link."
+    },
+    "FR-044": {
+      "title": "A reference whose target no longer exists MUST be shown as broken and reported as a finding, with its text in the file kept."
+    },
+    "FR-045": {
+      "title": "The person MUST be able to narrow the page by tag, by category, by state and by item title, and a requirement that remains MUST be shown with the items that contain it."
+    },
+    "FR-046": {
+      "title": "A filter on item titles MUST accept `*` for any run of characters and `?` for one character, in any case."
+    },
+    "FR-047": {
+      "title": "The person MUST be able to sort the requirements within each item by number, title, category or state, without the order in the file changing."
+    },
+    "FR-048": {
+      "title": "The person MUST be able to store a filter with its sorting under a name, and find it under that name when the document is opened again."
+    },
+    "FR-049": {
+      "title": "Narrowing, sorting, collapsing and focusing on an item MUST NOT change the Markdown file."
+    },
+    "FR-050": {
+      "title": "When the file changes outside the designer, the designer MUST read it again and show the change without being reopened, and entries matched by number MUST keep what was collapsed."
+    },
+    "FR-051": {
+      "title": "When the file changes outside the designer while it holds unsaved edits, the person MUST be told and MUST choose between reloading and keeping their version."
+    },
+    "FR-052": {
+      "title": "An edit made against a file that has changed since it was read MUST be refused and reported, never merged."
+    },
+    "FR-053": {
+      "title": "A bullet the designer cannot follow MUST be reported as a finding at that bullet, its bytes MUST be kept as written, and every other entry MUST stay readable and editable."
+    },
+    "FR-054": {
+      "title": "A file the designer cannot read at all MUST be shown read-only with one finding at the problem, with the last readable content when it was open and empty when it was not, and MUST NOT be written."
+    },
+    "FR-055": {
+      "title": "Text outside the bullets MUST be kept byte for byte and MUST NOT be reported."
+    },
+    "FR-056": {
+      "title": "The designer type MUST be defined in this repository completely enough that a host builds it from the definition alone: its specification, how its file is read and written, a companion document, and example documents that the Build workflow validates."
+    },
+    "FR-057": {
+      "title": "The Designer Specification Language MUST be able to state a surface of boxes that contain boxes, and an identifier that is counted up per kind of entry and kept."
+    },
+    "FR-058": {
+      "title": "The Format Binding Language MUST be able to declare a reading of nested Markdown bullets, so that this tool type and a later one bind their Markdown without code of their own."
+    },
+    "FR-059": {
+      "title": "A registration MUST be able to hold a tool type's settings for one document, of which FR-004 lists this tool type's."
+    },
+    "FR-060": {
+      "title": "The Designer Definition Language MUST say where a definition's envelope stands in a Markdown file, in a place that neither an agent nor a Markdown viewer takes for a requirement."
+    },
+    "FR-061": {
+      "title": "Each change to a specification language MUST come as its document, its schema and worked examples together, each example valid against that schema."
+    },
+    "FR-062": {
+      "title": "The changes of FR-057 to FR-061 MUST be delivered by this feature, each language's change in a pull request of its own, before the definition that rests on it."
+    },
+    "FR-063": {
+      "title": "The designer MUST be built first in the standalone host and in no other host by this feature."
+    }
+  },
+  "size": "oversized",
+  "classification": {
+    "projectedFiles": 70,
+    "projectedTasks": 150,
+    "scopeSignal": "larger",
+    "verdict": "oversized"
+  },
+  "context": [
+    "assessment: .specify/assessments/hierarchical-requirement-designer/ (decision.md go for Option C, concept.md, problem.md, research.md, intake.md)",
+    "area: specifications/desl/ (DESL 0.1: one surface kind, the table, section 7; id strategies uuid-v4, uuid-v7 and derived, section 5.3)",
+    "area: specifications/fbl/ (FBL 0.6: families yaml, json, xml, lines and blocks, section 4; registration, section 8; persistence plugins, section 11; history and reading problems, section 7)",
+    "area: specifications/ded/ (DED 0.1: the envelope for another format is stated by the designer type, section 2)",
+    "area: definitions/designers/ (knowledge.des, knowledge.fbl, knowledge.md, knowledge.schema.json, examples/: the one designer type, the model for the looks and the tag behaviour)",
+    "area: definitions/diagrams/agent-behavior-modelling.md (the one tool over nested Markdown bullets: read by a plugin, legend in every new file, a plain .md registered through Add)",
+    "area: etalii.adp.ide.standalone (first host; plans with spec-workflow in its own repository; spec 025-standalone-code-structure is open)",
+    "constraint: constitution principle V, the Markdown family in FBL and the settings block in the registration are each justified on the plan as a current tool's need, or the fallback is a persistence plugin and the registration as it is",
+    "constraint: constitution principle II, each change to a specification language comes as document, schema and worked examples together",
+    "constraint: constitution workflow, one Spec Kit feature per change to a specification (open in FR-062)",
+    "constraint: docs/terminology.md, a designer lists relations as values and draws nothing connected",
+    "living spec: none (living-specs.yml has no capabilities)"
+  ],
+  "expectations": [
+    "Hosts other than the standalone host",
+    "Showing how requirements connect, beyond a reference from one to another",
+    "Taking the text away from the agent, or getting agents to write less of it",
+    "The Knowledge designer beyond its looks",
+    "Spec Kit's spec.md and spec-workflow's requirements.md: neither read nor replaced",
+    "References that leave the document",
+    "Merging the edits of two writers",
+    "Rich text in a description beyond the reference box",
+    "The trial of the file and the layout without a tool (Option A)"
+  ],
+  "intent": "A designer over a Markdown file of nested bullets in which a person and an agent keep the requirements of one subject by its structure, first in the standalone host",
+  "decisions": [
+    {
+      "decision": "A requirement document is a plain .md: envelope on line 1, a mark line on line 2, the hierarchy under the heading Requirements and the assessments as a task list under the heading Assessments",
+      "why": "A legend has to show example bullets and the assessments are a second list, so entries are found by heading, as Agent Behavior Modelling finds its tree",
+      "rejected": "The first list in the file; marker comments around the hierarchy"
+    },
+    {
+      "decision": "Trailing words on the title line: #name for a tag, category:name and state:name, names without whitespace",
+      "why": "An agent cannot see the lists, which live in the registration, so each word names its kind; the same notation is the filter's",
+      "rejected": "(category, state) in brackets after the number; quoted names with spaces"
+    },
+    {
+      "decision": "Numbers come from a new DESL id strategy, counter, whose last number given is kept on line 2 of the file; an agent adds an entry as ITEM-NEW or REQ-NEW",
+      "why": "FR-012 needs a remembered high-water mark, FR-005 rules out the registration and DED rules out the envelope; a placeholder makes the kind of an unnumbered bullet certain",
+      "rejected": "Counting from the highest number in the file; a bare bullet as an unnumbered requirement"
+    },
+    {
+      "decision": "A reference is the number in square brackets, read by a new DESL facet, mentions, which also reads an assessment's target",
+      "why": "FR-039 and FR-044 keep the text of a broken reference, where a DESL reference is unset on delete and has one target type",
+      "rejected": "A link with an anchor target; a reference attribute beside the text"
+    },
+    {
+      "decision": "Only a missing envelope, or a file that is not UTF-8, makes the file unreadable",
+      "why": "Markdown is never malformed, and a document whose last item was deleted must stay editable",
+      "rejected": "No list of bullets as a second cause, as the specification first assumed"
+    },
+    {
+      "decision": "FBL 0.7 gains a sixth family, bullets, with sections named by heading, a continuation slot and re-indented moves",
+      "why": "A family and a plugin cost each host the same, and only the family puts the reading in this repository; Agent Behavior Modelling is a second tool whose reading it can state",
+      "rejected": "A persistence plugin, which would also need a plugins key in DESL; an indentation option on the lines family"
+    },
+    {
+      "decision": "A binding declares further blocks of the registration, in the grammar layout and identities already have, with order, keys and history per block",
+      "why": "The maintainer's rule keeps what an agent does not read out of the file; the existing block grammar holds it with one new rule for kept order",
+      "rejected": "Long header values; one flat settings block with dotted keys; keeping the lists in the document as the Knowledge designer does"
+    },
+    {
+      "decision": "DESL 0.2 holds five constructs: the hierarchy surface, the counter strategy, mentions, a move action and persistence.settings",
+      "why": "FR-057 named two; moving to another parent, text that names entries and state kept in the registration cannot be stated in DESL 0.1",
+      "rejected": "Leaving the other three to the companion's prose"
+    },
+    {
+      "decision": "A stored filter is one line of words in the file's own notation, with item: patterns and sort:",
+      "why": "It is the smallest form that is four ways to narrow, a sort and a stored value, and it fits one registration entry",
+      "rejected": "A tree of conditions as the Knowledge designer's views have"
+    },
+    {
+      "decision": "DED 0.2 states the envelope of a Markdown definition: line 1, an HTML comment",
+      "why": "DED requires a definition to begin with its envelope and markers read the first lines only; stating it in DED lets the validator and every host recognise any Markdown definition alike",
+      "rejected": "YAML front matter; leaving the form to the designer types"
+    },
+    {
+      "decision": "One feature, seven pull requests: documents, DED, the bullets family, registration blocks, DESL, the definition, the hand-off",
+      "why": "The maintainer chose one feature on 2026-10-14; a pull request per language, and one for each reserved construct, lets each be refused on its own",
+      "rejected": "A feature per language"
+    },
+    {
+      "decision": "The Build workflow reads a Markdown example with a reader written for this designer and proves edits by FBL fixtures",
+      "why": "It is the mechanism the Knowledge designer already uses; a generic interpreter of bindings in the validator would be a seventh host",
+      "rejected": "A binding-driven reader in the validator; a harness for planted defects"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "Plan for a Markdown requirement document, its registration, DED 0.2, FBL 0.7 and DESL 0.2, and the designer type's definition, in seven pull requests",
+      "key_finding": "The definition needs five DESL constructs and two FBL ones, and the fallback on record (a plugin, the registration as it is) is not free: it needs a DESL change too and leaves the settings without a home"
+    }
+  },
+  "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025."
+}
