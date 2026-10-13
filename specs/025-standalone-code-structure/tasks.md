@@ -2,7 +2,7 @@
 
 **Input**: [standalone-code-structure.spec.md](standalone-code-structure.spec.md), [plan.md](plan.md), [research.md](research.md), [data-model.md](data-model.md), [behaviour-changes.md](behaviour-changes.md), [contracts/](contracts/), and the report, [analysis-2026-10-10.md](analysis-2026-10-10.md).
 
-**275 tasks in ten milestones.** T265 and T266 were added on 2026-10-11 with the ruling on DP-5 and stand in M4. T255 to T257 were struck on 2026-10-12 by the ruling on DP-1 (c), keep the stubs. The M0 review added T267 to T271 to M0 and struck T021, so 267 remained. The M1 review added T272 (in M3, beside T144 and T145), T273 and T274 (at the head of M2) and T275 (in M1), and struck nothing, so 271 remain. Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
+**276 tasks in ten milestones.** T265 and T266 were added on 2026-10-11 with the ruling on DP-5 and stand in M4. T255 to T257 were struck on 2026-10-12 by the ruling on DP-1 (c), keep the stubs. The M0 review added T267 to T271 to M0 and struck T021, so 267 remained. The M1 review added T272 (in M3, beside T144 and T145), T273 and T274 (at the head of M2) and T275 and T276 (in M1), and struck nothing, so 272 remain. Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
 
 ## How to read a task
 
@@ -117,11 +117,12 @@
 
 - [x] T064 [US9] Run `etalii.adp.ide.standalone/.github/tools/analysis/measure.sh` on the merge commit of M1's last pull request, in a freshly created worktree, and save its output as `etalii.adp/specs/025-standalone-code-structure/reviews/M1-measurements.json` (FR-009, FR-010). Done on 2026-10-13 on `develop` `3daf9654c`, the merge commit of standalone pull request 224.
 - [x] T065 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M1-review.md` by `etalii.adp/specs/025-standalone-code-structure/contracts/milestone-review.md`: the comparison with the previous record, the exit condition of M1 (the four pilot modules have the shape of report 1.7) and the success criteria due, an answer for every candidate named for the M1 review, what the clone scan and the method-length count show that nobody named, the tasks under FR-012 marked *stands*, *reduced* or *overtaken*, and the open rows of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` that M2 needs (FR-010, FR-011, FR-012). Done on 2026-10-13.
-- [x] T066 [US9] In the same pull request into `etalii.adp`, update `etalii.adp/specs/025-standalone-code-structure/tasks.md`: tick what is merged, add the tasks the review produced with new numbers, strike what it found unnecessary; amend a success criterion in `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` only with this review named beside it. No task of the next milestone starts before this pull request is merged (FR-010, FR-011, FR-014). Done on 2026-10-13: T043 to T066 ticked, T272 to T275 added, nothing struck, no success criterion amended.
+- [x] T066 [US9] In the same pull request into `etalii.adp`, update `etalii.adp/specs/025-standalone-code-structure/tasks.md`: tick what is merged, add the tasks the review produced with new numbers, strike what it found unnecessary; amend a success criterion in `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` only with this review named beside it. No task of the next milestone starts before this pull request is merged (FR-010, FR-011, FR-014). Done on 2026-10-13: T043 to T066 ticked, T272 to T276 added, nothing struck, no success criterion amended.
 
 ### Added by the M1 review
 
 - [ ] T275 [US1] Make the nightly schedule of `etalii.adp.ide.standalone/.github/workflows/stability.yml` fire: by the M1 review it had not run once since T271, every run having been started by hand. Find why, correct it, see a scheduled run on `develop`, and read the runs since the previous review at each review (SC-002).
+- [ ] T276 [US1] The M1 stability run failed once (run 16 of 20) in the first case of `etalii.adp.ide.standalone/src/editors/yaml/client/yamlScalarColour.test.tsx`, which found no highlighted text: make its `mount` wait until CodeMirror has parsed the document, having seen the case fail without the wait first, and run the Stability workflow again (SC-002, FR-005).
 
 ## M2: the middle layer in every module, and the sibling modules
 
@@ -458,7 +459,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-002 | T039, T132, T135, T137, T146, T178, T211 |
 | FR-003 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md). |
 | FR-004 | 21 tasks, T016 to T266 |
-| FR-005 | T033, T034, T035, T056, T176, T185, T195, T212, T216, T217, T269 |
+| FR-005 | T033, T034, T035, T056, T176, T185, T195, T212, T216, T217, T269, T276 |
 | FR-006 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md) (the identity) and by the *Ownership* section of every review record (the owner). |
 | FR-007 | T029 |
 | FR-008 | T043 |
@@ -558,7 +559,7 @@ FR-002, FR-004, FR-005, FR-007 and FR-008 are rules of [contracts/pull-request.m
 | Success criterion | Where it is worked for | Measured at the review of |
 |---|---|---|
 | SC-001 | T025, T263 | M0 |
-| SC-002 | T026, T261, T271, T275 | M0, M9 |
+| SC-002 | T026, T261, T271, T275, T276 | M0, M9 |
 | SC-003 | T149 | M0, M3 |
 | SC-004 | T142, T143, T149 | M3 |
 | SC-005 | The test-code tasks of M0, M1 (contracts) and M8; T009 | M9 |
