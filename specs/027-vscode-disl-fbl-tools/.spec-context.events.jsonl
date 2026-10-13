@@ -80,3 +80,4 @@
 {"step": "implement", "substep": null, "task": "T080", "kind": "complete", "by": "ai", "at": "2026-10-12T23:58:20.398Z", "did": "Support record: view.viewer, three plugins, the mind map's subsection; tools.md has its row"}
 {"step": "implement", "substep": null, "task": "T081", "kind": "complete", "by": "ai", "at": "2026-10-12T23:58:20.601Z", "did": "Three plugins registered; reparent, fold and opening a link mapped"}
 {"step": "implement", "substep": null, "task": "T082", "kind": "complete", "by": "ai", "at": "2026-10-12T23:58:20.838Z", "did": "npm run check clean, 2536 unit tests pass, 44 in a real Visual Studio Code with scenario 5 skipped and reported"}
+{"step": "implement", "substep": null, "task": "T083", "kind": "complete", "by": "ai", "at": "2026-10-13T09:55:01.159Z", "did": "Pull request 24 merged into etalii.adp.ide.vscode develop as d5d314b after the Build passed; its branch is deleted on origin"}
