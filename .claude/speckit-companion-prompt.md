@@ -1,1 +1,1 @@
-/speckit-assess-define slug=hierarchical-requirement-designer Read the answers in the file at .speckit-companion/report-answers/idea-hierarchical-requirement-designer-problem.md, resolve each [NEEDS CLARIFICATION] marker whose question appears there, and rewrite problem.md in .specify/assessments/hierarchical-requirement-designer/.
+/speckit-companion-resume specs/027-vscode-disl-fbl-tools

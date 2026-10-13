@@ -1,0 +1,10 @@
+{
+  "workflow": "companion",
+  "specName": "015-fbl-scalar-as-written",
+  "branch": "015-fbl-scalar-as-written",
+  "selectedAt": "2026-10-13T13:15:25.852Z",
+  "currentStep": "specify",
+  "status": "draft",
+  "history": [],
+  "telemetryInstanceId": "30bad611-61df-4f34-9b54-e86ef7fb86fb"
+}
