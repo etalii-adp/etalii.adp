@@ -187,7 +187,7 @@ Files: `etalii.adp/definitions/designers/hierarchical-requirement.des`, `hierarc
 - [ ] **T044** [P] [US3] Write the DESL 0.2 specification: the label `Hierarchical Requirement Designer`, the seven types with the attribute names of research R25, the enumerations of colours and of assessment kinds with their icons, counted ids with `missing: "assign"`, the settings, the constraints, the `hierarchy` surface with every role, and one operation per gesture of [contracts/tool-type.md](contracts/tool-type.md) · etalii.adp/definitions/designers/hierarchical-requirement.des
 - [ ] **T045** [P] [US3] Write the example document: a web shop three levels deep, with all three markers, descriptions, tags, categories and states, a reference, a `REQ-NEW` entry, assessments of each kind with one resolved, and a legend whose fenced examples are not read · etalii.adp/definitions/designers/examples/web-shop.md
 - [ ] **T046** [P] [US3] Write its registration, with all five blocks · etalii.adp/definitions/designers/examples/web-shop.adp
-- [ ] **T047** [P] [US3] Add the designer to the validator: a `.md` under the designers' examples is an example, a reader takes a requirement document into the JSON form of T042, and a check reports what reading would report: an unreadable bullet, a duplicate number, a mention or an assessment that names nothing, a requirement out of place. The DED example of T004 now reads through it too (research R20) · etalii.adp/.github/scripts/validate-examples.py
+- [ ] **T047** [P] [US3] Add the designer to the validator: a `.md` under `definitions/designers/examples/` is an example, a reader takes a requirement document into the JSON form of T042, and a check reports what reading would report: an unreadable bullet, a duplicate number, a mention or an assessment that names nothing, a requirement out of place. The DED example of T004 now reads through it too (research R20) · etalii.adp/.github/scripts/validate-examples.py
 
 **⟶ Wait for Wave 2 to finish, then:**
 
@@ -335,7 +335,7 @@ Files: `etalii.adp/definitions/designers/README.md`, `etalii.adp/CLAUDE.md`, `et
 **⟶ Wait for Phases 6 to 13 to finish, then Wave 1: independent (different files):**
 
 - [ ] **T063** [P] Add the designer's row, and say that a designer's document may be Markdown with its envelope on line 1 · etalii.adp/definitions/designers/README.md
-- [ ] **T064** [P] Name Markdown among the formats of the designers' example documents, where "Writing specifications" describes what the validator checks · etalii.adp/CLAUDE.md
+- [ ] **T064** [P] Name Markdown among the formats of a designer type's example documents, where "Writing specifications" describes what the validator checks · etalii.adp/CLAUDE.md
 - [ ] **T065** [P] Say in the designer's row what a DED definition's file may be, where the table names `.ded` · etalii.adp/README.md
 - [ ] **T066** [P] Say the same where the glossary names the designer's definition file · etalii.adp/docs/terminology.md
 
