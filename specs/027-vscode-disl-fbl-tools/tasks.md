@@ -105,62 +105,62 @@ Files: `etalii.adp.ide.vscode/definitions/gartner-hype-cycle-graph/`, `definitio
 
 ### Tests (first, seen failing)
 
-- [ ] **T026** Cut the branch again from `origin/develop`, and add `@marcbachmann/cel-js` 8 · etalii.adp.ide.vscode/package.json, etalii.adp.ide.vscode/package-lock.json
+- [x] **T026** Cut the branch again from `origin/develop`, and add `@marcbachmann/cel-js` 8 · etalii.adp.ide.vscode/package.json, etalii.adp.ide.vscode/package-lock.json
 
 **⟶ Wait for T026 to finish, then Wave 1: independent (different files):**
 
-- [ ] **T027** [P] The sync command against two temporary git repositories: copies are the git objects' bytes; `PROVENANCE.md` has its five columns; `--add` and a deleted folder; a relative binding, a URL binding and the by-name fallback; the manifest's contributions in folder order; `--check` fails on a changed byte, a file without a row, a row without a file and a contribution that differs · etalii.adp.ide.vscode/test/scripts/syncDefinitions.test.ts
-- [ ] **T028** [P] Take Notion's `test/disl/` (16 files), reading the definition from `definitions/gartner-hype-cycle-graph/` · etalii.adp.ide.vscode/test/core/disl/
-- [ ] **T029** [P] Take Notion's `test/canvas/scene.test.ts`, `scene.examples.test.ts`, `geometry.test.ts` and `snapping.test.ts` with the nine examples' recorded places · etalii.adp.ide.vscode/test/core/scene/
-- [ ] **T030** [P] The contract: rename `diagramType.test.ts` and add `Claim`, `viewTypeOf`, an `applied` outcome that carries splices, the `open` outcome, and the requests for reparenting, folding, pinning and opening a link · etalii.adp.ide.vscode/test/core/frame/toolType.test.ts
-- [ ] **T031** [P] Claims: the three claim kinds of the data model; a file is claimed by extension and marker both; two bindings on one extension; `suggests` from `claims.suggest` · etalii.adp.ide.vscode/test/core/tool/claims.test.ts
-- [ ] **T032** [P] The plugin registry: a required plugin that is missing gives read-only documents with `std.pluginMissing` naming it; an optional one falls back · etalii.adp.ide.vscode/test/core/tool/pluginRegistry.test.ts
-- [ ] **T033** [P] `toolTypeFrom` on the hype cycle graph's definition: each of the nine examples opens to a scene with its recorded places; no edit leaves the text untouched; an edit is splices and nothing outside them; a refusal carries the definition's sentence; an unreadable body is empty, read-only and refuses; an unsupported feature gives `disl.unsupported-feature`; a folder missing a part, or a definition not on FBL, is no tool type; removing a folder removes the type · etalii.adp.ide.vscode/test/core/tool/toolTypeFrom.test.ts
-- [ ] **T034** [P] Byte offsets to positions: multi-byte text, CRLF, several splices of one gesture, a body with and without a final newline · etalii.adp.ide.vscode/test/core/tool/spliceRanges.test.ts
-- [ ] **T035** [P] Nothing names a tool type: read `src/core/disl/`, `desl/`, `scene/` and `tool/` for every type, attribute and message id of the copied definitions, as Notion's `test/words.test.ts` does · etalii.adp.ide.vscode/test/core/tool/words.test.ts
-- [ ] **T036** [P] The support record: `supportedFeatures` and the features table, the registry and the plugins table, the folders of `definitions/` and the subsections of differences, each read both ways · etalii.adp.ide.vscode/test/core/tool/supportRecord.test.ts
-- [ ] **T037** [P] The scene renderer: shapes, parts, labels, markers and edges anchored on parts; `light` for the light kinds and `dark` for the dark ones; contrast border and foreground in both high contrast kinds; the editor's colour for a token without a mode · etalii.adp.ide.vscode/test/webview/diagram/scene.test.ts
-- [ ] **T038** [P] In a real Visual Studio Code: the package ships `definitions/`; a Markdown, YAML, JSON and XML file nothing claims opens as text as before; "Open as Text" opens the text editor for a file in a tool · etalii.adp.ide.vscode/test/vscode/opening.test.ts
+- [x] **T027** [P] The sync command against two temporary git repositories: copies are the git objects' bytes; `PROVENANCE.md` has its five columns; `--add` and a deleted folder; a relative binding, a URL binding and the by-name fallback; the manifest's contributions in folder order; `--check` fails on a changed byte, a file without a row, a row without a file and a contribution that differs · etalii.adp.ide.vscode/test/scripts/syncDefinitions.test.ts
+- [x] **T028** [P] Take Notion's `test/disl/` (16 files), reading the definition from `definitions/gartner-hype-cycle-graph/` · etalii.adp.ide.vscode/test/core/disl/
+- [x] **T029** [P] Take Notion's `test/canvas/scene.test.ts`, `scene.examples.test.ts`, `geometry.test.ts` and `snapping.test.ts` with the nine examples' recorded places · etalii.adp.ide.vscode/test/core/scene/
+- [x] **T030** [P] The contract: rename `diagramType.test.ts` and add `Claim`, `viewTypeOf`, an `applied` outcome that carries splices, the `open` outcome, and the requests for reparenting, folding, pinning and opening a link · etalii.adp.ide.vscode/test/core/frame/toolType.test.ts
+- [x] **T031** [P] Claims: the three claim kinds of the data model; a file is claimed by extension and marker both; two bindings on one extension; `suggests` from `claims.suggest` · etalii.adp.ide.vscode/test/core/tool/claims.test.ts
+- [x] **T032** [P] The plugin registry: a required plugin that is missing gives read-only documents with `std.pluginMissing` naming it; an optional one falls back · etalii.adp.ide.vscode/test/core/tool/pluginRegistry.test.ts
+- [x] **T033** [P] `toolTypeFrom` on the hype cycle graph's definition: each of the nine examples opens to a scene with its recorded places; no edit leaves the text untouched; an edit is splices and nothing outside them; a refusal carries the definition's sentence; an unreadable body is empty, read-only and refuses; an unsupported feature gives `disl.unsupported-feature`; a folder missing a part, or a definition not on FBL, is no tool type; removing a folder removes the type · etalii.adp.ide.vscode/test/core/tool/toolTypeFrom.test.ts
+- [x] **T034** [P] Byte offsets to positions: multi-byte text, CRLF, several splices of one gesture, a body with and without a final newline · etalii.adp.ide.vscode/test/core/tool/spliceRanges.test.ts
+- [x] **T035** [P] Nothing names a tool type: read `src/core/disl/`, `desl/`, `scene/` and `tool/` for every type, attribute and message id of the copied definitions, as Notion's `test/words.test.ts` does · etalii.adp.ide.vscode/test/core/tool/words.test.ts
+- [x] **T036** [P] The support record: `supportedFeatures` and the features table, the registry and the plugins table, the folders of `definitions/` and the subsections of differences, each read both ways · etalii.adp.ide.vscode/test/core/tool/supportRecord.test.ts
+- [x] **T037** [P] The scene renderer: shapes, parts, labels, markers and edges anchored on parts; `light` for the light kinds and `dark` for the dark ones; contrast border and foreground in both high contrast kinds; the editor's colour for a token without a mode · etalii.adp.ide.vscode/test/webview/diagram/scene.test.ts
+- [x] **T038** [P] In a real Visual Studio Code: the package ships `definitions/`; a Markdown, YAML, JSON and XML file nothing claims opens as text as before; "Open as Text" opens the text editor for a file in a tool · etalii.adp.ide.vscode/test/vscode/opening.test.ts
 
 ### Implementation
 
 **Wave 2: independent (different files):**
 
-- [ ] **T039** [P] Mark `definitions/** -text` and `definitions/**/PROVENANCE.md text` · etalii.adp.ide.vscode/.gitattributes
-- [ ] **T040** [P] Write the sync command as [contracts/definitions.md](contracts/definitions.md) states it, on the shape of `sync-fbl.mjs` · etalii.adp.ide.vscode/scripts/sync-definitions.mjs
-- [ ] **T041** [P] Extend the examples command and copy what the three new tool types' standalone modules publish, with `specifications/desl/minimal-table.des` and its binding from etalii.adp: the `.mm` examples, `Fixtures/architecture.mm` and `Parity/mindmap.transcript.json`; the three `.aad` examples with their places and `Fixtures/**/*.aad`; the four Knowledge examples · etalii.adp.ide.vscode/scripts/sync-examples.mjs, etalii.adp.ide.vscode/examples/, etalii.adp.ide.vscode/fixtures/tools/
-- [ ] **T042** [P] Take Notion's `src/disl/` (14 files) and record where it came from · etalii.adp.ide.vscode/src/core/disl/, etalii.adp.ide.vscode/src/core/disl/ORIGIN.md
-- [ ] **T043** [P] Take Notion's `src/canvas/scene.ts`, `geometry.ts` and `snapping.ts` · etalii.adp.ide.vscode/src/core/scene/
-- [ ] **T044** [P] Rename `diagramType.ts` and make the contract generic as [contracts/tool-type.md](contracts/tool-type.md) declares it, keeping `DiagramType` as `ToolType<ViewModel, EditRequest>`; `protocolVersion` and every `v` become `2` · etalii.adp.ide.vscode/src/core/frame/toolType.ts, etalii.adp.ide.vscode/src/core/frame/protocol.ts
-- [ ] **T045** [P] Hold the layer rule in lint: what `src/core/`, `src/extension/` and `src/webview/` may import · etalii.adp.ide.vscode/eslint.config.mjs
+- [x] **T039** [P] Mark `definitions/** -text` and `definitions/**/PROVENANCE.md text` · etalii.adp.ide.vscode/.gitattributes
+- [x] **T040** [P] Write the sync command as [contracts/definitions.md](contracts/definitions.md) states it, on the shape of `sync-fbl.mjs` · etalii.adp.ide.vscode/scripts/sync-definitions.mjs
+- [x] **T041** [P] Extend the examples command and copy what the three new tool types' standalone modules publish, with `specifications/desl/minimal-table.des` and its binding from etalii.adp: the `.mm` examples, `Fixtures/architecture.mm` and `Parity/mindmap.transcript.json`; the three `.aad` examples with their places and `Fixtures/**/*.aad`; the four Knowledge examples · etalii.adp.ide.vscode/scripts/sync-examples.mjs, etalii.adp.ide.vscode/examples/, etalii.adp.ide.vscode/fixtures/tools/
+- [x] **T042** [P] Take Notion's `src/disl/` (14 files) and record where it came from · etalii.adp.ide.vscode/src/core/disl/, etalii.adp.ide.vscode/src/core/disl/ORIGIN.md
+- [x] **T043** [P] Take Notion's `src/canvas/scene.ts`, `geometry.ts` and `snapping.ts` · etalii.adp.ide.vscode/src/core/scene/
+- [x] **T044** [P] Rename `diagramType.ts` and make the contract generic as [contracts/tool-type.md](contracts/tool-type.md) declares it, keeping `DiagramType` as `ToolType<ViewModel, EditRequest>`; `protocolVersion` and every `v` become `2` · etalii.adp.ide.vscode/src/core/frame/toolType.ts, etalii.adp.ide.vscode/src/core/frame/protocol.ts
+- [x] **T045** [P] Hold the layer rule in lint: what `src/core/`, `src/extension/` and `src/webview/` may import · etalii.adp.ide.vscode/eslint.config.mjs
 
 **⟶ Wait for Wave 2 to finish, then Wave 3: independent (different files):**
 
-- [ ] **T046** [P] Add the `sync-definitions` script, run it with `--add` for the hype cycle graph and Agent Behavior Modelling, and commit the two folders and the contributions it writes. A contribution that differs from the hand-written one is reviewed, not reverted · etalii.adp.ide.vscode/definitions/gartner-hype-cycle-graph/, etalii.adp.ide.vscode/definitions/agent-behavior-modelling/, etalii.adp.ide.vscode/package.json
-- [ ] **T047** [P] Read one folder as a definition with its bindings: the specification, its companion, and each binding reference resolved to the copied file of that name · etalii.adp.ide.vscode/src/core/tool/definitionFolder.ts
-- [ ] **T048** [P] Claims from a binding, `claimed` and `suggests` · etalii.adp.ide.vscode/src/core/tool/claims.ts
-- [ ] **T049** [P] The registry with its `LayoutPlugin` and `ActionPlugin` interfaces, and the one place plugins are registered, empty for now · etalii.adp.ide.vscode/src/core/tool/pluginRegistry.ts, etalii.adp.ide.vscode/src/core/plugins/index.ts
-- [ ] **T050** [P] Splices as ranges of the text, with the library's `utf8.ts` · etalii.adp.ide.vscode/src/core/tool/spliceRanges.ts
-- [ ] **T051** [P] Draw a scene, with the colour rule of research R13 · etalii.adp.ide.vscode/src/webview/diagram/scene.ts
+- [x] **T046** [P] Add the `sync-definitions` script, run it with `--add` for the hype cycle graph and Agent Behavior Modelling, and commit the two folders and the contributions it writes. A contribution that differs from the hand-written one is reviewed, not reverted · etalii.adp.ide.vscode/definitions/gartner-hype-cycle-graph/, etalii.adp.ide.vscode/definitions/agent-behavior-modelling/, etalii.adp.ide.vscode/package.json
+- [x] **T047** [P] Read one folder as a definition with its bindings: the specification, its companion, and each binding reference resolved to the copied file of that name · etalii.adp.ide.vscode/src/core/tool/definitionFolder.ts
+- [x] **T048** [P] Claims from a binding, `claimed` and `suggests` · etalii.adp.ide.vscode/src/core/tool/claims.ts
+- [x] **T049** [P] The registry with its `LayoutPlugin` and `ActionPlugin` interfaces, and the one place plugins are registered, empty for now · etalii.adp.ide.vscode/src/core/tool/pluginRegistry.ts, etalii.adp.ide.vscode/src/core/plugins/index.ts
+- [x] **T050** [P] Splices as ranges of the text, with the library's `utf8.ts` · etalii.adp.ide.vscode/src/core/tool/spliceRanges.ts
+- [x] **T051** [P] Draw a scene, with the colour rule of research R13 · etalii.adp.ide.vscode/src/webview/diagram/scene.ts
 
 **⟶ Wait for Wave 3 to finish, then:**
 
-- [ ] **T052** `toolTypeFrom` for a diagram: view, findings, toolbox, fields, actions, `edit` as one model change planned into splices, the four states of an open document, and `newDocument` from the binding's template · etalii.adp.ide.vscode/src/core/tool/toolTypeFrom.ts
+- [x] **T052** `toolTypeFrom` for a diagram: view, findings, toolbox, fields, actions, `edit` as one model change planned into splices, the four states of an open document, and `newDocument` from the binding's template · etalii.adp.ide.vscode/src/core/tool/toolTypeFrom.ts
 
 **⟶ Wait for T052 to finish, then Wave 4: independent (different files):**
 
-- [ ] **T053** [P] Rename `diagramTypes.ts`: the tool types are the folders of `definitions/` that load, read from the install folder at start. `// simplified:` a hand-coded type wins for its origin until Phase 7 removes it · etalii.adp.ide.vscode/src/extension/toolTypes.ts
-- [ ] **T054** [P] Opening by claim: an unclaimed file of a default extension is handed back to the text editor with nothing reported; "Open as Text" holds for the session; the Explorer entry is fed from `claims.suggest` · etalii.adp.ide.vscode/src/extension/opening.ts, etalii.adp.ide.vscode/src/extension/suggestions.ts
-- [ ] **T055** [P] Rename `diagramEditor.ts`: an `applied` outcome is one `WorkspaceEdit` with the operation's name as its label; a registration change goes through the layout history; `open` is `vscode.open`; nothing that edits is offered for a read-only or unreadable document · etalii.adp.ide.vscode/src/extension/toolEditor.ts
-- [ ] **T056** [P] Read the `view` message of version 2 and draw a `Scene` with `scene.ts`, a `ViewModel` as before · etalii.adp.ide.vscode/src/webview/diagram/main.ts, etalii.adp.ide.vscode/src/webview/diagram/canvas.ts
-- [ ] **T057** [P] Ship `definitions/` in the package · etalii.adp.ide.vscode/.vscodeignore, etalii.adp.ide.vscode/scripts/package.mjs
-- [ ] **T058** [P] Run `npm run sync-definitions -- --check` on every pull request · etalii.adp.ide.vscode/.github/workflows/build.yml
-- [ ] **T059** [P] Write the support record with the sections of [contracts/support-record.md](contracts/support-record.md), the six issues of T002 in its last section, and the mixed line endings row now covering every tool type · etalii.adp.ide.vscode/docs/disl-support.md, etalii.adp.ide.vscode/docs/parity.md
+- [x] **T053** [P] Rename `diagramTypes.ts`: the tool types are the folders of `definitions/` that load, read from the install folder at start. `// simplified:` a hand-coded type wins for its origin until Phase 7 removes it · etalii.adp.ide.vscode/src/extension/toolTypes.ts
+- [x] **T054** [P] Opening by claim: an unclaimed file of a default extension is handed back to the text editor with nothing reported; "Open as Text" holds for the session; the Explorer entry is fed from `claims.suggest` · etalii.adp.ide.vscode/src/extension/opening.ts, etalii.adp.ide.vscode/src/extension/suggestions.ts
+- [x] **T055** [P] Rename `diagramEditor.ts`: an `applied` outcome is one `WorkspaceEdit` with the operation's name as its label; a registration change goes through the layout history; `open` is `vscode.open`; nothing that edits is offered for a read-only or unreadable document · etalii.adp.ide.vscode/src/extension/toolEditor.ts
+- [x] **T056** [P] Read the `view` message of version 2 and draw a `Scene` with `scene.ts`, a `ViewModel` as before · etalii.adp.ide.vscode/src/webview/diagram/main.ts, etalii.adp.ide.vscode/src/webview/diagram/canvas.ts
+- [x] **T057** [P] Ship `definitions/` in the package · etalii.adp.ide.vscode/.vscodeignore, etalii.adp.ide.vscode/scripts/package.mjs
+- [x] **T058** [P] Run `npm run sync-definitions -- --check` on every pull request · etalii.adp.ide.vscode/.github/workflows/build.yml
+- [x] **T059** [P] Write the support record with the sections of [contracts/support-record.md](contracts/support-record.md), the six issues of T002 in its last section, and the mixed line endings row now covering every tool type · etalii.adp.ide.vscode/docs/disl-support.md, etalii.adp.ide.vscode/docs/parity.md
 
 **⟶ Wait for Wave 4 to finish, then:**
 
-- [ ] **T060** Wire it: the custom editors and the `new`, `openAs` and `openAsText` commands come from the tool types · etalii.adp.ide.vscode/src/extension/extension.ts, etalii.adp.ide.vscode/src/extension/commands.ts
-- [ ] **T061** Run `npm test` and `npm run sync-definitions -- --check`; every test of specs 006 and 009 still passes · etalii.adp.ide.vscode
+- [x] **T060** Wire it: the custom editors and the `new`, `openAs` and `openAsText` commands come from the tool types · etalii.adp.ide.vscode/src/extension/extension.ts, etalii.adp.ide.vscode/src/extension/commands.ts
+- [x] **T061** Run `npm test` and `npm run sync-definitions -- --check`; every test of specs 006 and 009 still passes · etalii.adp.ide.vscode
 
 **Checkpoint**: the plug-in reads a tool type from a folder of `definitions/`; users see the two diagrams as before.
 
@@ -178,42 +178,42 @@ Extends: `src/core/disl/{notation,behavior,persistence,metamodel,expressions,lay
 
 ### Tests (first, seen failing)
 
-- [ ] **T062** [US1] Run the sync command with `--add definitions/diagrams/mindmap.dis` and commit the folder and its contributions · etalii.adp.ide.vscode/definitions/mindmap/, etalii.adp.ide.vscode/package.json
+- [x] **T062** [US1] Run the sync command with `--add definitions/diagrams/mindmap.dis` and commit the folder and its contributions · etalii.adp.ide.vscode/definitions/mindmap/, etalii.adp.ide.vscode/package.json
 
 **⟶ Wait for T062 to finish, then Wave 1: independent (different files):**
 
-- [ ] **T063** [P] [US1] The definition reads with no `disl.unsupported-*` finding, and each of `autoSize: "fitContent"`, `clipboard`, the `view` action, `persistence.view` for `collapsed`, the id `prefix`, `descendants()` and a layout named as a plugin is read as written · etalii.adp.ide.vscode/test/core/disl/definitions/mindmap.test.ts
-- [ ] **T064** [P] [US1] The plugin reads as standalone's does: the cases of `MindmapFreeplanePlugin.Tests.cs` and `MindmapDocument.Tests.cs`, and a body that is no map · etalii.adp.ide.vscode/test/core/plugins/freeplane-mm/reading.test.ts
-- [ ] **T065** [P] [US1] The plugin plans: the cases of `Commands.Tests.cs` as splices, for `add` with a position, `set` of text, notes and link, `remove` and `move`; each changes only its splices and its inverse restores the bytes · etalii.adp.ide.vscode/test/core/plugins/freeplane-mm/planning.test.ts
-- [ ] **T066** [P] [US1] The layout: the cases of `MindmapLayout.Tests.cs` and the placed nodes of the transcript · etalii.adp.ide.vscode/test/core/plugins/mindmap-layout/layout.test.ts
-- [ ] **T067** [P] [US1] The tool type against the transcript for `architecture.mm`: its toolbox, menus and property rows, its 41 edits and the undo of each; every example opens and saves byte-identical · etalii.adp.ide.vscode/test/core/tool/mindmap.test.ts
-- [ ] **T068** [P] [US1] In a real Visual Studio Code: a `.mm` file opens in the mind map with the text editor available; one gesture is one undo step; save; findings in Problems. Scenario 5 is skipped with issue 1 of T002 as its reason · etalii.adp.ide.vscode/test/vscode/mindmap.test.ts
+- [x] **T063** [P] [US1] The definition reads with no `disl.unsupported-*` finding, and each of `autoSize: "fitContent"`, `clipboard`, the `view` action, `persistence.view` for `collapsed`, the id `prefix`, `descendants()` and a layout named as a plugin is read as written · etalii.adp.ide.vscode/test/core/disl/definitions/mindmap.test.ts
+- [x] **T064** [P] [US1] The plugin reads as standalone's does: the cases of `MindmapFreeplanePlugin.Tests.cs` and `MindmapDocument.Tests.cs`, and a body that is no map · etalii.adp.ide.vscode/test/core/plugins/freeplane-mm/reading.test.ts
+- [x] **T065** [P] [US1] The plugin plans: the cases of `Commands.Tests.cs` as splices, for `add` with a position, `set` of text, notes and link, `remove` and `move`; each changes only its splices and its inverse restores the bytes · etalii.adp.ide.vscode/test/core/plugins/freeplane-mm/planning.test.ts
+- [x] **T066** [P] [US1] The layout: the cases of `MindmapLayout.Tests.cs` and the placed nodes of the transcript · etalii.adp.ide.vscode/test/core/plugins/mindmap-layout/layout.test.ts
+- [x] **T067** [P] [US1] The tool type against the transcript for `architecture.mm`: its toolbox, menus and property rows, its 41 edits and the undo of each; every example opens and saves byte-identical · etalii.adp.ide.vscode/test/core/tool/mindmap.test.ts
+- [x] **T068** [P] [US1] In a real Visual Studio Code: a `.mm` file opens in the mind map with the text editor available; one gesture is one undo step; save; findings in Problems. Scenario 5 is skipped with issue 1 of T002 as its reason · etalii.adp.ide.vscode/test/vscode/mindmap.test.ts
 
 ### Implementation
 
 **Wave 2: independent (different files):**
 
-- [ ] **T069** [P] [US1] `autoSize: "fitContent"` · etalii.adp.ide.vscode/src/core/disl/notation.ts
-- [ ] **T070** [P] [US1] `clipboard` and the `view` action · etalii.adp.ide.vscode/src/core/disl/behavior.ts
-- [ ] **T071** [P] [US1] `persistence.view` for viewer state · etalii.adp.ide.vscode/src/core/disl/persistence.ts
-- [ ] **T072** [P] [US1] The id `prefix` and `descendants()` · etalii.adp.ide.vscode/src/core/disl/metamodel.ts, etalii.adp.ide.vscode/src/core/disl/expressions.ts
-- [ ] **T073** [P] [US1] A layout named as a plugin · etalii.adp.ide.vscode/src/core/disl/layout.ts
-- [ ] **T074** [P] [US1] The reader, with standalone's `MindmapFreeplanePlugin` and `MindmapDocument` as the worked example · etalii.adp.ide.vscode/src/core/plugins/freeplane-mm/reader.ts
-- [ ] **T075** [P] [US1] The layout, ported from standalone's `MindmapLayout` · etalii.adp.ide.vscode/src/core/plugins/mindmap-layout/layout.ts
-- [ ] **T076** [P] [US1] The link picker: the platform's file and folder dialog, storing the path relative to the document · etalii.adp.ide.vscode/src/extension/projectLinkPicker.ts
+- [x] **T069** [P] [US1] `autoSize: "fitContent"` · etalii.adp.ide.vscode/src/core/disl/notation.ts
+- [x] **T070** [P] [US1] `clipboard` and the `view` action · etalii.adp.ide.vscode/src/core/disl/behavior.ts
+- [x] **T071** [P] [US1] `persistence.view` for viewer state · etalii.adp.ide.vscode/src/core/disl/persistence.ts
+- [x] **T072** [P] [US1] The id `prefix` and `descendants()` · etalii.adp.ide.vscode/src/core/disl/metamodel.ts, etalii.adp.ide.vscode/src/core/disl/expressions.ts
+- [x] **T073** [P] [US1] A layout named as a plugin · etalii.adp.ide.vscode/src/core/disl/layout.ts
+- [x] **T074** [P] [US1] The reader, with standalone's `MindmapFreeplanePlugin` and `MindmapDocument` as the worked example · etalii.adp.ide.vscode/src/core/plugins/freeplane-mm/reader.ts
+- [x] **T075** [P] [US1] The layout, ported from standalone's `MindmapLayout` · etalii.adp.ide.vscode/src/core/plugins/mindmap-layout/layout.ts
+- [x] **T076** [P] [US1] The link picker: the platform's file and folder dialog, storing the path relative to the document · etalii.adp.ide.vscode/src/extension/projectLinkPicker.ts
 
 **⟶ Wait for Wave 2 to finish, then Wave 3: independent (different files):**
 
-- [ ] **T077** [P] [US1] The planner, with standalone's `FreeplaneXmlWriter` as the worked example, and the plugin's entry · etalii.adp.ide.vscode/src/core/plugins/freeplane-mm/planner.ts, etalii.adp.ide.vscode/src/core/plugins/freeplane-mm/index.ts
-- [ ] **T078** [P] [US1] Folded nodes and content-sized nodes in the scene · etalii.adp.ide.vscode/src/core/scene/scene.ts
-- [ ] **T079** [P] [US1] Draw a fold, and the gestures for folding, reparenting by drag and the clipboard · etalii.adp.ide.vscode/src/webview/diagram/scene.ts, etalii.adp.ide.vscode/src/webview/diagram/canvas.ts
-- [ ] **T080** [P] [US1] Add the seven constructs and three plugins to the support record, and the mind map's row to the tool list · etalii.adp.ide.vscode/src/core/disl/support.ts, etalii.adp.ide.vscode/docs/disl-support.md, etalii.adp.ide.vscode/docs/tools.md
+- [x] **T077** [P] [US1] The planner, with standalone's `FreeplaneXmlWriter` as the worked example, and the plugin's entry · etalii.adp.ide.vscode/src/core/plugins/freeplane-mm/planner.ts, etalii.adp.ide.vscode/src/core/plugins/freeplane-mm/index.ts
+- [x] **T078** [P] [US1] Folded nodes and content-sized nodes in the scene · etalii.adp.ide.vscode/src/core/scene/scene.ts
+- [x] **T079** [P] [US1] Draw a fold, and the gestures for folding, reparenting by drag and the clipboard · etalii.adp.ide.vscode/src/webview/diagram/scene.ts, etalii.adp.ide.vscode/src/webview/diagram/canvas.ts
+- [x] **T080** [P] [US1] Add the seven constructs and three plugins to the support record, and the mind map's row to the tool list · etalii.adp.ide.vscode/src/core/disl/support.ts, etalii.adp.ide.vscode/docs/disl-support.md, etalii.adp.ide.vscode/docs/tools.md
 
 **⟶ Wait for Wave 3 to finish, then:**
 
-- [ ] **T081** [US1] Register the three plugins, and map reparenting, folding and opening a link to model changes · etalii.adp.ide.vscode/src/core/plugins/index.ts, etalii.adp.ide.vscode/src/core/tool/toolTypeFrom.ts
-- [ ] **T082** [US1] Run `npm test`; the skipped scenario is in the skipped-tests report with its reason · etalii.adp.ide.vscode
-- [ ] **T083** [US1] Push, open pull request 2 naming this folder and the etalii.adp commit, merge it once the Build passes, delete the branch, then tick T026 to T083 here through a pull request · etalii.adp.ide.vscode (pull request 2), etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md
+- [x] **T081** [US1] Register the three plugins, and map reparenting, folding and opening a link to model changes · etalii.adp.ide.vscode/src/core/plugins/index.ts, etalii.adp.ide.vscode/src/core/tool/toolTypeFrom.ts
+- [x] **T082** [US1] Run `npm test`; the skipped scenario is in the skipped-tests report with its reason · etalii.adp.ide.vscode
+- [x] **T083** [US1] Push, open pull request 2 naming this folder and the etalii.adp commit, merge it once the Build passes, delete the branch, then tick T026 to T083 here through a pull request · etalii.adp.ide.vscode (pull request 2), etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md
 
 **Checkpoint**: the mind map works in Visual Studio Code from its definition, and is testable alone.
 

@@ -304,6 +304,462 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-12T22:31:55.298Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T027",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:44:45.260Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T028",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:44:45.510Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T029",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:44:45.754Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T030",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:44:46.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T038",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:44:46.200Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T039",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:44:46.404Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T042",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:44:46.603Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T043",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:44:46.820Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T044",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:44:47.022Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T045",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:44:47.226Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T040",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:47:43.198Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T041",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:47:43.391Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T046",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:47:43.582Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T057",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:47:43.773Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T058",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:47:43.962Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T031",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:02:21.811Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T032",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:02:22.014Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T033",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:02:22.211Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T034",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:02:22.412Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T035",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:02:22.611Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T036",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:02:22.812Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T047",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:13:18.429Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T048",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:13:18.635Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T049",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:13:18.838Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T050",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:13:19.043Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T052",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:13:19.245Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T053",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:13:19.445Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T054",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:13:19.667Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T055",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:13:19.882Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T059",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:13:20.103Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T060",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:13:20.316Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T037",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:20:35.329Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T051",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:20:35.528Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T056",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:20:35.725Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T061",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:20:35.921Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T062",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:20:36.122Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T063",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:16.990Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T064",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:17.186Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T065",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:17.389Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T066",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:17.593Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T067",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:17.791Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T068",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:17.994Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T069",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:18.197Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T070",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:18.395Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T071",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:18.588Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T072",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:18.789Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T073",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:18.986Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T074",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:19.185Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T075",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:19.381Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T076",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:19.576Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T077",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:19.771Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T078",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:19.969Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T079",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:20.197Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T080",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:20.398Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T081",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:20.601Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T082",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T23:58:20.838Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T083",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T09:55:01.159Z"
     }
   ],
   "telemetryInstanceId": "dc5f5bb0-d20a-4e36-9cc2-dc702a232be5",
@@ -609,7 +1065,7 @@
       ]
     }
   },
-  "currentTask": "T026",
+  "currentTask": "T083",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -808,6 +1264,234 @@
         "etalii.adp.ide.vscode/package.json",
         "etalii.adp.ide.vscode/package-lock.json"
       ]
+    },
+    "T027": {
+      "status": "DONE",
+      "did": "14 tests of the sync command against two temporary git repositories, seen failing for want of the script"
+    },
+    "T028": {
+      "status": "DONE",
+      "did": "Notion's test/disl taken without offers.test.ts, reading definitions/gartner-hype-cycle-graph; seen failing"
+    },
+    "T029": {
+      "status": "DONE",
+      "did": "Notion's four scene tests taken with the nine examples' recorded places under fixtures/disl/places; seen failing"
+    },
+    "T030": {
+      "status": "DONE",
+      "did": "toolType.test.ts: 19 tests of the generic contract, protocol 2 and the hand-coded adapter; seen failing"
+    },
+    "T038": {
+      "status": "DONE",
+      "did": "opening.test.ts: 6 tests in a real Visual Studio Code, type-checked, to run when the package ships definitions/"
+    },
+    "T039": {
+      "status": "DONE",
+      "did": "definitions/** marked -text, PROVENANCE.md text"
+    },
+    "T042": {
+      "status": "DONE",
+      "did": "src/core/disl taken from Notion 4a0cdb4 with ORIGIN.md; a finding carries its own detail"
+    },
+    "T043": {
+      "status": "DONE",
+      "did": "src/core/scene taken: scene.ts, geometry.ts, snapping.ts; 339 taken tests pass"
+    },
+    "T044": {
+      "status": "DONE",
+      "did": "toolType.ts with ToolType<View, Request>, splices, open, four new requests; handCoded.ts adapter; protocol version 2"
+    },
+    "T045": {
+      "status": "DONE",
+      "did": "eslint.config.mjs holds the layer rule for core, extension and webview"
+    },
+    "T040": {
+      "status": "DONE",
+      "did": "sync-definitions.mjs: copies from git objects, PROVENANCE.md, --check, contributions; 14 tests pass"
+    },
+    "T041": {
+      "status": "DONE",
+      "did": "sync-examples.mjs takes etalii.adp too; 91 files copied for the three new tool types and DESL's minimal table"
+    },
+    "T046": {
+      "status": "DONE",
+      "did": "Two definition folders copied at etalii.adp 2477f75 and standalone 5756a07; contributions written, two titles now from the labels"
+    },
+    "T057": {
+      "status": "DONE",
+      "did": "definitions/ ships in the package"
+    },
+    "T058": {
+      "status": "DONE",
+      "did": "Build runs sync-definitions --check in the plugin job"
+    },
+    "T031": {
+      "status": "DONE",
+      "did": "claims.test.ts written first, seen failing"
+    },
+    "T032": {
+      "status": "DONE",
+      "did": "pluginRegistry.test.ts written first, seen failing"
+    },
+    "T033": {
+      "status": "DONE",
+      "did": "toolTypeFrom.test.ts on the hype cycle graph's definition, with the bytes the hand-coded tests state; seen failing"
+    },
+    "T034": {
+      "status": "DONE",
+      "did": "spliceRanges.test.ts written first, seen failing"
+    },
+    "T035": {
+      "status": "DONE",
+      "did": "words.test.ts reads 223 names of the copied definitions against disl, scene and tool; fails for want of src/core/tool"
+    },
+    "T036": {
+      "status": "DONE",
+      "did": "supportRecord.test.ts reads the record both ways; seen failing"
+    },
+    "T047": {
+      "status": "DONE",
+      "did": "definitionFolder.ts reads one folder given as bytes, resolving a binding reference to the copied file"
+    },
+    "T048": {
+      "status": "DONE",
+      "did": "claims.ts: claims, the claiming binding and suggests through the library's routing"
+    },
+    "T049": {
+      "status": "DONE",
+      "did": "pluginRegistry.ts with LayoutPlugin and ActionPlugin, and the empty registry in plugins/index.ts"
+    },
+    "T050": {
+      "status": "DONE",
+      "did": "spliceRanges.ts turns byte splices into line and character ranges"
+    },
+    "T052": {
+      "status": "DONE",
+      "did": "toolTypeFrom and toolTypesFrom for a diagram; 211 tests of test/core/tool pass"
+    },
+    "T053": {
+      "status": "DONE",
+      "did": "toolTypes.ts reads definitions/ from the install folder; a hand-coded type wins for its origin"
+    },
+    "T054": {
+      "status": "DONE",
+      "did": "opening.ts: the claimant of a file, text for the session, handing back an unclaimed file; suggestions fed from suggests"
+    },
+    "T055": {
+      "status": "DONE",
+      "did": "toolEditor.ts: splices as one WorkspaceEdit, registration through the layout history, the open outcome"
+    },
+    "T059": {
+      "status": "DONE",
+      "did": "docs/disl-support.md with the eight sections; issues 150 and 151 filed for two differences found"
+    },
+    "T060": {
+      "status": "DONE",
+      "did": "Custom editors and the new, openAs and openAsText commands come from the tool types"
+    },
+    "T037": {
+      "status": "DONE",
+      "did": "scene.test.ts: 26 tests of the renderer and the colour rule, written first"
+    },
+    "T051": {
+      "status": "DONE",
+      "did": "scene.ts draws a scene with the colour rule of R13"
+    },
+    "T056": {
+      "status": "DONE",
+      "did": "The canvas reads the view message of version 2: a scene by scene.ts, a view model as before; 102 webview tests pass"
+    },
+    "T061": {
+      "status": "DONE",
+      "did": "npm run check clean, 1968 unit tests pass, 34 tests pass in a real Visual Studio Code, sync-definitions --check passes"
+    },
+    "T062": {
+      "status": "DONE",
+      "did": "definitions/mindmap copied with its contributions"
+    },
+    "T063": {
+      "status": "DONE",
+      "did": "mindmap.test.ts of the definition: 26 tests written first, 23 seen failing"
+    },
+    "T064": {
+      "status": "DONE",
+      "did": "reading.test.ts of the persistence plugin, written first"
+    },
+    "T065": {
+      "status": "DONE",
+      "did": "planning.test.ts: standalone's command cases as splices, written first"
+    },
+    "T066": {
+      "status": "DONE",
+      "did": "layout.test.ts: standalone's cases and the transcript's placed nodes, written first"
+    },
+    "T067": {
+      "status": "DONE",
+      "did": "The tool type replays the transcript for three maps; written first"
+    },
+    "T068": {
+      "status": "DONE",
+      "did": "mindmap.test.ts in a real Visual Studio Code; scenario 5 skipped with issue 140 as its reason"
+    },
+    "T069": {
+      "status": "DONE",
+      "did": "autoSize fitContent read; a content-sized node is measured in the core"
+    },
+    "T070": {
+      "status": "DONE",
+      "did": "clipboard read and kept, the view action for viewer state"
+    },
+    "T071": {
+      "status": "DONE",
+      "did": "persistence.view with initial; folds seeded from the file"
+    },
+    "T072": {
+      "status": "DONE",
+      "did": "descendants() and ancestors(); the id prefix was already read"
+    },
+    "T073": {
+      "status": "DONE",
+      "did": "A layout named as a plugin is read and run"
+    },
+    "T074": {
+      "status": "DONE",
+      "did": "reader.ts reads a Freeplane body as standalone does"
+    },
+    "T075": {
+      "status": "DONE",
+      "did": "layout.ts gives the transcript's places to the last digit"
+    },
+    "T076": {
+      "status": "DONE",
+      "did": "projectLinkPicker.ts: the pickPath outcome, a quick pick for file or folder where one dialog cannot do both"
+    },
+    "T077": {
+      "status": "DONE",
+      "did": "planner.ts plans add, set, remove, move and storeId as splices"
+    },
+    "T078": {
+      "status": "DONE",
+      "did": "SceneNode.fold, content-sized nodes, derived relations and arcs in the scene"
+    },
+    "T079": {
+      "status": "DONE",
+      "did": "The canvas draws a fold and asks for folding, reparenting by drag and bound keys; no clipboard to build"
+    },
+    "T080": {
+      "status": "DONE",
+      "did": "Support record: view.viewer, three plugins, the mind map's subsection; tools.md has its row"
+    },
+    "T081": {
+      "status": "DONE",
+      "did": "Three plugins registered; reparent, fold and opening a link mapped"
+    },
+    "T082": {
+      "status": "DONE",
+      "did": "npm run check clean, 2536 unit tests pass, 44 in a real Visual Studio Code with scenario 5 skipped and reported"
+    },
+    "T083": {
+      "status": "DONE",
+      "did": "Pull request 24 merged into etalii.adp.ide.vscode develop as d5d314b after the Build passed; its branch is deleted on origin"
     }
   }
 }
