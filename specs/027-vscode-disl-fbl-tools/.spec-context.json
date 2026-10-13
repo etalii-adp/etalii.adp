@@ -1208,6 +1208,22 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-13T20:21:46.372Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T136",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T21:03:10.292Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T137",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T21:03:10.788Z"
     }
   ],
   "telemetryInstanceId": "dc5f5bb0-d20a-4e36-9cc2-dc702a232be5",
@@ -1396,6 +1412,10 @@
     },
     {
       "note": "Pull request 5 puts the row of issue 165 in the Knowledge designer table of docs/disl-support.md; the polish branch moves it and holds it with a test",
+      "step": "implement"
+    },
+    {
+      "note": "Settled 2026-10-13: pull request 27 is merged, the polish branch is gone and its four commits are on features/027-vscode-disl-fbl-tools as etalii.adp.ide.vscode pull request 28, a draft. Left: T138, which Peter does in the Development build and reports with the Visual Studio Code version; then its row in docs/parity.md, the draft made ready, and T143",
       "step": "implement"
     }
   ],
@@ -1615,7 +1635,7 @@
       ]
     }
   },
-  "currentTask": "T142",
+  "currentTask": "T137",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -2328,7 +2348,7 @@
     },
     "T120": {
       "status": "DONE",
-      "did": "Branch cut again from origin/develop at 893a4f8",
+      "did": "The branch was cut again from origin/develop at 893a4f8 for pull request 5",
       "files": [
         "etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools"
       ]
@@ -2480,6 +2500,20 @@
       "files": [
         "etalii.adp.ide.vscode"
       ]
+    },
+    "T136": {
+      "status": "DONE",
+      "did": "etalii.adp.ide.vscode pull request 27 merged by Peter as 9849baf on 2026-10-13, its branch deleted on origin; T120 to T136 ticked",
+      "files": [
+        "etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md"
+      ]
+    },
+    "T137": {
+      "status": "DONE",
+      "did": "The branch was cut again from origin/develop at 9849baf, with the four Polish commits prepared ahead put on it; the tree is the one validated at e2adb5d",
+      "files": [
+        "etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools"
+      ]
     }
   },
   "verified": [
@@ -2555,5 +2589,5 @@
       "result": "seen in this session; the tree was left clean"
     }
   ],
-  "last_action": "T139 to T142 journaled from a local branch; etalii.adp.ide.vscode pull request 27 and etalii.adp pull request 166 wait for their merge; T138 waits for a person"
+  "last_action": "T120 to T136 ticked; etalii.adp.ide.vscode pull request 28 (Polish) is a draft that waits for T138, a person at a real window"
 }

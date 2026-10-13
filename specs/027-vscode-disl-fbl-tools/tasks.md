@@ -335,40 +335,40 @@ Extends: `src/core/disl/{metamodel,notation,layout,support}.ts`, `src/core/plugi
 
 ### Tests (first, seen failing)
 
-- [ ] **T120** [US4] Cut the branch again from `origin/develop` · etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools
+- [x] **T120** [US4] Cut the branch again from `origin/develop` · etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools
 
 **⟶ Wait for T120 to finish, then Wave 1: independent (different files):**
 
-- [ ] **T121** [P] [US4] The definition reads with no `disl.unsupported-*` finding: `anchor.sides`, the derived id strategy, the `tidyTree` layout, parent placements and retyping · etalii.adp.ide.vscode/test/core/disl/definitions/agentBehaviorModelling.test.ts
-- [ ] **T122** [P] [US4] Move the parser and writer tests to the plugin, naming the same behaviour through `PersistencePlugin` · etalii.adp.ide.vscode/test/core/plugins/abm-markdown/behaviorModel.test.ts
-- [ ] **T123** [P] [US4] The arrange action gives the places today's `layout.ts` gives · etalii.adp.ide.vscode/test/core/plugins/abm-arrange/arrange.test.ts
-- [ ] **T124** [P] [US4] Rewrite each test that names a hand-coded function to name the same behaviour through the tool type, and list each in the pull request; every other test stays as it is · etalii.adp.ide.vscode/test/core/gartner-hypecycle-graph/, etalii.adp.ide.vscode/test/core/agent-behavior-modelling/dragPreview.test.ts, etalii.adp.ide.vscode/test/webview/gartner-hypecycle-graph/, etalii.adp.ide.vscode/test/webview/agent-behavior-modelling/
-- [ ] **T125** [P] [US4] A label, a colour and a refusal sentence changed in a temporary copy of a definition show in the tool type with no other change · etalii.adp.ide.vscode/test/core/tool/definitionChange.test.ts
+- [x] **T121** [P] [US4] The definition reads with no `disl.unsupported-*` finding: `anchor.sides`, the derived id strategy, the `tidyTree` layout, parent placements and retyping · etalii.adp.ide.vscode/test/core/disl/definitions/agentBehaviorModelling.test.ts
+- [x] **T122** [P] [US4] Move the parser and writer tests to the plugin, naming the same behaviour through `PersistencePlugin` · etalii.adp.ide.vscode/test/core/plugins/abm-markdown/behaviorModel.test.ts
+- [x] **T123** [P] [US4] The arrange action gives the places today's `layout.ts` gives · etalii.adp.ide.vscode/test/core/plugins/abm-arrange/arrange.test.ts
+- [x] **T124** [P] [US4] Rewrite each test that names a hand-coded function to name the same behaviour through the tool type, and list each in the pull request; every other test stays as it is · etalii.adp.ide.vscode/test/core/gartner-hypecycle-graph/, etalii.adp.ide.vscode/test/core/agent-behavior-modelling/dragPreview.test.ts, etalii.adp.ide.vscode/test/webview/gartner-hypecycle-graph/, etalii.adp.ide.vscode/test/webview/agent-behavior-modelling/
+- [x] **T125** [P] [US4] A label, a colour and a refusal sentence changed in a temporary copy of a definition show in the tool type with no other change · etalii.adp.ide.vscode/test/core/tool/definitionChange.test.ts
 
 ### Implementation
 
 **Wave 2: independent (different files):**
 
-- [ ] **T126** [P] [US4] The derived id strategy and retyping · etalii.adp.ide.vscode/src/core/disl/metamodel.ts
-- [ ] **T127** [P] [US4] `anchor.sides` and parent placements · etalii.adp.ide.vscode/src/core/disl/notation.ts
-- [ ] **T128** [P] [US4] The `tidyTree` layout · etalii.adp.ide.vscode/src/core/disl/layout.ts
-- [ ] **T129** [P] [US4] Today's parser, writer, model and rules under the plugin's interface · etalii.adp.ide.vscode/src/core/plugins/abm-markdown/
-- [ ] **T130** [P] [US4] Today's `layout.ts` as the arrange action · etalii.adp.ide.vscode/src/core/plugins/abm-arrange/
+- [x] **T126** [P] [US4] The derived id strategy and retyping · etalii.adp.ide.vscode/src/core/disl/metamodel.ts
+- [x] **T127** [P] [US4] `anchor.sides` and parent placements · etalii.adp.ide.vscode/src/core/disl/notation.ts
+- [x] **T128** [P] [US4] The `tidyTree` layout · etalii.adp.ide.vscode/src/core/disl/layout.ts
+- [x] **T129** [P] [US4] Today's parser, writer, model and rules under the plugin's interface · etalii.adp.ide.vscode/src/core/plugins/abm-markdown/
+- [x] **T130** [P] [US4] Today's `layout.ts` as the arrange action · etalii.adp.ide.vscode/src/core/plugins/abm-arrange/
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T131** [US4] Register the two plugins and remove the line that let a hand-coded type win · etalii.adp.ide.vscode/src/core/plugins/index.ts, etalii.adp.ide.vscode/src/extension/toolTypes.ts
+- [x] **T131** [US4] Register the two plugins and remove the line that let a hand-coded type win · etalii.adp.ide.vscode/src/core/plugins/index.ts, etalii.adp.ide.vscode/src/extension/toolTypes.ts
 
 **⟶ Wait for T131 to finish, then Wave 3: independent (different files):**
 
-- [ ] **T132** [P] [US4] Remove the hand-coded modules, `ViewElement`, `ViewRelation`, `ViewModel` and `DiagramType`, and the webview's `DiagramDefinition` path with what only it used · etalii.adp.ide.vscode/src/core/gartner-hypecycle-graph/, etalii.adp.ide.vscode/src/core/agent-behavior-modelling/, etalii.adp.ide.vscode/src/webview/gartner-hypecycle-graph/, etalii.adp.ide.vscode/src/webview/agent-behavior-modelling/, etalii.adp.ide.vscode/src/webview/diagram/, etalii.adp.ide.vscode/src/core/frame/toolType.ts
-- [ ] **T133** [P] [US4] Record what Agent Behavior Modelling added and every difference from spec 006's results, each with its reason or its issue in etalii.adp · etalii.adp.ide.vscode/src/core/disl/support.ts, etalii.adp.ide.vscode/docs/disl-support.md, etalii.adp.ide.vscode/docs/parity.md, etalii.adp.ide.vscode/docs/tools.md
+- [x] **T132** [P] [US4] Remove the hand-coded modules, `ViewElement`, `ViewRelation`, `ViewModel` and `DiagramType`, and the webview's `DiagramDefinition` path with what only it used · etalii.adp.ide.vscode/src/core/gartner-hypecycle-graph/, etalii.adp.ide.vscode/src/core/agent-behavior-modelling/, etalii.adp.ide.vscode/src/webview/gartner-hypecycle-graph/, etalii.adp.ide.vscode/src/webview/agent-behavior-modelling/, etalii.adp.ide.vscode/src/webview/diagram/, etalii.adp.ide.vscode/src/core/frame/toolType.ts
+- [x] **T133** [P] [US4] Record what Agent Behavior Modelling added and every difference from spec 006's results, each with its reason or its issue in etalii.adp · etalii.adp.ide.vscode/src/core/disl/support.ts, etalii.adp.ide.vscode/docs/disl-support.md, etalii.adp.ide.vscode/docs/parity.md, etalii.adp.ide.vscode/docs/tools.md
 
 **⟶ Wait for Wave 3 to finish, then:**
 
-- [ ] **T134** [US4] Remove what nothing uses any more of the old text, registration and diagram helpers, with their tests · etalii.adp.ide.vscode/src/core/text/, etalii.adp.ide.vscode/src/core/registration/, etalii.adp.ide.vscode/src/core/diagram/
-- [ ] **T135** [US4] Run `npm test`: every test under `test/vscode/` for the two diagrams passes untouched (SC-004) · etalii.adp.ide.vscode
-- [ ] **T136** [US4] Push, open pull request 5, merge it once the Build passes, delete the branch, then tick T120 to T136 here through a pull request · etalii.adp.ide.vscode (pull request 5), etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md
+- [x] **T134** [US4] Remove what nothing uses any more of the old text, registration and diagram helpers, with their tests · etalii.adp.ide.vscode/src/core/text/, etalii.adp.ide.vscode/src/core/registration/, etalii.adp.ide.vscode/src/core/diagram/
+- [x] **T135** [US4] Run `npm test`: every test under `test/vscode/` for the two diagrams passes untouched (SC-004) · etalii.adp.ide.vscode
+- [x] **T136** [US4] Push, open pull request 5, merge it once the Build passes, delete the branch, then tick T120 to T136 here through a pull request · etalii.adp.ide.vscode (pull request 5), etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md
 
 **Checkpoint**: one way of building a tool; every tool type in the plug-in is a folder of `definitions/`.
 
