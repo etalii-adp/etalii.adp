@@ -760,6 +760,134 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-13T09:55:01.159Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T084",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T09:57:08.979Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T085",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:19:49.400Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T086",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:19:49.691Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T087",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:19:49.974Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T088",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:19:50.257Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T089",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:19:50.558Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T090",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:22:23.406Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T091",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:53:02.852Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T092",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:53:03.126Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T093",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:53:03.421Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T094",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:53:03.716Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T095",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:53:03.980Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T096",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:53:04.237Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T097",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:53:04.526Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T098",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T10:54:42.327Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T099",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T13:46:34.130Z"
     }
   ],
   "telemetryInstanceId": "dc5f5bb0-d20a-4e36-9cc2-dc702a232be5",
@@ -1100,7 +1228,7 @@
       ]
     }
   },
-  "currentTask": "T083",
+  "currentTask": "T099",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -1527,6 +1655,133 @@
     "T083": {
       "status": "DONE",
       "did": "Pull request 24 merged into etalii.adp.ide.vscode develop as d5d314b after the Build passed; its branch is deleted on origin"
+    },
+    "T084": {
+      "status": "DONE",
+      "did": "Copied the agent activity diagram's definition at etalii.adp 8e52c81 with its contributions; the refresh also moved the other three folders' records and the hype cycle graph's companion",
+      "files": [
+        "etalii.adp.ide.vscode/definitions/agent-activity-diagram/",
+        "etalii.adp.ide.vscode/package.json"
+      ]
+    },
+    "T085": {
+      "status": "DONE",
+      "did": "Test of the definition read by the interpreter alone, written first and seen failing (b3eb8df)",
+      "files": [
+        "etalii.adp.ide.vscode/test/core/disl/definitions/agentActivityDiagram.test.ts"
+      ]
+    },
+    "T086": {
+      "status": "DONE",
+      "did": "Test of the force layout in tiers with the companion's numbers and the three examples, written first and seen failing (b3eb8df)",
+      "files": [
+        "etalii.adp.ide.vscode/test/core/disl/forceLayout.test.ts"
+      ]
+    },
+    "T087": {
+      "status": "DONE",
+      "did": "Test of the tool type against the examples, standalone's fixtures and the bytes of agent-activity-edits, written first and seen failing (b3eb8df)",
+      "files": [
+        "etalii.adp.ide.vscode/test/core/tool/agentActivityDiagram.test.ts",
+        "etalii.adp.ide.vscode/src/core/frame/toolType.ts"
+      ]
+    },
+    "T088": {
+      "status": "DONE",
+      "did": "Test of compartments, shapes, icons, a pinned node and a filter's switch on the canvas, written first and seen failing (4343b7a)",
+      "files": [
+        "etalii.adp.ide.vscode/test/webview/diagram/compartments.test.ts"
+      ]
+    },
+    "T089": {
+      "status": "DONE",
+      "did": "Test in a real Visual Studio Code, written first; five of nine seen failing in a run of the packaged plug-in (a8f5cb8)",
+      "files": [
+        "etalii.adp.ide.vscode/test/vscode/agent-activity-diagram.test.ts",
+        "etalii.adp.ide.vscode/test/vscode/identity.test.ts"
+      ]
+    },
+    "T090": {
+      "status": "DONE",
+      "did": "The force layout in tiers as a pure function, by the companion's reference algorithm; overlap passes run until none is left (the reference's 50 leave overlaps), and the live test was restated for what the reference gives",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/disl/forceLayout.ts",
+        "etalii.adp.ide.vscode/test/core/disl/forceLayout.test.ts"
+      ]
+    },
+    "T091": {
+      "status": "DONE",
+      "did": "Compartments with groupBy, itemOrder and itemLink, the kept filter, folder, hexagon, badges and conditions read in the notation (2e3d862)",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/disl/notation.ts",
+        "etalii.adp.ide.vscode/src/core/disl/specification.ts"
+      ]
+    },
+    "T092": {
+      "status": "DONE",
+      "did": "pin, unpin, unpinAll, create-child, open with its refusal, the view action on stored view data, and a derived relation's gestures as operations (2e3d862)",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/disl/behavior.ts",
+        "etalii.adp.ide.vscode/src/core/disl/toolbox.ts",
+        "etalii.adp.ide.vscode/src/core/disl/forms.ts"
+      ]
+    },
+    "T093": {
+      "status": "DONE",
+      "did": "persistence.view.bind with the stored view data of a body, and paths on a uri attribute, with derived relations and moments beside them (2e3d862)",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/disl/persistence.ts",
+        "etalii.adp.ide.vscode/src/core/disl/metamodel.ts"
+      ]
+    },
+    "T094": {
+      "status": "DONE",
+      "did": "The force layout run under respect pinned from the places on screen, and compartments, badges and pins carried in the scene (2e3d862)",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/disl/layout.ts",
+        "etalii.adp.ide.vscode/src/core/disl/viewpoints.ts",
+        "etalii.adp.ide.vscode/src/core/scene/scene.ts"
+      ]
+    },
+    "T095": {
+      "status": "DONE",
+      "did": "The canvas draws compartments, badges, a pinned node and a filter's switch and asks for their gestures; the editor hands back the places on screen and opens links (e70a673, 8598a92)",
+      "files": [
+        "etalii.adp.ide.vscode/src/webview/diagram/scene.ts",
+        "etalii.adp.ide.vscode/src/webview/diagram/canvas.ts",
+        "etalii.adp.ide.vscode/src/webview/diagram/icons.ts",
+        "etalii.adp.ide.vscode/src/webview/diagram/panel.ts",
+        "etalii.adp.ide.vscode/src/webview/diagram/canvas.css",
+        "etalii.adp.ide.vscode/src/extension/toolEditor.ts"
+      ]
+    },
+    "T096": {
+      "status": "DONE",
+      "did": "A pin, a dragged position, a group's state and a kept filter as splices of the entries persistence.view.bind names, with stale entries removed on the next write (2e3d862)",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/tool/toolTypeFrom.ts",
+        "etalii.adp.ide.vscode/src/core/tool/modelChanges.ts"
+      ]
+    },
+    "T097": {
+      "status": "DONE",
+      "did": "The support record reads DISL 0.4, lists the agent activity diagram's differences and etalii.adp issue 159, and the tool list has the diagram's row (6121f65)",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/disl/support.ts",
+        "etalii.adp.ide.vscode/docs/disl-support.md",
+        "etalii.adp.ide.vscode/docs/tools.md"
+      ]
+    },
+    "T098": {
+      "status": "DONE",
+      "did": "npm test green at 6121f65: check clean, 2712 unit tests passed and 9 expected failures, 53 tests in a real Visual Studio Code with 0 failed and 1 skipped (mind map scenario 5, etalii.adp issue 140); sync-definitions --check passes for 4 tool types",
+      "files": [
+        "etalii.adp.ide.vscode"
+      ]
+    },
+    "T099": {
+      "status": "DONE",
+      "did": "Pull request 25 merged into etalii.adp.ide.vscode develop as ad802c0 after the Build passed; its branch is deleted on origin"
     }
   },
   "verified": [
