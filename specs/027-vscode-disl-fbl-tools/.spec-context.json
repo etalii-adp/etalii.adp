@@ -184,6 +184,126 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-12T21:44:00.257Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:02:17.462Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T014",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:02:17.669Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T015",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:02:17.878Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T016",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:02:18.093Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:02:18.302Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T018",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:02:18.502Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T019",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:08:06.358Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T020",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:08:06.548Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:08:06.746Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T022",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:10:52.030Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T023",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:10:52.223Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T024",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:14:54.971Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:30:41.564Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T025",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:30:41.840Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T026",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-12T22:31:55.298Z"
     }
   ],
   "telemetryInstanceId": "dc5f5bb0-d20a-4e36-9cc2-dc702a232be5",
@@ -489,7 +609,7 @@
       ]
     }
   },
-  "currentTask": "T011",
+  "currentTask": "T026",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -569,6 +689,124 @@
       "files": [
         "etalii.adp.ide.vscode/test/core/fbl/reading.test.ts",
         "etalii.adp.ide.vscode/test/core/fbl/yamlScalars.test.ts"
+      ]
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "Loader reads FBL 0.1 to 0.6 without a warning and 0.7 with one; types gain read, quoted, fallback, create at end, remove-empty-levels and wireOrder; options gain attributeType, timeAttributes, reportUnboundKeys; IdRequest gains parent, slot and position; findings gain fbl.unbound-key and fbl.unconverted-value",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/fbl/documents/documentLoader.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/documents/types.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/model.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/finding.ts"
+      ]
+    },
+    "T014": {
+      "status": "DONE",
+      "did": "ModelChange gains move, retype, storeId and a position and slot on add; a plan orders an insertion before a removal that starts at its offset",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/fbl/planning/modelChange.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/planning/plan.ts"
+      ]
+    },
+    "T015": {
+      "status": "DONE",
+      "did": "Every sentence the range added to standalone, verbatim, and the few FBL 0.5 needs that standalone lacks, marked as this host's",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/fbl/messages.ts"
+      ]
+    },
+    "T016": {
+      "status": "DONE",
+      "did": "Body reading: what a slot reads from a scalar (FBL 0.5), typed values and fallbacks, ids and references as written text, by id, containment before ids with a position in the slot, unbound keys, CEL text, style and type; a family's default move",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/fbl/rules/bodyReading.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/rules/familyReader.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/rules/treeFamily.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/rules/typedValue.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/expressions/cel.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/families/yaml/flowReader.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/families/yaml/yamlParser.ts"
+      ]
+    },
+    "T017": {
+      "status": "DONE",
+      "did": "A plugin's plan request carries the files, the last reading and the change as it was made; read keeps the binding's args, which FBL 11.2 gives it",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/fbl/plugins/persistencePlugin.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/plugins/pluginBody.ts"
+      ]
+    },
+    "T018": {
+      "status": "DONE",
+      "did": "A missing body is reported as fbl.missing-body on the body header or the origin line; a registration orders an insertion before a removal at its offset; routing needed no change",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/fbl/registration/bodyLocator.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/registration/openRegistration.ts"
+      ]
+    },
+    "T019": {
+      "status": "DONE",
+      "did": "yaml: levels of a nested mapping created and removed with their entries, place before refused, flow items quoted, a dash-led plain value, a literal block nested under its key, a body without a final newline kept so, an empty value on an insert by the binding's empty rule, a text-read slot written plain when its style asks, a quoted number keeping its quotes",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/fbl/families/yaml/yamlFamily.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/families/yaml/yamlScalars.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/families/yaml/yamlParser.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/families/yaml/flowReader.ts"
+      ]
+    },
+    "T020": {
+      "status": "DONE",
+      "did": "json: a key added at its place in the key order, a container on one line created and removed around its entry, a move among siblings, place before refused, an empty value on an insert by the binding's empty rule, a new entry laid out as the entry beside it",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/fbl/families/json/jsonFamily.ts"
+      ]
+    },
+    "T021": {
+      "status": "DONE",
+      "did": "xml: an attribute added at its place in the rule's order, an only child removed closing its parent again, place before refused, an empty value on an insert by the binding's empty rule; lines and blocks needed no change beyond the family's default move",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/fbl/families/xml/xmlFamily.ts"
+      ]
+    },
+    "T022": {
+      "status": "DONE",
+      "did": "The planner plans a move among siblings by FBL's index, stores an id, refuses a retype, an add at a position and a move to another parent, chooses the rule of a slot and a parent, and refuses an add that gives a refused attribute its empty value; an open body forks",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/fbl/planning/editPlanner.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/planning/newText.ts",
+        "etalii.adp.ide.vscode/src/core/fbl/history/openBody.ts"
+      ]
+    },
+    "T023": {
+      "status": "DONE",
+      "did": "The position type is exported, and docs/fbl.md says FBL 0.6, the twenty-one fixtures, what is no longer missing, each difference from standalone at 5756a07 and the questions FBL leaves open",
+      "files": [
+        "etalii.adp.ide.vscode/src/core/fbl/index.ts",
+        "etalii.adp.ide.vscode/docs/fbl.md"
+      ]
+    },
+    "T024": {
+      "status": "DONE",
+      "did": "npm test passes: check, 1311 unit tests, and the real Visual Studio Code run with test/vscode untouched"
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "This folder reached develop through pull request 146, merged with a merge commit as bf38b6d",
+      "files": [
+        "specs/027-vscode-disl-fbl-tools/"
+      ]
+    },
+    "T025": {
+      "status": "DONE",
+      "did": "Pull request 23 merged into etalii.adp.ide.vscode develop as a6c6580 after the Build passed; etalii.adp.ide.notion issue 10 says its copy is behind; the remote branch is deleted"
+    },
+    "T026": {
+      "status": "DONE",
+      "did": "Branch fast-forwarded to origin/develop a6c6580; @marcbachmann/cel-js ^8 added as a bundled dependency",
+      "files": [
+        "etalii.adp.ide.vscode/package.json",
+        "etalii.adp.ide.vscode/package-lock.json"
       ]
     }
   }
