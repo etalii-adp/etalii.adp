@@ -952,6 +952,21 @@
       "decision": "A file of a later version opens editable with fbl.header-mismatch as a warning",
       "why": "Nothing in the binding or FBL states read-only",
       "rejected": "Read-only, as the companion document says"
+    },
+    {
+      "decision": "What a view of the Knowledge designer shows is code for that one tool type, under src/core/plugins/knowledge-views and reached through the plugin registry by origin",
+      "why": "DESL 7.4 names the types of a view's settings by role and not what their attributes mean, and knowledge.md gives the view logic to each host",
+      "rejected": "Inferring the attributes from their types: arbitrary conventions, and no calculations"
+    },
+    {
+      "decision": "DESL is read by the DISL interpreter: a .des file is given to it in its names, and operations run on its behavior",
+      "why": "The metamodel, constraints, expressions and actions have the same shape",
+      "rejected": "A second engine in src/core/desl"
+    },
+    {
+      "decision": "Every operation is offered in a menu where its for says, and a cell is edited by the quick change of DESL 10.3",
+      "why": "DESL ties no gesture to an operation by name",
+      "rejected": "Gesture to operation tables in the webview, which would name the tool type"
     }
   ],
   "concerns": [
@@ -1009,6 +1024,18 @@
     },
     {
       "note": "README.md of etalii.adp.ide.vscode still says two diagrams and that no tool uses FBL; T140 covers it",
+      "step": "implement"
+    },
+    {
+      "note": "Pull request 4 (etalii.adp.ide.vscode 26): reopening.ts was written before its test, against FR-016; the table was seen in a browser through npm run look, not in a Visual Studio Code window, and not in high contrast",
+      "step": "implement"
+    },
+    {
+      "note": "The Knowledge designer reads one file: relations across files, two-way relations, nesting by the parent relation and drag gestures are not built; each is a row of docs/disl-support.md (issue 162)",
+      "step": "implement"
+    },
+    {
+      "note": "simplified: the id a reader derives is evaluated with the siblings standing in as elements of the element's own type, and only the parent of its ancestors",
       "step": "implement"
     }
   ],
@@ -1806,7 +1833,15 @@
       "warnings": [
         "exited 1"
       ]
+    },
+    {
+      "what": "npm test of etalii.adp.ide.vscode at d0e2b7e",
+      "command": "cd ../../../../etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools && npx vitest run test/core/tool/knowledge.test.ts test/core/desl",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 2.9,
+      "result": "   Start at  16:32:47 ·    Duration  1.78s (tests 46%, transform 34%, import 19%) · JUNIT report written to C:/git/etalii.adp.ide.vscode/.claude/worktrees/027-vscode-disl-fbl-tools/reports/unit.xml"
     }
   ],
-  "last_action": "Phase 5 built and pushed as etalii.adp.ide.vscode pull request 25; T084 to T098 journaled, unticked until it is merged"
+  "last_action": "Pull request 4 is open (etalii.adp.ide.vscode 26), npm test green; T100 to T118 journaled"
 }
