@@ -4,7 +4,7 @@
   "branch": "027-vscode-disl-fbl-tools",
   "selectedAt": "2026-10-12T20:39:44.693Z",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -1232,6 +1232,21 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-13T21:20:20.269Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T143",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T21:30:08.312Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-13T21:30:08.514Z"
     }
   ],
   "telemetryInstanceId": "dc5f5bb0-d20a-4e36-9cc2-dc702a232be5",
@@ -1425,6 +1440,13 @@
     {
       "note": "Settled 2026-10-13: pull request 27 is merged, the polish branch is gone and its four commits are on features/027-vscode-disl-fbl-tools as etalii.adp.ide.vscode pull request 28, a draft. Left: T138, which Peter does in the Development build and reports with the Visual Studio Code version; then its row in docs/parity.md, the draft made ready, and T143",
       "step": "implement"
+    },
+    {
+      "note": "Settled 2026-10-13: the six pull requests of etalii.adp.ide.vscode (23 to 28) are merged and every task is ticked. Open beyond this feature: scenario 5 of User Story 1 stays skipped until etalii.adp issue 140 gives the mind map binding a marker, and issues 140 to 145, 148, 150 to 152, 159, 162 and 165 hold what was raised",
+      "step": "implement"
+    },
+    {
+      "note": "This change resolved no living-spec capability, so nothing was loaded before it and nothing was folded after it. Either the areas it touched belong to no capability yet, or a capability claims them and no requirement describes them — `living-validate` names which."
     }
   ],
   "step_summaries": {
@@ -1434,6 +1456,9 @@
     },
     "tasks": {
       "summary": "143 tasks in 8 phases: setup, the FBL library at 0.6, the definition foundation, one phase per user story (mind map, agent activity diagram, Knowledge designer, the two existing diagrams) and polish, one pull request each from Phase 2 on except Phases 3 and 4, which share pull request 2"
+    },
+    "implement": {
+      "summary": "Five tool types read from their definitions in etalii.adp.ide.vscode, in six pull requests; the closing record and the dialogs seen by a person"
     }
   },
   "approach": "The plug-in reads each tool type from its copied definition: a DISL interpreter taken from the Notion add-ons and a new DESL interpreter turn a definition, its FBL binding and its plugins into one value of a generic frame contract. Edits are FBL splices applied as one edit of the text document, after the FBL library is brought from 0.1 to 0.6. Delivery is six pull requests into etalii.adp.ide.vscode.",
@@ -1643,7 +1668,7 @@
       ]
     }
   },
-  "currentTask": "T138",
+  "currentTask": "T143",
   "task_summaries": {
     "T001": {
       "status": "DONE",
@@ -2529,6 +2554,13 @@
       "files": [
         "etalii.adp.ide.vscode/docs/parity.md"
       ]
+    },
+    "T143": {
+      "status": "DONE",
+      "did": "etalii.adp.ide.vscode pull request 28 merged by Peter as bf9ec24 on 2026-10-13; its branch and worktree are removed; T137 to T143 ticked; the branch and worktree of etalii.adp go when this last pull request is merged",
+      "files": [
+        "etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md"
+      ]
     }
   },
   "verified": [
@@ -2608,5 +2640,5 @@
       "result": "his report: everything looks fine"
     }
   ],
-  "last_action": "T138 journaled; etalii.adp.ide.vscode pull request 28 is ready and waits for its merge, then T137 to T143 are ticked and the branches and worktrees removed"
+  "last_action": "all 143 tasks done; etalii.adp.ide.vscode pull request 28 merged as bf9ec24"
 }
