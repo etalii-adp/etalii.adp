@@ -187,6 +187,9 @@
       "test/examples/**",
       "test/fixtures/**"
     ],
+    "etalii.adp.ide.vscode": [
+      "fixtures/disl/disl.schema.json"
+    ],
     "etalii.adp.site": [
       "src/data/redirects.ts",
       "tests/reference/fixtures/dedl-aaef333/**",
