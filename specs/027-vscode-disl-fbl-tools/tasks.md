@@ -278,46 +278,46 @@ Extends: `src/core/tool/{toolTypeFrom,definitionFolder}.ts`, `src/core/disl/supp
 
 ### Tests (first, seen failing)
 
-- [ ] **T100** [US3] Cut the branch again, run the sync command with `--add definitions/designers/knowledge.des`, and commit · etalii.adp.ide.vscode/definitions/knowledge/, etalii.adp.ide.vscode/package.json
+- [x] **T100** [US3] Cut the branch again, run the sync command with `--add definitions/designers/knowledge.des`, and commit · etalii.adp.ide.vscode/definitions/knowledge/, etalii.adp.ide.vscode/package.json
 
 **⟶ Wait for T100 to finish, then Wave 1: independent (different files):**
 
-- [ ] **T101** [P] [US3] DESL reads `knowledge.des` and `minimal-table.des`: the `table` surface, its nine value types, views, sorts, filters and groups, with the metamodel and expressions of `src/core/disl/` · etalii.adp.ide.vscode/test/core/desl/specification.test.ts
-- [ ] **T102** [P] [US3] Every operation the definition lists, counted from the definition, is one transaction over model changes · etalii.adp.ide.vscode/test/core/desl/operations.test.ts
-- [ ] **T103** [P] [US3] The table view: properties, rows, the view shown with its sorts, filters and groups applied, and each operation offered or disabled with its reason · etalii.adp.ide.vscode/test/core/tool/tableView.test.ts
-- [ ] **T104** [P] [US3] The tool type: the four examples open and save byte-identical; each operation gives the bytes of etalii.adp's `knowledge-yaml`, `knowledge-json`, `knowledge-xml` and `knowledge-kept` fixtures and undoes exactly; the `knowledge-equivalence` fixture gives equal table views through the three bindings; a `.ded` file is claimed by its marker; a file without the envelope is not claimed · etalii.adp.ide.vscode/test/core/tool/knowledge.test.ts
-- [ ] **T105** [P] [US3] Adding a tool type needs no code: `minimal-table.des` and its binding in a temporary definitions folder give a tool type that opens a document · etalii.adp.ide.vscode/test/core/tool/addToolType.test.ts
-- [ ] **T106** [P] [US3] The table surface: an HTML table with the grid role, every cell reached and edited by keyboard, each value type's control, the operations in their menus, and the colour rule · etalii.adp.ide.vscode/test/webview/table/table.test.ts
-- [ ] **T107** [P] [US3] In a real Visual Studio Code: a claimed YAML, JSON and XML file is reopened in the designer; one without the envelope stays text and is offered the designer only under "Open With"; a diff, a file from version control and an untitled document are never reopened; "Open as Text" holds for the session; undo, save and Problems · etalii.adp.ide.vscode/test/vscode/knowledge.test.ts
+- [x] **T101** [P] [US3] DESL reads `knowledge.des` and `minimal-table.des`: the `table` surface, its nine value types, views, sorts, filters and groups, with the metamodel and expressions of `src/core/disl/` · etalii.adp.ide.vscode/test/core/desl/specification.test.ts
+- [x] **T102** [P] [US3] Every operation the definition lists, counted from the definition, is one transaction over model changes · etalii.adp.ide.vscode/test/core/desl/operations.test.ts
+- [x] **T103** [P] [US3] The table view: properties, rows, the view shown with its sorts, filters and groups applied, and each operation offered or disabled with its reason · etalii.adp.ide.vscode/test/core/tool/tableView.test.ts
+- [x] **T104** [P] [US3] The tool type: the four examples open and save byte-identical; each operation gives the bytes of etalii.adp's `knowledge-yaml`, `knowledge-json`, `knowledge-xml` and `knowledge-kept` fixtures and undoes exactly; the `knowledge-equivalence` fixture gives equal table views through the three bindings; a `.ded` file is claimed by its marker; a file without the envelope is not claimed · etalii.adp.ide.vscode/test/core/tool/knowledge.test.ts
+- [x] **T105** [P] [US3] Adding a tool type needs no code: `minimal-table.des` and its binding in a temporary definitions folder give a tool type that opens a document · etalii.adp.ide.vscode/test/core/tool/addToolType.test.ts
+- [x] **T106** [P] [US3] The table surface: an HTML table with the grid role, every cell reached and edited by keyboard, each value type's control, the operations in their menus, and the colour rule · etalii.adp.ide.vscode/test/webview/table/table.test.ts
+- [x] **T107** [P] [US3] In a real Visual Studio Code: a claimed YAML, JSON and XML file is reopened in the designer; one without the envelope stays text and is offered the designer only under "Open With"; a diff, a file from version control and an untitled document are never reopened; "Open as Text" holds for the session; undo, save and Problems · etalii.adp.ide.vscode/test/vscode/knowledge.test.ts
 
 ### Implementation
 
 **Wave 2: independent (different files):**
 
-- [ ] **T108** [P] [US3] Read a `.des` file and its `table` surface · etalii.adp.ide.vscode/src/core/desl/specification.ts, etalii.adp.ide.vscode/src/core/desl/surface.ts
-- [ ] **T109** [P] [US3] `TableView`, `TableRequest`, and the view computed from a reading · etalii.adp.ide.vscode/src/core/tool/tableView.ts
-- [ ] **T110** [P] [US3] The table surface, on the plug-in's existing controls and with no grid library · etalii.adp.ide.vscode/src/webview/table/main.ts, etalii.adp.ide.vscode/src/webview/table/table.ts, etalii.adp.ide.vscode/src/webview/table/table.css
-- [ ] **T111** [P] [US3] Reopen a text tab on a workspace file its binding claims with `vscode.openWith` · etalii.adp.ide.vscode/src/extension/reopening.ts
+- [x] **T108** [P] [US3] Read a `.des` file and its `table` surface · etalii.adp.ide.vscode/src/core/desl/specification.ts, etalii.adp.ide.vscode/src/core/desl/surface.ts
+- [x] **T109** [P] [US3] `TableView`, `TableRequest`, and the view computed from a reading · etalii.adp.ide.vscode/src/core/tool/tableView.ts
+- [x] **T110** [P] [US3] The table surface, on the plug-in's existing controls and with no grid library · etalii.adp.ide.vscode/src/webview/table/main.ts, etalii.adp.ide.vscode/src/webview/table/table.ts, etalii.adp.ide.vscode/src/webview/table/table.css
+- [x] **T111** [P] [US3] Reopen a text tab on a workspace file its binding claims with `vscode.openWith` · etalii.adp.ide.vscode/src/extension/reopening.ts
 
 **⟶ Wait for Wave 2 to finish, then Wave 3: independent (different files):**
 
-- [ ] **T112** [P] [US3] The operations as DESL's transactions, run by the behaviour of `src/core/disl/` · etalii.adp.ide.vscode/src/core/desl/operations.ts
-- [ ] **T113** [P] [US3] Bundle the table webview and give it its page · etalii.adp.ide.vscode/esbuild.mjs, etalii.adp.ide.vscode/src/extension/webviewHtml.ts
-- [ ] **T114** [P] [US3] Read a `.des` folder with its several bindings · etalii.adp.ide.vscode/src/core/tool/definitionFolder.ts
+- [x] **T112** [P] [US3] The operations as DESL's transactions, run by the behaviour of `src/core/disl/` · etalii.adp.ide.vscode/src/core/desl/operations.ts
+- [x] **T113** [P] [US3] Bundle the table webview and give it its page · etalii.adp.ide.vscode/esbuild.mjs, etalii.adp.ide.vscode/src/extension/webviewHtml.ts
+- [x] **T114** [P] [US3] Read a `.des` folder with its several bindings · etalii.adp.ide.vscode/src/core/tool/definitionFolder.ts
 
 **⟶ Wait for Wave 3 to finish, then:**
 
-- [ ] **T115** [US3] `toolTypeFrom` for a designer, with ADP Properties given the fields of a selection · etalii.adp.ide.vscode/src/core/tool/toolTypeFrom.ts
+- [x] **T115** [US3] `toolTypeFrom` for a designer, with ADP Properties given the fields of a selection · etalii.adp.ide.vscode/src/core/tool/toolTypeFrom.ts
 
 **⟶ Wait for T115 to finish, then Wave 4: independent (different files):**
 
-- [ ] **T116** [P] [US3] Serve a designer with the table webview, and wire the reopening · etalii.adp.ide.vscode/src/extension/toolEditor.ts, etalii.adp.ide.vscode/src/extension/extension.ts
-- [ ] **T117** [P] [US3] Add DESL 0.1 and what is read of each of its sections to the support record, and the designer's row to the tool list · etalii.adp.ide.vscode/src/core/disl/support.ts, etalii.adp.ide.vscode/docs/disl-support.md, etalii.adp.ide.vscode/docs/tools.md
+- [x] **T116** [P] [US3] Serve a designer with the table webview, and wire the reopening · etalii.adp.ide.vscode/src/extension/toolEditor.ts, etalii.adp.ide.vscode/src/extension/extension.ts
+- [x] **T117** [P] [US3] Add DESL 0.1 and what is read of each of its sections to the support record, and the designer's row to the tool list · etalii.adp.ide.vscode/src/core/disl/support.ts, etalii.adp.ide.vscode/docs/disl-support.md, etalii.adp.ide.vscode/docs/tools.md
 
 **⟶ Wait for Wave 4 to finish, then:**
 
-- [ ] **T118** [US3] Run `npm test` · etalii.adp.ide.vscode
-- [ ] **T119** [US3] Push, open pull request 4, merge it once the Build passes, delete the branch, then tick T100 to T119 here through a pull request · etalii.adp.ide.vscode (pull request 4), etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md
+- [x] **T118** [US3] Run `npm test` · etalii.adp.ide.vscode
+- [x] **T119** [US3] Push, open pull request 4, merge it once the Build passes, delete the branch, then tick T100 to T119 here through a pull request · etalii.adp.ide.vscode (pull request 4), etalii.adp/specs/027-vscode-disl-fbl-tools/tasks.md
 
 **Checkpoint**: the Knowledge designer works from its definition; no other YAML, JSON or XML file is touched.
 
