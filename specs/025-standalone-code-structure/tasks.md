@@ -199,7 +199,7 @@
 
 ### Added by the M2 review
 
-- [ ] T277 [US2] Add `AddEmptyDocument(origin, Func<string, string> textFromBaseName)` beside `AddEmptyDocument(origin, text)` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/`, and register the twelve document factories through it (agent-behavior-modelling, azure-devops-pipeline, wardley-map, mindmap, databricks, dotnet-dependency-graph, c4's two, rdf's four), deleting their classes; every new-document test of those modules unchanged. Before M3 (FR-029; SC-007; the M2 review, question 1).
+- [x] T277 [US2] Add `AddEmptyDocument(origin, Func<string, string> textFromBaseName)` beside `AddEmptyDocument(origin, text)` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/`, and register the twelve document factories through it (agent-behavior-modelling, azure-devops-pipeline, wardley-map, mindmap, databricks, dotnet-dependency-graph, c4's two, rdf's four), deleting their classes; every new-document test of those modules unchanged. Before M3 (FR-029; SC-007; the M2 review, question 1). Done in standalone pull request 297 (2026-10-14); the twelve classes are gone, each new document is byte for byte what it was, and production code is 167 lines smaller rather than the 250 estimated, because the texts and their reasons moved beside the registrations. The c4/code type registers a function that refuses with the same sentence.
 
 ## M3: shared utilities
 
