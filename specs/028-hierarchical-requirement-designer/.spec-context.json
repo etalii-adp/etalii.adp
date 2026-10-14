@@ -235,6 +235,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T15:56:55.703Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T020",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:58:25.456Z"
     }
   ],
   "last_action": "living specs evaluated — no capabilities matched",
@@ -840,7 +848,7 @@
     }
   },
   "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
-  "currentTask": "T019",
+  "currentTask": "T020",
   "task_summaries": {
     "T002": {
       "status": "DONE",
@@ -975,6 +983,13 @@
         "specifications/fbl/fixtures/bullets-edits/fixture.json",
         "specifications/fbl/behavior-tree.fbl"
       ]
+    },
+    "T020": {
+      "status": "DONE",
+      "did": "Pull request 203 opened into develop, naming the folder, the reserved construct and the site issue; Build green",
+      "files": [
+        "etalii.adp (pull request 203)"
+      ]
     }
   },
   "verified": [
@@ -1001,6 +1016,14 @@
       "exitCode": 0,
       "durationSeconds": 0.5,
       "result": "ok   specifications/edsl/EDSL-specification.md · ok   specifications/fbl/FBL-specification.md · 7 specification document(s), 0 failure(s)."
+    },
+    {
+      "what": "validator on FBL 0.7 bullets",
+      "command": "python .github/scripts/validate-examples.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.8,
+      "result": "ok   specifications/fbl/fixtures/knowledge-equivalence: 3 fixtures read the same 65 elements · ok   definitions/diagrams/agent-activity-diagram.md: its example is valid against agent-activity-diagram.schema.json · 99 example(s), 0 invalid."
     }
   ]
 }

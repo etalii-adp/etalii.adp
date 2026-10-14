@@ -93,7 +93,7 @@ Files: `etalii.adp/specifications/fbl/behavior-tree.fbl`, `fixtures/bullets-read
 
 - [x] **T018** Add the fixture that reads the companion's example tree through `behavior-tree.fbl`, and confirm it shows each of the six things T014 lists. If one cannot be declared, correct the family in the document and the schema before T020. The example is not dropped (research R10) · etalii.adp/specifications/fbl/fixtures/behavior-tree-read/
 - [x] **T019** Plant and see fail, then restore: the move step of `bullets-edits` with one column of indentation missing from its expected bytes (reported at its first differing byte), `behavior-tree.fbl` with a `within` that names no section (a name problem), and with `family` misspelt (a schema error) (SC-008) · etalii.adp/specifications/fbl/fixtures/bullets-edits/fixture.json, etalii.adp/specifications/fbl/behavior-tree.fbl
-- [ ] **T020** Deliver pull request 3: run the three checks, see every earlier example keep its result, commit, push and open the pull request into `develop`, naming this folder and saying that the family is one of the two constructs the decision reserved, with a green Build (FR-062) · etalii.adp (pull request 3)
+- [x] **T020** Deliver pull request 3: run the three checks, see every earlier example keep its result, commit, push and open the pull request into `develop`, naming this folder and saying that the family is one of the two constructs the decision reserved, with a green Build (FR-062) · etalii.adp (pull request 3)
 
 **Checkpoint**: a second tool's Markdown is read by a declared binding. The family can be refused here without touching what Phase 4 adds.
 
