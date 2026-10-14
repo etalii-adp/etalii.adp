@@ -194,7 +194,7 @@ The metamodel says what a document of the designer type can hold: the kinds of e
 
 | Property   | Type | Description |
 |------------|------|-------------|
-| `document` | `{attributes, doc}` | The attributes of the document as a whole: for a table, its name and the view it was last left in. |
+| `document` | `{attributes, children, doc}` | The attributes of the document as a whole: for a table, its name and the view it was last left in. *(DESL 0.2)* `children`, a Containment (4.6), says which types the document's own elements may be. |
 | `enums`    | map → Enum | Enumerations (4.4). |
 | `types`    | map → ElementType | **Required.** The element types (4.5). |
 | `doc`      | Doc | |
@@ -234,7 +234,7 @@ An **Attribute** (`$defs/Attribute`) is one named value of an element, of the do
 **Mentions** *(DESL 0.2)*. A `mentions` facet makes the text of a `string` or `text` attribute name elements of the same document where it is written. `pattern` is a regular expression in FBL's common subset (FBL section 2.5) with a named group `id`; `types` (TypeRefs, **required**) are the element types a mention may name.
 
 - A runtime finds the matches of `pattern` in the value from left to right, each starting after the one before it ends. A match in which the group `id` takes part is a **mention**, naming the element whose id is that group's text; a match in which it takes no part is not, so an alternative before it can say what is not a mention: `\[(?:ITEM|REQ)-\d+\]\([^)]*\)|\[(?<id>(?:ITEM|REQ)-\d+)\]` reads `[REQ-0002]` as a mention and the Markdown link `[REQ-0002](https://…)` as none.
-- A mention resolves to the element with its id, as a reference does (4.7), the first holder of a duplicated id included (5.3.4). A mention that names no element of `types` is reported by `std.mentions` (6.5).
+- A mention resolves to the element with its id, as a reference does (4.7), the first holder of a duplicated id included (5.3.4). A mention that names no element of `types` is reported by `std.mentions` (6.5), located at the mention itself.
 - A mention is text, and no runtime changes it: when the element it names is deleted, the text is kept as written and the mention is reported. This is what sets it apart from a reference, which a deletion unsets (4.7).
 
 Reading an attribute that has no stored value yields its `default`, otherwise the zero value of its CEL type (`''`, `0`, `0.0`, `false`, `[]`, `null` for a reference). `has(self.attr)` tests whether a value is stored. A writer leaves out a value that is not stored.
@@ -268,7 +268,7 @@ An element has one type. `isA(t)` (9.2) is true for an element of type `t`.
 | `slots`   | map → `{allowed, max, doc}` | Named places for children, when an element holds several kinds apart: a view's `columns`, `sorts` and `filter`. Each child records its slot. |
 | `doc`     | Doc | |
 
-An element type without `children` contains nothing. Elements without a parent are the document's own, in document order (10.2).
+An element type without `children` contains nothing. Elements without a parent are the document's own, in document order (10.2). *(DESL 0.2)* `metamodel.document.children` allows the types they may be, as an element type's `children` does; without it, they may be of any type.
 
 ### 4.7 References
 
@@ -310,6 +310,7 @@ A binding may name its types and attributes as its format does rather than as th
 - Without an entry, a binding type and its attributes **MUST** have the names of an element type and its attributes.
 - `as: "document"` makes the entry's attributes the document's (`metamodel.document`). `"header"` and `"unreadable"` keep the entry out of the model; an `unreadable` one is reported by `std.unreadableEntry` (6.5).
 - `hostAttributes` are not visible in CEL, on the surface or to constraints, and a writer keeps their values.
+- *(DESL 0.2)* When the body has no entry of a type mapped as `document` and a transaction sets a document attribute that type binds, the change is planned as an add of such an entry, by its rule's `insert`; a rule without one refuses the set.
 
 ### 5.3 Identifiers
 
@@ -473,10 +474,10 @@ The metamodel and the reader raise these by themselves. They behave as declared 
 
 | Id                    | Raised for | Severity |
 |-----------------------|------------|----------|
-| `std.required`        | an attribute with `required: true` that has no value | error |
+| `std.required`        | an attribute with `required: true` that has no value, or *(DESL 0.2)* the empty value of its type | error |
 | `std.facets`          | a value outside `min`, `max`, `minLength`, `maxLength` or `pattern`, or an enumeration value no value of the enumeration has | error |
 | `std.references`      | a reference that names no element | error |
-| `std.containment`     | a child whose type its parent's `children`, or its slot, does not allow | error |
+| `std.containment`     | a child whose type its parent's `children`, or its slot, does not allow, or *(DESL 0.2)* an element without a parent whose type `metamodel.document.children` does not allow | error |
 | `std.unparseable`     | the reader, once per body that cannot be parsed (6.3) | error |
 | `std.unreadableEntry` | the reader, per entry of a parsed body that cannot become an element: an unknown key, a value that does not convert, an entry in no known form; the entry is kept as written | warning |
 | `std.missingId`       | the reader or runtime, per element without a usable id, or whose derived id cannot be computed (5.3.4) | warning |
@@ -598,7 +599,7 @@ How a host draws a label, a menu or a list is not DESL's: a designer type's comp
 
 A label attribute is a `string`, or a `string` with `many`, whose value names a member of its list by the member's `name`, ignoring case. A level's or entry's labels are drawn below its title, each in its member's colour.
 
-A value that names no member is an **implicit member** of the list all the same: it stands after the stored members, in the order of its first appearance in the document, with the attribute's default colour, and is spelt as it first appears. Such a value is never reported. When a list is written (5.5), its implicit members become stored members, after the others, in their order.
+A value that names no member is an **implicit member** of the list all the same: an element of the options type, with the id its derived rule gives it, standing after the stored members in the order of its first appearance in the document, with the colour attribute's default, and spelt as it first appears. Every operation on members serves it. Such a value is never reported. When a list is written (5.5), its implicit members become stored members, after the others, in their order.
 
 Renaming a member **MUST** rename every value that names it in the same transaction, and deleting one **MUST** remove every such value; a specification states both with its operations.
 
@@ -639,7 +640,7 @@ Actions are a small, closed set of steps. **Every value in an action is an Expre
 | Action    | Form | Effect |
 |-----------|------|--------|
 | `set`     | `{ "set": { "attr": expr, … }, "target": expr }` | Assign attributes of `target` (default `self`); `target` may be `document`. |
-| `unset`   | `{ "unset": ["attr", …], "target": expr }` | Remove stored values. |
+| `unset`   | `{ "unset": ["attr", …], "target": expr }` | Remove stored values. *(DESL 0.2)* Planned as a set of each attribute to no value (FBL section 11.2). |
 | `create`  | `{ "create": { "type": expr, "attributes": {…}, "parent": expr, "slot": expr, "after": expr, "before": expr }, "as": "name" }` | Create an element, in `parent` (default: the document) and its `slot`; the new element is `name` in later actions. |
 | `delete`  | `{ "delete": expr }` | Delete an element or a list of them, with what they contain. |
 | `reorder` | `{ "reorder": { "target": expr, "by": expr } }`, or with `after` or `before` in place of `by` | Change only an element's place among its siblings: `by` a signed number of places, or directly after or before a sibling. |
@@ -653,7 +654,7 @@ Every action **MAY** carry `when`, which skips it unless true, and `doc`.
 - **Order of evaluation.** Actions **MUST** run in order against the transaction's working state, and every expression, `when` included, **MUST** see the effects of every action run before it, including earlier iterations of an enclosing `forEach`. The list of a `forEach` is evaluated once, before its first iteration; a `let` value once, where it appears.
 - **Positional create.** `after` and `before` (at most one) name a sibling. The new element **MUST** be placed directly after or before it, and the sibling **MUST** have the same parent (or both have none); otherwise the transaction is rolled back with an error. The parent's `children` **MUST** be `ordered`. Without either, a new child is appended last.
 - **Reorder.** A `reorder` **MUST** change only the order among siblings. A `by` that would move an element past the first or last place rolls the transaction back.
-- **Move** *(DESL 0.2)*. A `move` changes an element's parent, slot and place and nothing else: the element keeps its id, its attributes and everything it contains. `after` and `before` (at most one) name a sibling in the new parent, as for a positional create. A move into the element itself or into something it contains, or into a parent whose `children`, or slot, does not allow the element's type, rolls the transaction back. It is planned as FBL's `move` change (FBL sections 6.4, 11.2), so the element's bytes travel unchanged, re-indented in the `bullets` family. A move among the same siblings is a `reorder`.
+- **Move** *(DESL 0.2)*. A `move` changes an element's parent, slot and place and nothing else: the element keeps its id, its attributes and everything it contains. `after` and `before` (at most one) name a sibling in the new parent, as for a positional create. A move into the element itself or into something it contains, or into a parent whose `children`, or slot, does not allow the element's type, rolls the transaction back. It is planned as FBL's `move` change (FBL sections 6.4, 11.2), so the element's bytes travel unchanged, re-indented in the `bullets` family. A `move` whose parent and slot are the element's own is planned as a `reorder`.
 
 ```json
 "moveProperty": { "label": "Move", "for": ["Property"],
