@@ -5,7 +5,7 @@
   "branch": "features/028-hierarchical-requirement-designer",
   "selectedAt": "2026-10-13T21:41:45.662Z",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "implemented",
   "history": [
     {
       "step": "specify",
@@ -635,6 +635,29 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T19:29:54.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T070",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T21:57:27.413Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T071",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T21:58:49.208Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T21:58:49.422Z"
     }
   ],
   "last_action": "T001 to T068 done; pull requests 201, 203, 204, 208 merged; 210 (language corrections) open with a green Build; the definition waits for its merge",
@@ -1248,6 +1271,10 @@
       "decision": "Fixture phases 7 to 13 went to three workers rather than seven",
       "why": "each owns two or three small fixture folders; fewer workers cost less",
       "rejected": "one worker per phase"
+    },
+    {
+      "decision": "T070 specifies the host feature here as spec 029 rather than a spec-workflow specification in standalone",
+      "why": "The maintainer asked on 2026-10-14, as for spec 025"
     }
   ],
   "step_summaries": {
@@ -1260,7 +1287,7 @@
     }
   },
   "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
-  "currentTask": "T069",
+  "currentTask": "T071",
   "task_summaries": {
     "T002": {
       "status": "DONE",
@@ -1748,6 +1775,24 @@
       "did": "Pull request 212 opened into develop with the definition, its examples, 22 fixture folders, the validator's reader and the prose; Build green",
       "files": [
         "etalii.adp (pull request 212)"
+      ]
+    },
+    "T070": {
+      "status": "DONE",
+      "did": "Specified the host feature as spec 029 here, and re-planned Phase 15 to match",
+      "files": [
+        "specs/029-standalone-hierarchical-requirement-designer/standalone-hierarchical-requirement-designer.spec.md",
+        "specs/028-hierarchical-requirement-designer/tasks.md",
+        "plan.md",
+        "contracts/host-handoff.md",
+        "hierarchical-requirement-designer.spec.md"
+      ]
+    },
+    "T071": {
+      "status": "DONE",
+      "did": "Pull request 215 open with a green Build",
+      "files": [
+        "etalii.adp pull request 215"
       ]
     }
   },

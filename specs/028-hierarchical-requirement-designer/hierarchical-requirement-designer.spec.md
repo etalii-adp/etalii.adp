@@ -18,7 +18,7 @@
 - The go does not pass the plan's Constitution Check. If the plan cannot justify the Markdown family or the settings block as a current tool's need (principle V), the fallback on record stands: the file is read by a persistence plugin and the registration stays as it is.
 - Nothing was measured before this was written. The baseline for the time a person needs, the count of agents' breaks and the shape of a real document are found by this specification and by use.
 
-**Where the work lands.** This specification, its plan and its tasks live here. The designer type's definition and the changes to the specification languages land in this repository, all through this one feature, as spec 013-knowledge-designer delivered the Knowledge designer's. The designer itself is built first in `etalii.adp.ide.standalone`, which plans with spec-workflow in its own repository. No other host is in scope.
+**Where the work lands.** This specification, its plan and its tasks live here. The designer type's definition and the changes to the specification languages land in this repository, all through this one feature, as spec 013-knowledge-designer delivered the Knowledge designer's. The designer itself is built first in `etalii.adp.ide.standalone`, from a specification of its own in this repository, spec 029-standalone-hierarchical-requirement-designer. No other host is in scope.
 
 **When.** The decision placed this specification after the open work on the standalone host, spec 025-standalone-code-structure among it. The maintainer started it on 2026-10-13, before that work ended. This specification reads that as: specifying starts now, and building in the standalone host still waits for that work.
 

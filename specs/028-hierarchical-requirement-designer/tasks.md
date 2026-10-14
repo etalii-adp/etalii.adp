@@ -2,7 +2,7 @@
 
 **Input**: [plan.md](plan.md), [hierarchical-requirement-designer.spec.md](hierarchical-requirement-designer.spec.md), [research.md](research.md), [data-model.md](data-model.md), [contracts/requirement-document.md](contracts/requirement-document.md), [contracts/language-changes.md](contracts/language-changes.md), [contracts/tool-type.md](contracts/tool-type.md), [contracts/host-handoff.md](contracts/host-handoff.md)
 
-**Scale note.** About seventy files in five areas of this repository: three specification languages, one designer type's definition and the example validator, delivered as six more pull requests, each merged before the next begins. Watch two things. `FBL-specification.md`, `fbl.schema.json` and `validate-examples.py` are extended by several phases, never by two at once. And nothing here builds the designer, so no task shows what a person sees: that is Phase 15, in another repository.
+**Scale note.** About seventy files in five areas of this repository: three specification languages, one designer type's definition and the example validator, delivered as six more pull requests, each merged before the next begins. Watch two things. `FBL-specification.md`, `fbl.schema.json` and `validate-examples.py` are extended by several phases, never by two at once. And nothing here builds the designer, so no task shows what a person sees: that is spec 029, which Phase 15 specifies.
 
 **Tests**: not requested as tasks of their own. The plan asks instead that every check this feature adds is seen to fail (SC-008): each pull request's phase has one task that plants the named defects by hand, sees the named failures and restores the files.
 
@@ -21,7 +21,7 @@
 - **The three checks** are `python .github/scripts/validate-examples.py`, `python .github/scripts/terminology-check.py --name etalii.adp` and `python .github/scripts/licence-check.py`.
 - A fixture is a folder under `etalii.adp/specifications/fbl/fixtures/` with its `fixture.json` and its input files. Where a story's cases need more than one input, the folder holds one sub-folder per input, as `knowledge-equivalence` does.
 
-> **Ticking**: a task of `etalii.adp` is ticked when done. The tasks of Phase 15 land in `etalii.adp.ide.standalone` and are ticked only after that repository's pull request is merged.
+> **Ticking**: a task of `etalii.adp` is ticked when done. Every task of this feature lands in `etalii.adp`; the host's own tasks are spec 029's.
 
 > **Merging**: every pull request is merged by the maintainer, with a merge commit. A "deliver" task ends when the pull request is open and its Build is green. The phase after it starts when the pull request is merged.
 
@@ -349,16 +349,16 @@ Files: `etalii.adp/definitions/designers/README.md`, `etalii.adp/CLAUDE.md`, `et
 
 ---
 
-## Phase 15: The hand-off (pull request 7, in the standalone host)
+## Phase 15: The hand-off (pull request 7)
 
-**Purpose**: the designer is built first in the standalone host, which plans with spec-workflow in its own repository (FR-063). This phase waits for two things: pull request 6 merged, and spec 025-standalone-code-structure done with the maintainer's word to start.
+**Purpose**: the designer is built first in the standalone host (FR-063), from a specification of its own. On 2026-10-14 the maintainer asked for that specification here, as a feature of its own, and not in the host's `.spec-workflow/` as this phase first had it. This phase waits for pull request 6 to be merged. Building the designer waits, in spec 029, for spec 025-standalone-code-structure to be done and for the maintainer's word.
 
-Files: `etalii.adp.ide.standalone/.spec-workflow/specs/hierarchical-requirement-designer/`.
+Files: `etalii.adp/specs/029-standalone-hierarchical-requirement-designer/`.
 
-- [ ] **T070** Write the host's spec-workflow specification from the merged definition and [contracts/host-handoff.md](contracts/host-handoff.md): what the host builds, what it settles, the five success criteria only it can show (SC-001, SC-002, SC-009, SC-010, SC-011), the user-facing requirements FR-015 to FR-024, FR-036, FR-037, FR-040, FR-042, FR-045 to FR-047 and FR-050 to FR-052, and the conformance it declares · etalii.adp.ide.standalone/.spec-workflow/specs/hierarchical-requirement-designer/requirements.md
-- [ ] **T071** Open the pull request in `etalii.adp.ide.standalone`, naming this folder and the etalii.adp commit of the merged definition. Tick T070 and this task once it is merged · etalii.adp.ide.standalone (pull request 7)
+- [x] **T070** Specify the host's feature, spec 029, from the merged definition and [contracts/host-handoff.md](contracts/host-handoff.md): what the host builds, what it settles, the five success criteria only it can show (SC-001, SC-002, SC-009, SC-010, SC-011), the user-facing requirements FR-015 to FR-024, FR-036, FR-037, FR-040, FR-042, FR-045 to FR-047 and FR-050 to FR-052, the line T067 left for it (FR-042), and the conformance it declares · etalii.adp/specs/029-standalone-hierarchical-requirement-designer/standalone-hierarchical-requirement-designer.spec.md
+- [x] **T071** Deliver pull request 7: commit, push and open the pull request into `develop`, naming this folder, spec 029's folder and the etalii.adp commit of the merged definition (`bfb0c27`), with a green Build · etalii.adp (pull request 7)
 
-**Checkpoint**: the standalone host has its own specification of the designer, and this feature is complete.
+**Checkpoint**: the standalone host has its own specification of the designer, spec 029, and this feature is complete once the maintainer merges.
 
 ---
 
@@ -371,7 +371,7 @@ Files: `etalii.adp.ide.standalone/.spec-workflow/specs/hierarchical-requirement-
 - **User Story 3 (Phase 6)** needs all three languages. It blocks Phases 7 to 13, which replay fixtures over its binding.
 - **Phases 7 to 13** need Phase 6 and nothing of each other. Each owns its fixture folders, so they can run at once, one worker per phase.
 - **Polish (Phase 14)** needs Phases 6 to 13 and ends with pull request 6.
-- **The hand-off (Phase 15)** needs pull request 6 merged, spec 025 done and the maintainer's word.
+- **The hand-off (Phase 15)** needs pull request 6 merged. Building the designer is spec 029's, and waits there for spec 025 and the maintainer's word.
 
 ### Waves within each phase
 
