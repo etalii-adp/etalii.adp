@@ -131,6 +131,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T15:32:48.679Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:33:59.557Z"
     }
   ],
   "last_action": "living specs evaluated — no capabilities matched",
@@ -736,7 +744,7 @@
     }
   },
   "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
-  "currentTask": "T001",
+  "currentTask": "T007",
   "task_summaries": {
     "T002": {
       "status": "DONE",
@@ -779,6 +787,39 @@
       "files": [
         "etalii.adp/.claude/worktrees/028-hierarchical-requirement-designer"
       ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "Pull request 201 opened into develop, naming the feature folder; Build green (examples, terminology, licence)",
+      "files": [
+        "etalii.adp (pull request 201)"
+      ]
     }
-  }
+  },
+  "verified": [
+    {
+      "what": "validator on DED 0.2",
+      "command": "python .github/scripts/validate-examples.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.9,
+      "result": "ok   specifications/fbl/fixtures/knowledge-equivalence: 3 fixtures read the same 65 elements · ok   definitions/diagrams/agent-activity-diagram.md: its example is valid against agent-activity-diagram.schema.json · 93 example(s), 0 invalid."
+    },
+    {
+      "what": "terminology",
+      "command": "python .github/scripts/terminology-check.py --name etalii.adp",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 5.6,
+      "result": "etalii.adp: 0 error(s), 1603 for review."
+    },
+    {
+      "what": "licence",
+      "command": "python .github/scripts/licence-check.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.5,
+      "result": "ok   specifications/edsl/EDSL-specification.md · ok   specifications/fbl/FBL-specification.md · 7 specification document(s), 0 failure(s)."
+    }
+  ]
 }

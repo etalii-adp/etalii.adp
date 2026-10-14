@@ -55,7 +55,7 @@ Files: `etalii.adp/specifications/ded/DED-specification.md`, `ded.schema.json`, 
 
 - [x] **T005** Teach the validator the Markdown envelope: `is_example` takes a `.md` under `specifications/ded/` that is not the specification document, line 1 is read into `ded` and `designer`, and the result is checked against `$defs/Definition`. A Markdown example without the envelope fails (research R20) · etalii.adp/.github/scripts/validate-examples.py
 - [x] **T006** Plant and see fail, then restore: `web-shop.md` with `ded: 0.3` (reported at `ded`), and with line 1 removed (reported as having no envelope) (SC-008) · etalii.adp/specifications/ded/web-shop.md
-- [ ] **T007** Deliver pull request 2: run the three checks, see every example of the baseline keep its result, commit, push and open the pull request into `develop`, naming this folder, with a green Build (FR-062) · etalii.adp (pull request 2)
+- [x] **T007** Deliver pull request 2: run the three checks, see every example of the baseline keep its result, commit, push and open the pull request into `develop`, naming this folder, with a green Build (FR-062) · etalii.adp (pull request 2)
 
 **Checkpoint**: DED 0.2 is on `develop` once the maintainer merges.
 
