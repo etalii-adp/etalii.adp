@@ -123,7 +123,7 @@ Files: `etalii.adp/specifications/fbl/registrations/requirements.adp`, `fixtures
 **⟶ Wait for Wave 1 to finish, then:**
 
 - [x] **T027** Plant and see fail, then restore: `requirements.adp` with an entry that has no `: ` (reported at its line), and one step of `registration-blocks` with a wrong offset (reported at its first differing byte) (SC-008) · etalii.adp/specifications/fbl/registrations/requirements.adp, etalii.adp/specifications/fbl/fixtures/registration-blocks/fixture.json
-- [ ] **T028** Deliver pull request 4: run the three checks, see every earlier example and registration keep its result, commit, push and open the pull request into `develop`, naming this folder and saying that declared blocks are the second reserved construct, with a green Build (FR-062) · etalii.adp (pull request 4)
+- [x] **T028** Deliver pull request 4: run the three checks, see every earlier example and registration keep its result, commit, push and open the pull request into `develop`, naming this folder and saying that declared blocks are the second reserved construct, with a green Build (FR-062) · etalii.adp (pull request 4)
 
 **Checkpoint**: FBL 0.7 is complete on `develop` once the maintainer merges.
 

@@ -299,6 +299,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T16:10:35.487Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T028",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:14:15.524Z"
     }
   ],
   "last_action": "living specs evaluated — no capabilities matched",
@@ -904,7 +912,7 @@
     }
   },
   "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
-  "currentTask": "T027",
+  "currentTask": "T028",
   "task_summaries": {
     "T002": {
       "status": "DONE",
@@ -1096,6 +1104,13 @@
         "specifications/fbl/registrations/requirements.adp",
         "specifications/fbl/fixtures/registration-blocks/fixture.json"
       ]
+    },
+    "T028": {
+      "status": "DONE",
+      "did": "Pull request 204 opened into develop, naming the folder and the second reserved construct; Build green",
+      "files": [
+        "etalii.adp (pull request 204)"
+      ]
     }
   },
   "verified": [
@@ -1130,6 +1145,14 @@
       "exitCode": 0,
       "durationSeconds": 1.8,
       "result": "ok   specifications/fbl/fixtures/knowledge-equivalence: 3 fixtures read the same 65 elements · ok   definitions/diagrams/agent-activity-diagram.md: its example is valid against agent-activity-diagram.schema.json · 99 example(s), 0 invalid."
+    },
+    {
+      "what": "validator on FBL 0.7 declared blocks",
+      "command": "python .github/scripts/validate-examples.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.8,
+      "result": "ok   specifications/fbl/fixtures/knowledge-equivalence: 3 fixtures read the same 65 elements · ok   definitions/diagrams/agent-activity-diagram.md: its example is valid against agent-activity-diagram.schema.json · 102 example(s), 0 invalid."
     }
   ]
 }
