@@ -32,14 +32,15 @@
           "type": "string"
         },
         "fbl": {
-          "description": "The FBL version the document is written in: 0.1, 0.2, 0.3, 0.4, 0.5, or 0.6 (draft); 0.3 names the tool type's specification in place of DISL, lets a specification name one binding per format family, and spells a reference to a stored id as by: \"id\". 0.4 creates and removes the missing levels of a nested container or child mapping. 0.5 defines a scalar's written text, read with read, and adds quoted and fallback to an attribute binding. 0.6 applies an attribute binding's empty rule to an insert as well as to a set. See FBL 0.6, section 2.7.",
+          "description": "The FBL version the document is written in: 0.1, 0.2, 0.3, 0.4, 0.5, or 0.6 (draft); 0.3 names the tool type's specification in place of DISL, lets a specification name one binding per format family, and spells a reference to a stored id as by: \"id\". 0.4 creates and removes the missing levels of a nested container or child mapping. 0.5 defines a scalar's written text, read with read, and adds quoted and fallback to an attribute binding. 0.6 applies an attribute binding's empty rule to an insert as well as to a set. 0.7 adds the bullets family and the drift check before an edit. See FBL 0.7, section 2.7.",
           "enum": [
             "0.1",
             "0.2",
             "0.3",
             "0.4",
             "0.5",
-            "0.6"
+            "0.6",
+            "0.7"
           ]
         },
         "doc": {
@@ -114,7 +115,7 @@
           "$ref": "#/$defs/Regex"
         },
         "unmatched": {
-          "description": "lines, blocks: a statement no rule matches is kept ('keep', the default) or also reported as fbl.unbound-statement ('report').",
+          "description": "lines, blocks, bullets: a statement no rule matches is kept ('keep', the default) or also reported as fbl.unbound-statement ('report').",
           "enum": [
             "keep",
             "report"
@@ -124,6 +125,13 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/BlockRule"
+          }
+        },
+        "sections": {
+          "description": "(FBL 0.7) bullets: the headings whose list items the rules read (section 4.8).",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SectionRule"
           }
         },
         "elements": {
@@ -455,13 +463,14 @@
       ]
     },
     "Family": {
-      "description": "A format family, each with a lossless reading FBL defines: yaml (YAML 1.2), json (RFC 8259), xml (XML 1.0), lines (one statement per line) and blocks (statements nested in braces). See section 4.",
+      "description": "A format family, each with a lossless reading FBL defines: yaml (YAML 1.2), json (RFC 8259), xml (XML 1.0), lines (one statement per line), blocks (statements nested in braces) and (FBL 0.7) bullets (list items nested by indentation under named headings). See section 4.",
       "enum": [
         "yaml",
         "json",
         "xml",
         "lines",
-        "blocks"
+        "blocks",
+        "bullets"
       ]
     },
     "FileRule": {
@@ -618,8 +627,34 @@
         "line"
       ]
     },
+    "SectionRule": {
+      "description": "(FBL 0.7) bullets: a section of the body, the lines after the first heading whose text matches 'heading', up to the next heading with as many '#' or fewer. A rule's 'within' and an insert's 'container' name it. See section 4.8.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/Name"
+        },
+        "doc": {
+          "$ref": "#/$defs/Doc"
+        },
+        "heading": {
+          "$ref": "#/$defs/Regex"
+        },
+        "caseInsensitive": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "patternProperties": {
+        "^x-": true
+      },
+      "required": [
+        "name",
+        "heading"
+      ]
+    },
     "ElementRule": {
-      "description": "How entries of the body become elements of one node type, and how new, changed and removed elements are written back. A tree or xml rule selects entries with 'at'; a lines or blocks rule matches statements with 'line'. See section 5.",
+      "description": "How entries of the body become elements of one node type, and how new, changed and removed elements are written back. A tree or xml rule selects entries with 'at'; a lines or blocks rule matches statements with 'line', and a bullets rule statements, or with 'within' the text of list items. See section 5.",
       "type": "object",
       "properties": {
         "name": {
@@ -638,7 +673,7 @@
           "$ref": "#/$defs/Regex"
         },
         "within": {
-          "description": "blocks: the rules whose block encloses the statement; '^' is the top level.",
+          "description": "blocks: the rules whose block encloses the statement; '^' is the top level. (FBL 0.7) bullets: the sections whose list items the rule matches.",
           "type": "array",
           "items": {
             "type": "string"
@@ -649,7 +684,7 @@
           "type": "boolean"
         },
         "caseInsensitive": {
-          "description": "lines, blocks: match 'line' ignoring the case of ASCII letters.",
+          "description": "lines, blocks, bullets: match 'line' ignoring the case of ASCII letters.",
           "type": "boolean"
         },
         "files": {
@@ -758,7 +793,7 @@
           "$ref": "#/$defs/Regex"
         },
         "within": {
-          "description": "blocks: the rules whose block encloses the statement; '^' is the top level.",
+          "description": "blocks: the rules whose block encloses the statement; '^' is the top level. (FBL 0.7) bullets: the sections whose list items the rule matches.",
           "type": "array",
           "items": {
             "type": "string"
@@ -769,7 +804,7 @@
           "type": "boolean"
         },
         "caseInsensitive": {
-          "description": "lines, blocks: match 'line' ignoring the case of ASCII letters.",
+          "description": "lines, blocks, bullets: match 'line' ignoring the case of ASCII letters.",
           "type": "boolean"
         },
         "files": {
@@ -908,7 +943,7 @@
       ]
     },
     "Slot": {
-      "description": "Exactly one place in the body a value is read from and written to: a key of a tree entry, an attribute or the text of an xml element (or of its child selected by 'child'), a named group of a lines or blocks rule, or the matching slot of the enclosing entry. A slot given by 'value' is computed by CEL and read-only. See section 5.2.",
+      "description": "Exactly one place in the body a value is read from and written to: a key of a tree entry, an attribute or the text of an xml element (or of its child selected by 'child'), a named group of a lines, blocks or bullets rule, a list item's continuation (bullets), or the matching slot of the enclosing entry. A slot given by 'value' is computed by CEL and read-only. See section 5.2.",
       "type": "object",
       "properties": {
         "key": {
@@ -919,6 +954,10 @@
         },
         "text": {
           "type": "boolean"
+        },
+        "continuation": {
+          "description": "(FBL 0.7) bullets: the item's continuation, its continuation lines before its first nested item, blank lines between them included, read with their indentation taken off (section 4.8).",
+          "const": true
         },
         "child": {
           "$ref": "#/$defs/Selector"
@@ -936,7 +975,7 @@
           "$ref": "#/$defs/Expression"
         },
         "word": {
-          "description": "lines, blocks: the value is the first word of the group (words split on whitespace, a double-quoted run being one word) that matches this expression; its named group 'value', if any, is the value.",
+          "description": "lines, blocks, bullets: the value is the first word of the group (words split on whitespace, a double-quoted run being one word) that matches this expression; its named group 'value', if any, is the value.",
           "$ref": "#/$defs/Regex"
         },
         "flag": {
@@ -962,6 +1001,11 @@
         {
           "required": [
             "text"
+          ]
+        },
+        {
+          "required": [
+            "continuation"
           ]
         },
         {
@@ -1007,6 +1051,11 @@
         },
         {
           "required": [
+            "continuation"
+          ]
+        },
+        {
+          "required": [
             "group"
           ]
         },
@@ -1036,6 +1085,10 @@
         "text": {
           "type": "boolean"
         },
+        "continuation": {
+          "description": "(FBL 0.7) bullets: the item's continuation, its continuation lines before its first nested item, blank lines between them included, read with their indentation taken off (section 4.8).",
+          "const": true
+        },
         "child": {
           "$ref": "#/$defs/Selector"
         },
@@ -1052,7 +1105,7 @@
           "$ref": "#/$defs/Expression"
         },
         "word": {
-          "description": "lines, blocks: the value is the first word of the group (words split on whitespace, a double-quoted run being one word) that matches this expression; its named group 'value', if any, is the value.",
+          "description": "lines, blocks, bullets: the value is the first word of the group (words split on whitespace, a double-quoted run being one word) that matches this expression; its named group 'value', if any, is the value.",
           "$ref": "#/$defs/Regex"
         },
         "flag": {
@@ -1427,7 +1480,7 @@
       }
     },
     "RegistrationSettings": {
-      "description": "What a binding adds to the registration: headers it reads, whether a bare body may be positioned without a registration, and legacy sidecars it reads. See section 8.",
+      "description": "What a binding adds to the registration: headers it reads, (FBL 0.7) further blocks it declares, whether a bare body may be positioned without a registration, and legacy sidecars it reads. See section 8.",
       "type": "object",
       "properties": {
         "headers": {
@@ -1452,8 +1505,53 @@
             }
           }
         },
+        "blocks": {
+          "description": "(FBL 0.7) Further blocks of the registration, by name, in the order they are written after layout: and identities: (sections 8.1, 8.4).",
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/Name",
+            "not": {
+              "enum": [
+                "layout",
+                "identities"
+              ]
+            }
+          },
+          "additionalProperties": {
+            "description": "A block this binding declares.",
+            "type": "object",
+            "properties": {
+              "doc": {
+                "$ref": "#/$defs/Doc"
+              },
+              "order": {
+                "description": "ordinal (default): entries in the ordinal order of their keys; kept: an entry stands where the edit put it.",
+                "enum": [
+                  "ordinal",
+                  "kept"
+                ]
+              },
+              "keys": {
+                "description": "names (default), or ids: an entry's key is an element's id, pruned when stale and never ephemeral (section 8.5).",
+                "enum": [
+                  "names",
+                  "ids"
+                ]
+              },
+              "history": {
+                "description": "Whether writes to the block are steps of the history (default true, section 7.1).",
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "patternProperties": {
+              "^x-": true
+            }
+          }
+        },
         "createOnFirstPlacement": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "The first placement creates the registration beside a bare body, and (FBL 0.7) so does the first change to a setting a declared block keeps (section 8.4)."
         },
         "resource": {
           "description": "The selector capture a registration's resource header selects, so one body can hold several diagrams (a bundle file with several jobs). Without the header, the first entry in document order is used.",
@@ -1512,7 +1610,7 @@
       ]
     },
     "Registration": {
-      "description": "The parsed form of an .adp registration file (section 8): its origin line, the headers, and the positions the user placed. The file itself is lines, not JSON; this is what it means.",
+      "description": "The parsed form of an .adp registration file (section 8): its origin line, the headers, the positions the user placed, and (FBL 0.7) every further block, declared or not. The file itself is lines, not JSON; this is what it means.",
       "type": "object",
       "properties": {
         "origin": {
@@ -1561,6 +1659,16 @@
           "type": "object",
           "additionalProperties": {
             "type": "string"
+          }
+        },
+        "blocks": {
+          "description": "(FBL 0.7) Every block besides layout: and identities:, by name, in the order of the file: its entries, key to value, in their order.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         }
       },
@@ -1648,6 +1756,13 @@
                   },
                   "type": {
                     "type": "string"
+                  },
+                  "parent": {
+                    "description": "(FBL 0.7) The id of the element this one is contained in (section 5.5), or null at the top level. Absent: not compared.",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
                   },
                   "attributes": {
                     "description": "(FBL 0.5) The values read for the attributes named: a JSON string for a text, a JSON number, bool or null otherwise. Attributes not named are not compared.",
@@ -1750,7 +1865,7 @@
       ]
     },
     "Edit": {
-      "description": "A model change in a fixture: add an element or relation (at a position, FBL 0.3), set attributes, remove, move (FBL 0.3), place, or save without change.",
+      "description": "A model change in a fixture: add an element or relation (at a position, FBL 0.3), set attributes, remove, move (FBL 0.3), place, change a setting of a declared block (FBL 0.7), or save without change.",
       "oneOf": [
         {
           "description": "Add an element or relation.",
@@ -1937,6 +2052,114 @@
           },
           "required": [
             "place"
+          ]
+        },
+        {
+          "description": "(FBL 0.7) Change an entry of a declared block of the registration (section 15.3).",
+          "type": "object",
+          "properties": {
+            "setting": {
+              "description": "",
+              "type": "object",
+              "properties": {
+                "block": {
+                  "$ref": "#/$defs/Name"
+                },
+                "key": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "value": {
+                  "type": "string"
+                },
+                "position": {
+                  "description": "Where the entry goes in a kept block: at an index, or after or before the entry with that key.",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "index": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "index"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "after": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "after"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "before": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "before"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "rename": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "remove": {
+                  "const": true
+                }
+              },
+              "additionalProperties": false,
+              "patternProperties": {
+                "^x-": true
+              },
+              "required": [
+                "block",
+                "key"
+              ],
+              "anyOf": [
+                {
+                  "required": [
+                    "value"
+                  ]
+                },
+                {
+                  "required": [
+                    "position"
+                  ]
+                },
+                {
+                  "required": [
+                    "rename"
+                  ]
+                },
+                {
+                  "required": [
+                    "remove"
+                  ]
+                }
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
+          },
+          "required": [
+            "setting"
           ]
         },
         {

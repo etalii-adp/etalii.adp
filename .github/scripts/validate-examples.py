@@ -6,7 +6,9 @@ specification (`*.des`), a DED definition (`*.ded`), or a `*.json` file that nam
 `disl.schema.json#/$defs/Specification`, `*.did` against `did.schema.json#/$defs/Definition`, `*.fbl` against
 `fbl.schema.json#/$defs/Document`, `*.des` against `desl.schema.json#/$defs/Specification`, `*.ded` against `ded.schema.json#/$defs/Definition`. A DED definition
 whose designer type has a file schema in definitions/designers/ (DESIGNERS below) is validated against that one, which
-refines DED's. A `$schema` the example names must agree with that; its part before `#`
+refines DED's. A Markdown definition (`*.md` under `specifications/ded/`, the specification document aside) has its
+envelope on line 1 (DED section 2); it is read into `ded` and `designer` and validated as a DED definition, and one
+without the envelope fails. A `$schema` the example names must agree with that; its part before `#`
 is matched against the `$id` of a `*.schema.json` in this repository, so the schemas in the same commit are used,
 never the published ones. All schemas are loaded into one registry, so DID's references to DISL resolve. A `$schema`
 naming an earlier version of DISL or DID (0.1) is read against the current schema, because 0.2 keeps every 0.1 document valid.
@@ -20,9 +22,13 @@ Two FBL formats are not JSON documents and get their own treatment (spec 005, co
 registration under `specifications/fbl/` is parsed from its line form into `fbl.schema.json#/$defs/Registration`
 (FBL section 8). A `fixture.json` under `specifications/fbl/fixtures/` is validated against `$defs/Fixture` and then
 replayed: every step's splices must turn the document before the step into the document it expects, byte for byte,
-and an undo must return the document the undone edit started from (FBL section 15.3). Every `*.fbl` that validates is
+and an undo must return the document the undone edit started from (FBL section 15.3). A `setting` step
+on a block the fixture's binding declares with `history: false` is no step of the history (FBL 0.7, section 7.1); an
+undo or redo of an edit made before it is checked by what each of its splices replaces and writes, since that block's
+write stands between. An `.adp` registration's blocks besides `layout:` and `identities:` are read into `blocks`,
+declared or not, and what follows the blocks is kept, as FBL 0.7 section 8.1 says. Every `*.fbl` that validates is
 then checked for its names (FBL section 14.1, step 4): every rule a `parent`, `cascade`, `reference.to`, `within` or
-`files` names exists in its binding, and a reference's `by` is an attribute every rule it names binds, or `id` when
+`files` names exists in its binding (in the `bullets` family `within` names sections), and a reference's `by` is an attribute every rule it names binds, or `id` when
 every rule it names stores its id with `id.from` (the specification languages reserve `id`, so it is never an attribute's name).
 The fixtures under a folder named `*-equivalence` read one model in different formats: their `read` must be identical.
 
@@ -37,6 +43,7 @@ without turning moments into timestamps.
 Prints one line per example and exits 1 when any example is invalid or names an unknown schema.
 """
 import json
+import re
 import sys
 import xml.etree.ElementTree as ElementTree
 from pathlib import Path
@@ -99,7 +106,20 @@ def is_example(path: Path) -> bool:
         return False  # a fixture's input and expected bodies are checked through its fixture.json
     if designer_examples in path.parents and path.suffix in (".yaml", ".yml", ".xml"):
         return True
+    if path.suffix == ".md":
+        return path.parent == root / "ded" and not path.name.endswith("-specification.md")
     return path.suffix in CURRENT_EXTENSIONS or path.suffix in ALIAS_EXTENSIONS or path.suffix == ".json"
+
+
+MARKDOWN_ENVELOPE = re.compile(r"^<!--[ \t]+ded:[ \t]+(?P<ded>[^ \t]+)[ \t]+designer:[ \t]+(?P<designer>[^ \t]+)[ \t]+-->[ \t]*$")
+
+
+def definition_from_markdown(text: str):
+    """Reads the envelope of a Markdown definition, its line 1 (DED section 2), into the YAML and JSON form."""
+    match = MARKDOWN_ENVELOPE.match(text.removeprefix("﻿").split("\n", 1)[0].removesuffix("\r"))
+    if not match:
+        raise ValueError("it has no envelope: line 1 is not '<!-- ded: <version> designer: <origin> -->'")
+    return match.groupdict()
 
 
 KNOWLEDGE_BOOLEANS = {"title", "computed", "parent", "visible", "wrap", "hideEmptyGroups", "checked"}
@@ -220,14 +240,18 @@ def check_knowledge(table) -> list[str]:
     return problems
 
 
+BLOCK_LINE = re.compile(r"^[A-Za-z_][A-Za-z0-9_.-]*:$")
+
+
 def parse_registration(data: bytes):
-    """Parses an .adp registration's line form (FBL section 8.1) into $defs/Registration, or returns a problem."""
+    """Parses an .adp registration's line form (FBL section 8.1) into $defs/Registration, or returns a problem. Every
+    block besides layout: and identities: is read into `blocks`, declared or not, since no binding is at hand."""
     text = data.decode("utf-8").removeprefix("﻿")
     lines = text.splitlines()
     if not lines or not lines[0].strip():
         return None, "line 1 must name the origin"
     registration = {"origin": lines[0].strip()}
-    block = None
+    block = None  # the block being read; "" after the blocks, where what is not a block is kept unbound
     for number, line in enumerate(lines[1:], start=2):
         if not line.strip():
             continue
@@ -241,15 +265,21 @@ def parse_registration(data: bytes):
                 except ValueError:
                     return None, f"line {number}: expected '<id>: <x> <y>'"
                 registration["layout"][key] = {"x": x, "y": y}
-            else:
+            elif block == "identities":
                 registration["identities"][key] = value
+            else:
+                registration["blocks"][block][key] = value
             continue
-        if line in ("layout:", "identities:"):
+        if BLOCK_LINE.match(line):  # layout:, identities: or (FBL 0.7) a block a binding declares, or one nobody does
             block = line[:-1]
-            registration[block] = {}
+            if block in ("layout", "identities"):
+                registration[block] = {}
+            else:
+                registration.setdefault("blocks", {})[block] = {}
             continue
-        if block:
-            return None, f"line {number}: nothing may follow the {block} block except another block"
+        if block is not None:
+            block = ""  # anything after the blocks that is neither a block nor an entry is unbound (FBL section 8.1)
+            continue
         key, separator, value = line.partition(": ")
         if not separator:
             return None, f"line {number}: expected a '<key>: <value>' header"
@@ -289,11 +319,31 @@ def first_difference(a: bytes, b: bytes) -> int:
     return next((i for i, (x, y) in enumerate(zip(a, b)) if x != y), min(len(a), len(b)))
 
 
+def splice_changes(document: bytes, splices):
+    """What each splice replaces and with what, in the order of their offsets."""
+    ordered = sorted(splices, key=lambda splice: (splice["start"], splice["end"]))
+    return [(document[splice["start"]:splice["end"]], splice["text"].encode("utf-8")) for splice in ordered]
+
+
+def blocks_outside_history(folder: Path, reference: str) -> set[str]:
+    """The registration blocks a fixture's binding declares with history: false (FBL 0.7, sections 7.1, 8.1)."""
+    file, _, name = reference.partition("#")
+    try:
+        binding = json.loads((folder / file).read_text(encoding="utf-8"))["bindings"][name]
+    except (OSError, ValueError, KeyError):
+        return set()
+    blocks = binding.get("registration", {}).get("blocks", {})
+    return {block for block, settings in blocks.items() if settings.get("history") is False}
+
+
 def replay_fixture(path: Path, fixture) -> str | None:
     """Replays a fixture's steps (FBL section 15.3) and returns the first problem, if any."""
     folder = path.parent
     document = (folder / fixture["input"]).read_bytes()
-    done, undone = [], []  # (before, after) of each edit that can be undone, and of each that can be redone
+    outside = blocks_outside_history(folder, fixture["binding"])
+    # (before, after, changes, crossed) of each edit that can be undone, and of each that can be redone; crossed: a write
+    # outside the history (FBL 0.7, section 7.1) came after it, so its undo is compared by what it changes, not by bytes
+    done, undone = [], []
     for index, step in enumerate(fixture["steps"], start=1):
         if "expectFile" in step:
             expected = (folder / step["expectFile"]).read_bytes()
@@ -309,25 +359,33 @@ def replay_fixture(path: Path, fixture) -> str | None:
         if restored != document:
             return f"step {index}: the inverse splices do not restore the document before the step"
         edit = step.get("edit", {})
+        changes = splice_changes(document, step["splices"])
         if step.get("undo"):
             if not done:
                 return f"step {index}: nothing to undo"
-            before, after = done.pop()
-            if document != after or result != before:
+            before, after, edit_changes, crossed = done.pop()
+            if crossed and changes != [(new, old) for old, new in edit_changes]:
+                return f"step {index}: the undo does not put back what the undone edit changed"
+            if not crossed and (document != after or result != before):
                 return f"step {index}: the undo does not return the document the undone edit started from"
-            undone.append((before, after))
+            undone.append((before, after, edit_changes, crossed))
         elif step.get("redo"):
             if not undone:
                 return f"step {index}: nothing to redo"
-            before, after = undone.pop()
-            if document != before or result != after:
+            before, after, edit_changes, crossed = undone.pop()
+            if crossed and changes != edit_changes:
+                return f"step {index}: the redo does not make the changes the edit made"
+            if not crossed and (document != before or result != after):
                 return f"step {index}: the redo does not return the document the edit produced"
-            done.append((before, after))
+            done.append((before, after, edit_changes, crossed))
         elif step.get("refused") or "save" in edit:
             if result != document:
                 return f"step {index}: a refused edit or a save without change must leave the document as it is"
+        elif edit.get("setting", {}).get("block") in outside:  # no step of the history: undo and redo pass it by
+            done = [(before, after, edit_changes, True) for before, after, edit_changes, _ in done]
+            undone = [(before, after, edit_changes, True) for before, after, edit_changes, _ in undone]
         else:
-            done.append((document, result))
+            done.append((document, result, changes, False))
             undone.clear()
         document = result
     return None
@@ -344,6 +402,8 @@ def resolve_names(document) -> list[str]:
             for index, rule in enumerate(binding.get(kind, [])):
                 rules[rule["name"]] = (rule, f"{base}/{kind}/{index}")
         file_rules = {rule["name"] for rule in binding.get("body", {}).get("files", [])}
+        sections = {section["name"] for section in binding.get("sections", [])}
+        bullets = binding.get("body", {}).get("family") == "bullets"
 
         def known(names, pointer, allowed=()):
             for name in names:
@@ -353,7 +413,12 @@ def resolve_names(document) -> list[str]:
         for name, (rule, pointer) in rules.items():
             known(rule.get("parent", {}).get("rules", []), pointer + "/parent/rules")
             known(rule.get("remove", {}).get("cascade", []), pointer + "/remove/cascade")
-            known(rule.get("within", []), pointer + "/within", allowed=("^",))
+            if bullets:  # a bullets rule's within names sections (FBL section 4.8)
+                for section in rule.get("within", []):
+                    if section not in sections:
+                        problems.append(f"at {pointer}/within: names the section {section!r}, which this binding does not have")
+            else:
+                known(rule.get("within", []), pointer + "/within", allowed=("^",))
             for file_rule in rule.get("files", []):
                 if file_rule not in file_rules:
                     problems.append(f"at {pointer}/files: names the file rule {file_rule!r}, which this binding does not have")
@@ -447,9 +512,16 @@ def resolve_disl(document) -> list[str]:
     return problems
 
 
+def type_list(names) -> list:
+    """A TypeRefs value, one type or a list of them (DESL section 2.2), as a list."""
+    return [names] if isinstance(names, str) else list(names)
+
+
 def resolve_desl(path: Path, document) -> list[str]:
-    """Checks the names a DESL specification's surface and persistence refer to (DESL section 10.1, step 4) and
-    returns a problem per unresolved name, each with the JSON Pointer of where it is used."""
+    """Checks the names a DESL specification's surface and persistence refer to (DESL section 10.1, step 4), for a
+    table or (DESL 0.2) a hierarchy surface, with the types of each mentions facet, the mark of each counter rule and the
+    blocks persistence.settings keeps, and returns a problem per unresolved name, each with the JSON Pointer of where it
+    is used."""
     problems = []
     types = document.get("metamodel", {}).get("types", {})
     type_map = document.get("persistence", {}).get("typeMap", {})
@@ -476,33 +548,78 @@ def resolve_desl(path: Path, document) -> list[str]:
             problems.append(f"at {pointer}: the type {owner!r} has no attribute {name!r}")
 
     surface = document.get("surface", {})
-    columns, cells, views = surface.get("columns", {}), surface.get("cells", {}), surface.get("views", {})
-    if element_type(columns.get("type"), "/surface/columns/type"):
-        for role in ("name", "valueType", "title", "parent"):
-            attribute(columns["type"], columns.get(role), f"/surface/columns/{role}")
-        options = columns.get("options")
-        if options and element_type(options["type"], "/surface/columns/options/type"):
-            if options["type"] not in children_of(columns["type"]):
-                problems.append(f"at /surface/columns/options/type: {options['type']!r} is not contained in {columns['type']!r}")
-            for role in ("name", "colour"):
-                attribute(options["type"], options.get(role), f"/surface/columns/options/{role}")
-    element_type(surface.get("rows", {}).get("type"), "/surface/rows/type")
-    if element_type(cells.get("type"), "/surface/cells/type"):
-        attribute(cells["type"], cells.get("column"), "/surface/cells/column")
-        if "items" in cells and element_type(cells["items"], "/surface/cells/items") and cells["items"] not in children_of(cells["type"]):
-            problems.append(f"at /surface/cells/items: {cells['items']!r} is not contained in {cells['type']!r}")
-    if element_type(views.get("type"), "/surface/views/type"):
-        attribute(views["type"], views.get("name"), "/surface/views/name")
-        attribute("the document", views.get("active"), "/surface/views/active", document.get("metamodel", {}).get("document", {}).get("attributes", {}))
-        for role, name in views.get("settings", {}).items():
-            element_type(name, f"/surface/views/settings/{role}")
-    for name, value_type in surface.get("valueTypes", {}).items():
-        holder = cells.get("items") if value_type.get("many") else cells.get("type")
-        if holder in types:
-            attribute(holder, value_type.get("key"), f"/surface/valueTypes/{name}/key")
-        for target in value_type.get("converts", {}):
-            if target not in surface.get("valueTypes", {}):
-                problems.append(f"at /surface/valueTypes/{name}/converts: names the value type {target!r}, which the surface does not declare")
+    if surface.get("kind") == "hierarchy":  # DESL 0.2, section 7.7
+        levels, entries = surface.get("levels", {}), surface.get("entries", {})
+        for role, members in (("levels", levels), ("entries", entries)):
+            if element_type(members.get("type"), f"/surface/{role}/type"):
+                for part in ("title", "description"):
+                    attribute(members["type"], members.get(part), f"/surface/{role}/{part}")
+        if levels.get("type") in types:
+            for contained in (levels["type"], entries.get("type")):
+                if contained in types and contained not in children_of(levels["type"]):
+                    problems.append(f"at /surface/levels/type: {contained!r} is not contained in {levels['type']!r}")
+        for name, label in surface.get("labels", {}).items():
+            for index, owner in enumerate(type_list(label.get("on", []))):
+                if element_type(owner, f"/surface/labels/{name}/on/{index}"):
+                    attribute(owner, name, f"/surface/labels/{name}")
+            options = label.get("options", {})
+            if element_type(options.get("type"), f"/surface/labels/{name}/options/type"):
+                for part in ("name", "colour"):
+                    attribute(options["type"], options.get(part), f"/surface/labels/{name}/options/{part}")
+        for role, parts in (("notes", ("about", "kind", "text", "detail", "resolved")), ("filters", ("name", "query"))):
+            members = surface.get(role)
+            if members and element_type(members.get("type"), f"/surface/{role}/type"):
+                for part in parts:
+                    attribute(members["type"], members.get(part), f"/surface/{role}/{part}")
+        if "collapsed" in surface:
+            for members in (levels, entries):
+                if members.get("type") in types:
+                    attribute(members["type"], surface["collapsed"], "/surface/collapsed")
+    else:
+        columns, cells, views = surface.get("columns", {}), surface.get("cells", {}), surface.get("views", {})
+        if element_type(columns.get("type"), "/surface/columns/type"):
+            for role in ("name", "valueType", "title", "parent"):
+                attribute(columns["type"], columns.get(role), f"/surface/columns/{role}")
+            options = columns.get("options")
+            if options and element_type(options["type"], "/surface/columns/options/type"):
+                if options["type"] not in children_of(columns["type"]):
+                    problems.append(f"at /surface/columns/options/type: {options['type']!r} is not contained in {columns['type']!r}")
+                for role in ("name", "colour"):
+                    attribute(options["type"], options.get(role), f"/surface/columns/options/{role}")
+        element_type(surface.get("rows", {}).get("type"), "/surface/rows/type")
+        if element_type(cells.get("type"), "/surface/cells/type"):
+            attribute(cells["type"], cells.get("column"), "/surface/cells/column")
+            if "items" in cells and element_type(cells["items"], "/surface/cells/items") and cells["items"] not in children_of(cells["type"]):
+                problems.append(f"at /surface/cells/items: {cells['items']!r} is not contained in {cells['type']!r}")
+        if element_type(views.get("type"), "/surface/views/type"):
+            attribute(views["type"], views.get("name"), "/surface/views/name")
+            attribute("the document", views.get("active"), "/surface/views/active", document.get("metamodel", {}).get("document", {}).get("attributes", {}))
+            for role, name in views.get("settings", {}).items():
+                element_type(name, f"/surface/views/settings/{role}")
+        for name, value_type in surface.get("valueTypes", {}).items():
+            holder = cells.get("items") if value_type.get("many") else cells.get("type")
+            if holder in types:
+                attribute(holder, value_type.get("key"), f"/surface/valueTypes/{name}/key")
+            for target in value_type.get("converts", {}):
+                if target not in surface.get("valueTypes", {}):
+                    problems.append(f"at /surface/valueTypes/{name}/converts: names the value type {target!r}, which the surface does not declare")
+    for type_name, declaration in types.items():  # DESL 0.2: what a mentions facet may name (section 4.3)
+        for name, declared in declaration.get("attributes", {}).items():
+            for index, target in enumerate(type_list(declared.get("mentions", {}).get("types", []))):
+                element_type(target, f"/metamodel/types/{type_name}/attributes/{name}/mentions/types/{index}")
+    document_attributes = document.get("metamodel", {}).get("document", {}).get("attributes", {})
+    for type_name, rule in document.get("persistence", {}).get("ids", {}).get("types", {}).items():
+        if rule.get("strategy") == "counter" and rule.get("mark") not in document_attributes:
+            problems.append(f"at /persistence/ids/types/{type_name}/mark: names no attribute of the document: {rule.get('mark')!r}")
+    settings = document.get("persistence", {}).get("settings", {})
+    for name, setting in settings.items():  # DESL 0.2, section 5.5
+        pointer = f"/persistence/settings/{name}"
+        if "type" in setting and element_type(setting["type"], f"{pointer}/type"):
+            for part in ("key", "value"):
+                attribute(setting["type"], setting.get(part), f"{pointer}/{part}")
+        for index, owner in enumerate(type_list(setting.get("of", []))):
+            if element_type(owner, f"{pointer}/of/{index}"):
+                attribute(owner, setting.get("attribute"), f"{pointer}/attribute")
     for index, reference in enumerate(document.get("persistence", {}).get("bindings", [])):
         pointer = f"/persistence/bindings/{index}"
         file, _, binding_name = reference.partition("#")
@@ -518,6 +635,10 @@ def resolve_desl(path: Path, document) -> list[str]:
             for rule in binding.get(kind, []):
                 if rule["type"] not in types and rule["type"] not in type_map:
                     problems.append(f"at {pointer}: the rule {rule['name']!r} produces the type {rule['type']!r}, which neither the metamodel nor the type map declares")
+        declared_blocks = binding.get("registration", {}).get("blocks", {})
+        for name in settings:
+            if name not in declared_blocks:
+                problems.append(f"at /persistence/settings/{name}: the binding {reference!r} declares no registration block {name!r}")
     return problems
 
 
@@ -565,10 +686,12 @@ for path in examples:
     if path.suffix == ".adp":
         document, problem = parse_registration(path.read_bytes())
         reference, aliases = FBL_REGISTRATION, []
-    elif path.suffix in (".yaml", ".yml", ".xml"):
+    elif path.suffix in (".yaml", ".yml", ".xml", ".md"):
         try:
             if path.suffix == ".xml":
                 document = knowledge_from_xml(path.read_text(encoding="utf-8"))
+            elif path.suffix == ".md":
+                document = definition_from_markdown(path.read_text(encoding="utf-8"))
             else:
                 import yaml  # only the designers' examples need it
 

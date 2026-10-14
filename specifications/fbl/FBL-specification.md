@@ -1,10 +1,10 @@
 # FBL — Format Binding Language
 
-**Specification, version 0.6 (Draft)**
+**Specification, version 0.7 (Draft)**
 
 |                          |                                                                                              |
 |--------------------------|----------------------------------------------------------------------------------------------|
-| Date                     | 2026-10-12                                                                                   |
+| Date                     | 2026-10-14                                                                                   |
 | Document schema          | `fbl.schema.json` (JSON Schema, draft 2020-12), `$defs/Document`                             |
 | Also in the schema       | `$defs/Registration` (the parsed `.adp` registration), `$defs/Fixture` (round-trip fixtures) |
 | Serves                   | every kind of tool: [DISL](../disl/DISL-specification.md) through `persistence.binding`, [DESL](../desl/DESL-specification.md) through `persistence.bindings` |
@@ -17,7 +17,7 @@
 
 ## Status of this document
 
-This is a draft, version 0.6. It is complete enough to implement a conforming validator of FBL documents and a host that reads and writes bodies through declared bindings, but individual constructs may still change before version 1.0. FBL 0.2 (2026-10-05, approved by the product owner as part of the DISL 0.3 additions) gives the model changes a persistence plugin plans their fields: an add with a position, a move and a retype (section 11.2), which declared bindings follow too (section 6.4); and it lets a DISL specification map a binding's own type and attribute names onto its metamodel (DISL §11.2, `persistence.typeMap`; section 5.1). Every valid 0.1 document is a valid 0.2 document with the same meaning, except that a plugin that does not declare `move` is sent a reorder or re-parent as a remove and an add. FBL 0.3 (2026-10-09, for the Knowledge designer, spec 013) changes no behaviour: it names the tool type's specification wherever 0.2 said DISL, since a DESL specification uses bindings too (DESL section 5), and pairs each construct it relies on with its DISL and its DESL section (section 1.3); it lets a specification name one binding per format family, the body choosing among them by the files each claims (sections 1.2, 8.1); it spells a reference to a stored id as `by: "id"` (sections 5.2, 5.7); it lets a fixture's edit be a `move` or an `add` with a `position`, as section 11.2 already defines them (section 15.3); and it says how a container written on one line is created and removed around its entry (section 6.2). Every valid 0.2 document is a valid 0.3 document with the same meaning. FBL 0.4 (2026-10-09, for the Agent activity diagram, spec 014, by the ruling of 2026-10-09) lets a binding keep its entries and values in a nested mapping that the body may not have yet: an insert whose container is placed `at: "end"` creates every missing level of its selector (section 6.2), an attribute reached through `child` is written into a mapping it creates the same way in yaml and json (section 5.2), and `remove-empty-levels` removes the levels an entry's removal leaves empty (section 6.2). Every valid 0.3 document is a valid 0.4 document with the same meaning. FBL 0.5 (2026-10-10, spec 015, for the tools whose YAML files people write by hand) says what a slot reads from a scalar: it defines a scalar's **written text** (section 4.1.5), lets an attribute binding read it with `read` and makes it what a text attribute, an id and a reference read (sections 5.2, 5.3), presents it to CEL as `text` and `style` beside `entry` (section 2.4), lets a binding keep an entry readable when one value does not convert, with `fallback`, and read a quoted number, with `quoted` (sections 5.2, 7.4), and lets a fixture state the attribute values a reading yields and an add name the `slot` it fills (section 15.3). Every valid 0.4 document is a valid 0.5 document; section 5.2 lists the two places where 0.5 gives a meaning that 0.4 left open. FBL 0.6 (2026-10-12, spec 026, by the maintainer's ruling of 2026-10-12 on row B-09 of spec 025's behaviour-change register) makes an attribute binding's `empty` rule decide a new entry's key as it decides a set (sections 5.2, 6.2): 0.5 said that a key a new entry has no value for is left out, and left open whether an empty value counts as no value on an insert; 0.6 says it does not, so an attribute an add gives its empty value is written with `keep`, left out with `remove` and refuses the add with `refuse` (section 6.4), with a set's defaults, while an attribute the add does not give is still left out. Every valid 0.5 document is a valid 0.6 document. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
+This is a draft, version 0.7. It is complete enough to implement a conforming validator of FBL documents and a host that reads and writes bodies through declared bindings, but individual constructs may still change before version 1.0. FBL 0.2 (2026-10-05, approved by the product owner as part of the DISL 0.3 additions) gives the model changes a persistence plugin plans their fields: an add with a position, a move and a retype (section 11.2), which declared bindings follow too (section 6.4); and it lets a DISL specification map a binding's own type and attribute names onto its metamodel (DISL §11.2, `persistence.typeMap`; section 5.1). Every valid 0.1 document is a valid 0.2 document with the same meaning, except that a plugin that does not declare `move` is sent a reorder or re-parent as a remove and an add. FBL 0.3 (2026-10-09, for the Knowledge designer, spec 013) changes no behaviour: it names the tool type's specification wherever 0.2 said DISL, since a DESL specification uses bindings too (DESL section 5), and pairs each construct it relies on with its DISL and its DESL section (section 1.3); it lets a specification name one binding per format family, the body choosing among them by the files each claims (sections 1.2, 8.1); it spells a reference to a stored id as `by: "id"` (sections 5.2, 5.7); it lets a fixture's edit be a `move` or an `add` with a `position`, as section 11.2 already defines them (section 15.3); and it says how a container written on one line is created and removed around its entry (section 6.2). Every valid 0.2 document is a valid 0.3 document with the same meaning. FBL 0.4 (2026-10-09, for the Agent activity diagram, spec 014, by the ruling of 2026-10-09) lets a binding keep its entries and values in a nested mapping that the body may not have yet: an insert whose container is placed `at: "end"` creates every missing level of its selector (section 6.2), an attribute reached through `child` is written into a mapping it creates the same way in yaml and json (section 5.2), and `remove-empty-levels` removes the levels an entry's removal leaves empty (section 6.2). Every valid 0.3 document is a valid 0.4 document with the same meaning. FBL 0.5 (2026-10-10, spec 015, for the tools whose YAML files people write by hand) says what a slot reads from a scalar: it defines a scalar's **written text** (section 4.1.5), lets an attribute binding read it with `read` and makes it what a text attribute, an id and a reference read (sections 5.2, 5.3), presents it to CEL as `text` and `style` beside `entry` (section 2.4), lets a binding keep an entry readable when one value does not convert, with `fallback`, and read a quoted number, with `quoted` (sections 5.2, 7.4), and lets a fixture state the attribute values a reading yields and an add name the `slot` it fills (section 15.3). Every valid 0.4 document is a valid 0.5 document; section 5.2 lists the two places where 0.5 gives a meaning that 0.4 left open. FBL 0.6 (2026-10-12, spec 026, by the maintainer's ruling of 2026-10-12 on row B-09 of spec 025's behaviour-change register) makes an attribute binding's `empty` rule decide a new entry's key as it decides a set (sections 5.2, 6.2): 0.5 said that a key a new entry has no value for is left out, and left open whether an empty value counts as no value on an insert; 0.6 says it does not, so an attribute an add gives its empty value is written with `keep`, left out with `remove` and refuses the add with `refuse` (section 6.4), with a set's defaults, while an attribute the add does not give is still left out. Every valid 0.5 document is a valid 0.6 document. FBL 0.7 (2026-10-14, spec 028, for the Hierarchical Requirement Designer) adds a sixth family, `bullets`, which reads the list items under named headings of a Markdown file as a tree (section 4.8): a binding's `sections` name the headings, a rule's `within` the sections its items stand in, the slot `{continuation: true}` reads the lines indented under an item (section 5.2), and a move to another depth re-indents the entry it moves (sections 5.5, 6.3), and an insert's `emit` can write a literal bracket, as a Markdown task list needs (section 6.2), and a fixture's `read` may state the parent of an element (section 15.3). It lets a binding declare further blocks of the registration, `registration.blocks`, in the grammar `layout:` and `identities:` already have, each with the order its entries keep, whether they are keyed by ids and whether its writes are steps of the history (sections 8.1, 8.4), so a tool type can keep beside the body what the body's readers do not need. A word slot of a `many` attribute holds every word of its group that matches, which lets a line carry a list of tags (sections 4.6, 6.3). It also makes a host compare the body with the bytes an edit was planned against before applying it, as 0.6 required before an undo or a redo (section 7.2). Every valid 0.6 document is a valid 0.7 document with the same meaning. Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
 
 FBL relies on constructs that the specification language of the tool type's kind defines: id strategies and ephemeral ids, findings and their source locations, derived elements, the editing transaction and the tool type's origin. Where this document names one of them, the specification language is the definition; FBL defines none of its own. Where this document says **the tool type's specification**, it means the DISL specification of a diagram or the DESL specification of a designer whose persistence names the binding. Section 1.3 lists, for each construct, the section of DISL and of DESL that defines it; a citation of DISL in this document is read, for a designer, as a citation of the DESL section that table pairs it with.
 
@@ -111,7 +111,7 @@ DISL's persistence layer names FBL with `format: "fbl"` and `binding` (DISL §11
 
 ### 1.5 Non-goals
 
-- FBL is not a general grammar formalism. It covers the five format families of section 4, which are the ones today's tools need (constitution principle V).
+- FBL is not a general grammar formalism. It covers the six format families of section 4, which are the ones today's tools need (constitution principle V).
 - FBL does not compute the model beyond reading it: which elements a view shows, derived elements and layouts are the specification language's.
 - FBL does not merge concurrent edits. A body is edited by one host at a time; changes from anywhere else arrive as external changes (section 7.3).
 
@@ -126,7 +126,7 @@ An FBL document is a JSON document (RFC 8259) encoded in UTF-8, validated by `fb
 | Property   | Type                 | Description                                                    |
 |------------|----------------------|----------------------------------------------------------------|
 | `$schema`  | URI                  | Optional; the schema's `$id` with `#/$defs/Document`.          |
-| `fbl`      | `"0.1"`, `"0.2"`, `"0.3"`, `"0.4"`, `"0.5"`, `"0.6"` | Required. The FBL version the document is written in.    |
+| `fbl`      | `"0.1"`, `"0.2"`, `"0.3"`, `"0.4"`, `"0.5"`, `"0.6"`, `"0.7"` | Required. The FBL version the document is written in.    |
 | `doc`      | Doc                  | Documentation, as in DISL §2.4.                                |
 | `bindings` | map Name → Binding   | Required, at least one. Each binding is described in section 3. |
 
@@ -151,7 +151,7 @@ Wherever FBL needs a condition or a computed value it uses CEL, as DISL does (DI
 | `style`        | map                      | same, yaml and json *(FBL 0.5)*                | The same entry with every scalar as the name of the style it is written in: `plain`, `single`, `double`, `literal` or `folded`; json strings are `double`, other json scalars `plain`. |
 | `parent`       | map or null              | same                                           | The nearest enclosing entry matched by any rule of the binding, or null. |
 | `path`         | map string → string      | tree and xml rules                             | The values of the selector's `{capture}` segments (section 4.2). |
-| `groups`       | map string → string      | lines and blocks rules                         | The named groups of the rule's `line` that took part in the match; a group that did not is absent, so `has(groups.x)` tests it. |
+| `groups`       | map string → string      | lines, blocks and bullets rules                | The named groups of the rule's `line` that took part in the match; a group that did not is absent, so `has(groups.x)` tests it. |
 | `line`         | int                      | every rule                                     | The 1-based line on which the entry starts. |
 | `registration` | map string → string      | every rule                                     | The headers of the registration the body was opened through (section 8), empty without one. |
 | `attributes`   | map                      | `insert.when`                                  | The attribute values of the element being added. |
@@ -160,14 +160,14 @@ A CEL expression **MUST** compile against these variables; a validator reports o
 
 ### 2.5 Regular expressions
 
-`lines` and `blocks` rules, markers, headers and comments use regular expressions in the **common subset** of RE2, .NET, Java and ECMAScript syntax, which all four hosts' languages and CEL's `matches` read alike:
+`lines`, `blocks` and `bullets` rules, sections, markers, headers and comments use regular expressions in the **common subset** of RE2, .NET, Java and ECMAScript syntax, which all four hosts' languages and CEL's `matches` read alike:
 
 - literals, `.`, character classes `[…]` and `[^…]`, the escapes `\d \D \s \S \w \W \t \n \r \\` and escaped punctuation;
 - anchors `^` and `$` (a line never contains its line ending, so both refer to the line);
 - groups `(…)`, non-capturing groups `(?:…)` and named groups `(?<name>…)`, names being SimpleIds;
 - alternation `|` and the quantifiers `* + ? {n} {n,} {n,m}` and their lazy forms.
 
-Backreferences, lookaround, atomic groups, possessive quantifiers, inline flags and Unicode property classes are not in the subset, and a validator **MUST** reject an expression that uses them. Case-insensitive matching of ASCII letters is requested with a rule's `caseInsensitive`. Matching is against the whole line unless the expression says otherwise with anchors; a match that could succeed in several ways takes the one the leftmost-first semantics of RE2 gives, which the other engines agree with for this subset.
+Backreferences, lookaround, atomic groups, possessive quantifiers, inline flags and Unicode property classes are not in the subset, and a validator **MUST** reject an expression that uses them. Case-insensitive matching of ASCII letters is requested with a rule's `caseInsensitive`. Matching is against the whole line unless the expression says otherwise with anchors, except that *(FBL 0.7)* a `bullets` rule with `within` is matched against the item's text and a section against the heading's text (section 4.8); a match that could succeed in several ways takes the one the leftmost-first semantics of RE2 gives, which the other engines agree with for this subset.
 
 ### 2.6 Text
 
@@ -175,7 +175,7 @@ A body file is UTF-8, with or without a byte-order mark. A byte-order mark, if p
 
 ### 2.7 Versioning
 
-`fbl` names the version of FBL a document is written in: `"0.1"`, `"0.2"`, `"0.3"`, `"0.4"`, `"0.5"` or `"0.6"`. Each is a superset of the one before, and a host **MUST** read a document of an earlier minor version with its meaning. While 0.6 is a draft, its schema is published at the 0.1 address (`https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json`), which accepts every 0.1 document unchanged. A host **MUST** refuse a document whose major version it does not support, and **SHOULD** read a document of a newer minor version, ignoring what it does not know, with a warning. Before 1.0 any construct may change (constitution principle IV).
+`fbl` names the version of FBL a document is written in: `"0.1"`, `"0.2"`, `"0.3"`, `"0.4"`, `"0.5"`, `"0.6"` or `"0.7"`. Each is a superset of the one before, and a host **MUST** read a document of an earlier minor version with its meaning. While 0.7 is a draft, its schema is published at the 0.1 address (`https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json`), which accepts every 0.1 document unchanged. A host **MUST** refuse a document whose major version it does not support, and **SHOULD** read a document of a newer minor version, ignoring what it does not know, with a warning. Before 1.0 any construct may change (constitution principle IV).
 
 ---
 
@@ -210,8 +210,9 @@ A **binding** declares how one format maps to a language's model. Every binding 
 | `text`         | TextDefaults                    | Conventions for new text where the body gives no evidence (section 6.3). |
 | `header`       | Header                          | A version or identity mark the body starts with (section 5.6). |
 | `comment`      | Regex                           | `lines` and `blocks`: a line that matches it is a comment (section 4.6). |
-| `unmatched`    | `"keep"` (default), `"report"`  | `lines` and `blocks`: whether a statement no rule matches is also reported (section 7.4). |
+| `unmatched`    | `"keep"` (default), `"report"`  | `lines`, `blocks` and `bullets`: whether a statement no rule matches is also reported (section 7.4). |
 | `blocks`       | BlockRule[]                     | `blocks`: statements that open blocks and produce nothing (section 4.7). |
+| `sections`     | SectionRule[]                   | *(FBL 0.7)* `bullets`: the headings whose list items the rules read (section 4.8). |
 | `elements`     | ElementRule[]                   | Rules producing elements (section 5). |
 | `relations`    | RelationRule[]                  | Rules producing relations (section 5.4). |
 | `registration` | RegistrationSettings            | What the binding adds to the registration (section 8). |
@@ -224,7 +225,7 @@ A declared binding **MUST** have at least one element or relation rule. A bindin
 | Property    | Type                                   | Description |
 |-------------|----------------------------------------|-------------|
 | `kind`      | `"file"`, `"folder"`                   | Required. |
-| `family`    | `"yaml"`, `"json"`, `"xml"`, `"lines"`, `"blocks"` | Required for a declared file body: the family whose lossless reading the rules address (section 4). |
+| `family`    | `"yaml"`, `"json"`, `"xml"`, `"lines"`, `"blocks"`, *(FBL 0.7)* `"bullets"` | Required for a declared file body: the family whose lossless reading the rules address (section 4). |
 | `alsoRead`  | family[]                               | Other families accepted for the same body. The host tries `family` first, then each of these in order, and uses the first under which the body is readable. A document read under another family keeps that family for writing. |
 | `recognise`, `files`, `ignore`, `settle` | | Folder bodies only (section 10). |
 
@@ -246,7 +247,7 @@ For each family, this section defines a **lossless reading**: a tree of nodes ov
 
 #### 4.1.1 Entries and spans
 
-An **entry** is a node that a rule can match: a mapping member or sequence item (yaml, json), an element (xml), a statement (lines, blocks). Every entry has:
+An **entry** is a node that a rule can match: a mapping member or sequence item (yaml, json), an element (xml), a statement (lines, blocks, bullets), a list item (bullets). Every entry has:
 
 - its **own span**: the bytes of the entry itself, from its first to its last significant byte;
 - its **line span**, when the entry starts its line and ends its line (nothing but trivia before it on its first line and after it on its last): from the first byte of its first line to the end of the line ending of its last line, extended upwards over its **leading comments**, the comment lines directly above it at the same indentation with no blank line in between. A trailing comment on the entry's last line is part of its line span.
@@ -265,7 +266,7 @@ Entries have **document order**, the order of their first bytes. Reading order i
 
 #### 4.1.4 Entries as CEL values
 
-An entry is presented to CEL (section 2.4) as follows. A yaml or json mapping is a map from key to value; a sequence is a list; a scalar is a string, int, double, bool or null by the YAML 1.2 core schema (JSON by its own types). An xml element is a map from attribute name to string, plus the key `text` holding its text content. A lines or blocks statement is presented as its `groups`.
+An entry is presented to CEL (section 2.4) as follows. A yaml or json mapping is a map from key to value; a sequence is a list; a scalar is a string, int, double, bool or null by the YAML 1.2 core schema (JSON by its own types). An xml element is a map from attribute name to string, plus the key `text` holding its text content. A lines, blocks or bullets statement, and a bullets item, is presented as its `groups`.
 
 A key that is present with no value is present in the map with the value null, so `has(entry.end)` is true for `end:` and false where the key is absent.
 
@@ -282,7 +283,7 @@ Every scalar of a yaml or json body has, beside the typed value of section 4.1.4
 | json string | Its content, with its escapes resolved. |
 | json number, `true`, `false`, `null` | Its literal characters. |
 
-A tag does not change the written text. A scalar reached through an alias or a merge key has the written text of the scalar it stands for. The members of a flow collection have a written text each, by the same rules. The `xml`, `lines` and `blocks` families read text and nothing else, so there the value a slot reads is already what was written.
+A tag does not change the written text. A scalar reached through an alias or a merge key has the written text of the scalar it stands for. The members of a flow collection have a written text each, by the same rules. The `xml`, `lines`, `blocks` and `bullets` families read text and nothing else, so there the value a slot reads is already what was written.
 
 So `yes`, `"yes"` and `'yes'` have the written text `yes`; `007` has `007`; `1.0` has `1.0`; `0x10` has `0x10`. The typed value of each is what the YAML 1.2 core schema gives: a bool, a string, a string, the int 7, the double 1.0, the int 16.
 
@@ -340,7 +341,7 @@ The body is a sequence of lines. Each line is exactly one of:
 - a **comment**: it matches the binding's `comment`; it is owned by the statement directly below it, if no blank line intervenes (a leading comment, section 4.1.1);
 - a **statement**: any other line. A statement matched by a rule's `line` is an entry of that rule; the first rule in the binding's order whose `line` matches (and whose `when` holds) wins. A statement no rule matches is unbound (and reported when `unmatched` is `report`).
 
-A statement's own span is the line without its ending; its line span adds its leading comments and its line ending. Its **values** are its named groups. A group used with `word` is split into **words**: runs of non-whitespace, where a run starting with `"` extends to the next `"` and includes both quotes. A `word` slot's value is the first word of the group that matches the slot's `word` expression; if that expression has a named group `value`, the value is that group, otherwise the whole word (without quotes when the word is quoted). A `flag` word slot's value is true when such a word is present.
+A statement's own span is the line without its ending; its line span adds its leading comments and its line ending. Its **values** are its named groups. A group used with `word` is split into **words**: runs of non-whitespace, where a run starting with `"` extends to the next `"` and includes both quotes. A `word` slot's value is the first word of the group that matches the slot's `word` expression; if that expression has a named group `value`, the value is that group, otherwise the whole word (without quotes when the word is quoted). A `flag` word slot's value is true when such a word is present. *(FBL 0.7)* A word slot of an attribute with `many` holds every word of the group that matches its `word` expression, in order, each an item: the word's group `value`, or the whole word.
 
 ### 4.7 The `blocks` family
 
@@ -358,6 +359,44 @@ The body is lines as in the `lines` family, with nesting: a statement whose last
 
 An element rule with `opens: true` may open a block (it may also appear on one line without one); `within` on element and relation rules works as for block rules. A statement is matched only by rules whose `within` admits its enclosing block.
 
+### 4.8 The `bullets` family *(FBL 0.7)*
+
+The body is lines, as in the `lines` family, holding list items that nest by their indentation: the part of a Markdown file that a tool reads as a tree. FBL reads the list items under the headings a binding names, and nothing else of Markdown (section 1.5).
+
+**Columns.** A line's **indentation** is the spaces and tabs it starts with, counted in columns from 0, a tab counting four columns wherever it stands (not up to the next multiple of four).
+
+**Line kinds.** Each line is one of the following, decided in document order. An **item** is **open** from its item line until a line closes it.
+
+1. The lines after the one that opens a **fence**, up to and including the one that closes it, are fence lines; the opening line itself is decided by the rules below. A fence opens on a line whose text after its indentation starts with three or more backticks or three or more tildes, and closes on the next line whose text after its indentation is a run of at least as many of the same character and nothing else but whitespace, or at the end of the body. Nothing inside a fence is any other kind of line.
+2. A **blank** line holds only whitespace. It closes nothing.
+3. Any other line first closes every open item whose marker stands at the line's indentation or deeper.
+4. An **item line** is indentation, a **marker** `-`, `*` or `+`, then whitespace or the end of the line, and is not a thematic break (below). Its item is nested in the deepest item still open, if any, and is then open itself. The item's **text** is what follows the marker and the whitespace after it, to the end of the line, trailing whitespace included; its **content column** is the column where the text begins, or the marker's column plus two when the text is empty.
+5. While an item is still open, any other line is a **continuation line** of the deepest open item. A fence that opens on a continuation line belongs to that item: its lines are continuation lines of it, whatever their indentation.
+6. With no item open, a line is a **heading** when it has at most three columns of indentation, then one to six `#`, then whitespace or the end of the line. Its **level** is the number of `#`, and its **text** the rest of the line without leading and trailing whitespace and without a closing run of `#` that whitespace precedes. A line underlined with `=` or `-` is not a heading in this family.
+7. With no item open, a line is a **thematic break** when it holds three or more of one of `-`, `*` and `_`, and nothing else but spaces and tabs. It is never an item line, open or not.
+8. With no item open, a line that opens a fence makes the fence **unbound**, with every line in it.
+9. Any other line is a **statement**, as in the `lines` family.
+
+**Sections.** A binding's `sections` name headings, as `blocks` name the statements that open a block:
+
+| Property          | Type  | Description |
+|-------------------|-------|-------------|
+| `name`            | Name  | Required. Referenced by a rule's `within` and by `insert.container`. |
+| `heading`         | Regex | Required. Matched against a heading's text. |
+| `caseInsensitive` | bool  | Match ignoring the case of ASCII letters. |
+
+A **section** is the lines after the first heading whose text matches `heading`, up to the next heading with as many `#` or fewer, or to the end of the body. A heading with more `#` inside it does not end it. A later heading that matches too is an ordinary heading. An item **stands in** a section when its item line is one of the section's lines.
+
+**Entries and spans.** An item and a statement are entries. An item's **own span** runs from its marker to the end of its last continuation line or of its last nested item, whichever comes later, without that line's ending; its **line span** runs from the first byte of its item line to the end of that last line's ending. Blank lines inside an item's own span are part of it; those after it belong to no entry (section 4.1.1). A statement's spans are those of section 4.6. This family has no comments.
+
+**Rules.** A rule with `within` matches items of the sections it names: its `line` is matched against the item's text. A rule without `within` matches statements, as in the `lines` family. Of the rules that may match an entry, the first in the binding's order whose `line` matches and whose `when` holds takes it (section 5.1). The named groups of `line` are the entry's values, split into words as section 4.6 says.
+
+**Continuation.** An item's **continuation** is its continuation lines from the first to the last before its first nested item, the blank lines between them included; the continuation lines after a nested item are part of the item's span and are unbound. The slot `{continuation: true}` reads the continuation as text: its lines joined by LF, each with the whitespace before the item's content column taken off (a line indented less loses all of its indentation, and a tab the content column cuts into is replaced by the spaces that remain of it), a blank line read as an empty line. An item without continuation lines reads as the empty text.
+
+**Unbound.** Headings, thematic breaks, blank lines and unbound fences are unbound. An item that stands in no section a rule's `within` names is unbound. An item that no rule matches, and an unreadable item (section 7.4), are not looked into: they are unbound with everything in their span, and no rule matches an item nested in them. A statement that no rule matches is unbound, and reported only when `unmatched` is `report`.
+
+The body is never unreadable for its family: Markdown has no malformed list (section 7.5).
+
 ---
 
 ## 5. Rules
@@ -371,8 +410,9 @@ An element rule turns entries into elements of one node type:
 | `name`            | Name                        | Required. Referenced by `parent`, `cascade`, `reference.to` and `within`. |
 | `type`            | TypeRef                     | Required. The node type produced, as the tool type's specification declares it. |
 | `at`              | Selector                    | yaml, json, xml: where the entries are. |
-| `line`            | Regex                       | lines, blocks: the statement. Exactly one of `at` and `line`. |
-| `within`, `opens`, `caseInsensitive` | | blocks (section 4.7); `caseInsensitive` also for lines. |
+| `line`            | Regex                       | lines, blocks: the statement; bullets: the statement, or with `within` the item's text (section 4.8). Exactly one of `at` and `line`. |
+| `within`          | Name[]                      | blocks: the block rules or element rules whose block encloses the statement (section 4.7); *(FBL 0.7)* bullets: the sections whose items the rule matches (section 4.8). |
+| `opens`, `caseInsensitive` | | `opens`: blocks (section 4.7); `caseInsensitive`: lines, blocks and bullets. |
 | `files`           | Name[]                      | Folder subjects: the file rules whose files this rule reads (section 10). |
 | `when`            | Expression                  | The entry is matched only when this holds. |
 | `id`              | IdBinding                   | Where the element's id is stored (section 5.3). |
@@ -396,7 +436,8 @@ A **slot** is exactly one place a value is read from and written to:
 | `{key}`                  | yaml, json        | The value of that member of the entry's mapping; with `child`, of the mapping the relative selector `child` reaches. |
 | `{attribute}`            | xml               | The value of that attribute of the element, or of the element `child` selects. |
 | `{text: true}`           | xml               | The text of the element, or of the element `child` selects. |
-| `{group}`                | lines, blocks     | The named group; with `word` (and `flag`), a word of it (section 4.6). |
+| `{group}`                | lines, blocks, bullets | The named group; with `word` (and `flag`), a word of it (section 4.6). |
+| `{continuation: true}`   | bullets           | *(FBL 0.7)* The item's continuation, its lines with their indentation taken off (section 4.8). |
 | `{parent: a}`            | all               | The value of attribute `a`'s slot in the enclosing entry the rule's `parent` names, or the nearest enclosing matched entry. Read-only unless that entry's slot is writable. |
 | `{capture: c}`           | yaml, json, xml   | The key a `{c}` selector segment matched; writing it renames the key. |
 | `{value: cel}`           | all               | Computed; read-only. |
@@ -436,7 +477,7 @@ An **attribute binding** is a slot bound to one attribute of the rule's type, wi
 - A slot read as typed converts the typed value to the attribute's type. A conversion that loses nothing succeeds (the int 1 to a number, the double 1.0 to an int); any other does not convert. With `quoted: "convert"`, a quoted scalar is first read by the core schema from its written text.
 - A value that does not convert makes its entry unreadable (section 7.4), unless the binding gives the attribute a `fallback`.
 - A binding type the tool type's specification maps with `typeMap`, and a host attribute, have the type of the attribute they map to; a host attribute, which has none, is read as text.
-- `read`, `quoted` and `fallback` **MUST NOT** be given on a slot of the `xml`, `lines` or `blocks` family, nor on a `value` or `capture` slot; `fallback` applies there in no case, since a text always reads.
+- `read`, `quoted` and `fallback` **MUST NOT** be given on a slot of the `xml`, `lines`, `blocks` or `bullets` family, nor on a `value` or `capture` slot; `fallback` applies there in no case, since a text always reads.
 
 These are the two places where 0.5 gives a meaning that 0.4 left open. 0.4 said what CEL sees of a scalar (section 4.1.4) and that a value which "does not convert to the attribute's type" makes an entry unreadable, and did not say what a string attribute reads from a scalar that the core schema types otherwise, nor how an id written `007` compares. Hosts read them differently; 0.5 settles both as the written text, which is what the tools that own such files do.
 
@@ -468,11 +509,11 @@ A relation rule is an element rule with two more slots, `source` and `target`, e
 
 ### 5.5 Containment
 
-`parent: {rules, slot}` makes the element a child, in DISL containment slot `slot`, of the nearest enclosing entry matched by one of `rules`: the nearest ancestor node in the tree families and xml, the nearest enclosing block in `blocks`. A rule without `parent` produces top-level elements. Moving an element to another parent is a `remove-entry` in the old parent and an `insert-entry` in the new one, in one edit, keeping the entry's own bytes.
+`parent: {rules, slot}` makes the element a child, in DISL containment slot `slot`, of the nearest enclosing entry matched by one of `rules`: the nearest ancestor node in the tree families and xml, the nearest enclosing block in `blocks`, *(FBL 0.7)* the nearest item the entry is nested in in `bullets`, which is the nearest open item above it with its marker in a smaller column (section 4.8). A rule without `parent` produces top-level elements. Moving an element to another parent is a `remove-entry` in the old parent and an `insert-entry` in the new one, in one edit, keeping the entry's own bytes. *(FBL 0.7)* In `bullets` they are the entry's own bytes re-indented: a move to another depth shifts the indentation of every line of the entry by the difference (section 6.3), and changes nothing else.
 
 ### 5.6 The header
 
-`header` names a version or identity mark: a root `key` with a `value` (yaml, json), or a `line` expression the first statement or the root start tag must match (lines, blocks, xml). A body without the mark, or with another value, is read, and the difference is reported as `fbl.header-mismatch` (a warning). With `required: true`, a body without the mark is unreadable (section 7.5) instead. The header is never written except by the template.
+`header` names a version or identity mark: a root `key` with a `value` (yaml, json), or a `line` expression the first statement or the root start tag must match (lines, blocks, xml), or *(FBL 0.7)* that line 1 must match, after a byte-order mark (bullets). A body without the mark, or with another value, is read, and the difference is reported as `fbl.header-mismatch` (a warning). With `required: true`, a body without the mark is unreadable (section 7.5) instead. The header is never written except by the template.
 
 ### 5.7 References and rename
 
@@ -490,16 +531,18 @@ Every write is a **splice**: the replacement of one byte range of the body (poss
 | Operation           | Replaces | With | Families |
 |---------------------|----------|------|----------|
 | `replace-value`     | a value's span, quotes included | the new value, in the value's own style when it fits (section 6.3) | all |
-| `insert-key`        | nothing, at the position `insert.keys` or the attribute order gives | a new key and value (yaml, json), attribute (xml), optional segment or word (lines, blocks), or child element holding a value (xml `create`) | all |
-| `remove-key`        | a key or attribute and the trivia it owns; a word and the whitespace before it; an `override` slot; a `create`d child | nothing | all |
+| `insert-key`        | nothing, at the position `insert.keys` or the attribute order gives | a new key and value (yaml, json), attribute (xml), optional segment or word (lines, blocks, bullets), item's continuation (bullets), or child element holding a value (xml `create`) | all |
+| `remove-key`        | a key or attribute and the trivia it owns; a word and the whitespace before it; an `override` slot; a `create`d child; an item's continuation | nothing | all |
 | `insert-entry`      | nothing, at the place `insert.place` gives | a new entry with its separators and line endings | all |
 | `remove-entry`      | an entry's line span, or its own span and one separator | nothing | all |
-| `ensure-container`  | nothing, at the place `insert.create` gives | a missing container (a key with an empty block value, an array, an element) | yaml, json, xml; the registration's blocks |
+| `ensure-container`  | nothing, at the place `insert.create` gives | a missing container (a key with an empty block value, an array, an element, a section's heading) | yaml, json, xml, bullets; the registration's blocks |
 | `remove-container`  | a container left empty and its line span | nothing | yaml, json, xml; the registration's blocks |
 | `rewrite-reference` | a reference's span | the new value it names | all |
-| `re-emit-line`      | a statement's own span | the statement emitted from its rule's `emit` with the element's current values | lines, blocks |
+| `re-emit-line`      | a statement's own span, or an item's text | the statement or text emitted from its rule's `emit` with the element's current values | lines, blocks, bullets |
 | `open-block`        | nothing, before the statement's line ending; and nothing, after the block's last line | ` {`; and a closing `}` line indented like the statement | blocks |
 | `self-close`        | the `>` of a start tag and the end tag with the whitespace before it; or `/>` | `/>`; or `>` and a new end tag | xml |
+
+*(FBL 0.7)* In a declared block of the registration whose order is `kept`, a move of an entry is a `remove-entry` and an `insert-entry` of the same bytes (section 8.4).
 
 A host **MUST NOT** write a body by any other means than these splices, except when the user explicitly replaces the body with the editor's own version after an external change (section 7.3).
 
@@ -509,13 +552,15 @@ A host **MUST NOT** write a body by any other means than these splices, except w
 
 | Property    | Description |
 |-------------|-------------|
-| `place`     | Required. `after-last`: right after the last entry of this rule in the container (document order); if there is none, at `end`. `end`: after the container's last entry. `start`: before its first entry. `last-child`: after the parent entry's last child (xml, blocks), opening the parent first when it is self-closed (`self-close`) or one-line (`open-block`). `next-sibling`: right after the entry the gesture was made on. `end-of-document`: after the last byte of the body. `{before: key}`: before the member `key` of the container. |
-| `container` | Selector of the container (tree, xml), or the name of the enclosing block rule (blocks). Relative selectors resolve against the parent entry. `{capture}` segments resolve to the values the registration or the parent entry bound them to. |
-| `create`    | When the container does not exist: `at` is `end-of-document`, `{before: key}` (before a member of the container's parent), `{after: key}` (right after a key of the entry, as the first key after it), or `{under: selector}` (at the end of that container), or *(FBL 0.4)* `end` (after the last member of the container's parent, which for a member of the root is the end of the document); `text`, when given, is the container's own text, otherwise the key alone with an empty block value (yaml), `"key": []` (json) or an empty element (xml). One `ensure-container` splice. *(FBL 0.4)* With `end`, the container's parent may be missing too: see *Missing levels* below. |
+| `place`     | Required. `after-last`: right after the last entry of this rule in the container (document order); if there is none, at `end`. `end`: after the container's last entry. `start`: before its first entry. `last-child`: after the parent entry's last child (xml, blocks, bullets), opening the parent first when it is self-closed (`self-close`) or one-line (`open-block`). `next-sibling`: right after the entry the gesture was made on. `end-of-document`: after the last byte of the body. `{before: key}`: before the member `key` of the container. |
+| `container` | Selector of the container (tree, xml), the name of the enclosing block rule (blocks), or *(FBL 0.7)* the name of the section (bullets); in `bullets`, the container of an add with a parent is that parent item, whose nested items are its entries. Relative selectors resolve against the parent entry. `{capture}` segments resolve to the values the registration or the parent entry bound them to. |
+| `create`    | When the container does not exist: `at` is `end-of-document`, `{before: key}` (before a member of the container's parent), `{after: key}` (right after a key of the entry, as the first key after it), or `{under: selector}` (at the end of that container), or *(FBL 0.4)* `end` (after the last member of the container's parent, which for a member of the root is the end of the document); `text`, when given, is the container's own text, otherwise the key alone with an empty block value (yaml), `"key": []` (json) or an empty element (xml). One `ensure-container` splice. *(FBL 0.4)* With `end`, the container's parent may be missing too: see *Missing levels* below. *(FBL 0.7)* In `bullets` the container is a section: `at` is `end-of-document`, and `text` is its heading line, such as `## Behavior` (section 6.3). |
 | `keys`      | The order of keys in a new entry (tree) or of its attributes (xml). A key the new entry has no value for is left out. *(FBL 0.6)* An attribute the add does not give has no value, and its key is left out whatever its binding's `empty` says. An attribute the add gives its empty value (section 5.2) has a value, and a host **MUST** write or leave out its key by that attribute binding's `empty`, with the defaults a set has: `keep` writes the key with the empty value, in the form section 6.3 gives it (in yaml the empty string is not plain-safe, so it is quoted, `key: ""` with the default `text.quote`; in json `"key": ""`); `remove` leaves the key out; `refuse` refuses the add (section 6.4). A binding without `empty` **MUST** give the key what a set of that attribute to its empty value gives the slot, which for a string attribute is `keep`. So one binding gives the same entry for an add as for an add followed by a set to the same value. A new entry written with `emit` follows `emit`'s own rule for optional segments instead. |
-| `emit`      | The text of a new entry for families without keys (lines, blocks, xml), and for json items written on one line: literal text with placeholders `{attribute}` (the attribute's written form, section 6.3), `{id}`, `{source}`, `{target}`; `[ … ]` encloses an optional segment, written only when every placeholder in it is non-empty. A `flag` attribute's placeholder writes the flag's word when true and nothing when false. |
+| `emit`      | The text of a new entry for families without keys (lines, blocks, xml, bullets), and for json items written on one line: literal text with placeholders `{attribute}` (the attribute's written form, section 6.3), `{id}`, `{source}`, `{target}`; `[ … ]` encloses an optional segment, written only when every placeholder in it is non-empty, and *(FBL 0.7)* `\[` and `\]` write a literal bracket (`\[ \] {text}` writes an open task of a Markdown task list). A `flag` attribute's placeholder writes the flag's word when true and nothing when false. |
 | `skeleton`  | Fixed text written with the entry after its keys, indented as its keys (a Databricks task's `notebook_task`). |
 | `when`      | An expression over `attributes`; when false, adding is refused. |
+
+An add is planned by the first rule of its type, in the binding's order, that has an `insert` whose `when` holds. *(FBL 0.7)* In `bullets` an item's siblings are the items nested in the same parent, or the top-level items of the section when it has none: `after-last`, `end` and `last-child` put a new item after the last of them, `start` before the first, and section 6.3 says where that is in bytes.
 
 An insert is one `insert-entry` splice, preceded by an `ensure-container` splice at the same offset when the container is created. Splices at the same offset are applied in the order the edit lists them. *(FBL 0.3)* A container that encloses its entries on one line (a json array or object written on one line) cannot be written before an entry that goes inside it, so it is created as two `ensure-container` splices, its opening and its closing, with the `insert-entry` between them, all three at the same offset; removing such a container with its last entry is likewise its opening (`remove-container`), the entry (`remove-entry`) and its closing (`remove-container`), as `self-close` splits an xml element around its children.
 
@@ -548,13 +593,22 @@ New text follows the body's own conventions where the body shows them, and the b
 
 **xml.** New attributes are written in `insert.keys` order, then in the order of their binding; an attribute added to an existing element goes after its last attribute, preceded by one space. A new element goes on its own line when its previous sibling is on its own line, with that sibling's indentation. A self-closed tag is written `/>` without a space unless the element being replaced wrote one.
 
-**lines and blocks.** A new statement is its rule's `emit` on its own line, indented (in `blocks`) one step deeper than its enclosing block's statement. A changed value is written by `replace-value` on its group's span. A value whose slot has no span in the statement (an absent optional group or word) is written by `insert-key` when the rule's `emit` places it after a present value and before nothing that must move, and otherwise by `re-emit-line`, which rewrites the statement in the canonical form its `emit` gives; unbound words of a re-emitted statement are lost, so a host **MUST** prefer `insert-key` when both are possible.
+**lines and blocks.** A new statement is its rule's `emit` on its own line, indented (in `blocks`) one step deeper than its enclosing block's statement. A changed value is written by `replace-value` on its group's span. A value whose slot has no span in the statement (an absent optional group or word) is written by `insert-key` when the rule's `emit` places it after a present value and before nothing that must move, and otherwise by `re-emit-line`, which rewrites the statement in the canonical form its `emit` gives; unbound words of a re-emitted statement are lost, so a host **MUST** prefer `insert-key` when both are possible. *(FBL 0.7)* A word a set adds, the value of a word slot that holds none or a new item of a `many` one, is an `insert-key` of one space and the word, right after the last word of the group held by that slot or by a slot listed before it in the rule's `attributes` on the same group, else at the start of the group. A removed word or item is a `remove-key` of the word and the whitespace before it, and a changed one a `replace-value` of the word, or of its group `value`. Items keep their order, and a new one is written after the slot's last.
+
+**bullets** *(FBL 0.7)*. The family's new text, with the line endings and the last line without an ending as this section says above:
+
+- **A new item** is one line, its indentation, its marker, one space and its rule's `emit`, written as for `lines`. It takes the marker and the indentation of its previous sibling, else of its next sibling, else the marker of its parent and the parent's content column, else `-` at column 0. When the add gives the attribute of the rule's `continuation` slot a value that is not empty, each line of the value follows on a line of its own, indented with spaces to the new item's content column, an empty line of the value written as an empty line.
+- **Where it goes.** After the line span of its previous sibling; else at the start of the line span of its next sibling; else, as its parent's first nested item, at the end of the line ending of the parent's last line before its first nested item, which is its item line or the last line of its continuation; else, as the first item of a section that holds none, at the end of the line ending of the section's last line that is not blank, which is the heading when the section holds nothing else, with a line ending written first, so that a blank line stands before the item.
+- **A missing section** is created by `insert.create` with `at: "end-of-document"` and the heading as `text`: one `ensure-container` at the end of the body that writes a line ending, the heading and a line ending, so that a blank line stands before the heading; when the body's last line is blank already, or the body is empty, it writes the heading and a line ending only. The item that follows it at the same offset is the first item of a section that holds none. In a body whose last line has no line ending, each of the two splices also writes the line break that line lacks, before its text, and none after it: the `ensure-container` writes two line endings and the heading, the item two line endings and its line, and the body still ends without a line ending.
+- **A changed value** of a group or a word is written as for `lines`, in the item's text. `re-emit-line` rewrites the item's text, never its indentation or its marker.
+- **The continuation.** Its value span runs from the end of the item line, before its line ending, to the end of the last line of the continuation, before that line's ending. Setting it is a `replace-value` of that span with the new value, every line of it written after a line ending and indented with spaces to the item's content column, an empty line written empty; on an item without continuation it is an `insert-key` at the end of the item line; setting the empty text is a `remove-key` of the span.
+- **A move to another depth.** The entry's line span is removed (`remove-entry`) and inserted where a new item would go at its new place (`insert-entry`), every line of it that is not blank shifted by the difference between the column a new item's marker would have there and the column its marker had. A line is shifted right by writing that many spaces before it, and left by taking that many columns of whitespace off its start, a tab counting four columns; a tab the shift cuts into is replaced by the spaces that remain of it. The marker and every other byte stay as they were. Like every offset of an edit, the place of the insertion is taken in the body before the edit: a move to just after the entry's old parent is inserted at the start of the removed span.
 
 ### 6.4 Edits
 
 A user gesture, form commit, operation or quick fix is one DISL transaction (DISL §14.4). When the transaction commits, its model changes are **planned** as splices: each model change of section 11.2 (*(FBL 0.2)* an `add`, `set`, `remove`, `move` or `retype`, with the fields given there) becomes the splices this section gives, in the order the transaction made them, then adjusted so that all offsets refer to the body before the edit. The result is one **edit**: its splices applied together, recorded together, undone together. If any change cannot be planned (no `insert`, no `remove`, a read-only slot, `empty: "refuse"` on a set or, *(FBL 0.6)*, on an add that gives the attribute its empty value (section 6.2), an `absent` refusal, a duplicate on rename, a plugin's refusal), the whole transaction is rejected with that reason and rolled back, and nothing is written.
 
-*(FBL 0.2)* A declared binding plans the changes of section 11.2 as a plugin that declares `add.position` and `move` does. An `add` with a `position` is one `insert-entry` directly before the entry of the sibling at that index (or after the last sibling's entry when the index equals their number), in place of the rule's `insert.place`; a rule whose `insert` cannot place it there refuses the add. A `move` is the `remove-entry` and `insert-entry` of section 5.5, the inserted text being the entry's own bytes, at its `position`. A `retype` is planned as a `remove` and an `add` of the element under its new type's rule, and the host warns as section 11.2 says.
+*(FBL 0.2)* A declared binding plans the changes of section 11.2 as a plugin that declares `add.position` and `move` does. An `add` with a `position` is one `insert-entry` directly before the entry of the sibling at that index (or after the last sibling's entry when the index equals their number, and, with no sibling, where section 6.3 puts a new entry that has none), in place of the rule's `insert.place`; a rule whose `insert` cannot place it there refuses the add. A `move` is the `remove-entry` and `insert-entry` of section 5.5, the inserted text being the entry's own bytes, re-indented in `bullets` (section 6.3), at its `position`. A `retype` is planned as a `remove` and an `add` of the element under its new type's rule, and the host warns as section 11.2 says. *(FBL 0.7)* In `bullets`, when the new type's rule has an `emit`, a retype is one `re-emit-line` of the item's text from that `emit` with the retype's values: the item's continuation and nested items stay where they are, and the host does not warn.
 
 ### 6.5 Determinism
 
@@ -572,11 +626,15 @@ A host writes a body when the user saves, or after every edit if the host saves 
 
 Each open body has one **history** of edits, shared by every reading of it (section 9). An edit records its splices, the bytes each replaced, and the digest of the whole body after it. Undo applies the inverse splices of the most recent edit; redo applies the edit's splices again. A new edit clears the redo stack.
 
+*(FBL 0.7)* A write to a declared block with `history: false` (section 8.1) is applied at once and is not a step of the history: undo and redo pass it by, and it leaves the redo stack as it is. It changes only the lines of its block, so an undo or a redo of an edit made before it is applied with its registration offsets moved by what such writes added or removed before them, and the comparison of section 7.2 leaves those blocks' lines out.
+
 A rule or edit with `undo: "snapshot"` records the whole body before the edit instead; its undo replaces the whole body with that snapshot, as one splice of the whole range under the operation of the edit's first splice. Snapshots are for edits whose inverse would be many splices, such as a removal cascading through a large file; the result is the same bytes either way.
 
 ### 7.2 Drift
 
 Before applying an undo or a redo, the host **MUST** compare the body on disk (or in the host's buffer, when another editor in the same host holds it) with the bytes the history expects: for an undo, the body after the edit; for a redo, the body before it. When they differ, the body has **drifted**: the host **MUST** refuse the undo or redo with a reason ("The file has changed since this edit, so it cannot be undone."), **MUST NOT** write, and **SHOULD** offer to reload.
+
+*(FBL 0.7)* Before applying an edit, the host **MUST** compare the body on disk, or in the host's buffer as above, with the bytes the edit was planned against. When they differ, the host **MUST** refuse the edit with a reason ("The file has changed since this edit was made, so it was not written."), **MUST NOT** write, and **MUST** read the body again. Section 7.3 then applies: the history is cleared as for any external change.
 
 ### 7.3 External changes
 
@@ -590,7 +648,7 @@ FBL's own finding codes:
 
 | Code                        | Severity | When |
 |-----------------------------|----------|------|
-| `fbl.unbound-statement`     | warning  | A `lines` or `blocks` statement no rule matches, when the binding's `unmatched` is `report`. |
+| `fbl.unbound-statement`     | warning  | A `lines`, `blocks` or *(FBL 0.7)* `bullets` statement no rule matches, when the binding's `unmatched` is `report`. |
 | `fbl.dangling-reference`    | warning  | A reference or relation end names nothing (section 5.4). |
 | `fbl.header-mismatch`       | warning  | The header is missing or has another value (section 5.6). |
 | `fbl.duplicate-key`         | warning  | A json object or yaml mapping repeats a key; the first is bound. |
@@ -598,12 +656,13 @@ FBL's own finding codes:
 | `fbl.missing-body`          | error    | A registration's body does not exist (section 8.2). |
 | `fbl.stale-view-data`       | info     | A registration stores view data for an id the body no longer has (section 8.5). |
 | `fbl.unknown-header`        | info     | A registration has a header neither FBL nor the binding declares (section 8.1). |
+| `fbl.unknown-block`         | info     | *(FBL 0.7)* A registration has a block neither FBL nor the binding declares (section 8.1). It is kept as written. |
 
 Every finding carries a DISL source location: `file` relative to the subject with `/` separators (for a file body, the body's own name), and the line, column and length of the entry's own span. A finding about something that is not drawn uses DISL's `subject`.
 
 ### 7.5 The unreadable body
 
-A body is **unreadable** when it is not valid UTF-8, when it is not well-formed in its family (a YAML or JSON syntax error, XML that is not well-formed, unbalanced braces), when a `required` header is missing, or when a plugin reports it unreadable. An unreadable body opens as an **empty, read-only** model with one finding, DISL's `std.unparseable`, located at the problem, which replaces all other findings. It is never written. For a file body the body is the **primary file**, and `std.unparseable` stops rule evaluation (DISL §8.6); a folder subject has no primary file (section 10.3).
+A body is **unreadable** when it is not valid UTF-8, when it is not well-formed in its family (a YAML or JSON syntax error, XML that is not well-formed, unbalanced braces), when a `required` header is missing, or when a plugin reports it unreadable. *(FBL 0.7)* A `bullets` body is never unreadable for its family (section 4.8): only invalid UTF-8 and a missing `required` header make it unreadable. An unreadable body opens as an **empty, read-only** model with one finding, DISL's `std.unparseable`, located at the problem, which replaces all other findings. It is never written. For a file body the body is the **primary file**, and `std.unparseable` stops rule evaluation (DISL §8.6); a folder subject has no primary file (section 10.3).
 
 ---
 
@@ -624,9 +683,20 @@ layout:
 
 1. **Line 1** is the **origin** of the tool type (`language.origin`, DISL §3.2), after a byte-order mark if there is one. A host finds the tool type's specification with that origin, and through its persistence the binding: the one a DISL specification's `persistence.binding` names, or, of the bindings a DESL specification's `persistence.bindings` names, the one whose `claims` take the body (section 12.1). A body two of them claim is refused with a reason, and a validator reports a specification whose bindings claim one extension twice.
 2. **Headers** follow, one per line, `key: value` (the first `: ` separates them; blank lines are skipped). FBL defines `body`, `view` and `resource`; a binding declares others in `registration.headers` (the SKOS reading's `language`). A header neither defines is kept and reported as `fbl.unknown-header`. The header region ends at the first line that is not a header.
-3. **Blocks** follow the headers: `layout:` (section 8.3) and `identities:` (section 8.6), each a line holding only the block's name and colon, followed by its entries, each indented by two spaces (any whitespace is read), `<key>: <value>`, where the key is everything before the **last** `: ` of the line, so keys may contain `: `.
+3. **Blocks** follow the headers: `layout:` (section 8.3), `identities:` (section 8.6) and *(FBL 0.7)* the blocks the binding declares, each a line holding only the block's name and colon, followed by its entries, each indented by two spaces (any whitespace is read), `<key>: <value>`, where the key is everything before the **last** `: ` of the line, so keys may contain `: `. A block's name is a Name (section 2.2).
 
-Anything after the blocks is kept as unbound content. `$defs/Registration` in `fbl.schema.json` describes the parsed form; the examples in `registrations/` validate against it.
+*(FBL 0.7)* A binding declares further blocks in `registration.blocks`, as it declares further headers in `registration.headers`, each by its name, with these properties:
+
+| Property  | Values | Meaning |
+|-----------|--------|---------|
+| `order`   | `"ordinal"` (default), `"kept"` | `ordinal`: entries are written in the ordinal order of their keys, as `layout:` is. `kept`: an entry stands where the edit put it (section 8.4). |
+| `keys`    | `"names"` (default), `"ids"` | `ids`: an entry's key is an element's id, and the block is pruned and keeps no ephemeral id as section 8.5 says of layout. |
+| `history` | `true` (default), `false` | `false`: writes to the block are not steps of the history (section 7.1). |
+| `doc`     | Doc | What the block holds. |
+
+A value of a declared block is one line of text, not empty, and holds no `: `, since the key is everything before the last one. What a value means is the tool type's specification's; FBL reads and writes it as text. A block neither FBL nor the binding declares is kept as it is written, and reported as `fbl.unknown-block`.
+
+Anything after the blocks that is neither a block nor an entry is kept as unbound content. `$defs/Registration` in `fbl.schema.json` describes the parsed form; the examples in `registrations/` validate against it.
 
 ### 8.2 Finding the body
 
@@ -642,15 +712,21 @@ Anything after the blocks is kept as unbound content. `$defs/Registration` in `f
 - with numbers in `{decimals: 3}` form (section 6.3), so `120.5` and `640`;
 - with the registration's own line ending by the rules of section 6.3.
 
-Placing an element for the first time inserts its entry (`insert-entry`), creating `layout:` after the headers first when it is missing (`ensure-container`); moving it replaces its numbers (`replace-value`); undoing the first placement removes the entry, and the `layout:` line with the last entry (`remove-container`). Other view data (sizes, waypoints, label offsets) is not stored in FBL 0.1.
+Placing an element for the first time inserts its entry (`insert-entry`), creating `layout:` after the headers first when it is missing (`ensure-container`); moving it replaces its numbers (`replace-value`); undoing the first placement removes the entry, and the `layout:` line with the last entry (`remove-container`). Other view data (sizes, waypoints, label offsets) is not stored in FBL 0.1. *(FBL 0.7)* What else a tool type keeps beside the body, in a block of its own, a binding declares in `registration.blocks` (section 8.1).
 
 ### 8.4 Writing the registration
 
-A registration is written with the splice rules of section 6, so a user's hand edits, comments below the blocks and unknown headers survive. View changes write only the registration; model changes write only the body, except where one edit concerns both (a rename of a stored id moves its layout entry in the same edit, with splices in both files, undone together). A host creates a registration beside a body the first time the user places an element, when the binding's `registration.createOnFirstPlacement` is true, and refuses the placement with a reason otherwise; a registration created this way is `<origin>` then `body: <name>` when the body's base name differs from the registration's, with the body's dominant line ending.
+A registration is written with the splice rules of section 6, so a user's hand edits, comments below the blocks and unknown headers survive. View changes write only the registration; model changes write only the body, except where one edit concerns both (a rename of a stored id moves its layout entry in the same edit, with splices in both files, undone together). A host creates a registration beside a body the first time the user places an element, when the binding's `registration.createOnFirstPlacement` is true, and refuses the placement with a reason otherwise; a registration created this way is `<origin>` then `body: <name>` when the body's base name differs from the registration's, with the body's dominant line ending. *(FBL 0.7)* `createOnFirstPlacement` also creates it the first time the user changes a setting that a declared block keeps. Creating the file is not part of the edit: it is written with that text first, outside the history, and the edit is planned against it, so an undo leaves the file in place.
+
+*(FBL 0.7)* **Declared blocks** are written by the same splices. A change to a setting that a declared block keeps writes the registration, as part of the edit of the transaction that makes it, so a change that concerns the body too is one edit with splices in both files, undone together.
+
+- **The order of blocks.** `layout:`, `identities:`, then the declared blocks in the order the binding declares them. A missing block is created (`ensure-container`) right after the last line of the nearest block before it in that order that exists, or after the headers when none does, and its line goes with its last entry (`remove-container`). An undeclared block stays where it is.
+- **Entries.** An entry is written `<key>: <value>`, indented by two spaces, with the registration's line ending. A new entry (`insert-entry`) goes where the ordinal order of the keys puts it in an `ordinal` block; in a `kept` block it goes at the position the change gives, else after the last entry. The place is found among the entries that remain once stale entries and, for a move, the moved entry are taken out. A changed value is a `replace-value` of the value, a renamed key a `replace-value` of the key, and a removed entry a `remove-entry` of its line. A move in a `kept` block is a `remove-entry` and an `insert-entry` of the entry's own bytes.
+- **Refusals.** An edit that would write an empty value, or a value that holds `: ` or a line break, is refused (section 6.4), and so is a key that is empty, holds a line break, or is the key of another entry of the block.
 
 ### 8.5 Stale and ephemeral ids
 
-A layout entry whose id is not in the model is **stale**: it is not applied to any other element, it is reported as `fbl.stale-view-data`, and it is removed at the next write of the registration, as part of that edit. A host **MUST NOT** store a position for an element whose id DISL marks ephemeral; dragging such an element moves it for the current session only, and the host tells the user why the position will not be kept. A layout entry found for an ephemeral id is ignored and reported by DISL's `std.ephemeralViewData` (DISL §11.5.3).
+A layout entry whose id is not in the model is **stale**: it is not applied to any other element, it is reported as `fbl.stale-view-data`, and it is removed at the next write of the registration, as part of that edit. A host **MUST NOT** store a position for an element whose id DISL marks ephemeral; dragging such an element moves it for the current session only, and the host tells the user why the position will not be kept. A layout entry found for an ephemeral id is ignored and reported by DISL's `std.ephemeralViewData` (DISL §11.5.3). *(FBL 0.7)* All of this holds for a declared block with `keys: "ids"` as for `layout:`: an entry whose key is no id of the model is stale, reported as `fbl.stale-view-data` and removed at the next write of the registration, and an ephemeral id is never stored as a key. The removal of a stale entry from a block with `history: false` is no step of the history either: the undo of the edit it was written with does not put the entry back.
 
 ### 8.6 Identities
 
@@ -869,7 +945,7 @@ Saving writes each changed file atomically (section 6.6). Closing the last readi
 | **FBL document** | Validates against `$defs/Document` and passes the checks of section 14.1 without errors. |
 | **Validator** | Implements section 14.1 and reports problems with JSON Pointers; checks registrations against `$defs/Registration` and fixtures against `$defs/Fixture` and section 15.3. |
 | **Host — declared** | Implements the lossless readings of the families it supports (section 4), rules (section 5), the splice catalogue and new-text rules (section 6), history and drift (section 7), the registration (section 8), several readings (section 9), routing and templates (sections 12, 13), and passes every fixture of the families it supports. It states which families it supports. |
-| **Host — full** | Host — declared for all five families, plus folder subjects (section 10) and the plugin contract (section 11). |
+| **Host — full** | Host — declared for all six families, plus folder subjects (section 10) and the plugin contract (section 11). |
 | **Persistence plugin** | Meets section 11.4 for its format. |
 
 A host that does not support a binding's family or plugin **MUST** open its documents read-only, if it can read them at all, and say why; this is DISL's rule for a missing required plugin (DISL §13.1).
@@ -886,10 +962,12 @@ A host that cannot watch files reads bodies on open and on request only, and say
 |-----------|-------------|
 | `binding` | The binding under test, relative to the fixture. |
 | `input`   | The input body, a file beside the fixture, compared byte for byte (the repository keeps these files from line-ending conversion). |
-| `read`    | What reading the input yields: `elements` (`id`, `type`, and *(FBL 0.5)* optionally `attributes`, the values read for the attributes it names, a JSON string for a text and a JSON number, bool or null otherwise), `findings` (`rule`, `line`), `unreadable`. |
-| `steps`   | In order: an `edit` (add, set, remove, *(FBL 0.3)* move, place, or save without change; an add or a move carries a `position` as section 11.2 gives it, and *(FBL 0.5)* an add the `slot` it fills, as section 11.2's add does, which a host needs when one type fills several slots of one parent), an `undo` or a `redo`; the `splices` it must produce, as `{operation, start, end, text}` with UTF-8 byte offsets into the document before the step; the document after it (`expect`, or `expectFile`); `refused` with the reason when the edit must be refused and write nothing. |
+| `read`    | What reading the input yields: `elements` (`id`, `type`, *(FBL 0.7)* optionally `parent`, the id of the element it is contained in or null at the top level, and *(FBL 0.5)* optionally `attributes`, the values read for the attributes it names, a JSON string for a text and a JSON number, bool or null otherwise), `findings` (`rule`, `line`), `unreadable`. |
+| `steps`   | In order: an `edit` (add, set, remove, *(FBL 0.3)* move, place, *(FBL 0.7)* setting, or save without change; an add or a move carries a `position` as section 11.2 gives it, and *(FBL 0.5)* an add the `slot` it fills, as section 11.2's add does, which a host needs when one type fills several slots of one parent), an `undo` or a `redo`; the `splices` it must produce, as `{operation, start, end, text}` with UTF-8 byte offsets into the document before the step; the document after it (`expect`, or `expectFile`); `refused` with the reason when the edit must be refused and write nothing. |
 
 A host passes a fixture when reading the input gives what `read` lists (for an element with `attributes`, each attribute named there has that value and that JSON type; attributes not named are not compared) and every step produces exactly its splices and its document. For a refused step it passes when it refuses the edit and writes nothing: the text of `refused` is informative, because FBL leaves a refusal's wording to the host except where a binding gives the reason itself (`readOnly`, section 3.4), and then it is that reason. The repository's validator checks every fixture's consistency: each step's splices turn the document before it into its `expect`, and back by their inverses; an undo returns the document the undone edit started from; a save and a refused edit change nothing. Undo steps list the inverse splices under the operation of the splice each inverts.
+
+*(FBL 0.7)* A `setting` edit changes an entry of a declared block of the registration, which is then the fixture's input: it names the `block` and the entry's `key`, and gives its new `value`, its new `position` in a `kept` block (`{index}`, `{after: key}` or `{before: key}`), a new key as `rename`, or `remove: true`; a `setting` with a `position` and no `value` moves the entry. When the input is a registration, the fixture's `read` is that of the document it opens: the elements of the body it names, and the findings, a registration finding's `line` being a line of the registration. A fixture for a registration that `createOnFirstPlacement` creates starts from the text section 8.4 creates. A step whose setting writes a block outside the history is no step of the history, so an undo after it undoes the edit before it.
 
 Together the fixtures exercise every operation of section 6.1.
 
@@ -935,6 +1013,6 @@ Rewriting the definitions to use FBL is follow-up work, as is implementing FBL i
 
 ## Appendix A — JSON Schema
 
-The normative schema is [`fbl.schema.json`](fbl.schema.json) beside this document (JSON Schema draft 2020-12, `$id` `https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json`). Its `$defs` are: `Document`, `Binding`, `Claims`, `Marker`, `Body`, `Family`, `FileRule`, `PluginReader`, `TextDefaults`, `Header`, `BlockRule`, `ElementRule`, `RelationRule`, `IdBinding`, `Slot`, `AttributeBinding`, `Insert`, `Remove`, `RegistrationSettings`, `Template`, `Registration`, `Splice`, `Fixture`, `Edit`, the model changes `ModelChange` and `ChangePosition` (FBL 0.2, section 11.2), and the helpers `Name`, `BindingRef`, `Regex`, `Selector`. While 0.3 is a draft, the schema keeps its 0.1 `$id` and accepts `"fbl": "0.2"` and `"0.3"`. It references DISL's `Doc`, `LocalizedText`, `Expression` and `TypeRef`.
+The normative schema is [`fbl.schema.json`](fbl.schema.json) beside this document (JSON Schema draft 2020-12, `$id` `https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json`). Its `$defs` are: `Document`, `Binding`, `Claims`, `Marker`, `Body`, `Family`, `FileRule`, `PluginReader`, `TextDefaults`, `Header`, `BlockRule`, *(FBL 0.7)* `SectionRule`, `ElementRule`, `RelationRule`, `IdBinding`, `Slot`, `AttributeBinding`, `Insert`, `Remove`, `RegistrationSettings`, `Template`, `Registration`, `Splice`, `Fixture`, `Edit`, the model changes `ModelChange` and `ChangePosition` (FBL 0.2, section 11.2), and the helpers `Name`, `BindingRef`, `Regex`, `Selector`. While FBL is a draft, the schema keeps its 0.1 `$id` and accepts every version from `"fbl": "0.1"` to `"0.7"`. It references DISL's `Doc`, `LocalizedText`, `Expression` and `TypeRef`.
 
-The examples beside this document are `timeline.fbl`, `databricks-job.fbl`, `databricks-pipeline.fbl`, `mindmap.fbl`, `causal-loop-diagram.fbl`, `structurizr.fbl`, `w3c-turtle.fbl` and `helm-chart.fbl`; registrations are in `registrations/` and round-trip fixtures in `fixtures/`. `python .github/scripts/validate-examples.py` validates them all.
+The examples beside this document are `timeline.fbl`, `databricks-job.fbl`, `databricks-pipeline.fbl`, `mindmap.fbl`, `causal-loop-diagram.fbl`, `structurizr.fbl`, `w3c-turtle.fbl`, `helm-chart.fbl` and *(FBL 0.7)* `behavior-tree.fbl`, Agent Behavior Modelling's Markdown read by the `bullets` family; registrations are in `registrations/` and round-trip fixtures in `fixtures/`. `python .github/scripts/validate-examples.py` validates them all.
