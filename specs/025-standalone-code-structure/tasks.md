@@ -169,7 +169,7 @@
 
 ### The RDF family (report 2)
 
-- [ ] T100 [P] [US2] rdf, owl, shacl and skos, band A in `etalii.adp.ide.standalone/src/diagrams/rdf/backend/EtAlii.Adp.Diagram.Rdf/`: one store on the store base, the generic reloader, the registrations looping over the four origins (FR-028, FR-029, FR-030, FR-035).
+- [x] T100 [P] [US2] rdf, owl, shacl and skos, band A in `etalii.adp.ide.standalone/src/diagrams/rdf/backend/EtAlii.Adp.Diagram.Rdf/`: one store on the store base, the generic reloader, the registrations looping over the four origins (FR-028, FR-029, FR-030, FR-035). Done in standalone pull request 277 (2026-10-14); the four document factories stay, because each reading's starter document is named after the file, and share one local-name helper in place of four copies.
 - [ ] T101 [US2] Replace the four sessions (`RdfSession.cs` and its three near-copies, 24 to 47 lines apart) with one `RdfFamilySession<TProjection>` on the session base, and the four factories with one registration parameterised by origin; the four hand-rolled diffs go; the resolver adopts the resolver base (FR-038, FR-031, FR-032).
 - [ ] T102 [US2] rdf family, band C in `etalii.adp.ide.standalone/src/diagrams/rdf/backend/EtAlii.Adp.Diagram.Rdf/`: the command handlers on the handler base; the `Edits.ExecuteAsync` copy goes (FR-033, FR-034, FR-022).
 
