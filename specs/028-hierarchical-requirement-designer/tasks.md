@@ -107,23 +107,23 @@ Files: `etalii.adp/specifications/fbl/registrations/requirements.adp`, `fixtures
 
 **⟶ Wait for pull request 3 to be merged, then one after another (one file):**
 
-- [ ] **T021** State what a declared block is: `registration.blocks` beside `registration.headers` with `order`, `keys` and `history`, the grammar in section 8.1, a value as one line without `: `, an undeclared block kept and reported as `fbl.unknown-block` in 7.4, and the status paragraph (FR-059, research R12) · etalii.adp/specifications/fbl/FBL-specification.md
-- [ ] **T022** State how a declared block is written: the sentence on other view data in 8.3, the blocks in declared order after `layout:` and `identities:` and `createOnFirstPlacement` widened to the first setting in 8.4, a stale entry of a block keyed by ids in 8.5, a move in a kept order as a `remove-entry` and an `insert-entry` in 6.1, a block outside the history in 7.1, the refusal of a value with `: `, and the fixture edit `setting` in 15.3 (research R12, R4, R25) · etalii.adp/specifications/fbl/FBL-specification.md
+- [x] **T021** State what a declared block is: `registration.blocks` beside `registration.headers` with `order`, `keys` and `history`, the grammar in section 8.1, a value as one line without `: `, an undeclared block kept and reported as `fbl.unknown-block` in 7.4, and the status paragraph (FR-059, research R12) · etalii.adp/specifications/fbl/FBL-specification.md
+- [x] **T022** State how a declared block is written: the sentence on other view data in 8.3, the blocks in declared order after `layout:` and `identities:` and `createOnFirstPlacement` widened to the first setting in 8.4, a stale entry of a block keyed by ids in 8.5, a move in a kept order as a `remove-entry` and an `insert-entry` in 6.1, a block outside the history in 7.1, the refusal of a value with `: `, and the fixture edit `setting` in 15.3 (research R12, R4, R25) · etalii.adp/specifications/fbl/FBL-specification.md
 
 **⟶ Wait for T022 to finish, then:**
 
-- [ ] **T023** Follow the document in the schema: `blocks` in `$defs/RegistrationSettings`, the parsed blocks in `$defs/Registration`, and `setting` in `$defs/Edit` (FR-061) · etalii.adp/specifications/fbl/fbl.schema.json
+- [x] **T023** Follow the document in the schema: `blocks` in `$defs/RegistrationSettings`, the parsed blocks in `$defs/Registration`, and `setting` in `$defs/Edit` (FR-061) · etalii.adp/specifications/fbl/fbl.schema.json
 
 **⟶ Wait for T023 to finish, then Wave 1: independent (different files):**
 
-- [ ] **T024** [P] Add the example registration of research R12, with its five blocks. It is parsed without a binding (FR-061) · etalii.adp/specifications/fbl/registrations/requirements.adp
-- [ ] **T025** [P] Add the fixture, with a small binding of its own that declares its blocks: the registration created by the first setting, an insert at a place and a move in a kept order, an ordinal order, a stale entry pruned with the next write, a write to a block outside the history, a refused value with `: `, and the undo of each step in the history (FR-061, research R12) · etalii.adp/specifications/fbl/fixtures/registration-blocks/
-- [ ] **T026** [P] Let `parse_registration` read every block into the parsed form and keep one it does not know, where today it fails the file (research R12, R20) · etalii.adp/.github/scripts/validate-examples.py
+- [x] **T024** [P] Add the example registration of research R12, with its five blocks. It is parsed without a binding (FR-061) · etalii.adp/specifications/fbl/registrations/requirements.adp
+- [x] **T025** [P] Add the fixture, with a small binding of its own that declares its blocks: the registration created by the first setting, an insert at a place and a move in a kept order, an ordinal order, a stale entry pruned with the next write, a write to a block outside the history, a refused value with `: `, and the undo of each step in the history (FR-061, research R12) · etalii.adp/specifications/fbl/fixtures/registration-blocks/
+- [x] **T026** [P] Let `parse_registration` read every block into the parsed form and keep one it does not know, where today it fails the file (research R12, R20) · etalii.adp/.github/scripts/validate-examples.py
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T027** Plant and see fail, then restore: `requirements.adp` with an entry that has no `: ` (reported at its line), and one step of `registration-blocks` with a wrong offset (reported at its first differing byte) (SC-008) · etalii.adp/specifications/fbl/registrations/requirements.adp, etalii.adp/specifications/fbl/fixtures/registration-blocks/fixture.json
-- [ ] **T028** Deliver pull request 4: run the three checks, see every earlier example and registration keep its result, commit, push and open the pull request into `develop`, naming this folder and saying that declared blocks are the second reserved construct, with a green Build (FR-062) · etalii.adp (pull request 4)
+- [x] **T027** Plant and see fail, then restore: `requirements.adp` with an entry that has no `: ` (reported at its line), and one step of `registration-blocks` with a wrong offset (reported at its first differing byte) (SC-008) · etalii.adp/specifications/fbl/registrations/requirements.adp, etalii.adp/specifications/fbl/fixtures/registration-blocks/fixture.json
+- [x] **T028** Deliver pull request 4: run the three checks, see every earlier example and registration keep its result, commit, push and open the pull request into `develop`, naming this folder and saying that declared blocks are the second reserved construct, with a green Build (FR-062) · etalii.adp (pull request 4)
 
 **Checkpoint**: FBL 0.7 is complete on `develop` once the maintainer merges.
 

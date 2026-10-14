@@ -1480,7 +1480,7 @@
       }
     },
     "RegistrationSettings": {
-      "description": "What a binding adds to the registration: headers it reads, whether a bare body may be positioned without a registration, and legacy sidecars it reads. See section 8.",
+      "description": "What a binding adds to the registration: headers it reads, (FBL 0.7) further blocks it declares, whether a bare body may be positioned without a registration, and legacy sidecars it reads. See section 8.",
       "type": "object",
       "properties": {
         "headers": {
@@ -1505,8 +1505,53 @@
             }
           }
         },
+        "blocks": {
+          "description": "(FBL 0.7) Further blocks of the registration, by name, in the order they are written after layout: and identities: (sections 8.1, 8.4).",
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/Name",
+            "not": {
+              "enum": [
+                "layout",
+                "identities"
+              ]
+            }
+          },
+          "additionalProperties": {
+            "description": "A block this binding declares.",
+            "type": "object",
+            "properties": {
+              "doc": {
+                "$ref": "#/$defs/Doc"
+              },
+              "order": {
+                "description": "ordinal (default): entries in the ordinal order of their keys; kept: an entry stands where the edit put it.",
+                "enum": [
+                  "ordinal",
+                  "kept"
+                ]
+              },
+              "keys": {
+                "description": "names (default), or ids: an entry's key is an element's id, pruned when stale and never ephemeral (section 8.5).",
+                "enum": [
+                  "names",
+                  "ids"
+                ]
+              },
+              "history": {
+                "description": "Whether writes to the block are steps of the history (default true, section 7.1).",
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false,
+            "patternProperties": {
+              "^x-": true
+            }
+          }
+        },
         "createOnFirstPlacement": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "The first placement creates the registration beside a bare body, and (FBL 0.7) so does the first change to a setting a declared block keeps (section 8.4)."
         },
         "resource": {
           "description": "The selector capture a registration's resource header selects, so one body can hold several diagrams (a bundle file with several jobs). Without the header, the first entry in document order is used.",
@@ -1565,7 +1610,7 @@
       ]
     },
     "Registration": {
-      "description": "The parsed form of an .adp registration file (section 8): its origin line, the headers, and the positions the user placed. The file itself is lines, not JSON; this is what it means.",
+      "description": "The parsed form of an .adp registration file (section 8): its origin line, the headers, the positions the user placed, and (FBL 0.7) every further block, declared or not. The file itself is lines, not JSON; this is what it means.",
       "type": "object",
       "properties": {
         "origin": {
@@ -1614,6 +1659,16 @@
           "type": "object",
           "additionalProperties": {
             "type": "string"
+          }
+        },
+        "blocks": {
+          "description": "(FBL 0.7) Every block besides layout: and identities:, by name, in the order of the file: its entries, key to value, in their order.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
           }
         }
       },
@@ -1704,7 +1759,10 @@
                   },
                   "parent": {
                     "description": "(FBL 0.7) The id of the element this one is contained in (section 5.5), or null at the top level. Absent: not compared.",
-                    "type": ["string", "null"]
+                    "type": [
+                      "string",
+                      "null"
+                    ]
                   },
                   "attributes": {
                     "description": "(FBL 0.5) The values read for the attributes named: a JSON string for a text, a JSON number, bool or null otherwise. Attributes not named are not compared.",
@@ -1807,7 +1865,7 @@
       ]
     },
     "Edit": {
-      "description": "A model change in a fixture: add an element or relation (at a position, FBL 0.3), set attributes, remove, move (FBL 0.3), place, or save without change.",
+      "description": "A model change in a fixture: add an element or relation (at a position, FBL 0.3), set attributes, remove, move (FBL 0.3), place, change a setting of a declared block (FBL 0.7), or save without change.",
       "oneOf": [
         {
           "description": "Add an element or relation.",
@@ -1994,6 +2052,114 @@
           },
           "required": [
             "place"
+          ]
+        },
+        {
+          "description": "(FBL 0.7) Change an entry of a declared block of the registration (section 15.3).",
+          "type": "object",
+          "properties": {
+            "setting": {
+              "description": "",
+              "type": "object",
+              "properties": {
+                "block": {
+                  "$ref": "#/$defs/Name"
+                },
+                "key": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "value": {
+                  "type": "string"
+                },
+                "position": {
+                  "description": "Where the entry goes in a kept block: at an index, or after or before the entry with that key.",
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "index": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "index"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "after": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "after"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "before": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "before"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                },
+                "rename": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "remove": {
+                  "const": true
+                }
+              },
+              "additionalProperties": false,
+              "patternProperties": {
+                "^x-": true
+              },
+              "required": [
+                "block",
+                "key"
+              ],
+              "anyOf": [
+                {
+                  "required": [
+                    "value"
+                  ]
+                },
+                {
+                  "required": [
+                    "position"
+                  ]
+                },
+                {
+                  "required": [
+                    "rename"
+                  ]
+                },
+                {
+                  "required": [
+                    "remove"
+                  ]
+                }
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
+          },
+          "required": [
+            "setting"
           ]
         },
         {

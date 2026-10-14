@@ -22,7 +22,11 @@ Two FBL formats are not JSON documents and get their own treatment (spec 005, co
 registration under `specifications/fbl/` is parsed from its line form into `fbl.schema.json#/$defs/Registration`
 (FBL section 8). A `fixture.json` under `specifications/fbl/fixtures/` is validated against `$defs/Fixture` and then
 replayed: every step's splices must turn the document before the step into the document it expects, byte for byte,
-and an undo must return the document the undone edit started from (FBL section 15.3). Every `*.fbl` that validates is
+and an undo must return the document the undone edit started from (FBL section 15.3). A `setting` step
+on a block the fixture's binding declares with `history: false` is no step of the history (FBL 0.7, section 7.1); an
+undo or redo of an edit made before it is checked by what each of its splices replaces and writes, since that block's
+write stands between. An `.adp` registration's blocks besides `layout:` and `identities:` are read into `blocks`,
+declared or not, and what follows the blocks is kept, as FBL 0.7 section 8.1 says. Every `*.fbl` that validates is
 then checked for its names (FBL section 14.1, step 4): every rule a `parent`, `cascade`, `reference.to`, `within` or
 `files` names exists in its binding (in the `bullets` family `within` names sections), and a reference's `by` is an attribute every rule it names binds, or `id` when
 every rule it names stores its id with `id.from` (the specification languages reserve `id`, so it is never an attribute's name).
@@ -236,14 +240,18 @@ def check_knowledge(table) -> list[str]:
     return problems
 
 
+BLOCK_LINE = re.compile(r"^[A-Za-z_][A-Za-z0-9_.-]*:$")
+
+
 def parse_registration(data: bytes):
-    """Parses an .adp registration's line form (FBL section 8.1) into $defs/Registration, or returns a problem."""
+    """Parses an .adp registration's line form (FBL section 8.1) into $defs/Registration, or returns a problem. Every
+    block besides layout: and identities: is read into `blocks`, declared or not, since no binding is at hand."""
     text = data.decode("utf-8").removeprefix("﻿")
     lines = text.splitlines()
     if not lines or not lines[0].strip():
         return None, "line 1 must name the origin"
     registration = {"origin": lines[0].strip()}
-    block = None
+    block = None  # the block being read; "" after the blocks, where what is not a block is kept unbound
     for number, line in enumerate(lines[1:], start=2):
         if not line.strip():
             continue
@@ -257,15 +265,21 @@ def parse_registration(data: bytes):
                 except ValueError:
                     return None, f"line {number}: expected '<id>: <x> <y>'"
                 registration["layout"][key] = {"x": x, "y": y}
-            else:
+            elif block == "identities":
                 registration["identities"][key] = value
+            else:
+                registration["blocks"][block][key] = value
             continue
-        if line in ("layout:", "identities:"):
+        if BLOCK_LINE.match(line):  # layout:, identities: or (FBL 0.7) a block a binding declares, or one nobody does
             block = line[:-1]
-            registration[block] = {}
+            if block in ("layout", "identities"):
+                registration[block] = {}
+            else:
+                registration.setdefault("blocks", {})[block] = {}
             continue
-        if block:
-            return None, f"line {number}: nothing may follow the {block} block except another block"
+        if block is not None:
+            block = ""  # anything after the blocks that is neither a block nor an entry is unbound (FBL section 8.1)
+            continue
         key, separator, value = line.partition(": ")
         if not separator:
             return None, f"line {number}: expected a '<key>: <value>' header"
@@ -305,11 +319,31 @@ def first_difference(a: bytes, b: bytes) -> int:
     return next((i for i, (x, y) in enumerate(zip(a, b)) if x != y), min(len(a), len(b)))
 
 
+def splice_changes(document: bytes, splices):
+    """What each splice replaces and with what, in the order of their offsets."""
+    ordered = sorted(splices, key=lambda splice: (splice["start"], splice["end"]))
+    return [(document[splice["start"]:splice["end"]], splice["text"].encode("utf-8")) for splice in ordered]
+
+
+def blocks_outside_history(folder: Path, reference: str) -> set[str]:
+    """The registration blocks a fixture's binding declares with history: false (FBL 0.7, sections 7.1, 8.1)."""
+    file, _, name = reference.partition("#")
+    try:
+        binding = json.loads((folder / file).read_text(encoding="utf-8"))["bindings"][name]
+    except (OSError, ValueError, KeyError):
+        return set()
+    blocks = binding.get("registration", {}).get("blocks", {})
+    return {block for block, settings in blocks.items() if settings.get("history") is False}
+
+
 def replay_fixture(path: Path, fixture) -> str | None:
     """Replays a fixture's steps (FBL section 15.3) and returns the first problem, if any."""
     folder = path.parent
     document = (folder / fixture["input"]).read_bytes()
-    done, undone = [], []  # (before, after) of each edit that can be undone, and of each that can be redone
+    outside = blocks_outside_history(folder, fixture["binding"])
+    # (before, after, changes, crossed) of each edit that can be undone, and of each that can be redone; crossed: a write
+    # outside the history (FBL 0.7, section 7.1) came after it, so its undo is compared by what it changes, not by bytes
+    done, undone = [], []
     for index, step in enumerate(fixture["steps"], start=1):
         if "expectFile" in step:
             expected = (folder / step["expectFile"]).read_bytes()
@@ -325,25 +359,33 @@ def replay_fixture(path: Path, fixture) -> str | None:
         if restored != document:
             return f"step {index}: the inverse splices do not restore the document before the step"
         edit = step.get("edit", {})
+        changes = splice_changes(document, step["splices"])
         if step.get("undo"):
             if not done:
                 return f"step {index}: nothing to undo"
-            before, after = done.pop()
-            if document != after or result != before:
+            before, after, edit_changes, crossed = done.pop()
+            if crossed and changes != [(new, old) for old, new in edit_changes]:
+                return f"step {index}: the undo does not put back what the undone edit changed"
+            if not crossed and (document != after or result != before):
                 return f"step {index}: the undo does not return the document the undone edit started from"
-            undone.append((before, after))
+            undone.append((before, after, edit_changes, crossed))
         elif step.get("redo"):
             if not undone:
                 return f"step {index}: nothing to redo"
-            before, after = undone.pop()
-            if document != before or result != after:
+            before, after, edit_changes, crossed = undone.pop()
+            if crossed and changes != edit_changes:
+                return f"step {index}: the redo does not make the changes the edit made"
+            if not crossed and (document != before or result != after):
                 return f"step {index}: the redo does not return the document the edit produced"
-            done.append((before, after))
+            done.append((before, after, edit_changes, crossed))
         elif step.get("refused") or "save" in edit:
             if result != document:
                 return f"step {index}: a refused edit or a save without change must leave the document as it is"
+        elif edit.get("setting", {}).get("block") in outside:  # no step of the history: undo and redo pass it by
+            done = [(before, after, edit_changes, True) for before, after, edit_changes, _ in done]
+            undone = [(before, after, edit_changes, True) for before, after, edit_changes, _ in undone]
         else:
-            done.append((document, result))
+            done.append((document, result, changes, False))
             undone.clear()
         document = result
     return None

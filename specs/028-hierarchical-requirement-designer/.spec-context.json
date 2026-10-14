@@ -243,6 +243,70 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T15:58:25.456Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:00:13.047Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T022",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:00:46.455Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T023",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:02:47.770Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T026",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:02:48.697Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T024",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:03:18.217Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T025",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:09:18.518Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T027",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:10:35.487Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T028",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:14:15.524Z"
     }
   ],
   "last_action": "living specs evaluated — no capabilities matched",
@@ -848,7 +912,7 @@
     }
   },
   "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
-  "currentTask": "T020",
+  "currentTask": "T028",
   "task_summaries": {
     "T002": {
       "status": "DONE",
@@ -990,6 +1054,63 @@
       "files": [
         "etalii.adp (pull request 203)"
       ]
+    },
+    "T021": {
+      "status": "DONE",
+      "did": "FBL 0.7 declared blocks: registration.blocks with order, keys, history and doc in 8.1, a value as one line without ': ', an undeclared block kept and reported as fbl.unknown-block (7.4), 8.3's other view data, the status paragraph",
+      "files": [
+        "specifications/fbl/FBL-specification.md"
+      ]
+    },
+    "T022": {
+      "status": "DONE",
+      "did": "FBL 0.7 writing declared blocks: createOnFirstPlacement widened and the block order, entries, kept moves and refusals in 8.4, stale id-keyed entries in 8.5, a kept move in 6.1, writes outside the history in 7.1, the fixture edit setting in 15.3",
+      "files": [
+        "specifications/fbl/FBL-specification.md"
+      ]
+    },
+    "T023": {
+      "status": "DONE",
+      "did": "fbl.schema.json: blocks in RegistrationSettings (order, keys, history, doc), the parsed blocks in Registration, the fixture edit setting in Edit",
+      "files": [
+        "specifications/fbl/fbl.schema.json"
+      ]
+    },
+    "T026": {
+      "status": "DONE",
+      "did": "parse_registration reads every further block into blocks and keeps what follows the blocks; the fixture replay passes by a setting on a block outside the history and checks an undo across it splice by splice",
+      "files": [
+        ".github/scripts/validate-examples.py"
+      ]
+    },
+    "T024": {
+      "status": "DONE",
+      "did": "The example registration of research R12 with its five blocks, CRLF; parsed without a binding",
+      "files": [
+        "specifications/fbl/registrations/requirements.adp"
+      ]
+    },
+    "T025": {
+      "status": "DONE",
+      "did": "Added the registration-blocks fixture: tasks.fbl declares tags (kept), collapsed (ordinal, ids, outside the history) and filters (kept); 16 steps over plan.adp cover stale pruning, block creation in declared order, kept inserts and a move, writes outside the history passed by undo and redo, a refused ': ' value and every undo",
+      "files": [
+        "specifications/fbl/fixtures/registration-blocks/"
+      ]
+    },
+    "T027": {
+      "status": "DONE",
+      "did": "Planted and seen fail, then restored: requirements.adp with an entry without ': ' (line 5), registration-blocks step 4 with a wrong offset (first at byte 59)",
+      "files": [
+        "specifications/fbl/registrations/requirements.adp",
+        "specifications/fbl/fixtures/registration-blocks/fixture.json"
+      ]
+    },
+    "T028": {
+      "status": "DONE",
+      "did": "Pull request 204 opened into develop, naming the folder and the second reserved construct; Build green",
+      "files": [
+        "etalii.adp (pull request 204)"
+      ]
     }
   },
   "verified": [
@@ -1024,6 +1145,14 @@
       "exitCode": 0,
       "durationSeconds": 1.8,
       "result": "ok   specifications/fbl/fixtures/knowledge-equivalence: 3 fixtures read the same 65 elements · ok   definitions/diagrams/agent-activity-diagram.md: its example is valid against agent-activity-diagram.schema.json · 99 example(s), 0 invalid."
+    },
+    {
+      "what": "validator on FBL 0.7 declared blocks",
+      "command": "python .github/scripts/validate-examples.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.8,
+      "result": "ok   specifications/fbl/fixtures/knowledge-equivalence: 3 fixtures read the same 65 elements · ok   definitions/diagrams/agent-activity-diagram.md: its example is valid against agent-activity-diagram.schema.json · 102 example(s), 0 invalid."
     }
   ]
 }
