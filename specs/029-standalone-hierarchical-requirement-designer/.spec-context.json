@@ -2,8 +2,8 @@
   "workflow": "companion",
   "specName": "The Hierarchical Requirement Designer in the Standalone Host",
   "branch": "features/029-standalone-hierarchical-requirement-designer",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "plan",
+  "status": "planning",
   "history": [
     {
       "step": "specify",
@@ -18,6 +18,13 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-10-14T21:57:18.450Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-14T22:08:16.943Z"
     }
   ],
   "telemetryInstanceId": "4534790c-e93b-4985-a552-aedf1e2b422a",
@@ -152,5 +159,6 @@
     "constraint: building waits for spec 025 and the maintainer word",
     "constraint: standalone principles are its CLAUDE.md and .spec-workflow/steering/"
   ],
-  "intent": "Build the Hierarchical Requirement Designer in the standalone host from the definition spec 028 merged"
+  "intent": "Build the Hierarchical Requirement Designer in the standalone host from the definition spec 028 merged",
+  "assistant": "claude-vscode"
 }

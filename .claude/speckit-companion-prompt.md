@@ -1,1 +1,1 @@
-/speckit-companion-resume specs\028-hierarchical-requirement-designer
+/speckit-assess-research slug=host-agnostic-tool-language Read the answers in the file at .speckit-companion/report-answers/idea-host-agnostic-tool-language-research.md, resolve each [NEEDS CLARIFICATION] marker whose question appears there, and rewrite research.md in .specify/assessments/host-agnostic-tool-language/.
