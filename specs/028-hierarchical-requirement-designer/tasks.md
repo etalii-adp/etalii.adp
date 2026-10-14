@@ -157,7 +157,7 @@ Files: `etalii.adp/specifications/desl/DESL-specification.md`, `desl.schema.json
 **⟶ Wait for Wave 1 to finish, then:**
 
 - [x] **T039** Plant and see fail, then restore: `minimal-hierarchy.des` with `surface.levels` naming a type its metamodel does not declare (reported at that path), with a settings block its binding does not declare, and with a `mark` that names no document attribute (SC-008) · etalii.adp/specifications/desl/minimal-hierarchy.des
-- [ ] **T040** Deliver pull request 5: run the three checks, see `minimal-table.des` and `knowledge.des` keep their result, commit, push and open the pull request into `develop`, naming this folder and the three constructs FR-057 first left out, with a green Build (FR-062) · etalii.adp (pull request 5)
+- [x] **T040** Deliver pull request 5: run the three checks, see `minimal-table.des` and `knowledge.des` keep their result, commit, push and open the pull request into `develop`, naming this folder and the three constructs FR-057 first left out, with a green Build (FR-062) · etalii.adp (pull request 5)
 
 **Checkpoint**: the three languages can state the definition. Story work starts here.
 

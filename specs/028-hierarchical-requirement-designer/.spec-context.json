@@ -395,6 +395,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T16:23:16.060Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T040",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:04:03.004Z"
     }
   ],
   "last_action": "living specs evaluated — no capabilities matched",
@@ -1000,7 +1008,7 @@
     }
   },
   "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
-  "currentTask": "T039",
+  "currentTask": "T040",
   "task_summaries": {
     "T002": {
       "status": "DONE",
@@ -1276,6 +1284,13 @@
       "files": [
         "specifications/desl/minimal-hierarchy.des"
       ]
+    },
+    "T040": {
+      "status": "DONE",
+      "did": "Pull request 208 opened into develop, naming the folder and the three constructs FR-057 first left out; Build green",
+      "files": [
+        "etalii.adp (pull request 208)"
+      ]
     }
   },
   "verified": [
@@ -1318,6 +1333,14 @@
       "exitCode": 0,
       "durationSeconds": 1.8,
       "result": "ok   specifications/fbl/fixtures/knowledge-equivalence: 3 fixtures read the same 65 elements · ok   definitions/diagrams/agent-activity-diagram.md: its example is valid against agent-activity-diagram.schema.json · 102 example(s), 0 invalid."
+    },
+    {
+      "what": "validator on DESL 0.2",
+      "command": "python .github/scripts/validate-examples.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.9,
+      "result": "ok   specifications/fbl/fixtures/knowledge-equivalence: 3 fixtures read the same 65 elements · ok   definitions/diagrams/agent-activity-diagram.md: its example is valid against agent-activity-diagram.schema.json · 104 example(s), 0 invalid."
     }
   ]
 }
