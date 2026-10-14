@@ -123,6 +123,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T00:26:42.591Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:32:48.679Z"
     }
   ],
   "last_action": "living specs evaluated — no capabilities matched",
@@ -728,7 +736,7 @@
     }
   },
   "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
-  "currentTask": "T006",
+  "currentTask": "T001",
   "task_summaries": {
     "T002": {
       "status": "DONE",
@@ -763,6 +771,13 @@
       "did": "Planted and seen fail, then restored: web-shop.md with ded: 0.3 (reported at ded) and with line 1 removed (reported as having no envelope)",
       "files": [
         "specifications/ded/web-shop.md"
+      ]
+    },
+    "T001": {
+      "status": "DONE",
+      "did": "Pull request 173 merged; branch cut again from origin/develop 4dc1811; the three checks pass; baseline 94 ok lines, 92 examples, 0 invalid",
+      "files": [
+        "etalii.adp/.claude/worktrees/028-hierarchical-requirement-designer"
       ]
     }
   }

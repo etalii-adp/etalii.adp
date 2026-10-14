@@ -35,7 +35,7 @@
 
 **Purpose**: a clean branch and a baseline to compare every later run with. The specification and the plan reached `develop` in pull request 172, and this file follows in a pull request of its own.
 
-- [ ] **T001** After the pull request that carries this file is merged, cut the branch again from `origin/develop`, run the three checks and note the validator's count of `ok` lines as the baseline · etalii.adp/.claude/worktrees/028-hierarchical-requirement-designer
+- [x] **T001** After the pull request that carries this file is merged, cut the branch again from `origin/develop`, run the three checks and note the validator's count of `ok` lines as the baseline · etalii.adp/.claude/worktrees/028-hierarchical-requirement-designer
 
 ---
 
