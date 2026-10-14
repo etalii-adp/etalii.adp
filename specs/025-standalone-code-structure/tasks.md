@@ -2,7 +2,7 @@
 
 **Input**: [standalone-code-structure.spec.md](standalone-code-structure.spec.md), [plan.md](plan.md), [research.md](research.md), [data-model.md](data-model.md), [behaviour-changes.md](behaviour-changes.md), [contracts/](contracts/), and the report, [analysis-2026-10-10.md](analysis-2026-10-10.md).
 
-**276 tasks in ten milestones.** T265 and T266 were added on 2026-10-11 with the ruling on DP-5 and stand in M4. T255 to T257 were struck on 2026-10-12 by the ruling on DP-1 (c), keep the stubs. The M0 review added T267 to T271 to M0 and struck T021, so 267 remained. The M1 review added T272 (in M3, beside T144 and T145), T273 and T274 (at the head of M2) and T275 and T276 (in M1), and struck nothing, so 272 remain. Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
+**278 tasks in ten milestones.** T265 and T266 were added on 2026-10-11 with the ruling on DP-5 and stand in M4. T255 to T257 were struck on 2026-10-12 by the ruling on DP-1 (c), keep the stubs. The M0 review added T267 to T271 to M0 and struck T021, so 267 remained. The M1 review added T272 (in M3, beside T144 and T145), T273 and T274 (at the head of M2) and T275 and T276 (in M1), and struck nothing, so 272 remain. The M2 review added T277 (at the end of M2) and T278 (in M3, beside T151) and struck T129, so 273 remain. Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
 
 ## How to read a task
 
@@ -187,15 +187,19 @@
 
 ### Closing M2
 
-- [ ] T112 [US2] Read sankey beside supply-chain, and timeline beside dependency-graph, with `clones.py`: confirm that nothing in the role classes is still shared by copy, that the two pairs are still two modules each, and list what model, parser and writer still share, for the M2 review (FR-039, FR-040).
-- [ ] T113 [US2] List the types of each of the 19 modules beside the shape of report 1.7 and name every extra type with its reason, for the M2 review (FR-036; SC-007).
-- [ ] T114 [US2] Read `etalii.adp.ide.standalone/docs/creating-a-diagram-module.md`, `etalii.adp.ide.standalone/docs/architecture.md` and `etalii.adp.ide.standalone/docs/solution-structure.md` from start to end against the modules as they now are (FR-004).
+- [x] T112 [US2] Read sankey beside supply-chain, and timeline beside dependency-graph, with `clones.py`: confirm that nothing in the role classes is still shared by copy, that the two pairs are still two modules each, and list what model, parser and writer still share, for the M2 review (FR-039, FR-040). Done in this review (2026-10-14): each module of the two pairs references only core projects; what the role classes still share is overrides of the bases, recorded in the M2 review under *The sibling pairs*.
+- [x] T113 [US2] List the types of each of the 19 modules beside the shape of report 1.7 and name every extra type with its reason, for the M2 review (FR-036; SC-007). Done in this review (2026-10-14): the M2 review lists the fifteen modules' types beyond the shape, each with its reason.
+- [x] T114 [US2] Read `etalii.adp.ide.standalone/docs/creating-a-diagram-module.md`, `etalii.adp.ide.standalone/docs/architecture.md` and `etalii.adp.ide.standalone/docs/solution-structure.md` from start to end against the modules as they now are (FR-004). Done in standalone pull request 294 (2026-10-14); `architecture.md` needed no change.
 
 ### Review
 
-- [ ] T115 [US9] Run `etalii.adp.ide.standalone/.github/tools/analysis/measure.sh` on the merge commit of M2's last pull request, in a freshly created worktree, and save its output as `etalii.adp/specs/025-standalone-code-structure/reviews/M2-measurements.json` (FR-009, FR-010).
-- [ ] T116 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M2-review.md` by `etalii.adp/specs/025-standalone-code-structure/contracts/milestone-review.md`: the comparison with the previous record, the exit condition of M2 (all 19 modules stand on the middle layer) and the success criteria due, an answer for every candidate named for the M2 review, what the clone scan and the method-length count show that nobody named, the tasks under FR-012 marked *stands*, *reduced* or *overtaken*, and the open rows of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` that M3 needs (FR-010, FR-011, FR-012).
-- [ ] T117 [US9] In the same pull request into `etalii.adp`, update `etalii.adp/specs/025-standalone-code-structure/tasks.md`: tick what is merged, add the tasks the review produced with new numbers, strike what it found unnecessary; amend a success criterion in `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` only with this review named beside it. No task of the next milestone starts before this pull request is merged (FR-010, FR-011, FR-014).
+- [x] T115 [US9] Run `etalii.adp.ide.standalone/.github/tools/analysis/measure.sh` on the merge commit of M2's last pull request, in a freshly created worktree, and save its output as `etalii.adp/specs/025-standalone-code-structure/reviews/M2-measurements.json` (FR-009, FR-010). Done (2026-10-14): `reviews/M2-measurements.json`, measured at `20d43776d`, the merge of standalone pull request 294.
+- [x] T116 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M2-review.md` by `etalii.adp/specs/025-standalone-code-structure/contracts/milestone-review.md`: the comparison with the previous record, the exit condition of M2 (all 19 modules stand on the middle layer) and the success criteria due, an answer for every candidate named for the M2 review, what the clone scan and the method-length count show that nobody named, the tasks under FR-012 marked *stands*, *reduced* or *overtaken*, and the open rows of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` that M3 needs (FR-010, FR-011, FR-012). Done in this pull request (2026-10-14).
+- [x] T117 [US9] In the same pull request into `etalii.adp`, update `etalii.adp/specs/025-standalone-code-structure/tasks.md`: tick what is merged, add the tasks the review produced with new numbers, strike what it found unnecessary; amend a success criterion in `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` only with this review named beside it. No task of the next milestone starts before this pull request is merged (FR-010, FR-011, FR-014). Done in this pull request (2026-10-14); SC-006 amended as the maintainer ruled on 2026-10-13.
+
+### Added by the M2 review
+
+- [ ] T277 [US2] Add `AddEmptyDocument(origin, Func<string, string> textFromBaseName)` beside `AddEmptyDocument(origin, text)` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/`, and register the twelve document factories through it (agent-behavior-modelling, azure-devops-pipeline, wardley-map, mindmap, databricks, dotnet-dependency-graph, c4's two, rdf's four), deleting their classes; every new-document test of those modules unchanged. Before M3 (FR-029; SC-007; the M2 review, question 1).
 
 ## M3: shared utilities
 
@@ -215,18 +219,18 @@
 
 - [ ] T127 [P] [US3] wardley-map: replace `WardleyDocument.cs` with core `LineDocument` (`etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/LineDocument.cs`), adding `ReplaceLine` or `InsertLine` to core only if this module needs it; a round-trip guard for a file with equal counts of LF and CRLF, and the byte round-trip fixtures unchanged. Read `wardley-map-disl-fbl` first (FR-042, FR-012; behaviour-changes B-05).
 - [ ] T128 [P] [US3] c4: replace `_Model/C4Document.cs` with core `LineDocument` (`etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/LineDocument.cs`), adding `ReplaceLine` or `InsertLine` to core only if this module needs it; a round-trip guard for a file with equal counts of LF and CRLF, and the byte round-trip fixtures unchanged. Read `c4-disl-fbl` first (FR-042, FR-012; behaviour-changes B-05).
-- [ ] T129 [P] [US3] causal-loop-diagram: replace `CausalLoopDocument.cs` with core `LineDocument` (`etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/LineDocument.cs`), adding `ReplaceLine` or `InsertLine` to core only if this module needs it; a round-trip guard for a file with equal counts of LF and CRLF, and the byte round-trip fixtures unchanged. Read `causal-loop-disl-fbl` first (FR-042, FR-012; behaviour-changes B-05).
+- [ ] ~~T129 [P] [US3] causal-loop-diagram: replace `CausalLoopDocument.cs` with core `LineDocument` (`etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/LineDocument.cs`), adding `ReplaceLine` or `InsertLine` to core only if this module needs it; a round-trip guard for a file with equal counts of LF and CRLF, and the byte round-trip fixtures unchanged. Read `causal-loop-disl-fbl` first (FR-042, FR-012; behaviour-changes B-05).~~ struck by the M2 review: `causal-loop-disl-fbl` replaced the module's line document with its FBL binding, so there is no `CausalLoopDocument` left to replace.
 - [ ] T130 [P] [US3] Add `LineIndex` (binary search) to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/`, offered by `LineDocument`, and replace `RdfTokenizer.LineOf`, `SparqlTokenizer.LineOf`, `RdfWriter.LineOf` and the linear `ShaclWriter.LineOf` (FR-043).
 - [ ] T131 [US3] Add `TerminalScanner`, `RdfEscapes` and `NumericLiteral` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/` (not to the rdf module, which sparql may not reference) and make `RdfTokenizer.cs` read its terminals through them (FR-044).
 - [ ] T132 [US3] Make `SparqlTokenizer.cs` read its terminals through the shared scanner; the parsers stay separate; `\r` in a short string is handled as B-02 is ruled, with a guard for each language (FR-044, FR-002; behaviour-changes B-02).
 - [ ] T133 [US3] Promote `etalii.adp.ide.standalone/src/diagrams/databricks/backend/` `DatabricksYaml.cs` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/YamlAccess.cs` beside `YamlNodeRange` (`Scalar`, `Sequence`, `LineOf`), with databricks as first consumer (FR-046).
 - [ ] T134 [P] [US3] Replace `Scalar(YamlMappingNode, key)` in the other parsers and the three local copies in `HelmChartReader` with `YamlAccess`; skip a parser whose module's conversion has started (FR-046, FR-012; SC-010).
-- [ ] T135 [P] [US3] Add `DslNumber.Format` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/` and replace the six `Number(double)` of wardley-map and those of sankey, supply-chain and functional-decomposition-graph; the two-decimal form of the functional-decomposition-graph provider is handled as B-01 is ruled, with a guard (FR-047, FR-002; behaviour-changes B-01).
+- [ ] T135 [P] [US3] Add `DslNumber.Format` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/` and replace the six `Number(double)` of wardley-map and those of sankey, supply-chain and functional-decomposition-graph; the two-decimal form of the functional-decomposition-graph provider is handled as B-01 is ruled, with a guard (FR-047, FR-002; behaviour-changes B-01). Widened by the M2 review: `DependencyGraphWriter.Number` as well.
 - [ ] T136 [US3] Add `LineLexer` (a comment policy and an escape policy) and `QuotedString.Write` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/`, starting from `C4Tokens.SplitWithSpans`; c4 (`C4Line.StripComment`) is first consumer. Read `c4-disl-fbl` first (FR-048, FR-012).
-- [ ] T137 [P] [US3] Move `WardleyParser.WithoutComment` and the causal-loop `Tokenize` onto `LineLexer`, each with the policy it has today, and a guard for a quoted `//` in a Wardley line (FR-048, FR-012, FR-002; behaviour-changes B-04).
+- [ ] T137 [P] [US3] Move `WardleyParser.WithoutComment` and the causal-loop `Tokenize` onto `LineLexer`, each with the policy it has today, and a guard for a quoted `//` in a Wardley line (FR-048, FR-012, FR-002; behaviour-changes B-04). Reduced by the M2 review to `WardleyParser.WithoutComment`: the causal-loop `Tokenize` went with `causal-loop-disl-fbl`.
 - [ ] T138 [P] [US3] Replace the private `Text()` quoters of `SankeyWriter.cs` and `SupplyChainWriter.cs` with the core quoter (`LineSplice.Quote` as pull request 167 left it, or `QuotedString.Write`), after a test shows they agree on every case the two private ones guard (FR-048, FR-040, FR-012).
 - [ ] T139 [US3] Add `ParseOutcome<TModel>` (model, problems, usable) to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents/` and let `DocumentEntry` carry it; gartner-hype-cycle-graph, which already keeps findings lists, is first consumer (FR-049).
-- [ ] T140 [P] [US3] Move the other parse styles onto `ParseOutcome`: exceptions caught at the parser's edge (rdf, sparql, mindmap, the `YamlException` of 11 modules), the silent skips of `WardleyParser` reported as problems, and the string or `bool` on an entry; one module per pull request, skipping a parser whose conversion has started (FR-049, FR-012).
+- [ ] T140 [P] [US3] Move the other parse styles onto `ParseOutcome`: exceptions caught at the parser's edge (rdf, sparql, mindmap, the `YamlException` of 11 modules), the silent skips of `WardleyParser` reported as problems, and the string or `bool` on an entry; one module per pull request, skipping a parser whose conversion has started (FR-049, FR-012). Reduced by the M2 review: the `YamlException` is now caught in seven modules (azure-devops-pipeline, databricks, dependency-graph, functional-decomposition-graph, sankey, supply-chain, timeline), ansible-structure and helm-chart reading through `TolerantYaml` since T103.
 
 ### Time and files (report 3, 8.5)
 
@@ -245,6 +249,7 @@
 
 - [ ] T150 [US3] Add `DislDiagramDefinition` (the lazy bundled definition, the wire-id map, the toolbox projection, the menu action mapping, the row mapping, one finding-to-severity mapping) and `DislToolboxProvider` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/`, with timeline's `*Definition.cs` as first consumer (FR-052).
 - [ ] T151 [P] [US3] Move the other six modules with a bundled definition onto `DislDiagramDefinition`, one module per pull request, deleting the forwarding toolbox providers and rule sets that T028 left; shortcuts are sent in one way by all seven (FR-052; report D2).
+- [ ] T278 [P] [US3] Added by the M2 review: one loader for a bundled FBL binding (an embedded resource read into an `FblBinding`) and one memo of a body's DISL model per text, in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/` beside `DislDiagramDefinition`; `AadBody`, `CausalLoopBody`, `GhgBody` and `AbmBody` use them (FR-052).
 
 ### Review
 
@@ -483,7 +488,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-026 | T185, T190 |
 | FR-027 | T049, T055, T274 |
 | FR-028 | 16 tasks, T043 to T100 |
-| FR-029 | 16 tasks, T044 to T100 |
+| FR-029 | 17 tasks, T044 to T100, T277 |
 | FR-030 | 21 tasks, T045 to T110, and T273, T274 |
 | FR-031 | 19 tasks, T050 to T110 |
 | FR-032 | 19 tasks, T051 to T110 |
@@ -496,7 +501,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-039 | T075, T078, T112 |
 | FR-040 | T112, T138 |
 | FR-041 | The heading of FR-042 to FR-053; claimed through them. |
-| FR-042 | T127, T128, T129 |
+| FR-042 | T127, T128, T129 (struck) |
 | FR-043 | T130 |
 | FR-044 | T131, T132 |
 | FR-045 | T118, T119, T120, T121, T122, T123, T124, T125, T126, T239 |
@@ -506,7 +511,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-049 | T139, T140 |
 | FR-050 | T145, T146, T147, T148, T272 |
 | FR-051 | T141, T142, T143, T149 |
-| FR-052 | T150, T151 |
+| FR-052 | T150, T151, T278 |
 | FR-053 | T144, T272 |
 | FR-054 | T155, T156, T157, T158, T266 |
 | FR-055 | T159 |
@@ -564,7 +569,7 @@ FR-002, FR-004, FR-005, FR-007 and FR-008 are rules of [contracts/pull-request.m
 | SC-004 | T142, T143, T149 | M3 |
 | SC-005 | The test-code tasks of M0, M1 (contracts) and M8; T009 | M9 |
 | SC-006 | Every band task of M1 and M2 | M2 |
-| SC-007 | T113 | M2 |
+| SC-007 | T113, T277 | M2 |
 | SC-008 | Every band task of M1 and M2 | M2 |
 | SC-009 | Every band C task | M2 |
 | SC-010 | T119, T120, T134, T145, T272 | M3 |
