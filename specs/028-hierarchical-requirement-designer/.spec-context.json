@@ -357,5 +357,6 @@
       "key_finding": "The definition needs five DESL constructs and two FBL ones, and the fallback on record (a plugin, the registration as it is) is not free: it needs a DESL change too and leaves the settings without a home"
     }
   },
-  "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025."
+  "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
+  "assistant": "claude-vscode"
 }
