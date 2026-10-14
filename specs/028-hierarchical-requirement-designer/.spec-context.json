@@ -5,7 +5,7 @@
   "branch": "features/028-hierarchical-requirement-designer",
   "selectedAt": "2026-10-13T21:41:45.662Z",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "implemented",
   "history": [
     {
       "step": "specify",
@@ -643,6 +643,21 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T21:57:27.413Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T071",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T21:58:49.208Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T21:58:49.422Z"
     }
   ],
   "last_action": "T001 to T068 done; pull requests 201, 203, 204, 208 merged; 210 (language corrections) open with a green Build; the definition waits for its merge",
@@ -1272,7 +1287,7 @@
     }
   },
   "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
-  "currentTask": "T070",
+  "currentTask": "T071",
   "task_summaries": {
     "T002": {
       "status": "DONE",
@@ -1771,6 +1786,13 @@
         "plan.md",
         "contracts/host-handoff.md",
         "hierarchical-requirement-designer.spec.md"
+      ]
+    },
+    "T071": {
+      "status": "DONE",
+      "did": "Pull request 215 open with a green Build",
+      "files": [
+        "etalii.adp pull request 215"
       ]
     }
   },

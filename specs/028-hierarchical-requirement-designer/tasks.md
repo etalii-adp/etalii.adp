@@ -356,7 +356,7 @@ Files: `etalii.adp/definitions/designers/README.md`, `etalii.adp/CLAUDE.md`, `et
 Files: `etalii.adp/specs/029-standalone-hierarchical-requirement-designer/`.
 
 - [x] **T070** Specify the host's feature, spec 029, from the merged definition and [contracts/host-handoff.md](contracts/host-handoff.md): what the host builds, what it settles, the five success criteria only it can show (SC-001, SC-002, SC-009, SC-010, SC-011), the user-facing requirements FR-015 to FR-024, FR-036, FR-037, FR-040, FR-042, FR-045 to FR-047 and FR-050 to FR-052, the line T067 left for it (FR-042), and the conformance it declares · etalii.adp/specs/029-standalone-hierarchical-requirement-designer/standalone-hierarchical-requirement-designer.spec.md
-- [ ] **T071** Deliver pull request 7: commit, push and open the pull request into `develop`, naming this folder, spec 029's folder and the etalii.adp commit of the merged definition (`bfb0c27`), with a green Build · etalii.adp (pull request 7)
+- [x] **T071** Deliver pull request 7: commit, push and open the pull request into `develop`, naming this folder, spec 029's folder and the etalii.adp commit of the merged definition (`bfb0c27`), with a green Build · etalii.adp (pull request 7)
 
 **Checkpoint**: the standalone host has its own specification of the designer, spec 029, and this feature is complete once the maintainer merges.
 
