@@ -394,8 +394,8 @@ Every count is taken by the scripts of FR-009 against the baseline. The figures 
 
 **The modules**
 
-- **SC-006**: Production code of the diagram modules is at least 9,000 lines and 250 files smaller than the baseline at the end of M2, the stub modules not counted.
-- **SC-007**: After M2 the modules declare no reloader class (16), no changed-event type (12), no unsubscriber type (12) and no session that computes its own delivered-elements diff (13); at most four session-factory classes and four document-factory classes (21 each).
+- **SC-006**: Production code of the diagram modules is at least 9,000 lines and 80 files smaller than the baseline at the end of M2, the stub modules not counted. *Amended by the [M2 review](reviews/M2-review.md), as the maintainer ruled on 2026-10-13: the 250 files counted role files that the rollout does not delete, because a module keeps one file per type of report 1.7; M2 measured 86.*
+- **SC-007**: After M2 the modules declare no reloader class (16), no changed-event type (12) but mindmap's, which stays with its own store (*amended by the [M2 review](reviews/M2-review.md)*), no unsubscriber type (12) and no session that computes its own delivered-elements diff (13); at most four session-factory classes and four document-factory classes (21 each).
 - **SC-008**: The normalized clone scan reports fewer than 200 shared windows in the context-source-resolver role (1,911) and fewer than 50 in each of the session-factory (326), property-provider (134), document-store (115) and action-provider (99) roles. At the end of M2.
 - **SC-009**: No command handler in a diagram module builds its result from a save without the save's warning, held by the contract test of FR-033 for every module. At the end of M2.
 
