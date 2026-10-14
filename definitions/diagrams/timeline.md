@@ -94,6 +94,7 @@ connections:
 | `row` is read as text, with `default: 0`, without `quoted` and `fallback`. | The tool reads a row with .NET's integer parse of the scalar's text: `1.0`, `0x10` and `0o17` are row 0 and `"3"` is 3, where FBL's conversion of a typed value would make `1.0` row 1 and `0x10` row 16. |
 | `begin` has `default: ""`. | A missing `begin` reads as the empty text, which the tool reports as an unreadable time; an absent slot would leave the attribute unset, and no rule would report it. |
 | The `connection` rule has `when: "entry.all(k, true)"`. | A sequence entry that is not a mapping is taken by no rule and passed over, as the tool passes it over; without the condition the rule would read a scalar item as a relation without an id. |
+| Both element rules insert with `place: "end"`, where the example has `after-last`. | The tool appends a new element after the last entry of `elements`; `after-last` is right after the last entry of the same rule (FBL 6.2), so once the last entry is a period a new moment would go after the last moment, in the middle of the list (standalone fixture `indentation.tml`, `Parity/timeline.findings.json` B16). |
 
 `label`, `from`, `to` and `storedId` need no `read`: under FBL 0.5 a string attribute, a reference and a host attribute read their written text unasked. `begin` and `end` keep `"read": "text"` and `time: "keep-precision"` as the example has them, and the period rule's `end` keeps `empty: "remove"`.
 
