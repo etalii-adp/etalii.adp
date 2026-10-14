@@ -6,7 +6,7 @@
 
 ## Summary
 
-A requirement document is a plain `.md` file: an envelope line, a legend for agents, the hierarchy as nested bullets under `## Requirements`, and the assessments as a task list under `## Assessments`. Its registration keeps the colours and order of the tag, category and state lists, what is collapsed, and the stored filters. This feature delivers the languages that can say so and the definition that says it: FBL gains a `bullets` family and declared blocks in the registration, DESL gains a `hierarchy` surface, counted identifiers and three smaller constructs, DED states where the envelope stands in Markdown, and `definitions/designers/` gains the designer type with its binding, companion document, examples and fixtures. The standalone host then builds the designer from those files, planned with spec-workflow in its own repository.
+A requirement document is a plain `.md` file: an envelope line, a legend for agents, the hierarchy as nested bullets under `## Requirements`, and the assessments as a task list under `## Assessments`. Its registration keeps the colours and order of the tag, category and state lists, what is collapsed, and the stored filters. This feature delivers the languages that can say so and the definition that says it: FBL gains a `bullets` family and declared blocks in the registration, DESL gains a `hierarchy` surface, counted identifiers and three smaller constructs, DED states where the envelope stands in Markdown, and `definitions/designers/` gains the designer type with its binding, companion document, examples and fixtures. The standalone host then builds the designer from those files, as spec 029-standalone-hierarchical-requirement-designer specifies.
 
 ## Technical Context
 
@@ -41,6 +41,7 @@ Checked against `.specify/memory/constitution.md` 1.6.0, before research and aga
 |---|---|---|
 | One feature for three language changes and a definition, against "One Spec Kit feature per change to a specification" | The maintainer's choice of 2026-10-14 (specification, Clarifications). The four parts are one tool's need and are reviewed together, as spec 013 delivered DESL 0.1, DED 0.1, an FBL change and the Knowledge definition. | A feature per language. It was offered and declined. Each language still gets its own pull request, in the order below, so each is reviewed and can be refused on its own. |
 | DESL gains five constructs where FR-057 named two | Moving an entry to another parent, a text that names entries by number, and state kept in the registration cannot be stated in DESL 0.1 (R13, R15, R16). Without them the definition would leave FR-004, FR-023 and FR-040 to FR-044 to each host. | Leaving them to the companion's prose, as "What DESL cannot express". That is what principle I forbids for behaviour every host must share. FR-057 is corrected to name all five (R22). |
+| The host's specification written here, as spec 029, against "`etalii.adp.ide.standalone` plans with spec-workflow" | The maintainer asked for it on 2026-10-14, when T070 came up, as they did for spec 025. | A spec-workflow specification in the host's `.spec-workflow/`, as this plan first had it. The convention's text is left unchanged, as spec 025 ruled. |
 
 ## Project Structure
 
@@ -106,11 +107,11 @@ One branch at a time, each cut from `develop` after the pull request before it i
 4. **FBL 0.7, declared registration blocks.** A pull request of its own, so that this reserved construct can be refused without the family.
 5. **DESL 0.2**: the `hierarchy` surface, counted identifiers, `move`, `mentions` and `persistence.settings`.
 6. **The definition**: `definitions/designers/hierarchical-requirement.*`, its examples and fixtures, and the prose that names the designer formats.
-7. **The hand-off**: the standalone host's spec-workflow specification, written in that repository from the merged definition. It waits for spec 025.
+7. **The hand-off**: the standalone host's specification of the designer, written in this repository as spec 029-standalone-hierarchical-requirement-designer from the merged definition. Spec 029 is specified now; its building waits for spec 025.
 
 ## What is not done here
 
-- The designer in the standalone host, and every success criterion that needs a person or an agent at work: SC-001, SC-002, SC-009, SC-010, SC-011. They are carried to the host's own specification by step 7.
+- The designer in the standalone host, and every success criterion that needs a person or an agent at work: SC-001, SC-002, SC-009, SC-010, SC-011. They are carried to the host's own specification, spec 029, by step 7.
 - Agent Behavior Modelling's move onto the `bullets` family. `behavior-tree.fbl` shows that the family can state its reading; changing that tool's definition and its hosts is a feature of its own.
 - Hosts other than standalone. Visual Studio Code and IntelliJ implement FBL 0.7 and DESL 0.2 when a feature brings this designer to them.
 - The copies of schemas that `etalii.adp.site` keeps. Whether the site shows DED, DESL or FBL schemas is checked when the first language pull request merges, and refreshed there if it does.

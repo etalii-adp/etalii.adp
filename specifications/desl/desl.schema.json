@@ -224,7 +224,7 @@
       "type": "object",
       "properties": {
         "document": {
-          "description": "The attributes of the document as a whole. See section 4.1.",
+          "description": "The attributes of the document as a whole, and (DESL 0.2) the types its own elements may be. See section 4.1.",
           "type": "object",
           "properties": {
             "attributes": {
@@ -235,6 +235,10 @@
               "additionalProperties": {
                 "$ref": "#/$defs/Attribute"
               }
+            },
+            "children": {
+              "description": "(DESL 0.2) The types the document's own elements may be, checked by std.containment. See section 4.6.",
+              "$ref": "#/$defs/Containment"
             },
             "doc": {
               "$ref": "#/$defs/Doc"

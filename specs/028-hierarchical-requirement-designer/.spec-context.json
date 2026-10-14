@@ -5,7 +5,7 @@
   "branch": "features/028-hierarchical-requirement-designer",
   "selectedAt": "2026-10-13T21:41:45.662Z",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "implemented",
   "history": [
     {
       "step": "specify",
@@ -403,9 +403,264 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T18:04:03.004Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T041",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:14:29.197Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T043",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:14:30.086Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T042",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:15:03.841Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T044",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:17:05.470Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T045",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:20:45.688Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T046",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:20:46.097Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T047",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:20:46.507Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T048",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:23:13.439Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T050",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:24:00.290Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T049",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:30:21.626Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T053",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:43:25.687Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T054",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:43:26.252Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T057",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:43:27.034Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T051",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:45:30.710Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T052",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:45:31.824Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T055",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:45:32.411Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T056",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:45:32.893Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T058",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:45:59.882Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T059",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:46:00.941Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T060",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:46:02.866Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T061",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:46:05.003Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T062",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:46:07.027Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T063",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:50:10.261Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T064",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:50:12.998Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T065",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:50:15.270Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T066",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:50:17.743Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T067",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:55:12.480Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T068",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T18:55:43.897Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T069",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T19:29:54.109Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T070",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T21:57:27.413Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T071",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T21:58:49.208Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T21:58:49.422Z"
     }
   ],
-  "last_action": "living specs evaluated — no capabilities matched",
+  "last_action": "T001 to T068 done; pull requests 201, 203, 204, 208 merged; 210 (language corrections) open with a green Build; the definition waits for its merge",
   "coverage": {
     "FR-001": {
       "title": "Users MUST see the designer type named \"Hierarchical Requirement Designer\" wherever a tool type's name is shown.",
@@ -996,6 +1251,30 @@
       "decision": "The Build workflow reads a Markdown example with a reader written for this designer and proves edits by FBL fixtures",
       "why": "It is the mechanism the Knowledge designer already uses; a generic interpreter of bindings in the validator would be a seventh host",
       "rejected": "A binding-driven reader in the validator; a harness for planted defects"
+    },
+    {
+      "decision": "Each pull request's later phase was built locally on top of the open one and rebased onto develop after its merge",
+      "why": "the maintainer merges; work that does not depend on the merge went on meanwhile",
+      "rejected": "pushing later phases into the open pull request"
+    },
+    {
+      "decision": "Language corrections the definition and fixtures found went into FBL 0.7 and DESL 0.2 and were split into pull request 210, ahead of the definition",
+      "why": "FR-062, by the maintainer's choice of 2026-10-14",
+      "rejected": "delivering them inside the definition's pull request"
+    },
+    {
+      "decision": "A word slot of a many attribute holds every matching word of its group (FBL 4.6, 6.3)",
+      "why": "tags, category and state share the trailing words of a title line",
+      "rejected": "one group per kind of word"
+    },
+    {
+      "decision": "Fixture phases 7 to 13 went to three workers rather than seven",
+      "why": "each owns two or three small fixture folders; fewer workers cost less",
+      "rejected": "one worker per phase"
+    },
+    {
+      "decision": "T070 specifies the host feature here as spec 029 rather than a spec-workflow specification in standalone",
+      "why": "The maintainer asked on 2026-10-14, as for spec 025"
     }
   ],
   "step_summaries": {
@@ -1008,7 +1287,7 @@
     }
   },
   "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
-  "currentTask": "T040",
+  "currentTask": "T071",
   "task_summaries": {
     "T002": {
       "status": "DONE",
@@ -1291,6 +1570,230 @@
       "files": [
         "etalii.adp (pull request 208)"
       ]
+    },
+    "T041": {
+      "status": "DONE",
+      "did": "Binding markdown in the bullets family: .md claim with the envelope marker, required header, Requirements and Assessments sections, mark line, item, requirement, assessment and catch-all rules, five declared blocks",
+      "files": [
+        "definitions/designers/hierarchical-requirement.fbl"
+      ]
+    },
+    "T043": {
+      "status": "DONE",
+      "did": "CRLF template: envelope, mark line ITEM-0007 REQ-0009, title, legend with fenced examples, five top items with at most three requirements and two sub-items, empty Assessments",
+      "files": [
+        "definitions/designers/hierarchical-requirement.fbl"
+      ]
+    },
+    "T042": {
+      "status": "DONE",
+      "did": "JSON form schema: envelope values, the two marks, items nested to any depth with requirements, assessments; refines DED's Definition by allOf",
+      "files": [
+        "definitions/designers/hierarchical-requirement.schema.json"
+      ]
+    },
+    "T044": {
+      "status": "DONE",
+      "did": "DESL 0.2 specification: seven types with R25's attributes, Colour and AssessmentKind enums, counter ids with marks and NEW, settings, constraint requirementInAnItem, hierarchy surface with every role, 38 operations",
+      "files": [
+        "definitions/designers/hierarchical-requirement.des"
+      ]
+    },
+    "T045": {
+      "status": "DONE",
+      "did": "Example requirement document, CRLF: a web shop three items deep, markers - * +, descriptions, tags, categories, states, references, a link, REQ-NEW, four kinds of assessment with one resolved, the template's legend",
+      "files": [
+        "definitions/designers/examples/web-shop.md"
+      ]
+    },
+    "T046": {
+      "status": "DONE",
+      "did": "Its registration, CRLF, with the five blocks tags, categories, states, collapsed and filters",
+      "files": [
+        "definitions/designers/examples/web-shop.adp"
+      ]
+    },
+    "T047": {
+      "status": "DONE",
+      "did": "Validator: .md and .adp under definitions/designers/examples are examples; requirements_from_markdown reads a requirement document by the binding's and the specification's expressions into the JSON form and reports unreadable bullets, duplicates, mentions naming nothing and misplaced requirements; specifications/ded/web-shop.md reads through it",
+      "files": [
+        ".github/scripts/validate-examples.py"
+      ]
+    },
+    "T048": {
+      "status": "DONE",
+      "did": "Companion: the two files, the file, items and requirements with the trailing words and the title's known limit, numbers, references, assessments, what reading reports, the template and legend, the registration, filters, the JSON form, layout and the Knowledge designer's looks, gestures, what the languages cannot state, the complete example",
+      "files": [
+        "definitions/designers/hierarchical-requirement.md"
+      ]
+    },
+    "T050": {
+      "status": "DONE",
+      "did": "Planted by script and restored byte for byte: unknown prefix, second REQ-0001, [REQ-0999], assessment about ITEM-0999, top-level requirement, bullet under a requirement, no envelope, and an undeclared attribute in surface.notes.about; each failed with its one expected message",
+      "files": [
+        "definitions/designers/examples/web-shop.md",
+        "definitions/designers/hierarchical-requirement.des"
+      ]
+    },
+    "T049": {
+      "status": "DONE",
+      "did": "A worker with the companion only wrote a lending document (items, sub-item, five requirements, tags, references, three assessments); the reader read it with no finding; the companion now says how to number a document written by hand, that line 2 may be left out, line endings, and punctuation in a title",
+      "files": [
+        "definitions/designers/hierarchical-requirement.md"
+      ]
+    },
+    "T053": {
+      "status": "DONE",
+      "did": "Faults fixture: one document with every fault of What reading reports, each with its finding, a save and an edit that numbers the placeholders past the faults; no-envelope/ read as unreadable with one std.unparseable",
+      "files": [
+        "specifications/fbl/fixtures/hierarchical-requirement-faults/"
+      ]
+    },
+    "T054": {
+      "status": "DONE",
+      "did": "Edits fixture: a save with no splice, one title spliced alone, a duplicate given REQ-0007 with the mark; numbering/ numbers REQ-NEW and ITEM-NEW with the next edit; no-mark/ writes the mark line again at after-header; each edit with its undo",
+      "files": [
+        "specifications/fbl/fixtures/hierarchical-requirement-edits/"
+      ]
+    },
+    "T057": {
+      "status": "DONE",
+      "did": "Assessments fixture: four kinds in any case, [X], no checkbox, a detail, one about an item without requirements, one std.mentions; an add, a change, a resolve and a reopen of one character, a resolve by re-emit-line, a remove, a delete of the named entry; first-assessment/ appends the section; each with its undo",
+      "files": [
+        "specifications/fbl/fixtures/hierarchical-requirement-assessments/"
+      ]
+    },
+    "T051": {
+      "status": "DONE",
+      "did": "Reading fixture: three levels of items with requirements at every depth, all markers, tabs, descriptions and unbound author text, read with parents and attributes; no-section/ reads a file without a Requirements heading as empty with no finding",
+      "files": [
+        "specifications/fbl/fixtures/hierarchical-requirement-read/"
+      ]
+    },
+    "T052": {
+      "status": "DONE",
+      "did": "Collapsed block fixture: first collapse creates the block in the created registration, ordinal entries, expand removes an entry and the last one the block, a filter undone and redone across folds; stale/ prunes a stale entry with the next write",
+      "files": [
+        "specifications/fbl/fixtures/hierarchical-requirement-collapsed/"
+      ]
+    },
+    "T055": {
+      "status": "DONE",
+      "did": "Template fixture: the binding's template with {base} replaced reads with no finding, 7 items in 2 levels and 9 requirements, at most 2 per item; first item added and undone",
+      "files": [
+        "specifications/fbl/fixtures/hierarchical-requirement-new/"
+      ]
+    },
+    "T056": {
+      "status": "DONE",
+      "did": "Structure fixture, LF: requirement added below a selected one numbered from a mark above the highest, sub-item after the last child, item moved two columns deeper, delete, add undone with mark restored; no-section/ appends the heading with the first item",
+      "files": [
+        "specifications/fbl/fixtures/hierarchical-requirement-structure/"
+      ]
+    },
+    "T058": {
+      "status": "DONE",
+      "did": "References fixture: mentions read in descriptions and assessments, not in a title or a link; a description set with [REQ-0002] (insert-key and replace-value); REQ-0002 moved a level deeper with no reference rewritten; REQ-0002 deleted with its mentions kept, and deleted/ reading the three std.mentions; each with its undo",
+      "files": [
+        "specifications/fbl/fixtures/hierarchical-requirement-references/"
+      ]
+    },
+    "T059": {
+      "status": "DONE",
+      "did": "Tags fixture over the Markdown file: tags added to an item, before a category and state, after a last tag, after an author's out-of-order state; user experience written user-experience; a tag removed from one entry; a rename over three carriers and a delete over two in one edit; each with its undo",
+      "files": [
+        "specifications/fbl/fixtures/hierarchical-requirement-tags/"
+      ]
+    },
+    "T060": {
+      "status": "DONE",
+      "did": "Tag-list fixture over the registration: implicit members in read; the first recolour writing the whole tags block, undo and redo; a recolour; a reorder as insert-entry and remove-entry; the registration halves of a new tag, a rename and a delete with the block present and absent; each with its undo",
+      "files": [
+        "specifications/fbl/fixtures/hierarchical-requirement-tag-list/"
+      ]
+    },
+    "T061": {
+      "status": "DONE",
+      "did": "Category and state fixture: a category and a state written after the tags; a second category: word kept and not counting; a state changed; both removed and undone; clearing the first category leaves the second counting; a rename over two carriers; list/ writing the initial and implicit categories with the first change",
+      "files": [
+        "specifications/fbl/fixtures/hierarchical-requirement-category-state/"
+      ]
+    },
+    "T062": {
+      "status": "DONE",
+      "did": "Filters fixture over the registration: a filter with its sorting creating the block after collapsed, a second after it, a rename, a duplicate rename and a query with ': ' refused, a name with ': ' written as FBL allows, removals of one and of the last with its block, each with its undo",
+      "files": [
+        "specifications/fbl/fixtures/hierarchical-requirement-filters/"
+      ]
+    },
+    "T063": {
+      "status": "DONE",
+      "did": "definitions/designers/README.md: the designer's row, and that a Markdown document's envelope is line 1",
+      "files": [
+        "definitions/designers/README.md"
+      ]
+    },
+    "T064": {
+      "status": "DONE",
+      "did": "CLAUDE.md: Markdown among the formats of a designer type's example documents, and the Markdown definitions under specifications/ded/",
+      "files": [
+        "CLAUDE.md"
+      ]
+    },
+    "T065": {
+      "status": "DONE",
+      "did": "README.md: a DED definition's file is .ded or a format its designer type's bindings read, such as .md",
+      "files": [
+        "README.md"
+      ]
+    },
+    "T066": {
+      "status": "DONE",
+      "did": "docs/terminology.md: the same in the glossary's designer row",
+      "files": [
+        "docs/terminology.md"
+      ]
+    },
+    "T067": {
+      "status": "DONE",
+      "did": "Walked FR-001 to FR-063, SC-003 to SC-007 and the twelve cases: all stated or handed to the host; fixed two fixture docs, the companion's resolve exception, the faults claim, and added faults/not-utf8 and collapsed/unknown-block; FR-062 open for the language corrections, named in pull request 6",
+      "files": [
+        "specifications/fbl/fixtures/hierarchical-requirement-*",
+        "definitions/designers/hierarchical-requirement.md"
+      ]
+    },
+    "T068": {
+      "status": "DONE",
+      "did": "Three checks pass (137 examples, 0 invalid); step 1 of hierarchical-requirement-structure with its insert one byte early failed first at byte 600, then restored",
+      "files": [
+        ".github/scripts/ (run",
+        "not changed)"
+      ]
+    },
+    "T069": {
+      "status": "DONE",
+      "did": "Pull request 212 opened into develop with the definition, its examples, 22 fixture folders, the validator's reader and the prose; Build green",
+      "files": [
+        "etalii.adp (pull request 212)"
+      ]
+    },
+    "T070": {
+      "status": "DONE",
+      "did": "Specified the host feature as spec 029 here, and re-planned Phase 15 to match",
+      "files": [
+        "specs/029-standalone-hierarchical-requirement-designer/standalone-hierarchical-requirement-designer.spec.md",
+        "specs/028-hierarchical-requirement-designer/tasks.md",
+        "plan.md",
+        "contracts/host-handoff.md",
+        "hierarchical-requirement-designer.spec.md"
+      ]
+    },
+    "T071": {
+      "status": "DONE",
+      "did": "Pull request 215 open with a green Build",
+      "files": [
+        "etalii.adp pull request 215"
+      ]
     }
   },
   "verified": [
@@ -1307,8 +1810,8 @@
       "command": "python .github/scripts/terminology-check.py --name etalii.adp",
       "source": "derived",
       "exitCode": 0,
-      "durationSeconds": 5.6,
-      "result": "etalii.adp: 0 error(s), 1603 for review."
+      "durationSeconds": 5.8,
+      "result": "etalii.adp: 0 error(s), 1885 for review."
     },
     {
       "what": "licence",
@@ -1341,6 +1844,32 @@
       "exitCode": 0,
       "durationSeconds": 1.9,
       "result": "ok   specifications/fbl/fixtures/knowledge-equivalence: 3 fixtures read the same 65 elements · ok   definitions/diagrams/agent-activity-diagram.md: its example is valid against agent-activity-diagram.schema.json · 104 example(s), 0 invalid."
+    },
+    {
+      "what": "validator on the definition and its fixtures",
+      "command": "python .github/scripts/validate-examples.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 2.0,
+      "result": "ok   specifications/fbl/fixtures/knowledge-equivalence: 3 fixtures read the same 65 elements · ok   definitions/diagrams/agent-activity-diagram.md: its example is valid against agent-activity-diagram.schema.json · 137 example(s), 0 invalid."
+    }
+  ],
+  "concerns": [
+    {
+      "note": "behavior-tree.fbl cannot write Retry's singular 'time' for a count of one; recorded as a known difference in its doc",
+      "step": "implement"
+    },
+    {
+      "note": "An assessment or reference written against REQ-NEW never resolves, since numbering rewrites no mention; stated in the companion only",
+      "step": "implement"
+    },
+    {
+      "note": "The validator checks fixture splices and undo, not that a host plans them; reads of fixtures are stated, not checked",
+      "step": "implement"
+    },
+    {
+      "note": "Phase 15 (T070, T071) waits for the definition's merge, spec 025 and the maintainer's word to start",
+      "step": "implement"
     }
   ],
   "assistant": "claude-vscode"

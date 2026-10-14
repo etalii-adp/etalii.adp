@@ -1333,7 +1333,8 @@
                 "start",
                 "last-child",
                 "next-sibling",
-                "end-of-document"
+                "end-of-document",
+                "after-header"
               ]
             },
             {
@@ -1803,6 +1804,19 @@
             },
             "unreadable": {
               "type": "boolean"
+            },
+            "document": {
+              "description": "(FBL 0.7) The attributes of the document read, as an element's attributes are stated.",
+              "type": "object",
+              "properties": {
+                "attributes": {
+                  "type": "object"
+                }
+              },
+              "additionalProperties": false,
+              "patternProperties": {
+                "^x-": true
+              }
             }
           },
           "additionalProperties": false,
@@ -1820,7 +1834,19 @@
                 "$ref": "#/$defs/Doc"
               },
               "edit": {
-                "$ref": "#/$defs/Edit"
+                "description": "One change, or (FBL 0.7) the list of changes one transaction makes, planned as one edit (section 15.3).",
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/Edit"
+                  },
+                  {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "#/$defs/Edit"
+                    }
+                  }
+                ]
               },
               "undo": {
                 "type": "boolean"
@@ -1928,6 +1954,11 @@
                 },
                 "attributes": {
                   "type": "object"
+                },
+                "occurrence": {
+                  "description": "(FBL 0.7) Which holder of a duplicated id, by its place in reading order: 2 for the second.",
+                  "type": "integer",
+                  "minimum": 2
                 }
               },
               "additionalProperties": false,
@@ -1958,6 +1989,11 @@
               "properties": {
                 "element": {
                   "type": "string"
+                },
+                "occurrence": {
+                  "description": "(FBL 0.7) Which holder of a duplicated id, by its place in reading order: 2 for the second.",
+                  "type": "integer",
+                  "minimum": 2
                 }
               },
               "additionalProperties": false,

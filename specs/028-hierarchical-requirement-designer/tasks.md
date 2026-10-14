@@ -2,7 +2,7 @@
 
 **Input**: [plan.md](plan.md), [hierarchical-requirement-designer.spec.md](hierarchical-requirement-designer.spec.md), [research.md](research.md), [data-model.md](data-model.md), [contracts/requirement-document.md](contracts/requirement-document.md), [contracts/language-changes.md](contracts/language-changes.md), [contracts/tool-type.md](contracts/tool-type.md), [contracts/host-handoff.md](contracts/host-handoff.md)
 
-**Scale note.** About seventy files in five areas of this repository: three specification languages, one designer type's definition and the example validator, delivered as six more pull requests, each merged before the next begins. Watch two things. `FBL-specification.md`, `fbl.schema.json` and `validate-examples.py` are extended by several phases, never by two at once. And nothing here builds the designer, so no task shows what a person sees: that is Phase 15, in another repository.
+**Scale note.** About seventy files in five areas of this repository: three specification languages, one designer type's definition and the example validator, delivered as six more pull requests, each merged before the next begins. Watch two things. `FBL-specification.md`, `fbl.schema.json` and `validate-examples.py` are extended by several phases, never by two at once. And nothing here builds the designer, so no task shows what a person sees: that is spec 029, which Phase 15 specifies.
 
 **Tests**: not requested as tasks of their own. The plan asks instead that every check this feature adds is seen to fail (SC-008): each pull request's phase has one task that plants the named defects by hand, sees the named failures and restores the files.
 
@@ -21,7 +21,7 @@
 - **The three checks** are `python .github/scripts/validate-examples.py`, `python .github/scripts/terminology-check.py --name etalii.adp` and `python .github/scripts/licence-check.py`.
 - A fixture is a folder under `etalii.adp/specifications/fbl/fixtures/` with its `fixture.json` and its input files. Where a story's cases need more than one input, the folder holds one sub-folder per input, as `knowledge-equivalence` does.
 
-> **Ticking**: a task of `etalii.adp` is ticked when done. The tasks of Phase 15 land in `etalii.adp.ide.standalone` and are ticked only after that repository's pull request is merged.
+> **Ticking**: a task of `etalii.adp` is ticked when done. Every task of this feature lands in `etalii.adp`; the host's own tasks are spec 029's.
 
 > **Merging**: every pull request is merged by the maintainer, with a merge commit. A "deliver" task ends when the pull request is open and its Build is green. The phase after it starts when the pull request is merged.
 
@@ -175,25 +175,25 @@ Files: `etalii.adp/definitions/designers/hierarchical-requirement.des`, `hierarc
 
 **⟶ Wait for pull request 5 to be merged, then Wave 1: independent (different files):**
 
-- [ ] **T041** [P] [US3] Write the binding `markdown`: the family, the claim of `.md` with the envelope as marker, the required header, the sections `Requirements` and `Assessments`, the rules for an item, a requirement and an assessment with their trailing words and continuation slot, the mark line as a statement, and the five declared blocks with `createOnFirstPlacement` ([contracts/tool-type.md](contracts/tool-type.md), Persistence) · etalii.adp/definitions/designers/hierarchical-requirement.fbl
-- [ ] **T042** [P] [US3] Write the schema of the JSON form a requirement document is read into: the envelope's two values, the two marks, `items` nested to any depth with their `requirements`, and `assessments`, refining DED's `$defs/Definition` (research R20, R25) · etalii.adp/definitions/designers/hierarchical-requirement.schema.json
+- [x] **T041** [P] [US3] Write the binding `markdown`: the family, the claim of `.md` with the envelope as marker, the required header, the sections `Requirements` and `Assessments`, the rules for an item, a requirement and an assessment with their trailing words and continuation slot, the mark line as a statement, and the five declared blocks with `createOnFirstPlacement` ([contracts/tool-type.md](contracts/tool-type.md), Persistence) · etalii.adp/definitions/designers/hierarchical-requirement.fbl
+- [x] **T042** [P] [US3] Write the schema of the JSON form a requirement document is read into: the envelope's two values, the two marks, `items` nested to any depth with their `requirements`, and `assessments`, refining DED's `$defs/Definition` (research R20, R25) · etalii.adp/definitions/designers/hierarchical-requirement.schema.json
 
 **⟶ Wait for T041 to finish, then:**
 
-- [ ] **T043** [US3] Add the template to the binding, with CRLF: the envelope, the mark line, the title `{base}`, the legend with its examples in a fenced block, the five top items with at most three requirements each and one sub-item under two of them, numbers written out, and an empty `Assessments` section (FR-006, FR-007, research R19) · etalii.adp/definitions/designers/hierarchical-requirement.fbl
+- [x] **T043** [US3] Add the template to the binding, with CRLF: the envelope, the mark line, the title `{base}`, the legend with its examples in a fenced block, the five top items with at most three requirements each and one sub-item under two of them, numbers written out, and an empty `Assessments` section (FR-006, FR-007, research R19) · etalii.adp/definitions/designers/hierarchical-requirement.fbl
 
 **⟶ Wait for T043 to finish, then Wave 2: independent (different files):**
 
-- [ ] **T044** [P] [US3] Write the DESL 0.2 specification: the label `Hierarchical Requirement Designer`, the seven types with the attribute names of research R25, the enumerations of colours and of assessment kinds with their icons, counted ids with `missing: "assign"`, the settings, the constraints, the `hierarchy` surface with every role, and one operation per gesture of [contracts/tool-type.md](contracts/tool-type.md) · etalii.adp/definitions/designers/hierarchical-requirement.des
-- [ ] **T045** [P] [US3] Write the example document: a web shop three levels deep, with all three markers, descriptions, tags, categories and states, a reference, a `REQ-NEW` entry, assessments of each kind with one resolved, and a legend whose fenced examples are not read · etalii.adp/definitions/designers/examples/web-shop.md
-- [ ] **T046** [P] [US3] Write its registration, with all five blocks · etalii.adp/definitions/designers/examples/web-shop.adp
-- [ ] **T047** [P] [US3] Add the designer to the validator: a `.md` under `definitions/designers/examples/` is an example, a reader takes a requirement document into the JSON form of T042, and a check reports what reading would report: an unreadable bullet, a duplicate number, a mention or an assessment that names nothing, a requirement out of place. The DED example of T004 now reads through it too (research R20) · etalii.adp/.github/scripts/validate-examples.py
+- [x] **T044** [P] [US3] Write the DESL 0.2 specification: the label `Hierarchical Requirement Designer`, the seven types with the attribute names of research R25, the enumerations of colours and of assessment kinds with their icons, counted ids with `missing: "assign"`, the settings, the constraints, the `hierarchy` surface with every role, and one operation per gesture of [contracts/tool-type.md](contracts/tool-type.md) · etalii.adp/definitions/designers/hierarchical-requirement.des
+- [x] **T045** [P] [US3] Write the example document: a web shop three levels deep, with all three markers, descriptions, tags, categories and states, a reference, a `REQ-NEW` entry, assessments of each kind with one resolved, and a legend whose fenced examples are not read · etalii.adp/definitions/designers/examples/web-shop.md
+- [x] **T046** [P] [US3] Write its registration, with all five blocks · etalii.adp/definitions/designers/examples/web-shop.adp
+- [x] **T047** [P] [US3] Add the designer to the validator: a `.md` under `definitions/designers/examples/` is an example, a reader takes a requirement document into the JSON form of T042, and a check reports what reading would report: an unreadable bullet, a duplicate number, a mention or an assessment that names nothing, a requirement out of place. The DED example of T004 now reads through it too (research R20) · etalii.adp/.github/scripts/validate-examples.py
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T048** [US3] Write the companion: everything a person or an agent needs to write a valid requirement document from it alone, the mapping to the JSON form, the known limit of a title's last word, the looks taken from the Knowledge designer, and what DESL cannot express (FR-021, SC-007) · etalii.adp/definitions/designers/hierarchical-requirement.md
-- [ ] **T049** [US3] Give a worker the companion and nothing else, ask it for a requirement document with an item, two requirements, a tag, a reference and an assessment, and run the validator's reader on the result. Correct the companion until the result reads without a finding. The document is not kept (SC-007, User Story 3 scenario 2) · etalii.adp/definitions/designers/hierarchical-requirement.md
-- [ ] **T050** [US3] Plant in `web-shop.md` and see fail, one at a time, then restore: a bullet with an unknown prefix, a second `REQ-0001`, `[REQ-0999]` in a description, an assessment about `ITEM-0999`, a requirement at the top level, a bullet under a requirement, and no envelope. Plant in `hierarchical-requirement.des` a role that names an undeclared attribute (SC-005, SC-008) · etalii.adp/definitions/designers/examples/web-shop.md, etalii.adp/definitions/designers/hierarchical-requirement.des
+- [x] **T048** [US3] Write the companion: everything a person or an agent needs to write a valid requirement document from it alone, the mapping to the JSON form, the known limit of a title's last word, the looks taken from the Knowledge designer, and what DESL cannot express (FR-021, SC-007) · etalii.adp/definitions/designers/hierarchical-requirement.md
+- [x] **T049** [US3] Give a worker the companion and nothing else, ask it for a requirement document with an item, two requirements, a tag, a reference and an assessment, and run the validator's reader on the result. Correct the companion until the result reads without a finding. The document is not kept (SC-007, User Story 3 scenario 2) · etalii.adp/definitions/designers/hierarchical-requirement.md
+- [x] **T050** [US3] Plant in `web-shop.md` and see fail, one at a time, then restore: a bullet with an unknown prefix, a second `REQ-0001`, `[REQ-0999]` in a description, an assessment about `ITEM-0999`, a requirement at the top level, a bullet under a requirement, and no envelope. Plant in `hierarchical-requirement.des` a role that names an undeclared attribute (SC-005, SC-008) · etalii.adp/definitions/designers/examples/web-shop.md, etalii.adp/definitions/designers/hierarchical-requirement.des
 
 **Checkpoint**: the definition validates, and a document written from the companion alone reads without a finding. Each phase from 7 to 13 can now start, in any order or at once.
 
@@ -211,8 +211,8 @@ Files: `etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-read/`, 
 
 **Wave 1: independent (different files):**
 
-- [ ] **T051** [P] [US1] Add the reading fixture: a document three levels deep whose items hold requirements at every depth, with descriptions, every marker and the author's text between the parts, read into its elements with their parents, and a document with no `Requirements` heading, read as empty with no finding (FR-008, FR-055) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-read/
-- [ ] **T052** [P] [US1] Add the fixture for the `collapsed` block: the first collapse creates the registration, entries stand in ordinal order, an expand removes its entry, an entry whose number is not in the model is pruned with the next write, and no step joins the history (FR-020, research R12) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-collapsed/
+- [x] **T051** [P] [US1] Add the reading fixture: a document three levels deep whose items hold requirements at every depth, with descriptions, every marker and the author's text between the parts, read into its elements with their parents, and a document with no `Requirements` heading, read as empty with no finding (FR-008, FR-055) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-read/
+- [x] **T052** [P] [US1] Add the fixture for the `collapsed` block: the first collapse creates the registration, entries stand in ordinal order, an expand removes its entry, an entry whose number is not in the model is pruned with the next write, and no step joins the history (FR-020, research R12) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-collapsed/
 
 **Checkpoint**: a host's conformance run can show User Story 1's reading.
 
@@ -230,8 +230,8 @@ Files: `etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-faults/`
 
 **Wave 1: independent (different files):**
 
-- [ ] **T053** [P] [US2] Add the faults fixture: one document with every fault of the table "What reading reports" in [contracts/requirement-document.md](contracts/requirement-document.md), each read with its one finding and every other entry read as usual, and a file without its envelope, read as unreadable with one `std.unparseable` finding (FR-053, FR-054, SC-005) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-faults/
-- [ ] **T054** [P] [US2] Add the edits fixture: a save without an edit has no splice, a change of one title splices that entry only, an edit while an entry is `REQ-NEW` numbers it in the same edit and rewrites the mark line, a missing mark line is written again with the next numbering, and a duplicate is given the next number (FR-013, FR-014, FR-025, SC-004) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-edits/
+- [x] **T053** [P] [US2] Add the faults fixture: one document with every fault of the table "What reading reports" in [contracts/requirement-document.md](contracts/requirement-document.md), each read with its one finding and every other entry read as usual, and a file without its envelope, read as unreadable with one `std.unparseable` finding (FR-053, FR-054, SC-005) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-faults/
+- [x] **T054** [P] [US2] Add the edits fixture: a save without an edit has no splice, a change of one title splices that entry only, an edit while an entry is `REQ-NEW` numbers it in the same edit and rewrites the mark line, a missing mark line is written again with the next numbering, and a duplicate is given the next number (FR-013, FR-014, FR-025, SC-004) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-edits/
 
 **Checkpoint**: a host's conformance run can show User Story 2's bytes.
 
@@ -249,8 +249,8 @@ Files: `etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-new/`, `
 
 **Wave 1: independent (different files):**
 
-- [ ] **T055** [P] [US4] Add the fixture that reads the template through its binding with no finding of severity warning or above, as `agent-activity-new` does, and counts its levels and its requirements against FR-007 (FR-006, FBL section 13) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-new/
-- [ ] **T056** [P] [US4] Add the structure fixture: a requirement added below a selected one with its sibling's marker and indentation and its number from the mark, a sub-item added after the item's last child, the first item in a file without the heading, an item with everything in it moved across depths with no number changed, a delete, and an add undone with the mark restored. The mark starts above the highest number in the file, so the new number shows that a deleted one is not given again (FR-010, FR-011, FR-012, FR-022, FR-023, SC-003) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-structure/
+- [x] **T055** [P] [US4] Add the fixture that reads the template through its binding with no finding of severity warning or above, as `agent-activity-new` does, and counts its levels and its requirements against FR-007 (FR-006, FBL section 13) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-new/
+- [x] **T056** [P] [US4] Add the structure fixture: a requirement added below a selected one with its sibling's marker and indentation and its number from the mark, a sub-item added after the item's last child, the first item in a file without the heading, an item with everything in it moved across depths with no number changed, a delete, and an add undone with the mark restored. The mark starts above the highest number in the file, so the new number shows that a deleted one is not given again (FR-010, FR-011, FR-012, FR-022, FR-023, SC-003) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-structure/
 
 **Checkpoint**: a host's conformance run can show User Story 4's bytes.
 
@@ -266,7 +266,7 @@ Files: `etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-assessme
 
 ### Implementation
 
-- [ ] **T057** [US5] Add the assessments fixture: the four kinds read in any case, one about an item with no requirements, a checkbox left out, a detail, the first assessment appending the section at the end of the file, an add, a change, a resolve and a reopen as one `replace-value` of one character each, a remove, and an assessment whose entry is gone, kept and read with `std.mentions` (FR-032 to FR-035, FR-038, FR-039) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-assessments/
+- [x] **T057** [US5] Add the assessments fixture: the four kinds read in any case, one about an item with no requirements, a checkbox left out, a detail, the first assessment appending the section at the end of the file, an add, a change, a resolve and a reopen as one `replace-value` of one character each, a remove, and an assessment whose entry is gone, kept and read with `std.mentions` (FR-032 to FR-035, FR-038, FR-039) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-assessments/
 
 **Checkpoint**: a host's conformance run can show User Story 5's bytes.
 
@@ -282,7 +282,7 @@ Files: `etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-referenc
 
 ### Implementation
 
-- [ ] **T058** [US6] Add the references fixture: mentions read in a description and in an assessment's text and detail and not in a title, a link with a target read as no mention, a description set with `[REQ-0002]` in it, a referred requirement moved with every reference unchanged, and a referred requirement deleted with the reference's text kept and `std.mentions` read afterwards (FR-041, FR-043, FR-044, SC-003) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-references/
+- [x] **T058** [US6] Add the references fixture: mentions read in a description and in an assessment's text and detail and not in a title, a link with a target read as no mention, a description set with `[REQ-0002]` in it, a referred requirement moved with every reference unchanged, and a referred requirement deleted with the reference's text kept and `std.mentions` read afterwards (FR-041, FR-043, FR-044, SC-003) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-references/
 
 **Checkpoint**: a host's conformance run can show User Story 6's bytes.
 
@@ -300,8 +300,8 @@ Files: `etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-tags/`, 
 
 **Wave 1: independent (different files):**
 
-- [ ] **T059** [P] [US7] Add the tags fixture over the Markdown file: a tag set on an item and on a requirement, written before the category and the state, a space typed in a name written as `-`, a tag removed from one entry, a tag carried by several entries renamed in one edit, and a tag deleted from every carrier in one edit (FR-026, FR-027, FR-028) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-tags/
-- [ ] **T060** [P] [US7] Add the tag-list fixture over the registration: a document without a registration read with its tags as implicit members in order of first appearance, the first recolour creating the registration with the whole list, a recolour, a reorder as a `remove-entry` and an `insert-entry`, and a rename and a delete of the member's entry, with no splice in the Markdown file for a colour or a place (FR-005, FR-029, FR-049, SC-006) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-tag-list/
+- [x] **T059** [P] [US7] Add the tags fixture over the Markdown file: a tag set on an item and on a requirement, written before the category and the state, a space typed in a name written as `-`, a tag removed from one entry, a tag carried by several entries renamed in one edit, and a tag deleted from every carrier in one edit (FR-026, FR-027, FR-028) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-tags/
+- [x] **T060** [P] [US7] Add the tag-list fixture over the registration: a document without a registration read with its tags as implicit members in order of first appearance, the first recolour creating the registration with the whole list, a recolour, a reorder as a `remove-entry` and an `insert-entry`, and a rename and a delete of the member's entry, with no splice in the Markdown file for a colour or a place (FR-005, FR-029, FR-049, SC-006) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-tag-list/
 
 **Checkpoint**: a host's conformance run can show User Story 7's bytes.
 
@@ -319,8 +319,8 @@ Files: `etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-category
 
 **Wave 1: independent (different files):**
 
-- [ ] **T061** [P] [US8] Add the category and state fixture: each set on a requirement and written after the tags, a second `category:` word read as not counting and kept as written, a state changed, both removed, a category renamed on every carrier in one edit, and the first change of a list writing the initial members with it (FR-030, FR-031) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-category-state/
-- [ ] **T062** [P] [US8] Add the filters fixture over the registration: a filter stored with its sorting, a second one after it, one renamed, one removed, each a step of the history, and a name or a query with `: ` refused (FR-048, FR-049) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-filters/
+- [x] **T061** [P] [US8] Add the category and state fixture: each set on a requirement and written after the tags, a second `category:` word read as not counting and kept as written, a state changed, both removed, a category renamed on every carrier in one edit, and the first change of a list writing the initial members with it (FR-030, FR-031) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-category-state/
+- [x] **T062** [P] [US8] Add the filters fixture over the registration: a filter stored with its sorting, a second one after it, one renamed, one removed, each a step of the history, and a name or a query with `: ` refused (FR-048, FR-049) · etalii.adp/specifications/fbl/fixtures/hierarchical-requirement-filters/
 
 **Checkpoint**: every case of "Examples and fixtures" in [contracts/tool-type.md](contracts/tool-type.md) is stated by a fixture.
 
@@ -334,31 +334,31 @@ Files: `etalii.adp/definitions/designers/README.md`, `etalii.adp/CLAUDE.md`, `et
 
 **⟶ Wait for Phases 6 to 13 to finish, then Wave 1: independent (different files):**
 
-- [ ] **T063** [P] Add the designer's row, and say that a designer's document may be Markdown with its envelope on line 1 · etalii.adp/definitions/designers/README.md
-- [ ] **T064** [P] Name Markdown among the formats of a designer type's example documents, where "Writing specifications" describes what the validator checks · etalii.adp/CLAUDE.md
-- [ ] **T065** [P] Say in the designer's row what a DED definition's file may be, where the table names `.ded` · etalii.adp/README.md
-- [ ] **T066** [P] Say the same where the glossary names the designer's definition file · etalii.adp/docs/terminology.md
+- [x] **T063** [P] Add the designer's row, and say that a designer's document may be Markdown with its envelope on line 1 · etalii.adp/definitions/designers/README.md
+- [x] **T064** [P] Name Markdown among the formats of a designer type's example documents, where "Writing specifications" describes what the validator checks · etalii.adp/CLAUDE.md
+- [x] **T065** [P] Say in the designer's row what a DED definition's file may be, where the table names `.ded` · etalii.adp/README.md
+- [x] **T066** [P] Say the same where the glossary names the designer's definition file · etalii.adp/docs/terminology.md
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T067** Walk the twelve cases of "Examples and fixtures" in [contracts/tool-type.md](contracts/tool-type.md) and FR-001 to FR-063, and confirm that a fixture step, a section or an operation states each. What nothing states becomes a correction in the phase that owns the file, or a line for T070, and is listed in pull request 6's description (SC-003 to SC-007) · etalii.adp (pull request 6's description)
-- [ ] **T068** Run the three checks. Then plant a wrong offset in one step of one `hierarchical-requirement-*` fixture, see the validator fail at that byte, and restore it (SC-008) · etalii.adp/.github/scripts/ (run, not changed)
-- [ ] **T069** Deliver pull request 6: commit, push and open the pull request into `develop`, naming this folder, with a green Build · etalii.adp (pull request 6)
+- [x] **T067** Walk the twelve cases of "Examples and fixtures" in [contracts/tool-type.md](contracts/tool-type.md) and FR-001 to FR-063, and confirm that a fixture step, a section or an operation states each. What nothing states becomes a correction in the phase that owns the file, or a line for T070, and is listed in pull request 6's description (SC-003 to SC-007) · etalii.adp (pull request 6's description)
+- [x] **T068** Run the three checks. Then plant a wrong offset in one step of one `hierarchical-requirement-*` fixture, see the validator fail at that byte, and restore it (SC-008) · etalii.adp/.github/scripts/ (run, not changed)
+- [x] **T069** Deliver pull request 6: commit, push and open the pull request into `develop`, naming this folder, with a green Build · etalii.adp (pull request 6)
 
 **Checkpoint**: the definition is on `develop` once the maintainer merges. Everything this repository delivers is done.
 
 ---
 
-## Phase 15: The hand-off (pull request 7, in the standalone host)
+## Phase 15: The hand-off (pull request 7)
 
-**Purpose**: the designer is built first in the standalone host, which plans with spec-workflow in its own repository (FR-063). This phase waits for two things: pull request 6 merged, and spec 025-standalone-code-structure done with the maintainer's word to start.
+**Purpose**: the designer is built first in the standalone host (FR-063), from a specification of its own. On 2026-10-14 the maintainer asked for that specification here, as a feature of its own, and not in the host's `.spec-workflow/` as this phase first had it. This phase waits for pull request 6 to be merged. Building the designer waits, in spec 029, for spec 025-standalone-code-structure to be done and for the maintainer's word.
 
-Files: `etalii.adp.ide.standalone/.spec-workflow/specs/hierarchical-requirement-designer/`.
+Files: `etalii.adp/specs/029-standalone-hierarchical-requirement-designer/`.
 
-- [ ] **T070** Write the host's spec-workflow specification from the merged definition and [contracts/host-handoff.md](contracts/host-handoff.md): what the host builds, what it settles, the five success criteria only it can show (SC-001, SC-002, SC-009, SC-010, SC-011), the user-facing requirements FR-015 to FR-024, FR-036, FR-037, FR-040, FR-042, FR-045 to FR-047 and FR-050 to FR-052, and the conformance it declares · etalii.adp.ide.standalone/.spec-workflow/specs/hierarchical-requirement-designer/requirements.md
-- [ ] **T071** Open the pull request in `etalii.adp.ide.standalone`, naming this folder and the etalii.adp commit of the merged definition. Tick T070 and this task once it is merged · etalii.adp.ide.standalone (pull request 7)
+- [x] **T070** Specify the host's feature, spec 029, from the merged definition and [contracts/host-handoff.md](contracts/host-handoff.md): what the host builds, what it settles, the five success criteria only it can show (SC-001, SC-002, SC-009, SC-010, SC-011), the user-facing requirements FR-015 to FR-024, FR-036, FR-037, FR-040, FR-042, FR-045 to FR-047 and FR-050 to FR-052, the line T067 left for it (FR-042), and the conformance it declares · etalii.adp/specs/029-standalone-hierarchical-requirement-designer/standalone-hierarchical-requirement-designer.spec.md
+- [x] **T071** Deliver pull request 7: commit, push and open the pull request into `develop`, naming this folder, spec 029's folder and the etalii.adp commit of the merged definition (`bfb0c27`), with a green Build · etalii.adp (pull request 7)
 
-**Checkpoint**: the standalone host has its own specification of the designer, and this feature is complete.
+**Checkpoint**: the standalone host has its own specification of the designer, spec 029, and this feature is complete once the maintainer merges.
 
 ---
 
@@ -371,7 +371,7 @@ Files: `etalii.adp.ide.standalone/.spec-workflow/specs/hierarchical-requirement-
 - **User Story 3 (Phase 6)** needs all three languages. It blocks Phases 7 to 13, which replay fixtures over its binding.
 - **Phases 7 to 13** need Phase 6 and nothing of each other. Each owns its fixture folders, so they can run at once, one worker per phase.
 - **Polish (Phase 14)** needs Phases 6 to 13 and ends with pull request 6.
-- **The hand-off (Phase 15)** needs pull request 6 merged, spec 025 done and the maintainer's word.
+- **The hand-off (Phase 15)** needs pull request 6 merged. Building the designer is spec 029's, and waits there for spec 025 and the maintainer's word.
 
 ### Waves within each phase
 
