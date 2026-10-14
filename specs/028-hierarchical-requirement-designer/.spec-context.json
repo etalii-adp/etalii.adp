@@ -139,6 +139,102 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T15:33:59.557Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:35:02.969Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:41:33.577Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:41:55.982Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T011",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:43:00.101Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:43:01.057Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:44:31.885Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:45:05.023Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T016",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:50:21.134Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T015",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:51:33.452Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T014",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:55:03.696Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T018",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:55:04.199Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T019",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:56:55.703Z"
     }
   ],
   "last_action": "living specs evaluated — no capabilities matched",
@@ -744,7 +840,7 @@
     }
   },
   "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
-  "currentTask": "T007",
+  "currentTask": "T019",
   "task_summaries": {
     "T002": {
       "status": "DONE",
@@ -793,6 +889,91 @@
       "did": "Pull request 201 opened into develop, naming the feature folder; Build green (examples, terminology, licence)",
       "files": [
         "etalii.adp (pull request 201)"
+      ]
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "etalii.adp.site keeps version copies under src/content/reference/<language>/<version>/ (ded 0.1, desl 0.1, fbl 0.1 and 0.6); opened etalii-adp/etalii.adp.site#122 naming this folder; to be recorded in pull request 3's description",
+      "files": [
+        "etalii.adp.site (issue 122)"
+      ]
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "FBL 0.7: header, status, 2.1, 2.7, six families in 1.5, sections in 3.1, bullets in 3.2, and section 4.8: columns, line kinds in document order, sections, spans, rules, continuation, what is unbound",
+      "files": [
+        "specifications/fbl/FBL-specification.md"
+      ]
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "FBL 0.7 rules: line and within in 5.1, the continuation slot in 5.2, parent by indentation in 5.5, the header against line 1 in 5.6, never unreadable for its family in 7.5",
+      "files": [
+        "specifications/fbl/FBL-specification.md"
+      ]
+    },
+    "T011": {
+      "status": "DONE",
+      "did": "FBL 0.7 writing: Families column of 6.1, the section as container and its heading as create.text in 6.2, the new text of bullets in 6.3 (new item, where it goes, missing section, values, continuation, move re-indented), 5.5, 6.4, 15.1, Appendix A",
+      "files": [
+        "specifications/fbl/FBL-specification.md"
+      ]
+    },
+    "T012": {
+      "status": "DONE",
+      "did": "FBL 7.2: before applying an edit a host compares the body with the bytes the edit was planned against, refuses with a reason, writes nothing and reads the body again; 7.3 unchanged",
+      "files": [
+        "specifications/fbl/FBL-specification.md"
+      ]
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "fbl.schema.json: 0.7 for fbl, bullets in Family, the binding's sections and SectionRule, within and caseInsensitive for bullets, the continuation slot in Slot and AttributeBinding",
+      "files": [
+        "specifications/fbl/fbl.schema.json"
+      ]
+    },
+    "T017": {
+      "status": "DONE",
+      "did": "resolve_names: in a bullets binding every within names a section the binding declares",
+      "files": [
+        ".github/scripts/validate-examples.py"
+      ]
+    },
+    "T016": {
+      "status": "DONE",
+      "did": "bullets-edits fixture: topics.fbl binding, nine edits with undo (adds by sibling, first child with notes, group and continuation sets, nested remove, move across depths) and no-section/ for the section's creation; validator ok",
+      "files": [
+        "specifications/fbl/fixtures/bullets-edits/"
+      ]
+    },
+    "T015": {
+      "status": "DONE",
+      "did": "Added the bullets-read fixture: a small outline binding (fbl 0.7, sections, within, continuation) and a Markdown input covering the three markers, a tab indent, continuation with a blank line, fences in and outside items, a thematic break, an item outside every section, a statement rule and a section ended by a same-level heading",
+      "files": [
+        "specifications/fbl/fixtures/bullets-read/"
+      ]
+    },
+    "T014": {
+      "status": "DONE",
+      "did": "behavior-tree.fbl: Agent Behavior Modelling's Markdown as a bullets binding, one rule per keyword, Retry's count as attempts, an implicit Do rule, ids derived from place, notes as continuation, ## Behavior appended on the first add; ten known differences in its doc",
+      "files": [
+        "specifications/fbl/behavior-tree.fbl"
+      ]
+    },
+    "T018": {
+      "status": "DONE",
+      "did": "behavior-tree-read fixture: a small CRLF instruction file read through behavior-tree.fbl (keywords, Retry up to 1 time and 2 times, an implicit Do, place ids, two-paragraph notes, nesting) with four edits and their undos, and first-add/ for the section appended on the first add; validator ok",
+      "files": [
+        "specifications/fbl/fixtures/behavior-tree-read/"
+      ]
+    },
+    "T019": {
+      "status": "DONE",
+      "did": "Planted and seen fail, then restored: bullets-edits step 17 (the move) with a column missing (first at byte 229), behavior-tree.fbl with a within naming no section (a name problem) and with family misspelt (a schema error)",
+      "files": [
+        "specifications/fbl/fixtures/bullets-edits/fixture.json",
+        "specifications/fbl/behavior-tree.fbl"
       ]
     }
   },

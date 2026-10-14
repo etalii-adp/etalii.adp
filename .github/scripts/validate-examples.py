@@ -24,7 +24,7 @@ registration under `specifications/fbl/` is parsed from its line form into `fbl.
 replayed: every step's splices must turn the document before the step into the document it expects, byte for byte,
 and an undo must return the document the undone edit started from (FBL section 15.3). Every `*.fbl` that validates is
 then checked for its names (FBL section 14.1, step 4): every rule a `parent`, `cascade`, `reference.to`, `within` or
-`files` names exists in its binding, and a reference's `by` is an attribute every rule it names binds, or `id` when
+`files` names exists in its binding (in the `bullets` family `within` names sections), and a reference's `by` is an attribute every rule it names binds, or `id` when
 every rule it names stores its id with `id.from` (the specification languages reserve `id`, so it is never an attribute's name).
 The fixtures under a folder named `*-equivalence` read one model in different formats: their `read` must be identical.
 
@@ -360,6 +360,8 @@ def resolve_names(document) -> list[str]:
             for index, rule in enumerate(binding.get(kind, [])):
                 rules[rule["name"]] = (rule, f"{base}/{kind}/{index}")
         file_rules = {rule["name"] for rule in binding.get("body", {}).get("files", [])}
+        sections = {section["name"] for section in binding.get("sections", [])}
+        bullets = binding.get("body", {}).get("family") == "bullets"
 
         def known(names, pointer, allowed=()):
             for name in names:
@@ -369,7 +371,12 @@ def resolve_names(document) -> list[str]:
         for name, (rule, pointer) in rules.items():
             known(rule.get("parent", {}).get("rules", []), pointer + "/parent/rules")
             known(rule.get("remove", {}).get("cascade", []), pointer + "/remove/cascade")
-            known(rule.get("within", []), pointer + "/within", allowed=("^",))
+            if bullets:  # a bullets rule's within names sections (FBL section 4.8)
+                for section in rule.get("within", []):
+                    if section not in sections:
+                        problems.append(f"at {pointer}/within: names the section {section!r}, which this binding does not have")
+            else:
+                known(rule.get("within", []), pointer + "/within", allowed=("^",))
             for file_rule in rule.get("files", []):
                 if file_rule not in file_rules:
                     problems.append(f"at {pointer}/files: names the file rule {file_rule!r}, which this binding does not have")
