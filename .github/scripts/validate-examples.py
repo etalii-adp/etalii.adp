@@ -512,9 +512,16 @@ def resolve_disl(document) -> list[str]:
     return problems
 
 
+def type_list(names) -> list:
+    """A TypeRefs value, one type or a list of them (DESL section 2.2), as a list."""
+    return [names] if isinstance(names, str) else list(names)
+
+
 def resolve_desl(path: Path, document) -> list[str]:
-    """Checks the names a DESL specification's surface and persistence refer to (DESL section 10.1, step 4) and
-    returns a problem per unresolved name, each with the JSON Pointer of where it is used."""
+    """Checks the names a DESL specification's surface and persistence refer to (DESL section 10.1, step 4), for a
+    table or (DESL 0.2) a hierarchy surface, with the types of each mentions facet, the mark of each counter rule and the
+    blocks persistence.settings keeps, and returns a problem per unresolved name, each with the JSON Pointer of where it
+    is used."""
     problems = []
     types = document.get("metamodel", {}).get("types", {})
     type_map = document.get("persistence", {}).get("typeMap", {})
@@ -541,33 +548,78 @@ def resolve_desl(path: Path, document) -> list[str]:
             problems.append(f"at {pointer}: the type {owner!r} has no attribute {name!r}")
 
     surface = document.get("surface", {})
-    columns, cells, views = surface.get("columns", {}), surface.get("cells", {}), surface.get("views", {})
-    if element_type(columns.get("type"), "/surface/columns/type"):
-        for role in ("name", "valueType", "title", "parent"):
-            attribute(columns["type"], columns.get(role), f"/surface/columns/{role}")
-        options = columns.get("options")
-        if options and element_type(options["type"], "/surface/columns/options/type"):
-            if options["type"] not in children_of(columns["type"]):
-                problems.append(f"at /surface/columns/options/type: {options['type']!r} is not contained in {columns['type']!r}")
-            for role in ("name", "colour"):
-                attribute(options["type"], options.get(role), f"/surface/columns/options/{role}")
-    element_type(surface.get("rows", {}).get("type"), "/surface/rows/type")
-    if element_type(cells.get("type"), "/surface/cells/type"):
-        attribute(cells["type"], cells.get("column"), "/surface/cells/column")
-        if "items" in cells and element_type(cells["items"], "/surface/cells/items") and cells["items"] not in children_of(cells["type"]):
-            problems.append(f"at /surface/cells/items: {cells['items']!r} is not contained in {cells['type']!r}")
-    if element_type(views.get("type"), "/surface/views/type"):
-        attribute(views["type"], views.get("name"), "/surface/views/name")
-        attribute("the document", views.get("active"), "/surface/views/active", document.get("metamodel", {}).get("document", {}).get("attributes", {}))
-        for role, name in views.get("settings", {}).items():
-            element_type(name, f"/surface/views/settings/{role}")
-    for name, value_type in surface.get("valueTypes", {}).items():
-        holder = cells.get("items") if value_type.get("many") else cells.get("type")
-        if holder in types:
-            attribute(holder, value_type.get("key"), f"/surface/valueTypes/{name}/key")
-        for target in value_type.get("converts", {}):
-            if target not in surface.get("valueTypes", {}):
-                problems.append(f"at /surface/valueTypes/{name}/converts: names the value type {target!r}, which the surface does not declare")
+    if surface.get("kind") == "hierarchy":  # DESL 0.2, section 7.7
+        levels, entries = surface.get("levels", {}), surface.get("entries", {})
+        for role, members in (("levels", levels), ("entries", entries)):
+            if element_type(members.get("type"), f"/surface/{role}/type"):
+                for part in ("title", "description"):
+                    attribute(members["type"], members.get(part), f"/surface/{role}/{part}")
+        if levels.get("type") in types:
+            for contained in (levels["type"], entries.get("type")):
+                if contained in types and contained not in children_of(levels["type"]):
+                    problems.append(f"at /surface/levels/type: {contained!r} is not contained in {levels['type']!r}")
+        for name, label in surface.get("labels", {}).items():
+            for index, owner in enumerate(type_list(label.get("on", []))):
+                if element_type(owner, f"/surface/labels/{name}/on/{index}"):
+                    attribute(owner, name, f"/surface/labels/{name}")
+            options = label.get("options", {})
+            if element_type(options.get("type"), f"/surface/labels/{name}/options/type"):
+                for part in ("name", "colour"):
+                    attribute(options["type"], options.get(part), f"/surface/labels/{name}/options/{part}")
+        for role, parts in (("notes", ("about", "kind", "text", "detail", "resolved")), ("filters", ("name", "query"))):
+            members = surface.get(role)
+            if members and element_type(members.get("type"), f"/surface/{role}/type"):
+                for part in parts:
+                    attribute(members["type"], members.get(part), f"/surface/{role}/{part}")
+        if "collapsed" in surface:
+            for members in (levels, entries):
+                if members.get("type") in types:
+                    attribute(members["type"], surface["collapsed"], "/surface/collapsed")
+    else:
+        columns, cells, views = surface.get("columns", {}), surface.get("cells", {}), surface.get("views", {})
+        if element_type(columns.get("type"), "/surface/columns/type"):
+            for role in ("name", "valueType", "title", "parent"):
+                attribute(columns["type"], columns.get(role), f"/surface/columns/{role}")
+            options = columns.get("options")
+            if options and element_type(options["type"], "/surface/columns/options/type"):
+                if options["type"] not in children_of(columns["type"]):
+                    problems.append(f"at /surface/columns/options/type: {options['type']!r} is not contained in {columns['type']!r}")
+                for role in ("name", "colour"):
+                    attribute(options["type"], options.get(role), f"/surface/columns/options/{role}")
+        element_type(surface.get("rows", {}).get("type"), "/surface/rows/type")
+        if element_type(cells.get("type"), "/surface/cells/type"):
+            attribute(cells["type"], cells.get("column"), "/surface/cells/column")
+            if "items" in cells and element_type(cells["items"], "/surface/cells/items") and cells["items"] not in children_of(cells["type"]):
+                problems.append(f"at /surface/cells/items: {cells['items']!r} is not contained in {cells['type']!r}")
+        if element_type(views.get("type"), "/surface/views/type"):
+            attribute(views["type"], views.get("name"), "/surface/views/name")
+            attribute("the document", views.get("active"), "/surface/views/active", document.get("metamodel", {}).get("document", {}).get("attributes", {}))
+            for role, name in views.get("settings", {}).items():
+                element_type(name, f"/surface/views/settings/{role}")
+        for name, value_type in surface.get("valueTypes", {}).items():
+            holder = cells.get("items") if value_type.get("many") else cells.get("type")
+            if holder in types:
+                attribute(holder, value_type.get("key"), f"/surface/valueTypes/{name}/key")
+            for target in value_type.get("converts", {}):
+                if target not in surface.get("valueTypes", {}):
+                    problems.append(f"at /surface/valueTypes/{name}/converts: names the value type {target!r}, which the surface does not declare")
+    for type_name, declaration in types.items():  # DESL 0.2: what a mentions facet may name (section 4.3)
+        for name, declared in declaration.get("attributes", {}).items():
+            for index, target in enumerate(type_list(declared.get("mentions", {}).get("types", []))):
+                element_type(target, f"/metamodel/types/{type_name}/attributes/{name}/mentions/types/{index}")
+    document_attributes = document.get("metamodel", {}).get("document", {}).get("attributes", {})
+    for type_name, rule in document.get("persistence", {}).get("ids", {}).get("types", {}).items():
+        if rule.get("strategy") == "counter" and rule.get("mark") not in document_attributes:
+            problems.append(f"at /persistence/ids/types/{type_name}/mark: names no attribute of the document: {rule.get('mark')!r}")
+    settings = document.get("persistence", {}).get("settings", {})
+    for name, setting in settings.items():  # DESL 0.2, section 5.5
+        pointer = f"/persistence/settings/{name}"
+        if "type" in setting and element_type(setting["type"], f"{pointer}/type"):
+            for part in ("key", "value"):
+                attribute(setting["type"], setting.get(part), f"{pointer}/{part}")
+        for index, owner in enumerate(type_list(setting.get("of", []))):
+            if element_type(owner, f"{pointer}/of/{index}"):
+                attribute(owner, setting.get("attribute"), f"{pointer}/attribute")
     for index, reference in enumerate(document.get("persistence", {}).get("bindings", [])):
         pointer = f"/persistence/bindings/{index}"
         file, _, binding_name = reference.partition("#")
@@ -583,6 +635,10 @@ def resolve_desl(path: Path, document) -> list[str]:
             for rule in binding.get(kind, []):
                 if rule["type"] not in types and rule["type"] not in type_map:
                     problems.append(f"at {pointer}: the rule {rule['name']!r} produces the type {rule['type']!r}, which neither the metamodel nor the type map declares")
+        declared_blocks = binding.get("registration", {}).get("blocks", {})
+        for name in settings:
+            if name not in declared_blocks:
+                problems.append(f"at /persistence/settings/{name}: the binding {reference!r} declares no registration block {name!r}")
     return problems
 
 
