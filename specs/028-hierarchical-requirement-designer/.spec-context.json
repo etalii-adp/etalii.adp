@@ -627,6 +627,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T18:55:43.897Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T069",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T19:29:54.109Z"
     }
   ],
   "last_action": "T001 to T068 done; pull requests 201, 203, 204, 208 merged; 210 (language corrections) open with a green Build; the definition waits for its merge",
@@ -1252,7 +1260,7 @@
     }
   },
   "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
-  "currentTask": "T068",
+  "currentTask": "T069",
   "task_summaries": {
     "T002": {
       "status": "DONE",
@@ -1733,6 +1741,13 @@
       "files": [
         ".github/scripts/ (run",
         "not changed)"
+      ]
+    },
+    "T069": {
+      "status": "DONE",
+      "did": "Pull request 212 opened into develop with the definition, its examples, 22 fixture folders, the validator's reader and the prose; Build green",
+      "files": [
+        "etalii.adp (pull request 212)"
       ]
     }
   },

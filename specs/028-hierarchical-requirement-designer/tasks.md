@@ -343,7 +343,7 @@ Files: `etalii.adp/definitions/designers/README.md`, `etalii.adp/CLAUDE.md`, `et
 
 - [x] **T067** Walk the twelve cases of "Examples and fixtures" in [contracts/tool-type.md](contracts/tool-type.md) and FR-001 to FR-063, and confirm that a fixture step, a section or an operation states each. What nothing states becomes a correction in the phase that owns the file, or a line for T070, and is listed in pull request 6's description (SC-003 to SC-007) · etalii.adp (pull request 6's description)
 - [x] **T068** Run the three checks. Then plant a wrong offset in one step of one `hierarchical-requirement-*` fixture, see the validator fail at that byte, and restore it (SC-008) · etalii.adp/.github/scripts/ (run, not changed)
-- [ ] **T069** Deliver pull request 6: commit, push and open the pull request into `develop`, naming this folder, with a green Build · etalii.adp (pull request 6)
+- [x] **T069** Deliver pull request 6: commit, push and open the pull request into `develop`, naming this folder, with a green Build · etalii.adp (pull request 6)
 
 **Checkpoint**: the definition is on `develop` once the maintainer merges. Everything this repository delivers is done.
 
