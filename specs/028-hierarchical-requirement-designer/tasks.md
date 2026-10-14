@@ -47,14 +47,14 @@ Files: `etalii.adp/specifications/ded/DED-specification.md`, `ded.schema.json`, 
 
 **Wave 1: independent (different files):**
 
-- [ ] **T002** [P] Make DED 0.2: the header table and the status paragraph (what 0.2 adds, that every 0.1 definition stays valid), a Markdown paragraph in section 2 with the form `<!-- ded: 0.2 designer: <origin> -->` on line 1, `.md` among the shared extensions of section 4 step 1 with the kind of marker a Markdown binding uses, the version check of step 2, and what follows in sections 5 to 8, with `web-shop.md` as second example (FR-060, FR-061) · etalii.adp/specifications/ded/DED-specification.md
-- [ ] **T003** [P] Let `$defs/Definition` accept `"0.1"` and `"0.2"` for `ded`, at the schema's 0.1 address (research R3, R20) · etalii.adp/specifications/ded/ded.schema.json
-- [ ] **T004** [P] Write the worked example: the requirement document of research R1, with its envelope on line 1 and its mark line on line 2 (FR-061) · etalii.adp/specifications/ded/web-shop.md
+- [x] **T002** [P] Make DED 0.2: the header table and the status paragraph (what 0.2 adds, that every 0.1 definition stays valid), a Markdown paragraph in section 2 with the form `<!-- ded: 0.2 designer: <origin> -->` on line 1, `.md` among the shared extensions of section 4 step 1 with the kind of marker a Markdown binding uses, the version check of step 2, and what follows in sections 5 to 8, with `web-shop.md` as second example (FR-060, FR-061) · etalii.adp/specifications/ded/DED-specification.md
+- [x] **T003** [P] Let `$defs/Definition` accept `"0.1"` and `"0.2"` for `ded`, at the schema's 0.1 address (research R3, R20) · etalii.adp/specifications/ded/ded.schema.json
+- [x] **T004** [P] Write the worked example: the requirement document of research R1, with its envelope on line 1 and its mark line on line 2 (FR-061) · etalii.adp/specifications/ded/web-shop.md
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T005** Teach the validator the Markdown envelope: `is_example` takes a `.md` under `specifications/ded/` that is not the specification document, line 1 is read into `ded` and `designer`, and the result is checked against `$defs/Definition`. A Markdown example without the envelope fails (research R20) · etalii.adp/.github/scripts/validate-examples.py
-- [ ] **T006** Plant and see fail, then restore: `web-shop.md` with `ded: 0.3` (reported at `ded`), and with line 1 removed (reported as having no envelope) (SC-008) · etalii.adp/specifications/ded/web-shop.md
+- [x] **T005** Teach the validator the Markdown envelope: `is_example` takes a `.md` under `specifications/ded/` that is not the specification document, line 1 is read into `ded` and `designer`, and the result is checked against `$defs/Definition`. A Markdown example without the envelope fails (research R20) · etalii.adp/.github/scripts/validate-examples.py
+- [x] **T006** Plant and see fail, then restore: `web-shop.md` with `ded: 0.3` (reported at `ded`), and with line 1 removed (reported as having no envelope) (SC-008) · etalii.adp/specifications/ded/web-shop.md
 - [ ] **T007** Deliver pull request 2: run the three checks, see every example of the baseline keep its result, commit, push and open the pull request into `develop`, naming this folder, with a green Build (FR-062) · etalii.adp (pull request 2)
 
 **Checkpoint**: DED 0.2 is on `develop` once the maintainer merges.
