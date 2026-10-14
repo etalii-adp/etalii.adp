@@ -1342,5 +1342,6 @@
       "durationSeconds": 1.9,
       "result": "ok   specifications/fbl/fixtures/knowledge-equivalence: 3 fixtures read the same 65 elements · ok   definitions/diagrams/agent-activity-diagram.md: its example is valid against agent-activity-diagram.schema.json · 104 example(s), 0 invalid."
     }
-  ]
+  ],
+  "assistant": "claude-vscode"
 }

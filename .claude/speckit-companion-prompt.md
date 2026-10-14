@@ -1,1 +1,1 @@
-/speckit-assess-research slug=host-agnostic-tool-language
+/speckit-companion-resume specs\028-hierarchical-requirement-designer
