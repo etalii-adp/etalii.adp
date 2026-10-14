@@ -7,7 +7,7 @@ What `etalii.adp.ide.standalone` builds and settles, and which success criteria 
 | Rule | Source |
 |---|---|
 | The designer is built first in the standalone host, and in no other host by this feature. | FR-063 |
-| The host plans with spec-workflow in its own repository. Its specification of this designer is written there, from the merged definition, as step 7 of the delivery. | plan, Delivery |
+| The host's specification of this designer is written in this repository, as [spec 029-standalone-hierarchical-requirement-designer](../../029-standalone-hierarchical-requirement-designer/), from the merged definition, as step 7 of the delivery. The maintainer asked for it here on 2026-10-14, as for spec 025; the host's other features keep spec-workflow. | plan, Delivery |
 | Nothing is built in that host until its open work, spec 025-standalone-code-structure among it, is done. Spec 025 moves the seams this designer plugs into: it joins the three tool-family routers, catalogs and factories. | Assumptions, R24 |
 | No host changes in this feature's pull requests. | plan, Technical Context |
 

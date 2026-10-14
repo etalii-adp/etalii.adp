@@ -1,0 +1,156 @@
+{
+  "workflow": "companion",
+  "specName": "The Hierarchical Requirement Designer in the Standalone Host",
+  "branch": "features/029-standalone-hierarchical-requirement-designer",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-14T21:53:20.895Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-14T21:57:18.450Z"
+    }
+  ],
+  "telemetryInstanceId": "4534790c-e93b-4985-a552-aedf1e2b422a",
+  "last_action": "living specs evaluated — no capabilities matched",
+  "coverage": {
+    "FR-001": {
+      "title": "Offer the designer type as Hierarchical Requirement Designer"
+    },
+    "FR-002": {
+      "title": "Recognise a requirement document by its envelope alone, ahead of the other .md owners"
+    },
+    "FR-003": {
+      "title": "Add an existing requirement document as a designer document without changing it"
+    },
+    "FR-004": {
+      "title": "Keep the document when its registration is deleted; create the registration with the first setting"
+    },
+    "FR-005": {
+      "title": "Create a new document from the binding template byte for byte"
+    },
+    "FR-006": {
+      "title": "One page that scrolls top to bottom, no tree beside it"
+    },
+    "FR-007": {
+      "title": "Items as boxes with requirements then sub-items to their right"
+    },
+    "FR-008": {
+      "title": "Levels that fit, a mark for those that do not, focus with a trail, not stored"
+    },
+    "FR-009": {
+      "title": "Number beside the title, tags below it, description under it"
+    },
+    "FR-010": {
+      "title": "Collapse control left of every title, kept when reopened"
+    },
+    "FR-011": {
+      "title": "The Knowledge designer looks in both themes, outside a table too"
+    },
+    "FR-012": {
+      "title": "Add without a dialog by a control and by a named key"
+    },
+    "FR-013": {
+      "title": "Drag an item with its content, or a requirement"
+    },
+    "FR-014": {
+      "title": "Confirm before deleting an entry that holds anything or is named"
+    },
+    "FR-015": {
+      "title": "Assessment icon at the top right, rolling up in a collapsed item"
+    },
+    "FR-016": {
+      "title": "The icon opens the list of its assessments to add, change, remove, resolve"
+    },
+    "FR-017": {
+      "title": "Typing # opens the lookup of entries of the same document"
+    },
+    "FR-018": {
+      "title": "Selecting a reference box shows its target without writing the file"
+    },
+    "FR-019": {
+      "title": "Narrow by tag, category, state and an item pattern with * and ?"
+    },
+    "FR-020": {
+      "title": "Sort requirements within each item without changing the file"
+    },
+    "FR-021": {
+      "title": "A finding stays listed under a filter and shows its entry"
+    },
+    "FR-022": {
+      "title": "Read an outside change again and keep what was collapsed"
+    },
+    "FR-023": {
+      "title": "Tell the person and offer reload or keep when unsaved edits meet an outside change"
+    },
+    "FR-024": {
+      "title": "Refuse an edit against a changed file, never merge"
+    },
+    "FR-025": {
+      "title": "Tell the person when an outside change ended the undo history"
+    },
+    "FR-026": {
+      "title": "Make the model change and the fixture bytes of every gesture"
+    },
+    "FR-027": {
+      "title": "Report each finding at its place; an unreadable file read-only, never written"
+    },
+    "FR-028": {
+      "title": "Read and write declared registration blocks; keep an undeclared one"
+    },
+    "FR-029": {
+      "title": "FBL host conformance with bullets, passing every fixture"
+    },
+    "FR-030": {
+      "title": "DESL host conformance with the hierarchy surface kind"
+    },
+    "FR-031": {
+      "title": "DED host conformance: envelope, version, never changed"
+    },
+    "FR-032": {
+      "title": "The hierarchy surface is shared host work, not module code"
+    }
+  },
+  "size": "oversized",
+  "classification": {
+    "projectedFiles": 60,
+    "projectedTasks": 60,
+    "scopeSignal": "larger",
+    "verdict": "oversized"
+  },
+  "decisions": [
+    {
+      "decision": "The standalone host build of the Hierarchical Requirement Designer is specified here as spec 029, not in standalone .spec-workflow/",
+      "why": "The maintainer asked on 2026-10-14 when T070 of spec 028 came up, as for spec 025"
+    },
+    {
+      "decision": "Each user story passes spec 028 scenarios of the same story by reference and adds only what this host decides",
+      "why": "Copying them would let the two specifications drift"
+    }
+  ],
+  "expectations": [
+    "Hosts other than standalone",
+    "Changes to a specification language or the definition",
+    "Agent Behavior Modelling on the bullets family",
+    "A host library that interprets .des files",
+    "Merging the edits of two writers"
+  ],
+  "context": [
+    "area: definitions/designers/hierarchical-requirement.*",
+    "area: specs/028-hierarchical-requirement-designer/contracts/host-handoff.md",
+    "area: specifications/fbl/fixtures/bullets-*, registration-blocks, hierarchical-requirement-*",
+    "constraint: the definition files win over this specification",
+    "constraint: building waits for spec 025 and the maintainer word",
+    "constraint: standalone principles are its CLAUDE.md and .spec-workflow/steering/"
+  ],
+  "intent": "Build the Hierarchical Requirement Designer in the standalone host from the definition spec 028 merged"
+}
