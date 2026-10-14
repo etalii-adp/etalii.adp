@@ -7,7 +7,7 @@ The specifications of the formats and languages that the ADP tools implement. A 
 | Kind | Specification language | Extension | Definition language | Extension |
 |---|---|---|---|---|
 | Diagram | [DISL, Diagram Specification Language](specifications/disl/DISL-specification.md) | `.dis` | [DID, Diagram Definition Language](specifications/did/DID-specification.md) | `.did` |
-| Designer | [DESL, Designer Specification Language](specifications/desl/DESL-specification.md) | `.des` | [DED, Designer Definition Language](specifications/ded/DED-specification.md) | `.ded` |
+| Designer | [DESL, Designer Specification Language](specifications/desl/DESL-specification.md) | `.des` | [DED, Designer Definition Language](specifications/ded/DED-specification.md) | `.ded`, or a format the designer type's bindings read, such as `.md` |
 | Editor | [EDSL, Editor Specification Language](specifications/edsl/EDSL-specification.md) | `.eds` | [EDD, Editor Definition Language](specifications/edd/EDD-specification.md) | `.edd` |
 
 When a tool's model lives in another tool's file, such as a Structurizr workspace, a Freeplane mind map or an Azure Pipelines YAML file, the tool's specification points at a binding in [FBL, the Format Binding Language](specifications/fbl/FBL-specification.md) (`.fbl`), which says how that file is read and how edits are written back into it without disturbing the rest.

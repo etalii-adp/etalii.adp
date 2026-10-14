@@ -8,7 +8,16 @@ specification (`*.des`), a DED definition (`*.ded`), or a `*.json` file that nam
 whose designer type has a file schema in definitions/designers/ (DESIGNERS below) is validated against that one, which
 refines DED's. A Markdown definition (`*.md` under `specifications/ded/`, the specification document aside) has its
 envelope on line 1 (DED section 2); it is read into `ded` and `designer` and validated as a DED definition, and one
-without the envelope fails. A `$schema` the example names must agree with that; its part before `#`
+without the envelope fails. A Markdown definition whose envelope names the Hierarchical Requirement Designer
+(`etalii/hierarchical-requirement`), under `specifications/ded/` or `definitions/designers/examples/`, is read whole, by
+a reader written for that designer type (`requirements_from_markdown`, as `knowledge_from_xml` is written for the
+Knowledge designer), which takes its expressions from the designer type's binding and specification and follows the
+`bullets` family (FBL 0.7, section 4.8): into the JSON form `hierarchical-requirement.schema.json` describes, which is
+validated, and into what reading it would report, each a failure at its line: a bullet in no known form, a number an
+earlier entry carries, a mention or an assessment that names nothing, and a requirement out of place (at the top level,
+or anything nested in a requirement). An entry written `ITEM-NEW` or `REQ-NEW` is not a failure. A designer type's
+registration (`*.adp` under `definitions/designers/examples/`) is parsed as the registrations under `specifications/fbl/`
+are. A `$schema` the example names must agree with that; its part before `#`
 is matched against the `$id` of a `*.schema.json` in this repository, so the schemas in the same commit are used,
 never the published ones. All schemas are loaded into one registry, so DID's references to DISL resolve. A `$schema`
 naming an earlier version of DISL or DID (0.1) is read against the current schema, because 0.2 keeps every 0.1 document valid.
@@ -64,10 +73,11 @@ FBL_REGISTRATION = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs
 FBL_FIXTURE = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Fixture"
 DED = "https://etalii.net/adp/ded/schema/0.1/ded.schema.json#/$defs/Definition"
 KNOWLEDGE = "https://etalii.net/adp/definitions/designers/knowledge.schema.json"
+HIERARCHICAL_REQUIREMENT = "https://etalii.net/adp/definitions/designers/hierarchical-requirement.schema.json"
 CURRENT_EXTENSIONS = {".dis": DISL, ".did": DID, ".fbl": FBL, ".des": DESL, ".ded": DED}
 CURRENT_VERSION_KEYS = {"disl": DISL, "did": DID, "fbl": FBL, "desl": DESL, "ded": DED}
 # The file schema of each designer type whose DED definitions have one, by the origin in their `designer` key.
-DESIGNERS = {"etalii/knowledge": KNOWLEDGE}
+DESIGNERS = {"etalii/knowledge": KNOWLEDGE, "etalii/hierarchical-requirement": HIERARCHICAL_REQUIREMENT}
 # A designer's examples are documents in the formats its bindings read (definitions/designers/examples/).
 designer_examples = repository / "definitions" / "designers" / "examples"
 
@@ -101,10 +111,10 @@ def is_example(path: Path) -> bool:
     if path.name.endswith(".schema.json") or not path.is_file():
         return False
     if path.suffix == ".adp":
-        return is_fbl_file(path)
+        return is_fbl_file(path) or designer_examples in path.parents
     if is_fbl_file(path) and "fixtures" in path.relative_to(root / "fbl").parts and path.name != "fixture.json":
         return False  # a fixture's input and expected bodies are checked through its fixture.json
-    if designer_examples in path.parents and path.suffix in (".yaml", ".yml", ".xml"):
+    if designer_examples in path.parents and path.suffix in (".yaml", ".yml", ".xml", ".md"):
         return True
     if path.suffix == ".md":
         return path.parent == root / "ded" and not path.name.endswith("-specification.md")
@@ -240,6 +250,237 @@ def check_knowledge(table) -> list[str]:
     return problems
 
 
+# The Hierarchical Requirement Designer's definition: the reader takes its expressions from these two files.
+REQUIREMENT_DESIGNER = repository / "definitions" / "designers" / "hierarchical-requirement"
+LIST_ITEM = re.compile(r"[-*+](?:[ \t]|$)")
+THEMATIC_BREAK = re.compile(r"^[ \t]*(?:(?:-[ \t]*){3,}|(?:\*[ \t]*){3,}|(?:_[ \t]*){3,})$")
+FENCE = re.compile(r"(`{3,}|~{3,})")
+HEADING = re.compile(r"(#{1,6})(?:[ \t]|$)")
+
+
+def common_regex(expression: str, case_insensitive: bool = False):
+    """An expression of FBL's common subset (FBL section 2.5) as Python reads it: named groups are written (?P<name>),
+    and the classes are ASCII, as RE2's are."""
+    return re.compile(expression.replace("(?<", "(?P<"), re.ASCII | (re.IGNORECASE if case_insensitive else 0))
+
+
+def columns(whitespace: str) -> int:
+    """The columns of a run of spaces and tabs, a tab counting four (FBL section 4.8)."""
+    return sum(4 if character == "\t" else 1 for character in whitespace)
+
+
+def without_indentation(line: str, column: int) -> str:
+    """A continuation line with the whitespace before `column` taken off; a tab the column cuts into leaves its spaces."""
+    at = index = 0
+    while index < len(line) and line[index] in " \t" and at < column:
+        width = 4 if line[index] == "\t" else 1
+        if at + width > column:
+            return " " * (at + width - column) + line[index + 1:]
+        at, index = at + width, index + 1
+    return line[index:]
+
+
+class Bullet:
+    """A list item of the bullets family (FBL section 4.8): its line, its marker's and its content's columns, its text,
+    the item it is nested in, and its continuation (the lines before its first nested item, blank lines between them)."""
+
+    def __init__(self, number, marker, content, text, parent):
+        self.number, self.marker, self.content, self.text, self.parent = number, marker, content, text, parent
+        self.continuation, self.blanks, self.nested = [], [], False
+
+    def add_line(self, number, line):
+        if not self.nested:
+            self.continuation += self.blanks + [(number, line)]
+            self.blanks = []
+
+    def add_blank(self, number):
+        if not self.nested and self.continuation:
+            self.blanks.append((number, ""))
+
+    def text_of_continuation(self):
+        return [(number, without_indentation(line, self.content)) for number, line in self.continuation]
+
+
+def bullets_of(text: str):
+    """Reads a Markdown body's lines into the bullets family's kinds (FBL section 4.8): its list items, its headings (line,
+    level, text) and its statements (line, text). Fenced lines and thematic breaks are none of these."""
+    lines = re.split(r"\r\n|\n|\r", text.removeprefix("﻿"))
+    if lines and lines[-1] == "":
+        lines.pop()
+    items, headings, statements, open_items, fence = [], [], [], [], None
+    for number, line in enumerate(lines, start=1):
+        rest = line.lstrip(" \t")
+        if fence:  # (character, length, the item it belongs to or None)
+            if re.fullmatch(re.escape(fence[0]) + "{%d,}[ \t]*" % fence[1], rest):
+                fence, owner = None, fence[2]
+            else:
+                owner = fence[2]
+            if owner:
+                owner.add_line(number, line)
+            continue
+        if not rest:
+            if open_items:
+                open_items[-1].add_blank(number)
+            continue
+        indentation = columns(line[:len(line) - len(rest)])
+        while open_items and open_items[-1].marker >= indentation:
+            open_items.pop()
+        if LIST_ITEM.match(rest) and not THEMATIC_BREAK.match(line):
+            after = rest[1:]
+            item_text = after.lstrip(" \t")
+            content = indentation + 1 + columns(after[:len(after) - len(item_text)]) if item_text else indentation + 2
+            parent = open_items[-1] if open_items else None
+            if parent:
+                parent.nested = True
+            item = Bullet(number, indentation, content, item_text, parent)
+            items.append(item)
+            open_items.append(item)
+            continue
+        opens = FENCE.match(rest)
+        if open_items:
+            open_items[-1].add_line(number, line)
+            if opens:
+                fence = (opens.group(1)[0], len(opens.group(1)), open_items[-1])
+            continue
+        heading = HEADING.match(rest) if indentation <= 3 else None
+        if heading:
+            title = re.sub(r"(?:^|[ \t]+)#+$", "", rest[len(heading.group(1)):].strip(" \t")).strip(" \t")
+            headings.append((number, len(heading.group(1)), title))
+        elif opens:
+            fence = (opens.group(1)[0], len(opens.group(1)), None)
+        elif not THEMATIC_BREAK.match(line):
+            statements.append((number, line))
+    return items, headings, statements, len(lines)
+
+
+def requirements_from_markdown(text: str):
+    """Reads a requirement document (hierarchical-requirement.md) through the rules of its binding,
+    hierarchical-requirement.fbl#markdown, into the JSON form hierarchical-requirement.schema.json describes, and returns
+    it with what reading it reports, each a problem at its line (contracts/requirement-document.md, What reading
+    reports). The mentions are found by the patterns of hierarchical-requirement.des. Raises when line 1 is no envelope."""
+    document = dict(definition_from_markdown(text))
+    binding = json.loads(REQUIREMENT_DESIGNER.with_suffix(".fbl").read_text(encoding="utf-8"))["bindings"]["markdown"]
+    types = json.loads(REQUIREMENT_DESIGNER.with_suffix(".des").read_text(encoding="utf-8"))["metamodel"]["types"]
+    rules = {rule["name"]: rule for rule in binding["elements"]}
+
+    def rule_regex(name):
+        return common_regex(rules[name]["line"], rules[name].get("caseInsensitive", False))
+
+    def word_regex(rule, attribute):
+        return common_regex(rules[rule]["attributes"][attribute]["word"])
+
+    def mentions_of(type_name, attribute):
+        return common_regex(types[type_name]["attributes"][attribute]["mentions"]["pattern"])
+
+    items, headings, statements, line_count = bullets_of(text)
+    sections = {}
+    for section in binding["sections"]:
+        heading_regex = common_regex(section["heading"], section.get("caseInsensitive", False))
+        first = next((h for h in headings if heading_regex.search(h[2])), None)
+        if first:
+            end = next((number for number, level, _ in headings if number > first[0] and level <= first[1]), line_count + 1)
+            sections[section["name"]] = (first[0], end)
+
+    def stands_in(item, name):
+        return name in sections and sections[name][0] < item.number < sections[name][1]
+
+    for number, line in statements:
+        marks = rule_regex("marks").search(line)
+        if marks:
+            document.update({k: v for k, v in marks.groupdict().items() if v is not None})
+            break
+    document["items"], document["assessments"] = [], []
+    problems, read, not_looked_into, ids, mentions = [], {}, set(), {}, []
+
+    def words(group):
+        return re.findall(r'"[^"]*"|\S+', group or "")
+
+    def description(item):
+        lines = item.text_of_continuation()
+        return "\n".join(line for _, line in lines), [number for number, _ in lines]
+
+    for item in items:
+        if item.parent in not_looked_into or not (stands_in(item, "requirements") or stands_in(item, "assessments")):
+            not_looked_into.add(item)
+            continue
+        if stands_in(item, "requirements"):
+            match, kind = rule_regex("item").search(item.text), "Item"
+            if not match:
+                match, kind = rule_regex("requirement").search(item.text), "Requirement"
+            if not match:
+                problems.append(f"line {item.number}: a bullet under Requirements that is neither an item nor a requirement (std.unreadableEntry): {item.text!r}")
+                not_looked_into.add(item)
+                continue
+            rule = "item" if kind == "Item" else "requirement"
+            entry = {"id": match.group("id"), "title": match.group("title")}
+            text_of, lines_of = description(item)
+            if text_of:
+                entry["description"] = text_of
+                mentions.append((mentions_of(kind, "description"), text_of, lines_of, False))
+            group = words(match.group("words"))
+            tags = [m.group("value") for m in (word_regex(rule, "tags").match(w) for w in group) if m]
+            if tags:
+                entry["tags"] = tags
+            if kind == "Requirement":
+                for attribute in ("category", "state"):
+                    value = next((m.group("value") for m in (word_regex(rule, attribute).match(w) for w in group) if m), None)
+                    if value is not None:
+                        entry[attribute] = value
+            else:
+                entry.update({"requirements": [], "items": []})
+            parent = read.get(item.parent)
+            read[item] = (kind, entry, parent)
+            if not entry["id"].endswith("-NEW"):  # the placeholder is std.missingId, which is no failure
+                if entry["id"] in ids:
+                    problems.append(f"line {item.number}: {entry['id']} is the number of the entry on line {ids[entry['id']]} too (std.duplicateId)")
+                else:
+                    ids[entry["id"]] = item.number
+            if not entry.get("title", "").strip():
+                problems.append(f"line {item.number}: {entry['id']} has no title (std.required)")
+            if parent is None and kind == "Requirement":
+                problems.append(f"line {item.number}: {entry['id']} stands at the top level, where a requirement stands in an item (std.containment)")
+            elif parent is not None and parent[0] == "Requirement":
+                problems.append(f"line {item.number}: {entry['id']} is nested under the requirement {parent[1]['id']}, which holds nothing (std.containment)")
+            elif parent is None:
+                document["items"].append(entry)
+                entry["placed"] = True
+            elif parent[1].get("placed"):
+                parent[1]["requirements" if kind == "Requirement" else "items"].append(entry)
+                entry["placed"] = True
+        else:
+            match = rule_regex("assessment").search(item.text)
+            if not match:
+                problems.append(f"line {item.number}: a bullet under Assessments in no known form (std.unreadableEntry): {item.text!r}")
+                not_looked_into.add(item)
+                continue
+            entry = {"kind": match.group("kind").lower(), "about": match.group("about"), "text": match.group("text"), "resolved": (match.group("done") or " ").lower() == "x"}
+            text_of, lines_of = description(item)
+            if text_of:
+                entry["detail"] = text_of
+                mentions.append((mentions_of("Assessment", "detail"), text_of, lines_of, False))
+            mentions.append((mentions_of("Assessment", "text"), entry["text"], [item.number], False))
+            mentions.append((mentions_of("Assessment", "about"), entry["about"], [item.number], True))
+            document["assessments"].append(entry)
+    for pattern, value, lines_of, about in mentions:  # once every entry is read, so that a mention may name one after it
+        for match in pattern.finditer(value):
+            if match.group("id") is not None and match.group("id") not in ids:
+                line = lines_of[min(value.count("\n", 0, match.start()), len(lines_of) - 1)]
+                if about:
+                    problems.append(f"line {line}: an assessment about {match.group('id')}, which names no item or requirement (std.mentions)")
+                else:
+                    problems.append(f"line {line}: [{match.group('id')}] names no item or requirement (std.mentions)")
+
+    def without_marks(entries):
+        for entry in entries:
+            entry.pop("placed", None)
+            without_marks(entry.get("requirements", []))
+            without_marks(entry.get("items", []))
+
+    without_marks(document["items"])
+    problems.sort(key=lambda problem: int(problem.split(":", 1)[0].removeprefix("line ")))
+    return document, problems
+
+
 BLOCK_LINE = re.compile(r"^[A-Za-z_][A-Za-z0-9_.-]*:$")
 
 
@@ -359,6 +600,7 @@ def replay_fixture(path: Path, fixture) -> str | None:
         if restored != document:
             return f"step {index}: the inverse splices do not restore the document before the step"
         edit = step.get("edit", {})
+        changes_of_edit = edit if isinstance(edit, list) else [edit]  # FBL 0.7: one transaction's changes
         changes = splice_changes(document, step["splices"])
         if step.get("undo"):
             if not done:
@@ -378,10 +620,10 @@ def replay_fixture(path: Path, fixture) -> str | None:
             if not crossed and (document != before or result != after):
                 return f"step {index}: the redo does not return the document the edit produced"
             done.append((before, after, edit_changes, crossed))
-        elif step.get("refused") or "save" in edit:
+        elif step.get("refused") or any("save" in change for change in changes_of_edit):
             if result != document:
                 return f"step {index}: a refused edit or a save without change must leave the document as it is"
-        elif edit.get("setting", {}).get("block") in outside:  # no step of the history: undo and redo pass it by
+        elif all(change.get("setting", {}).get("block") in outside for change in changes_of_edit):  # no step of the history: undo and redo pass it by
             done = [(before, after, edit_changes, True) for before, after, edit_changes, _ in done]
             undone = [(before, after, edit_changes, True) for before, after, edit_changes, _ in undone]
         else:
@@ -679,6 +921,7 @@ def expected_reference(path: Path, document) -> tuple[str | None, list[str], str
 
 
 failures = 0
+reading = {}  # what reading each requirement document reports (requirements_from_markdown), by its path
 examples = [p for folder in folders for p in sorted(folder.rglob("*")) if is_example(p)]
 for path in examples:
     name = path.relative_to(repository).as_posix()
@@ -692,6 +935,8 @@ for path in examples:
                 document = knowledge_from_xml(path.read_text(encoding="utf-8"))
             elif path.suffix == ".md":
                 document = definition_from_markdown(path.read_text(encoding="utf-8"))
+                if document["designer"] == "etalii/hierarchical-requirement":  # read whole, by its designer type's reader
+                    document, reading[path] = requirements_from_markdown(path.read_text(encoding="utf-8"))
             else:
                 import yaml  # only the designers' examples need it
 
@@ -732,6 +977,11 @@ for path in examples:
         failures += 1
         print(f"FAIL {name}: {problem}")
     elif reference == KNOWLEDGE and (problems := check_knowledge(document)):
+        failures += 1
+        print(f"FAIL {name}: {len(problems)} finding(s) on reading")
+        for problem in problems[:10]:
+            print(f"  {problem}")
+    elif reference == HIERARCHICAL_REQUIREMENT and (problems := reading.get(path)):
         failures += 1
         print(f"FAIL {name}: {len(problems)} finding(s) on reading")
         for problem in problems[:10]:
