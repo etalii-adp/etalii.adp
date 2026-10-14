@@ -6,7 +6,9 @@ specification (`*.des`), a DED definition (`*.ded`), or a `*.json` file that nam
 `disl.schema.json#/$defs/Specification`, `*.did` against `did.schema.json#/$defs/Definition`, `*.fbl` against
 `fbl.schema.json#/$defs/Document`, `*.des` against `desl.schema.json#/$defs/Specification`, `*.ded` against `ded.schema.json#/$defs/Definition`. A DED definition
 whose designer type has a file schema in definitions/designers/ (DESIGNERS below) is validated against that one, which
-refines DED's. A `$schema` the example names must agree with that; its part before `#`
+refines DED's. A Markdown definition (`*.md` under `specifications/ded/`, the specification document aside) has its
+envelope on line 1 (DED section 2); it is read into `ded` and `designer` and validated as a DED definition, and one
+without the envelope fails. A `$schema` the example names must agree with that; its part before `#`
 is matched against the `$id` of a `*.schema.json` in this repository, so the schemas in the same commit are used,
 never the published ones. All schemas are loaded into one registry, so DID's references to DISL resolve. A `$schema`
 naming an earlier version of DISL or DID (0.1) is read against the current schema, because 0.2 keeps every 0.1 document valid.
@@ -37,6 +39,7 @@ without turning moments into timestamps.
 Prints one line per example and exits 1 when any example is invalid or names an unknown schema.
 """
 import json
+import re
 import sys
 import xml.etree.ElementTree as ElementTree
 from pathlib import Path
@@ -99,7 +102,20 @@ def is_example(path: Path) -> bool:
         return False  # a fixture's input and expected bodies are checked through its fixture.json
     if designer_examples in path.parents and path.suffix in (".yaml", ".yml", ".xml"):
         return True
+    if path.suffix == ".md":
+        return path.parent == root / "ded" and not path.name.endswith("-specification.md")
     return path.suffix in CURRENT_EXTENSIONS or path.suffix in ALIAS_EXTENSIONS or path.suffix == ".json"
+
+
+MARKDOWN_ENVELOPE = re.compile(r"^<!--[ \t]+ded:[ \t]+(?P<ded>[^ \t]+)[ \t]+designer:[ \t]+(?P<designer>[^ \t]+)[ \t]+-->[ \t]*$")
+
+
+def definition_from_markdown(text: str):
+    """Reads the envelope of a Markdown definition, its line 1 (DED section 2), into the YAML and JSON form."""
+    match = MARKDOWN_ENVELOPE.match(text.removeprefix("﻿").split("\n", 1)[0].removesuffix("\r"))
+    if not match:
+        raise ValueError("it has no envelope: line 1 is not '<!-- ded: <version> designer: <origin> -->'")
+    return match.groupdict()
 
 
 KNOWLEDGE_BOOLEANS = {"title", "computed", "parent", "visible", "wrap", "hideEmptyGroups", "checked"}
@@ -565,10 +581,12 @@ for path in examples:
     if path.suffix == ".adp":
         document, problem = parse_registration(path.read_bytes())
         reference, aliases = FBL_REGISTRATION, []
-    elif path.suffix in (".yaml", ".yml", ".xml"):
+    elif path.suffix in (".yaml", ".yml", ".xml", ".md"):
         try:
             if path.suffix == ".xml":
                 document = knowledge_from_xml(path.read_text(encoding="utf-8"))
+            elif path.suffix == ".md":
+                document = definition_from_markdown(path.read_text(encoding="utf-8"))
             else:
                 import yaml  # only the designers' examples need it
 

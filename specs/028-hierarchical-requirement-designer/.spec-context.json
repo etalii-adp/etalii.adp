@@ -4,8 +4,8 @@
   "specName": "Hierarchical Requirement Designer",
   "branch": "features/028-hierarchical-requirement-designer",
   "selectedAt": "2026-10-13T21:41:45.662Z",
-  "currentStep": "tasks",
-  "status": "ready-to-implement",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -76,6 +76,69 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-13T23:57:53.157Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-14T00:22:38.101Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T00:25:36.294Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T00:25:37.412Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T00:26:05.668Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T00:26:29.010Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T00:26:42.591Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:32:48.679Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T15:33:59.557Z"
     }
   ],
   "last_action": "living specs evaluated — no capabilities matched",
@@ -680,5 +743,83 @@
       "summary": "71 tasks in 15 phases: setup, the three languages as four foundational pull requests (DED 0.2, FBL 0.7 twice, DESL 0.2), the definition for User Story 3, one fixture phase for each of the seven other stories, polish with pull request 6, and the hand-off to the standalone host"
     }
   },
-  "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025."
+  "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
+  "currentTask": "T007",
+  "task_summaries": {
+    "T002": {
+      "status": "DONE",
+      "did": "DED 0.2: the Markdown envelope on line 1 (section 2), .md among the shared extensions with a one-line pattern marker (section 4), the version check, writing, the schema and a second example",
+      "files": [
+        "specifications/ded/DED-specification.md"
+      ]
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "ded.schema.json: ded accepts 0.1 and 0.2, at the 0.1 address",
+      "files": [
+        "specifications/ded/ded.schema.json"
+      ]
+    },
+    "T004": {
+      "status": "DONE",
+      "did": "The worked example: research R1's requirement document, envelope on line 1, mark line on line 2, with a legend whose examples stand in a fence",
+      "files": [
+        "specifications/ded/web-shop.md"
+      ]
+    },
+    "T005": {
+      "status": "DONE",
+      "did": "The validator takes a .md under specifications/ded/ as an example, reads line 1 into ded and designer and checks them against DED's Definition; a Markdown example without the envelope fails",
+      "files": [
+        ".github/scripts/validate-examples.py"
+      ]
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "Planted and seen fail, then restored: web-shop.md with ded: 0.3 (reported at ded) and with line 1 removed (reported as having no envelope)",
+      "files": [
+        "specifications/ded/web-shop.md"
+      ]
+    },
+    "T001": {
+      "status": "DONE",
+      "did": "Pull request 173 merged; branch cut again from origin/develop 4dc1811; the three checks pass; baseline 94 ok lines, 92 examples, 0 invalid",
+      "files": [
+        "etalii.adp/.claude/worktrees/028-hierarchical-requirement-designer"
+      ]
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "Pull request 201 opened into develop, naming the feature folder; Build green (examples, terminology, licence)",
+      "files": [
+        "etalii.adp (pull request 201)"
+      ]
+    }
+  },
+  "verified": [
+    {
+      "what": "validator on DED 0.2",
+      "command": "python .github/scripts/validate-examples.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 1.9,
+      "result": "ok   specifications/fbl/fixtures/knowledge-equivalence: 3 fixtures read the same 65 elements · ok   definitions/diagrams/agent-activity-diagram.md: its example is valid against agent-activity-diagram.schema.json · 93 example(s), 0 invalid."
+    },
+    {
+      "what": "terminology",
+      "command": "python .github/scripts/terminology-check.py --name etalii.adp",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 5.6,
+      "result": "etalii.adp: 0 error(s), 1603 for review."
+    },
+    {
+      "what": "licence",
+      "command": "python .github/scripts/licence-check.py",
+      "source": "derived",
+      "exitCode": 0,
+      "durationSeconds": 0.5,
+      "result": "ok   specifications/edsl/EDSL-specification.md · ok   specifications/fbl/FBL-specification.md · 7 specification document(s), 0 failure(s)."
+    }
+  ]
 }
