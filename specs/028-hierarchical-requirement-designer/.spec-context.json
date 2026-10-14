@@ -307,6 +307,94 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T16:14:15.524Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T029",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:15:52.375Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T030",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:17:10.288Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T031",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:17:11.132Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T032",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:17:11.970Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T033",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:17:12.863Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T034",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:17:36.308Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T035",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:18:43.835Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T036",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:22:33.175Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T037",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:22:39.120Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T038",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:22:45.421Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T039",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T16:23:16.060Z"
     }
   ],
   "last_action": "living specs evaluated — no capabilities matched",
@@ -912,7 +1000,7 @@
     }
   },
   "approach": "A requirement document is a plain .md read through a new FBL family, bullets, with colours, order, collapsed state and stored filters in declared blocks of its registration. DESL 0.2 adds the hierarchy surface, counted ids, mentions, move and persistence.settings; DED 0.2 states the envelope line. The definition lands in definitions/designers, and the standalone host builds from it after spec 025.",
-  "currentTask": "T028",
+  "currentTask": "T039",
   "task_summaries": {
     "T002": {
       "status": "DONE",
@@ -1110,6 +1198,83 @@
       "did": "Pull request 204 opened into develop, naming the folder and the second reserved construct; Build green",
       "files": [
         "etalii.adp (pull request 204)"
+      ]
+    },
+    "T029": {
+      "status": "DONE",
+      "did": "DESL 0.2: header, status paragraph with the five constructs, 0.1 and 0.2 in 2.7 and 3.1, and 1.3 naming the registration blocks of FBL",
+      "files": [
+        "specifications/desl/DESL-specification.md"
+      ]
+    },
+    "T030": {
+      "status": "DONE",
+      "did": "DESL 4.3: the facet mentions (pattern with a group id, types), resolution by id, a match without id as no mention, text never changed on delete; std.mentions, a warning, in 6.5",
+      "files": [
+        "specifications/desl/DESL-specification.md"
+      ]
+    },
+    "T031": {
+      "status": "DONE",
+      "did": "DESL 5.3.5: the id strategy counter per type (prefix, digits, mark, placeholder), a new id one past the higher of mark and highest number, a missing mark, the placeholder as a missing id, the exception to 5.3.1, the offer on a duplicate",
+      "files": [
+        "specifications/desl/DESL-specification.md"
+      ]
+    },
+    "T032": {
+      "status": "DONE",
+      "did": "DESL 5.5: persistence.settings, a list (type, key, value, initial) or a state (attribute, of), values as written forms, one transaction with the body, absent or complete, ids from keys, the ordinary actions",
+      "files": [
+        "specifications/desl/DESL-specification.md"
+      ]
+    },
+    "T033": {
+      "status": "DONE",
+      "did": "DESL 7.7: the surface kind hierarchy with its seven roles, the layout every host draws, labels and implicit members, and the words of a filter's query",
+      "files": [
+        "specifications/desl/DESL-specification.md"
+      ]
+    },
+    "T034": {
+      "status": "DONE",
+      "did": "DESL 8.2: the action move (target, parent, slot, after, before), planned as FBL's move; 10.1 step 4: the name checks of the hierarchy, mentions, counter and settings; 11: the surface kinds a host states; Appendix A",
+      "files": [
+        "specifications/desl/DESL-specification.md"
+      ]
+    },
+    "T035": {
+      "status": "DONE",
+      "did": "desl.schema.json: 0.2 for desl, Surface as one shape per kind (Table, Hierarchy with its roles), Mentions on Attribute, counter in IdRule, Setting in Persistence, move in Action",
+      "files": [
+        "specifications/desl/desl.schema.json"
+      ]
+    },
+    "T036": {
+      "status": "DONE",
+      "did": "minimal-hierarchy.des: sections and tasks with counted ids, tags kept in the registration's tags block, mentions in descriptions and a note's about, notes with kinds and icons, and a move operation",
+      "files": [
+        "specifications/desl/minimal-hierarchy.des"
+      ]
+    },
+    "T037": {
+      "status": "DONE",
+      "did": "minimal-hierarchy.fbl: the bullets binding with the envelope as header and marker, the mark line as a statement, sections Outline and Notes, tags as words of a group, continuation descriptions, and the tags block declared",
+      "files": [
+        "specifications/desl/minimal-hierarchy.fbl"
+      ]
+    },
+    "T038": {
+      "status": "DONE",
+      "did": "resolve_desl branches on surface.kind: for hierarchy every role's types and attributes, containment of levels, label attributes on their types; for every specification the types of each mentions facet, each counter's mark, and each settings block declared by every binding",
+      "files": [
+        ".github/scripts/validate-examples.py"
+      ]
+    },
+    "T039": {
+      "status": "DONE",
+      "did": "Planted and seen fail, then restored: minimal-hierarchy.des with surface.levels naming Chapter, with a settings block colours the binding does not declare, and with a mark lastStep that names no document attribute; each reported at its path",
+      "files": [
+        "specifications/desl/minimal-hierarchy.des"
       ]
     }
   },
