@@ -12,13 +12,13 @@
 
 ## Context
 
-**What exists.** Spec 028 defined the Hierarchical Requirement Designer in this repository: its specification `hierarchical-requirement.des` in DESL 0.2, its binding `hierarchical-requirement.fbl` in FBL 0.7's `bullets` family, its companion `hierarchical-requirement.md`, the JSON form a document is read into, and the example `web-shop.md` with its registration, all under `definitions/designers/`. Twelve fixture folders, `specifications/fbl/fixtures/hierarchical-requirement-*/`, state the exact bytes of every edit. The languages it rests on are DED 0.2, FBL 0.7 and DESL 0.2. The companion says that these definition files are authoritative: where this specification and they disagree, they win and this specification is amended.
+**What exists.** Spec 028 defined the Hierarchical Requirement Designer in this repository: its specification `hierarchical-requirement.des` in DESL 0.2, its binding `hierarchical-requirement.fbl` in FBL 0.7's `bullets` family, its companion `hierarchical-requirement.md`, the JSON form a document is read into, and the example `web-shop.md` with its registration, all under `definitions/designers/`. Twelve fixture folders, `specifications/fbl/fixtures/hierarchical-requirement-*/`, hold 23 fixtures, eleven of them one folder down, and state the exact bytes of every edit. The languages it rests on are DED 0.2, FBL 0.7 and DESL 0.2. The companion says that these definition files are authoritative: where this specification and they disagree, they win and this specification is amended.
 
 **What this feature adds.** The designer itself, in the standalone host, the first host to build it and the only one in scope (028: FR-063). It is a person's tool for a file an agent also writes: a person reads the requirements of a subject by its structure, edits them in boxes, and discusses them with the agent through numbers, references and assessments, while the agent reads and writes the same Markdown file as text.
 
 **Why it is a feature of its own.** Spec 028 could state in this repository everything a definition can state. What a person sees and does, and the success criteria that need a person or an agent at work, can only be shown in a host. Spec 028's walk of its requirements (T067) left FR-015 to FR-024, FR-036, FR-037, FR-040, FR-042, FR-045 to FR-047 and FR-050 to FR-052 to the host, and five success criteria: SC-001, SC-002, SC-009, SC-010 and SC-011. This feature carries them.
 
-**What the host lacks today.** Spec 028 read the host at `f45a4d50c` (its research R24). The designer family there is the table from end to end, so a second kind of surface is new work. The host reads no `.des`: a developer writes a designer's module from its definition, and a test compares the vocabularies. It has readers for the `json`, `lines`, `xml` and `yaml` families, not `bullets`. Its registration reader stops at a block it does not know. Its conformance corpus is FBL 0.1 with selected additions. And it refuses to add an existing file as a designer document.
+**What the host lacks today.** Spec 028 read the host at `f45a4d50c` (its research R24). The designer family there is the table from end to end, so a second kind of surface is new work. The host reads no `.des`: a developer writes a designer's module from its definition, and a test compares the vocabularies. It has readers for the `json`, `lines`, `xml` and `yaml` families, not `bullets`. Its registration reader stops at a block it does not know. Its conformance corpus is FBL 0.1 with additions up to FBL 0.6. And it refuses to add an existing file as a designer document.
 
 **When.** Spec 025 moves the places this designer plugs into: it joins the three tool families' routers, catalogs and factories. Nothing is built in the host until spec 025 is done and the maintainer gives the word. The plan reads the host again at that point, not at `f45a4d50c`.
 
@@ -89,7 +89,7 @@ A person creates a requirement document in the host. It starts with the definiti
 **Acceptance Scenarios**:
 
 1. 028's User Story 4, scenarios 1 to 5.
-2. **Given** a new document, **When** it is created, **Then** its file is the binding's template with its title, byte for byte, and no registration exists yet.
+2. **Given** a new document, **When** it is created, **Then** its file is the binding's template with the file's base name as its title, byte for byte, and no registration exists yet.
 3. **Given** a selected requirement, **When** the person presses the key for adding, **Then** a requirement appears below it, ready for typing, and the key is the one the host's help names.
 
 ---
@@ -174,8 +174,8 @@ Each requirement names the requirement of spec 028 it carries, as "028: FR-0xx".
 - **FR-001**: The host MUST offer the designer type under the name `Hierarchical Requirement Designer` wherever it shows a tool type's name (028: FR-001).
 - **FR-002**: The host MUST recognise a `.md` as a requirement document by its envelope on line 1 alone, without a registration, and open it in the designer ahead of the Markdown editor and Agent Behavior Modelling.
 - **FR-003**: The host MUST let a person add an existing requirement document to the workspace as a designer document, without refusing because the file exists and without changing it.
-- **FR-004**: The host MUST keep a requirement document when its registration is deleted, MUST open it without one, and MUST create the registration only with the first setting the person changes (028: FR-005).
-- **FR-005**: The host MUST create a new requirement document from the binding's template, byte for byte, with the title the person gives (028: FR-006, FR-007).
+- **FR-004**: The host MUST keep a requirement document when its registration is deleted, MUST open it without one, and MUST create the registration only with the first setting the person changes, outside the undo history (028: FR-005; FBL section 8.4).
+- **FR-005**: The host MUST create a new requirement document from the binding's template, byte for byte, with the file name the person gives; its title is the file's base name, which the template writes (028: FR-006, FR-007).
 
 #### What the person sees
 
@@ -183,7 +183,7 @@ Each requirement names the requirement of spec 028 it carries, as "028: FR-0xx".
 - **FR-007**: The host MUST draw an item as a box with its requirements and then its sub-items to its right, as high as what stands to its right, with neighbouring boxes sharing their borders (028: FR-016).
 - **FR-008**: The host MUST show as many levels as fit the page's width, MUST mark an item whose deeper levels do not fit, and MUST let the person make any item the left edge of the page, with a trail of the items above it that leads back to each of them; focus MUST NOT be stored (028: FR-017).
 - **FR-009**: The host MUST show every entry's number beside its title, its tags below the title and its description under it (028: FR-009, FR-018).
-- **FR-010**: The host MUST offer a control to the left of every title that collapses the entry to its number, title, tags and assessment icon, and MUST show the same entries collapsed when the document is opened again (028: FR-019, FR-020).
+- **FR-010**: The host MUST offer a control to the left of every title that collapses the entry to its number, title, tags and assessment icon, and MUST show the same entries collapsed when the document is opened again; collapsing is not an undo step (028: FR-019, FR-020).
 - **FR-011**: The host MUST draw the designer in the Knowledge designer's looks, in both themes: its colours, typography and spacing, tags as its rounded tags, and its searchable lists that also create, outside a table as inside one (028: FR-021).
 
 #### Editing
@@ -230,7 +230,7 @@ Each requirement names the requirement of spec 028 it carries, as "028: FR-0xx".
 As in spec 028, with two of this host's own:
 
 - **Designer document**: what the host lists and opens. A requirement document is one by its envelope, with or without its registration.
-- **Conformance corpus**: the fixtures the host's conformance run replays. It holds today FBL 0.1 with selected additions, and gains those of FBL 0.7.
+- **Conformance corpus**: the fixtures the host's conformance run replays. It holds today FBL 0.1 with additions up to FBL 0.6, and gains those of FBL 0.7.
 
 ## Success Criteria *(mandatory)*
 
@@ -244,7 +244,7 @@ As in spec 028, with two of this host's own:
 - **SC-006**: The host's conformance run passes every fixture of `bullets-read`, `bullets-edits`, `registration-blocks` and `hierarchical-requirement-*`, and fails on a planted defect (028: SC-003, SC-004).
 - **SC-007**: For every fault in the `hierarchical-requirement-faults` fixture, the person sees either one finding at one bullet with everything else editable, or a read-only page with one finding (028: SC-005).
 - **SC-008**: A document whose registration is deleted and created again opens with every tag, category, state, reference and assessment it had (028: SC-006).
-- **SC-009**: A requirement document written from the companion alone, by a person or by an agent, opens in the designer without a finding (028: SC-007).
+- **SC-009**: A requirement document written from the companion alone, by a person or by an agent, opens in the designer without a finding other than `std.missingId` for an entry written as `ITEM-NEW` or `REQ-NEW`, as the companion tells writers to (028: SC-007).
 
 ## Assumptions
 
