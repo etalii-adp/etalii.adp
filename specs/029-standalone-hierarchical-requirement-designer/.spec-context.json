@@ -419,5 +419,6 @@
       "summary": "113 tasks in 11 phases: setup, three foundational pull requests, one pull request per user story (US3, US1, US2 first), polish and measurement"
     }
   },
-  "approach": "FBL library first (bullets family, declared registration blocks, drift), then envelope routing with an optional registration, then the module's model with the fixtures, then a shared hierarchy surface (session contract, wire, client library), then one pull request per remaining user story."
+  "approach": "FBL library first (bullets family, declared registration blocks, drift), then envelope routing with an optional registration, then the module's model with the fixtures, then a shared hierarchy surface (session contract, wire, client library), then one pull request per remaining user story.",
+  "assistant": "claude-vscode"
 }

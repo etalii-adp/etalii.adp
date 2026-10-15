@@ -1871,5 +1871,6 @@
       "note": "Phase 15 (T070, T071) waits for the definition's merge, spec 025 and the maintainer's word to start",
       "step": "implement"
     }
-  ]
+  ],
+  "assistant": "claude-vscode"
 }

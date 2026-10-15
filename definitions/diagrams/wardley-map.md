@@ -26,9 +26,9 @@ Every statement here is tied to the source that shows it. Paths are in [etalii.a
 
 ## 2. Files: registration and body
 
-- A map is two files: an `.adp` registration whose first line is `wardley/map`, and the body, `<name>.owm` (`backend/WardleyDocumentFactory.cs`). DISL's `persistence.files` can name the body but not a registration file owned by the host.
+- A map is two files: an `.adp` registration whose first line is `wardley/map`, and the body, `<name>.owm` (`backend/ServiceCollection.AddWardleyMap.cs`). DISL's `persistence.files` can name the body but not a registration file owned by the host.
 - The `.wm` extension is read as well as `.owm` (`backend/WardleyParser.cs`, Req 2). DISL has one `fileExtension`.
-- A new map's body is exactly `title <baseName>\n`, with an LF terminator (`backend/WardleyDocumentFactory.cs`). DISL can set a diagram attribute default, but not a default computed from the file name, nor the bytes of an empty document.
+- A new map's body is exactly `title <baseName>\n`, with an LF terminator (`backend/ServiceCollection.AddWardleyMap.cs`). DISL can set a diagram attribute default, but not a default computed from the file name, nor the bytes of an empty document.
 - A third file, `<name>.identities.json`, sits beside the body (section 4).
 
 ## 3. The `.owm` format
@@ -201,7 +201,7 @@ The standalone rules are `backend/WardleyRuleSet.cs` and `backend/WardleyValidat
 ## 9. Runtime behaviour specific to the standalone host
 
 - **Several connections** to one map receive deltas, filtered to the viewport each client is showing (`backend/WardleyElementMapper.cs`, `backend/ServiceCollection.AddWardleyMap.cs`).
-- **External edits**: when the `.owm` or its registration changes on disk, the store re-reads it and every open session hears. A read that fails keeps the last good document; only the watcher's delete clears it (`backend/WardleyDocumentReloader.cs`, `backend/WardleyDocumentStore.cs`). Saves are published atomically.
+- **External edits**: when the `.owm` or its registration changes on disk, the store re-reads it and every open session hears. A read that fails keeps the last good document; only the watcher's delete clears it (`backend/WardleyDocumentStore.cs`). Saves are published atomically.
 - **Layout** is manual only; there is no arrange command.
 - **Fixtures** are marked `-text` in `.gitattributes` so their bytes survive checkout; no third-party map content is committed, because the Wardley mapping method's material is CC BY-SA 4.0 (`Fixtures/readme.md`).
 
