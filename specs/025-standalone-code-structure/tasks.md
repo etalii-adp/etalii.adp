@@ -234,7 +234,7 @@
 
 ### Time and files (report 3, 8.5)
 
-- [ ] T141 [US3] Register `TimeProvider.System` in the host, reference `Microsoft.Extensions.TimeProvider.Testing` from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/` and record it in `etalii.adp.ide.standalone/docs/dependencies.md` (FR-051, FR-004; research R8).
+- [x] T141 [US3] Register `TimeProvider.System` in the host, reference `Microsoft.Extensions.TimeProvider.Testing` from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/` and record it in `etalii.adp.ide.standalone/docs/dependencies.md` (FR-051, FR-004; research R8).
 - [ ] T142 [US3] Add `Debouncer<TKey>` on a `TimeProvider` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp/` and move the coalescing timers of `HistoryActionsBroadcaster.cs`, `ProblemStore.cs` and `TrackedProblemRoot.cs` onto it; their tests advance a fake clock (FR-051; SC-004).
 - [ ] T143 [US3] Add `RetainedRegistry<TKey, TValue>` on a `TimeProvider` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp/` and move the idle eviction of `ContextSelectionStore.cs`, `HierarchyModelStore.cs` and `HistoryStackStore.cs` onto it; the two hierarchy tests that sleep 1,500 ms advance a fake clock (FR-051; SC-004).
 - [ ] T144 [P] [US3] Replace `MarkdownEditorSession.cs` and `PlainEditorSession.cs` under `etalii.adp.ide.standalone/src/editors/` with one `TextEditorSession` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Editor/`, the markdown editor a thin variant; update `etalii.adp.ide.standalone/docs/creating-an-editor-module.md` (FR-053, FR-004).
