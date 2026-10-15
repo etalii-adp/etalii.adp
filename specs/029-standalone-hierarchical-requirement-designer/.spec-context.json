@@ -2,8 +2,8 @@
   "workflow": "companion",
   "specName": "The Hierarchical Requirement Designer in the Standalone Host",
   "branch": "features/029-standalone-hierarchical-requirement-designer",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
   "history": [
     {
       "step": "specify",
@@ -18,106 +18,318 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-10-14T21:57:18.450Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-14T22:08:16.962Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T22:22:32.267Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T22:30:18.028Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T22:30:27.523Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-14T22:45:50.034Z"
+    },
+    {
+      "step": "tasks",
+      "substep": "generate",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T22:51:34.507Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-14T22:51:50.124Z"
     }
   ],
   "telemetryInstanceId": "4534790c-e93b-4985-a552-aedf1e2b422a",
   "last_action": "living specs evaluated — no capabilities matched",
   "coverage": {
     "FR-001": {
-      "title": "Offer the designer type as Hierarchical Requirement Designer"
+      "title": "Offer the designer type as Hierarchical Requirement Designer",
+      "tasks": [
+        "T054",
+        "T059"
+      ]
     },
     "FR-002": {
-      "title": "Recognise a requirement document by its envelope alone, ahead of the other .md owners"
+      "title": "Recognise a requirement document by its envelope alone, ahead of the other .md owners",
+      "tasks": [
+        "T022",
+        "T025",
+        "T029",
+        "T047"
+      ]
     },
     "FR-003": {
-      "title": "Add an existing requirement document as a designer document without changing it"
+      "title": "Add an existing requirement document as a designer document without changing it",
+      "tasks": [
+        "T023",
+        "T027",
+        "T047"
+      ]
     },
     "FR-004": {
-      "title": "Keep the document when its registration is deleted; create the registration with the first setting"
+      "title": "Keep the document when its registration is deleted; create the registration with the first setting",
+      "tasks": [
+        "T015",
+        "T018",
+        "T024",
+        "T026",
+        "T028",
+        "T096"
+      ]
     },
     "FR-005": {
-      "title": "Create a new document from the binding template byte for byte"
+      "title": "Create a new document from the binding template byte for byte",
+      "tasks": [
+        "T023",
+        "T027",
+        "T072",
+        "T076"
+      ]
     },
     "FR-006": {
-      "title": "One page that scrolls top to bottom, no tree beside it"
+      "title": "One page that scrolls top to bottom, no tree beside it",
+      "tasks": [
+        "T049",
+        "T056"
+      ]
     },
     "FR-007": {
-      "title": "Items as boxes with requirements then sub-items to their right"
+      "title": "Items as boxes with requirements then sub-items to their right",
+      "tasks": [
+        "T049",
+        "T056"
+      ]
     },
     "FR-008": {
-      "title": "Levels that fit, a mark for those that do not, focus with a trail, not stored"
+      "title": "Levels that fit, a mark for those that do not, focus with a trail, not stored",
+      "tasks": [
+        "T049",
+        "T056"
+      ]
     },
     "FR-009": {
-      "title": "Number beside the title, tags below it, description under it"
+      "title": "Number beside the title, tags below it, description under it",
+      "tasks": [
+        "T049",
+        "T056"
+      ]
     },
     "FR-010": {
-      "title": "Collapse control left of every title, kept when reopened"
+      "title": "Collapse control left of every title, kept when reopened",
+      "tasks": [
+        "T048",
+        "T049",
+        "T054",
+        "T056"
+      ]
     },
     "FR-011": {
-      "title": "The Knowledge designer looks in both themes, outside a table too"
+      "title": "The Knowledge designer looks in both themes, outside a table too",
+      "tasks": [
+        "T056",
+        "T058",
+        "T097",
+        "T099"
+      ]
     },
     "FR-012": {
-      "title": "Add without a dialog by a control and by a named key"
+      "title": "Add without a dialog by a control and by a named key",
+      "tasks": [
+        "T074",
+        "T075",
+        "T078",
+        "T079"
+      ]
     },
     "FR-013": {
-      "title": "Drag an item with its content, or a requirement"
+      "title": "Drag an item with its content, or a requirement",
+      "tasks": [
+        "T075",
+        "T079"
+      ]
     },
     "FR-014": {
-      "title": "Confirm before deleting an entry that holds anything or is named"
+      "title": "Confirm before deleting an entry that holds anything or is named",
+      "tasks": [
+        "T075",
+        "T079"
+      ]
     },
     "FR-015": {
-      "title": "Assessment icon at the top right, rolling up in a collapsed item"
+      "title": "Assessment icon at the top right, rolling up in a collapsed item",
+      "tasks": [
+        "T084",
+        "T086"
+      ]
     },
     "FR-016": {
-      "title": "The icon opens the list of its assessments to add, change, remove, resolve"
+      "title": "The icon opens the list of its assessments to add, change, remove, resolve",
+      "tasks": [
+        "T084",
+        "T086"
+      ]
     },
     "FR-017": {
-      "title": "Typing # opens the lookup of entries of the same document"
+      "title": "Typing # opens the lookup of entries of the same document",
+      "tasks": [
+        "T090",
+        "T091"
+      ]
     },
     "FR-018": {
-      "title": "Selecting a reference box shows its target without writing the file"
+      "title": "Selecting a reference box shows its target without writing the file",
+      "tasks": [
+        "T090",
+        "T092"
+      ]
     },
     "FR-019": {
-      "title": "Narrow by tag, category, state and an item pattern with * and ?"
+      "title": "Narrow by tag, category, state and an item pattern with * and ?",
+      "tasks": [
+        "T104",
+        "T108"
+      ]
     },
     "FR-020": {
-      "title": "Sort requirements within each item without changing the file"
+      "title": "Sort requirements within each item without changing the file",
+      "tasks": [
+        "T104",
+        "T108"
+      ]
     },
     "FR-021": {
-      "title": "A finding stays listed under a filter and shows its entry"
+      "title": "A finding stays listed under a filter and shows its entry",
+      "tasks": [
+        "T104",
+        "T109"
+      ]
     },
     "FR-022": {
-      "title": "Read an outside change again and keep what was collapsed"
+      "title": "Read an outside change again and keep what was collapsed",
+      "tasks": [
+        "T061",
+        "T069"
+      ]
     },
     "FR-023": {
-      "title": "Tell the person and offer reload or keep when unsaved edits meet an outside change"
+      "title": "Tell the person and offer reload or keep when unsaved edits meet an outside change",
+      "tasks": [
+        "T065",
+        "T068"
+      ]
     },
     "FR-024": {
-      "title": "Refuse an edit against a changed file, never merge"
+      "title": "Refuse an edit against a changed file, never merge",
+      "tasks": [
+        "T006",
+        "T009",
+        "T062"
+      ]
     },
     "FR-025": {
-      "title": "Tell the person when an outside change ended the undo history"
+      "title": "Tell the person when an outside change ended the undo history",
+      "tasks": [
+        "T063",
+        "T067"
+      ]
     },
     "FR-026": {
-      "title": "Make the model change and the fixture bytes of every gesture"
+      "title": "Make the model change and the fixture bytes of every gesture",
+      "tasks": [
+        "T066",
+        "T073",
+        "T077",
+        "T083",
+        "T085",
+        "T089",
+        "T095",
+        "T098",
+        "T102",
+        "T103",
+        "T105",
+        "T106"
+      ]
     },
     "FR-027": {
-      "title": "Report each finding at its place; an unreadable file read-only, never written"
+      "title": "Report each finding at its place; an unreadable file read-only, never written",
+      "tasks": [
+        "T041",
+        "T042"
+      ]
     },
     "FR-028": {
-      "title": "Read and write declared registration blocks; keep an undeclared one"
+      "title": "Read and write declared registration blocks; keep an undeclared one",
+      "tasks": [
+        "T013",
+        "T014",
+        "T016",
+        "T017",
+        "T019"
+      ]
     },
     "FR-029": {
-      "title": "FBL host conformance with bullets, passing every fixture"
+      "title": "FBL host conformance with bullets, passing every fixture",
+      "tasks": [
+        "T003",
+        "T004",
+        "T007",
+        "T008",
+        "T010",
+        "T032",
+        "T044",
+        "T059"
+      ]
     },
     "FR-030": {
-      "title": "DESL host conformance with the hierarchy surface kind"
+      "title": "DESL host conformance with the hierarchy surface kind",
+      "tasks": [
+        "T059"
+      ]
     },
     "FR-031": {
-      "title": "DED host conformance: envelope, version, never changed"
+      "title": "DED host conformance: envelope, version, never changed",
+      "tasks": [
+        "T036",
+        "T048"
+      ]
     },
     "FR-032": {
-      "title": "The hierarchy surface is shared host work, not module code"
+      "title": "The hierarchy surface is shared host work, not module code",
+      "tasks": [
+        "T050",
+        "T051",
+        "T053"
+      ]
     }
   },
   "size": "oversized",
@@ -135,6 +347,51 @@
     {
       "decision": "Each user story passes spec 028 scenarios of the same story by reference and adds only what this host decides",
       "why": "Copying them would let the two specifications drift"
+    },
+    {
+      "decision": "Plan now against the host spec 025 leaves; the first task reads the host again and corrects paths",
+      "why": "The spec asks for a re-read when building starts; the decisions do not depend on where a type lives",
+      "rejected": "Waiting with the plan until spec 025 is done"
+    },
+    {
+      "decision": "Eleven standalone pull requests: two FBL, routing, model, surface, then one per user story",
+      "why": "Host order is model, persistence, wire, client UI; each later story ships alone",
+      "rejected": "One pull request per layer across all stories"
+    },
+    {
+      "decision": "The envelope claims a .md through the FBL library marker routing, asked first in ToolRouter",
+      "why": "Agent Behavior Modelling is a diagram and routes first today; FBL 12 defines marker claims and the library has them",
+      "rejected": "A content check in the designer router alone"
+    },
+    {
+      "decision": "A designer document may have no registration; it is created with the first setting outside the history; deleting it keeps the body",
+      "why": "FR-002, FR-004 and the binding createOnFirstPlacement",
+      "rejected": "Creating an empty registration on open"
+    },
+    {
+      "decision": "Adding an existing .md: accepted with the envelope, refused without it, never written",
+      "why": "Routing by envelope already makes it a designer document; the refusal names the line to write",
+      "rejected": "A consent dialog that writes the envelope"
+    },
+    {
+      "decision": "A second session contract IHierarchySurfaceSession beside ITableDesignerSession, and the whole model sent on every change",
+      "why": "The table members cannot serve a page; 500 requirements fit in SC-003",
+      "rejected": "Deltas as the table sends them"
+    },
+    {
+      "decision": "Unsaved edits are the field being typed; Keep my text re-plans one value against the new file",
+      "why": "Designers write behind; replacing one value is an edit, not a merge",
+      "rejected": "Queuing gestures and replaying them"
+    },
+    {
+      "decision": "Ctrl+Enter and Ctrl+Shift+Enter as context-action shortcuts are the host help; mdi-comment-multiple-outline for several",
+      "why": "The host has no help screen; shortcuts show in ribbon and menus",
+      "rejected": "Building a keyboard help screen"
+    },
+    {
+      "decision": "Amend spec 029 where the definition disagrees: title is the base name, SC-009 exempts std.missingId, 23 fixtures, outside-history writes",
+      "why": "The definition wins, as the spec says",
+      "rejected": "Leaving the spec at odds with the fixtures"
     }
   ],
   "expectations": [
@@ -152,5 +409,15 @@
     "constraint: building waits for spec 025 and the maintainer word",
     "constraint: standalone principles are its CLAUDE.md and .spec-workflow/steering/"
   ],
-  "intent": "Build the Hierarchical Requirement Designer in the standalone host from the definition spec 028 merged"
+  "intent": "Build the Hierarchical Requirement Designer in the standalone host from the definition spec 028 merged",
+  "step_summaries": {
+    "plan": {
+      "summary": "Plan, research, data model, three contracts and quickstart for building the designer in the standalone host in eleven pull requests",
+      "key_finding": "The host assumes a designer document always has a registration and routes by registration only; envelope routing, an optional registration and a non-cascading delete are the foundation"
+    },
+    "tasks": {
+      "summary": "113 tasks in 11 phases: setup, three foundational pull requests, one pull request per user story (US3, US1, US2 first), polish and measurement"
+    }
+  },
+  "approach": "FBL library first (bullets family, declared registration blocks, drift), then envelope routing with an optional registration, then the module's model with the fixtures, then a shared hierarchy surface (session contract, wire, client library), then one pull request per remaining user story."
 }
