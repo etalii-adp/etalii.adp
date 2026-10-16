@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="1095" viewBox="0 0 820 1095" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker>
+<marker id="arrow-back" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker>
+<style>
+.title{font-size:14px;font-weight:600;fill:#222}.note{font-size:11px;fill:#666}.end{text-anchor:end}
+.layer{font-size:10px;fill:#999;text-anchor:middle}.label{font-size:13px;text-anchor:middle;fill:#222}
+.node{fill:#eef3fb;stroke:#4a6fa5}.cycle{fill:#fdf0e6;stroke:#d9822b}
+.edge{stroke:#555;stroke-width:1.4;fill:none}.back{stroke:#c0392b;stroke-dasharray:4 3}
+</style>
+</defs>
+<rect width="820" height="1095" fill="#ffffff"/>
+<text x="20" y="26" class="title">One graph with a cycle under each policy of Layering.LongestPath (spec 025, M3 review, question 3)</text>
+<text x="20" y="46" class="note">Edges S-&gt;A, A-&gt;B, B-&gt;C, C-&gt;A (the cycle, orange), C-&gt;D. Columns are layers 0 to 4; a red dashed edge points backwards or within its layer.</text>
+<text x="20" y="88" class="title">BackEdgeIsZero</text>
+<text x="20" y="106" class="note">azure-devops-pipeline, dotnet-dependency-graph</text>
+<line x1="334" y1="101" x2="612" y2="101" class="edge" marker-end="url(#arrow)"/>
+<path d="M615,101 Q527,146 442,101" class="edge back" marker-end="url(#arrow-back)"/>
+<line x1="439" y1="101" x2="507" y2="101" class="edge" marker-end="url(#arrow)"/>
+<line x1="544" y1="101" x2="612" y2="101" class="edge" marker-end="url(#arrow)"/>
+<line x1="544" y1="101" x2="612" y2="135" class="edge" marker-end="url(#arrow)"/>
+<rect x="300" y="84" width="34" height="26" rx="4" class="node"/>
+<text x="317.0" y="102" class="label">S</text>
+<rect x="615" y="84" width="34" height="26" rx="4" class="node cycle"/>
+<text x="632.0" y="102" class="label">A</text>
+<rect x="405" y="84" width="34" height="26" rx="4" class="node cycle"/>
+<text x="422.0" y="102" class="label">B</text>
+<rect x="510" y="84" width="34" height="26" rx="4" class="node cycle"/>
+<text x="527.0" y="102" class="label">C</text>
+<rect x="615" y="118" width="34" height="26" rx="4" class="node"/>
+<text x="632.0" y="136" class="label">D</text>
+<text x="317.0" y="74" class="layer">0</text>
+<text x="422.0" y="74" class="layer">1</text>
+<text x="527.0" y="74" class="layer">2</text>
+<text x="632.0" y="74" class="layer">3</text>
+<text x="737.0" y="74" class="layer">4</text>
+<text x="20" y="124" class="note">layers: S 0, A 3, B 1, C 2, D 3</text>
+<text x="20" y="293" class="title">BackEdgeIgnored</text>
+<text x="20" y="311" class="note">databricks (job)</text>
+<line x1="334" y1="306" x2="507" y2="306" class="edge" marker-end="url(#arrow)"/>
+<path d="M510,306 Q422,385 337,340" class="edge back" marker-end="url(#arrow-back)"/>
+<line x1="334" y1="340" x2="402" y2="306" class="edge" marker-end="url(#arrow)"/>
+<line x1="439" y1="306" x2="507" y2="306" class="edge" marker-end="url(#arrow)"/>
+<line x1="439" y1="306" x2="507" y2="340" class="edge" marker-end="url(#arrow)"/>
+<rect x="300" y="289" width="34" height="26" rx="4" class="node"/>
+<text x="317.0" y="307" class="label">S</text>
+<rect x="510" y="289" width="34" height="26" rx="4" class="node cycle"/>
+<text x="527.0" y="307" class="label">A</text>
+<rect x="300" y="323" width="34" height="26" rx="4" class="node cycle"/>
+<text x="317.0" y="341" class="label">B</text>
+<rect x="405" y="289" width="34" height="26" rx="4" class="node cycle"/>
+<text x="422.0" y="307" class="label">C</text>
+<rect x="510" y="323" width="34" height="26" rx="4" class="node"/>
+<text x="527.0" y="341" class="label">D</text>
+<text x="317.0" y="279" class="layer">0</text>
+<text x="422.0" y="279" class="layer">1</text>
+<text x="527.0" y="279" class="layer">2</text>
+<text x="632.0" y="279" class="layer">3</text>
+<text x="737.0" y="279" class="layer">4</text>
+<text x="20" y="329" class="note">layers: S 0, A 2, B 0, C 1, D 2</text>
+<text x="20" y="498" class="title">BackEdgeIsZeroPerNode</text>
+<text x="20" y="516" class="note">ansible-structure</text>
+<line x1="334" y1="511" x2="612" y2="511" class="edge" marker-end="url(#arrow)"/>
+<path d="M649,511 C687,511 687,545 651,545" class="edge back" marker-end="url(#arrow-back)"/>
+<path d="M649,545 C687,545 687,579 651,579" class="edge back" marker-end="url(#arrow-back)"/>
+<path d="M649,579 C687,579 687,511 651,511" class="edge back" marker-end="url(#arrow-back)"/>
+<line x1="649" y1="579" x2="717" y2="511" class="edge" marker-end="url(#arrow)"/>
+<rect x="300" y="494" width="34" height="26" rx="4" class="node"/>
+<text x="317.0" y="512" class="label">S</text>
+<rect x="615" y="494" width="34" height="26" rx="4" class="node cycle"/>
+<text x="632.0" y="512" class="label">A</text>
+<rect x="615" y="528" width="34" height="26" rx="4" class="node cycle"/>
+<text x="632.0" y="546" class="label">B</text>
+<rect x="615" y="562" width="34" height="26" rx="4" class="node cycle"/>
+<text x="632.0" y="580" class="label">C</text>
+<rect x="720" y="494" width="34" height="26" rx="4" class="node"/>
+<text x="737.0" y="512" class="label">D</text>
+<text x="317.0" y="484" class="layer">0</text>
+<text x="422.0" y="484" class="layer">1</text>
+<text x="527.0" y="484" class="layer">2</text>
+<text x="632.0" y="484" class="layer">3</text>
+<text x="737.0" y="484" class="layer">4</text>
+<text x="20" y="534" class="note">layers: S 0, A 3, B 3, C 3, D 4</text>
+<text x="20" y="703" class="title">Kahn</text>
+<text x="20" y="721" class="note">supply-chain; sankey and SKOS, cycles taken out first</text>
+<line x1="334" y1="716" x2="402" y2="716" class="edge" marker-end="url(#arrow)"/>
+<path d="M405,716 Q370,795 337,750" class="edge back" marker-end="url(#arrow-back)"/>
+<path d="M334,750 C372,750 372,784 336,784" class="edge back" marker-end="url(#arrow-back)"/>
+<line x1="334" y1="784" x2="402" y2="716" class="edge" marker-end="url(#arrow)"/>
+<path d="M334,784 C372,784 372,818 336,818" class="edge back" marker-end="url(#arrow-back)"/>
+<rect x="300" y="699" width="34" height="26" rx="4" class="node"/>
+<text x="317.0" y="717" class="label">S</text>
+<rect x="405" y="699" width="34" height="26" rx="4" class="node cycle"/>
+<text x="422.0" y="717" class="label">A</text>
+<rect x="300" y="733" width="34" height="26" rx="4" class="node cycle"/>
+<text x="317.0" y="751" class="label">B</text>
+<rect x="300" y="767" width="34" height="26" rx="4" class="node cycle"/>
+<text x="317.0" y="785" class="label">C</text>
+<rect x="300" y="801" width="34" height="26" rx="4" class="node"/>
+<text x="317.0" y="819" class="label">D</text>
+<text x="317.0" y="689" class="layer">0</text>
+<text x="422.0" y="689" class="layer">1</text>
+<text x="527.0" y="689" class="layer">2</text>
+<text x="632.0" y="689" class="layer">3</text>
+<text x="737.0" y="689" class="layer">4</text>
+<text x="20" y="739" class="note">layers: S 0, A 1, B 0, C 0, D 0</text>
+<text x="20" y="908" class="title">Condensed (proposed, option b)</text>
+<text x="20" y="926" class="note">OWL draws a cycle this way already</text>
+<line x1="334" y1="921" x2="402" y2="921" class="edge" marker-end="url(#arrow)"/>
+<path d="M439,921 C477,921 477,955 441,955" class="edge back" marker-end="url(#arrow-back)"/>
+<path d="M439,955 C477,955 477,989 441,989" class="edge back" marker-end="url(#arrow-back)"/>
+<path d="M439,989 C477,989 477,921 441,921" class="edge back" marker-end="url(#arrow-back)"/>
+<line x1="439" y1="989" x2="507" y2="921" class="edge" marker-end="url(#arrow)"/>
+<rect x="300" y="904" width="34" height="26" rx="4" class="node"/>
+<text x="317.0" y="922" class="label">S</text>
+<rect x="405" y="904" width="34" height="26" rx="4" class="node cycle"/>
+<text x="422.0" y="922" class="label">A</text>
+<rect x="405" y="938" width="34" height="26" rx="4" class="node cycle"/>
+<text x="422.0" y="956" class="label">B</text>
+<rect x="405" y="972" width="34" height="26" rx="4" class="node cycle"/>
+<text x="422.0" y="990" class="label">C</text>
+<rect x="510" y="904" width="34" height="26" rx="4" class="node"/>
+<text x="527.0" y="922" class="label">D</text>
+<text x="317.0" y="894" class="layer">0</text>
+<text x="422.0" y="894" class="layer">1</text>
+<text x="527.0" y="894" class="layer">2</text>
+<text x="632.0" y="894" class="layer">3</text>
+<text x="737.0" y="894" class="layer">4</text>
+<text x="20" y="944" class="note">layers: S 0, A 1, B 1, C 1, D 2</text>
+</svg>
