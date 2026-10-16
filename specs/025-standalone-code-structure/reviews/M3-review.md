@@ -90,7 +90,7 @@ The exit condition of M3 (plan.md, the specification's milestone table): one imp
 
 | Candidate | Answer | Evidence | Tasks added |
 |---|---|---|---|
-| One cycle policy for all tools | Asked: question 3, recommended no | Five rules are in use, not three: T122 found `BackEdgeIgnored` and `BackEdgeIsZeroPerNode` beside the pipeline's `BackEdgeIsZero`, T123 needed `Kahn`, and OWL condenses its cycles. [M3-cycle-policies.svg](M3-cycle-policies.svg) draws one cyclic graph under each. A cycle is a defect in three of the five sources: the pipeline and databricks validators report it as a problem, and a .NET solution with a cycle of project references does not build. Mostly a broken document's picture would change | none, unless question 3 says otherwise |
+| One cycle policy for all tools | No, as ruled on 2026-10-16 (question 3, (a)): each tool keeps its policy | Five rules are in use, not three: T122 found `BackEdgeIgnored` and `BackEdgeIsZeroPerNode` beside the pipeline's `BackEdgeIsZero`, T123 needed `Kahn`, and OWL condenses its cycles. [M3-cycle-policies.svg](M3-cycle-policies.svg) draws one cyclic graph under each. A cycle is a defect in three of the five sources: the pipeline and databricks validators report it as a problem, and a .NET solution with a cycle of project references does not build. Mostly a broken document's picture would change | none, unless question 3 says otherwise |
 | One watcher per project root for every consumer, the editors and the knowledge designer included | Do now | `ProjectFileEvents` feeds the reload bridge, the hierarchy, the problems watcher, the folder stores and `DependencyGraphStore` (T147, T148). Outside it: every `WatchedFile` (the five text editors and the knowledge designer) makes its own `WatchedFolder` on its file's folder, and `AnsibleFolder`, from `ansible-structure-disl-fbl` (#355), makes its own recursive `FileSystemWatcher`, the only one outside `WatchedFolder` | T280 |
 | Module layouts that are now a few calls into the layout library, expressed as data | No | After T118 to T126 each layout still holds its notation's placement: sizes, rows per kind, lanes, edge routing. The library took the generic part. Expressing what is left as data is a DISL arrangement, which each conversion writes for its own module (timeline's is in its definition, helm-chart's canvas is compiled from its definition in `helm-chart-disl-fbl`) (FR-012) | none |
 | The findings of every module as one `ParseOutcome` flow into the problems project | No | `ParseOutcome` is one type in every module that parses (T139, T140). What is left per module is three to six lines in its validator that turn the outcome's problems into a `DiagramProblem` under the module's own rule id, one problem or all of them as each module has always reported. A shared mapping would take every one of those as a parameter | none |
@@ -140,7 +140,9 @@ The exit condition of M3 (plan.md, the specification's milestone table): one imp
 
 Ruled since the M2 review, and applied: B-02 and B-17 to B-19 (T132, standalone pull request 346), B-01 and B-20 (T135), B-04 (T137), B-05 with B-15 and B-16 (T127, T128), B-06 (T146), B-21 to B-24 (T139, T140), B-25 (T140, shown by pull request 345). B-03 stays *not a change*; question 3 asks whether to make it one.
 
-Still open: B-07, needed by M4 (T178); B-08, needed by M6. B-07 is put now, as question 2, with the two rule sets laid side by side.
+Ruled with this review on 2026-10-16: B-07 (question 2, (a)): the rename handler validates with `EntryNameRules` and its messages win; T178 applies it. B-03 stays *not a change* (question 3, (a)).
+
+Still open: B-08, needed by M6.
 
 ## Follow-up features
 
@@ -175,7 +177,7 @@ None. Every finding of M3 serves a requirement of this feature.
 - (b) A task: give `Eventually` a round action and build `StreamProbe` on it, so there is one loop; about 40 lines, and `waits.py` then needs a change to stop counting the three entries.
 - (c) Other.
 
-This pull request is written as (a) for all four; it changes as the answers say.
+**Answers.** Ruled by the maintainer on 2026-10-16, in the project thread, each on (a): question 1 "In M5", question 2 "Dialog's rules", question 3 "Keep each", question 4 "Amend SC-003". This pull request was written as (a) for all four and stands as written.
 
 ## Ownership
 
