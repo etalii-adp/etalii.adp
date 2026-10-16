@@ -249,7 +249,7 @@
 
 - [x] T150 [US3] Add `DislDiagramDefinition` (the lazy bundled definition, the wire-id map, the toolbox projection, the menu action mapping, the row mapping, one finding-to-severity mapping) and `DislToolboxProvider` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/`, with timeline's `*Definition.cs` as first consumer (FR-052).
 - [x] T151 [P] [US3] Move the other six modules with a bundled definition onto `DislDiagramDefinition`, one module per pull request, deleting the forwarding toolbox providers and rule sets that T028 left; shortcuts are sent in one way by all seven (FR-052; report D2).
-- [ ] T278 [P] [US3] Added by the M2 review: one loader for a bundled FBL binding (an embedded resource read into an `FblBinding`) and one memo of a body's DISL model per text, in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/` beside `DislDiagramDefinition`; `AadBody`, `CausalLoopBody`, `GhgBody` and `AbmBody` use them (FR-052).
+- [x] T278 [P] [US3] Added by the M2 review: one loader for a bundled FBL binding (an embedded resource read into an `FblBinding`) and one memo of a body's DISL model per text, in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram/` beside `DislDiagramDefinition`; `AadBody`, `CausalLoopBody`, `GhgBody` and `AbmBody` use them (FR-052).
 
 ### Review
 
