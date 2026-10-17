@@ -2,7 +2,7 @@
 
 **Input**: [standalone-code-structure.spec.md](standalone-code-structure.spec.md), [plan.md](plan.md), [research.md](research.md), [data-model.md](data-model.md), [behaviour-changes.md](behaviour-changes.md), [contracts/](contracts/), and the report, [analysis-2026-10-10.md](analysis-2026-10-10.md).
 
-**285 tasks in ten milestones.** T265 and T266 were added on 2026-10-11 with the ruling on DP-5 and stand in M4. T255 to T257 were struck on 2026-10-12 by the ruling on DP-1 (c), keep the stubs. The M0 review added T267 to T271 to M0 and struck T021, so 267 remained. The M1 review added T272 (in M3, beside T144 and T145), T273 and T274 (at the head of M2) and T275 and T276 (in M1), and struck nothing, so 272 remain. The M2 review added T277 (at the end of M2) and T278 (in M3, beside T151) and struck T129, so 273 remain. The M3 review added T279 to T282 and T285 (in M3, after its review), T283 (in M5) and T284 (in M8), and struck nothing, so 280 remain. Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
+**286 tasks in ten milestones.** T265 and T266 were added on 2026-10-11 with the ruling on DP-5 and stand in M4. T255 to T257 were struck on 2026-10-12 by the ruling on DP-1 (c), keep the stubs. The M0 review added T267 to T271 to M0 and struck T021, so 267 remained. The M1 review added T272 (in M3, beside T144 and T145), T273 and T274 (at the head of M2) and T275 and T276 (in M1), and struck nothing, so 272 remain. The M2 review added T277 (at the end of M2) and T278 (in M3, beside T151) and struck T129, so 273 remain. The M3 review added T279 to T282 and T285 (in M3, after its review), T283 (in M5) and T284 (in M8), and struck nothing, so 280 remain. T286 was added to M4 on 2026-10-17, as the maintainer ruled on a card, so 281 remain. Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
 
 ## How to read a task
 
@@ -310,6 +310,10 @@ These come before M4's first task.
 - [ ] T180 [P] [US4] Make `HistoryActionsBroadcaster` and `ProblemBroadcaster` `IHostedService`s and remove their resolution "only to construct them" from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Service/Program.cs` (FR-064).
 - [ ] T181 [US4] Read `etalii.adp.ide.standalone/docs/architecture.md` and `etalii.adp.ide.standalone/docs/solution-structure.md` from start to end against the solution as it now is: the project tables, the counts, *which project owns which concern* (FR-004).
 
+### Added during M4
+
+- [ ] T286 [US1] Added on 2026-10-17, as the maintainer ruled on a card: every client test under `etalii.adp.ide.standalone/src/` that reads CodeMirror's syntax tree (`foldable`, `foldEffect`, `syntaxTree`, a fold or a tree query) before the parse is complete waits for it as T281's `parsed()` does - the editor holds the text, then `forceParsing` - so a slow runner cannot look before the tree exists. Found by `XmlEditorPanel`'s "folds an element, a comment and a CDATA section", which failed once in a full run on Windows and passed alone. Each fix is seen to fail under a fast clock first, as T276 and T281 did (FR-005; SC-002).
+
 ### Review
 
 - [ ] T182 [US9] Run `etalii.adp.ide.standalone/.github/tools/analysis/measure.sh` on the merge commit of M4's last pull request, in a freshly created worktree, and save its output as `etalii.adp/specs/025-standalone-code-structure/reviews/M4-measurements.json` (FR-009, FR-010).
@@ -476,7 +480,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-002 | T039, T132, T135, T137, T146, T178, T211 |
 | FR-003 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md). |
 | FR-004 | 21 tasks, T016 to T266 |
-| FR-005 | T033, T034, T035, T056, T176, T185, T195, T212, T216, T217, T269, T276, T281, T282 |
+| FR-005 | T033, T034, T035, T056, T176, T185, T195, T212, T216, T217, T269, T276, T281, T282, T286 |
 | FR-006 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md) (the identity) and by the *Ownership* section of every review record (the owner). |
 | FR-007 | T029 |
 | FR-008 | T043 |
@@ -576,7 +580,7 @@ FR-002, FR-004, FR-005, FR-007 and FR-008 are rules of [contracts/pull-request.m
 | Success criterion | Where it is worked for | Measured at the review of |
 |---|---|---|
 | SC-001 | T025, T263 | M0 |
-| SC-002 | T026, T261, T271, T275, T276, T281, T282 | M0, M9 |
+| SC-002 | T026, T261, T271, T275, T276, T281, T282, T286 | M0, M9 |
 | SC-003 | T149 | M0, M3 |
 | SC-004 | T142, T143, T149 | M3 |
 | SC-005 | The test-code tasks of M0, M1 (contracts) and M8; T009 | M9 |
