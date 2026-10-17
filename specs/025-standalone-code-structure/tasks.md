@@ -312,7 +312,7 @@ These come before M4's first task.
 
 ### Added during M4
 
-- [ ] T286 [US1] Added on 2026-10-17, as the maintainer ruled on a card: every client test under `etalii.adp.ide.standalone/src/` that reads CodeMirror's syntax tree (`foldable`, `foldEffect`, `syntaxTree`, a fold or a tree query) before the parse is complete waits for it as T281's `parsed()` does - the editor holds the text, then `forceParsing` - so a slow runner cannot look before the tree exists. Found by `XmlEditorPanel`'s "folds an element, a comment and a CDATA section", which failed once in a full run on Windows and passed alone. Each fix is seen to fail under a fast clock first, as T276 and T281 did (FR-005; SC-002).
+- [x] T286 [US1] Added on 2026-10-17, as the maintainer ruled on a card: every client test under `etalii.adp.ide.standalone/src/` that reads CodeMirror's syntax tree (`foldable`, `foldEffect`, `syntaxTree`, a fold or a tree query) before the parse is complete waits for it as T281's `parsed()` does - the editor holds the text, then `forceParsing` - so a slow runner cannot look before the tree exists. Found by `XmlEditorPanel`'s "folds an element, a comment and a CDATA section", which failed once in a full run on Windows and passed alone. Each fix is seen to fail under a fast clock first, as T276 and T281 did (FR-005; SC-002). Done in standalone pull request 406 (2026-10-17): the highlight and YAML-key mounts call `forceParsing`, and the three XML tests that read the tree await `parsed()`. With `Date.now` advanced 100 ms per call from the mount on, five tests fail without the change and pass with it.
 
 ### Review
 
