@@ -17,7 +17,7 @@ Its catalogue entries agree: standalone [`docs/tools.md`](https://github.com/eta
 
 ## 1. The `.dgr` file format
 
-DISL's persistence layer (section 11) configures a DID definition. A `.dgr` file is not one, so the `.dis` names a required persistence plugin, `net.etalii.adp.generic.dgr`, and this section is that plugin's specification.
+DISL's persistence layer (section 11) configures a DID definition. A `.dgr` file is not one, so the `.dis` names an FBL binding: `persistence.format` is `fbl`, `persistence.binding` is the binding `dgr` of the standalone module's `dependency-graph.fbl`, and `persistence.typeMap` maps the binding's types `Node`, `Dependency` and `Unreadable` onto `Node`, `DependsOn` and an unreadable entry. Until the dependency graph is converted to DISL and FBL, the standalone module reads and writes with its own parser and writer, and this section is what both say about the file.
 
 ### 1.1 Grammar
 
@@ -55,7 +55,7 @@ relations:
 
 ### 1.2 Mapping to DID
 
-A runtime that works on DID definitions sees a `.dgr` file through this mapping. DISL expresses the DID side; the mapping itself is the plugin's.
+A runtime that works on DID definitions sees a `.dgr` file through this mapping. DISL expresses the DID side; the binding and the `.dis`'s `typeMap` state the mapping. The binding reads a dependency as an element with reference attributes, so one whose end names no node is kept and reported, and reads each entry's id and each end a second time as written, into the host attributes `storedId`, `writtenFrom` and `writtenTo`.
 
 | `.dgr` | DID |
 |---|---|
@@ -69,7 +69,7 @@ There is no view record: `x` and `row` are bound placement attributes, so the po
 
 ### 1.3 Writing: splices, never serialisation
 
-Every write is a splice of the lines an edit affects, located by the line range the parser recorded for each node and relation ([`DependencyGraphWriter.cs`](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/develop/src/diagrams/dependency-graph/backend/EtAlii.Adp.Diagram.DependencyGraph/DependencyGraphWriter.cs)). DISL's persistence settings assume a canonical writer that regenerates the file; this type does the opposite, which is why `ordering`, `keys` and `omitDefaults` in the `.dis` describe only what new content looks like.
+Every write is a splice of the lines an edit affects, located by the line range the parser recorded for each node and relation ([`DependencyGraphWriter.cs`](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/develop/src/diagrams/dependency-graph/backend/EtAlii.Adp.Diagram.DependencyGraph/DependencyGraphWriter.cs)). DISL's persistence settings assume a canonical writer that regenerates the file; this type does the opposite. Beside an FBL binding DISL 11.2 forbids those settings (`encoding`, `newline`, `finalNewline`, `files`, `ordering`, `omitDefaults`), so the `.dis` has none of them, and the binding's own text settings and insert keys say what new content looks like.
 
 - **Round trip.** Opening and saving an unchanged file returns it byte for byte, and editing one node changes only that node's lines.
 - **Setting a value** (rename, move, relabel) replaces the value of the one key inside the node's or relation's range and leaves the rest of the line's layout alone.
@@ -193,7 +193,8 @@ Where DISL had more than one reasonable reading, these were chosen:
 
 - **Language id `net.etalii.adp.generic.dependencies`**, version `1.1.0` since the DISL 0.3 rewrite: the reverse-DNS form of etalii.net followed by the origin tag, which `language.origin` now carries.
 - **Node label shown with a fallback.** The label is a CEL text (`label`, or the id when empty) with a `parse` write-back, so it stays editable inline even though its text is computed.
-- **`DependsOn` label defaults to `""`**, which lets DISL's `omitDefaults` explain why an empty relation label has no key; the `.dis` still sets `omitDefaults: false` because node values are always written, even when zero or empty.
+- **`DependsOn` label defaults to `""`**, and an empty relation label has no key while a node always keeps its `label`; with persistence through an FBL binding, the binding says so (`empty` of each label), not `omitDefaults`.
+- **`std.unreadableEntry` is switched off.** An entry of `elements` or `relations` that is not a mapping is kept as it is and not drawn, silently, as the tool has always skipped it; the binding reads it as an `Unreadable` element so that it is kept.
 - **The palette tool uses `mode: "drop"`** and `after: "none"`: the node is dropped where it belongs and appears labelled "New node" without starting a label edit. Its initial values, and the `addNodeHere` operation that "Add node here" and a drop both run, put its left edge at the point's x and round the point's row to the nearest.
 - **Menus.** A node's menu has two groups, `edit` (Rename…, Remove) and `add` (Add node to the right, Add node below), a dependency's one (Relabel…, Remove dependency); empty canvas offers "Add node here" and a finished drag "Depends on". No entry is hidden or disabled on a graph that could not be read, because the code offers them there too and its edits refuse instead.
 - **Forms.** Every item states its label; the two read-only ends of a dependency are computed items with the ids `from` and `to` and the read-only reason as `readOnlyReasons`. A dependency end the file names but no node holds has no id CEL can read (4.9), so a runtime shows it as the file wrote it, as the code does.
