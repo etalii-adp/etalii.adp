@@ -35,4 +35,5 @@
 - **Rust is named on purpose.** FR-005 names the language because the maintainer decided it on 2026-10-17; it is the request, not a choice left to the plan. No library, toolkit, crate or code structure is named: those are the plan's. The other "technology" words (DISL, DESL, DED, FBL, CEL, the registration file) are the contract every host implements, as in specs 028 and 029.
 - **The standalone host's names.** Capabilities are described as the person sees them at the reference commit (`8b6ccfc`), not by the standalone host's projects or types; the parity inventory with its sources is the plan's (FR-010).
 - **No markers.** Three forks were settled by default and stated under Assumptions: no sign-in, parity fixed at the reference commit, and Windows, macOS and Linux as targets.
+- **VS Code style.** FR-044 names VS Code's default themes as the source of the look, at the maintainer's request of 2026-10-17; it is a visual reference a person can compare, not a technology choice.
 - **SC-005 to SC-007** need a reference machine, which the plan names; the thresholds are the specification's.

@@ -6,7 +6,7 @@
 
 **Status**: Draft. Only the specification is written; the plan and tasks wait for the maintainer's approval.
 
-**Input**: The maintainer's request of 2026-10-17: "in the etalii.adp repository create a spec kit specification to duplicate the .NET / web implementation in etalii.adp.ide.standalone to etalii.adp.ide.desktop as a full-native rest implementation." Asked whether "rest" meant Rust or a REST interface, the maintainer answered the same day: Rust, a fully native Rust desktop application.
+**Input**: The maintainer's request of 2026-10-17: "in the etalii.adp repository create a spec kit specification to duplicate the .NET / web implementation in etalii.adp.ide.standalone to etalii.adp.ide.desktop as a full-native rest implementation." Asked whether "rest" meant Rust or a REST interface, the maintainer answered the same day: Rust, a fully native Rust desktop application. They added minutes later: "the IDE style in terms of colors, thickness etc should be based on VS Code."
 
 ## Context
 
@@ -103,18 +103,19 @@ A person adds a new document from the same vendor-grouped catalogue the standalo
 
 ---
 
-### User Story 6 - Look and feel of a native application (Priority: P3)
+### User Story 6 - Look and feel of a native application in the style of VS Code (Priority: P3)
 
-The desktop host follows the platform: its own window and title bar, native file dialogs, the platform's modifier key where a shortcut uses one, light and dark themes following the system setting, and the tokens and contrast the standalone host's themes guarantee. A screen reader can reach the explorer, menus, dialogs, tabs and the errors panel as it can in the standalone host.
+The desktop host looks like Visual Studio Code: its colours, line and border thicknesses, spacing, font sizes, focus outlines, tab and panel shapes and icon weights are those of VS Code's default light and dark themes, so a person who works in VS Code feels at home. It behaves like the platform: its own window and title bar, native file dialogs, the platform's modifier key where a shortcut uses one, and light and dark themes following the system setting. The canvases and tables of the tools take their colours from the same theme, at the contrast the standalone host's themes guarantee. A screen reader can reach the explorer, menus, dialogs, tabs and the errors panel as it can in the standalone host.
 
 **Why this priority**: it is why a native host is wanted, but every tool is usable before it is complete.
 
-**Independent Test**: on each platform, switch the system theme, use a screen reader through Story 1's walk, and run the contrast checks against both themes.
+**Independent Test**: on each platform, place the desktop host beside VS Code in the same theme and compare the explorer, tabs, panels, menus and status bar; switch the system theme; use a screen reader through Story 1's walk; and run the contrast checks against both themes.
 
 **Acceptance Scenarios**:
 
-1. **Given** the system theme changes, **When** the desktop host is open, **Then** it follows without restart, and every pair of text and background colour meets the contrast the standalone host's theme tests require.
-2. **Given** a screen reader, **When** the person walks the explorer, a menu, a dialog and the errors panel, **Then** each element is announced with its role, name and state.
+1. **Given** VS Code and the desktop host side by side in the same light or dark theme, **When** a person compares the explorer, the tabs, the panels, the menus and the status bar, **Then** their colours, line thicknesses, spacing and font sizes match VS Code's default theme of that kind.
+2. **Given** the system theme changes, **When** the desktop host is open, **Then** it follows without restart, and every pair of text and background colour meets the contrast the standalone host's theme tests require.
+3. **Given** a screen reader, **When** the person walks the explorer, a menu, a dialog and the errors panel, **Then** each element is announced with its role, name and state.
 
 ### Edge Cases
 
@@ -170,6 +171,8 @@ The desktop host follows the platform: its own window and title bar, native file
 - **FR-040**: The desktop host **MUST** have a `Build` workflow that builds and tests it on every pull request into `develop` and on `develop`, including the conformance suite and the terminology check, and publishes an installable release for each platform from a green `develop`.
 - **FR-041**: Every interactive element **MUST** be reachable by keyboard and exposed to the platform's accessibility interface with its role, name and state.
 - **FR-042**: Light and dark themes **MUST** follow the system setting and meet the contrast the standalone host's theme tests require; text **MUST** be in English, as in the standalone host.
+- **FR-044**: The visual style of the workspace **MUST** be based on Visual Studio Code's default light and dark themes: colours, line and border thicknesses, spacing, font sizes, focus outlines, and the shapes of tabs, panels, menus and the status bar. Where the standalone host's look differs from VS Code's, VS Code's wins; behaviour stays the standalone host's (FR-010). The plan **MUST** name the VS Code version and themes whose values are taken.
+- **FR-045**: The canvases and tables of every tool **MUST** take their colours from the active theme, so that a tool looks the same in light and dark as the workspace around it.
 - **FR-043**: The desktop host **MUST** be delivered in increments a person can use: the frame and the editors (Story 1), then the bindings and the conformance suite (Story 3), then the diagrams type by type (Stories 2 and 5), then the Knowledge designer (Story 4). The parity inventory (FR-010) records which increment holds each row.
 
 ### Key Entities
@@ -195,10 +198,12 @@ The desktop host follows the platform: its own window and title bar, native file
 - **SC-007**: While idle with a workspace of 5,000 files and three documents open, the desktop host uses at most half the memory that the standalone host's process and its browser tab use together for the same workspace.
 - **SC-008**: A change made on disk by another program appears in the open view within 1 second.
 - **SC-009**: A screen reader user completes Story 1's walk without sighted help, on at least one platform per release.
+- **SC-010**: Every colour, line thickness and font size of the workspace's chrome equals the value of the VS Code theme the plan names, checked for 100% of the theme values the plan lists, in both light and dark.
 
 ## Assumptions
 
 - **Sign-in is dropped.** The standalone host signs in because a browser reaches it over a port; a native process has no such door, so the default is no sign-in (FR-003). Remote or shared use is out of scope.
+- **VS Code's look, standalone's behaviour.** Only the look is taken from VS Code (FR-044); layout, panes, ribbon, shortcuts and every behaviour stay the standalone host's, and no VS Code extension or code is used.
 - **Parity is fixed at the reference commit.** Work that lands in the standalone host later, such as spec 025's restructuring or spec 029's Hierarchical Requirement Designer, is out of scope here and comes to the desktop host as features of its own.
 - **Platforms.** Windows, macOS and Linux on 64-bit machines are the default targets; the plan names the architectures and the minimum versions of each.
 - **The standalone host is the oracle.** Where the standalone host's behaviour and its spec-workflow specification disagree at the reference commit, its behaviour wins and the difference is recorded in the parity inventory.
