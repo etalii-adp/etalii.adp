@@ -1,0 +1,24 @@
+{
+  "workflow": "speckit",
+  "specName": "The Native Desktop Host",
+  "branch": "features/030-desktop-native-rust",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-17T11:43:18.000Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-17T11:49:36.362Z"
+    }
+  ],
+  "telemetryInstanceId": "3701c676-c85d-4b5e-a5e5-42e52c9803fd"
+}
