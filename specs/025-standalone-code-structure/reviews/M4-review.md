@@ -248,7 +248,7 @@ Each is a change to a `.proto` contract, which this feature's scope excludes; qu
 - (c) None: the module-facing seams keep `string rootPath`, and T293 is struck.
 - (d) Other.
 
-**Answers.** Question 1 ruled by the maintainer on 2026-10-18, in the project thread, on (a) "All follow-up": the three wire candidates are follow-up features as written under *Follow-up features*, and this feature is unchanged. Question 2 is still open.
+**Answers.** Ruled by the maintainer on 2026-10-18, in the project thread, each on (a): question 1 "All follow-up", so the three wire candidates are follow-up features as written under *Follow-up features* and this feature is unchanged; question 2 "All in M5", so T293 gives every module-facing seam a typed root in M5. This review was written as (a) for both and stands as written.
 
 ## Ownership
 
