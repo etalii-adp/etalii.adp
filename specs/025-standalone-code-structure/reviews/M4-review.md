@@ -220,7 +220,7 @@ So:
 
 ## Follow-up features
 
-Each depends on question 1, and each is a change to a `.proto` contract, which this feature's scope excludes.
+Each is a change to a `.proto` contract, which this feature's scope excludes; question 1 was ruled on (a), so all three are follow-up features.
 
 1. **A text member on the workspace stream.**
    - *Evidence:* the `text` candidate above.
@@ -247,6 +247,8 @@ Each depends on question 1, and each is a change to a `.proto` contract, which t
 - (b) Only the seams whose implementations read the root (about 25), in M5; the others keep their string until a task touches them.
 - (c) None: the module-facing seams keep `string rootPath`, and T293 is struck.
 - (d) Other.
+
+**Answers.** Ruled by the maintainer on 2026-10-18, in the project thread, each on (a): question 1 "All follow-up", so the three wire candidates are follow-up features as written under *Follow-up features* and this feature is unchanged; question 2 "All in M5", so T293 gives every module-facing seam a typed root in M5. This review was written as (a) for both and stands as written.
 
 ## Ownership
 
