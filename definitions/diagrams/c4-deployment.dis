@@ -3163,7 +3163,7 @@
     "ids": {
       "strategy": "natural",
       "stable": true,
-      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$",
+      "pattern": "^[^\\s\"{}=\\-][^\\s\"{}=]*$",
       "suffix": "{n}",
       "compare": "ignore-case",
       "missing": "ephemeral",
