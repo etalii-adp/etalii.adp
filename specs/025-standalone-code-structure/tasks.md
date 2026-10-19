@@ -379,6 +379,8 @@ These come before M6's first task.
 - [x] T299 [P] [US5] Added by the M5 review: bring `RenameEntryCommandHandler.MoveAsync` (82 code lines), `RenameSubjectWithItsRegistrationsAsync` (77) and `ExecuteAsync` (53), and `DeleteEntryCommandHandler.ExecuteAsync` (66), in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/Commands/`, under 50 code lines (SC-023). Done in standalone pull request 509 (2026-10-19): one checked rename is a `Rename` record in place of six parameters; `ExecuteAsync` hands the announce, move and notify to `MoveAndNotifyAsync`, `MoveAsync` hands a qualifier rename to `RenameQualifier` and the move to `MoveWithSibling`, and a subject's set is planned in `PlanSet` and carried out in `ApplySetAsync`; the delete handler resolves what goes with a file in `CompanionsOf` and deletes it in `DeleteFileAsync`. No method of either is over 46 code lines.
 - [x] T300 [US1] Added by the M5 review: `ExplorerContextActionsFlowTests.APromptRaisedOnOneConnection_IsNeverObservedOnAnothersStream` failed in Stability runs 14 and 15 and once on standalone pull request 498 ("Connection B observed a message raised for connection A.", `ExplorerContextActionsFlow.Tests.cs:248`), and `ContextSelectionFlowTests.ASelectionOnOneConnection_IsNeverObservedOnAnothersStream` in run 15 at its last assertion ("Connection B observed a selection made on connection A.", `ContextSelectionFlow.Tests.cs:333`). Find the race, make a guard that fails on it every time, and correct it (FR-005; SC-002). Done in standalone pull request 511 (2026-10-19): neither flow saw another connection's prompt or selection. What connection B observed was a problem set it already had: a validation that finished between B registering and the broadcaster's push left Validated on B's baseline, and the push then sent Validated again. The selection store now remembers the set each connection was last sent, on its baseline or by a push, and `PushProblems` holds back an equal one; a changed set is still pushed. The guard, `ContextSelectionStoreTests.Register_AProblemSetAlreadyInTheBaseline_IsNotPushedAgain`, fails on the unfixed code every time. Under three CPU spinners the flow failed about one run in three to six before the fix and passed 60 of 60 after it.
 - [x] T301 [P] [US1] Added by the M5 review: `DocumentLifecycleTests.AReadThatIsRefused_WaitsForItsNextAttemptOnTheLifecyclesClock` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Documents.Tests/` advances its fake clock through `FakeClocks`' helper in place of its own copy of that loop (FR-051). Done in standalone pull request 510 (2026-10-19): the test drives its clock with `FakeClocks.DriveAsync`, one hour a step, and its deadline loop is gone; with the lifecycle's clock sabotaged to `TimeProvider.System` it times out, so it still waits on that clock.
+- [ ] T303 [P] [US4] Added on 2026-10-19, as the maintainer ruled on the second card of the M5 review's question 1 ("New cross-module project"): move the 11 flows of `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/` that test one module and name its types (agent activity, Ansible twice, C4, Databricks, Helm twice, OWL, RDF, timeline and Wardley map) into that module's own test project, referencing `EtAlii.Adp.TestSupport.Host`. This brings that part of T251 and T252 forward from M8 (FR-056, FR-095; SC-013).
+- [ ] T304 [P] [US4] Added on 2026-10-19, by the same ruling: a new test project for the host's tests that span modules, placed outside `etalii.adp.ide.standalone/src/backend/` so that it is no core project, and holding the seven files of `EtAlii.Adp.Backend.Tests` that name several modules on purpose: `DrawnConnections`, `ElementTypeCatalog` with `ElementTypes`, `ModulePluggability`, `DesignerModuleIsolation`, `SharedRestoreFlow` and `YamlEditorResolution`. With T303, `EtAlii.Adp.Backend.Tests` names no module in code and SC-013 is met as written; `etalii.adp.ide.standalone/docs/solution-structure.md` (*where tests and fixtures live*), `etalii.adp.ide.standalone/docs/architecture.md` and `ArchitecturePages.Tests` say where the new project is (FR-056, FR-004; SC-013).
 
 ## M6: the specification projects
 
@@ -456,7 +458,7 @@ These come before M6's first task.
 - [ ] T248 [P] [US8] Replace the hand-built temporary folders in the core test projects under `etalii.adp.ide.standalone/src/backend/` with `TestFolder.Create` (FR-094).
 - [ ] T249 [P] [US8] Replace the hand-built temporary folders in the module test projects under `etalii.adp.ide.standalone/src/diagrams/`, `etalii.adp.ide.standalone/src/designers/` and `etalii.adp.ide.standalone/src/editors/` with `TestFolder.Create`; 273 at the report's reading, in all (FR-094).
 - [ ] T250 [P] [US8] Replace the 63 copies of the repository-root locator with `RepositoryPaths` (FR-094). Reduced by the M0 review to the copies that are left: 44 test files use `RepositoryPaths` since standalone pull request 186; the M8 review counts the rest.
-- [ ] T251 [US8] Move the flows that test one module out of `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/` into that module's test project, referencing `EtAlii.Adp.TestSupport.Host`: the first half of about 5,300 lines (FR-095).
+- [ ] T251 [US8] Move the flows that test one module out of `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/` into that module's test project, referencing `EtAlii.Adp.TestSupport.Host`: the first half of about 5,300 lines (FR-095). The 11 that name a module's types move earlier, in T303; T251 and T252 move the rest.
 - [ ] T252 [US8] Move the second half; `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/` holds no flow that tests one module, and `etalii.adp.ide.standalone/docs/solution-structure.md` (*where tests and fixtures live*) says so (FR-095, FR-004).
 - [ ] T253 [P] [US8] Derive `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Unit Tests/ElementTypeCatalog.cs` and the catalogue in `DrawnConnections.Tests.cs` from the tool definitions, or remove them if the module's own tests cover the same (FR-095).
 - [ ] T254 [P] [US8] Move `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/GateScript.Tests.cs` out of the product test suite: beside the scripts under `etalii.adp.ide.standalone/.github/tools/gate/` if `retire.sh` is still tested by it, and deleted for `gate.sh` and `land.sh`, which no longer apply (FR-096).
@@ -491,7 +493,7 @@ These come before M6's first task.
 - **M2**: within a module, band A before B before C. Modules are independent of each other, except: T103 before T104 and T105; timeline's band C adds the lines-restore handler that dependency-graph's band C uses. The order of modules is the list's, and the M1 review may change it. T273 and T274 come before every band B task of M2 (M1 review).
 - **M3**: T118 before every other layout task; T121 before T122 and T123; T131 before T132; T133 before T134; T136 before T137; T139 before T140; T141 before T142, T143 and T145; T144 before T145; T272 goes with T144 and T145; T146 before T147; T150 before T151. The M3 review's T279 to T282 and T285 come before M4's first task; T280's ansible part waits for `ansible-structure-disl-fbl` to close.
 - **M4**: T155 and T156 before T157 before T158; T158 before T174 and T167, because the hierarchy project can reference the diagram project only once the diagram project no longer references it. T163 before T164 before T165 and T166; T173 before T167 before T168 and T169; T170 before T171 and T172; T176 before T177. T178 needs the ruling on B-07. T265 stands alone; T266 needs T158 and T166 and comes after T157. The M4 review's T288 to T292 and T280's remaining half come before M5's first task.
-- **M5**: T185 first; T283 needs T155 and T157, so that the calls it changes have moved; T186, T187 and T188 before T189 before T190; T192 needs T266 and comes before T193; T195 before T196; T197 before T198. The M5 review's T296 to T301 come before M6's first task.
+- **M5**: T185 first; T283 needs T155 and T157, so that the calls it changes have moved; T186, T187 and T188 before T189 before T190; T192 needs T266 and comes before T193; T195 before T196; T197 before T198. The M5 review's T296 to T301 come before M6's first task. T303 and T304 were added after M6 had begun, by the ruling on the review's question 1, and run beside M6.
 - **M6**: T207 and T208 first. T209 before T210 and T211; T212 before the three DISL typing tasks; T215 before T216, which needs T038; T220 before T221; T226 last of the code tasks.
 - **M7**: T231 before T232; T233 before T234.
 - **M8**: T245 before T246; T251 before T252. T284 stands alone.
@@ -505,7 +507,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-001 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md) (*No behaviour change*), and checked at every review by the unchanged fixtures and transcripts. |
 | FR-002 | T039, T132, T135, T137, T146, T178, T211 |
 | FR-003 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md). |
-| FR-004 | 21 tasks, T016 to T266 |
+| FR-004 | 21 tasks, T016 to T266; and T304, added by the M5 review |
 | FR-005 | T033, T034, T035, T056, T176, T185, T195, T212, T216, T217, T269, T276, T281, T282, T286, T291, T292, T300 |
 | FR-006 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md) (the identity) and by the *Ownership* section of every review record (the owner). |
 | FR-007 | T029 |
@@ -557,7 +559,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-053 | T144, T272 |
 | FR-054 | T155, T156, T157, T158, T266, T288 |
 | FR-055 | T159 |
-| FR-056 | T160, T161, T162, T287 |
+| FR-056 | T160, T161, T162, T287, T303, T304 |
 | FR-057 | T156, T164, T165, T166 |
 | FR-058 | T167, T168, T169, T290 |
 | FR-059 | T170, T171, T172, T293 |
@@ -596,7 +598,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-092 | T231, T232, T233, T234, T235, T236, T238, T240, T241 |
 | FR-093 | T245, T246 |
 | FR-094 | T247, T248, T249, T250 |
-| FR-095 | T251, T252, T253 |
+| FR-095 | T251, T252, T253, T303 |
 | FR-096 | T254 |
 | FR-097 | none: satisfied by leaving the stubs as they are (DP-1 (c)); T255 to T257 struck |
 | FR-098 | T261, T263, T264 |
@@ -617,7 +619,7 @@ FR-002, FR-004, FR-005, FR-007 and FR-008 are rules of [contracts/pull-request.m
 | SC-010 | T119, T120, T134, T145, T272, T283, T302 | M3, M5 (amended by the M3 review) |
 | SC-011 | T121, T239 | M3, M7 |
 | SC-012 | T158, T288 | M4 |
-| SC-013 | T162, T265, T287 | M5 |
+| SC-013 | T162, T265, T287, T303, T304 | M5 |
 | SC-014 | T037, T267 | M0, M1 |
 | SC-015 | T166, T169, T290 | M4 |
 | SC-016 | T177 | M4 |

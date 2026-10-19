@@ -247,7 +247,7 @@ Every specification, binding and fixture in both repositories writes two parts.
 - (d) Other.
 
 **Answers.** Not yet given when this review merged. It was written as (a) for all three, and T296 was added as question 2 (a) would have it. No criterion is amended in this pull request: SC-013 and SC-017 are amended in the specification, with this review named beside them, once the maintainer has ruled. The maintainer ruled on 2026-10-19 on cards in the project's thread:
-- Question 1: (c), other. The alternatives are on a second card, and SC-013 stays as written until it is answered.
+- Question 1: (c), other. The alternatives are on a second card, and SC-013 stays as written until it is answered. On the second card, the same day, the maintainer chose a new test project for the host's tests that span modules: T303 moves the 11 single-module flows to their modules now, T304 moves the seven files that span modules to the new project, and SC-013 is not amended.
 - Question 2: (a), T296 now. T296 was already done, in standalone pull request 506: `HierarchyModel.cs` is 381 lines. SC-017 is not amended.
 - Question 3: (a), strict, as both specifications write it. B-08 is ruled so, and T211 builds it in M6.
 
