@@ -3082,7 +3082,7 @@
       },
       "addInfrastructureNode": {
         "unavailable": [
-          "Adding a infrastructure node from the toolbox is not supported yet."
+          "Adding an infrastructure node from the toolbox is not supported yet."
         ],
         "doc": "The toolbox offers this kind and the tool answers its drop with this refusal: no add action is implemented for it. A commit of an answer to it is refused by the host with \"'<action id>' does not apply to this selection.\" (companion, *Outside the definition*)."
       },
