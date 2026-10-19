@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "A Built-in Person Shape in DISL",
   "branch": "features/031-disl-person-shape",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "plan",
+  "status": "planned",
   "history": [
     {
       "step": "specify",
@@ -25,6 +25,20 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-19T16:41:42.288Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-19T18:00:01.703Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-19T18:02:33.365Z"
     }
   ]
 }
