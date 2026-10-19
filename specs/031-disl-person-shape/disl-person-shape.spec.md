@@ -14,11 +14,18 @@
 
 Because DISL has no such shape, the six C4 definitions (`definitions/diagrams/c4-*.dis`) each declare a custom composite shape, `c4Person`: a circle of radius 10 whose centre sits 8 above the top edge, under a rounded box of radius 8 over the bounds, with only the box contributing to the outline. The DISL example `specifications/disl/c4-container.dis` declares its own `c4Person` too, with the head's centre 18 above the top edge instead of 8. A host can only draw these as a generic composite, and the standalone host, which draws C4 from its own shape library, cannot map the custom shape to the person shape it already has (standalone pull request #504 added `person` to its library and deliberately left the DISL catalogue entry out, because DISL had none).
 
-**What this feature adds.** One built-in shape, `person`, stated in DISL's own terms: its geometry relative to a node's bounds, its outline for connections and hit testing, its text area, and its parameters with their defaults. A tool engineer then writes `"shape": "person"` and every host that implements DISL's built-in shapes draws the same figure.
+**What this feature adds.** One built-in shape, `person`, stated in DISL's own terms: its geometry relative to a node's bounds, its outline for connections and hit testing, its text area, and its one parameter with its default. A tool engineer then writes `"shape": "person"` and every host that implements DISL's built-in shapes draws the same figure.
 
 **Why in the language.** Principle I: a need a host discovers comes back to the specification before hosts diverge on it. Two definitions of the same figure already differ in this repository (head centre 8 above in `definitions/`, 18 above in the example), and a host that recognises a person only by matching a custom shape's parts would be implementing a format of its own.
 
 **Words.** Those of [docs/terminology.md](../../docs/terminology.md). **Bounds** are a node's box, as DISL uses the word in sections 6.7 to 6.9 (x, y, width w, height h, y growing downwards). The **body** is the person's box; the **head** is its circle. **Above** means towards smaller y.
+
+## Clarifications
+
+### Session 2026-10-19
+
+- Q: Which parameters does `person` have? (FR-003) → A: Corner only: the body's corner radius, `radius`, default 8, as `roundedRect` has; the head is fixed at radius 10 with its centre 8 above the top edge.
+- Q: Does the head join the outline that relations anchor on? (FR-004) → A: Body, head clicks: relations attach to the body only, and a click on the head still selects the node.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -74,17 +81,17 @@ The maintainer of the C4 definitions replaces each `c4Person` custom shape by `"
 - **A node narrower than the head.** When w is less than twice the head's radius the head is wider than the body. The head keeps its radius and stays centred; the shape is still drawn, and no finding is raised.
 - **A node smaller than twice the corner radius.** The body's corner radius is limited to half the smaller side of the bounds, so the body never turns inside out; the specification states this for `person`, since section 6.7 does not state it for `roundedRect`.
 - **Strokes and fills.** Head and body take the node's one style: the same fill, stroke and states, so a selected or highlighted person shows it on both. The body's stroke is drawn over the head where the two cross, since the body is painted after the head.
-- **Parameters bound to data.** Every parameter of a built-in is Bindable (section 6.7); a person whose parameters follow an attribute or a CEL expression is drawn with the evaluated values. A negative length is not a valid value for any of them.
+- **A corner radius bound to data.** The shape's one parameter, `radius`, is Bindable like every built-in parameter (section 6.7); a person whose `radius` follows an attribute or a CEL expression is drawn with the evaluated value. A negative radius is not a valid value. The head does not follow it.
 - **A runtime at the Core conformance level.** Section 15's Core level names a few built-in shapes; `person` joins the Standard level's "all built-in shapes", as `cylinder` and `actor` are, and Core is unchanged.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: Section 6.7 of the DISL specification **MUST** list `person` as a built-in shape, in the table beside `cylinder`, with its parameters and a note that distinguishes it from `actor` (a box with the label inside and a head above, against a stick figure with the label below).
+- **FR-001**: Section 6.7 of the DISL specification **MUST** list `person` as a built-in shape, in the table beside `cylinder`, with its parameter and a note that distinguishes it from `actor` (a box with the label inside and a head above, against a stick figure with the label below).
 - **FR-002**: The specification **MUST** state the geometry relative to the node's bounds: the body is a rounded rectangle exactly over the bounds; the head is a circle centred horizontally on the bounds, whose centre lies a stated distance above the top edge; the body is painted after the head; the body's corner radius is limited to half the smaller side of the bounds.
-- **FR-003**: The specification **MUST** state the shape's parameters and their meaning, and Appendix B.2 **MUST** list their defaults, such that the defaults give a body corner radius of 8, a head radius of 10 and a head centre 8 above the top edge, in canvas units. [NEEDS CLARIFICATION: Q1, which parameters the shape has]
-- **FR-004**: The specification **MUST** state the shape's outline for edge anchoring and its area for hit testing, as section 6.7 requires of every built-in shape: anchoring on the body's rounded rectangle, and hit testing over the body and the head together. [NEEDS CLARIFICATION: Q2, whether the head also joins the outline that relations anchor on]
+- **FR-003**: The shape **MUST** have exactly one parameter, `radius`, the body's corner radius, as `roundedRect` has, and Appendix B.2 **MUST** list its default, 8. The head **MUST** be fixed and not a parameter: radius 10, centre 8 above the top edge, in canvas units.
+- **FR-004**: The specification **MUST** state the shape's outline for edge anchoring and its area for hit testing, as section 6.7 requires of every built-in shape: relations anchor on the body's rounded rectangle alone, and hit testing covers the body and the head together, so a click on the head selects the node. Section 6.7's sentence that a built-in's outline serves both edge anchoring and hit testing **MUST** say that `person` is the exception.
 - **FR-005**: The specification **MUST** state the shape's text area: the body, as for `roundedRect`, minus the node's padding. No part of the head is in it.
 - **FR-006**: The specification **MUST** say that the bounds are the body, that the head is drawn outside them, and that a measure of what a diagram draws includes the head.
 - **FR-007**: `actor` and every other existing built-in shape **MUST** keep their meaning, and a custom shape named `person` **MUST** keep shadowing the built-in (section 6.8).
@@ -97,7 +104,7 @@ The maintainer of the C4 definitions replaces each `c4Person` custom shape by `"
 
 - **Body**: the rounded rectangle over the node's bounds; carries the label, the anchoring outline and the node's style.
 - **Head**: the circle above the body's top edge, centred on it horizontally; drawn first, part of the hit area, outside the bounds and the text area.
-- **Person shape parameters**: the lengths that fix the body's corner radius, the head's radius and the head's distance above the top edge, with defaults in Appendix B.2.
+- **Person shape parameter**: `radius`, the body's corner radius, default 8 in Appendix B.2. The head's radius (10) and its distance above the top edge (8) are fixed lengths of the shape, not parameters.
 
 ## Scope and Dependencies
 
@@ -123,31 +130,5 @@ The maintainer of the C4 definitions replaces each `c4Person` custom shape by `"
 - The maintainer's ruling of 2026-10-19 decides that `person` is a DISL built-in; this feature writes down what it is.
 - The defaults are the figure the C4 definitions and the standalone library draw today (head radius 10, centre 8 above, corner radius 8), not the example's 18 above; the example adopts the defaults and its head moves down by 10.
 - Lengths are in canvas units and do not scale with the node's size, as the C4 definitions draw them; a person of any size has the same head.
-- The body's outline for anchoring excludes the head, as the custom shapes and the standalone library have it; Q2 asks whether that stays.
+- The body's outline for anchoring excludes the head, as the custom shapes and the standalone library have it (ruled on 2026-10-19, see Clarifications).
 - Which DISL version carries the addition (an amendment of the 0.4 draft or a new 0.5) is the plan's to propose; Principle IV allows either before 1.0, and FR-010 holds for both.
-
-## Open Questions
-
-### Q1: Which parameters does `person` have? (FR-003)
-
-**Context**: Most built-in shapes expose their geometry as parameters with defaults in Appendix B.2 (`cylinder` has `cap` and `orientation`, `roundedRect` has `radius`). Principle V asks that a construct be justified by a current tool's need, and the C4 tool type only uses one set of values.
-
-| Option | Answer | Implications |
-|--------|--------|--------------|
-| A (recommended) | Three length parameters: the body's corner radius (default 8), the head's radius (default 10) and the head centre's distance above the top edge (default 8) | Follows the catalogue's pattern of naming every geometric length and listing its default in B.2; costs three rows' worth of text in 6.7 and B.2 and three values every host honours. Recommended because the ruling names Appendix B.2, and without parameters a tool engineer who needs a larger head is back to a custom shape |
-| B | One parameter, the body's corner radius (as `roundedRect`), with the head fixed at radius 10, centred 8 above | Smallest parameterised form; the head cannot be adjusted without a custom shape |
-| C | No parameters; the whole figure is fixed | Simplest under Principle V; the row in 6.7 shows "–" and B.2 gets no row, but the geometry is still stated in 6.7 |
-| D | Proportional lengths (fractions of the bounds) instead of canvas units | The head grows with the node, unlike today's C4 definitions and the standalone library, whose drawings would change |
-| Other | Another set or naming of parameters | |
-
-### Q2: Does the head join the outline that relations anchor on? (FR-004)
-
-**Context**: Section 6.7 says every built-in shape defines its outline "for edge anchoring and hit testing". The C4 definitions' `c4Person` marks only the body `outline: true` and leaves the head hit-testable (a part's `hit` defaults to true, section 6.8), and the standalone library's `person` uses the body's rectangle as its outline.
-
-| Option | Answer | Implications |
-|--------|--------|--------------|
-| A (recommended) | Anchoring on the body alone; hit testing on body and head | Same as `c4Person` and standalone #504, so no consumer changes behaviour; a relation arriving from straight above ends at the top edge, crossing the head. Recommended as the figure every current consumer already draws |
-| B | Anchoring and hit testing both on the union of body and head | A relation from above ends on the head; every host computes a union outline, and C4 drawings change where relations meet a person |
-| C | Body alone for both anchoring and hit testing | One geometry for both, as 6.7's sentence reads literally; a click on the head does not select the person |
-| Other | Another outline | |
-
