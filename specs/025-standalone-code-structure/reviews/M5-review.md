@@ -246,7 +246,10 @@ Every specification, binding and fixture in both repositories writes two parts.
 - (c) Keep each loader's strictness. T211 shares the code with the strictness as a parameter, and the difference stays.
 - (d) Other.
 
-**Answers.** Not yet given. This review is written as (a) for all three, and T296 is added as question 2 (a) would have it. No criterion is amended in this pull request: SC-013 and SC-017 are amended in the specification, with this review named beside them, once the maintainer has ruled.
+**Answers.** Not yet given when this review merged. It was written as (a) for all three, and T296 was added as question 2 (a) would have it. No criterion is amended in this pull request: SC-013 and SC-017 are amended in the specification, with this review named beside them, once the maintainer has ruled. The maintainer ruled on 2026-10-19 on cards in the project's thread:
+- Question 1: (c), other. The alternatives are on a second card, and SC-013 stays as written until it is answered.
+- Question 2: (a), T296 now. T296 was already done, in standalone pull request 506: `HierarchyModel.cs` is 381 lines. SC-017 is not amended.
+- Question 3: (a), strict, as both specifications write it. B-08 is ruled so, and T211 builds it in M6.
 
 ## Ownership
 
