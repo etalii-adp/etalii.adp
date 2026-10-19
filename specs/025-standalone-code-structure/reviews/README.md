@@ -12,6 +12,7 @@ One record per milestone, written when the milestone's last task is merged in `e
 | `M4-review.md`, `M4-measurements.json` | The core project graph is restructured |
 | `M5-review.md`, `M5-measurements.json` | The core hotspots are corrected |
 | `M6-fixed-point.md` | M6 starts: the FBL conformance fixtures and the DISL suite it may not change (T208) |
+| `M6-yaml-spike.md` | T220, the spike on building the YAML tree from YamlDotNet's tokens, is done; the M6 review takes its outcome in |
 | `M6-review.md`, `M6-measurements.json` | The specification projects are restructured |
 | `M7-review.md`, `M7-measurements.json` | The module internals are decomposed |
 | `M8-review.md`, `M8-measurements.json` | The tests are consolidated and the stub modules have their ruled shape |
