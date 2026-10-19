@@ -385,7 +385,7 @@ These come before M6's first task.
 ### Before anything moves
 
 - [ ] T207 [US6] Read the state of `fbl-implementation`, `fbl-written-text` and the fifteen conversions in `etalii.adp.ide.standalone/.spec-workflow/specs/`, and agree with their owners which of the M6 tasks go before, after or around their work; a task that would collide is reduced or re-ordered and the M6 review says so (FR-012, FR-084).
-- [ ] T208 [US6] Record the FBL conformance fixtures vendored under `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/` and the DISL suite as the fixed point of M6: their expected results are not edited by any M6 task, and a task that needs to edit one stops and reports (FR-085; SC-021).
+- [x] T208 [US6] Record the FBL conformance fixtures vendored under `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/` and the DISL suite as the fixed point of M6: their expected results are not edited by any M6 task, and a task that needs to edit one stops and reports (FR-085; SC-021). Done: [M6-fixed-point.md](reviews/M6-fixed-point.md) (2026-10-19), at standalone `621be6f18`. It names the 67 vendored fixtures and the DISL suite's eight fixture files by blob, records that the three specification test projects pass in full there (1803, 493 and 269 tests), and gives the command the M6 review checks it with.
 
 ### What the loaders share (report 6.4, 6.5)
 
