@@ -32,7 +32,7 @@
 ## Notes
 
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`
-- **Two markers remain**, Q1 (FR-003, which parameters) and Q2 (FR-004, whether the head joins the anchoring outline), each listed under Open Questions with options and a recommendation. Both have a stated default under Assumptions, so a plan could proceed on the recommendations if the maintainer accepts them.
+- **Both markers resolved** in the clarification session of 2026-10-19 (see the spec's Clarifications): Q1 (FR-003) "Corner only", the shape's one parameter is the body's corner radius `radius`, default 8, and the head is fixed; Q2 (FR-004) "Body, head clicks", relations attach to the body only and a click on the head selects the node.
 - **Geometry is not implementation.** The lengths 8, 10 and 8 and the painting order are the shape's definition in DISL's own terms (bounds, outline, text area), as section 6.7 states every built-in. No host, library or drawing technique is named as a requirement; the standalone files appear only under Scope as consumers.
 - **The schema.** `disl.schema.json` does not enumerate built-in shape names today (`$defs/ShapeRef` accepts any string), so FR-008 is conditional: it requires `person` wherever the schema names shapes and no change where it accepts any name.
 - **The version** that carries the addition is left to the plan (Assumptions); FR-010 holds for either.
