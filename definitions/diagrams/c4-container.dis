@@ -3161,7 +3161,8 @@
           "strategy": "derived",
           "pattern": "^.+$",
           "ephemeral": true,
-          "expression": "writtenEnd(self, 'source') + '->' + writtenEnd(self, 'target') + '@' + string(self.location().orValue({'line': 0}).line)"
+          "expression": "'interaction:' + writtenEnd(self, 'source') + '->' + writtenEnd(self, 'target') + '@' + string(self.location().orValue({'line': 0}).line)",
+          "doc": "An interaction is a statement of the dynamic view, never drawn itself: the line drawn for it (`InteractionLine`) has its ends as written and its line as its id, so the statement's id is told apart from it by a prefix, since a derived element is not drawn under an id the model already holds."
         },
         "LiftedRelationship": {
           "ephemeral": true
