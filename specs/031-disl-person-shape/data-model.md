@@ -1,6 +1,6 @@
 # Data Model: A Built-in Person Shape in DISL
 
-Phase 1 of the [plan](plan.md). The "data" of this feature is the shape's geometry. Every quantity is in canvas units, in the node's shape coordinates: the bounds are `(0, 0)` to `(w, h)`, y growing downwards (section 6.8's shape coordinate context).
+Phase 1 of the [plan](plan.md). The "data" of this feature is the shape's geometry, new in DISL 0.5 (research R1); a specification that uses it **SHOULD** declare `"disl": "0.5"` (section 2.9). Every quantity is in canvas units, in the node's shape coordinates: the bounds are `(0, 0)` to `(w, h)`, y growing downwards (section 6.8's shape coordinate context).
 
 ## Shape reference
 

@@ -22,7 +22,7 @@ print(d["disl"], d["notation"]["nodes"]["Person"]["shape"], "c4Person" in d["not
 E
 ```
 
-Expected: `0.4 person False`.
+Expected: `0.5 person False`.
 
 ## 3. A planted fault is caught
 
@@ -45,10 +45,24 @@ Read section 6.7 and Appendix B.2 alone, and answer, for bounds of 160 by 100 at
 
 Every answer must be found in the text with its key word; an answer that has to be inferred from the C4 definitions or a host is a gap.
 
-## 5. Nothing else moved
+## 5. The version reads 0.5 everywhere it is stated
+
+```bash
+grep -n 'version 0.5 (Draft)\|This is a draft, version 0.5\|changes-from-04\|"0.5"' specifications/disl/DISL-specification.md
+python - <<'E'
+import json
+s = json.load(open("specifications/disl/disl.schema.json", encoding="utf-8"))
+print(s["title"])
+print(s["$defs"]["Specification"]["properties"]["disl"]["description"])
+E
+```
+
+Expected: the header, the status paragraph, the contents link, 2.9 and the section heading are found; the title begins `DISL 0.5 (draft)` and the description names 0.5 and section 2.9 of DISL 0.5 (contract C0).
+
+## 6. Nothing else moved
 
 ```bash
 git diff --stat origin/develop -- specifications/ definitions/
 ```
 
-Expected: only `specifications/disl/DISL-specification.md` and `specifications/disl/c4-container.dis`.
+Expected: only `specifications/disl/DISL-specification.md`, `specifications/disl/disl.schema.json` and `specifications/disl/c4-container.dis`.
