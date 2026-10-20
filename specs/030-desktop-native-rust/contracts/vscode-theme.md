@@ -4,8 +4,8 @@ What FR-044, FR-045 and SC-010 are checked against.
 
 ## Source
 
-- VS Code at one release tag, named in `crates/adp-theme/vscode/SOURCE.md` (for example `1.105.0`), MIT licence copied beside it.
-- Colours: `extensions/theme-defaults/themes/dark_modern.json` and `light_modern.json`, with the files they include (`dark_plus.json`, `dark_vs.json`, `light_plus.json`, `light_vs.json`) resolved, extracted by `tools/extract-vscode-theme` into `crates/adp-theme/vscode/dark-modern.json` and `light-modern.json`.
+- VS Code at one release tag, named in `crates/adp-theme/vscode/SOURCE.md` (`1.142.0` since 2026-10-21), MIT licence copied beside it.
+- Colours: the default dark and light themes that `ThemeSettingDefaults` names in `src/vs/workbench/services/themes/common/workbenchThemeService.ts`, from `extensions/theme-defaults/themes/`, with the files they include resolved (the child's colours win), extracted by `tools/extract-vscode-theme.py` into `crates/adp-theme/vscode/dark.json` and `light.json`. At `1.142.0` these are `2026-dark.json` → `dark_modern.json` → `dark_plus.json` → `dark_vs.json`, and the same chain for light.
 - Sizes: `crates/adp-theme/vscode/sizes.md`, one row per value with its VS Code source file and line at that tag.
 - Icons: the Codicons font at the version that VS Code tag ships.
 

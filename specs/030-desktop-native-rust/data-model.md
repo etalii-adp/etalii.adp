@@ -80,7 +80,7 @@ What the core gives the shell to draw a diagram: shapes, paths, labels, markers,
 
 ## Theme (new; R9)
 
-`name` (Dark Modern, Light Modern), `colors` (VS Code colour ids to RGBA), `sizes` (font sizes, row and tab heights, border and focus widths, radii), `source` (VS Code tag and file per value). Follows the system setting (FR-042).
+`name` (VS Code's default dark and light themes: Dark 2026 and Light 2026 at `1.142.0`), `colors` (VS Code colour ids to RGBA), `sizes` (font sizes, row and tab heights, border and focus widths, radii), `source` (VS Code tag and file per value). Follows the system setting (FR-042).
 
 ## Parity inventory row (new; R10)
 
