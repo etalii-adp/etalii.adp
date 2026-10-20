@@ -420,7 +420,7 @@ Every count is taken by the scripts of FR-009 against the baseline. The figures 
 - **SC-019**: DISL's derivation code holds no raw JSON access (about 430 sites); what remains is in the loader. At the end of M6.
 - **SC-020**: One cache serves compiled CEL programs (5 mechanisms); one write loop serves four families (4). At the end of M6.
 - **SC-021**: The FBL conformance fixtures and the DISL suite pass with no fixture's expected result changed. Through M6.
-- **SC-022**: FBL's public types are those another project uses (72 public types). At the end of M6.
+- **SC-022**: FBL's public types are those another project uses (72 public types). At the end of M6. *Amended by the [M6 review](reviews/M6-review.md), 2026-10-20: the 72 is FBL's count at the report's reading, a baseline and not a target. Met at M6 with 45 public top-level types (65 with nested ones), each named by another project, a test project of another project included (that review's question 3 asks whether it should be), or exposed by a public signature, and held by `PublicSurfaceTests` (T226); CEL went from 22 to 15 and DISL from 65 to 58.*
 
 **Readability**
 

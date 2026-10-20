@@ -2,7 +2,7 @@
 
 **Input**: [standalone-code-structure.spec.md](standalone-code-structure.spec.md), [plan.md](plan.md), [research.md](research.md), [data-model.md](data-model.md), [behaviour-changes.md](behaviour-changes.md), [contracts/](contracts/), and the report, [analysis-2026-10-10.md](analysis-2026-10-10.md).
 
-**287 tasks in ten milestones.** T265 and T266 were added on 2026-10-11 with the ruling on DP-5 and stand in M4. T255 to T257 were struck on 2026-10-12 by the ruling on DP-1 (c), keep the stubs. The M0 review added T267 to T271 to M0 and struck T021, so 267 remained. The M1 review added T272 (in M3, beside T144 and T145), T273 and T274 (at the head of M2) and T275 and T276 (in M1), and struck nothing, so 272 remain. The M2 review added T277 (at the end of M2) and T278 (in M3, beside T151) and struck T129, so 273 remain. The M3 review added T279 to T282 and T285 (in M3, after its review), T283 (in M5) and T284 (in M8), and struck nothing, so 280 remain. T286 was added to M4 on 2026-10-17, as the maintainer ruled on a card, so 281 remain. T287 was added to M5 on 2026-10-17, as the maintainer ruled on T162's card, so 282 remain. The M4 review added T288 to T292 (in M4, after its review), T293 (in M5) and T294 and T295 (in M7), and struck T225, so 289 remain. The M5 review added T296 to T301 (in M5, after its review) and T302 (in M7), and struck nothing, so 296 remain. Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
+**287 tasks in ten milestones.** T265 and T266 were added on 2026-10-11 with the ruling on DP-5 and stand in M4. T255 to T257 were struck on 2026-10-12 by the ruling on DP-1 (c), keep the stubs. The M0 review added T267 to T271 to M0 and struck T021, so 267 remained. The M1 review added T272 (in M3, beside T144 and T145), T273 and T274 (at the head of M2) and T275 and T276 (in M1), and struck nothing, so 272 remain. The M2 review added T277 (at the end of M2) and T278 (in M3, beside T151) and struck T129, so 273 remain. The M3 review added T279 to T282 and T285 (in M3, after its review), T283 (in M5) and T284 (in M8), and struck nothing, so 280 remain. T286 was added to M4 on 2026-10-17, as the maintainer ruled on a card, so 281 remain. T287 was added to M5 on 2026-10-17, as the maintainer ruled on T162's card, so 282 remain. The M4 review added T288 to T292 (in M4, after its review), T293 (in M5) and T294 and T295 (in M7), and struck T225, so 289 remain. The M5 review added T296 to T301 (in M5, after its review) and T302 (in M7), and struck nothing, so 296 remain. T303 and T304 were added on 2026-10-19, as the maintainer ruled on the M5 review's question 1, so 298 remain. The M6 review added T305 to T312 (in M6, after its review) and struck nothing, so 306 remain. Paths carry their repository as prefix. The code lands in `etalii.adp.ide.standalone`; the review records and this file are in `etalii.adp`. The clones sit side by side.
 
 ## How to read a task
 
@@ -415,13 +415,26 @@ These come before M6's first task.
 - [x] T224 [US6] Type constraints, hooks and names at load; `ConstraintEvaluator` and `DislNames` read the records; a JSON Pointer that matches no compiled expression is an error at load, and the silent compile on a miss in `DislEvaluation.cs` goes; `DislSpecification` keeps no `JsonElement Root` for the derivation code (FR-079; SC-019). Done 2026-10-20 in standalone #543. The `DislConstraints`, `DislBehavior` and `DislNotation` records, the viewpoints, the type map and the id settings are read once at load, and the constraint, hook, deletion, retype, operation, id, form, chrome, view and name code reads them. An expression read where the loader compiled none is an error at load (B-37), and the silent compile is gone. `Root` became `Json`, kept only for seven modules' own readings. For the M6 review: `Json` stays public for those modules; `InternalsVisibleTo` was added from Disl to `Diagram.Modules`; and a definition whose operation has no unavailable sentence now throws `InvalidOperationException` where a missing `behavior` threw `KeyNotFoundException`, which reaches no tool.
 - [ ] ~~T225 [US6] Add a DISL-side read element or a thin bridge so that `DislModelBuilder` takes a module's own reading; `TimelineDisl.cs` and its dependency-graph twin stop constructing `FblElement`s through the 12-argument constructor. Read `timeline-disl-fbl` and `dependency-graph-disl-fbl` first: if either conversion has landed, its module needs no bridge (FR-083, FR-012). Reduced by the M3 review to dependency-graph: `timeline-disl-fbl` has closed and `TimelineDisl.cs` is gone; `DependencyGraphFindings` is what still builds `FblElement`s.~~ struck by the M4 review: `dependency-graph-disl-fbl` has closed, and `DependencyGraphFindings` no longer builds `FblElement`s; the 12-argument constructor is now used only by FBL plugins, which this task never concerned.
 - [x] T226 [US6] Narrow the public surface of `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Cel/` and `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Disl/` to what another project uses: the 72 public FBL types, CEL's library registrars, the DISL types nothing outside reads (FR-082; SC-022). Done 2026-10-20 in standalone #544. A type stays public only when another project uses it or a public signature exposes it, and `PublicSurfaceTests` holds that. FBL went from 85 public top-level types to 45, CEL from 22 to 15 and DISL from 65 to 58. SC-022's 72 was FBL's count at the analysis commit, not a target. For the M6 review: use by another project's tests counts as use, which keeps `PluginReader`, `DislExpression`, `DislLoader` and `DislLoadResult` public.
-- [ ] T227 [US6] For timeline, dependency-graph and databricks: record in the M6 review what each conversion still waits on from this feature, confirm nothing of FR-074 to FR-083 that they need is left open, and hand over. Their work stays theirs (FR-084). Reduced by the M4 review to databricks: `timeline-disl-fbl` and `dependency-graph-disl-fbl` have closed.
+- [x] T227 [US6] For timeline, dependency-graph and databricks: record in the M6 review what each conversion still waits on from this feature, confirm nothing of FR-074 to FR-083 that they need is left open, and hand over. Their work stays theirs (FR-084). Reduced by the M4 review to databricks: `timeline-disl-fbl` and `dependency-graph-disl-fbl` have closed. Done (2026-10-20) in the [M6 review](reviews/M6-review.md): `databricks-disl-fbl` is at 9 of 15 and its stage one has closed; its task 10 waits on FBL gaps 1, 2 and 4 and its task 14 on a canvas player for `simulate`, none of them this feature's. What it needed of FR-074 to FR-083 has merged, and it needs no bridge of FR-083: its task 11 deletes the adapter that builds `FblElement`s. Handed over.
 
 ### Review
 
-- [ ] T228 [US9] Run `etalii.adp.ide.standalone/.github/tools/analysis/measure.sh` on the merge commit of M6's last pull request, in a freshly created worktree, and save its output as `etalii.adp/specs/025-standalone-code-structure/reviews/M6-measurements.json` (FR-009, FR-010).
-- [ ] T229 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M6-review.md` by `etalii.adp/specs/025-standalone-code-structure/contracts/milestone-review.md`: the comparison with the previous record, the exit condition of M6 (the specification projects are restructured) and the success criteria due, an answer for every candidate named for the M6 review, what the clone scan and the method-length count show that nobody named, the tasks under FR-012 marked *stands*, *reduced* or *overtaken*, and the open rows of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` that M7 needs (FR-010, FR-011, FR-012).
+- [x] T228 [US9] Run `etalii.adp.ide.standalone/.github/tools/analysis/measure.sh` on the merge commit of M6's last pull request, in a freshly created worktree, and save its output as `etalii.adp/specs/025-standalone-code-structure/reviews/M6-measurements.json` (FR-009, FR-010). Done (2026-10-20): [M6-measurements.json](reviews/M6-measurements.json), at standalone `514e784f1`, the merge of pull request 546. The three specification test projects were built and run in the same tree, its `src/global.json` set locally to the session's SDK (10.0.112 for 10.0.203) and not committed.
+- [x] T229 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M6-review.md` by `etalii.adp/specs/025-standalone-code-structure/contracts/milestone-review.md`: the comparison with the previous record, the exit condition of M6 (the specification projects are restructured) and the success criteria due, an answer for every candidate named for the M6 review, what the clone scan and the method-length count show that nobody named, the tasks under FR-012 marked *stands*, *reduced* or *overtaken*, and the open rows of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` that M7 needs (FR-010, FR-011, FR-012). Done (2026-10-20): [M6-review.md](reviews/M6-review.md).
 - [ ] T230 [US9] In the same pull request into `etalii.adp`, update `etalii.adp/specs/025-standalone-code-structure/tasks.md`: tick what is merged, add the tasks the review produced with new numbers, strike what it found unnecessary; amend a success criterion in `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` only with this review named beside it. No task of the next milestone starts before this pull request is merged (FR-010, FR-011, FR-014).
+
+### Added by the M6 review
+
+These come before M7's first task.
+
+- [ ] T305 [US6] Added by the M6 review: the rest of SC-019 in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Disl/`. The 58 lines outside `Loading/` that still read JSON go into the loader: a type's and an attribute's `label`, `icon`, `key`, flags and `derived`, which `ToolboxDerivation`, `CanvasChromeDerivation`, `ContextMenuDerivation`, `FormDerivation`, `DislElement`, `DislDiagram`, `DislNaturalIds` and `ConstraintEvaluator` read while a diagram runs, become members read at load; a derived relation becomes a record with its compiled fields, so `DislModelBuilder.DerivedRelations` rebuilds no pointer; `WireIdMap` reads its block beside the loader's readers; a tool's initial literal is converted at load, so `OperationInterpreter` calls no `DislValues.FromJson`; and `DislJson`'s one-line forwards give way to `JsonProperties` and `JsonPointer` (FR-079; SC-019).
+- [ ] T306 [US6] Added by the M6 review, after T305: `ActionRunner.Action` (152 code lines) in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Disl/Behavior/` becomes one method per action kind of the `DislAction` union, and `DislModelBuilder.From` (100), `DerivedRelations` (94) and `ExpressionForm` (76) go under 50 code lines (FR-079; SC-023).
+- [ ] T307 [US6] Added by the M6 review: a new xml element written by `XmlFamily.NewElement` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Files/Xml/` follows its binding's `empty` rule as FBL 0.6 §6.2 says and B-09 was ruled, as the json, lines and yaml families do since T216: under `empty: "remove"` an empty attribute is left out. A guard, seen to fail first, writes such an element (FR-076, FR-025, FR-005; behaviour-changes B-09).
+- [ ] T308 [US6] Added by the M6 review: apply B-38 as the maintainer rules it, in `JsonScalars.ToCel` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Json/`, with the guard B-38 names, seen to fail first, and the method's comment saying what it does (FR-074, FR-002; behaviour-changes B-38).
+- [ ] T309 [US6] Added by the M6 review: apply B-40 as the maintainer rules it, in `DislNotationReader.EditText` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Disl/Loading/`, with the guard B-40 names, seen to fail first; if the ruling keeps the expression reading, the difference goes to `etalii.adp` as a feature of its own (FR-079, FR-002, FR-085; behaviour-changes B-40).
+- [ ] T310 [P] [US4] Added by the M6 review: move `ModulePluggabilityTests.Core_CompilesAndRuns_WithNoDiagramModuleLoaded` from `etalii.adp.ide.standalone/src/tests/EtAlii.Adp.Modules.Tests/` to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Diagram.Tests/`, which references only `EtAlii.Adp.Diagram`, so that the assembly it inspects is one whose purpose is not modules; seen to fail there with a reference to the mind map module added (FR-056; SC-013).
+- [ ] T311 [P] [US9] Added by the M6 review: `etalii.adp.ide.standalone/.github/tools/analysis/graph.py` counts a core project as naming a tool module only when the other project is a diagram, designer or editor project, so that the grant from `EtAlii.Adp.Hierarchy` to `src/tests/EtAlii.Adp.Modules.Tests` is not counted; the scripts' readme says so (FR-009; SC-013).
+- [ ] T312 [US1] Added by the M6 review: Stability run 16 (run 39389430025, at `c77eeac43`, 2026-10-20) failed in its 14th of 20 runs, at *Backend tests*, with exit code 2, and its log could not be read when the review was written. Read it and name the test; if it is one T300 corrected, say whether T300's correction was in that commit, otherwise find the race, make a guard that fails on it every time, and correct it (FR-005; SC-002).
 
 ## M7: module internals
 
@@ -494,7 +507,7 @@ These come before M6's first task.
 - **M3**: T118 before every other layout task; T121 before T122 and T123; T131 before T132; T133 before T134; T136 before T137; T139 before T140; T141 before T142, T143 and T145; T144 before T145; T272 goes with T144 and T145; T146 before T147; T150 before T151. The M3 review's T279 to T282 and T285 come before M4's first task; T280's ansible part waits for `ansible-structure-disl-fbl` to close.
 - **M4**: T155 and T156 before T157 before T158; T158 before T174 and T167, because the hierarchy project can reference the diagram project only once the diagram project no longer references it. T163 before T164 before T165 and T166; T173 before T167 before T168 and T169; T170 before T171 and T172; T176 before T177. T178 needs the ruling on B-07. T265 stands alone; T266 needs T158 and T166 and comes after T157. The M4 review's T288 to T292 and T280's remaining half come before M5's first task.
 - **M5**: T185 first; T283 needs T155 and T157, so that the calls it changes have moved; T186, T187 and T188 before T189 before T190; T192 needs T266 and comes before T193; T195 before T196; T197 before T198. The M5 review's T296 to T301 come before M6's first task. T303 and T304 were added after M6 had begun, by the ruling on the review's question 1, and run beside M6.
-- **M6**: T207 and T208 first. T209 before T210 and T211; T212 before the three DISL typing tasks; T215 before T216, which needs T038; T220 before T221; T226 last of the code tasks.
+- **M6**: T207 and T208 first. T209 before T210 and T211; T212 before the three DISL typing tasks; T215 before T216, which needs T038; T220 before T221; T226 last of the code tasks. The M6 review's T305 to T312 come before M7's first task; T305 before T306; T308 and T309 wait for the rulings on B-38 and B-40.
 - **M7**: T231 before T232; T233 before T234.
 - **M8**: T245 before T246; T251 before T252. T284 stands alone.
 
@@ -505,14 +518,14 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | Requirement | Tasks |
 |---|---|
 | FR-001 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md) (*No behaviour change*), and checked at every review by the unchanged fixtures and transcripts. |
-| FR-002 | T039, T132, T135, T137, T146, T178, T211 |
+| FR-002 | T039, T132, T135, T137, T146, T178, T211, T308, T309 |
 | FR-003 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md). |
 | FR-004 | 21 tasks, T016 to T266; and T304, added by the M5 review |
-| FR-005 | T033, T034, T035, T056, T176, T185, T195, T212, T216, T217, T269, T276, T281, T282, T286, T291, T292, T300 |
+| FR-005 | T033, T034, T035, T056, T176, T185, T195, T212, T216, T217, T269, T276, T281, T282, T286, T291, T292, T300, T307, T312 |
 | FR-006 | Held by every task through [contracts/pull-request.md](contracts/pull-request.md) (the identity) and by the *Ownership* section of every review record (the owner). |
 | FR-007 | T029 |
 | FR-008 | T043 |
-| FR-009 | 19 tasks, T002 to T261, and T270 |
+| FR-009 | 19 tasks, T002 to T261, and T270, T311 |
 | FR-010 | 28 tasks, T040 to T263 |
 | FR-011 | 18 tasks, T041 to T260 |
 | FR-012 | 46 tasks, T010 to T259, T280, T295 and T302; T225 struck by the M4 review |
@@ -528,7 +541,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-022 | 19 tasks, T056 to T111 |
 | FR-023 | T034, T193 |
 | FR-024 | T035, T036, T037, T267 |
-| FR-025 | T038, T216 |
+| FR-025 | T038, T216, T307 |
 | FR-026 | T185, T190 |
 | FR-027 | T049, T055, T274 |
 | FR-028 | 16 tasks, T043 to T100 |
@@ -559,7 +572,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-053 | T144, T272 |
 | FR-054 | T155, T156, T157, T158, T266, T288 |
 | FR-055 | T159 |
-| FR-056 | T160, T161, T162, T287, T303, T304 |
+| FR-056 | T160, T161, T162, T287, T303, T304, T310 |
 | FR-057 | T156, T164, T165, T166 |
 | FR-058 | T167, T168, T169, T290 |
 | FR-059 | T170, T171, T172, T293 |
@@ -577,18 +590,18 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-071 | T201 |
 | FR-072 | T202 |
 | FR-073 | T203, T298 |
-| FR-074 | T209, T210, T211, T227 |
+| FR-074 | T209, T210, T211, T227, T308 |
 | FR-075 | T212, T213, T214 |
-| FR-076 | T215, T216 |
+| FR-076 | T215, T216, T307 |
 | FR-077 | T217 |
 | FR-078 | T218 |
-| FR-079 | T222, T223, T224 |
+| FR-079 | T222, T223, T224, T305, T306, T309 |
 | FR-080 | T219 |
 | FR-081 | T220, T221 |
 | FR-082 | T226 |
 | FR-083 | T227; T225 struck by the M4 review |
 | FR-084 | T207, T227 |
-| FR-085 | T208 |
+| FR-085 | T208, T309 |
 | FR-086 | T231, T232 |
 | FR-087 | T233, T234 |
 | FR-088 | T235 |
@@ -608,7 +621,7 @@ FR-002, FR-004, FR-005, FR-007 and FR-008 are rules of [contracts/pull-request.m
 | Success criterion | Where it is worked for | Measured at the review of |
 |---|---|---|
 | SC-001 | T025, T263 | M0 |
-| SC-002 | T026, T261, T271, T275, T276, T281, T282, T286, T291, T292, T300 | M0, M9 |
+| SC-002 | T026, T261, T271, T275, T276, T281, T282, T286, T291, T292, T300, T312 | M0, M9 |
 | SC-003 | T149 | M0, M3 |
 | SC-004 | T142, T143, T149 | M3 |
 | SC-005 | The test-code tasks of M0, M1 (contracts) and M8; T009 | M9 |
@@ -619,17 +632,17 @@ FR-002, FR-004, FR-005, FR-007 and FR-008 are rules of [contracts/pull-request.m
 | SC-010 | T119, T120, T134, T145, T272, T283, T302 | M3, M5 (amended by the M3 review) |
 | SC-011 | T121, T239 | M3, M7 |
 | SC-012 | T158, T288 | M4 |
-| SC-013 | T162, T265, T287, T303, T304 | M5 |
+| SC-013 | T162, T265, T287, T303, T304, T310, T311 | M5 |
 | SC-014 | T037, T267 | M0, M1 |
 | SC-015 | T166, T169, T290 | M4 |
 | SC-016 | T177 | M4 |
 | SC-017 | T189, T190, T296 | M5 |
 | SC-018 | T198, T199, T200, T283 | M5 |
-| SC-019 | T224 | M6 |
+| SC-019 | T224, T305 | M6 |
 | SC-020 | T212, T216 | M6 |
 | SC-021 | T208 | M6 |
-| SC-022 | T226 | M6 |
-| SC-023 | T009, T241, T297, T298, T299 | M9 |
+| SC-022 | T226 | M6 (amended by the M6 review) |
+| SC-023 | T009, T241, T297, T298, T299, T306 | M9 |
 | SC-024 | The three review tasks of each milestone; T263 | M0 to M9 |
 | SC-025 | T262 | M9 |
 | SC-026 | The defect tasks of M0, M1, M2, M5 and M6; T263 | M9 |
