@@ -177,6 +177,9 @@
       "specs/etalii.adp.site/006-*/**",
       ".github/scripts/validate-examples.py"
     ],
+    "etalii.adp.ide.desktop": [
+      "vendor/etalii.adp/**"
+    ],
     "etalii.adp.ide.intellij": [
       "core/src/test/resources/settings/baseline-adp.xml",
       "freemind/testdata/reference/spec001-test-inventory.md",
