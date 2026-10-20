@@ -369,6 +369,8 @@ rdf's own tasks 8 to 11 move all five out of production into its test project, a
 
 **Answers.** Not yet given when this review was written. SC-022 is amended in the specification, with this review named beside it, as question 3 (a) would leave it: the 72 was a count at the report's reading and never a target, which T226 had said. T308 and T309 wait on the rulings of questions 1 and 2. T231 and T232 stand as written until question 4 is ruled.
 
+The maintainer answered all four on decision cards on 2026-10-20, each with the recommended option: question 1 (a), ints, which T308 applies; question 2 (a), the literal, which T309 applies; question 3 (a), a test project's use counts as use, so SC-022 stands as amended; question 4 (a), rdf's stage one goes first, M7 does its other tasks before T231, T232 and T241's rdf part, and the M7 review reduces or strikes those once rdf has started.
+
 ## Ownership
 
 M6 was owned by one developer, signing as `agent-1-<task>` (FR-006), all of it in a cloud session. M7 is owned by the same developer unless the maintainer hands it over with this review.
