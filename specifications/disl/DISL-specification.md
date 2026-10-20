@@ -1,10 +1,10 @@
 # DISL — Diagram Specification Language
 
-**Specification, version 0.4 (Draft)**
+**Specification, version 0.5 (Draft)**
 
 |                           |                                                                              |
 |---------------------------|------------------------------------------------------------------------------|
-| Date                      | 2026-10-09                                                                   |
+| Date                      | 2026-10-19                                                                   |
 | Specification schema      | `disl.schema.json` (JSON Schema, draft 2020-12), `$defs/Specification`       |
 | Definition language       | DID, the Diagram Definition Language, in [`../did/`](../did/DID-specification.md) |
 | Expression language       | CEL — Common Expression Language (https://cel.dev)                           |
@@ -16,7 +16,7 @@
 
 ## Status of this document
 
-This is a draft, version 0.4. It is complete enough to implement a conforming validator, a documentation generator and a reference runtime, but individual constructs may still change before version 1.0. DISL 0.1 continued the earlier combined format (DEDL became DISL and DID); section 18 lists the old identifiers that runtimes still read. DISL 0.2 adds declarative constructs to 0.1 (declared identity, findings that point at files, reasons the tool gives, derived elements, gestures and menus, view state, budgets, notation and time details). Every valid 0.1 specification is a valid 0.2 specification and keeps its meaning, except in the places listed in [Changes from 0.1](#changes-from-01), where 0.1 was silent or ambiguous and 0.2 now says what it means. DISL 0.3 adds the constructs that the Gartner hype cycle graph and Agent Behavior Modelling tools needed and 0.2 could not state (neighbour-aware bounds, standard row and tree layouts, a type map for format bindings, part tooltips, form fields that parse their own text, per-case built-in codes, geometric drop placement, typed retyping fields and pointer bindings for connect gestures, and, by the ruling of 2026-10-06, menu groups, form row ids, a declared order of findings, one finding per group of duplicates and the case of an endpoint finding); every valid 0.2 specification is a valid 0.3 specification with the same meaning, apart from the clarifications in [Changes from 0.2](#changes-from-02). DISL 0.4 adds what a diagram that agents write and a person arranges needs (items grouped inside a node with collapse defaults, a kept canvas filter, pinning as standard gestures, a layout in tiers, links that open, and view data kept in a format binding's body); every valid 0.3 specification is a valid 0.4 specification with the same meaning, apart from the clarifications in [Changes from 0.3](#changes-from-03). Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
+This is a draft, version 0.5. It is complete enough to implement a conforming validator, a documentation generator and a reference runtime, but individual constructs may still change before version 1.0. DISL 0.1 continued the earlier combined format (DEDL became DISL and DID); section 18 lists the old identifiers that runtimes still read. DISL 0.2 adds declarative constructs to 0.1 (declared identity, findings that point at files, reasons the tool gives, derived elements, gestures and menus, view state, budgets, notation and time details). Every valid 0.1 specification is a valid 0.2 specification and keeps its meaning, except in the places listed in [Changes from 0.1](#changes-from-01), where 0.1 was silent or ambiguous and 0.2 now says what it means. DISL 0.3 adds the constructs that the Gartner hype cycle graph and Agent Behavior Modelling tools needed and 0.2 could not state (neighbour-aware bounds, standard row and tree layouts, a type map for format bindings, part tooltips, form fields that parse their own text, per-case built-in codes, geometric drop placement, typed retyping fields and pointer bindings for connect gestures, and, by the ruling of 2026-10-06, menu groups, form row ids, a declared order of findings, one finding per group of duplicates and the case of an endpoint finding); every valid 0.2 specification is a valid 0.3 specification with the same meaning, apart from the clarifications in [Changes from 0.2](#changes-from-02). DISL 0.4 adds what a diagram that agents write and a person arranges needs (items grouped inside a node with collapse defaults, a kept canvas filter, pinning as standard gestures, a layout in tiers, links that open, and view data kept in a format binding's body); every valid 0.3 specification is a valid 0.4 specification with the same meaning, apart from the clarifications in [Changes from 0.3](#changes-from-03). DISL 0.5 adds a built-in `person` shape, a rounded box with a round head above it, which the C4 diagram tool type needs; every valid 0.4 specification is a valid 0.5 specification with the same meaning, apart from the clarification in [Changes from 0.4](#changes-from-04). Sections and paragraphs marked *(informative)* explain intent and give guidance; everything else is *normative*.
 
 The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **SHOULD**, **SHOULD NOT**, **RECOMMENDED**, **MAY** and **OPTIONAL** are to be interpreted as described in RFC 2119 and RFC 8174 when, and only when, they appear in bold capitals.
 
@@ -44,6 +44,7 @@ The key words **MUST**, **MUST NOT**, **REQUIRED**, **SHALL**, **SHALL NOT**, **
 - [Changes from 0.1](#changes-from-01)
 - [Changes from 0.2](#changes-from-02)
 - [Changes from 0.3](#changes-from-03)
+- [Changes from 0.4](#changes-from-04)
 18. [Deprecated aliases](#18-deprecated-aliases)
 - [Appendix A — JSON Schema](#appendix-a--json-schema)
 - [Appendix B — Built-in catalogues](#appendix-b--built-in-catalogues)
@@ -351,7 +352,7 @@ Any object in a specification or DID definition MAY contain properties whose nam
 
 ### 2.9 Versioning
 
-- `disl` (required) is the version of DISL the specification targets, as `"major.minor"`: `"0.1"`, `"0.2"`, `"0.3"` or `"0.4"`. A runtime MUST refuse a specification with a higher major version than it supports and SHOULD warn for a higher minor version. The deprecated alias of section 18 is still read.
+- `disl` (required) is the version of DISL the specification targets, as `"major.minor"`: `"0.1"`, `"0.2"`, `"0.3"`, `"0.4"` or `"0.5"`. A runtime MUST refuse a specification with a higher major version than it supports and SHOULD warn for a higher minor version. The deprecated alias of section 18 is still read.
 - DISL 0.2 is a superset of 0.1. A 0.2 runtime **MUST** read a specification that declares `"disl": "0.1"`, or whose `$schema` names the 0.1 schema (`https://etalii.net/adp/disl/schema/0.1/disl.schema.json`), as a 0.2 specification with the same meaning, apart from the clarifications listed in [Changes from 0.1](#changes-from-01). A validator **MUST** validate such a specification against the 0.2 schema and **MUST NOT** report its 0.1 version or schema address as deprecated.
 - DISL 0.3 is a superset of 0.2. A 0.3 runtime **MUST** read a specification that declares `"disl": "0.1"` or `"disl": "0.2"` with its meaning, apart from the clarifications listed in [Changes from 0.2](#changes-from-02). While 0.3 is a draft, its schema is published at the 0.2 address (`https://etalii.net/adp/disl/schema/0.2/disl.schema.json`), which accepts every 0.2 specification unchanged; a specification that uses a construct new in 0.3 **SHOULD** declare `"disl": "0.3"`, and a 0.2 runtime **SHOULD** warn about it as a newer minor version.
 - `language.version` (required) is the semantic version (SemVer 2.0.0) of the defined language. DID definitions record the language version they were written with; this drives migrations (section 11.9).
@@ -1999,6 +2000,7 @@ The standard library offers these primitives (all parameters optional; defaults 
 | `star`          | `points`, `innerRadius` (fraction), `rotation`                                    |                                                                  |
 | `cross`         | `thickness` (fraction)                                                            | Plus shape.                                                      |
 | `cylinder`      | `cap` (height of the ellipse cap), `orientation` (`vertical`, `horizontal`)       | Databases, storage.                                              |
+| `person`        | `radius` (corner radius of the body)                                              | *(DISL 0.5)* Rounded box with the label inside and a round head above; not `actor` (below). |
 | `document`      | `wave` (amplitude fraction)                                                       | Wavy bottom.                                                     |
 | `multiDocument` | `wave`, `offset`, `count`                                                         | Stacked documents.                                               |
 | `note`          | `fold` (size of the folded corner)                                                | Comments.                                                        |
@@ -2022,7 +2024,23 @@ The standard library offers these primitives (all parameters optional; defaults 
 | `icon`          | `icon` (IconRef), `padding`                                                       | Icon filling the node.                                           |
 | `none`          | –                                                                                 | Invisible body; used for pure containers or label-only elements. |
 
-Every built-in shape defines its **outline** (for edge anchoring and hit testing) and its **text area** (where the main label goes). For example, a cylinder's text area excludes its top cap; an actor's text area lies below the figure.
+Every built-in shape defines its **outline** (for edge anchoring and hit testing) and its **text area** (where the main label goes). For example, a cylinder's text area excludes its top cap; an actor's text area lies below the figure. *(DISL 0.5)* A shape **MAY** state a separate **hit area**, which then takes the outline's place for hit testing while the outline still serves edge anchoring; of the built-in shapes, `person` does (below).
+
+**The person shape** *(DISL 0.5)*. `person` draws a person as the C4 model does: a box that carries the label, with a head above it. It is not `actor`, which is a stick figure with its label below. In shape coordinates (6.8), with the bounds from (0, 0) to (w, h):
+
+- The **body** **MUST** be a rounded rectangle exactly over the bounds, with corner radius `radius`. The radius drawn **MUST** be the smaller of `radius` and half the smaller side of the bounds, so the body never turns inside out. A negative `radius` is not a valid value.
+- The **head** **MUST** be a circle of radius 10 whose centre is at (w / 2, −8), on the vertical centre line of the bounds and 8 above the top edge. Its size and position are fixed: they **MUST NOT** follow the bounds or `radius`. A node narrower than the head is drawn with the head unchanged, and raises no finding.
+- The head **MUST** be painted before the body, so the body covers it where the two overlap. Both take the node's style and its states (6.6).
+- Relations **MUST** anchor on the body's outline alone (6.10). Hit testing **MUST** cover the body and the head, each widened by `hitPaddingScreenPx` (6.9): a hit on the head is a hit on the node.
+- The text area **MUST** be the body minus the node's `padding`, as for `roundedRect`; no part of the head is in it.
+- The bounds are the body: size, position, snapping, containment and layout refer to them as for every shape. The head lies outside them, as a `callout`'s pointer may; anything that measures what a diagram draws, such as fitting it to the view or an export (11.11), **MUST** include the head.
+
+```json
+"shape": "person",
+"shape": { "type": "person", "params": { "radius": 4 } }
+```
+
+For bounds of 160 by 100 at the origin, the first draws a body with corners of radius 8 and a head centred at (80, −8) whose top is at y = −18, so the node draws from y = −18 to y = 100; the second the same with corners of radius 4.
 
 ```json
 "shape": { "type": "superellipse", "params": { "exponent": 4 } }
@@ -6120,6 +6138,20 @@ DISL 0.4 (draft, 2026-10-09) adds the constructs listed below, approved by the p
 
 DISL 0.4 needs no change to FBL: a bound view kind is an ordinary entry of the body (FBL section 5), planned, undone and reloaded as any other. The worked example [`work-board.dis`](work-board.dis), with its binding [`../fbl/work-board.fbl`](../fbl/work-board.fbl), uses every construct of the first table.
 
+## Changes from 0.4
+
+DISL 0.5 (draft, 2026-10-19) adds the construct listed below, ruled by the product owner on 2026-10-19 (the decision cards "Add to DISL", for the shape, and "Approve, open 0.5", for the version; spec 031-disl-person-shape); it is optional, and its absence is the 0.4 behaviour. Every valid 0.4 specification is a valid 0.5 specification with the same meaning, apart from the clarification in the second table.
+
+| Construct | Section | Schema |
+|-----------|---------|--------|
+| `person`, a built-in shape with the parameter `radius` | 6.7, B.2 | – (`$defs/ShapeRef` accepts any shape name) |
+
+| # | Change | 0.4 said | 0.5 says | Reason | Section |
+|---|--------|----------|----------|--------|---------|
+| 1 | A shape reference `"person"` with no custom shape of that name | An unknown shape. | The built-in `person`. A custom shape named `person` still shadows it (6.8). | The C4 person needed a shape every host draws alike. | 6.7 |
+
+DISL 0.5 needs no change to DID or FBL: a definition stores no shapes, and a binding binds no notation. The worked example [`c4-container.dis`](c4-container.dis) draws its people with `person`.
+
 ---
 
 ## 18. Deprecated aliases
@@ -6844,6 +6876,7 @@ The following excerpt shows how per-axis snapping is encoded. A snap rule is eit
 | `star`          | `points`: 5, `innerRadius`: 0.5, `rotation`: 0                                         |
 | `cross`         | `thickness`: 0.33                                                                      |
 | `cylinder`      | `cap`: 0.15 × height, `orientation`: `vertical`                                        |
+| `person`        | `radius`: 8                                                                            |
 | `document`      | `wave`: 0.1                                                                            |
 | `multiDocument` | `wave`: 0.1, `offset`: 6, `count`: 3                                                   |
 | `note`          | `fold`: 12                                                                             |

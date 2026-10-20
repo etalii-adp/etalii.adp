@@ -1,6 +1,6 @@
 {
   "$schema": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Specification",
-  "disl": "0.2",
+  "disl": "0.5",
   "language": {
     "id": "org.example.c4.container",
     "version": "0.1.0",
@@ -191,18 +191,9 @@
       "diagramTitle": { "font": { "family": { "token": "font.body" }, "size": 18, "weight": 600 } },
       "headerMuted": { "font": { "family": { "token": "font.body" }, "size": 11, "color": { "token": "color.muted" } } }
     },
-    "shapes": {
-      "c4Person": {
-        "label": "Person",
-        "parts": [
-          { "id": "head", "shape": "circle", "box": { "x": "w / 2.0 - 10.0", "y": -28, "w": 20, "h": 20 } },
-          { "id": "body", "shape": { "type": "roundedRect", "params": { "radius": 8 } }, "box": { "x": 0, "y": 0, "w": "w", "h": "h" }, "outline": true }
-        ]
-      }
-    },
     "nodes": {
       "Person": {
-        "shape": "c4Person",
+        "shape": "person",
         "style": "person",
         "size": { "min": [160, 39.6], "max": [240, null], "autoSize": "fitContent", "resizable": false },
         "labels": [
