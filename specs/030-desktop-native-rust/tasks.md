@@ -18,11 +18,11 @@
 
 **Purpose**: the repository, its principles, its build on three platforms, and the documents here that name the hosts.
 
-- [ ] T001 Ask the maintainer to create the public repository `etalii-adp/etalii.adp.ide.desktop` with `develop` as default branch, merge commits only and "Automatically delete head branches", and to give the Claude app access, as `docs/new-repository.md` lists · etalii.adp/docs/new-repository.md (read, not changed)
-- [ ] T002 In the terminology, add the desktop host to **Host** and **IDE host** and to the list of IDE hosts, before any other document changes (FR-006) · etalii.adp/docs/terminology.md
-- [ ] T003 Name `etalii.adp.ide.desktop` among the hosts and the repositories with principles of their own, through `/speckit-constitution` as a MINOR amendment (FR-006) · etalii.adp/.specify/memory/constitution.md
-- [ ] T004 [P] Name `etalii.adp.ide.desktop` among the IDE hosts in the naming rule (FR-006) · etalii.adp/docs/new-repository.md
-- [ ] T005 [P] Write the desktop repository's principles: native platform citizenship, the text file is the source of truth, one frame for many tools, test-first against real files, simplicity, no clippy warnings (R13) · etalii.adp/.specify/memory/repositories/etalii.adp.ide.desktop.md
+- [x] T001 Ask the maintainer to create the public repository `etalii-adp/etalii.adp.ide.desktop` with `develop` as default branch, merge commits only and "Automatically delete head branches", and to give the Claude app access, as `docs/new-repository.md` lists · etalii.adp/docs/new-repository.md (read, not changed)
+- [x] T002 In the terminology, add the desktop host to **Host** and **IDE host** and to the list of IDE hosts, before any other document changes (FR-006) · etalii.adp/docs/terminology.md
+- [x] T003 Name `etalii.adp.ide.desktop` among the hosts and the repositories with principles of their own, through `/speckit-constitution` as a MINOR amendment (FR-006) · etalii.adp/.specify/memory/constitution.md
+- [x] T004 [P] Name `etalii.adp.ide.desktop` among the IDE hosts in the naming rule (FR-006) · etalii.adp/docs/new-repository.md
+- [x] T005 [P] Write the desktop repository's principles: native platform citizenship, the text file is the source of truth, one frame for many tools, test-first against real files, simplicity, no clippy warnings (R13) · etalii.adp/.specify/memory/repositories/etalii.adp.ide.desktop.md
 - [ ] T006 Write the starting files: `CLAUDE.md` copied from Eclipse's and adapted (branches, delivery, specifications written in etalii.adp), `LICENSE` (Apache-2.0, `Copyright © Peter Vrenken 2026`), `README.md` with the badge line, `.gitattributes` (`*.sh` LF; byte-compared fixtures and goldens `-text`), `.gitignore` (`target/`, `.claude/settings.local.json`) · etalii.adp.ide.desktop/
 - [ ] T007 Create the Cargo workspace with `rust-toolchain.toml` (stable, edition 2024), empty crates for every crate in the plan's tree, `rustfmt.toml` and workspace lints denying clippy warnings · etalii.adp.ide.desktop/Cargo.toml
 - [ ] T008 Write the `Build` workflow: fmt, clippy, `cargo test --workspace` on `ubuntu-latest`, `windows-latest` and `macos-latest`, and the `terminology` job copied from another repository's `build.yml` (FR-040) · etalii.adp.ide.desktop/.github/workflows/build.yml
