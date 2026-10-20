@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "The Native Desktop Host",
   "branch": "features/030-desktop-native-rust",
-  "currentStep": "plan",
-  "status": "planning",
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
   "history": [
     {
       "step": "specify",
@@ -25,8 +25,30 @@
       "kind": "start",
       "by": "extension",
       "at": "2026-10-17T12:07:27.194Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-20T19:45:55.677Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-20T19:47:13.122Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-20T19:48:47.827Z"
     }
   ],
   "telemetryInstanceId": "3701c676-c85d-4b5e-a5e5-42e52c9803fd",
-  "assistant": "claude-vscode"
+  "assistant": "claude-vscode",
+  "workingBranch": "features/030-desktop-native-rust-plan"
 }
