@@ -44,4 +44,4 @@ Open `parity/walks.md`, pick the story, and follow its steps on each platform in
 
 ## Check the look against VS Code
 
-Open VS Code at the tag in `crates/adp-theme/vscode/SOURCE.md` with Dark Modern, beside the desktop host on the same workspace, and compare the explorer, tabs, panels, menus and status bar; then repeat with Light Modern. `cargo test -p adp-theme` has already compared every value.
+Open VS Code at the tag in `crates/adp-theme/vscode/SOURCE.md` with its default dark theme (Dark 2026 at `1.142.0`), beside the desktop host on the same workspace, and compare the explorer, tabs, panels, menus and status bar; then repeat with its default light theme. `cargo test -p adp-theme` has already compared every value.
