@@ -1,0 +1,23 @@
+{
+  "workflow": "speckit",
+  "specName": "The Desktop Host on the Site",
+  "branch": "features/032-site-desktop-host",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-20T21:55:36.000Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-20T21:56:26.509Z"
+    }
+  ]
+}
