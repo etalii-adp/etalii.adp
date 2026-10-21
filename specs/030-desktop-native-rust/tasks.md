@@ -88,11 +88,11 @@
 - [x] T043 [P] [US3] Implement the Lines family · etalii.adp.ide.desktop/crates/adp-fbl/src/family/lines.rs
 - [x] T044 [US3] Implement routing by glob and marker, plugin bodies, folder subjects and the registration file with unknown blocks kept byte for byte (FBL section 8; FR-033) · etalii.adp.ide.desktop/crates/adp-fbl/src/
 - [x] T045 [P] [US3] Implement the CEL facade and port the standalone host's CEL tests (R7) · etalii.adp.ide.desktop/crates/adp-cel/
-- [ ] T046 [US3] Implement the DISL and DID runtime: loading with its findings, refusing a later version with the reason, types, attributes, toolbox, operations, constraints, notation, and scenes for a viewport (FR-030, Story 3 scenario 2) · etalii.adp.ide.desktop/crates/adp-disl/
-- [ ] T047 [US3] Implement the DESL and DED runtime for designers, with windowed table readings (FR-030) · etalii.adp.ide.desktop/crates/adp-desl/
+- [x] T046 [US3] Implement the DISL and DID runtime: loading with its findings, refusing a later version with the reason, types, attributes, toolbox, operations, constraints, notation, and scenes for a viewport (FR-030, Story 3 scenario 2) · etalii.adp.ide.desktop/crates/adp-disl/
+- [x] T047 [US3] Implement the DESL and DED runtime for designers, with windowed table readings (FR-030) · etalii.adp.ide.desktop/crates/adp-desl/
 - [x] T048 [US3] Load every tool type from `vendor/etalii.adp/definitions/` and the identity catalogue into the catalogue the add dialog uses (FR-021, FR-035) · etalii.adp.ide.desktop/crates/adp-core/src/catalogue.rs
-- [ ] T049 [US3] Write the recorder that replays an edit script through the standalone host's gRPC API, with its `.DotSettings` (contracts/parity.md) · etalii.adp.ide.desktop/parity/recorder/
-- [ ] T050 [US3] Write the parity runner that replays every script headless and compares each written file byte for byte with its golden (SC-004) · etalii.adp.ide.desktop/crates/adp-parity/
+- [x] T049 [US3] Write the recorder that replays an edit script through the standalone host's gRPC API, with its `.DotSettings` (contracts/parity.md) · etalii.adp.ide.desktop/parity/recorder/
+- [x] T050 [US3] Write the parity runner that replays every script headless and compares each written file byte for byte with its golden (SC-004) · etalii.adp.ide.desktop/crates/adp-parity/
 - [ ] T051 [US3] Port the standalone host's round-trip tests for the tool types whose module is not yet ported as pending tests named after them, so their count shows what is left (FR-034) · etalii.adp.ide.desktop/crates/adp-conformance/tests/round_trip.rs
 
 **Checkpoint**: every vendored fixture and example passes (SC-003); the parity runner works on an empty set.
@@ -103,7 +103,7 @@
 
 **Independent Test**: replay the same scripted edits in both hosts on copies of the same example and compare the files byte for byte (spec, Story 2).
 
-- [ ] T052 [P] [US2] Write and record edit scripts of at least 20 edits each for the mind map, the timeline and the C4 container view, with their goldens (SC-004) · etalii.adp.ide.desktop/parity/scripts/ and parity/goldens/
+- [x] T052 [P] [US2] Write and record edit scripts of at least 20 edits each for the mind map, the timeline and the C4 container view, with their goldens (SC-004) · etalii.adp.ide.desktop/parity/scripts/ and parity/goldens/
 - [ ] T053 [P] [US2] Write scene snapshot tests for the three types' examples (`insta`) · etalii.adp.ide.desktop/crates/adp-disl/tests/scenes/
 - [x] T054 [US2] Implement the layouts: Manual, Automatic Horizontal, Vertical and Cloud, layered layout and collapse and expand, ported from `EtAlii.Adp.Layout` (FR-018) · etalii.adp.ide.desktop/crates/adp-layout/
 - [ ] T055 [US2] Draw the canvas from scenes with viewport culling: pan with right-drag and scroll bars, zoom, fit to view (FR-018, SC-006) · etalii.adp.ide.desktop/crates/adp-shell/src/canvas/
