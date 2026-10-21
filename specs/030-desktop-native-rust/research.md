@@ -60,6 +60,8 @@ Each entry gives the decision, why, and what else was weighed. The standalone ho
 
 **Risk**: the text component is the largest single piece of new UI. It is planned as its own increment with its own acceptance walk.
 
+**Update 2026-10-21, as built** (etalii-adp/etalii.adp.ide.desktop pull requests 8 to 11): highlighting uses `syntect` with TextMate grammars instead of `tree-sitter`, because VS Code's token colours are TextMate scope selectors and so become a highlighting theme as they are (FR-044). YAML is read with `saphyr-parser`'s events, which keep positions, and XML with `roxmltree`. Checking XML against XSD and DTD is not built yet: `libxml2` still is the plan, and its Windows build is the open question; until then the status line says "not checked yet" and T024 and T032 stay open.
+
 ## R7. CEL
 
 **Decision**: the `cel-interpreter` crate, behind an `adp-cel` facade that exposes only the functions and types DISL and FBL use, with the standalone host's CEL tests ported as the facade's conformance suite.
