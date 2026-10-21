@@ -44,6 +44,8 @@ Each entry gives the decision, why, and what else was weighed. The standalone ho
 
 **Alternatives**: re-specifying tool types as Rust macros (the note's full proposal) — out of scope: it would change the specifications, not just add a host.
 
+**As built** (T054): the layouts are the ones the standalone host ships at the reference commit: `EtAlii.Adp.Layout` (layering, cycle policies, overlap resolution, row packing, grid packing) and its client's layout seam with the manual, tree, row-packed and tiered force layouts, and collapse and expand as the mind map does it. The four named modes Manual, Automatic Horizontal, Vertical and Cloud were never built there: its `layout-modes` draft was rejected on 2026-09-05. Following the spec's assumption that the standalone host's behaviour wins, the desktop host has what it has and maps nothing onto those names.
+
 ## R5. FBL in Rust and identical bytes
 
 **Decision**: a crate `adp-fbl` implements FBL's families (YAML, JSON, XML, Lines), plugin bodies, folder subjects, routing by glob and marker, the registration file, and the eleven splice operations of FBL section 6.1, on a byte buffer that keeps the byte order mark and the majority line ending (as the standalone host's `BodyText` does). Parsing that must keep byte offsets uses offset-preserving parsers: `saphyr`'s marked events for YAML, `quick-xml` with positions for XML, and a small hand-written JSON scanner, never a serialise-and-rewrite path.
