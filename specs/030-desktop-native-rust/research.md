@@ -101,6 +101,8 @@ Each entry gives the decision, why, and what else was weighed. The standalone ho
 
 **Rationale**: FR-004 and FR-040. The standalone host releases from every green `develop`; the desktop host does the same.
 
+**Update 2026-10-21, as built** (etalii-adp/etalii.adp.ide.desktop pull request 12): the first packages are archives built by the `Build` workflow itself (a zip for Windows x64, tar.gz for macOS arm64 and Linux x64), published unsigned as a GitHub pre-release from each green tip of `develop`; MSI, `.dmg` and AppImage through `cargo-dist` follow with signing (T092).
+
 **Minimum versions**: Windows 10 22H2, macOS 13, and Linux with glibc 2.35 (Ubuntu 22.04) and Vulkan or GL 3.3.
 
 ## R12. The reference machine and the numbers
