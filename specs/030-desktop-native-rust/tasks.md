@@ -90,7 +90,7 @@
 - [x] T045 [P] [US3] Implement the CEL facade and port the standalone host's CEL tests (R7) · etalii.adp.ide.desktop/crates/adp-cel/
 - [ ] T046 [US3] Implement the DISL and DID runtime: loading with its findings, refusing a later version with the reason, types, attributes, toolbox, operations, constraints, notation, and scenes for a viewport (FR-030, Story 3 scenario 2) · etalii.adp.ide.desktop/crates/adp-disl/
 - [ ] T047 [US3] Implement the DESL and DED runtime for designers, with windowed table readings (FR-030) · etalii.adp.ide.desktop/crates/adp-desl/
-- [ ] T048 [US3] Load every tool type from `vendor/etalii.adp/definitions/` and the identity catalogue into the catalogue the add dialog uses (FR-021, FR-035) · etalii.adp.ide.desktop/crates/adp-core/src/catalogue.rs
+- [x] T048 [US3] Load every tool type from `vendor/etalii.adp/definitions/` and the identity catalogue into the catalogue the add dialog uses (FR-021, FR-035) · etalii.adp.ide.desktop/crates/adp-core/src/catalogue.rs
 - [ ] T049 [US3] Write the recorder that replays an edit script through the standalone host's gRPC API, with its `.DotSettings` (contracts/parity.md) · etalii.adp.ide.desktop/parity/recorder/
 - [ ] T050 [US3] Write the parity runner that replays every script headless and compares each written file byte for byte with its golden (SC-004) · etalii.adp.ide.desktop/crates/adp-parity/
 - [ ] T051 [US3] Port the standalone host's round-trip tests for the tool types whose module is not yet ported as pending tests named after them, so their count shows what is left (FR-034) · etalii.adp.ide.desktop/crates/adp-conformance/tests/round_trip.rs

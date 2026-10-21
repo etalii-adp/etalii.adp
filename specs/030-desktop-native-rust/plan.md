@@ -96,7 +96,9 @@ crates/
 ├── adp-problems/
 ├── adp-layout/               # layered and other layouts, geometry
 ├── adp-fbl/                  # families, splices, routing, registration file
-├── adp-disl/                 # DISL and DID runtime, scenes
+├── adp-disl/                 # DISL and DID runtime
+├── adp-scene/                # a specification's notation and a model drawn as a scene, for a viewport
+├── adp-diagram/              # diagram sessions: open, edit through FBL, undo, reconcile (EtAlii.Adp.Diagram and .Diagram.Modules)
 ├── adp-desl/                 # DESL and DED runtime, tables
 ├── adp-cel/                  # facade over cel-interpreter
 ├── adp-theme/                # VS Code values and their check
