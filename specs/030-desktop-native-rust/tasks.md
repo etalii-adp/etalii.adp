@@ -127,7 +127,7 @@
 - [x] T064 [US4] Port the Knowledge designer module: typed properties, relations between files, views (visibility, sort, filter, group) (FR-022) · etalii.adp.ide.desktop/modules/designers/knowledge/
 - [x] T065 [US4] Draw windowed tables with `ScrollArea::show_rows` and edit cells in place (SC-006) · etalii.adp.ide.desktop/crates/adp-shell/src/table/
 - [x] T066 [US4] Benchmark scrolling 10,000 rows and memory per screen scrolled (Story 4 scenario 2) · etalii.adp.ide.desktop/benches/table.rs
-- [ ] T067 [US4] Walk Story 4 and record it · etalii.adp.ide.desktop/parity/walks.md
+- [x] T067 [US4] Walk Story 4 and record it · etalii.adp.ide.desktop/parity/walks.md
 
 **Checkpoint**: the Knowledge designer at parity.
 
@@ -137,12 +137,12 @@
 
 **Independent Test**: for each tool type, open its examples in both hosts and walk its acceptance checks from the standalone host's specification of it (spec, Story 5).
 
-- [ ] T068 [US5] Draw the add dialog from the catalogue, grouped by vendor, with the standalone host's names and states (Story 5 scenario 1) · etalii.adp.ide.desktop/crates/adp-shell/src/add_dialog.rs
-- [ ] T069 [P] [US5] Causal loop diagram (`.cld`) · etalii.adp.ide.desktop/modules/diagrams/causal-loop-diagram/
+- [x] T068 [US5] Draw the add dialog from the catalogue, grouped by vendor, with the standalone host's names and states (Story 5 scenario 1) · etalii.adp.ide.desktop/crates/adp-shell/src/add_dialog.rs
+- [x] T069 [P] [US5] Causal loop diagram (`.cld`) · etalii.adp.ide.desktop/modules/diagrams/causal-loop-diagram/
 - [ ] T070 [P] [US5] Wardley map (`.owm`, byte for byte) · etalii.adp.ide.desktop/modules/diagrams/wardley-map/
-- [ ] T071 [P] [US5] Dependency graph (`.dgr`) · etalii.adp.ide.desktop/modules/diagrams/dependency-graph/
+- [x] T071 [P] [US5] Dependency graph (`.dgr`) · etalii.adp.ide.desktop/modules/diagrams/dependency-graph/
 - [ ] T072 [P] [US5] Functional decomposition graph (`.fdg`) · etalii.adp.ide.desktop/modules/diagrams/functional-decomposition-graph/
-- [ ] T073 [P] [US5] Gartner hype cycle graph (`.ghg`), with compact mode, triggers, notes and the phase legend · etalii.adp.ide.desktop/modules/diagrams/gartner-hype-cycle-graph/
+- [x] T073 [P] [US5] Gartner hype cycle graph (`.ghg`), with compact mode, triggers, notes and the phase legend · etalii.adp.ide.desktop/modules/diagrams/gartner-hype-cycle-graph/
 - [ ] T074 [P] [US5] Agent Behavior Modelling (`.md`) · etalii.adp.ide.desktop/modules/diagrams/agent-behavior-modelling/
 - [ ] T075 [P] [US5] Agent activity diagram (`.aad`) · etalii.adp.ide.desktop/modules/diagrams/agent-activity-diagram/
 - [ ] T076 [P] [US5] Supply chain (`.supply`) · etalii.adp.ide.desktop/modules/diagrams/supply-chain/
