@@ -346,6 +346,12 @@
       "reason": "the test that the deprecated version key is still read (FR-011)"
     },
     {
+      "repository": "etalii.adp.ide.desktop",
+      "path": "crates/adp-disl/tests/disl_loader.rs",
+      "regex": "\"dedl\": \"0\\.1\"",
+      "reason": "the test that the deprecated version key is still read (FR-011), ported from the standalone host's"
+    },
+    {
       "repository": "etalii.adp.ide.standalone",
       "path": "src/client/src/canvas/library/disl/disTypes.ts",
       "regex": "document\\.disl\\b",
