@@ -28,8 +28,8 @@
 - [x] T008 Write the `Build` workflow: fmt, clippy, `cargo test --workspace` on `ubuntu-latest`, `windows-latest` and `macos-latest`, and the `terminology` job copied from another repository's `build.yml` (FR-040) · etalii.adp.ide.desktop/.github/workflows/build.yml
 - [x] T009 [P] Add the repository to both build tables · .github/profile/README.md and etalii.adp.site/src/data/builds.ts
 - [x] T010 Write `tools/sync-etalii-adp`, which copies `specifications/` and `definitions/` of a given etalii.adp commit into `vendor/etalii.adp/` and writes `vendor/etalii.adp.lock`; run it for `20389cd` or the newer commit the plan's merge leaves; add a Build step that fails when the copy and the lock disagree (R3, FR-034) · etalii.adp.ide.desktop/tools/sync-etalii-adp
-- [ ] T011 Fill the parity inventory: one row per capability of the standalone host's shell and per tool type of its `docs/tools.md` at `8b6ccfc`, each with its standalone source and increment, in the format of contracts/parity.md (FR-010) · etalii.adp.ide.desktop/parity/inventory.md
-- [ ] T012 [P] Generate the catalogue of the identity-only tool types (origin, display name, vendor group, state) from the standalone host's modules at `8b6ccfc` (R3, FR-021) · etalii.adp.ide.desktop/crates/adp-core/catalogue/identity-only.json
+- [x] T011 Fill the parity inventory: one row per capability of the standalone host's shell and per tool type of its `docs/tools.md` at `8b6ccfc`, each with its standalone source and increment, in the format of contracts/parity.md (FR-010) · etalii.adp.ide.desktop/parity/inventory.md
+- [x] T012 [P] Generate the catalogue of the identity-only tool types (origin, display name, vendor group, state) from the standalone host's modules at `8b6ccfc` (R3, FR-021) · etalii.adp.ide.desktop/crates/adp-core/catalogue/identity-only.json
 
 **Checkpoint**: an empty window opens on all three platforms from a green `Build`; the documents here name the desktop host.
 
@@ -42,8 +42,8 @@
 - [ ] T015 [P] Implement commands, composite commands and the history with its barrier at a change from outside, ported from `EtAlii.Adp.History` with its tests (FR-016) · etalii.adp.ide.desktop/crates/adp-history/
 - [ ] T016 [P] Implement the context: one selection per window with its chain, actions as data with id, label, group, shortcut, enabled state and reason, prompts and property rows with the editor kinds line, text, toggle, choice and ordered slider, ported from `EtAlii.Adp.Context` with its tests (FR-015, FR-017) · etalii.adp.ide.desktop/crates/adp-context/
 - [ ] T017 [P] Implement the per-user state folder and atomic JSON saves (`projects.json`, `problems/<project-id>.json`, window layout) under the platform's application data folder (R8, FR-036) · etalii.adp.ide.desktop/crates/adp-core/src/state.rs
-- [ ] T018 [P] Write `tools/extract-vscode-theme` and extract VS Code's default dark and light themes (Dark 2026 and Light 2026 at `1.142.0`) at the pinned VS Code tag, with `SOURCE.md`, the MIT licence and `sizes.md` (R9, contracts/vscode-theme.md) · etalii.adp.ide.desktop/crates/adp-theme/vscode/
-- [ ] T019 Write the theme test that compares every value of the `Theme` structs with the extracted files and `sizes.md` (SC-010) · etalii.adp.ide.desktop/crates/adp-theme/tests/vscode_values.rs
+- [x] T018 [P] Write `tools/extract-vscode-theme` and extract VS Code's default dark and light themes (Dark 2026 and Light 2026 at `1.142.0`) at the pinned VS Code tag, with `SOURCE.md`, the MIT licence and `sizes.md` (R9, contracts/vscode-theme.md) · etalii.adp.ide.desktop/crates/adp-theme/vscode/
+- [x] T019 Write the theme test that compares every value of the `Theme` structs with the extracted files and `sizes.md` (SC-010) · etalii.adp.ide.desktop/crates/adp-theme/tests/vscode_values.rs
 - [ ] T020 Implement the `Theme` structs and the mapping onto egui's `Style` and `Visuals`, following the system's light or dark setting (FR-042, FR-044) · etalii.adp.ide.desktop/crates/adp-theme/src/
 - [ ] T021 Start the shell: one window per workspace, the event drain once per frame, AccessKit switched on, the theme applied, Codicons loaded (R2) · etalii.adp.ide.desktop/crates/adp-shell/src/main.rs
 
