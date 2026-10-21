@@ -113,7 +113,7 @@
 - [x] T059 [P] [US2] Port the mind map's residue (`.mm` reader, two-sided layout, sibling naming) · etalii.adp.ide.desktop/modules/diagrams/mindmap/
 - [x] T060 [P] [US2] Port the timeline's residue · etalii.adp.ide.desktop/modules/diagrams/timeline/
 - [x] T061 [P] [US2] Port the C4 residue: the Structurizr DSL reader and the six views over one workspace · etalii.adp.ide.desktop/modules/diagrams/c4/
-- [ ] T062 [US2] Walk Story 2 and record it · etalii.adp.ide.desktop/parity/walks.md
+- [x] T062 [US2] Walk Story 2 and record it · etalii.adp.ide.desktop/parity/walks.md
 
 **Checkpoint**: three diagram types write the same bytes as the standalone host (SC-004 for those types).
 
@@ -123,10 +123,10 @@
 
 **Independent Test**: open the standalone host's Knowledge designer examples and a generated table of 10,000 rows, and pass its acceptance checks (spec, Story 4).
 
-- [ ] T063 [P] [US4] Write and record edit scripts for cell edits, added rows and view changes over YAML, XML and JSON, with their goldens · etalii.adp.ide.desktop/parity/scripts/knowledge/
-- [ ] T064 [US4] Port the Knowledge designer module: typed properties, relations between files, views (visibility, sort, filter, group) (FR-022) · etalii.adp.ide.desktop/modules/designers/knowledge/
-- [ ] T065 [US4] Draw windowed tables with `ScrollArea::show_rows` and edit cells in place (SC-006) · etalii.adp.ide.desktop/crates/adp-shell/src/table/
-- [ ] T066 [US4] Benchmark scrolling 10,000 rows and memory per screen scrolled (Story 4 scenario 2) · etalii.adp.ide.desktop/benches/table.rs
+- [x] T063 [P] [US4] Write and record edit scripts for cell edits, added rows and view changes over YAML, XML and JSON, with their goldens · etalii.adp.ide.desktop/parity/scripts/knowledge/
+- [x] T064 [US4] Port the Knowledge designer module: typed properties, relations between files, views (visibility, sort, filter, group) (FR-022) · etalii.adp.ide.desktop/modules/designers/knowledge/
+- [x] T065 [US4] Draw windowed tables with `ScrollArea::show_rows` and edit cells in place (SC-006) · etalii.adp.ide.desktop/crates/adp-shell/src/table/
+- [x] T066 [US4] Benchmark scrolling 10,000 rows and memory per screen scrolled (Story 4 scenario 2) · etalii.adp.ide.desktop/benches/table.rs
 - [ ] T067 [US4] Walk Story 4 and record it · etalii.adp.ide.desktop/parity/walks.md
 
 **Checkpoint**: the Knowledge designer at parity.
