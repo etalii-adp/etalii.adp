@@ -139,17 +139,17 @@
 
 - [x] T068 [US5] Draw the add dialog from the catalogue, grouped by vendor, with the standalone host's names and states (Story 5 scenario 1) · etalii.adp.ide.desktop/crates/adp-shell/src/add_dialog.rs
 - [x] T069 [P] [US5] Causal loop diagram (`.cld`) · etalii.adp.ide.desktop/modules/diagrams/causal-loop-diagram/
-- [ ] T070 [P] [US5] Wardley map (`.owm`, byte for byte) · etalii.adp.ide.desktop/modules/diagrams/wardley-map/
+- [x] T070 [P] [US5] Wardley map (`.owm`, byte for byte) · etalii.adp.ide.desktop/modules/diagrams/wardley-map/
 - [x] T071 [P] [US5] Dependency graph (`.dgr`) · etalii.adp.ide.desktop/modules/diagrams/dependency-graph/
-- [ ] T072 [P] [US5] Functional decomposition graph (`.fdg`) · etalii.adp.ide.desktop/modules/diagrams/functional-decomposition-graph/
+- [x] T072 [P] [US5] Functional decomposition graph (`.fdg`) · etalii.adp.ide.desktop/modules/diagrams/functional-decomposition-graph/
 - [x] T073 [P] [US5] Gartner hype cycle graph (`.ghg`), with compact mode, triggers, notes and the phase legend · etalii.adp.ide.desktop/modules/diagrams/gartner-hype-cycle-graph/
-- [ ] T074 [P] [US5] Agent Behavior Modelling (`.md`) · etalii.adp.ide.desktop/modules/diagrams/agent-behavior-modelling/
-- [ ] T075 [P] [US5] Agent activity diagram (`.aad`) · etalii.adp.ide.desktop/modules/diagrams/agent-activity-diagram/
-- [ ] T076 [P] [US5] Supply chain (`.supply`) · etalii.adp.ide.desktop/modules/diagrams/supply-chain/
-- [ ] T077 [P] [US5] Sankey (`.skv`) · etalii.adp.ide.desktop/modules/diagrams/sankey/
+- [x] T074 [P] [US5] Agent Behavior Modelling (`.md`) · etalii.adp.ide.desktop/modules/diagrams/agent-behavior-modelling/
+- [x] T075 [P] [US5] Agent activity diagram (`.aad`) · etalii.adp.ide.desktop/modules/diagrams/agent-activity-diagram/
+- [x] T076 [P] [US5] Supply chain (`.supply`) · etalii.adp.ide.desktop/modules/diagrams/supply-chain/
+- [x] T077 [P] [US5] Sankey (`.skv`) · etalii.adp.ide.desktop/modules/diagrams/sankey/
 - [ ] T078 [P] [US5] Azure DevOps pipeline (`.yml`) · etalii.adp.ide.desktop/modules/diagrams/azure-devops-pipeline/
-- [ ] T079 [P] [US5] Ansible structure (folder subject) · etalii.adp.ide.desktop/modules/diagrams/ansible-structure/
-- [ ] T080 [P] [US5] Helm chart (folder subject) · etalii.adp.ide.desktop/modules/diagrams/helm-chart/
+- [x] T079 [P] [US5] Ansible structure (folder subject) · etalii.adp.ide.desktop/modules/diagrams/ansible-structure/
+- [x] T080 [P] [US5] Helm chart (folder subject) · etalii.adp.ide.desktop/modules/diagrams/helm-chart/
 - [ ] T081 [P] [US5] Databricks bundle, job and pipeline · etalii.adp.ide.desktop/modules/diagrams/databricks/
 - [ ] T082 [P] [US5] .NET dependency graph (`.sln`, `.slnx`, read-only) · etalii.adp.ide.desktop/modules/diagrams/dotnet-dependency-graph/
 - [ ] T083 [P] [US5] RDF (`.ttl`, `.nt`) with its readings OWL, SKOS and SHACL · etalii.adp.ide.desktop/modules/diagrams/rdf/
