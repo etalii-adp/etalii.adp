@@ -90,7 +90,7 @@
 - [x] T045 [P] [US3] Implement the CEL facade and port the standalone host's CEL tests (R7) · etalii.adp.ide.desktop/crates/adp-cel/
 - [ ] T046 [US3] Implement the DISL and DID runtime: loading with its findings, refusing a later version with the reason, types, attributes, toolbox, operations, constraints, notation, and scenes for a viewport (FR-030, Story 3 scenario 2) · etalii.adp.ide.desktop/crates/adp-disl/
 - [ ] T047 [US3] Implement the DESL and DED runtime for designers, with windowed table readings (FR-030) · etalii.adp.ide.desktop/crates/adp-desl/
-- [ ] T048 [US3] Load every tool type from `vendor/etalii.adp/definitions/` and the identity catalogue into the catalogue the add dialog uses (FR-021, FR-035) · etalii.adp.ide.desktop/crates/adp-core/src/catalogue.rs
+- [x] T048 [US3] Load every tool type from `vendor/etalii.adp/definitions/` and the identity catalogue into the catalogue the add dialog uses (FR-021, FR-035) · etalii.adp.ide.desktop/crates/adp-core/src/catalogue.rs
 - [ ] T049 [US3] Write the recorder that replays an edit script through the standalone host's gRPC API, with its `.DotSettings` (contracts/parity.md) · etalii.adp.ide.desktop/parity/recorder/
 - [ ] T050 [US3] Write the parity runner that replays every script headless and compares each written file byte for byte with its golden (SC-004) · etalii.adp.ide.desktop/crates/adp-parity/
 - [ ] T051 [US3] Port the standalone host's round-trip tests for the tool types whose module is not yet ported as pending tests named after them, so their count shows what is left (FR-034) · etalii.adp.ide.desktop/crates/adp-conformance/tests/round_trip.rs
@@ -105,7 +105,7 @@
 
 - [ ] T052 [P] [US2] Write and record edit scripts of at least 20 edits each for the mind map, the timeline and the C4 container view, with their goldens (SC-004) · etalii.adp.ide.desktop/parity/scripts/ and parity/goldens/
 - [ ] T053 [P] [US2] Write scene snapshot tests for the three types' examples (`insta`) · etalii.adp.ide.desktop/crates/adp-disl/tests/scenes/
-- [ ] T054 [US2] Implement the layouts: Manual, Automatic Horizontal, Vertical and Cloud, layered layout and collapse and expand, ported from `EtAlii.Adp.Layout` (FR-018) · etalii.adp.ide.desktop/crates/adp-layout/
+- [x] T054 [US2] Implement the layouts: Manual, Automatic Horizontal, Vertical and Cloud, layered layout and collapse and expand, ported from `EtAlii.Adp.Layout` (FR-018) · etalii.adp.ide.desktop/crates/adp-layout/
 - [ ] T055 [US2] Draw the canvas from scenes with viewport culling: pan with right-drag and scroll bars, zoom, fit to view (FR-018, SC-006) · etalii.adp.ide.desktop/crates/adp-shell/src/canvas/
 - [ ] T056 [US2] Implement the one gesture arbiter for drag, move, resize and connect, with Escape to cancel, box and Ctrl selection, the toolbox dragged onto the canvas, a connection dropped on empty space creating its target, Tab and Enter for child and sibling, and inline label rename (FR-018) · etalii.adp.ide.desktop/crates/adp-shell/src/canvas/gestures/
 - [ ] T057 [US2] Draw the property grid for one and for several elements, one undo for a change to several (FR-017, Story 2 scenario 4) · etalii.adp.ide.desktop/crates/adp-shell/src/properties/

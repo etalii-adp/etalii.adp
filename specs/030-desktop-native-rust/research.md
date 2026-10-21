@@ -30,6 +30,8 @@ Each entry gives the decision, why, and what else was weighed. The standalone ho
 
 **Decision**: the desktop host loads tool types from the same files every host uses: the specification files, bindings and companions under `definitions/` in `etalii.adp`, at a pinned commit, vendored into the desktop repository by a sync script with a checked lock file (`vendor/etalii.adp.lock` holds the commit; CI fails when the vendored copy differs from that commit). Tool types that exist in the standalone host only as an identity (about forty stubs) are listed from a catalogue file generated once from the standalone host's modules at the reference commit.
 
+**As built** (T012, T048): the catalogue file, `crates/adp-core/catalogue/tools.json`, lists every tool type of the standalone host's `docs/tools.md` at the reference commit, with its group, order and state, and the catalogue joins each by origin with its vendored specification. Several specifications name their binding by its address in the standalone host's repository, where the standalone host bundles it with its module; those bindings are copied at the reference commit into `vendor/etalii.adp.ide.standalone/` by `tools/vendor-standalone-bindings.py`, and the three such addresses that do not exist at the reference commit (C4, Azure DevOps pipeline, .NET dependency graph) are read by their modules' own code there and here.
+
 **Rationale**: FR-035 and Principle I. The standalone host bundles DISL from its modules' `definition/` folders; the same files are in `etalii.adp/definitions/`, which is the source of truth. A lock file makes "the `etalii.adp` commit the plan names" (FR-034) a fact the build checks.
 
 **Alternatives**: a git submodule — rejected for the friction it adds to every clone and worktree. Fetching at build time like the terminology job — rejected: a build must be reproducible offline.
@@ -41,6 +43,8 @@ Each entry gives the decision, why, and what else was weighed. The standalone ho
 **Rationale**: this is the "middle path" of the research note *Rust as the tool language* (section 7): declarative tool types stay data, one Rust runtime interprets them, and Rust appears only where code is needed. It keeps the desktop host from becoming a fourth place where a tool type is specified.
 
 **Alternatives**: re-specifying tool types as Rust macros (the note's full proposal) — out of scope: it would change the specifications, not just add a host.
+
+**As built** (T054): the layouts are the ones the standalone host ships at the reference commit: `EtAlii.Adp.Layout` (layering, cycle policies, overlap resolution, row packing, grid packing) and its client's layout seam with the manual, tree, row-packed and tiered force layouts, and collapse and expand as the mind map does it. The four named modes Manual, Automatic Horizontal, Vertical and Cloud were never built there: its `layout-modes` draft was rejected on 2026-09-05. Following the spec's assumption that the standalone host's behaviour wins, the desktop host has what it has and maps nothing onto those names.
 
 ## R5. FBL in Rust and identical bytes
 
