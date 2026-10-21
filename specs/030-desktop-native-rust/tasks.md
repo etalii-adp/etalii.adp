@@ -80,14 +80,14 @@
 
 **Independent Test**: run the conformance suite; plant one wrong byte in an expected result and see it fail at that step (spec, Story 3).
 
-- [ ] T038 [US3] Write the conformance runner that replays every fixture under `vendor/etalii.adp/specifications/fbl/fixtures/` and validates every example under `vendor/etalii.adp/specifications/` and `definitions/`, with a planted-defect self-test (FR-034, SC-003) · etalii.adp.ide.desktop/crates/adp-conformance/
-- [ ] T039 [US3] Implement the FBL body buffer and the eleven splice operations of FBL section 6.1, keeping every byte outside them, the byte order mark and the majority line ending (FR-031) · etalii.adp.ide.desktop/crates/adp-fbl/src/splice/
-- [ ] T040 [P] [US3] Implement the YAML family with offset-keeping `saphyr` events (R5) · etalii.adp.ide.desktop/crates/adp-fbl/src/family/yaml.rs
-- [ ] T041 [P] [US3] Implement the JSON family with an offset-keeping scanner (R5) · etalii.adp.ide.desktop/crates/adp-fbl/src/family/json.rs
-- [ ] T042 [P] [US3] Implement the XML family with `quick-xml` positions (R5) · etalii.adp.ide.desktop/crates/adp-fbl/src/family/xml.rs
-- [ ] T043 [P] [US3] Implement the Lines family · etalii.adp.ide.desktop/crates/adp-fbl/src/family/lines.rs
-- [ ] T044 [US3] Implement routing by glob and marker, plugin bodies, folder subjects and the registration file with unknown blocks kept byte for byte (FBL section 8; FR-033) · etalii.adp.ide.desktop/crates/adp-fbl/src/
-- [ ] T045 [P] [US3] Implement the CEL facade and port the standalone host's CEL tests (R7) · etalii.adp.ide.desktop/crates/adp-cel/
+- [x] T038 [US3] Write the conformance runner that replays every fixture under `vendor/etalii.adp/specifications/fbl/fixtures/` and validates every example under `vendor/etalii.adp/specifications/` and `definitions/`, with a planted-defect self-test (FR-034, SC-003) · etalii.adp.ide.desktop/crates/adp-conformance/
+- [x] T039 [US3] Implement the FBL body buffer and the eleven splice operations of FBL section 6.1, keeping every byte outside them, the byte order mark and the majority line ending (FR-031) · etalii.adp.ide.desktop/crates/adp-fbl/src/splice/
+- [x] T040 [P] [US3] Implement the YAML family with offset-keeping `saphyr` events (R5) · etalii.adp.ide.desktop/crates/adp-fbl/src/family/yaml.rs
+- [x] T041 [P] [US3] Implement the JSON family with an offset-keeping scanner (R5) · etalii.adp.ide.desktop/crates/adp-fbl/src/family/json.rs
+- [x] T042 [P] [US3] Implement the XML family with `quick-xml` positions (R5) · etalii.adp.ide.desktop/crates/adp-fbl/src/family/xml.rs
+- [x] T043 [P] [US3] Implement the Lines family · etalii.adp.ide.desktop/crates/adp-fbl/src/family/lines.rs
+- [x] T044 [US3] Implement routing by glob and marker, plugin bodies, folder subjects and the registration file with unknown blocks kept byte for byte (FBL section 8; FR-033) · etalii.adp.ide.desktop/crates/adp-fbl/src/
+- [x] T045 [P] [US3] Implement the CEL facade and port the standalone host's CEL tests (R7) · etalii.adp.ide.desktop/crates/adp-cel/
 - [ ] T046 [US3] Implement the DISL and DID runtime: loading with its findings, refusing a later version with the reason, types, attributes, toolbox, operations, constraints, notation, and scenes for a viewport (FR-030, Story 3 scenario 2) · etalii.adp.ide.desktop/crates/adp-disl/
 - [ ] T047 [US3] Implement the DESL and DED runtime for designers, with windowed table readings (FR-030) · etalii.adp.ide.desktop/crates/adp-desl/
 - [ ] T048 [US3] Load every tool type from `vendor/etalii.adp/definitions/` and the identity catalogue into the catalogue the add dialog uses (FR-021, FR-035) · etalii.adp.ide.desktop/crates/adp-core/src/catalogue.rs
