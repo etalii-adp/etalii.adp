@@ -109,7 +109,7 @@
 - [x] T055 [US2] Draw the canvas from scenes with viewport culling: pan with right-drag and scroll bars, zoom, fit to view (FR-018, SC-006) · etalii.adp.ide.desktop/crates/adp-shell/src/canvas/
 - [ ] T056 [US2] Implement the one gesture arbiter for drag, move, resize and connect, with Escape to cancel, box and Ctrl selection, the toolbox dragged onto the canvas, a connection dropped on empty space creating its target, Tab and Enter for child and sibling, and inline label rename (FR-018) · etalii.adp.ide.desktop/crates/adp-shell/src/canvas/gestures/
 - [x] T057 [US2] Draw the property grid for one and for several elements, one undo for a change to several (FR-017, Story 2 scenario 4) · etalii.adp.ide.desktop/crates/adp-shell/src/properties/
-- [ ] T058 [US2] Reconcile a body changed on disk with unsaved edits and the undo barrier, as the standalone host does (FR-023, Story 2 scenario 5) · etalii.adp.ide.desktop/crates/adp-documents/src/reconcile.rs
+- [x] T058 [US2] Reconcile a body changed on disk with unsaved edits and the undo barrier, as the standalone host does (FR-023, Story 2 scenario 5) · etalii.adp.ide.desktop/crates/adp-documents/src/reconcile.rs
 - [x] T059 [P] [US2] Port the mind map's residue (`.mm` reader, two-sided layout, sibling naming) · etalii.adp.ide.desktop/modules/diagrams/mindmap/
 - [x] T060 [P] [US2] Port the timeline's residue · etalii.adp.ide.desktop/modules/diagrams/timeline/
 - [ ] T061 [P] [US2] Port the C4 residue: the Structurizr DSL reader and the six views over one workspace · etalii.adp.ide.desktop/modules/diagrams/c4/
