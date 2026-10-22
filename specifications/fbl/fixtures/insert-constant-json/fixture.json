@@ -45,11 +45,11 @@
       "expect": "{\r\n  \"elements\": [\r\n    {\r\n      \"id\": \"t1\",\r\n      \"type\": \"task\",\r\n      \"name\": \"Plan\"\r\n    },\r\n    {\r\n      \"id\": \"n1\",\r\n      \"text\": \"Remember\",\r\n      \"type\": \"note\",\r\n      \"format\": \"1.0\",\r\n      \"pinned\": false\r\n    },\r\n    {\r\n      \"id\": \"t2\",\r\n      \"type\": \"task\",\r\n      \"name\": \"Ship\"\r\n    }\r\n  ]\r\n}\r\n"
     },
     {
-      "doc": "The undo removes the new entry, its constant with it.",
+      "doc": "The undo removes the new entry, its constant with it; it is listed under the operation of the splice it inverts (section 15.3).",
       "undo": true,
       "splices": [
         {
-          "operation": "remove-entry",
+          "operation": "insert-entry",
           "start": 227,
           "end": 306,
           "text": ""

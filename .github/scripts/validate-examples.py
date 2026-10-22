@@ -31,7 +31,8 @@ Two FBL formats are not JSON documents and get their own treatment (spec 005, co
 registration under `specifications/fbl/` is parsed from its line form into `fbl.schema.json#/$defs/Registration`
 (FBL section 8). A `fixture.json` under `specifications/fbl/fixtures/` is validated against `$defs/Fixture` and then
 replayed: every step's splices must turn the document before the step into the document it expects, byte for byte,
-and an undo must return the document the undone edit started from (FBL section 15.3). A `setting` step
+and an undo must return the document the undone edit started from (FBL section 15.3), its splices listed under the
+operations of the splices they invert, as a redo's are. A `setting` step
 on a block the fixture's binding declares with `history: false` is no step of the history (FBL 0.7, section 7.1); an
 undo or redo of an edit made before it is checked by what each of its splices replaces and writes, since that block's
 write stands between. An `.adp` registration's blocks besides `layout:` and `identities:` are read into `blocks`,
@@ -587,8 +588,9 @@ def replay_fixture(path: Path, fixture) -> str | None:
     folder = path.parent
     document = (folder / fixture["input"]).read_bytes()
     outside = blocks_outside_history(folder, fixture["binding"])
-    # (before, after, changes, crossed) of each edit that can be undone, and of each that can be redone; crossed: a write
-    # outside the history (FBL 0.7, section 7.1) came after it, so its undo is compared by what it changes, not by bytes
+    # (before, after, changes, crossed, operations) of each edit that can be undone, and of each that can be redone; crossed:
+    # a write outside the history (FBL 0.7, section 7.1) came after it, so its undo is compared by what it changes, not by
+    # bytes; operations: the operations its splices are named by, which its undo and redo are listed under (section 15.3)
     done, undone = [], []
     for index, step in enumerate(fixture["steps"], start=1):
         if "expectFile" in step:
@@ -607,32 +609,40 @@ def replay_fixture(path: Path, fixture) -> str | None:
         edit = step.get("edit", {})
         changes_of_edit = edit if isinstance(edit, list) else [edit]  # FBL 0.7: one transaction's changes
         changes = splice_changes(document, step["splices"])
+        operations = {splice["operation"] for splice in step["splices"]}
+        if step.get("undo") or step.get("redo"):
+            # An undo lists the inverse splices under the operation of the splice each inverts, and a redo the edit's own
+            # (section 15.3); a snapshot's one splice is under the operation of the edit's first (section 7.1).
+            stack = done if step.get("undo") else undone
+            if stack and not operations <= stack[-1][4]:
+                named = ", ".join(sorted(operations - stack[-1][4]))
+                return f"step {index}: the {'undo' if step.get('undo') else 'redo'} names an operation the edit it replays has not: {named}"
         if step.get("undo"):
             if not done:
                 return f"step {index}: nothing to undo"
-            before, after, edit_changes, crossed = done.pop()
+            before, after, edit_changes, crossed, edit_operations = done.pop()
             if crossed and changes != [(new, old) for old, new in edit_changes]:
                 return f"step {index}: the undo does not put back what the undone edit changed"
             if not crossed and (document != after or result != before):
                 return f"step {index}: the undo does not return the document the undone edit started from"
-            undone.append((before, after, edit_changes, crossed))
+            undone.append((before, after, edit_changes, crossed, edit_operations))
         elif step.get("redo"):
             if not undone:
                 return f"step {index}: nothing to redo"
-            before, after, edit_changes, crossed = undone.pop()
+            before, after, edit_changes, crossed, edit_operations = undone.pop()
             if crossed and changes != edit_changes:
                 return f"step {index}: the redo does not make the changes the edit made"
             if not crossed and (document != before or result != after):
                 return f"step {index}: the redo does not return the document the edit produced"
-            done.append((before, after, edit_changes, crossed))
+            done.append((before, after, edit_changes, crossed, edit_operations))
         elif step.get("refused") or any("save" in change for change in changes_of_edit):
             if result != document:
                 return f"step {index}: a refused edit or a save without change must leave the document as it is"
         elif all(change.get("setting", {}).get("block") in outside for change in changes_of_edit):  # no step of the history: undo and redo pass it by
-            done = [(before, after, edit_changes, True) for before, after, edit_changes, _ in done]
-            undone = [(before, after, edit_changes, True) for before, after, edit_changes, _ in undone]
+            done = [(before, after, edit_changes, True, edit_operations) for before, after, edit_changes, _, edit_operations in done]
+            undone = [(before, after, edit_changes, True, edit_operations) for before, after, edit_changes, _, edit_operations in undone]
         else:
-            done.append((document, result, changes, False))
+            done.append((document, result, changes, False, operations))
             undone.clear()
         document = result
     return None
