@@ -1,0 +1,10 @@
+# Quickstart: Checking A Relation Type Inherits Its Flags
+
+Run from the root of the etalii.adp worktree of the implementation, each exit code captured before the next command.
+
+1. **Baseline.** On the unchanged tree, `python .github/scripts/validate-examples.py; echo "validate=$?"`, `python .github/scripts/licence-check.py; echo "licence=$?"` and `python .github/scripts/terminology-check.py --name etalii.adp; echo "terms=$?"`. Record the three codes and the validator's count of examples.
+2. **After the change.** The same three commands exit 0. The validator prints `ok` for `specifications/disl/service-calls.dis`, `service-calls.did` and `service-calls.findings.json`, prints each of the three documents under `specifications/disl/refused/` as refused with the flag it widens or inherits twice, and every earlier example keeps its result.
+3. **The check bites.** Delete `"allowParallel": false` from `TracedCall` in `service-calls.dis`: the run fails, naming `TracedCall`, `allowParallel`, `SyncCall` and `Observation`. Restore it. Change `relation-flag-widened.dis` so that `Strong` states `false`: the run fails, because a document in `refused/` is accepted. Restore it. Both restored, the run exits 0 again.
+4. **Reading check (SC-001).** With sections 4.7 and 4.9 alone, give `directed`, `allowSelfLoops` and `allowParallel` for every relation type of `definitions/diagrams/azure-devops-pipeline.dis` and `definitions/diagrams/wardley-map.dis`, and compare with research R5; then say what `TracedCall` would be without its two statements (an error). Each answer comes from a sentence of the text; one that has to be inferred is a gap.
+5. **Scope (FR-009).** `git diff --stat origin/develop -- specifications/did specifications/desl specifications/ded specifications/fbl definitions` prints nothing.
+6. **Hosts (SC-004).** In each host's pull request: a specification in which `DependsOn` inherits `allowParallel: false` and a model with two `DependsOn` on one pair gives one `std.endpoints` finding with `violation` `parallel`; each refused document is refused; and each test was seen to fail against `origin/develop` before the change.
