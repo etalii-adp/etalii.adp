@@ -57,7 +57,7 @@
 
 - [x] T022 [P] [US1] Write the project list's tests: add validates the path (exists, is a folder, readable), a missing folder is reported when opened and not dropped, the list survives a restart · etalii.adp.ide.desktop/crates/adp-projects/tests/
 - [x] T023 [P] [US1] Write the hierarchy's tests: nesting of registrations under what they register, several registrations of one subject, a folder's `folder/.adp`, add, rename, delete, and changes on disk applied in order · etalii.adp.ide.desktop/crates/adp-hierarchy/tests/
-- [ ] T024 [P] [US1] Write the editors' tests: plain keeps encoding and line endings; JSON reports schema findings and completes; XML validates against the XSD or DTD the document names; YAML takes its schema from a `yaml-language-server` comment; Markdown gives the heading outline · etalii.adp.ide.desktop/modules/editors/*/tests/
+- [x] T024 [P] [US1] Write the editors' tests: plain keeps encoding and line endings; JSON reports schema findings and completes; XML validates against the XSD or DTD the document names; YAML takes its schema from a `yaml-language-server` comment; Markdown gives the heading outline · etalii.adp.ide.desktop/modules/editors/*/tests/
 - [x] T025 [US1] Implement the project list (FR-011) · etalii.adp.ide.desktop/crates/adp-projects/src/
 - [x] T026 [US1] Implement the hierarchy with live watching through `notify`, and the explorer's actions `hierarchy.add`, `hierarchy.add-folder`, `hierarchy.rename`, `hierarchy.delete`, `editor.open-as-text`, `editor.open-with`, `problems.validate`, `problems.validate.all` (FR-013, FR-023) · etalii.adp.ide.desktop/crates/adp-hierarchy/src/
 - [x] T027 [US1] Implement documents and tabs: open or focus, dirty state, save with Ctrl+S (Cmd+S on macOS), close with a question when unsaved (FR-014) · etalii.adp.ide.desktop/crates/adp-documents/src/
@@ -65,7 +65,7 @@
 - [x] T029 [US1] Implement the text component on a rope with tree-sitter highlighting, selection, undo inside the editor, find, and the completion popup on Ctrl+Space (R6) · etalii.adp.ide.desktop/crates/adp-text/ and etalii.adp.ide.desktop/crates/adp-shell/src/text/
 - [x] T030 [P] [US1] Implement the plain and Markdown editors, with the preview and outline through `pulldown-cmark` (FR-020) · etalii.adp.ide.desktop/modules/editors/plain/ and modules/editors/markdown/
 - [x] T031 [P] [US1] Implement the JSON editor with `jsonschema` checks and completion (FR-020) · etalii.adp.ide.desktop/modules/editors/json/
-- [ ] T032 [P] [US1] Implement the XML editor with `libxml2` validation, statically linked (FR-020; Complexity Tracking) · etalii.adp.ide.desktop/modules/editors/xml/
+- [x] T032 [P] [US1] Implement the XML editor with `libxml2` validation, statically linked (FR-020; Complexity Tracking) · etalii.adp.ide.desktop/modules/editors/xml/
 - [x] T033 [P] [US1] Implement the YAML editor with its schema comment (FR-020) · etalii.adp.ide.desktop/modules/editors/yaml/
 - [x] T034 [US1] Draw the project list page and the workspace: resizable panes (explorer and search placeholder left, tabs centre, errors and warnings bottom, toolbox and properties right), the ribbon with Save, New, Undo, Redo, contextual groups and the zoom buttons, the context menu, and keyboard navigation with the standalone host's shortcuts (FR-012, FR-015, FR-024) · etalii.adp.ide.desktop/crates/adp-shell/src/workspace/
 - [x] T035 [US1] Draw the prompts with native file dialogs through `rfd` and the other prompts as modal panels (FR-015) · etalii.adp.ide.desktop/crates/adp-shell/src/prompts/
