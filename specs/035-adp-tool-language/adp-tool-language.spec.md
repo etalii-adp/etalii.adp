@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-22
 
-**Status**: Draft. This document is the specification only; the plan and the tasks follow after the maintainer approves it (Spec Kit process, 2026-10-12).
+**Status**: Draft, phase 1 of a transition (see *Phases*). This document is the specification only; the plan and the tasks follow after the maintainer approves it (Spec Kit process, 2026-10-12).
 
 **Input**: The maintainer's request of 2026-10-22: "create a spec flow specification in the etalii.adp repo that starts working on the following: A shared LALR(1) grammar that supports all aspects from DISL/DESL/EDSL and FBL, [and] custom scripting as per this research. A description for each tool (files will get a .atd extension - ADP Tool Definition). Each Definition should includes all aspects of the tool, including the logic as currently encoded in the code that makes up the tool side in each of the hosts. Language servers (as per the language server protocol that facilitates VSCode and IntelliJ), and of course also one for the language server in rust (for the desktop host), for completion, coloring, go to definition, renaming, diagnostics, hovering with documentation, formatting, highlighting grammars. An editor in VS Code that allows for the creation/editing/modification of a .atd file. A debugger in the desktop host. Any other aspects from this document that make sense to add." "This research" and "this document" are the thought experiment *One tool grammar, plus a script for the logic* of the same day, kept in the project's shared folder as `lark-plus-scripting/one-tool-grammar.html`.
 
@@ -14,13 +14,21 @@
 
 This specification reads the hosts at these commits of their `develop`, the **reference commits**: `etalii.adp` `222dea4`, `etalii.adp.ide.standalone` `396c776`, `etalii.adp.ide.vscode` `97e403d`, `etalii.adp.ide.intellij` `255c57c`, and `etalii.adp.ide.desktop` at the commit its plan names when planning starts.
 
-**What this feature adds.** One language, the **ADP tool language**, in which a tool type of any kind is described completely in one kind of file, `.atd`: its identity, its model, its view (canvas, form-based surface or text), its behaviour, its persistence, and the logic that today lives in host code, written in a small **script** that is part of the same language. The language is defined by one shared grammar that is LALR(1). Around it come the means to work in it: a checker, a conversion from and to today's languages, language servers for VS Code, IntelliJ and the desktop host, an editor for `.atd` files in VS Code, a runtime in the desktop host that runs a tool from its `.atd` alone, and a debugger for that runtime.
+**What this feature adds.** The first phase of moving every tool type to one language, the **ADP tool language**, in which a tool type of any kind is described completely in one kind of file, `.atd`: its identity, its model, its view (canvas, form-based surface or text), its behaviour, its persistence, and the logic that today lives in host code, written in a small **script** that is part of the same language. The language is defined by one shared grammar that is LALR(1). Around it come the means to work in it: a checker, a conversion from and to today's languages, language servers for VS Code, IntelliJ and the desktop host, an editor for `.atd` files in VS Code, a runtime in the desktop host that runs a tool from its `.atd` alone, and a debugger for that runtime. In this phase the runtime exercises tool descriptions to validate and debug them; no host stops running a tool from its JSON files.
 
 **Why.** The research of 2026-10-22 found that DISL is already a language that JSON only carries; that DESL and FBL repeat its foundations, so that FBL's introduction needs a table answering each concern twice; that most of what the companion files list is either a recurring construct or a small algorithm; and that the logic hosts write per tool type is the largest source of difference between hosts. One language with one grammar states each concept once, puts the logic beside the declarations it serves, can be checked as one unit, can be given one set of editing tools, and can be written by people and AI agents alike under a grammar that admits only valid text.
 
-**What stays.** DISL, DID, DESL, DED, EDSL, EDD and FBL remain specifications of this repository, and every existing `.dis`, `.des` and `.fbl` keeps being read by every host. DID and DED remain the formats tools store their documents in. No host changes how it runs today's tool types because of this feature, apart from the desktop host gaining a second way to run them. The standalone host plans with spec-workflow in its own repository; its adoption of `.atd` is a feature there, not part of this one. The Notion add-on and the Eclipse host adopt it in features of their own.
+**What stays.** DISL, DID, DESL, DED, EDSL, EDD and FBL remain specifications of this repository, and every existing `.dis`, `.des` and `.fbl` keeps being read by every host. DID and DED remain the formats tools store their documents in. No host changes how it runs today's tool types because of this feature. The standalone host plans with spec-workflow in its own repository; its adoption of `.atd` is a feature there, not part of this one. The Notion add-on and the Eclipse host adopt it in features of their own.
 
 **Words.** Those of [docs/terminology.md](../../docs/terminology.md): tool, tool type, diagram, designer, editor, tool engineer, specification, definition, binding, document, body, splice, reading, finding, host, runtime. A **tool description** is one `.atd` file, or a set of `.atd` files one of which is its root, that describes one tool type. The name "ADP Tool Definition" is the maintainer's; ADP's glossary reserves "definition" for the documents users create, which question Q4 below settles. The **script** is the part of the ADP tool language in which logic is written. A **capability** is a named algorithm the platform provides and a tool description calls, for work the script is not meant for (section *Where the logic goes*). **Parity** is the state in which a tool run from its `.atd` behaves as the same tool type does in the reference host, with the same bytes on disk.
+
+## Phases
+
+The maintainer ruled on 2026-10-22, answering Q1: "In the end it should be .adt only, however we need to have a transition period. For the first phase the idea is that we just define the tools in .adt, create the tooling infrastructure and make sure we can edit and validate them. This first phase will not transition the existing tools from their JSON representation to a .adt representation." (`.adt` is read as `.atd`, the extension of the request.)
+
+- **End state.** The `.atd` text alone is normative. The JSON languages of tool types (DISL, DESL, EDSL and FBL documents) are retired as authored forms, and every host runs tools from `.atd`.
+- **Phase 1, this feature.** The language and its grammar are specified; the tools in scope are described in `.atd`; the tooling to write, edit, check, validate and debug tool descriptions is built. The `.dis`, `.des` and `.fbl` files stay the ones every host runs, unchanged, and are neither converted nor retired.
+- **Later phases, features of their own.** Conversion of the existing JSON files, hosts running tools from `.atd`, retirement of the JSON languages as authored forms, and the adoption in the standalone host, the Notion add-on and the Eclipse host.
 
 ## Where the logic goes *(informative)*
 
@@ -35,11 +43,11 @@ The research sorted the residue that the companion files and the host code hold 
 
 ## Clarifications needed
 
-Four questions are put to the maintainer, each with options. This specification is written on the recommended option of each and changes if another is chosen.
+Four questions were put to the maintainer, each with options. Q1 and Q2 are answered and Q3 follows from Q1's answer; the specification is written on the recommended option of Q4 and changes if another is chosen.
 
-- **Q1, normative form (FR-030).** Recommended: the `.atd` text is what tool engineers write, and its parsed tree, written as JSON and described by a JSON Schema, stays the normative form tools exchange, so every existing reader keeps working. Alternatives: `.atd` text alone is normative and the JSON languages are retired; or both forms are written by hand side by side.
-- **Q2, which tool types get a tool description (FR-020).** Recommended: every tool type with a specification in `definitions/` (30 diagrams, 2 designers) and every editor the hosts implement (plain text, Markdown, JSON, XML, YAML), with the hosts' code for those tool types as the source of their logic. Alternatives: also every tool type any host implements without a specification here (the standalone host's other modules); or a pilot set of five first, the rest in a later feature.
-- **Q3, which hosts run tools from `.atd` in this feature (FR-040).** Recommended: the desktop host only, as the reference runtime and the home of the debugger; the other hosts gain the language servers and the VS Code editor but keep running today's languages. Alternatives: the desktop and VS Code hosts; or every host in this repository's scope.
+- **Q1, normative form (FR-030).** Answered 2026-10-22: `.atd` alone in the end, after a transition; phase 1 does not move existing tools off their JSON files (see *Phases*).
+- **Q2, which tool types get a tool description (FR-020).** Answered 2026-10-22: every tool type with a specification in `definitions/` (30 diagrams, 2 designers) and every editor the hosts implement (plain text, Markdown, JSON, XML, YAML), with the hosts' code for those tool types as the source of their logic.
+- **Q3, which hosts run tools from `.atd` in this feature (FR-040).** Settled by Q1: none in phase 1. The desktop host runs tool descriptions only to validate and debug them (FR-040 to FR-043).
 - **Q4, the name of the file (Words).** Recommended: "ADP Tool Description", which keeps `.atd` and fits ADP's glossary, where a tool engineer writes a specification and users create definitions. Alternative: "ADP Tool Definition", with the glossary amended to give "definition" a second meaning.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -72,7 +80,7 @@ A tool engineer opens the `.atd` of any tool type in scope and finds in it every
 
 **Acceptance Scenarios**:
 
-1. **Given** an existing `.dis`, `.des` or `.fbl`, **When** it is converted to `.atd` and back, **Then** the result is equal to the original as a tree, and every CEL expression is carried verbatim.
+1. **Given** a tool type's `.dis`, `.des` or `.fbl`, **When** its tool description is complete, **Then** every construct of those files has its counterpart in the description, every CEL expression is carried verbatim, and the JSON files themselves are unchanged.
 2. **Given** a tool type's companion file, **When** its tool description is complete, **Then** each item of the companion's "what the language cannot say" is either a construct, a script function, a binding rule or a named capability in the description, or is recorded as a host's concern with its reason.
 3. **Given** a host's code for a tool type at its reference commit, **When** the tool description is complete, **Then** each behaviour that code implements and the tool type's specification does not (layouts, naming, refusals, menus, read-only reasons, derived data, file reading and writing) is traced to the part of the description that now states it.
 4. **Given** the conformance fixtures recorded from the reference host for a tool type, **When** the tool is run from its `.atd`, **Then** its readings, findings, splices and drawings match the fixtures.
@@ -97,37 +105,36 @@ A tool engineer edits an `.atd` in VS Code, in IntelliJ or in the desktop host a
 
 ---
 
-### User Story 4 - Run a tool from its tool description in the desktop host (Priority: P2)
+### User Story 4 - Validate a tool description by running it in the desktop host (Priority: P2)
 
-A person opens a document in the desktop host whose tool type is available as an `.atd`, and works with it as with the same tool today: it reads the file, draws it, offers the same toolbox, forms, operations and refusals, writes the same bytes on every edit, and undoes exactly. The desktop host contains no code of its own for that tool type.
+A tool engineer opens a tool description in the desktop host's validation view, with one of the tool type's conformance documents. The desktop host runs the description on its own, beside the tool it runs today: it reads the document, draws it, offers the toolbox, forms, operations and refusals, and applies edits to a working copy. It reports where the description's readings, findings, splices or drawings differ from the fixtures recorded from the reference host. The tools a person uses in the desktop host keep running as they do today.
 
-**Why this priority**: it proves the descriptions are complete in the one place where that can be measured, and it is what the debugger runs on.
+**Why this priority**: it is how a description is shown to be complete before any host depends on it, and it is what the debugger runs on.
 
-**Independent Test**: run the conformance fixtures of every tool type in scope through the desktop host's runtime with no tool-specific code present, and walk three tool types by hand against the reference host.
+**Independent Test**: run the conformance fixtures of every tool type in scope through the desktop host's validation, with a seeded difference in one description, and check that only the seeded difference is reported.
 
 **Acceptance Scenarios**:
 
-1. **Given** a tool type in scope, **When** the desktop host runs it from its `.atd`, **Then** the result on disk of every fixture edit is byte-identical to the reference host's.
-2. **Given** a tool description edited while a document of its type is open, **When** it is saved, **Then** the desktop host checks it and, if it passes, applies it to the open document without a restart; if it fails, the document stays on the last description that passed and the findings are shown.
-3. **Given** a script function that runs past its step budget, **When** it is called, **Then** the call stops, the gesture that called it is refused with a finding that names the function, and the document is unchanged.
-4. **Given** the desktop host's source, **When** it is searched for the names of the tool types it runs from `.atd`, **Then** none of their element types, attributes, enum values or rules appears.
+1. **Given** a tool type in scope, **When** its description is validated against its fixtures, **Then** every reading, finding and drawing matches, and the result of every fixture edit is byte-identical to the reference host's, or each difference is reported at the construct that causes it.
+2. **Given** a tool description edited while it is open for validation, **When** it is saved, **Then** the desktop host checks it and, if it passes, validates again without a restart; if it fails, the findings are shown and the last result stays.
+3. **Given** a script function that runs past its step budget, **When** it is called, **Then** the call stops, the gesture that called it is refused with a finding that names the function, and the working copy is unchanged.
+4. **Given** a document a person has open in the desktop host, **When** a tool description of its type exists, **Then** the document keeps opening with the tool the desktop host runs today, and its file is never written by the validation.
 
 ---
 
 ### User Story 5 - Create and edit a tool description in VS Code (Priority: P2)
 
-A tool engineer creates a new tool type in VS Code from a command that asks for its kind, its origin and its name, and gets a tool description that checks clean. They edit it with the language support of story 3 and see the tool it describes in a preview beside the text, which follows their edits.
+A tool engineer creates a new tool type in VS Code from a command that asks for its kind, its origin and its name, and gets a tool description that checks clean. They edit it with the language support of story 3 and check it from the editor.
 
 **Why this priority**: VS Code is where most tool types are written today, and creating one should not start from copying another.
 
-**Independent Test**: in a fresh VS Code window with only the extension installed, create one tool type of each kind, edit it, and check that the preview follows and that the files pass the checker.
+**Independent Test**: in a fresh VS Code window with only the extension installed, create one tool type of each kind, edit it, and check that the files pass the checker.
 
 **Acceptance Scenarios**:
 
 1. **Given** the command to create a tool type, **When** the tool engineer answers its questions, **Then** a new `.atd` is written into the chosen folder that checks without findings and opens in the editor.
-2. **Given** an open `.atd`, **When** the tool engineer edits it, **Then** the preview shows the described tool with an example document, and updates after each edit that checks clean.
-3. **Given** an `.atd` with errors, **When** the preview is open, **Then** it keeps showing the last version that checked clean and says that it is out of date.
-4. **Given** an existing `.dis`, `.des` or `.fbl`, **When** the tool engineer asks to convert it, **Then** an `.atd` is written beside it and the original is left untouched.
+2. **Given** an open `.atd`, **When** the tool engineer saves it or asks for a check, **Then** the findings of the checker appear in VS Code's problems list, each at its place.
+3. **Given** an `.atd` that imports other `.atd` files, **When** one of them is edited, **Then** the findings of every file of the description are brought up to date.
 
 ---
 
@@ -181,7 +188,7 @@ An AI agent asked to create or change a tool type is given the published grammar
 
 ### Edge Cases
 
-- A tool type is available both as an `.atd` and as `.dis`/`.des`/`.fbl`: a host that reads both uses one, by a rule the language specification states, and reports that the other was ignored.
+- A tool type is available both as an `.atd` and as `.dis`/`.des`/`.fbl`: in phase 1 every host runs it from the JSON files and ignores the `.atd` when loading tools.
 - A word that is a keyword in one module (`label`, `create`, `default`) is used as a name in another: the grammar accepts it where a name is expected.
 - A later version of the language adds a keyword that an existing description uses as a name: the existing description still checks under its declared version.
 - A description declares a language version the reader does not know: it is refused with a finding naming both versions, never read as the nearest one.
@@ -224,25 +231,26 @@ An AI agent asked to create or change a tool type is given the published grammar
 
 ### Tool descriptions
 
-- **FR-020**: Every tool type in scope (Q2) **MUST** get a tool description in this repository, in `definitions/` beside its existing files.
+- **FR-020**: Every tool type in scope (Q2) **MUST** get a tool description in this repository, in `definitions/` beside its existing files, which stay as they are.
 - **FR-021**: A tool description **MUST** contain everything its specification, binding and companion file state, and every behaviour the hosts implement in code for that tool type at the reference commits, as constructs, script functions, binding rules or named capabilities.
 - **FR-022**: What a description leaves to a host **MUST** be only what the language specification lists as a host's concern (rendering, gestures, text measurement, file dialogs, opening links, the host's undo stack), and each such item in a companion file **MUST** be marked as such with its reason.
 - **FR-023**: Each tool description **MUST** come with a trace that names, for each behaviour taken from host code, the host files it was read from at the reference commit and the part of the description that now states it.
 - **FR-024**: Each tool type in scope **MUST** have conformance fixtures, recorded from the reference host, of its readings, findings, splices and drawings for a fixed set of documents and edits.
 - **FR-025**: `docs/tools.md` in each host that lists the tool type, and the site's catalogue sources, **MUST NOT** need to change because a tool description exists; a tool description changes no tool type's display name or origin.
 
-### Conversion and interchange
+### Normative form and machine edits
 
-- **FR-030**: The parsed tree of a tool description **MUST** be writable as JSON, valid against the language's JSON Schema, and that JSON **MUST** be the normative interchange form (Q1).
-- **FR-031**: There **MUST** be a conversion from every `.dis`, `.des` and `.fbl` in this repository to `.atd`, and from `.atd` back to them for every construct they can hold, equal as a tree after a round trip.
+- **FR-030**: The `.atd` text **MUST** be the normative form of a tool description (Q1). Its parsed tree **MUST** also be described by a JSON Schema, as the constitution's Principle II requires of every format; that tree is not an interchange form.
+- **FR-031**: In phase 1 the `.dis`, `.des` and `.fbl` files **MUST** remain the ones every host runs, and this feature **MUST NOT** convert, rewrite or retire them.
 - **FR-032**: There **MUST** be a formatter that writes an `.atd` in one canonical layout, keeps every comment with its construct, and is idempotent.
-- **FR-033**: A change that edits an `.atd` by machine (a refresh procedure, an agent, a conversion) **MUST** be possible as splices that leave the rest of the file byte for byte as it was.
+- **FR-033**: A change that edits an `.atd` by machine (a refresh procedure, an agent, a rename) **MUST** be possible as splices that leave the rest of the file byte for byte as it was.
 
-### Runtime in the desktop host
+### Validation runtime in the desktop host
 
-- **FR-040**: The desktop host **MUST** run every tool type in scope from its `.atd` alone, with no code of its own for any of them (Q3).
-- **FR-041**: A tool run from its `.atd` **MUST** match its conformance fixtures, byte for byte for every write.
-- **FR-042**: The desktop host **MUST** reload a changed tool description without a restart, keeping open documents on the last description that checked clean.
+- **FR-040**: The desktop host **MUST** be able to run every tool type in scope from its `.atd` alone, with no code of its own for any of them, in order to validate and debug the description; it **MUST NOT** replace the tools the desktop host runs today (Q1, Q3).
+- **FR-041**: Validation **MUST** compare a description's readings, findings, splices and drawings with its conformance fixtures, every write byte for byte, and report each difference at the construct that causes it.
+- **FR-042**: Validation **MUST** work on working copies only and **MUST NOT** write a person's files.
+- **FR-044**: The desktop host **MUST** take up a changed tool description without a restart, keeping the last result of a description that checked clean when a new version fails.
 - **FR-043**: The desktop host's runtime of the language (parser, checker, CEL, script, binding engine) **MUST** be usable as a library by the desktop host's language server, so that the two report the same findings.
 
 ### Language servers
@@ -256,8 +264,7 @@ An AI agent asked to create or change a tool type is given the published grammar
 ### Editor in VS Code
 
 - **FR-060**: The VS Code host **MUST** offer a command that creates a new tool description of a chosen kind, origin and name, which checks without findings.
-- **FR-061**: The VS Code host **MUST** open `.atd` files with the language support of FR-051 and a preview of the described tool, beside the text, with an example document, that follows every edit that checks clean.
-- **FR-062**: The VS Code host **MUST** offer a command that converts an existing `.dis`, `.des` or `.fbl` to an `.atd` beside it.
+- **FR-061**: The VS Code host **MUST** open `.atd` files with the language support of FR-051, and **MUST** show the checker's findings for every file of a description in its problems list.
 
 ### Debugger in the desktop host
 
@@ -278,7 +285,7 @@ An AI agent asked to create or change a tool type is given the published grammar
 
 ### Conformance, versioning and documentation
 
-- **FR-100**: The Build workflow of this repository **MUST** build the grammar in strict LALR(1) mode, check every `.atd` in the repository and every example of the language specification, and run the round trip of FR-031 on every `.dis`, `.des` and `.fbl`.
+- **FR-100**: The Build workflow of this repository **MUST** build the grammar in strict LALR(1) mode, check every `.atd` in the repository and every example of the language specification.
 - **FR-101**: The language **MUST** be versioned as Principle IV requires; a reader **MUST** read a description with the grammar of its declared version.
 - **FR-102**: Every published tool description **MUST** be checked with every new version of the grammar before that version is released.
 - **FR-103**: `docs/terminology.md` **MUST** define the ADP tool language, tool description, script and capability before any other document uses them, in the same change that introduces them.
@@ -294,16 +301,16 @@ An AI agent asked to create or change a tool type is given the published grammar
 - **Conformance fixture**: a document, a set of edits and the readings, findings, splices and drawings the reference host produced for them.
 - **Trace**: for one tool description, the list of host behaviours it states, each with the host files it was read from.
 - **Language server**: an implementation of the Language Server Protocol for `.atd`, one per IDE family, all reporting the checker's findings.
-- **Debug session**: one paused or running gesture in the desktop host, with its frames, its transaction and its budget.
+- **Debug session**: one paused or running gesture in the desktop host's validation, with its frames, its transaction and its budget.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
 - **SC-001**: The grammar builds with zero conflicts, and stays so on every pull request.
-- **SC-002**: 100 % of the `.dis`, `.des` and `.fbl` files in this repository convert to `.atd` and back equal as a tree.
+- **SC-002**: No `.dis`, `.des` or `.fbl` file in this repository, and no host's tool loading, is changed by this feature.
 - **SC-003**: Every tool type in scope has a tool description that checks without findings, and 100 % of the items its companion file lists are traced to a part of the description or marked as a host's concern.
-- **SC-004**: The desktop host runs every tool type in scope from its `.atd` with no tool-specific code, and 100 % of their conformance fixtures pass, every write byte-identical to the reference host's.
+- **SC-004**: The desktop host's validation runs every tool type in scope from its `.atd` with no tool-specific code, and 100 % of their conformance fixtures pass, every write byte-identical to the reference host's.
 - **SC-005**: For a fixed walk of 30 edits per IDE, VS Code, IntelliJ and the desktop host give the expected completion, diagnostic, hover, rename and formatting result in 30 of 30, with identical diagnostics across the three.
 - **SC-006**: Diagnostics appear within one second of a keystroke, and completion within half a second, on a tool description of 5,000 lines.
 - **SC-007**: A tool engineer new to the language creates a working tool type of each kind in VS Code in under 30 minutes, following the guide of FR-104.
@@ -313,7 +320,7 @@ An AI agent asked to create or change a tool type is given the published grammar
 
 ## Assumptions
 
-- The four questions are answered as recommended until the maintainer chooses otherwise; each answer changes only the requirements it names.
+- Q4 is answered as recommended until the maintainer chooses otherwise; each answer changes only the requirements it names.
 - The desktop host (spec 030) is far enough to host a runtime of the language: it opens workspaces, runs the tools of the standalone host and has a canvas, forms and editors to draw what a description declares.
 - "Custom scripting as per this research" means the research's recommendation: a bounded, deterministic script designed into the grammar, with CEL as its expressions, rather than an embedded language.
 - Lark is used as the notation of the grammar and as the tool that checks it; no host depends on Lark at run time.
@@ -322,4 +329,4 @@ An AI agent asked to create or change a tool type is given the published grammar
 - The standalone host, the Notion add-on and the Eclipse host adopt `.atd` in features of their own; this feature changes none of them, apart from the IntelliJ and VS Code hosts receiving language support, and VS Code the editor, which do not change how any tool runs there.
 - Capabilities are written by the platform, not by tool engineers, and are added through this repository's specification process.
 - The plan decides how the language servers are built, including whether VS Code and IntelliJ share one implementation; the requirement is only that they behave the same (FR-054).
-- The research's other conclusions (one runtime written once for every host, the capability library as compiled code) are directions for later features; this feature builds the runtime once, in the desktop host.
+- The research's other conclusions (one runtime written once for every host, the capability library as compiled code) are directions for later phases; this feature builds the runtime once, in the desktop host, for validation and debugging.
