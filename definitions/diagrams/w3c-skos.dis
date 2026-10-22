@@ -193,6 +193,78 @@
       "cel": "diagram.nodesOfType('Triple').map(t, cardTerms(t)).flatten().map(c, cardId(c[0], c[1])).distinct().size() > 1000",
       "doc": "Whether the RDF graph reading of this body is cut by its budget of 1000 cards. Every reading withholds its edits while it is, because the tool gates every reading's edits on that one count."
     },
+    "textsIn": {
+      "params": [
+        {
+          "name": "labels",
+          "type": "list"
+        },
+        {
+          "name": "tag",
+          "type": "string"
+        }
+      ],
+      "returns": "list",
+      "cel": "labels.filter(l, l.language == tag).map(l, l.text).sort()",
+      "doc": "The texts of the labels carrying exactly one language tag ('' for untagged), ordinally sorted, so the first one is the S14 tie-break."
+    },
+    "tagFor": {
+      "params": [
+        {
+          "name": "labels",
+          "type": "list"
+        },
+        {
+          "name": "display",
+          "type": "string"
+        }
+      ],
+      "returns": "string",
+      "cel": "size(textsIn(labels, display)) > 0 ? display : (size(textsIn(labels, 'en')) > 0 ? 'en' : (size(textsIn(labels, '')) > 0 ? '' : (size(labels) > 0 ? labels.map(l, l.language).filter(t, t != '').sort()[0] : '')))",
+      "doc": "The language tag the chooser settles on within one label kind: the display language, then English, then untagged, then the ordinally smallest remaining tag."
+    },
+    "chooseLabel": {
+      "params": [
+        {
+          "name": "pref",
+          "type": "list"
+        },
+        {
+          "name": "alt",
+          "type": "list"
+        },
+        {
+          "name": "display",
+          "type": "string"
+        },
+        {
+          "name": "fallback",
+          "type": "string"
+        }
+      ],
+      "returns": "string",
+      "cel": "size(pref) > 0 ? textsIn(pref, tagFor(pref, display))[0] : (size(alt) > 0 ? textsIn(alt, tagFor(alt, display))[0] : fallback)",
+      "doc": "The one name a scheme, concept or collection is drawn with: a preferred label in any language beats every alternate label; the IRI's local name stands in when neither exists. Hidden labels never display."
+    },
+    "chosenTag": {
+      "params": [
+        {
+          "name": "pref",
+          "type": "list"
+        },
+        {
+          "name": "alt",
+          "type": "list"
+        },
+        {
+          "name": "display",
+          "type": "string"
+        }
+      ],
+      "returns": "string",
+      "cel": "size(pref) > 0 ? tagFor(pref, display) : (size(alt) > 0 ? tagFor(alt, display) : '')",
+      "doc": "The language tag of the chosen label, or '' for an untagged label or the IRI fallback."
+    },
     "skosTyped": {
       "params": [
         {
@@ -426,78 +498,6 @@
       },
       "cel": "frontier.size() == 0 ? seen : cel.bind(more, frontier.filter(id, !(id in seen)), skosReached(more.map(id, skosChildren(id).filter(c, skosDrawable(c))).flatten().distinct(), (seen + more).distinct()))",
       "doc": "Every term reachable down the drawn hierarchy from the frontier."
-    },
-    "textsIn": {
-      "params": [
-        {
-          "name": "labels",
-          "type": "list"
-        },
-        {
-          "name": "tag",
-          "type": "string"
-        }
-      ],
-      "returns": "list",
-      "cel": "labels.filter(l, l.language == tag).map(l, l.text).sort()",
-      "doc": "The texts of the labels carrying exactly one language tag ('' for untagged), ordinally sorted, so the first one is the S14 tie-break."
-    },
-    "tagFor": {
-      "params": [
-        {
-          "name": "labels",
-          "type": "list"
-        },
-        {
-          "name": "display",
-          "type": "string"
-        }
-      ],
-      "returns": "string",
-      "cel": "size(textsIn(labels, display)) > 0 ? display : (size(textsIn(labels, 'en')) > 0 ? 'en' : (size(textsIn(labels, '')) > 0 ? '' : (size(labels) > 0 ? labels.map(l, l.language).filter(t, t != '').sort()[0] : '')))",
-      "doc": "The language tag the chooser settles on within one label kind: the display language, then English, then untagged, then the ordinally smallest remaining tag."
-    },
-    "chooseLabel": {
-      "params": [
-        {
-          "name": "pref",
-          "type": "list"
-        },
-        {
-          "name": "alt",
-          "type": "list"
-        },
-        {
-          "name": "display",
-          "type": "string"
-        },
-        {
-          "name": "fallback",
-          "type": "string"
-        }
-      ],
-      "returns": "string",
-      "cel": "size(pref) > 0 ? textsIn(pref, tagFor(pref, display))[0] : (size(alt) > 0 ? textsIn(alt, tagFor(alt, display))[0] : fallback)",
-      "doc": "The one name a scheme, concept or collection is drawn with: a preferred label in any language beats every alternate label; the IRI's local name stands in when neither exists. Hidden labels never display."
-    },
-    "chosenTag": {
-      "params": [
-        {
-          "name": "pref",
-          "type": "list"
-        },
-        {
-          "name": "alt",
-          "type": "list"
-        },
-        {
-          "name": "display",
-          "type": "string"
-        }
-      ],
-      "returns": "string",
-      "cel": "size(pref) > 0 ? tagFor(pref, display) : (size(alt) > 0 ? tagFor(alt, display) : '')",
-      "doc": "The language tag of the chosen label, or '' for an untagged label or the IRI fallback."
     }
   },
   "metamodel": {
