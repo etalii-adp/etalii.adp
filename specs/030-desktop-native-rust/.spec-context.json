@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "The Native Desktop Host",
   "branch": "features/030-desktop-native-rust",
-  "currentStep": "tasks",
-  "status": "ready-to-implement",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",

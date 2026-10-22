@@ -2,7 +2,7 @@
 
 **Feature Branch**: `features/004-disl-0-2`
 **Created**: 2026-09-30
-**Status**: Draft
+**Status**: Completed (2026-09-30). Every task in [tasks.md](tasks.md) is ticked.
 **Input**: "Use GitHub Spec Kit to specify DISL 0.2. Cover themes 4 and 6 to 13 of the DISL gaps summary: id strategies and unstable ids, findings at file and line plus common rules, refusal and read-only reasons, templated confirmations, gestures, view state, hard budgets, notation, time, and derived nodes from theme 3. A parallel session specifies Format binding (themes 1 to 3, persistence, `.adp` registration, plugin contract) as a separate spec beside DISL; keep that out of scope and align the boundary with it." (Peter chose this on the "DISL gaps for working tools" thread, 2026-09-30, relayed by the project's coordinator.)
 
 ## Context

@@ -2,7 +2,7 @@
 
 **Feature Branch**: `features/005-format-binding`
 **Created**: 2026-09-30
-**Status**: Draft
+**Status**: Completed (2026-09-30). Every task in [tasks.md](tasks.md) is ticked.
 **Input**: "Specify a declarative, bidirectional binding from text formats (YAML, line grammars, Structurizr, .mm, etc.) to the DISL model, with splice-based minimal writes and matching undo. Cover themes 1 to 3 of the DISL gaps summary: byte-preserving round trip, the .adp registration and view sidecar, one model feeding several readings, folder subjects, plus a written plugin contract for formats that stay plugins (Turtle projection, MSBuild). Default: a new specification folder beside DISL, not a DISL section. A parallel session specifies DISL 0.2 declarative additions; align the boundary with it." (Peter, 2026-09-30, through the project's coordinator, following the "DISL gaps for working tools" thread, where Peter chose to run this track beside DISL 0.2.)
 
 ## Context

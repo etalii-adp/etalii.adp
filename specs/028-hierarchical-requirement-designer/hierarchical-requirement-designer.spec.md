@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-13
 
-**Status**: Draft
+**Status**: Implemented (2026-10-14): the definition is merged and every task in [tasks.md](tasks.md) is ticked. The standalone host builds the designer under spec [029](../029-standalone-hierarchical-requirement-designer/standalone-hierarchical-requirement-designer.spec.md).
 
 **Input**: The go of 2026-10-13 in [decision.md](../../.specify/assessments/hierarchical-requirement-designer/decision.md), for Option C of [concept.md](../../.specify/assessments/hierarchical-requirement-designer/concept.md), with [problem.md](../../.specify/assessments/hierarchical-requirement-designer/problem.md), [research.md](../../.specify/assessments/hierarchical-requirement-designer/research.md) and [intake.md](../../.specify/assessments/hierarchical-requirement-designer/intake.md) beside it.
 
