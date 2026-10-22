@@ -20,7 +20,7 @@ This specification reads the hosts at these commits of their `develop`, the **re
 
 **What stays.** DISL, DID, DESL, DED, EDSL, EDD and FBL remain specifications of this repository, and every existing `.dis`, `.des` and `.fbl` keeps being read by every host. DID and DED remain the formats tools store their documents in. No host changes how it runs today's tool types because of this feature. The standalone host plans with spec-workflow in its own repository; its adoption of `.atd` is a feature there, not part of this one. The Notion add-on and the Eclipse host adopt it in features of their own.
 
-**Words.** Those of [docs/terminology.md](../../docs/terminology.md): tool, tool type, diagram, designer, editor, tool engineer, specification, definition, binding, document, body, splice, reading, finding, host, runtime. A **tool description** is one `.atd` file, or a set of `.atd` files one of which is its root, that describes one tool type. The name "ADP Tool Definition" is the maintainer's; ADP's glossary reserves "definition" for the documents users create, which question Q4 below settles. The **script** is the part of the ADP tool language in which logic is written. A **capability** is a named algorithm the platform provides and a tool description calls, for work the script is not meant for (section *Where the logic goes*). **Parity** is the state in which a tool run from its `.atd` behaves as the same tool type does in the reference host, with the same bytes on disk.
+**Words.** Those of [docs/terminology.md](../../docs/terminology.md): tool, tool type, diagram, designer, editor, tool engineer, specification, definition, binding, document, body, splice, reading, finding, host, runtime. A **tool description** is one `.atd` file, or a set of `.atd` files one of which is its root, that describes one tool type. `.atd` stands for **ADP Tool Description** (Q4), since ADP's glossary reserves "definition" for the documents users create. The **script** is the part of the ADP tool language in which logic is written. A **capability** is a named algorithm the platform provides and a tool description calls, for work the script is not meant for (section *Where the logic goes*). **Parity** is the state in which a tool run from its `.atd` behaves as the same tool type does in the reference host, with the same bytes on disk.
 
 ## Phases
 
@@ -41,14 +41,14 @@ The research sorted the residue that the companion files and the host code hold 
 | Small algorithms | sibling naming, elementary-cycle enumeration with loop claiming, SKOS cycle breaking, C4 relationship elevation, parent-cycle checks | script functions |
 | Heavy or numeric algorithms | Sankey relaxation, self-organising arrange, MSBuild import evaluation, the description-logic renderer | capabilities, named by the tool description and provided by the platform |
 
-## Clarifications needed
+## Clarifications
 
-Four questions were put to the maintainer, each with options. Q1, Q2 and Q3 are answered; the specification is written on the recommended option of Q4 and changes if another is chosen.
+Four questions were put to the maintainer, each with options. All four are answered and recorded below.
 
 - **Q1, normative form (FR-030).** Answered 2026-10-22: `.atd` alone in the end, after a transition; phase 1 does not move existing tools off their JSON files (see *Phases*).
 - **Q2, which tool types get a tool description (FR-020).** Answered 2026-10-22: every tool type with a specification in `definitions/` (30 diagrams, 2 designers) and every editor the hosts implement (plain text, Markdown, JSON, XML, YAML), with the hosts' code for those tool types as the source of their logic.
 - **Q3, which hosts run tools from `.atd` in this feature (FR-040, FR-063).** Answered 2026-10-22: "Desktop host and VS Code, however it is not 'running tools' according to a .adt specification but in the first phase rather the toolchain for editing, validation." Both hosts get the toolchain to edit and validate tool descriptions; neither runs a person's tools from `.atd`.
-- **Q4, the name of the file (Words).** Recommended: "ADP Tool Description", which keeps `.atd` and fits ADP's glossary, where a tool engineer writes a specification and users create definitions. Alternative: "ADP Tool Definition", with the glossary amended to give "definition" a second meaning.
+- **Q4, the name of the file (Words).** Answered 2026-10-22: "ADP Tool Description", keeping `.atd`; the request's "ADP Tool Definition" is not used, so the glossary keeps one meaning of "definition".
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -322,7 +322,6 @@ An AI agent asked to create or change a tool type is given the published grammar
 
 ## Assumptions
 
-- Q4 is answered as recommended until the maintainer chooses otherwise; each answer changes only the requirements it names.
 - The desktop host (spec 030) is far enough to host a runtime of the language: it opens workspaces, runs the tools of the standalone host and has a canvas, forms and editors to draw what a description declares.
 - "Custom scripting as per this research" means the research's recommendation: a bounded, deterministic script designed into the grammar, with CEL as its expressions, rather than an embedded language.
 - Lark is used as the notation of the grammar and as the tool that checks it; no host depends on Lark at run time.
