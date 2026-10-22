@@ -37,7 +37,7 @@ The host gains what the Hierarchical Requirement Designer rests on, then the des
 | I. One source of truth | PASS. The host implements FBL 0.7, DESL 0.2 and DED 0.2 as written, and the module is checked against the vendored definition by its vocabulary test and the fixtures. What the work finds wrong in a language or the definition comes back here as a feature of its own (spec, Out of Scope). Where spec 029 disagreed with the definition, the spec is amended (R16). |
 | II. Implementable from the document alone | Not engaged: no specification document, schema or example changes. The corpus copies are kept unchanged. |
 | III. Precise normative language | Not engaged. |
-| IV. Versioned specifications | PASS. The host states the versions it reads (`KnownMinor = 7`) and opens a later DED version read-only (FR-031). |
+| IV. Versioned specifications | PASS. The host states the versions it reads (the FBL `LanguageVersion` at minor 7) and opens a later DED version read-only (FR-031). |
 | V. Simplicity | PASS. No package, no `.des` interpreter, no delta protocol (R8), no keyboard help screen (R10), the table's tag components reused in place (R9), no consent flow for a file without an envelope (R5). The one new contract, `IHierarchySurfaceSession`, has its consumer in the same pull request. |
 | VI. No JetBrains Rider warnings in C# | PASS. Every pull request runs `inspect.sh`; a new project gets its `.csproj.DotSettings`. |
 | Structure and Naming: `specs/` holds every repository's features except standalone's | **Deviation**, recorded under Complexity Tracking. |
@@ -53,7 +53,7 @@ Its `CLAUDE.md` and `.spec-workflow/steering/` at `b35336639`. It has no file un
 | Core never depends on a module (`DesignerModuleIsolation.Tests`) | The surface library and contract know no designer type. The module supplies its declarations. |
 | Implementation order: model, persistence, wire, client UI, then the rest | Pull requests 1 to 4, then 5, then 6 to 11 (R2). |
 | Every state change is a command through `IHistoryStack`; a refusal is a `CommandResult` | Every gesture is a command; the refusals of R10 and R11 are results. Folding and creating the registration are outside the history, as the binding says. |
-| Selection through `IContextSourceResolver`; actions and shortcuts as data | The add keys are context actions with a `ContextShortcut` (R10). |
+| Selection through `IContextSourceResolver`; actions and shortcuts as data | The add keys are context actions with a `ContextShortcutDefinition` (R10). |
 | One entity per file, no nested types, POCOs in `_Model/` | Followed in every new project and folder. |
 | A module is `src/designers/<x>/{definition,backend,client,examples}`, with `provenance.json` | The module copies Knowledge's layout. |
 | Byte-compared files are `-text` | One new line for the vendored companion (R15). |
@@ -117,7 +117,7 @@ etalii.adp.ide.standalone/
 │   └── workspace.proto                                the hierarchy_surface member (PR 5)
 ├── src/backend/
 │   ├── EtAlii.Adp.Specification.Fbl/
-│   │   ├── Documents/FblModelTypes.cs, FblDocumentLoader.cs    Family.Bullets, KnownMinor = 7, registration.blocks (PR 1, 2)
+│   │   ├── Documents/FblModelTypes.cs, FblDocumentLoader.cs    Family.Bullets, FBL minor 7, registration.blocks (PR 1, 2)
 │   │   ├── Rules/BodyReading.cs                                the bullets reader chosen (PR 1)
 │   │   ├── Files/Bullets/                                      new: the reader and writer (PR 1)
 │   │   ├── History/OpenBody.cs, SplicedFile.cs                 drift before an edit, the shared sentence (PR 1)
@@ -127,12 +127,12 @@ etalii.adp.ide.standalone/
 │   │   ├── ConformanceFixtures.Tests.cs, readme.md             recursion, the new edit forms, the copy log
 │   │   └── HierarchicalRequirementFixtures.Tests.cs            new (PR 4)
 │   ├── EtAlii.Adp.Hierarchy/                                   ToolRouter: the marker claim; DesignerAddOptions; DeleteEntryCommandHandler (PR 3)
-│   ├── EtAlii.Adp.Sessions/                                    IDesignerSession split; IHierarchySurfaceSession (PR 5)
+│   ├── EtAlii.Adp.Sessions/                                    IDesignerSessionFactory: the registration optional (PR 3); IDesignerSession split; IHierarchySurfaceSession (PR 5)
 │   ├── EtAlii.Adp.Designer/
-│   │   ├── IDesignerSessionFactory.cs                          the registration optional (PR 3)
 │   │   └── HierarchySurfaceModel/                              new: the read model the wire carries (PR 5)
 │   └── EtAlii.Adp.Workspace/DesignerService*.cs                the surface's calls and stream member (PR 5)
 ├── src/client/src/
+│   ├── designers/useHierarchySurfaceStream.ts                  new: the stream hook, beside useTableStream (PR 5)
 │   ├── hierarchySurface/library/                               new: page, boxes, trail, collapse, icons, lookup, filter bar (PR 5 to 11)
 │   └── table/library/declarativeDesignerModules.test.ts        KNOWN_MODULE_CLIENTS = 2 (PR 5)
 └── src/designers/hierarchical-requirement/                     new

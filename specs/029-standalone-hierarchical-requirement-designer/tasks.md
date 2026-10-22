@@ -19,6 +19,22 @@
 - Paths are at spec 025's homes where it names one (`ToolRouter`, `DesignerAddOptions`, `EtAlii.Adp.Sessions`, `EtAlii.Adp.Workspace`, `WatchedFile`), otherwise as read at standalone `develop` `b35336639` (research R1). T001 corrects them before any standalone work starts.
 - A copy into the conformance corpus is taken unchanged from `etalii.adp` at the commit T001 records, and logged with that commit in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/readme.md`.
 
+## The host read again (T001)
+
+Read on 2026-10-22 at standalone `develop` `396c776c5`. Spec 025 was not finished then: its M7 rdf tasks, M8 (test consolidation) and M9 were open, and the maintainer chose to start this feature beside it ("Start 029 now"). The corpus copies of this feature are taken from `etalii.adp` `develop` `bee6f1f`, whose FBL specification is at 0.8; the fixtures this feature copies declare 0.7.
+
+Corrected against that reading:
+
+- `IDesignerSessionFactory` lives in `EtAlii.Adp.Sessions` (spec 025 T266), and `Open` takes a `ProjectRoot`, not a path string.
+- `NaturalIds.cs` lives in `EtAlii.Adp.TestSupport`, so `DerivedIds.cs` goes beside it there.
+- `useTableStream` lives in `src/client/src/designers/`, so `useHierarchySurfaceStream.ts` goes beside it there.
+- The FBL loader holds no `KnownMinor`; the newest minor it reads in full is the `LanguageVersion` `Fbl` in `FblDocumentLoader.cs`, at 5.
+- A flow that tests one module belongs in that module's test project by spec 025 T251 and T252, so `HierarchySurfaceFlow.Tests.cs` goes to the module's test project, referencing `EtAlii.Adp.TestSupport.Host`. New tests use `TestFolder.Create` and `RepositoryPaths` (T248 to T250).
+- A shortcut is a `ContextShortcutDefinition`; `NestedRowToggle` is exported by `src/client/src/table/library/rows/NestedRow.tsx`.
+- The corpus already holds fixtures up to FBL 0.8 (`insert-constant-*`), which the library loads with the newer-version warning.
+
+Every other path these files name was found where they name it, or is new.
+
 > **Ticking**: a task whose code lands in `etalii.adp.ide.standalone` is ticked here only once its pull request is merged, in a pull request of this repository. A task of `etalii.adp` is ticked when done.
 
 > **Merging**: every pull request is merged by the maintainer, with a merge commit. A "deliver" task ends when the pull request is open with its four gates and the inspection green. The phase after it starts when it is merged.
@@ -29,7 +45,7 @@
 
 **Purpose**: paths that match the host, and a baseline to compare every later run with.
 
-- [ ] **T001** Once spec 025 is done and the maintainer has given the word, read standalone's `develop` again: find every path this file, [plan.md](plan.md), [data-model.md](data-model.md) and the contracts name, correct each one that moved, record the standalone commit and the `etalii.adp` commit the corpus copies are taken from, and deliver that as a pull request here · etalii.adp/specs/029-standalone-hierarchical-requirement-designer/tasks.md
+- [x] **T001** Once spec 025 is done and the maintainer has given the word, read standalone's `develop` again: find every path this file, [plan.md](plan.md), [data-model.md](data-model.md) and the contracts name, correct each one that moved, record the standalone commit and the `etalii.adp` commit the corpus copies are taken from, and deliver that as a pull request here · etalii.adp/specs/029-standalone-hierarchical-requirement-designer/tasks.md
 
 **⟶ Wait for T001's pull request to merge, then:**
 
@@ -43,7 +59,7 @@
 
 ### Pull request 1: `features/029-fbl-bullets`
 
-Files: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Files/Bullets/`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/etalii.adp/specifications/fbl/fixtures/bullets-read/`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/etalii.adp/specifications/fbl/fixtures/bullets-edits/`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Support/DerivedIds.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Bullets/BulletsFamily.Tests.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/History/OpenBodyDrift.Tests.cs`
+Files: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Files/Bullets/`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/etalii.adp/specifications/fbl/fixtures/bullets-read/`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/etalii.adp/specifications/fbl/fixtures/bullets-edits/`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/DerivedIds.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Bullets/BulletsFamily.Tests.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/History/OpenBodyDrift.Tests.cs`
 
 Extends: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/FblModelTypes.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/FblDocumentLoader.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Rules/BodyReading.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/History/OpenBody.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/History/SplicedFile.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/ConformanceFixtures.Tests.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/readme.md`, `etalii.adp.ide.standalone/src/designers/knowledge/backend/EtAlii.Adp.Designer.Knowledge/KnowledgeBody.cs`
 
@@ -51,7 +67,7 @@ Extends: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Doc
 
 - [ ] **T003** [P] Copy `bullets-read/` and `bullets-edits/` with its `no-section/` sub-folder into the corpus in etalii.adp's layout, and log the copy (FR-029; R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/etalii.adp/specifications/fbl/fixtures/bullets-read/
 - [ ] **T004** [P] Teach the harness FBL 0.7: find `fixture.json` at any depth; read the edit forms `move`, `setting`, `position`, `slot`, `occurrence`, `expectFile` and an `edit` that is a list carrying its `x-operation`; compare `read.elements[].parent`; raise `MinimumFixtures` to the new count (FR-029; R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/ConformanceFixtures.Tests.cs
-- [ ] **T005** [P] Add the stand-in for the derived ids `tag/<name>`, `category/<name>`, `state/<name>`, `filter/<name>` and `assessment/<n>`, beside `NaturalIds.cs` (R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Support/DerivedIds.cs
+- [ ] **T005** [P] Add the stand-in for the derived ids `tag/<name>`, `category/<name>`, `state/<name>`, `filter/<name>` and `assessment/<n>`, beside `NaturalIds.cs` (R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/DerivedIds.cs
 - [ ] **T006** [P] Write the drift guard: an edit planned after the body's bytes changed on disk is refused with the library's sentence and writes nothing. Run it against the code without T009 and keep the failing output (FR-024; R12) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/History/OpenBodyDrift.Tests.cs
 
 **⟶ Wait for Wave 1 to finish, then:**
@@ -59,7 +75,7 @@ Extends: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Doc
 **Wave 2 (different files):**
 
 - [ ] **T007** [P] Write the `bullets` reader and writer on `FamilyReader`, mirroring `bullets_of` in `etalii.adp/.github/scripts/validate-examples.py`: sections by their first matching heading at any level, fences never read, setext lines not headings, a tab four columns, every list marker, the continuation slot and the word slots; a new bullet takes its previous sibling's marker and indent, else its next sibling's, else the parent's text column; a move re-indents every non-blank line and splits a tab the shift cuts into; an insert takes the line ending of the line it lands on, with its unit tests · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Files/Bullets/BulletsFamily.cs
-- [ ] **T008** [P] Add `Family.Bullets`, parse `bullets` in `ParseFamily`, and set `KnownMinor = 7` (FR-029) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/FblDocumentLoader.cs
+- [ ] **T008** [P] Add `Family.Bullets`, parse `bullets` in `ParseFamily`, and raise the minor of its `LanguageVersion` `Fbl` from 5 to 7 (FR-029) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/FblDocumentLoader.cs
 - [ ] **T009** [P] Check before planning that the body's bytes are those read, refuse with one sentence owned by the library, and replace the module-local sentence in `KnowledgeBody.cs` with it (FR-024; R12) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/History/OpenBody.cs
 
 **⟶ Wait for Wave 2 to finish, then:**
@@ -105,7 +121,7 @@ Extends: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Doc
 
 Files: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/FirstLineCache.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy.Tests/EnvelopeRouting.Tests.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy.Tests/DesignerAddOptions.Existing.Tests.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy.Tests/DeleteEntryCommandHandler.Registration.Tests.cs`
 
-Extends: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/ToolRouter.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/_Model/DesignerRouting.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/DesignerAddOptions.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/Commands/DeleteEntryCommandHandler.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Designer/IDesignerSessionFactory.cs`, `etalii.adp.ide.standalone/src/designers/knowledge/backend/EtAlii.Adp.Designer.Knowledge/KnowledgeSessionFactory.cs`, `etalii.adp.ide.standalone/docs/creating-a-designer-module.md`
+Extends: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/ToolRouter.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/_Model/DesignerRouting.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/DesignerAddOptions.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/Commands/DeleteEntryCommandHandler.cs`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Sessions/IDesignerSessionFactory.cs`, `etalii.adp.ide.standalone/src/designers/knowledge/backend/EtAlii.Adp.Designer.Knowledge/KnowledgeSessionFactory.cs`, `etalii.adp.ide.standalone/docs/creating-a-designer-module.md`
 
 **Wave 1, tests first (different files).** Each uses a test designer definition whose binding claims `.md` as shared with a line-1 marker, so that no module is needed yet.
 
@@ -199,7 +215,7 @@ Extends: `etalii.adp.ide.standalone/.gitattributes`, `etalii.adp.ide.standalone/
 
 **Independent Test**: a hand-written requirement document three levels deep, with no registration, beside an ordinary Markdown file and an Agent Behavior Modelling document; open each, and pass 028's User Story 1.
 
-Files: `etalii.adp.ide.standalone/src/api/designers.proto`, `etalii.adp.ide.standalone/src/api/workspace.proto`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Sessions/IDesignerSession.cs`, `ITableDesignerSession.cs`, `IHierarchySurfaceSession.cs`; `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Designer/HierarchySurfaceModel/`; `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Workspace/DesignerService.HierarchySurface.cs`; `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/HierarchySurfaceFlow.Tests.cs`; `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Designer.cs`, `ServiceCollection.AddHierarchicalRequirement.cs`, `HierarchicalRequirementSession.cs`, `HierarchicalRequirementSessionFactory.cs`, `HierarchicalRequirementSurfaceMapper.cs`, `HierarchicalRequirementGestures.cs`; `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/HierarchicalRequirementSession.Tests.cs`; `etalii.adp.ide.standalone/src/client/src/hierarchySurface/useHierarchySurfaceStream.ts`; `etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/HierarchySurface.tsx`, `HierarchySurfaceBox.tsx`, `HierarchySurfaceTrail.tsx`, `CollapseToggle.tsx`, `FindingList.tsx`, `hierarchySurface.css` and their tests; `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/client/`
+Files: `etalii.adp.ide.standalone/src/api/designers.proto`, `etalii.adp.ide.standalone/src/api/workspace.proto`, `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Sessions/IDesignerSession.cs`, `ITableDesignerSession.cs`, `IHierarchySurfaceSession.cs`; `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Designer/HierarchySurfaceModel/`; `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Workspace/DesignerService.HierarchySurface.cs`; `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/HierarchySurfaceFlow.Tests.cs`; `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Designer.cs`, `ServiceCollection.AddHierarchicalRequirement.cs`, `HierarchicalRequirementSession.cs`, `HierarchicalRequirementSessionFactory.cs`, `HierarchicalRequirementSurfaceMapper.cs`, `HierarchicalRequirementGestures.cs`; `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/HierarchicalRequirementSession.Tests.cs`; `etalii.adp.ide.standalone/src/client/src/designers/useHierarchySurfaceStream.ts`; `etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/HierarchySurface.tsx`, `HierarchySurfaceBox.tsx`, `HierarchySurfaceTrail.tsx`, `CollapseToggle.tsx`, `FindingList.tsx`, `hierarchySurface.css` and their tests; `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/client/`
 
 Extends: `etalii.adp.ide.standalone/src/designers/knowledge/backend/EtAlii.Adp.Designer.Knowledge/KnowledgeSession.cs`, `etalii.adp.ide.standalone/src/client/src/table/library/declarativeDesignerModules.test.ts`, `etalii.adp.ide.standalone/src/package-lock.json`, `etalii.adp.ide.standalone/docs/tools.md`, `etalii.adp.ide.standalone/docs/architecture.md`, `etalii.adp.ide.standalone/tests.md`
 
@@ -207,7 +223,7 @@ Extends: `etalii.adp.ide.standalone/src/designers/knowledge/backend/EtAlii.Adp.D
 
 **Wave 1 (different files):**
 
-- [ ] **T047** [P] [US1] Write the flow test: the enveloped document opens in the designer with every entry in the model, the ordinary `.md` in the Markdown editor, the Agent Behavior Modelling document in its diagram; an existing enveloped file added as a designer document is accepted; nothing is written (US1 scenarios 2 to 4) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Backend.Tests/Integration Tests/HierarchySurfaceFlow.Tests.cs
+- [ ] **T047** [P] [US1] Write the flow test: the enveloped document opens in the designer with every entry in the model, the ordinary `.md` in the Markdown editor, the Agent Behavior Modelling document in its diagram; an existing enveloped file added as a designer document is accepted; nothing is written (US1 scenarios 2 to 4) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/HierarchySurfaceFlow.Tests.cs
 - [ ] **T048** [P] [US1] Write the session tests: the model's ids by the contract (`line/<n>` for an entry without a usable number); collapsing writes only the registration, creating it, outside the undo history, and the entry is collapsed again on reopening; a later DED version opens read-only with the reason (FR-010, FR-031; US1 scenario 5) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/HierarchicalRequirementSession.Tests.cs
 - [ ] **T049** [P] [US1] Write the page tests: one page and no tree; a box as high as what stands to its right, its requirements above its sub-items, borders shared; number beside the title, tags below, description under; as many levels as fit and the mark on an item that does not fit; focus by the control and by the mark, the trail leading back, nothing sent for focus; a collapsed entry showing number, title, tags and assessment icon only (FR-006 to FR-010) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/HierarchySurface.test.tsx
 
@@ -226,7 +242,7 @@ Extends: `etalii.adp.ide.standalone/src/designers/knowledge/backend/EtAlii.Adp.D
 
 **⟶ Wait, then (different files):**
 
-- [ ] **T055** [P] [US1] Open and close the stream in one hook, beside `useTableStream`, with a guard that no other file opens it · etalii.adp.ide.standalone/src/client/src/hierarchySurface/useHierarchySurfaceStream.ts
+- [ ] **T055** [P] [US1] Open and close the stream in one hook, beside `useTableStream`, with a guard that no other file opens it · etalii.adp.ide.standalone/src/client/src/designers/useHierarchySurfaceStream.ts
 - [ ] **T056** [P] [US1] Draw the page: the boxes, the trail, the focus control and the mark of R10, the collapse control after `NestedRowToggle`, tags with `OptionTag`, the findings list, the read-only reason; colours as theme tokens in both themes, no inline styles (FR-006 to FR-011) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/HierarchySurface.tsx
 
 **⟶ Then:**
@@ -304,7 +320,7 @@ Extends: `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backe
 
 - [ ] **T072** [P] [US4] Test the template: a new document's file is the binding's template with the file's base name as its title, CRLF, byte for byte, and no registration (FR-005; US4 scenario 2) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/Template.Tests.cs
 - [ ] **T073** [P] [US4] Test each structure operation against the step of `hierarchical-requirement-structure` and `-edits` that states it, `numbering` and `no-mark` included; `addRequirementBelow` on a top-level requirement refused with its message; an item moved into itself refused; giving a duplicate a new number (FR-026; R17) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/StructureOperations.Tests.cs
-- [ ] **T074** [P] [US4] Test the two context actions and their `ContextShortcut`s (FR-012; R10; US4 scenario 3) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/ContextActions.Tests.cs
+- [ ] **T074** [P] [US4] Test the two context actions and their `ContextShortcutDefinition`s (FR-012; R10; US4 scenario 3) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/ContextActions.Tests.cs
 - [ ] **T075** [P] [US4] Test the page: the control at the end of every item adds without a dialog; the key adds directly below, ready for typing; an item dragged with everything in it, a requirement dragged alone; deleting an entry that holds anything or is named asks first (FR-012 to FR-014) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/editing/AddControl.test.tsx
 
 ### Implementation

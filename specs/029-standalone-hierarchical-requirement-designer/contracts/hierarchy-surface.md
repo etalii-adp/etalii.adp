@@ -47,7 +47,7 @@ public interface IHierarchySurfaceSession : IDesignerSession
 | `HierarchySurfaceModel` and its parts are POCOs in `EtAlii.Adp.Designer/HierarchySurfaceModel/`, one type per file, beside `TableModel/`. | plan, Structure Decision |
 | Every gesture that changes a file is a command through `IHistoryStack`; a refusal is a `CommandResult`. `toggleCollapsed` and the creation of the registration are outside the history. | R4, standalone's principles |
 | Opening never writes a file. The session watches the body and the registration through `WatchedFile`, skips its own writes, ignores identical bytes and raises the whole model again. | R13, plan, Constraints |
-| `IDesignerSessionFactory.Open(ShortGuid watchId, string rootPath, string? registrationPath, string bodyPath)`: the registration is optional; the routing of [routing-and-adding.md](routing-and-adding.md) supplies it when one exists. | R4, FR-004 |
+| `IDesignerSessionFactory.Open(ShortGuid watchId, ProjectRoot root, string? registrationPath, string bodyPath)`: the registration is optional; the routing of [routing-and-adding.md](routing-and-adding.md) supplies it when one exists. | R4, FR-004 |
 
 ## The wire
 
