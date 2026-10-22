@@ -333,6 +333,8 @@ M8's tasks remove copies (T245 to T254, T284), but no count of copies removed ca
 
 **Answers.** Not yet given when this review was written. T316 waits on question 1. SC-005 stands as written until question 2 is ruled.
 
+The maintainer answered both on decision cards on 2026-10-22, each with the recommended option: question 1 (a), both as DISL says, which T316 applies; question 2 (a), count the consolidation itself, so SC-005 is amended in the specification with this review named beside it, and the M8 review makes the sum.
+
 ## Ownership
 
 M7 was owned by one developer, signing as `agent-1-<task>` (FR-006), in a cloud session. A Remote Control session of the same developer on a Mac mini did T240 and T241's non-rdf part. M8 is owned by the same developer, agent 1, unless the maintainer hands it over with this review.
