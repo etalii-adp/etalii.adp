@@ -2,7 +2,7 @@
 
 **Feature Branch**: `features/012-notion-hype-cycle-addon`
 **Created**: 2026-10-08
-**Status**: Draft
+**Status**: Completed (2026-10-09). Every task in [tasks.md](tasks.md) is ticked.
 **Input**: "Create a Notion plugin that makes the Gartner Hypecycle graph working inside of Notion and with a database for storage. Build the plugin to use the DISL and BL for the Gartner Hypecycle graph, i.e. do not change it but build the correct interpreter. Store the data in this database [...]. Embed the diagram on this page [...]. If you can, replicate the above with the correct names for all examples also already available in the other ADP hosts. The plugin should also be able to edit the diagram, so incorporate a (collapsible) toolbox and property grid, in a reusable form so that they can also be used for other Notion plugins. Make sure that there is an undo-redo system; if Notion provides an API of its own then use that. This can also be done indirectly through the database mutations, as long as the user can do the usual CTRL+Z / CTRL+Y. Read here on more details on the Notion plugin implementation: [a Claude session]."
 
 ## Context

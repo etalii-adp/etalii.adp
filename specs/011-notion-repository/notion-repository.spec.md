@@ -2,7 +2,7 @@
 
 **Feature Branch**: `features/011-notion-repository`
 **Created**: 2026-10-07
-**Status**: Draft
+**Status**: Completed (2026-10-09). Every task in [tasks.md](tasks.md) is ticked.
 **Input**: "Incorporate the git repo etalii.adp.ide.notion so that it can start delivering notion web based 'tool' addons based on DISL and FBL specifications. The addons should be hosted under https://etalii.net/adp/notion using the github pages approach."
 
 ## Context
