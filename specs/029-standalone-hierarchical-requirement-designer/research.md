@@ -18,7 +18,7 @@ Decisions the plan rests on. Paths prefixed `standalone:` are in `etalii.adp.ide
 
 | # | Pull request | Stories | What it holds |
 |---|---|---|---|
-| 1 | FBL 0.7: the `bullets` family | US3 | The reader, drift checked before an edit, `KnownMinor = 7`, the harness's new edit forms, recursion into sub-folders, `bullets-read` and `bullets-edits` in the corpus |
+| 1 | FBL 0.7: the `bullets` family | US3 | The reader, drift checked before an edit, the FBL minor raised to 7, the harness's new edit forms, recursion into sub-folders, `bullets-read` and `bullets-edits` in the corpus |
 | 2 | FBL 0.7: declared registration blocks | US3 | Blocks the binding declares, kept order and ordinal order, `history: false`, `createOnFirstPlacement`, `registration-blocks` in the corpus |
 | 3 | Documents recognised by their envelope | US1 | The marker claim in the tool router, a designer document without a registration, adding an existing file, deleting a registration that keeps the body |
 | 4 | The module's model and persistence | US3 | `src/designers/hierarchical-requirement/` backend: the vendored definition, the body, the read model, the `hierarchical-requirement-*` fixtures; `Designer.cs` waits for pull request 5, so the type is never offered without a page |

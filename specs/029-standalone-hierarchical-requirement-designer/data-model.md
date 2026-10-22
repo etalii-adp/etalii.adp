@@ -46,7 +46,7 @@ Stored in `standalone:…/EtAlii.Adp.Specification.Fbl/Documents/FblModelTypes.c
 | Change | Rule | Source |
 |---|---|---|
 | A member `Bullets` beside `Yaml`, `Json`, `Xml`, `Lines` and `Blocks` | Chosen by `Rules/BodyReading.cs` for a binding whose `body.family` is `bullets` | FR-029, R2 |
-| `FblDocumentLoader.KnownMinor` goes from 5 to 7 | A binding of FBL 0.7 loads without the "newer than" warning; one of 0.8 or later still gets it | FR-029, Constitution Check IV |
+| The minor of `FblDocumentLoader`'s `LanguageVersion` `Fbl` goes from 5 to 7 | A binding of FBL 0.7 loads without the "newer than" warning; one of 0.8 or later still gets it | FR-029, Constitution Check IV |
 
 ### Bullets reader and writer
 
@@ -111,7 +111,7 @@ Undo after an outside change keeps `CommandResult.Outdated` and `OutdatedBodyPat
 | Discovery | `fixture.json` is found at any depth under `Conformance/etalii.adp/`, so the eleven fixtures one folder down run. This feature brings 27 | FR-029, R14 |
 | Edit forms | `move`, `setting`, `position`, `slot`, `occurrence`, `expectFile`, and an `edit` that is a list carrying its `x-operation` | R14 |
 | Read comparison | `read.elements[].parent` is compared | R14 |
-| Derived ids | `tag/<name>`, `category/<name>`, `state/<name>`, `filter/<name>`, `assessment/<n>` resolve through a stand-in beside `Support/NaturalIds.cs` | R14 |
+| Derived ids | `tag/<name>`, `category/<name>`, `state/<name>`, `filter/<name>`, `assessment/<n>` resolve through a stand-in beside `EtAlii.Adp.TestSupport/NaturalIds.cs` | R14 |
 | Corpus copy | The fixtures and the four definition files sit in etalii.adp's layout, unchanged, and are logged with the etalii.adp commit in the corpus `readme.md` | R14 |
 
 Validation: a planted defect in one expected byte fails the run at that step (US3 scenario 2, SC-006).

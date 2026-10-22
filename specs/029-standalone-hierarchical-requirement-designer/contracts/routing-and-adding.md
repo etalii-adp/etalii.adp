@@ -40,7 +40,7 @@ The envelope a document carries on line 1, as the template writes it: `<!-- ded:
 
 | Rule | Source |
 |---|---|
-| `IDesignerSessionFactory.Open(ShortGuid watchId, string rootPath, string? registrationPath, string bodyPath)`. A null `registrationPath` opens the document with the definition's defaults: `tags` and `filters` empty, the starting categories (`functional` `blue`, `non-functional` `purple`, `technical` `brown`) and states (`proposed` `gray`, `accepted` `green`, `rejected` `red`, `done` `blue`), nothing collapsed. | R4, companion, The registration |
+| `IDesignerSessionFactory.Open(ShortGuid watchId, ProjectRoot root, string? registrationPath, string bodyPath)`. A null `registrationPath` opens the document with the definition's defaults: `tags` and `filters` empty, the starting categories (`functional` `blue`, `non-functional` `purple`, `technical` `brown`) and states (`proposed` `gray`, `accepted` `green`, `rejected` `red`, `done` `blue`), nothing collapsed. | R4, companion, The registration |
 | Opening never writes a file: not the registration, not a missing mark line, not a number for `ITEM-NEW` or `REQ-NEW`. | plan, Constraints; companion, Numbers |
 | The first setting the person changes creates the registration (`registration.createOnFirstPlacement: true`): `<body base name>.adp` in the body's folder, holding the line `etalii/hierarchical-requirement`, in the body's dominant line ending, with no `body:` line because the base names are equal. It is written before the edit is planned and outside the undo history, so an undo leaves it in place. | R4, FR-004, FBL section 8.4 |
 | When a file of that name exists and is not this document's registration, the setting is refused with a sentence naming that file, and nothing is written. | FBL section 8.4 ("refuses the placement with a reason otherwise") |
@@ -72,5 +72,5 @@ While the document is open and its registration is deleted, the designer goes on
 | Where | What | Source |
 |---|---|---|
 | `docs/tools.md` | The FBL families the host supports, `bullets` among them (`json`, `lines`, `xml`, `yaml`, `bullets`); the DESL surface kinds it supports, `table` and `hierarchy`; the DED version it reads, 0.2. | FR-029, FR-030, FR-031, R6 |
-| `KnownMinor` in the FBL library | `7` | plan, Constitution Check (IV) |
+| The minor of the FBL library's `LanguageVersion` | `7` | plan, Constitution Check (IV) |
 | A document of a surface kind the build lacks | The existing unsupported placeholder, `PanelPlaceholder.tsx`, with the reason | R6, FR-030 |
