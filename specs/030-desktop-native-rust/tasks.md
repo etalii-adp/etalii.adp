@@ -93,7 +93,7 @@
 - [x] T048 [US3] Load every tool type from `vendor/etalii.adp/definitions/` and the identity catalogue into the catalogue the add dialog uses (FR-021, FR-035) · etalii.adp.ide.desktop/crates/adp-core/src/catalogue.rs
 - [x] T049 [US3] Write the recorder that replays an edit script through the standalone host's gRPC API, with its `.DotSettings` (contracts/parity.md) · etalii.adp.ide.desktop/parity/recorder/
 - [x] T050 [US3] Write the parity runner that replays every script headless and compares each written file byte for byte with its golden (SC-004) · etalii.adp.ide.desktop/crates/adp-parity/
-- [ ] T051 [US3] Port the standalone host's round-trip tests for the tool types whose module is not yet ported as pending tests named after them, so their count shows what is left (FR-034) · etalii.adp.ide.desktop/crates/adp-conformance/tests/round_trip.rs
+- [x] T051 [US3] Port the standalone host's round-trip tests for the tool types whose module is not yet ported as pending tests named after them, so their count shows what is left (FR-034) · etalii.adp.ide.desktop/crates/adp-conformance/tests/round_trip.rs
 
 **Checkpoint**: every vendored fixture and example passes (SC-003); the parity runner works on an empty set.
 
@@ -104,7 +104,7 @@
 **Independent Test**: replay the same scripted edits in both hosts on copies of the same example and compare the files byte for byte (spec, Story 2).
 
 - [x] T052 [P] [US2] Write and record edit scripts of at least 20 edits each for the mind map, the timeline and the C4 container view, with their goldens (SC-004) · etalii.adp.ide.desktop/parity/scripts/ and parity/goldens/
-- [ ] T053 [P] [US2] Write scene snapshot tests for the three types' examples (`insta`) · etalii.adp.ide.desktop/crates/adp-disl/tests/scenes/
+- [x] T053 [P] [US2] Write scene snapshot tests for the three types' examples (`insta`) · etalii.adp.ide.desktop/crates/adp-disl/tests/scenes/
 - [x] T054 [US2] Implement the layouts: Manual, Automatic Horizontal, Vertical and Cloud, layered layout and collapse and expand, ported from `EtAlii.Adp.Layout` (FR-018) · etalii.adp.ide.desktop/crates/adp-layout/
 - [x] T055 [US2] Draw the canvas from scenes with viewport culling: pan with right-drag and scroll bars, zoom, fit to view (FR-018, SC-006) · etalii.adp.ide.desktop/crates/adp-shell/src/canvas/
 - [x] T056 [US2] Implement the one gesture arbiter for drag, move, resize and connect, with Escape to cancel, box and Ctrl selection, the toolbox dragged onto the canvas, a connection dropped on empty space creating its target, Tab and Enter for child and sibling, and inline label rename (FR-018) · etalii.adp.ide.desktop/crates/adp-shell/src/canvas/gestures/
