@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-19
 
-**Status**: Draft. Only the specification is written; the plan and tasks wait for the maintainer's approval.
+**Status**: Implemented as DISL 0.5 (2026-10-20, [plan.md](plan.md), [tasks.md](tasks.md)).
 
 **Input**: The maintainer's ruling of 2026-10-19, on the decision card "Add to DISL": add `person` to DISL as a built-in node shape, beside `cylinder`, in the DISL specification's shape catalogue (section 6.7 of `specifications/disl/DISL-specification.md` and Appendix B.2), and in the JSON Schema `disl.schema.json` where shapes are enumerated. It closes gap C1 of task 11 of the standalone specification `c4-disl-fbl`: the C4 diagram tool type needs a person drawn as C4 draws one, a rounded box with a round head above its top edge and its label inside the box.
 

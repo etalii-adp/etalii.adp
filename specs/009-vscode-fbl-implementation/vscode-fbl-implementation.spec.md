@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-06
 
-**Status**: Draft
+**Status**: Completed (2026-10-07). Every task in [tasks.md](tasks.md) is ticked.
 
 **Input**: User description: "For a generic FBL implementation that can run in VSCode (in the etalii.adp.ide.vscode repo), with simple unit tests to validate that the loading/saving works as expected (at minimum the same FBL unit tests as that have been added to the etalii.adp.ide.standalone repo."
 

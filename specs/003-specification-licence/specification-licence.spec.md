@@ -2,7 +2,7 @@
 
 **Feature Branch**: `features/003-specification-licence`
 **Created**: 2026-09-29
-**Status**: Draft
+**Status**: Completed (2026-10-04). Every task in [tasks.md](tasks.md) is ticked.
 **Input**: "Every ADP language specification (DISL, DID, DESL, DED, EDSL, EDD) states its licence, Apache-2.0 like the rest of the project, in a form the etalii.adp.site refresh recognises, so the site can publish versions. The site currently shows: 'No version of DISL has been published on this site yet. The site publishes a version once its source states a licence and the refresh brings it in.'" (Peter, 2026-09-29, through the project's coordinator.)
 
 ## Context

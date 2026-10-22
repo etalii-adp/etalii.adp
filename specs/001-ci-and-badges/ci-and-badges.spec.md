@@ -2,7 +2,7 @@
 
 **Feature Branch**: `features/001-ci-and-badges`
 **Created**: 2026-09-27
-**Status**: Draft
+**Status**: Completed (2026-09-27). Every task in [tasks.md](tasks.md) is ticked.
 **Input**: "add in etalii.adp repo a spec kit specification that all repos should have a github action, include badges and update them everywhere accordingly, also the corresponding badge in each of the repo's readme.md"
 
 ## Context

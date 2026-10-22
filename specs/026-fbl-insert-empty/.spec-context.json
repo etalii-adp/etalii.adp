@@ -3,8 +3,8 @@
   "specName": "026-fbl-insert-empty",
   "branch": "026-fbl-insert-empty",
   "selectedAt": "2026-10-13T13:15:47.251Z",
-  "currentStep": "specify",
-  "status": "draft",
+  "currentStep": "implement",
+  "status": "completed",
   "history": [],
   "telemetryInstanceId": "4a13de61-a3f8-4500-8cf1-15550cfe9fa8"
 }

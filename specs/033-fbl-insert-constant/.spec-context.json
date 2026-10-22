@@ -3,7 +3,7 @@
   "specName": "An Insert Writes a Constant",
   "branch": "features/033-fbl-insert-constant",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "completed",
   "history": [
     {
       "step": "specify",

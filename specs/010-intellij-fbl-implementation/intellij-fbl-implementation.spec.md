@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-06
 
-**Status**: Draft
+**Status**: Completed (2026-10-07). Every task in [tasks.md](tasks.md) is ticked.
 
 **Input**: The companion panel started this feature as "intellij fbl implementation" with no further description. It is read as the IntelliJ counterpart of [spec 009](../009-vscode-fbl-implementation/vscode-fbl-implementation.spec.md): a generic FBL implementation that can run in the IntelliJ Platform (in the `etalii.adp.ide.intellij` repository), with simple unit tests to validate that loading and saving work as expected, at minimum the same FBL unit tests as were added to the `etalii.adp.ide.standalone` repository.
 
