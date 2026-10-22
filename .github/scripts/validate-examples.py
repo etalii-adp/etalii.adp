@@ -50,6 +50,14 @@ The fixtures under a folder named `*-equivalence` read one model in different fo
 Every `*.dis` that validates is checked for the names DISL 0.4's constructs refer to (DISL section 14.1): a compartment's
 `groupBy` names an attribute of every item type it lists, of an enumeration type; a `force` layout's `tiers` name node
 types of the metamodel; and `persistence.view.bind` is used only with `format: "fbl"`, for kinds that `view.store` lists.
+It is also checked for its relation flags (DISL 0.6, sections 4.7 and 14.1 step 6): the relation types are put in their
+C3 linearisation, a cycle or an order C3 cannot make being a problem; each of `directed`, `allowSelfLoops` and
+`allowParallel` has the value of the nearest type in it that states the flag, else the section 4.9 default; a relation
+type that states a flag only narrows every direct supertype's value (`true` to `false`, and `directed` never differs);
+and one that does not state it has supertypes that agree on it. The `*.dis` documents under `specifications/disl/refused/`
+are, like the FBL ones, each valid against the schema and refused by one of these checks, and the run fails when one is
+accepted. The findings a definition gives (such as `service-calls.findings.json`) are validated against
+`$defs/ValidatorOutput` only; the hosts' tests compute them.
 
 A diagram type whose file has a JSON Schema beside its definition (`definitions/diagrams/<name>.schema.json`) shows a
 complete file in the first YAML block of its companion `<name>.md`; that example is validated against the schema, read
@@ -793,6 +801,7 @@ def resolve_disl(document) -> list[str]:
             for type_name in [tier] if isinstance(tier, str) else tier:
                 if type_name not in types:
                     problems.append(f"at /layout/algorithms/{name}/force/tiers/{index}: names the type {type_name!r}, which the metamodel does not declare")
+    problems += relation_flag_problems(metamodel.get("relations", {}))
     persistence = document.get("persistence", {})
     view = persistence.get("view", {})
     for kind in view.get("bind", {}):
@@ -800,6 +809,74 @@ def resolve_disl(document) -> list[str]:
             problems.append(f"at /persistence/view/bind/{kind}: view data is bound into a body only with format fbl")
         if kind not in view.get("store", []):
             problems.append(f"at /persistence/view/bind/{kind}: the kind {kind!r} is bound but view.store does not list it")
+    return problems
+
+
+RELATION_FLAGS = {"directed": True, "allowSelfLoops": False, "allowParallel": True}  # the defaults of DISL section 4.9
+
+
+def relation_flag_problems(relations) -> list[str]:
+    """Checks the relation flags of DISL 0.6 (sections 4.7 and 14.1 step 6): each flag a relation type does not state is
+    the value of the nearest type of its C3 linearisation that states it, else the 4.9 default; a stated flag only
+    narrows every direct supertype's value; and direct supertypes that differ in a flag the type does not state are an
+    error. A supertype the metamodel does not declare as a relation type is left to the other checks."""
+    problems, linearisations, failed = [], {}, set()
+
+    def parents(name):
+        extends = relations.get(name, {}).get("extends", [])
+        return [p for p in ([extends] if isinstance(extends, str) else extends) if p in relations]
+
+    def linearise(name, visiting=()):
+        if name in linearisations or name in failed:
+            return linearisations.get(name)
+        if name in visiting:
+            failed.add(name)
+            problems.append(f"at /metamodel/relations/{name}/extends: the relation type {name!r} is its own supertype (DISL section 4.7)")
+            return None
+        sequences = []
+        for parent in parents(name):
+            order = linearise(parent, visiting + (name,))
+            if order is None:
+                failed.add(name)
+                return None
+            sequences.append(list(order))
+        sequences.append(parents(name))
+        result = [name]
+        while any(sequences):
+            sequences = [s for s in sequences if s]
+            head = next((s[0] for s in sequences if not any(s[0] in other[1:] for other in sequences)), None)
+            if head is None:
+                failed.add(name)
+                problems.append(f"at /metamodel/relations/{name}/extends: the supertypes of {name!r} cannot be put in one order (C3, DISL section 4.7)")
+                return None
+            result.append(head)
+            sequences = [s[1:] if s[0] == head else s for s in sequences]
+        linearisations[name] = result
+        return result
+
+    def effective(name, flag):
+        for type_name in linearisations[name]:
+            if flag in relations[type_name]:
+                return relations[type_name][flag]
+        return RELATION_FLAGS[flag]
+
+    for name in relations:
+        linearise(name)
+    for name, declaration in relations.items():
+        if name not in linearisations or any(p not in linearisations for p in parents(name)):
+            continue
+        for flag in RELATION_FLAGS:
+            values = {parent: effective(parent, flag) for parent in parents(name)}
+            if flag in declaration:
+                stated = declaration[flag]
+                for parent, value in values.items():
+                    if flag == "directed" and stated != value:
+                        problems.append(f"at /metamodel/relations/{name}/{flag}: {name!r} states {flag} {str(stated).lower()}, which differs from the {str(value).lower()} of its supertype {parent!r} (DISL section 4.7)")
+                    elif flag != "directed" and stated is True and value is False:
+                        problems.append(f"at /metamodel/relations/{name}/{flag}: {name!r} states {flag} true, which widens the false of its supertype {parent!r} (DISL section 4.7)")
+            elif len(set(values.values())) > 1:
+                given = ", ".join(f"{str(value).lower()} from {parent!r}" for parent, value in values.items())
+                problems.append(f"at /metamodel/relations/{name}: {name!r} does not state {flag}, and its supertypes give it differently: {given} (DISL section 4.7)")
     return problems
 
 
@@ -975,7 +1052,9 @@ examples = [p for folder in folders for p in sorted(folder.rglob("*")) if is_exa
 for path in examples:
     name = path.relative_to(repository).as_posix()
     legacy = "legacy" in path.relative_to(repository).parts
-    refused = root / "fbl" / "refused" in path.parents  # FBL 0.8: bindings that a check of section 14.1 must refuse
+    refused_fbl = root / "fbl" / "refused" in path.parents  # FBL 0.8: bindings that a check of section 14.1 must refuse
+    refused_disl = root / "disl" / "refused" in path.parents  # DISL 0.6: specifications that a check of section 14.1 must refuse
+    refused = refused_fbl or refused_disl
     if path.suffix == ".adp":
         document, problem = parse_registration(path.read_bytes())
         reference, aliases = FBL_REGISTRATION, []
@@ -1019,7 +1098,7 @@ for path in examples:
     errors = sorted(validator.iter_errors(document), key=lambda e: list(e.absolute_path))
     if errors:
         failures += 1
-        print(f"FAIL {name}: {len(errors)} error(s)" + (" (a binding in refused/ must be valid against the schema and refused by section 14.1)" if refused else ""))
+        print(f"FAIL {name}: {len(errors)} error(s)" + (f" (a {'binding' if refused_fbl else 'specification'} in refused/ must be valid against the schema and refused by section 14.1)" if refused else ""))
         for error in errors[:10]:
             location = "/".join(str(part) for part in error.absolute_path) or "(root)"
             print(f"  at {location}: {error.message}")
@@ -1036,6 +1115,15 @@ for path in examples:
         print(f"FAIL {name}: {len(problems)} finding(s) on reading")
         for problem in problems[:10]:
             print(f"  {problem}")
+    elif refused_disl and reference == DISL:
+        if problems := resolve_disl(document):
+            print(f"ok   {name} (refused, as a specification in refused/ must be: {problems[0]})")
+        else:
+            failures += 1
+            print(f"FAIL {name}: a specification in refused/ must be refused by a check of DISL section 14.1, and this one is accepted")
+    elif refused_disl:
+        failures += 1
+        print(f"FAIL {name}: only DISL specifications belong in specifications/disl/refused/")
     elif refused and reference == FBL:
         if problems := resolve_names(document) + check_constants(document):
             print(f"ok   {name} (refused, as a binding in refused/ must be: {problems[0]})")
