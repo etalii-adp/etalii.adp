@@ -179,6 +179,12 @@
 
 - [x] T090 [P] Write the start-up probe and the benchmarks for SC-005, SC-006 and SC-008 with a generated 5,000-file workspace and a 1,000-element canvas; record the reference machine (R12) · etalii.adp.ide.desktop/benches/ and parity/reference-machine.md
 - [x] T091 [P] Measure SC-007 against the standalone host at `8b6ccfc` in Chrome and record it · etalii.adp.ide.desktop/parity/reference-machine.md
+- [ ] T099 [P] [US1] Offer Open with… on an explorer entry that several editors claim, as the standalone host's `editor.open-with` does, and set P-005 to `checked` · etalii.adp.ide.desktop/crates/adp-shell/src/explorer/
+- [ ] T100 [P] [US1] Open an explorer entry's context menu with Shift+F10 and the Menu key, as the standalone host's `ExplorerTreePanel.tsx` does, and set P-007 to `checked` · etalii.adp.ide.desktop/crates/adp-shell/src/explorer/
+- [ ] T101 [US1] Add the search panel beside the explorer, at least the standalone host's placeholder, and set P-015 to `checked` · etalii.adp.ide.desktop/crates/adp-shell/src/search.rs
+- [ ] T102 [US1] Test that the explorer and search, the tabs, the errors and warnings and the toolbox and properties panes resize, and set P-009 to `checked` (after T101) · etalii.adp.ide.desktop/crates/adp-shell/src/shell.rs
+- [ ] T103 [P] [US2] Add the ribbon with Save, New, Undo, Redo, Zoom In, Zoom Out, Fit to View and the contextual groups, as the standalone host's, and set P-010 to `checked` · etalii.adp.ide.desktop/crates/adp-shell/src/ribbon.rs
+- [ ] T104 [P] [US2] Draw the layout switcher on the canvas where a definition has several layout modes, as the standalone host's `layout-switcher` in `DiagramCanvas.tsx`, and set P-029 to `checked` · etalii.adp.ide.desktop/crates/adp-shell/src/canvas/
 - [ ] T092 Sign the Windows installers and sign and notarise the macOS ones with the maintainer's certificates (R11) · etalii.adp.ide.desktop/.github/workflows/build.yml
 - [ ] T093 Set every inventory row to `checked`, or list what is left; release 1.0 when none is (SC-002) · etalii.adp.ide.desktop/parity/inventory.md
 - [ ] T094 Tick in this file every task whose pull request is merged, and record the release in the feature's state · etalii.adp/specs/030-desktop-native-rust/tasks.md
