@@ -39,6 +39,13 @@
               "reason": "truncated"
             }
           },
+          "notice": {
+            "text": {
+              "cel": "'Showing ' + string(budget('elements').shown) + ' of ' + string(budget('elements').total) + ' elements — edits are withheld on this truncated view'"
+            },
+            "severity": "warning",
+            "position": "top"
+          },
           "doc": "At most 1000 nodes are drawn; an edge is drawn only when both its ends are. Today the cut walks whole units, a named node with its expressions and anchors, in order of first appearance (`w3c-owl.md`)."
         }
       }
@@ -47,7 +54,6 @@
       "conformance": "standard",
       "features": [
         "limits.budgets",
-        "canvas.notices",
         "persistence.fbl"
       ]
     },
@@ -655,76 +661,8 @@
         "maxDepth": 1000,
         "atMaxDepth": "'…'"
       },
-      "cel": "kind == 'iri' ? owlDisplay(term) : (kind == 'literal' ? term : (kind != 'blank' ? '?' : (depth > cap ? '…' : (term in path ? '…' : owlStructure(term, depth, path + [term], cap)))))",
-      "doc": "The Manchester-style text of a term inside an expression: a named term's display, a literal's lexical form, a nested expression's structure, `…` past the depth cap or at a revisit."
-    },
-    "owlMembersText": {
-      "params": [
-        {
-          "name": "head",
-          "type": "string"
-        },
-        {
-          "name": "kind",
-          "type": "string"
-        },
-        {
-          "name": "depth",
-          "type": "int"
-        },
-        {
-          "name": "path",
-          "type": "list"
-        },
-        {
-          "name": "cap",
-          "type": "int"
-        },
-        {
-          "name": "separator",
-          "type": "string"
-        }
-      ],
-      "returns": "string",
-      "uses": [
-        "diagram"
-      ],
-      "recursion": {
-        "maxDepth": 1000,
-        "atMaxDepth": "'…'"
-      },
-      "cel": "kind != 'blank' ? '?' : cel.bind(ms, collectionMembers(head), ms.size() == 0 ? '?' : ms.map(m, owlText(m.o, m.oKind, depth + 1, path, cap)).join(separator))",
-      "doc": "A set operator's list, each member rendered one level deeper, `?` for an empty list."
-    },
-    "owlStructure": {
-      "params": [
-        {
-          "name": "blank",
-          "type": "string"
-        },
-        {
-          "name": "depth",
-          "type": "int"
-        },
-        {
-          "name": "path",
-          "type": "list"
-        },
-        {
-          "name": "cap",
-          "type": "int"
-        }
-      ],
-      "returns": "string",
-      "uses": [
-        "diagram"
-      ],
-      "recursion": {
-        "maxDepth": 1000,
-        "atMaxDepth": "'…'"
-      },
-      "cel": "cel.bind(about, owlAbout(blank), cel.bind(op, about.filter(t, t.p in ['http://www.w3.org/2002/07/owl#unionOf', 'http://www.w3.org/2002/07/owl#intersectionOf', 'http://www.w3.org/2002/07/owl#complementOf', 'http://www.w3.org/2002/07/owl#oneOf']), op.size() > 0 ? (op[0].p == 'http://www.w3.org/2002/07/owl#unionOf' ? '(' + owlMembersText(op[0].o, op[0].oKind, depth, path, cap, ' ∪ ') + ')' : (op[0].p == 'http://www.w3.org/2002/07/owl#intersectionOf' ? '(' + owlMembersText(op[0].o, op[0].oKind, depth, path, cap, ' ∩ ') + ')' : (op[0].p == 'http://www.w3.org/2002/07/owl#complementOf' ? '¬' + owlText(op[0].o, op[0].oKind, depth + 1, path, cap) : '{' + owlMembersText(op[0].o, op[0].oKind, depth, path, cap, ', ') + '}'))) : cel.bind(pr, about.filter(t, t.p == 'http://www.w3.org/2002/07/owl#onProperty'), cel.bind(pt, pr.size() > 0 && pr[0].oKind == 'iri' ? owlDisplay(pr[0].o) : '?', cel.bind(q, about.filter(t, t.p in ['http://www.w3.org/2002/07/owl#someValuesFrom', 'http://www.w3.org/2002/07/owl#allValuesFrom', 'http://www.w3.org/2002/07/owl#hasValue', 'http://www.w3.org/2002/07/owl#cardinality', 'http://www.w3.org/2002/07/owl#minCardinality', 'http://www.w3.org/2002/07/owl#maxCardinality', 'http://www.w3.org/2002/07/owl#qualifiedCardinality', 'http://www.w3.org/2002/07/owl#minQualifiedCardinality', 'http://www.w3.org/2002/07/owl#maxQualifiedCardinality']), q.size() == 0 ? '? ' + pt : (q[0].p in ['http://www.w3.org/2002/07/owl#someValuesFrom', 'http://www.w3.org/2002/07/owl#allValuesFrom', 'http://www.w3.org/2002/07/owl#hasValue'] ? {'http://www.w3.org/2002/07/owl#someValuesFrom': '∃', 'http://www.w3.org/2002/07/owl#allValuesFrom': '∀', 'http://www.w3.org/2002/07/owl#hasValue': '∋'}[q[0].p] + ' ' + pt + '.' + owlText(q[0].o, q[0].oKind, depth + 1, path, cap) : cel.bind(head, {'http://www.w3.org/2002/07/owl#cardinality': '=', 'http://www.w3.org/2002/07/owl#minCardinality': '≥', 'http://www.w3.org/2002/07/owl#maxCardinality': '≤', 'http://www.w3.org/2002/07/owl#qualifiedCardinality': '=', 'http://www.w3.org/2002/07/owl#minQualifiedCardinality': '≥', 'http://www.w3.org/2002/07/owl#maxQualifiedCardinality': '≤'}[q[0].p] + ' ' + (q[0].oKind == 'literal' ? q[0].o : '?') + ' ' + pt, !(q[0].p in ['http://www.w3.org/2002/07/owl#qualifiedCardinality', 'http://www.w3.org/2002/07/owl#minQualifiedCardinality', 'http://www.w3.org/2002/07/owl#maxQualifiedCardinality']) ? head : cel.bind(f, about.filter(t, t.p == 'http://www.w3.org/2002/07/owl#onClass' || t.p == 'http://www.w3.org/2002/07/owl#onDataRange'), f.size() > 0 ? head + '.' + owlText(f[0].o, f[0].oKind, depth + 1, path, cap) : head))))))))",
-      "doc": "An expression's own text: `(A ∪ B)`, `(A ∩ B)`, `¬A`, `{a, b}` for the first operator triple; else a restriction, `∃ p.C`, `∀ p.C`, `∋ p.v`, `= n p`, `≥ n p`, `≤ n p` and the qualified forms with `.C`, `?` standing for a missing property or count, and `? p` when there is no quantifier."
+      "cel": "kind == 'iri' ? owlDisplay(term) : (kind == 'literal' ? term : (kind != 'blank' ? '?' : (depth > cap || term in path ? '…' : cel.bind(about, owlAbout(term), cel.bind(inner, path + [term], cel.bind(op, about.filter(t, t.p in ['http://www.w3.org/2002/07/owl#unionOf', 'http://www.w3.org/2002/07/owl#intersectionOf', 'http://www.w3.org/2002/07/owl#complementOf', 'http://www.w3.org/2002/07/owl#oneOf']), op.size() > 0 ? cel.bind(members, op[0].oKind != 'blank' ? [] : collectionMembers(op[0].o).map(m, owlText(m.o, m.oKind, depth + 1, inner, cap)), op[0].p == 'http://www.w3.org/2002/07/owl#unionOf' ? '(' + (members.size() == 0 ? '?' : members.join(' ∪ ')) + ')' : (op[0].p == 'http://www.w3.org/2002/07/owl#intersectionOf' ? '(' + (members.size() == 0 ? '?' : members.join(' ∩ ')) + ')' : (op[0].p == 'http://www.w3.org/2002/07/owl#complementOf' ? '¬' + owlText(op[0].o, op[0].oKind, depth + 1, inner, cap) : '{' + (members.size() == 0 ? '?' : members.join(', ')) + '}'))) : cel.bind(pr, about.filter(t, t.p == 'http://www.w3.org/2002/07/owl#onProperty'), cel.bind(pt, pr.size() > 0 && pr[0].oKind == 'iri' ? owlDisplay(pr[0].o) : '?', cel.bind(q, about.filter(t, t.p in ['http://www.w3.org/2002/07/owl#someValuesFrom', 'http://www.w3.org/2002/07/owl#allValuesFrom', 'http://www.w3.org/2002/07/owl#hasValue', 'http://www.w3.org/2002/07/owl#cardinality', 'http://www.w3.org/2002/07/owl#minCardinality', 'http://www.w3.org/2002/07/owl#maxCardinality', 'http://www.w3.org/2002/07/owl#qualifiedCardinality', 'http://www.w3.org/2002/07/owl#minQualifiedCardinality', 'http://www.w3.org/2002/07/owl#maxQualifiedCardinality']), q.size() == 0 ? '? ' + pt : (q[0].p in ['http://www.w3.org/2002/07/owl#someValuesFrom', 'http://www.w3.org/2002/07/owl#allValuesFrom', 'http://www.w3.org/2002/07/owl#hasValue'] ? {'http://www.w3.org/2002/07/owl#someValuesFrom': '∃', 'http://www.w3.org/2002/07/owl#allValuesFrom': '∀', 'http://www.w3.org/2002/07/owl#hasValue': '∋'}[q[0].p] + ' ' + pt + '.' + owlText(q[0].o, q[0].oKind, depth + 1, inner, cap) : cel.bind(head, {'http://www.w3.org/2002/07/owl#cardinality': '=', 'http://www.w3.org/2002/07/owl#minCardinality': '≥', 'http://www.w3.org/2002/07/owl#maxCardinality': '≤', 'http://www.w3.org/2002/07/owl#qualifiedCardinality': '=', 'http://www.w3.org/2002/07/owl#minQualifiedCardinality': '≥', 'http://www.w3.org/2002/07/owl#maxQualifiedCardinality': '≤'}[q[0].p] + ' ' + (q[0].oKind == 'literal' ? q[0].o : '?') + ' ' + pt, !(q[0].p in ['http://www.w3.org/2002/07/owl#qualifiedCardinality', 'http://www.w3.org/2002/07/owl#minQualifiedCardinality', 'http://www.w3.org/2002/07/owl#maxQualifiedCardinality']) ? head : cel.bind(f, about.filter(t, t.p == 'http://www.w3.org/2002/07/owl#onClass' || t.p == 'http://www.w3.org/2002/07/owl#onDataRange'), f.size() > 0 ? head + '.' + owlText(f[0].o, f[0].oKind, depth + 1, inner, cap) : head))))))))))))",
+      "doc": "The Manchester-style text of a term inside an expression: a named term's display, a literal's lexical form, `…` past the depth cap or at a node already on the path; for a blank node, the first operator triple as `(A ∪ B)`, `(A ∩ B)`, `¬A` or `{a, b}` with `?` for an empty list, else a restriction, `∃ p.C`, `∀ p.C`, `∋ p.v`, `= n p`, `≥ n p`, `≤ n p` and the qualified forms with `.C`, `?` standing for a missing property or count and `? p` for a missing quantifier."
     },
     "owlListBroken": {
       "params": [
@@ -2593,19 +2531,6 @@
         "reconnectable": false,
         "deletable": false
       }
-    },
-    "canvas": {
-      "notices": [
-        {
-          "id": "budget:elements",
-          "severity": "warning",
-          "position": "top",
-          "text": {
-            "cel": "'Showing ' + string(budget('elements').shown) + ' of ' + string(budget('elements').total) + ' elements — edits are withheld on this truncated view'"
-          },
-          "doc": "The truncation banner, shown only while the elements budget truncates."
-        }
-      ]
     }
   },
   "forms": {

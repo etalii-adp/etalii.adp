@@ -33,6 +33,13 @@
               "reason": "truncated"
             }
           },
+          "notice": {
+            "text": {
+              "cel": "'Showing ' + string(budget('cards').shown) + ' of ' + string(budget('cards').total) + ' resources — edits are withheld on this truncated view'"
+            },
+            "severity": "warning",
+            "position": "top"
+          },
           "doc": "At most 1000 cards are drawn, in the order the file first names them; a statement is drawn only when both its cards are. While it truncates, every edit through the diagram is withheld and moves stay allowed."
         }
       }
@@ -41,7 +48,6 @@
       "conformance": "standard",
       "features": [
         "limits.budgets",
-        "canvas.notices",
         "persistence.fbl"
       ]
     },
@@ -828,19 +834,6 @@
           "doc": "A statement starts at a card's left or right side; the card dragged from becomes its subject."
         }
       }
-    },
-    "canvas": {
-      "notices": [
-        {
-          "id": "budget:cards",
-          "severity": "warning",
-          "position": "top",
-          "text": {
-            "cel": "'Showing ' + string(budget('cards').shown) + ' of ' + string(budget('cards').total) + ' resources — edits are withheld on this truncated view'"
-          },
-          "doc": "The truncation banner, shown only while the cards budget truncates."
-        }
-      ]
     }
   },
   "forms": {
