@@ -39,6 +39,11 @@ declared or not, and what follows the blocks is kept, as FBL 0.7 section 8.1 say
 then checked for its names (FBL section 14.1, step 4): every rule a `parent`, `cascade`, `reference.to`, `within` or
 `files` names exists in its binding (in the `bullets` family `within` names sections), and a reference's `by` is an attribute every rule it names binds, or `id` when
 every rule it names stores its id with `id.from` (the specification languages reserve `id`, so it is never an attribute's name).
+It is also checked for its constants (FBL 0.8, section 14.1, step 6): an insert's `constant` stands only on a rule that
+reads the yaml or json family, and none of its keys is a key the same rule writes, through a writable attribute
+binding, its id or one of its ends. The `*.fbl` documents under `specifications/fbl/refused/` are the other way
+round: each must be valid against the schema and refused by one of these checks, and the run fails when one is
+accepted.
 The fixtures under a folder named `*-equivalence` read one model in different formats: their `read` must be identical.
 
 Every `*.dis` that validates is checked for the names DISL 0.4's constructs refer to (DISL section 14.1): a compartment's
@@ -683,6 +688,40 @@ def resolve_names(document) -> list[str]:
     return problems
 
 
+def check_constants(document) -> list[str]:
+    """Checks an insert's constants (FBL 0.8, section 14.1, step 6) and returns a problem per constant that stands in
+    a binding of another family than yaml or json, or whose key the same rule also writes: through a writable
+    attribute binding, its id or one of its ends. The schema refuses a constant beside emit, and on a binding whose
+    file body names another family; a folder body's families are its file rules', checked here."""
+    problems = []
+    for binding_name, binding in document.get("bindings", {}).items():
+        base = f"/bindings/{binding_name}"
+        body = binding.get("body", {})
+        file_families = {rule["name"]: rule.get("family") for rule in body.get("files", [])}
+        for kind in ("elements", "relations"):
+            for index, rule in enumerate(binding.get(kind, [])):
+                constant = rule.get("insert", {}).get("constant")
+                if not constant:
+                    continue
+                pointer = f"{base}/{kind}/{index}/insert/constant"
+                families = [file_families.get(name) for name in rule.get("files", [])] or [body.get("family")]
+                for family in families:
+                    if family not in ("yaml", "json"):
+                        problems.append(f"at {pointer}: a constant is written only in the yaml and json families, and this rule reads {family!r}")
+                written = {}  # key -> what the rule writes there
+                if not binding.get("readOnly") and not rule.get("readOnly"):
+                    for attribute, attribute_binding in rule.get("attributes", {}).items():
+                        if isinstance(attribute_binding, dict) and "key" in attribute_binding and "child" not in attribute_binding and not attribute_binding.get("readOnly"):
+                            written.setdefault(attribute_binding["key"], f"the attribute {attribute!r}")
+                    for slot_name, slot in (("id", rule.get("id", {}).get("from")), ("source", rule.get("source")), ("target", rule.get("target"))):
+                        if isinstance(slot, dict) and "key" in slot and "child" not in slot:
+                            written.setdefault(slot["key"], f"its {slot_name}")
+                for key in constant:
+                    if key in written:
+                        problems.append(f"at {pointer}/{key}: the rule {rule['name']!r} also writes the key {key!r}, through {written[key]}")
+    return problems
+
+
 # The names DISL section 2.2 reserves: the built-in fields of an element in CEL, and CEL's keywords. An attribute
 # with one of them would be shadowed by the field, so a host refuses the specification.
 DISL_RESERVED = {
@@ -926,6 +965,7 @@ examples = [p for folder in folders for p in sorted(folder.rglob("*")) if is_exa
 for path in examples:
     name = path.relative_to(repository).as_posix()
     legacy = "legacy" in path.relative_to(repository).parts
+    refused = root / "fbl" / "refused" in path.parents  # FBL 0.8: bindings that a check of section 14.1 must refuse
     if path.suffix == ".adp":
         document, problem = parse_registration(path.read_bytes())
         reference, aliases = FBL_REGISTRATION, []
@@ -969,7 +1009,7 @@ for path in examples:
     errors = sorted(validator.iter_errors(document), key=lambda e: list(e.absolute_path))
     if errors:
         failures += 1
-        print(f"FAIL {name}: {len(errors)} error(s)")
+        print(f"FAIL {name}: {len(errors)} error(s)" + (" (a binding in refused/ must be valid against the schema and refused by section 14.1)" if refused else ""))
         for error in errors[:10]:
             location = "/".join(str(part) for part in error.absolute_path) or "(root)"
             print(f"  at {location}: {error.message}")
@@ -986,7 +1026,13 @@ for path in examples:
         print(f"FAIL {name}: {len(problems)} finding(s) on reading")
         for problem in problems[:10]:
             print(f"  {problem}")
-    elif reference in (FBL, DESL, DISL) and (problems := (resolve_names(document) if reference == FBL else resolve_desl(path, document) if reference == DESL else resolve_disl(document))):
+    elif refused and reference == FBL:
+        if problems := resolve_names(document) + check_constants(document):
+            print(f"ok   {name} (refused, as a binding in refused/ must be: {problems[0]})")
+        else:
+            failures += 1
+            print(f"FAIL {name}: a binding in refused/ must be refused by a check of FBL section 14.1, and this one is accepted")
+    elif reference in (FBL, DESL, DISL) and (problems := (resolve_names(document) + check_constants(document) if reference == FBL else resolve_desl(path, document) if reference == DESL else resolve_disl(document))):
         failures += 1
         print(f"FAIL {name}: {len(problems)} name problem(s)")
         for problem in problems[:10]:

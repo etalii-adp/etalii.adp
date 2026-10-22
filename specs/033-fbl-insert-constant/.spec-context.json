@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "An Insert Writes a Constant",
   "branch": "features/033-fbl-insert-constant",
-  "currentStep": "tasks",
-  "status": "ready-to-implement",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -53,7 +53,13 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-10-22T11:27:39.190Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-22T12:07:28.023Z"
     }
-  ],
-  "workingBranch": "features/033-fbl-insert-constant-plan"
+  ]
 }
