@@ -174,7 +174,7 @@
 ## Phase 9: Polish and release
 
 - [x] T090 [P] Write the start-up probe and the benchmarks for SC-005, SC-006 and SC-008 with a generated 5,000-file workspace and a 1,000-element canvas; record the reference machine (R12) · etalii.adp.ide.desktop/benches/ and parity/reference-machine.md
-- [ ] T091 [P] Measure SC-007 against the standalone host at `8b6ccfc` in Chrome and record it · etalii.adp.ide.desktop/parity/reference-machine.md
+- [x] T091 [P] Measure SC-007 against the standalone host at `8b6ccfc` in Chrome and record it · etalii.adp.ide.desktop/parity/reference-machine.md
 - [ ] T092 Sign the Windows installers and sign and notarise the macOS ones with the maintainer's certificates (R11) · etalii.adp.ide.desktop/.github/workflows/build.yml
 - [ ] T093 Set every inventory row to `checked`, or list what is left; release 1.0 when none is (SC-002) · etalii.adp.ide.desktop/parity/inventory.md
 - [ ] T094 Tick in this file every task whose pull request is merged, and record the release in the feature's state · etalii.adp/specs/030-desktop-native-rust/tasks.md
