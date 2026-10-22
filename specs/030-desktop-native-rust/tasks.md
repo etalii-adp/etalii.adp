@@ -154,7 +154,7 @@
 - [x] T082 [P] [US5] .NET dependency graph (`.sln`, `.slnx`, read-only) · etalii.adp.ide.desktop/modules/diagrams/dotnet-dependency-graph/
 - [x] T083 [P] [US5] RDF (`.ttl`, `.nt`) with its readings OWL, SKOS and SHACL · etalii.adp.ide.desktop/modules/diagrams/rdf/
 - [x] T084 [P] [US5] SPARQL query (`.rq`, read-only) · etalii.adp.ide.desktop/modules/diagrams/sparql/
-- [ ] T085 [US5] Check the inventory's tool type rows against the standalone host's `docs/tools.md` at `8b6ccfc`; add a task here for any working tool type the list above misses · etalii.adp.ide.desktop/parity/inventory.md
+- [x] T085 [US5] Check the inventory's tool type rows against the standalone host's `docs/tools.md` at `8b6ccfc`; add a task here for any working tool type the list above misses · etalii.adp.ide.desktop/parity/inventory.md
 
 **Checkpoint**: every tool type row of the inventory is `built`.
 
