@@ -1,0 +1,23 @@
+{
+  "workflow": "speckit",
+  "specName": "One Language for Every Tool Type",
+  "branch": "claude/project-thread-kykv1z",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-22T21:58:15.000Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-22T22:02:45.883Z"
+    }
+  ]
+}
