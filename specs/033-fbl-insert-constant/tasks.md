@@ -2,9 +2,9 @@
 
 **Input**: [fbl-insert-constant.spec.md](fbl-insert-constant.spec.md), [plan.md](plan.md), [research.md](research.md), [data-model.md](data-model.md), [contracts/](contracts/), [quickstart.md](quickstart.md)
 
-Paths carry their repository as prefix: `etalii.adp/...` and `etalii.adp.ide.standalone/...`, the clones side by side. Each repository gets its own branch `features/033-fbl-insert-constant` and its own pull request; the etalii.adp one merges first, and a task of `etalii.adp.ide.standalone` is ticked here only once that repository's pull request is merged.
+Paths carry their repository as prefix: `etalii.adp/...`, `etalii.adp.ide.standalone/...`, `etalii.adp.ide.vscode/...`, `etalii.adp.ide.intellij/...` and `etalii.adp.ide.notion/...`, the clones side by side. Each repository gets its own branch `features/033-fbl-insert-constant` and its own pull request, whose description links `specs/033-fbl-insert-constant/` here and names the etalii.adp commit its tasks were taken from. The etalii.adp one merges first; Visual Studio Code's before Notion's. A task of another repository is ticked here only once that repository's pull request is merged (the maintainer's ruling "Approve, all hosts", 2026-10-22, puts every host in this feature).
 
-Every etalii.adp task is checked by `python .github/scripts/validate-examples.py`, `python .github/scripts/terminology-check.py --name etalii.adp` and `python .github/scripts/licence-check.py`, each exit code captured. Every standalone task is checked by that repository's four gates and by `bash .github/tools/inspect/inspect.sh` (constitution principle VI), and every test there is seen to fail before the code it covers.
+Every etalii.adp task is checked by `python .github/scripts/validate-examples.py`, `python .github/scripts/terminology-check.py --name etalii.adp` and `python .github/scripts/licence-check.py`, each exit code captured. Every standalone task is checked by that repository's four gates and by `bash .github/tools/inspect/inspect.sh` (constitution principle VI); every Visual Studio Code task by `npm run check` and `npm run test:unit`, and `npm run test:vscode` (a real Visual Studio Code) where the container can run it; every IntelliJ task by `./gradlew build`; every Notion task by `npm test`, `npm run lint`, `npm run typecheck`, `node scripts/sync-fbl.mjs --check` and `node scripts/build.mjs --out <dir>` with `node scripts/check-tree.mjs <dir>`. In every host, a test is seen to fail before the code it covers, and a gate the container cannot run is named as not run and left to that repository's CI.
 
 ## Phase 1: Foundational, the version
 
@@ -36,25 +36,57 @@ Every etalii.adp task is checked by `python .github/scripts/validate-examples.py
 - [ ] T014 [US2] Add `etalii.adp/specifications/fbl/refused/README.md` (what the folder is, the validator's contract of `contracts/fixtures.md`) and `etalii.adp/specifications/fbl/refused/insert-constant-collision.fbl`: a yaml binding with one rule whose `constant` key `type` is bound by a writable attribute, and one whose `type` is read by a read-only attribute, its `doc` naming the check it fails (FR-006, FR-011).
 - [ ] T015 [US2] See the validator fail when the colliding attribute in T014 is made read-only, and when a copy of T008's binding declares a `lines` body (the schema refuses it), and pass again when each is restored (FR-006, FR-008).
 
-## Phase 4: User Story 3, a host can be checked against it (P3)
+## Phase 4: Closing the etalii.adp change
+
+- [ ] T016 Confirm that no file under `etalii.adp/specifications/disl/`, `etalii.adp/specifications/desl/` or `etalii.adp/specifications/did/` changed, and that `persistence.typeMap` is untouched (FR-013).
+- [ ] T017 Copy every `insert` object of the binding draft in the appendix of `etalii.adp.ide.standalone/.spec-workflow/specs/functional-decomposition-graph-disl-fbl/requirements.md` into a scratch FBL 0.8 document and validate it against T007's schema: the draft's `constant` is valid FBL (SC-002). Nothing of the scratch document is committed.
+- [ ] T018 Run the three etalii.adp checks; confirm that every existing example and fixture keeps its result (SC-004), and read section 6.2 alone against `insert-constant-yaml` to say which bytes each add writes (SC-001).
+- [ ] T019 Run the coverage diff: every FR and SC of the specification against the requirement references of these tasks, then read two traces back to their artefacts and ask whether the evidence is that criterion's. Open the etalii.adp pull request into `develop`; tick T001 to T019 in it.
+
+## Phase 5: User Story 3 in etalii.adp.ide.standalone (P3)
 
 **Goal**: the standalone FBL library writes the constant as the fixtures state, and the conversion that waits on it can start.
-**Independent test**: the vendored `insert-constant-*` fixtures run green in `EtAlii.Adp.Specification.Fbl.Tests`, and each new test failed before the library change.
+**Independent test**: the vendored `insert-constant-*` fixtures run green in `EtAlii.Adp.Specification.Fbl.Tests`, the refused binding is refused, and each new test failed before the library change.
 
-These tasks start once the etalii.adp pull request of Phases 1 to 3 is merged, in a worktree of `etalii.adp.ide.standalone` on `features/033-fbl-insert-constant` with `git config --worktree user.name "agent-<N>-fbl-insert-constant"`.
+From here on, each host starts once the etalii.adp pull request is merged, in a worktree of its repository on `features/033-fbl-insert-constant` with `git config --worktree user.name "agent-<N>-fbl-insert-constant"`.
 
-- [ ] T016 [US3] Vendor the four `insert-constant-*` fixture folders from the merged etalii.adp commit into `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/fixtures/`, unchanged, and record them, the commit and why in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/readme.md`; add each new extension to `.gitattributes` there only if its existing rules under `Conformance/` do not already keep it as written. Run them and see the two add fixtures fail.
-- [ ] T017 [US3] Write `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Planning/InsertConstant.Tests.cs` and add cases to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Loading/Loading.Tests.cs`, each seen to fail first: a constant at its place in `keys` and after them; a string that is not plain-safe; a number and a bool written as their JSON type in json and yaml; a set that leaves the constant; the refusals of T012 (a writable slot on the key, `id.from` on the key, a `lines` body, with `emit`) and the read-only binding that is not refused.
-- [ ] T018 [US3] Implement the constant in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/FblModelTypes.cs` (`InsertSettings.Constant`, in member order), `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/BindingReader.cs` (read `constant`), `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/BindingChecker.cs` (the checks of T012) and `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Rules/FamilyReader.cs` (`InsertValues` yields the constants by research R2). In `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Files/Json/JsonFamily.cs` and `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Files/Yaml/YamlFamily.cs`, write a constant's value as its JSON type: today a value with no binding is written as a string (`JsonFamily`, the `v.Binding is null` branch). Leave the minor version `FblDocumentLoader.cs` declares as it is (research R9). T016's fixtures and T017's tests pass; the four gates and `inspect.sh` exit zero, each by its captured exit code.
-- [ ] T019 [US3] Open the standalone pull request into `develop`, its description linking `specs/033-fbl-insert-constant/` in etalii.adp and naming the etalii.adp commit these tasks were taken from; tick T016 to T018 here once it is merged.
-- [ ] T020 [US3] In `etalii.adp.ide.standalone/.spec-workflow/specs/functional-decomposition-graph-disl-fbl/` (`tasks.md` task 9 and its L6 bullet, `design.md` row L6 and the waits table), say that the constant is in the library by this feature and task 9 no longer waits: a small amendment, sent to the Scrum master as a selection and applied by that specification's owner (SC-005).
+- [ ] T020 [US3] Vendor the four `insert-constant-*` fixture folders and `refused/insert-constant-collision.fbl` from the merged etalii.adp commit into `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/`, unchanged, and record them, the commit and why in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/readme.md`; add a rule to `.gitattributes` there only if its existing rules under `Conformance/` do not already keep them as written. Run them and see the two add fixtures fail.
+- [ ] T021 [US3] Write `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Planning/InsertConstant.Tests.cs` and add cases to `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Loading/Loading.Tests.cs`, each seen to fail first: a constant at its place in `keys` and after them; a string that is not plain-safe; a number and a bool written as their JSON type in json and yaml; a set that leaves the constant; the refusals of T012 (a writable slot on the key, `id.from` on the key, a `lines` body, with `emit`), the vendored refused binding, and the read-only binding that is not refused.
+- [ ] T022 [US3] Implement the constant in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/FblModelTypes.cs` (`InsertSettings.Constant`, in member order), `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/BindingReader.cs` (read `constant`), `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/BindingChecker.cs` (the checks of T012) and `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Rules/FamilyReader.cs` (`InsertValues` yields the constants by research R2). In `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Files/Json/JsonFamily.cs` and `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Files/Yaml/YamlFamily.cs`, write a constant's value as its JSON type: today a value with no binding is written as a string (`JsonFamily`, the `v.Binding is null` branch). Leave the minor version `FblDocumentLoader.cs` declares as it is (research R9). T020's fixtures and T021's tests pass; the four gates and `inspect.sh` exit zero, each by its captured exit code.
+- [ ] T023 [US3] Open the standalone pull request into `develop`; tick T020 to T022 here once it is merged.
+- [ ] T024 [US3] In `etalii.adp.ide.standalone/.spec-workflow/specs/functional-decomposition-graph-disl-fbl/` (`tasks.md` task 9 and its L6 bullet, `design.md` row L6 and the waits table), say that the constant is in the library by this feature and task 9 no longer waits: a small amendment, sent to the Scrum master as a selection and applied by that specification's owner, once T023 is merged (SC-005).
 
-## Phase 5: Polish
+## Phase 6: User Story 3 in etalii.adp.ide.vscode (P3)
 
-- [ ] T021 Confirm that no file under `etalii.adp/specifications/disl/`, `etalii.adp/specifications/desl/` or `etalii.adp/specifications/did/` changed, and that `persistence.typeMap` is untouched (FR-013).
-- [ ] T022 Copy every `insert` object of the binding draft in the appendix of `etalii.adp.ide.standalone/.spec-workflow/specs/functional-decomposition-graph-disl-fbl/requirements.md` into a scratch FBL 0.8 document and validate it against T007's schema: the draft's `constant` is valid FBL (SC-002). Nothing of the scratch document is committed.
-- [ ] T023 Run the three etalii.adp checks; confirm that every existing example and fixture keeps its result (SC-004), and read section 6.2 alone against `insert-constant-yaml` to say which bytes each add writes (SC-001).
-- [ ] T024 Run the coverage diff: every FR and SC of the specification against the requirement references of these tasks, then read two traces back to their artefacts and ask whether the evidence is that criterion's. Open the etalii.adp pull request into `develop`.
+**Goal**: the Visual Studio Code FBL library, and through it the Notion copy, writes the constant as the fixtures state.
+**Independent test**: the vendored fixtures run green in `test/core/fbl/conformanceFixtures.test.ts`, the refused binding is refused in `test/core/fbl/loading.test.ts`, and each new test failed first.
+
+This library reads FBL 0.6 (`supportedMinor = 6`). It implements the 0.8 constant only, not what 0.7 added: the constant depends on nothing of 0.7 (research R9). It does not raise `supportedMinor`, so a binding that declares 0.8 still loads with the newer-version warning section 2.7 asks for.
+
+- [ ] T025 [US3] Vendor the four `insert-constant-*` fixture folders and `refused/insert-constant-collision.fbl` from the merged etalii.adp commit into `etalii.adp.ide.vscode/fixtures/fbl/conformance/`, unchanged, recording them under a new source of that commit, with each file's SHA-256, in `etalii.adp.ide.vscode/fixtures/fbl/manifest.json`; the older sources stay at their commits. Run the conformance test and see the two add fixtures fail.
+- [ ] T026 [US3] Add to `etalii.adp.ide.vscode/test/core/fbl/planning.test.ts` and `etalii.adp.ide.vscode/test/core/fbl/loading.test.ts` the cases of T021, each seen to fail first.
+- [ ] T027 [US3] Implement the constant in `etalii.adp.ide.vscode/src/core/fbl/documents/types.ts` (`constant` on the insert settings), `etalii.adp.ide.vscode/src/core/fbl/documents/documentLoader.ts` (read it, and the checks of T012), `etalii.adp.ide.vscode/src/core/fbl/families/yaml/yamlFamily.ts` and `etalii.adp.ide.vscode/src/core/fbl/families/json/jsonFamily.ts` (a new entry's keys by research R2, each constant written as its JSON type). T025's fixtures and T026's tests pass; `npm run check` and `npm run test:unit` exit zero; `npm run test:vscode`, which needs a real Visual Studio Code, is run if the container can, and otherwise named as left to CI.
+- [ ] T028 [US3] Open the Visual Studio Code pull request into `develop`; tick T025 to T027 here once it is merged. It does not touch spec 027's branch.
+
+## Phase 7: User Story 3 in etalii.adp.ide.intellij (P3)
+
+**Goal**: the IntelliJ FBL library writes the constant as the fixtures state.
+**Independent test**: the vendored fixtures run green in `ConformanceFixturesTest`, the refused binding is refused in `LoadingTest`, and each new test failed first.
+
+This library reads FBL 0.1 and warns on any newer minor. It implements the 0.8 constant only, not what 0.2 to 0.7 added: the constant depends on none of it, since it uses `keys`, `skeleton`, `emit`, the yaml and json writing of section 6.3 and the one-place rule, all of 0.1. The one later construct the fixtures use is the `attributes` a fixture's `read` states (0.5, section 15.3); the read-back fixtures still prove FR-009 by the element types, which the runner compares today, and the runner compares `attributes` too if T030 shows it can at no cost to the existing corpus (research R9).
+
+- [ ] T029 [US3] Vendor the four `insert-constant-*` fixture folders and `refused/insert-constant-collision.fbl` from the merged etalii.adp commit, unchanged, into `etalii.adp.ide.intellij/fbl/testdata/conformance-0.8/`, with its own `README.md` (source, commit, licence, why it sits apart) and `SHA256SUMS`, so that `fbl/testdata/conformance/`, the whole-corpus copy of FBL 0.1, keeps its rule; extend `CorpusUnchangedTest` and `ConformanceFixturesTest` under `etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/conformance/` to read it. See the two add fixtures fail.
+- [ ] T030 [US3] Add the cases of T021 to `etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/document/LoadingTest.java` and a new `etalii.adp.ide.intellij/fbl/src/test/java/etalii/adp/fbl/plan/InsertConstantTest.java`, each seen to fail first.
+- [ ] T031 [US3] Implement the constant in `etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/document/InsertSettings.java`, `etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/document/BindingReader.java`, `etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/document/BindingChecker.java` (the checks of T012), `etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/yaml/YamlFamily.java` and `etalii.adp.ide.intellij/fbl/src/main/java/etalii/adp/fbl/family/json/JsonFamily.java` (a new entry's keys by research R2). T029's fixtures and T030's tests pass; `./gradlew build` exits zero, or the gate the container cannot run is named and left to CI.
+- [ ] T032 [US3] Open the IntelliJ pull request into `develop`; tick T029 to T031 here once it is merged.
+
+## Phase 8: User Story 3 in etalii.adp.ide.notion (P3)
+
+**Goal**: the Notion add-ons' copy of the FBL library has the constant, refreshed, never edited.
+**Independent test**: `node scripts/sync-fbl.mjs --check` passes against the new `PROVENANCE.md`, and the add-ons build and test as before.
+
+- [ ] T033 [US3] After T028 is merged, run `node scripts/sync-fbl.mjs etalii.adp.ide.vscode=<its merge commit>` in `etalii.adp.ide.notion`, which rewrites `etalii.adp.ide.notion/src/fbl/` and `etalii.adp.ide.notion/src/fbl/PROVENANCE.md`; no file under `src/fbl/` is edited by hand. `node scripts/sync-fbl.mjs --check`, `npm test`, `npm run lint`, `npm run typecheck` and `node scripts/build.mjs --out <dir>` with `node scripts/check-tree.mjs <dir>` exit zero.
+- [ ] T034 [US3] Open the Notion pull request into `develop`; tick T033 here once it is merged.
 
 ## Coverage
 
@@ -72,33 +104,25 @@ These tasks start once the etalii.adp pull request of Phases 1 to 3 is merged, i
 | FR-010 | T005 |
 | FR-011 | T008, T009, T014 |
 | FR-012 | T001, T002 |
-| FR-013 | T021 |
-| SC-001 | T023 |
-| SC-002 | T022 |
+| FR-013 | T016 |
+| SC-001 | T018 |
+| SC-002 | T017 |
 | SC-003 | T011 |
-| SC-004 | T023 |
-| SC-005 | T020 |
+| SC-004 | T018 |
+| SC-005 | T024 |
+
+User Story 3 (a host can be checked against it) is claimed by T020 to T034 in the four hosts; its acceptance scenarios are each host's conformance run of the vendored fixtures.
 
 ## Dependencies and order
 
-- T001 and T002 first; Phases 2 and 3 then in either order, except that T013's fixture check (T015) uses T008.
-- T008 and T009 in parallel; T010 after both; T011 after T008.
-- Phase 4 after the etalii.adp pull request is merged: T016, then T017, then T018, then T019; T020 after T019 is merged.
-- MVP: Phases 1 and 2 make the construct specified and checkable; Phase 3 makes a wrong binding refused; Phase 4 is the one host whose tool needs it.
-
-## After this feature, in other repositories
-
-Not tasks of this feature (research R9); listed so that they are not lost.
-
-- `etalii.adp.ide.vscode`: `src/core/fbl/documents/types.ts`, `src/core/fbl/documents/documentLoader.ts`, `src/core/fbl/families/yaml/yamlFamily.ts`, `src/core/fbl/families/json/jsonFamily.ts`, with the fixtures vendored into `fixtures/fbl/conformance/` and `fixtures/fbl/manifest.json`, when that host catches up to FBL 0.7 or a tool of it needs the constant.
-- `etalii.adp.ide.notion`: nothing to edit; `node scripts/sync-fbl.mjs` refreshes `src/fbl/` and its `PROVENANCE.md` once Visual Studio Code has it.
-- `etalii.adp.ide.intellij`: `fbl/src/main/java/etalii/adp/fbl/document/InsertSettings.java`, `BindingReader.java`, `BindingChecker.java` and the yaml and json families under `fbl/src/main/java/etalii/adp/fbl/family/`, with the fixtures in `fbl/testdata/conformance/` and its `SHA256SUMS`, when a tool of that host needs it.
+- T001 and T002 first; Phases 2 and 3 then in either order, except that T015 uses T008. T008 and T009 in parallel; T010 after both; T011 after T008. Phase 4 closes the etalii.adp pull request.
+- Once it is merged, Phases 5, 6 and 7 in parallel, one repository each; within each, vendor, then tests, then code, then the pull request. T024 after T023 is merged; Phase 8 after T028 is merged.
+- MVP: Phases 1 to 4 make the construct specified and checkable; Phase 5 is the host whose tool needs it; Phases 6 to 8 keep every host conforming.
 
 ## Forks
 
-One choice in this plan is the maintainer's (research R9), with the recommended option taken until ruled otherwise:
-
-- **A (recommended, planned above)**: etalii.adp and the standalone library now; the conversion's task 9 L6 takes the constant as given (T020). One library change, planned beside the fixtures that define it.
-- **B**: every host now, Visual Studio Code, Notion (copy) and IntelliJ too. Three more pull requests and no tool that uses them; Visual Studio Code and IntelliJ would implement an 0.8 construct while 0.7 is missing.
-- **C**: etalii.adp only, as specs 015 and 026 did; the library stays with the conversion's task 9 (L6). Phase 4 is dropped, and T020 is not needed.
-- **Other.**
+- **How IntelliJ vendors the new fixtures** (T029). Its corpus README says a newer FBL is taken up by copying the whole corpus again, and that library reads 0.1, so a whole copy would bring in the fixtures of 0.2 to 0.7, which it does not pass.
+  - **A (recommended, planned above)**: a second folder, `fbl/testdata/conformance-0.8/`, with its own README and `SHA256SUMS`; the 0.1 corpus and its rule stay as they are.
+  - **B**: copy the whole corpus at the new commit, and report every fixture the library does not pass as skipped with its reason (that repository's principle IV); the 0.1 corpus rule holds, at the cost of a long skip list.
+  - **C**: add the five files to `fbl/testdata/conformance/` and its `SHA256SUMS`, and change its README to allow a partial copy.
+  - **Other.**
