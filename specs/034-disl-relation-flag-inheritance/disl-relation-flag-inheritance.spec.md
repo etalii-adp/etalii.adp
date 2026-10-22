@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-22
 
-**Status**: Draft
+**Status**: Draft, clarified 2026-10-22
 
 **Input**: The maintainer's ruling "Spec first" (2026-10-22) on DISL relation-flag inheritance. DISL 0.5 section 4.7 does not say whether a relation type's `directed`, `allowSelfLoops` and `allowParallel` (section 4.9) are inherited from its supertypes, and the hosts that interpret DISL read it differently. The known case: in `definitions/diagrams/azure-devops-pipeline.dis`, the abstract `Dependency` states `allowParallel: false` and its subtype `DependsOn` does not.
 
@@ -46,13 +46,13 @@ A tool engineer states a flag once, on an abstract relation type, and every rela
 
 **Why this priority**: it is the whole of the gap. Today the same specification is two different tools depending on the host, and the tool engineer cannot tell which reading is right from the document.
 
-**Independent Test**: a DISL example in which an abstract relation type states `allowParallel: false` and `allowSelfLoops: true`, and a concrete subtype states neither; a document with two such relations between the same pair and one loop gives the findings section 4.7 then says, and the example validates against the schema.
+**Independent Test**: a DISL example in which an abstract relation type states `allowParallel: false` and `allowSelfLoops: true`, and a concrete subtype states neither; a document with two such relations between the same pair gives a finding for the second, a loop gives none, and the example validates against the schema.
 
 **Acceptance Scenarios**:
 
-1. **Given** a supertype that states `allowParallel: false` and a subtype that does not state `allowParallel`, **When** a diagram holds two relations of the subtype between the same pair, **Then** every conforming host reads the subtype's `allowParallel` as the rule settled under Q1 says, and so reports or does not report the second one alike.
+1. **Given** a supertype that states `allowParallel: false` and a subtype that does not state `allowParallel`, **When** a diagram holds two relations of the subtype between the same pair, **Then** every conforming host reads the subtype's `allowParallel` as false, inherited from the supertype, and reports the second one.
 2. **Given** the same for `allowSelfLoops` and for `directed`, **When** a diagram holds a loop, or two relations in opposite directions, **Then** every conforming host reads the flag the same way.
-3. **Given** a subtype that states the flag itself, **When** it is read, **Then** its own value is the one it has, as far as Q2 allows it.
+3. **Given** a subtype that states the flag itself, **When** it is read, **Then** its own value is the one it has when it narrows the supertype's, and a value that widens it is a specification error.
 4. **Given** a relation type that states the flag nowhere along its supertype chain, **When** it is read, **Then** it has section 4.9's default.
 5. **Given** `azure-devops-pipeline.dis` and `wardley-map.dis` as they are, **When** they are read under the settled rule, **Then** what the rule makes of `DependsOn`, `DefaultOrder`, `Dependency` and `Flow` is stated in the feature's plan, and a definition whose meaning changes is corrected in the same pull request.
 
@@ -69,7 +69,7 @@ A host implementer reads sections 4.7 and 4.9 and knows, for each of the three f
 **Acceptance Scenarios**:
 
 1. **Given** sections 4.7 and 4.9, **When** an implementer looks up a flag of a subtype that does not state it, **Then** the text says where the value comes from.
-2. **Given** a relation type with several supertypes that state a flag differently and a subtype that does not restate it, **When** it is read, **Then** the text says what follows, as Q3 settles it.
+2. **Given** a relation type with several supertypes that state a flag differently and a subtype that does not restate it, **When** it is read, **Then** the text says that the specification is in error unless the subtype states the flag itself.
 
 ### Edge Cases
 
@@ -82,9 +82,9 @@ A host implementer reads sections 4.7 and 4.9 and knows, for each of the three f
 
 ### Functional Requirements
 
-- **FR-001**: Section 4.7 **MUST** say, for `directed`, `allowSelfLoops` and `allowParallel`, where a relation type's value comes from when it does not state it, by the rule Q1 settles: [NEEDS CLARIFICATION: Q1, inherited along the linearisation, or the section 4.9 default].
-- **FR-002**: Section 4.7 or 4.9 **MUST** say what a subtype that states a flag may state: [NEEDS CLARIFICATION: Q2, any value, or only a value that narrows the supertype's].
-- **FR-003**: The specification **MUST** say what a relation type with several supertypes that state a flag differently has when it does not restate it: [NEEDS CLARIFICATION: Q3, a specification error, or the first in the linearisation].
+- **FR-001**: Section 4.7 **MUST** say that a relation type which does not state `directed`, `allowSelfLoops` or `allowParallel` inherits it from the nearest type along its C3 linearisation that states it, and has the section 4.9 default when none does, as notation, forms and constraints are looked up.
+- **FR-002**: Section 4.7 or 4.9 **MUST** say that a subtype may state a flag only to narrow its supertype's: `allowSelfLoops` and `allowParallel` may go from true to false and not back, and `directed` **MUST NOT** differ from the supertype's; a subtype that widens a flag is a specification error.
+- **FR-003**: The specification **MUST** say that a relation type with several supertypes whose effective values of a flag differ is a specification error unless it states the flag itself, as section 4.7 already says of conflicting inherited attributes.
 - **FR-004**: Section 4.9's defaults **MUST** stay as they are: `directed` true, `allowSelfLoops` false, `allowParallel` true, for a type that has no value by FR-001.
 - **FR-005**: `acyclic` **MUST** keep section 4.9's rule; the specification **MAY** restate it beside the three flags so that the four read as one list.
 - **FR-006**: The DISL examples **MUST** include a relation type that inherits a flag whose value differs from its default, with a document whose findings show it, and the schema **MUST** still accept every existing example.
@@ -104,7 +104,7 @@ A host implementer reads sections 4.7 and 4.9 and knows, for each of the three f
 
 - **SC-001**: For each of the three flags, a reader of sections 4.7 and 4.9 alone gives the same effective value for every relation type of `azure-devops-pipeline.dis` and `wardley-map.dis` as the specification's own answer.
 - **SC-002**: The new example and its document validate with `python .github/scripts/validate-examples.py`, and every existing example still does.
-- **SC-003**: Each host's difference from the settled rule is named, with its file, as a task for that host: the standalone backend at least, and any host Q1 to Q3 put in conflict.
+- **SC-003**: Each host's difference from the settled rule is named, with its file, as a task for that host: the standalone backend at least, and any host the rules of FR-001 to FR-003 put in conflict.
 - **SC-004**: A second `DependsOn` between the same pair is either a finding in every host or in none.
 
 ## Assumptions
@@ -114,28 +114,12 @@ A host implementer reads sections 4.7 and 4.9 and knows, for each of the three f
 - The standalone backend's `allowSelfLoops` default of true is a defect against section 4.9 as written, whatever this feature settles, and is reported to that host.
 - A relation type's ends (`source`, `target`) are outside this feature, as *What this feature is not* says.
 
-## Clarifications needed
+## Clarifications
 
-### Q1: Where does a subtype's flag come from when it does not state it? (FR-001)
+### Session 2026-10-22
 
-| Option | Answer | Implications |
-|--------|--------|--------------|
-| A (recommended) | Inherited: from the nearest type along the C3 linearisation that states it, else the section 4.9 default, as notation, forms and constraints are looked up in section 4.7. | What Visual Studio Code and Notion do, and the standalone client for single inheritance; what the definitions' authors evidently meant, since `Dependency` and `Link` are abstract and their `allowParallel: false` would otherwise govern nothing. Every valid 0.5 specification keeps the meaning three of four readers give it; the standalone backend changes. |
-| B | Not inherited: a type's own statement, else the section 4.9 default. | What the standalone backend does. The four cases above lose their `allowParallel: false` unless their definitions restate it on every subtype; the client, Visual Studio Code and Notion change. |
-| Other | Provide your own answer | |
+The maintainer answered the three questions on decision cards in the project chat.
 
-### Q2: May a subtype state a flag that differs from its supertype's? (FR-002)
-
-| Option | Answer | Implications |
-|--------|--------|--------------|
-| A (recommended) | Only to narrow it, as a subtype narrows an attribute (section 4.7) and cannot unset `acyclic` (section 4.9): `allowSelfLoops` and `allowParallel` may go from true to false and not back, and `directed` **MUST NOT** differ from the supertype's. | A relation of the subtype is accepted wherever one of its supertype is, so a rule stated on the abstract type holds for every subtype. No current definition relaxes a flag, so none becomes invalid; a loader gains one check. |
-| B | Freely: the most specific statement wins. | Nothing for a loader to check, but a subtype can undo what its supertype forbids, so a constraint written against the abstract type no longer holds for all of its relations. |
-| Other | Provide your own answer | |
-
-### Q3: What does a relation type with several supertypes that state a flag differently have? (FR-003)
-
-| Option | Answer | Implications |
-|--------|--------|--------------|
-| A (recommended) | A specification error unless the subtype states the flag itself, as section 4.7 already says of conflicting inherited attributes. | One rule for attributes and flags; no current definition has a relation type with several supertypes, so none becomes invalid. |
-| B | The first in the C3 linearisation that states it. | No error, but the value depends on the order the supertypes are named in, which a reader of the subtype does not see. |
-| Other | Provide your own answer | |
+- Q1: Where does a subtype's flag come from when it does not state it? → A, inherited: from the nearest type along the C3 linearisation that states it, else the section 4.9 default (FR-001).
+- Q2: May a subtype state a flag that differs from its supertype's? → A, only to narrow it: `allowSelfLoops` and `allowParallel` from true to false and not back, `directed` never different (FR-002).
+- Q3: What does a relation type with several supertypes that state a flag differently have? → A, a specification error unless the subtype states the flag itself (FR-003).
