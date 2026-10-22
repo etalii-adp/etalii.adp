@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-22
 
-**Status**: Draft
+**Status**: FBL 0.8 in etalii.adp ([plan.md](plan.md), [tasks.md](tasks.md)); the hosts follow in their own pull requests (T020 to T034)
 
 **Input**: Gap 2 of the conversion specification `functional-decomposition-graph-disl-fbl` of `etalii.adp.ide.standalone`, which plans with spec-workflow: `.spec-workflow/specs/functional-decomposition-graph-disl-fbl/requirements.md` at commit `592827920`, finding B3 and section C, gap 2 ("a rule chosen by a value cannot write that value"), and the same specification's `design.md` (*The stand-ins*) and `tasks.md` task 9, which waits on "a constant written by an `insert`". The maintainer ruled on 2026-10-22 ("Specify gap 2") that FBL gets that construct.
 
