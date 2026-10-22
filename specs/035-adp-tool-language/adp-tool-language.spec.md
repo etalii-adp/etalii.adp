@@ -27,7 +27,7 @@ This specification reads the hosts at these commits of their `develop`, the **re
 The maintainer ruled on 2026-10-22, answering Q1: "In the end it should be .adt only, however we need to have a transition period. For the first phase the idea is that we just define the tools in .adt, create the tooling infrastructure and make sure we can edit and validate them. This first phase will not transition the existing tools from their JSON representation to a .adt representation." (`.adt` is read as `.atd`, the extension of the request.)
 
 - **End state.** The `.atd` text alone is normative. The JSON languages of tool types (DISL, DESL, EDSL and FBL documents) are retired as authored forms, and every host runs tools from `.atd`.
-- **Phase 1, this feature.** The language and its grammar are specified; the tools in scope are described in `.atd`; the tooling to write, edit, check, validate and debug tool descriptions is built. The `.dis`, `.des` and `.fbl` files stay the ones every host runs, unchanged, and are neither converted nor retired.
+- **Phase 1, this feature.** The language and its grammar are specified; the tools in scope are described in `.atd`; the toolchain to write, edit, check, validate and debug tool descriptions is built, in the desktop host and in VS Code (Q3), with language support in IntelliJ. The `.dis`, `.des` and `.fbl` files stay the ones every host runs, unchanged, and are neither converted nor retired.
 - **Later phases, features of their own.** Conversion of the existing JSON files, hosts running tools from `.atd`, retirement of the JSON languages as authored forms, and the adoption in the standalone host, the Notion add-on and the Eclipse host.
 
 ## Where the logic goes *(informative)*
@@ -43,11 +43,11 @@ The research sorted the residue that the companion files and the host code hold 
 
 ## Clarifications needed
 
-Four questions were put to the maintainer, each with options. Q1 and Q2 are answered and Q3 follows from Q1's answer; the specification is written on the recommended option of Q4 and changes if another is chosen.
+Four questions were put to the maintainer, each with options. Q1, Q2 and Q3 are answered; the specification is written on the recommended option of Q4 and changes if another is chosen.
 
 - **Q1, normative form (FR-030).** Answered 2026-10-22: `.atd` alone in the end, after a transition; phase 1 does not move existing tools off their JSON files (see *Phases*).
 - **Q2, which tool types get a tool description (FR-020).** Answered 2026-10-22: every tool type with a specification in `definitions/` (30 diagrams, 2 designers) and every editor the hosts implement (plain text, Markdown, JSON, XML, YAML), with the hosts' code for those tool types as the source of their logic.
-- **Q3, which hosts run tools from `.atd` in this feature (FR-040).** Settled by Q1: none in phase 1. The desktop host runs tool descriptions only to validate and debug them (FR-040 to FR-043).
+- **Q3, which hosts run tools from `.atd` in this feature (FR-040, FR-063).** Answered 2026-10-22: "Desktop host and VS Code, however it is not 'running tools' according to a .adt specification but in the first phase rather the toolchain for editing, validation." Both hosts get the toolchain to edit and validate tool descriptions; neither runs a person's tools from `.atd`.
 - **Q4, the name of the file (Words).** Recommended: "ADP Tool Description", which keeps `.atd` and fits ADP's glossary, where a tool engineer writes a specification and users create definitions. Alternative: "ADP Tool Definition", with the glossary amended to give "definition" a second meaning.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -135,6 +135,7 @@ A tool engineer creates a new tool type in VS Code from a command that asks for 
 1. **Given** the command to create a tool type, **When** the tool engineer answers its questions, **Then** a new `.atd` is written into the chosen folder that checks without findings and opens in the editor.
 2. **Given** an open `.atd`, **When** the tool engineer saves it or asks for a check, **Then** the findings of the checker appear in VS Code's problems list, each at its place.
 3. **Given** an `.atd` that imports other `.atd` files, **When** one of them is edited, **Then** the findings of every file of the description are brought up to date.
+4. **Given** a tool description with conformance fixtures, **When** the tool engineer asks to validate it, **Then** VS Code reports the same differences as the desktop host's validation, and no document of the person's workspace is opened or written by it.
 
 ---
 
@@ -265,6 +266,7 @@ An AI agent asked to create or change a tool type is given the published grammar
 
 - **FR-060**: The VS Code host **MUST** offer a command that creates a new tool description of a chosen kind, origin and name, which checks without findings.
 - **FR-061**: The VS Code host **MUST** open `.atd` files with the language support of FR-051, and **MUST** show the checker's findings for every file of a description in its problems list.
+- **FR-063**: The VS Code host **MUST** offer the same validation of a tool description against its conformance fixtures as the desktop host (FR-041), with the same results, on working copies only; it **MUST NOT** run a person's documents from `.atd` (Q3).
 
 ### Debugger in the desktop host
 
@@ -310,7 +312,7 @@ An AI agent asked to create or change a tool type is given the published grammar
 - **SC-001**: The grammar builds with zero conflicts, and stays so on every pull request.
 - **SC-002**: No `.dis`, `.des` or `.fbl` file in this repository, and no host's tool loading, is changed by this feature.
 - **SC-003**: Every tool type in scope has a tool description that checks without findings, and 100 % of the items its companion file lists are traced to a part of the description or marked as a host's concern.
-- **SC-004**: The desktop host's validation runs every tool type in scope from its `.atd` with no tool-specific code, and 100 % of their conformance fixtures pass, every write byte-identical to the reference host's.
+- **SC-004**: The validation in the desktop host and in VS Code runs every tool type in scope from its `.atd` with no tool-specific code, and 100 % of their conformance fixtures pass in both, every write byte-identical to the reference host's.
 - **SC-005**: For a fixed walk of 30 edits per IDE, VS Code, IntelliJ and the desktop host give the expected completion, diagnostic, hover, rename and formatting result in 30 of 30, with identical diagnostics across the three.
 - **SC-006**: Diagnostics appear within one second of a keystroke, and completion within half a second, on a tool description of 5,000 lines.
 - **SC-007**: A tool engineer new to the language creates a working tool type of each kind in VS Code in under 30 minutes, following the guide of FR-104.
