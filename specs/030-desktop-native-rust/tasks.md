@@ -94,6 +94,10 @@
 - [x] T049 [US3] Write the recorder that replays an edit script through the standalone host's gRPC API, with its `.DotSettings` (contracts/parity.md) · etalii.adp.ide.desktop/parity/recorder/
 - [x] T050 [US3] Write the parity runner that replays every script headless and compares each written file byte for byte with its golden (SC-004) · etalii.adp.ide.desktop/crates/adp-parity/
 - [x] T051 [US3] Port the standalone host's round-trip tests for the tool types whose module is not yet ported as pending tests named after them, so their count shows what is left (FR-034) · etalii.adp.ide.desktop/crates/adp-conformance/tests/round_trip.rs
+- [ ] T095 [P] [US3] Undo of a C4 description or technology added to an element without one removes what it added, and a renamed container instance is undone; take `c4_component` and `c4_deployment` out of pending (FR-034) · etalii.adp.ide.desktop/modules/diagrams/c4/src/commands.rs
+- [ ] T096 [P] [US3] Leave a timeline label YAML reads as another type (`yes`, `1.0`, `null`) and a quoted row alone when set to what they hold, and refuse edits of a document that does not read; take `generic_timeline` out of pending (FR-034) · etalii.adp.ide.desktop/modules/diagrams/timeline/src/
+- [ ] T097 [P] [US3] Undo of the pipeline's "Use the default order" puts `dependsOn` back where it was, and undo of a dependency in a broken graph is not refused; take `azure_devops_pipeline` out of pending (FR-034) · etalii.adp.ide.desktop/modules/diagrams/azure-devops-pipeline/src/
+- [ ] T098 [P] [US3] Keep a Wardley map's byte order mark through an edit and its undo; take `wardley_map` out of pending (FR-034) · etalii.adp.ide.desktop/modules/diagrams/wardley-map/src/
 
 **Checkpoint**: every vendored fixture and example passes (SC-003); the parity runner works on an empty set.
 
