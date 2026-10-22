@@ -147,13 +147,13 @@
 - [x] T075 [P] [US5] Agent activity diagram (`.aad`) · etalii.adp.ide.desktop/modules/diagrams/agent-activity-diagram/
 - [x] T076 [P] [US5] Supply chain (`.supply`) · etalii.adp.ide.desktop/modules/diagrams/supply-chain/
 - [x] T077 [P] [US5] Sankey (`.skv`) · etalii.adp.ide.desktop/modules/diagrams/sankey/
-- [ ] T078 [P] [US5] Azure DevOps pipeline (`.yml`) · etalii.adp.ide.desktop/modules/diagrams/azure-devops-pipeline/
+- [x] T078 [P] [US5] Azure DevOps pipeline (`.yml`) · etalii.adp.ide.desktop/modules/diagrams/azure-devops-pipeline/
 - [x] T079 [P] [US5] Ansible structure (folder subject) · etalii.adp.ide.desktop/modules/diagrams/ansible-structure/
 - [x] T080 [P] [US5] Helm chart (folder subject) · etalii.adp.ide.desktop/modules/diagrams/helm-chart/
-- [ ] T081 [P] [US5] Databricks bundle, job and pipeline · etalii.adp.ide.desktop/modules/diagrams/databricks/
-- [ ] T082 [P] [US5] .NET dependency graph (`.sln`, `.slnx`, read-only) · etalii.adp.ide.desktop/modules/diagrams/dotnet-dependency-graph/
-- [ ] T083 [P] [US5] RDF (`.ttl`, `.nt`) with its readings OWL, SKOS and SHACL · etalii.adp.ide.desktop/modules/diagrams/rdf/
-- [ ] T084 [P] [US5] SPARQL query (`.rq`, read-only) · etalii.adp.ide.desktop/modules/diagrams/sparql/
+- [x] T081 [P] [US5] Databricks bundle, job and pipeline · etalii.adp.ide.desktop/modules/diagrams/databricks/
+- [x] T082 [P] [US5] .NET dependency graph (`.sln`, `.slnx`, read-only) · etalii.adp.ide.desktop/modules/diagrams/dotnet-dependency-graph/
+- [x] T083 [P] [US5] RDF (`.ttl`, `.nt`) with its readings OWL, SKOS and SHACL · etalii.adp.ide.desktop/modules/diagrams/rdf/
+- [x] T084 [P] [US5] SPARQL query (`.rq`, read-only) · etalii.adp.ide.desktop/modules/diagrams/sparql/
 - [ ] T085 [US5] Check the inventory's tool type rows against the standalone host's `docs/tools.md` at `8b6ccfc`; add a task here for any working tool type the list above misses · etalii.adp.ide.desktop/parity/inventory.md
 
 **Checkpoint**: every tool type row of the inventory is `built`.
