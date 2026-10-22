@@ -164,9 +164,9 @@
 
 **Independent Test**: compare with VS Code side by side in both themes, switch the system theme, walk Story 1 with a screen reader, run the contrast checks (spec, Story 6).
 
-- [ ] T086 [P] [US6] Port the standalone host's contrast tests and run them against both VS Code themes; adjust tool colours, never VS Code values (FR-042, R9) · etalii.adp.ide.desktop/crates/adp-theme/tests/contrast.rs
-- [ ] T087 [P] [US6] Give every tool's canvas and table colours per theme from the active theme (FR-045) · etalii.adp.ide.desktop/modules/*/src/theme.rs
-- [ ] T088 [US6] Expose every interactive element through AccessKit with role, name and state, and test the tree of the explorer, menus, dialogs, tabs and the errors panel (FR-041) · etalii.adp.ide.desktop/crates/adp-shell/tests/accessibility.rs
+- [x] T086 [P] [US6] Port the standalone host's contrast tests and run them against both VS Code themes; adjust tool colours, never VS Code values (FR-042, R9) · etalii.adp.ide.desktop/crates/adp-theme/tests/contrast.rs
+- [x] T087 [P] [US6] Give every tool's canvas and table colours per theme from the active theme (FR-045) · etalii.adp.ide.desktop/modules/*/src/theme.rs
+- [x] T088 [US6] Expose every interactive element through AccessKit with role, name and state, and test the tree of the explorer, menus, dialogs, tabs and the errors panel (FR-041) · etalii.adp.ide.desktop/crates/adp-shell/tests/accessibility.rs
 - [ ] T089 [US6] Walk Story 1 with a screen reader on at least one platform and Story 6 on all three, and record them (SC-009, SC-010) · etalii.adp.ide.desktop/parity/walks.md
 
 **Checkpoint**: the look matches VS Code value for value; a screen reader user completes Story 1.
