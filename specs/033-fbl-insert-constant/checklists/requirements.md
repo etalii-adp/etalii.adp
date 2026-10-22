@@ -13,7 +13,7 @@
 
 ## Requirement Completeness
 
-- [ ] No [NEEDS CLARIFICATION] markers remain
+- [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
@@ -33,5 +33,5 @@
 
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`
 - **Language words.** As for specs 015 and 026, the readers are tool engineers and host implementers, so the specification names FBL's own sections and constructs (`insert`, `keys`, `when`, `skeleton`, `emit`); the name and shape of the new construct are left to the plan.
-- **Three markers remain**, each with options in the specification's *Clarifications needed*: Q1 the families (FR-008), Q2 whether a constant takes part in reading (FR-009), Q3 how a retype between rules that differ by their constant is planned (FR-010). They are for `/speckit-clarify` or the maintainer.
+- **Markers resolved 2026-10-22.** Q1 (families, FR-008), Q2 (reading, FR-009) and Q3 (retype, FR-010) took their recommended options on the maintainer's "make sure all work continues"; they are recorded in the specification's *Clarifications*.
 - **Gap 1 is out of scope**: FBL 0.5 answers it (sections 4.1.5 and 5.2), as the Assumptions say.
