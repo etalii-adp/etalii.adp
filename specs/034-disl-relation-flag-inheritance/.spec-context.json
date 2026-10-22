@@ -1,0 +1,23 @@
+{
+  "workflow": "speckit",
+  "specName": "A Relation Type Inherits Its Flags",
+  "branch": "features/034-disl-relation-flag-inheritance",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-22T10:56:16.000Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-22T10:57:29.439Z"
+    }
+  ]
+}
