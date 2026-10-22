@@ -3,7 +3,7 @@
   "specName": "A Relation Type Inherits Its Flags",
   "branch": "features/034-disl-relation-flag-inheritance",
   "currentStep": "clarify",
-  "status": "clarified",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -33,5 +33,6 @@
       "by": "agent",
       "at": "2026-10-22T15:50:00.000Z"
     }
-  ]
+  ],
+  "telemetryInstanceId": "59c894de-4a45-4c90-b957-3c89883315ea"
 }
