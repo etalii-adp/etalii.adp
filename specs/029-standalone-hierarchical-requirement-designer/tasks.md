@@ -49,7 +49,7 @@ Every other path these files name was found where they name it, or is new.
 
 **⟶ Wait for T001's pull request to merge, then:**
 
-- [ ] **T002** In a freshly created worktree of standalone `develop`, build once, run the four gates and `bash .github/tools/inspect/inspect.sh`, and note the number of tests and of conformance fixtures as the baseline · etalii.adp.ide.standalone (run, not changed)
+- [x] **T002** In a freshly created worktree of standalone `develop`, build once, run the four gates and `bash .github/tools/inspect/inspect.sh`, and note the number of tests and of conformance fixtures as the baseline · etalii.adp.ide.standalone (run, not changed)
 
 ---
 
@@ -65,27 +65,27 @@ Extends: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Doc
 
 **Wave 1, tests first (different files):**
 
-- [ ] **T003** [P] Copy `bullets-read/` and `bullets-edits/` with its `no-section/` sub-folder into the corpus in etalii.adp's layout, and log the copy (FR-029; R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/etalii.adp/specifications/fbl/fixtures/bullets-read/
+- [x] **T003** [P] Copy `bullets-read/` and `bullets-edits/` with its `no-section/` sub-folder into the corpus in etalii.adp's layout, and log the copy (FR-029; R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/etalii.adp/specifications/fbl/fixtures/bullets-read/
 - [ ] **T004** [P] Teach the harness FBL 0.7: find `fixture.json` at any depth; read the edit forms `move`, `setting`, `position`, `slot`, `occurrence`, `expectFile` and an `edit` that is a list carrying its `x-operation`; compare `read.elements[].parent`; raise `MinimumFixtures` to the new count (FR-029; R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/ConformanceFixtures.Tests.cs
 - [ ] **T005** [P] Add the stand-in for the derived ids `tag/<name>`, `category/<name>`, `state/<name>`, `filter/<name>` and `assessment/<n>`, beside `NaturalIds.cs` (R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/DerivedIds.cs
-- [ ] **T006** [P] Write the drift guard: an edit planned after the body's bytes changed on disk is refused with the library's sentence and writes nothing. Run it against the code without T009 and keep the failing output (FR-024; R12) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/History/OpenBodyDrift.Tests.cs
+- [x] **T006** [P] Write the drift guard: an edit planned after the body's bytes changed on disk is refused with the library's sentence and writes nothing. Run it against the code without T009 and keep the failing output (FR-024; R12) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/History/OpenBodyDrift.Tests.cs
 
 **⟶ Wait for Wave 1 to finish, then:**
 
 **Wave 2 (different files):**
 
-- [ ] **T007** [P] Write the `bullets` reader and writer on `FamilyReader`, mirroring `bullets_of` in `etalii.adp/.github/scripts/validate-examples.py`: sections by their first matching heading at any level, fences never read, setext lines not headings, a tab four columns, every list marker, the continuation slot and the word slots; a new bullet takes its previous sibling's marker and indent, else its next sibling's, else the parent's text column; a move re-indents every non-blank line and splits a tab the shift cuts into; an insert takes the line ending of the line it lands on, with its unit tests · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Files/Bullets/BulletsFamily.cs
-- [ ] **T008** [P] Add `Family.Bullets`, parse `bullets` in `ParseFamily`, and raise the minor of its `LanguageVersion` `Fbl` from 5 to 7 (FR-029) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/FblDocumentLoader.cs
-- [ ] **T009** [P] Check before planning that the body's bytes are those read, refuse with one sentence owned by the library, and replace the module-local sentence in `KnowledgeBody.cs` with it (FR-024; R12) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/History/OpenBody.cs
+- [x] **T007** [P] Write the `bullets` reader and writer on `FamilyReader`, mirroring `bullets_of` in `etalii.adp/.github/scripts/validate-examples.py`: sections by their first matching heading at any level, fences never read, setext lines not headings, a tab four columns, every list marker, the continuation slot and the word slots; a new bullet takes its previous sibling's marker and indent, else its next sibling's, else the parent's text column; a move re-indents every non-blank line and splits a tab the shift cuts into; an insert takes the line ending of the line it lands on, with its unit tests · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Files/Bullets/BulletsFamily.cs
+- [x] **T008** [P] Add `Family.Bullets`, parse `bullets` in `ParseFamily`, and raise the minor of its `LanguageVersion` `Fbl` from 5 to 7 (FR-029) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/FblDocumentLoader.cs
+- [x] **T009** [P] Check before planning that the body's bytes are those read, refuse with one sentence owned by the library, and replace the module-local sentence in `KnowledgeBody.cs` with it (FR-024; R12) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/History/OpenBody.cs
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T010** Choose the `bullets` reader in `CreateFamily` · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Rules/BodyReading.cs
+- [x] **T010** Choose the `bullets` reader in `CreateFamily` · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Rules/BodyReading.cs
 
 **⟶ Then:**
 
-- [ ] **T011** Run the conformance run: every `bullets-*` step passes and T006 now passes. Plant a wrong byte in one expected splice of a scratch copy outside the corpus, see the run fail at that step, and remove the copy · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests (run, not changed)
-- [ ] **T012** Deliver pull request 1 by [contracts/pull-request.md](contracts/pull-request.md), with the corrected pages that list the FBL families · etalii.adp.ide.standalone/docs/architecture.md
+- [x] **T011** Run the conformance run: every `bullets-*` step passes and T006 now passes. Plant a wrong byte in one expected splice of a scratch copy outside the corpus, see the run fail at that step, and remove the copy · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests (run, not changed)
+- [x] **T012** Deliver pull request 1 by [contracts/pull-request.md](contracts/pull-request.md), with the corrected pages that list the FBL families · etalii.adp.ide.standalone/docs/architecture.md
 
 ### Pull request 2: `features/029-fbl-registration-blocks`
 
@@ -95,18 +95,18 @@ Extends: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Doc
 
 **Wave 1, tests first (different files):**
 
-- [ ] **T013** [P] Copy `registration-blocks/` into the corpus and log it (FR-028, FR-029) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/etalii.adp/specifications/fbl/fixtures/registration-blocks/
-- [ ] **T014** [P] Write the guards for declared blocks: reading goes on past a block the binding does not declare, keeps its bytes and reports `fbl.unknown-block` once at information; a value holding `: ` and a rename to an existing key are refused. Run them against the code without T017 and keep the output (FR-028; US3 scenario 3) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Registration/DeclaredBlocks.Tests.cs
-- [ ] **T015** [P] Write the guards for creating the registration on first placement: written before the edit is planned, outside the history, the origin line and `body:` only when the base names differ, in the body's dominant line ending; refused with a reason when a different file has that name (FR-004; R4) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Registration/RegistrationCreation.Tests.cs
+- [x] **T013** [P] Copy `registration-blocks/` into the corpus and log it (FR-028, FR-029) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/etalii.adp/specifications/fbl/fixtures/registration-blocks/
+- [x] **T014** [P] Write the guards for declared blocks: reading goes on past a block the binding does not declare, keeps its bytes and reports `fbl.unknown-block` once at information; a value holding `: ` and a rename to an existing key are refused. Run them against the code without T017 and keep the output (FR-028; US3 scenario 3) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Registration/DeclaredBlocks.Tests.cs
+- [x] **T015** [P] Write the guards for creating the registration on first placement: written before the edit is planned, outside the history, the origin line and `body:` only when the base names differ, in the body's dominant line ending; refused with a reason when a different file has that name (FR-004; R4) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Registration/RegistrationCreation.Tests.cs
 
 **⟶ Wait for Wave 1 to finish, then:**
 
-- [ ] **T016** Read `registration.blocks` into declarations: name, order `kept` or `ordinal`, keys `names` or `ids`, `history` (FR-028) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/_Model/RegistrationBlockDeclaration.cs
+- [x] **T016** Read `registration.blocks` into declarations: name, order `kept` or `ordinal`, keys `names` or `ids`, `history` (FR-028) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Documents/_Model/RegistrationBlockDeclaration.cs
 
 **⟶ Then (different files):**
 
-- [ ] **T017** [P] Read the declared blocks, and keep every undeclared one as it is · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Registration/RegistrationDocument.cs
-- [ ] **T018** [P] Act on `createOnFirstPlacement` (R4) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Registration/RegistrationCreation.cs
+- [x] **T017** [P] Read the declared blocks, and keep every undeclared one as it is · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Registration/RegistrationDocument.cs
+- [x] **T018** [P] Act on `createOnFirstPlacement` (R4) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Registration/RegistrationCreation.cs
 
 **⟶ Wait for T017, then:**
 
@@ -114,8 +114,8 @@ Extends: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Doc
 
 **⟶ Then:**
 
-- [ ] **T020** Run the conformance run: `registration-blocks` passes and T014 and T015 now pass; plant a wrong byte in a scratch copy and see it fail · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests (run, not changed)
-- [ ] **T021** Deliver pull request 2 · etalii.adp.ide.standalone (pull request 2)
+- [x] **T020** Run the conformance run: `registration-blocks` passes and T014 and T015 now pass; plant a wrong byte in a scratch copy and see it fail · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests (run, not changed)
+- [x] **T021** Deliver pull request 2 · etalii.adp.ide.standalone (pull request 2)
 
 ### Pull request 3: `features/029-envelope-routing`
 
