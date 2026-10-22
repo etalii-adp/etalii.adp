@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "One Language for Every Tool Type",
   "branch": "claude/project-thread-kykv1z",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "plan",
+  "status": "planned",
   "history": [
     {
       "step": "specify",
@@ -18,6 +18,75 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-10-22T22:02:45.883Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-22T23:37:43.350Z"
+    },
+    {
+      "step": "plan",
+      "substep": "research",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-22T23:53:40.690Z"
+    },
+    {
+      "step": "plan",
+      "substep": "design",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-22T23:58:25.720Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-22T23:59:26.538Z"
     }
-  ]
+  ],
+  "telemetryInstanceId": "08585035-be37-4ec2-8014-b7ba182a1776",
+  "assistant": "claude-vscode",
+  "workingBranch": "features/035-adp-tool-language-plan",
+  "approach": "ATD is specified in specifications/atd/ as one strict LALR(1) grammar in a stated subset of Lark notation, with soft keywords, CEL inside the grammar and a bounded deterministic script. It is implemented once, in Rust crates of the desktop host, whose language server runs in process there, as WebAssembly in VS Code and as a native binary under IntelliJ's LSP API. A validation runtime lowers descriptions onto the desktop host's existing engines and replays fixtures built from the standalone goldens.",
+  "decisions": [
+    {
+      "decision": "Implement parser, checker, script, runtime and language server once, in Rust, in etalii.adp.ide.desktop",
+      "why": "FR-043 and FR-054 ask for one runtime and identical diagnostics; the desktop host is Rust and has the engines",
+      "rejected": "a checker per host; a Python checker in etalii.adp; TypeScript shared core"
+    },
+    {
+      "decision": "VS Code runs the language server as wasm32 WebAssembly inside the universal vsix; IntelliJ runs native binaries through the optional com.intellij.modules.lsp",
+      "why": "one implementation, each host its own mechanism, one vsix, no extra plug-in",
+      "rejected": "LSP4IJ (EPL-2.0), Chicory, per-platform vsix, @vscode/wasm-wasi-lsp"
+    },
+    {
+      "decision": "One grammar table for all kinds, kind admission in the checker; soft keywords under a contextual lexer",
+      "why": "conflict-free shared core (FR-004), keywords usable as names (FR-008), refusals at the construct",
+      "rejected": "a grammar per kind; reserved keywords with escapes"
+    },
+    {
+      "decision": "Conformance bytes from the standalone goldens vendored in the desktop host; readings and drawings recorded from the desktop host at fe5feec",
+      "why": "the standalone host is out of scope and the desktop host already proves byte parity with it",
+      "rejected": "a new recorder in the standalone host; screenshot drawings"
+    },
+    {
+      "decision": "etalii.adp Build builds the Rust checker from the same-named desktop branch, else develop",
+      "why": "FR-100 needs the full checker and language and checker change together",
+      "rejected": "a pinned released binary (release cycle between repositories)"
+    },
+    {
+      "decision": "The validation runtime lowers descriptions onto adp-disl, adp-desl, adp-fbl, adp-scene and adp-diagram with generic extension points",
+      "why": "parity by default; no fourth DISL implementation in one host",
+      "rejected": "a new interpreter"
+    }
+  ],
+  "step_summaries": {
+    "plan": {
+      "summary": "ATD 0.1 planned: grammar, script and capabilities in etalii.adp, one Rust toolchain in the desktop host serving every IDE, 36 tool descriptions with traces and fixtures, FBL 0.9 grammar family"
+    }
+  }
 }
