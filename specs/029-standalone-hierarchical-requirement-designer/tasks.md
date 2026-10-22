@@ -125,27 +125,27 @@ Extends: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/ToolRouter.
 
 **Wave 1, tests first (different files).** Each uses a test designer definition whose binding claims `.md` as shared with a line-1 marker, so that no module is needed yet.
 
-- [ ] **T022** [P] Write the routing guards: an enveloped `.md` without a registration routes to the designer with no registration; with an Agent Behavior Modelling registration, the body routes to the designer and that registration to `Unreadable` with the reason; a `.md` without the envelope routes as today; the first line is read up to 1,024 bytes and cached until the file changes (FR-002; R3; [contracts/routing-and-adding.md](contracts/routing-and-adding.md)) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy.Tests/EnvelopeRouting.Tests.cs
-- [ ] **T023** [P] Write the add guards: an existing enveloped file is accepted and nothing is written; one without the envelope is refused with the line it needs; a new name writes the body only, with no registration, for a binding that creates it on first placement (FR-003, FR-005; R5) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy.Tests/DesignerAddOptions.Existing.Tests.cs
-- [ ] **T024** [P] Write the delete guards: deleting the registration of a type that creates it on first placement keeps the body; the Knowledge designer's cascade is unchanged; deleting a body still deletes its registration (FR-004; R4) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy.Tests/DeleteEntryCommandHandler.Registration.Tests.cs
+- [x] **T022** [P] Write the routing guards: an enveloped `.md` without a registration routes to the designer with no registration; with an Agent Behavior Modelling registration, the body routes to the designer and that registration to `Unreadable` with the reason; a `.md` without the envelope routes as today; the first line is read up to 1,024 bytes and cached until the file changes (FR-002; R3; [contracts/routing-and-adding.md](contracts/routing-and-adding.md)) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy.Tests/EnvelopeRouting.Tests.cs
+- [x] **T023** [P] Write the add guards: an existing enveloped file is accepted and nothing is written; one without the envelope is refused with the line it needs; a new name writes the body only, with no registration, for a binding that creates it on first placement (FR-003, FR-005; R5) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy.Tests/DesignerAddOptions.Existing.Tests.cs
+- [x] **T024** [P] Write the delete guards: deleting the registration of a type that creates it on first placement keeps the body; the Knowledge designer's cascade is unchanged; deleting a body still deletes its registration (FR-004; R4) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy.Tests/DeleteEntryCommandHandler.Registration.Tests.cs
 
 **⟶ Wait for Wave 1 to finish, then:**
 
 **Wave 2 (different files):**
 
-- [ ] **T025** [P] Cache the first line of each file of an extension a designer claims as shared, up to the first line break or 1,024 bytes, dropped when the file changes (R3) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/FirstLineCache.cs
-- [ ] **T026** [P] Make the registration optional in `DesignerRouted` and `IDesignerSessionFactory.Open`, and adapt the Knowledge designer's factory, which always passes one (R4) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/_Model/DesignerRouting.cs
-- [ ] **T027** [P] Accept an enveloped existing file without writing, refuse one without the envelope naming the line, and write no registration for a binding with `createOnFirstPlacement` (FR-003, FR-005; R5) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/DesignerAddOptions.cs
-- [ ] **T028** [P] Keep the body when the registration of such a type is deleted (FR-004) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/Commands/DeleteEntryCommandHandler.cs
+- [x] **T025** [P] Cache the first line of each file of an extension a designer claims as shared, up to the first line break or 1,024 bytes, dropped when the file changes (R3) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/FirstLineCache.cs
+- [x] **T026** [P] Make the registration optional in `DesignerRouted` and `IDesignerSessionFactory.Open`, and adapt the Knowledge designer's factory, which always passes one (R4) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/_Model/DesignerRouting.cs
+- [x] **T027** [P] Accept an enveloped existing file without writing, refuse one without the envelope naming the line, and write no registration for a binding with `createOnFirstPlacement` (FR-003, FR-005; R5) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/DesignerAddOptions.cs
+- [x] **T028** [P] Keep the body when the registration of such a type is deleted (FR-004) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/Commands/DeleteEntryCommandHandler.cs
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T029** Ask the FBL library's `Router` and `MarkerEvaluator` first, through the cache, before the routers of the three tool kinds; route another tool's registration whose body carries an envelope as `Unreadable` with the reason (FR-002; R3) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/ToolRouter.cs
+- [x] **T029** Ask the FBL library's `Router` and `MarkerEvaluator` first, through the cache, before the routers of the three tool kinds; route another tool's registration whose body carries an envelope as `Unreadable` with the reason (FR-002; R3) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Hierarchy/ToolRouter.cs
 
 **⟶ Then:**
 
-- [ ] **T030** Correct the module guide: a designer document recognised by its envelope, the optional registration, the delete rule; and the stale opening "No designer exists yet" · etalii.adp.ide.standalone/docs/creating-a-designer-module.md
-- [ ] **T031** Deliver pull request 3 · etalii.adp.ide.standalone (pull request 3)
+- [x] **T030** Correct the module guide: a designer document recognised by its envelope, the optional registration, the delete rule; and the stale opening "No designer exists yet" · etalii.adp.ide.standalone/docs/creating-a-designer-module.md
+- [x] **T031** Deliver pull request 3 · etalii.adp.ide.standalone (pull request 3)
 
 **Checkpoint**: the library reads and writes the `bullets` family and declared blocks, and the host routes and adds a document by its envelope. Stories can start.
 
