@@ -1,6 +1,6 @@
 {
   "$schema": "https://etalii.net/adp/atd/schema/0.1/atd.schema.json#/$defs/ConformanceFixture",
-  "doc": "Recorded by `atd record freeplane/mindmap` from the parity script parity/scripts/freeplane/mindmap/example-1.json of etalii.adp.ide.desktop; never edited by hand.",
+  "doc": "Recorded by `atd record freeplane/mindmap` from parity/scripts/freeplane/mindmap/example-1.json of etalii.adp.ide.desktop; never edited by hand.",
   "tool": "freeplane/mindmap",
   "description": "../../../mindmap.atd",
   "inputs": {
@@ -866,21 +866,21 @@
       "host": "desktop",
       "repository": "etalii.adp.ide.desktop",
       "commit": "fe5feec",
-      "recordedWith": "1c1aed0",
+      "recordedWith": "567ab55",
       "source": "atd record (reading)"
     },
     "findings": {
       "host": "desktop",
       "repository": "etalii.adp.ide.desktop",
       "commit": "fe5feec",
-      "recordedWith": "1c1aed0",
+      "recordedWith": "567ab55",
       "source": "atd record (findings)"
     },
     "drawing": {
       "host": "desktop",
       "repository": "etalii.adp.ide.desktop",
       "commit": "fe5feec",
-      "recordedWith": "1c1aed0",
+      "recordedWith": "567ab55",
       "source": "atd record (drawing)"
     }
   }
