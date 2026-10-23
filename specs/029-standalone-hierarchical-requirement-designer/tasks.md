@@ -66,8 +66,8 @@ Extends: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Doc
 **Wave 1, tests first (different files):**
 
 - [x] **T003** [P] Copy `bullets-read/` and `bullets-edits/` with its `no-section/` sub-folder into the corpus in etalii.adp's layout, and log the copy (FR-029; R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/etalii.adp/specifications/fbl/fixtures/bullets-read/
-- [ ] **T004** [P] Teach the harness FBL 0.7: find `fixture.json` at any depth; read the edit forms `move`, `setting`, `position`, `slot`, `occurrence`, `expectFile` and an `edit` that is a list carrying its `x-operation`; compare `read.elements[].parent`; raise `MinimumFixtures` to the new count (FR-029; R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/ConformanceFixtures.Tests.cs
-- [ ] **T005** [P] Add the stand-in for the derived ids `tag/<name>`, `category/<name>`, `state/<name>`, `filter/<name>` and `assessment/<n>`, beside `NaturalIds.cs` (R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/DerivedIds.cs
+- [x] **T004** [P] Teach the harness FBL 0.7: find `fixture.json` at any depth; read the edit forms `move`, `setting`, `position`, `slot`, `occurrence`, `expectFile` and an `edit` that is a list carrying its `x-operation`; compare `read.elements[].parent`; raise `MinimumFixtures` to the new count (FR-029; R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/ConformanceFixtures.Tests.cs
+- [x] **T005** [P] Add the stand-in for the derived ids `tag/<name>`, `category/<name>`, `state/<name>`, `filter/<name>` and `assessment/<n>`, beside `NaturalIds.cs` (R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/DerivedIds.cs
 - [x] **T006** [P] Write the drift guard: an edit planned after the body's bytes changed on disk is refused with the library's sentence and writes nothing. Run it against the code without T009 and keep the failing output (FR-024; R12) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/History/OpenBodyDrift.Tests.cs
 
 **⟶ Wait for Wave 1 to finish, then:**
@@ -110,7 +110,7 @@ Extends: `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Doc
 
 **⟶ Wait for T017, then:**
 
-- [ ] **T019** Write the declared blocks as the fixtures state: a block absent or complete, its first change writing the whole list with its implicit members; a move in a kept block as insert before remove; ordinal blocks by key; an entry whose id is gone pruned with the next write; a change to a `history: false` block outside the history (FR-028) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Registration/OpenRegistration.cs
+- [x] **T019** Write the declared blocks as the fixtures state: a block absent or complete, its first change writing the whole list with its implicit members; a move in a kept block as insert before remove; ordinal blocks by key; an entry whose id is gone pruned with the next write; a change to a `history: false` block outside the history (FR-028) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl/Registration/OpenRegistration.cs
 
 **⟶ Then:**
 
@@ -167,41 +167,41 @@ Extends: `etalii.adp.ide.standalone/.gitattributes`, `etalii.adp.ide.standalone/
 
 **Wave 1 (different files):**
 
-- [ ] **T032** [P] [US3] Copy the four `definitions/designers/hierarchical-requirement.*` files and the twelve `hierarchical-requirement-*` folders, 23 fixtures, into the corpus and log the copy (SC-006; R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/etalii.adp/specifications/fbl/fixtures/
-- [ ] **T033** [P] [US3] Write the designer's runner after `KnowledgeFixtures.Tests.cs`, with a planted-defect test after `TheRunnerFailsOnAnAttributeValueOfAnotherType` (US3 scenarios 1 and 2) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/HierarchicalRequirementFixtures.Tests.cs
+- [x] **T032** [P] [US3] Copy the four `definitions/designers/hierarchical-requirement.*` files and the twelve `hierarchical-requirement-*` folders, 23 fixtures, into the corpus and log the copy (SC-006; R14) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/etalii.adp/specifications/fbl/fixtures/
+- [x] **T033** [P] [US3] Write the designer's runner after `KnowledgeFixtures.Tests.cs`, with a planted-defect test after `TheRunnerFailsOnAnAttributeValueOfAnotherType` (US3 scenarios 1 and 2) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/HierarchicalRequirementFixtures.Tests.cs
 
 ### Implementation
 
 **Wave 2 (different files):**
 
-- [ ] **T034** [P] [US3] Vendor the `.des`, `.fbl` and companion `.md` with `provenance.json` (the etalii.adp commit, a sha256 per file), and add `src/designers/*/definition/*.md -text` (R15) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/definition/
-- [ ] **T035** [P] [US3] Add `web-shop.md` and `web-shop.adp` with `LICENSE.md` and a `readme.md` saying what they do not demonstrate · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/examples/
-- [ ] **T036** [P] [US3] Check the envelope's DED version where the Knowledge designer checks its own, moving that check here if it is local to Knowledge: a later version is read-only with the reason, an envelope is never written (FR-031; R6) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Designer/DedEnvelope.cs
+- [x] **T034** [P] [US3] Vendor the `.des`, `.fbl` and companion `.md` with `provenance.json` (the etalii.adp commit, a sha256 per file), and add `src/designers/*/definition/*.md -text` (R15) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/definition/
+- [x] **T035** [P] [US3] Add `web-shop.md` and `web-shop.adp` with `LICENSE.md` and a `readme.md` saying what they do not demonstrate · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/examples/
+- [x] **T036** [P] [US3] Check the envelope's DED version where the Knowledge designer checks its own, moving that check here if it is local to Knowledge: a later version is read-only with the reason, an envelope is never written (FR-031; R6) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Designer/DedEnvelope.cs
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T037** [US3] Create the module project: the definition as embedded resources with `LogicalName`, `InternalsVisibleTo` its tests, its `.csproj.DotSettings`, in the solution; no `Designer.cs` yet, so the type is not offered before it has a page · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/EtAlii.Adp.Designer.HierarchicalRequirement.csproj
+- [x] **T037** [US3] Create the module project: the definition as embedded resources with `LogicalName`, `InternalsVisibleTo` its tests, its `.csproj.DotSettings`, in the solution; no `Designer.cs` yet, so the type is not offered before it has a page · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/EtAlii.Adp.Designer.HierarchicalRequirement.csproj
 
 **⟶ Then (different files):**
 
-- [ ] **T038** [P] [US3] Load the definition lazily, throwing when a resource is missing · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementDefinition.cs
-- [ ] **T039** [P] [US3] Write the model: the document with its marks, `Item`, `Requirement`, `Assessment`, `Tag`, `Category`, `State`, `Filter`, the findings, one type per file (data-model, The module) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/_Model/
-- [ ] **T040** [P] [US3] Write the vocabulary by hand from the `.des`, and its test, which reads the `.des` itself, differs in both directions and asserts a count; with the provenance hash test · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/DefinitionConformance.Tests.cs
+- [x] **T038** [P] [US3] Load the definition lazily, throwing when a resource is missing · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementDefinition.cs
+- [x] **T039** [P] [US3] Write the model: the document with its marks, `Item`, `Requirement`, `Assessment`, `Tag`, `Category`, `State`, `Filter`, the findings, one type per file (data-model, The module) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/_Model/
+- [x] **T040** [P] [US3] Write the vocabulary by hand from the `.des`, and its test, which reads the `.des` itself, differs in both directions and asserts a count; with the provenance hash test · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/DefinitionConformance.Tests.cs
 
 **⟶ Wait, then:**
 
-- [ ] **T041** [US3] Read a requirement document through `OpenBody` and the binding into the model: numbers for `ITEM-NEW` and `REQ-NEW` in memory only, the mark line, every finding of the companion's "What reading reports" at its bullet with every other entry usable, a body without the envelope or not UTF-8 read-only with one finding; opening writes nothing (FR-027) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementBody.cs
+- [x] **T041** [US3] Read a requirement document through `OpenBody` and the binding into the model: numbers for `ITEM-NEW` and `REQ-NEW` in memory only, the mark line, every finding of the companion's "What reading reports" at its bullet with every other entry usable, a body without the envelope or not UTF-8 read-only with one finding; opening writes nothing (FR-027) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementBody.cs
 
 **⟶ Then:**
 
-- [ ] **T042** [P] [US3] Test the reading: `web-shop.md` reads with exactly its `std.missingId`; each fault of `hierarchical-requirement-faults` gives one finding at one bullet or a read-only document; opening leaves both files' bytes as they were (FR-027; SC-007) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/HierarchicalRequirementBody.Tests.cs
-- [ ] **T043** [P] [US3] Test that the examples read as their readme says · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/Examples.Tests.cs
+- [x] **T042** [P] [US3] Test the reading: `web-shop.md` reads with exactly its `std.missingId`; each fault of `hierarchical-requirement-faults` gives one finding at one bullet or a read-only document; opening leaves both files' bytes as they were (FR-027; SC-007) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/HierarchicalRequirementBody.Tests.cs
+- [x] **T043** [P] [US3] Test that the examples read as their readme says · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/Examples.Tests.cs
 
 **⟶ Then:**
 
-- [ ] **T044** [US3] Run the conformance run: all 27 fixtures pass, against T002's baseline count; correct a failure in the library of Phase 2, never in the corpus · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests (run, not changed)
-- [ ] **T045** [US3] Update the solution's page and the counts its test holds · etalii.adp.ide.standalone/docs/solution-structure.md
-- [ ] **T046** [US3] Deliver pull request 4 · etalii.adp.ide.standalone (pull request 4)
+- [x] **T044** [US3] Run the conformance run: all 27 fixtures pass, against T002's baseline count; correct a failure in the library of Phase 2, never in the corpus · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Specification.Fbl.Tests (run, not changed)
+- [x] **T045** [US3] Update the solution's page and the counts its test holds · etalii.adp.ide.standalone/docs/solution-structure.md
+- [x] **T046** [US3] Deliver pull request 4 · etalii.adp.ide.standalone (pull request 4)
 
 **Checkpoint**: User Story 3 is done: the conformance run passes every fixture of the four groups and fails on a planted defect.
 
