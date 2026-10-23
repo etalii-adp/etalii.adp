@@ -22,7 +22,7 @@
 
 **Purpose**: the branches, the words, the constitution's place for a grammar, the pinned Python tools and the empty crates.
 
-- [ ] T001 Create the branch `features/035-adp-tool-language` from `develop` in its own worktree in each repository when that repository's first task starts (etalii.adp now; the desktop host at Phase 2; VS Code and IntelliJ at Phase 5), and a suffixed branch (`features/035-adp-tool-language-<stage>`) for each later stage in a repository that has more than one pull request (research R24); the batches of Story 2 use `features/035-adp-tool-language-batch<n>` in every repository they touch · etalii.adp/, etalii.adp.ide.desktop/, etalii.adp.ide.vscode/, etalii.adp.ide.intellij/
+- [ ] T001 Create the branch `features/035-adp-tool-language` from `develop` in its own worktree in each repository when that repository's first task starts (etalii.adp now; the desktop host at Phase 2; VS Code and IntelliJ at Phase 5), and a suffixed branch (`features/035-adp-tool-language-<stage>`) for each later stage in a repository that has more than one pull request (research R24); the batches of Story 2 use `features/035-adp-tool-language-batch<n>` in every repository they touch. T001 is ticked when pull request 1 merges; each later branch is created as part of the first task of its pull request · etalii.adp/, etalii.adp.ide.desktop/, etalii.adp.ide.vscode/, etalii.adp.ide.intellij/
 - [ ] T002 Define, before any other file uses them, **ADP tool language** (ATD), **tool description** (one `.atd` file or a root with its parts; `.atd` is the ADP Tool Description), **script**, **capability**, **conformance fixture** and **trace**, and say that a tool description is not a definition, which stays the word for the documents users create (FR-103, Q4, R23); run `python .github/scripts/terminology-check.py` · etalii.adp/docs/terminology.md
 - [ ] T003 Amend the constitution to 1.8.0 (MINOR) through `/speckit-constitution`: a language whose authored form is text carries its grammar in `grammar/` beside its schema, its schema describes its parsed tree, its version key is its first construct, and `specifications/atd/` sits beside FBL as a language that serves every kind (R23) · etalii.adp/.specify/memory/constitution.md
 - [ ] T004 [P] Name ATD (`specifications/atd/`) beside FBL in the opening paragraph, add `atd` to the list of acronyms in *Writing specifications*, and add `*.atd` and the traces and conformance fixtures to the list of what `validate-examples.py` validates · etalii.adp/CLAUDE.md
@@ -345,7 +345,7 @@ Pull requests in research R24's order, each from `features/035-adp-tool-language
 
 | # | Repository | Tasks |
 |---|---|---|
-| 1 | etalii.adp: the language (glossary, constitution, ATD 0.1, examples, refused corpus, generated files, the walk, the formats of fixtures, traces and capability contracts with their checks, the `grammar` job) | T001 (etalii.adp's branch), T002–T007, T009–T027, T029–T031, T033, T046, T047, T094, T095, T150, T160, T161 |
+| 1 | etalii.adp: the language (glossary, constitution, ATD 0.1, examples, refused corpus, generated files, the walk, the formats of fixtures, traces and capability contracts with their checks, the `grammar` job) | T001, T002–T007, T009–T027, T029–T031, T033, T046, T047, T094, T095, T150, T160, T161 |
 | 2 | etalii.adp.ide.desktop: the toolchain, the shell's `.atd` support and `atd-v0.1.0` | T008, T028, T032, T034–T044, T096–T108, T151 |
 | 3 | etalii.adp: the `descriptions` job | T045 |
 | 4a | etalii.adp.ide.vscode: language support from `atd-v0.1.0` | T109–T114 |

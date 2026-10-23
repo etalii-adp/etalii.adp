@@ -1,9 +1,9 @@
 {
   "workflow": "speckit",
   "specName": "One Language for Every Tool Type",
-  "branch": "claude/project-thread-kykv1z",
-  "currentStep": "analyze",
-  "status": "ready-to-implement",
+  "branch": "features/035-adp-tool-language",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -81,11 +81,18 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-23T00:22:50.603Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "user",
+      "at": "2026-10-23T01:01:44.745Z"
     }
   ],
   "telemetryInstanceId": "08585035-be37-4ec2-8014-b7ba182a1776",
   "assistant": "claude-vscode",
-  "workingBranch": "features/035-adp-tool-language-tasks",
+  "workingBranch": "features/035-adp-tool-language-implementing",
   "approach": "ATD is specified in specifications/atd/ as one strict LALR(1) grammar in a stated subset of Lark notation, with soft keywords, CEL inside the grammar and a bounded deterministic script. It is implemented once, in Rust crates of the desktop host, whose language server runs in process there, as WebAssembly in VS Code and as a native binary under IntelliJ's LSP API. A validation runtime lowers descriptions onto the desktop host's existing engines and replays fixtures built from the standalone goldens.",
   "decisions": [
     {
