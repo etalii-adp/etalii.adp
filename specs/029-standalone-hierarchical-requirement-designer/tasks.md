@@ -431,21 +431,21 @@ Extends: `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backe
 
 **Wave 1 (different files):**
 
-- [ ] **T095** [P] [US7] Test `addTag`, `removeTag`, `renameTag`, `recolourTag`, `moveTag` and `deleteTag` against `hierarchical-requirement-tags` and `-tag-list`; a rename or a delete that writes the `.md` and the `.adp` is one history step that one undo takes back (FR-026; R17) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/TagOperations.Tests.cs
-- [ ] **T096** [P] [US7] Test deleting the registration: the document stays; reopening creates none until a setting changes; deleted and created again, every tag, category, state, reference and assessment is there; an open page goes on with default colours and order (FR-004; US7 scenario 2; SC-008) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/RegistrationDeleted.Tests.cs
-- [ ] **T097** [P] [US7] Test the field and the list: searching, creating, renaming, recolouring, reordering, deleting (FR-011) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/labels/TagField.test.tsx
+- [x] **T095** [P] [US7] Test `addTag`, `removeTag`, `renameTag`, `recolourTag`, `moveTag` and `deleteTag` against `hierarchical-requirement-tags` and `-tag-list`; a rename or a delete that writes the `.md` and the `.adp` is one history step that one undo takes back (FR-026; R17) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/TagOperations.Tests.cs
+- [x] **T096** [P] [US7] Test deleting the registration: the document stays; reopening creates none until a setting changes; deleted and created again, every tag, category, state, reference and assessment is there; an open page goes on with default colours and order (FR-004; US7 scenario 2; SC-008) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/RegistrationDeleted.Tests.cs
+- [x] **T097** [P] [US7] Test the field and the list: searching, creating, renaming, recolouring, reordering, deleting (FR-011) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/labels/TagField.test.tsx
 
 ### Implementation
 
 **Wave 2 (different files):**
 
-- [ ] **T098** [P] [US7] Write the six tag operations (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Operations/TagOperations.cs
-- [ ] **T099** [P] [US7] Write the tag field on `SearchList` and the list editor on `OptionsEditor`, reused in place (FR-011; R9) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/labels/TagField.tsx
+- [x] **T098** [P] [US7] Write the six tag operations (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Operations/TagOperations.cs
+- [x] **T099** [P] [US7] Write the tag field on `SearchList` and the list editor on `OptionsEditor`, reused in place (FR-011; R9) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/labels/TagField.tsx
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T100** [US7] Map the gestures, and put the field below the title · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementGestures.cs
-- [ ] **T101** [US7] Check in the browser beside the Knowledge designer, in both themes, record it, and deliver pull request 10 · etalii.adp.ide.standalone/tests.md
+- [x] **T100** [US7] Map the gestures, and put the field below the title · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementGestures.cs
+- [x] **T101** [US7] Check in the browser beside the Knowledge designer, in both themes, record it, and deliver pull request 10 · etalii.adp.ide.standalone/tests.md
 
 **Checkpoint**: tags work, and the registration holds only what an agent does not need.
 
