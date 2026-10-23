@@ -661,6 +661,8 @@ def highlighting(parser):
         ("constant.numeric.length.atd", r"\b[0-9]+(?:\.[0-9]+)?(?:px|mm|in|em|%)"),
         ("constant.numeric.atd", r"\b(?:0x[0-9a-fA-F]+[uU]?|[0-9]+\.[0-9]+(?:[eE][+-]?[0-9]+)?|[0-9]+[eE][+-]?[0-9]+|[0-9]+[uU]?)\b"),
         ("support.type.property-name.atd", r"\b[A-Za-z_][A-Za-z0-9_-]*(?:\.[A-Za-z_][A-Za-z0-9_-]*)*(?=[ \t]*:(?!:))"),
+        # A word with hyphens is one DASHED_WORD token, never a keyword or name and a minus (section 3.4).
+        ("variable.other.word.atd", r"\b[A-Za-z_][A-Za-z0-9_]*(?:-[A-Za-z0-9_]+)+\b"),
         ("keyword.control.atd", r"\b(?:" + "|".join(control_words) + r")\b"),
         ("constant.language.atd", r"\b(?:true|false|null)\b"),
         ("keyword.other.atd", r"\b(?:" + "|".join(re.escape(k) for k in construct_words) + r")\b"),
