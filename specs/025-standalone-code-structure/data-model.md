@@ -139,7 +139,7 @@ In M4 the session base, the resolver base, the handler base and the provider fra
 
 | Type | Home | Replaces | Requirement |
 |---|---|---|---|
-| `TranscriptHarness`, `TranscriptText`, `TranscriptTests<TAdapter>` | `EtAlii.Adp.TestSupport.Host/` | Six harnesses, six canonical-JSON writers, six identical test files | FR-093 |
+| `TranscriptHarness`, `TranscriptText`, `TranscriptTests<TAdapter>` | `EtAlii.Adp.TestSupport/` (moved from `EtAlii.Adp.TestSupport.Host/` by the maintainer's ruling of 2026-10-23: the harness needs no host) | Six harnesses, six canonical-JSON writers, six identical test files | FR-093 |
 
 ## Relationships that constrain the order
 
