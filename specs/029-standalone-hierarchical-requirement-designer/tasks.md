@@ -318,28 +318,28 @@ Extends: `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backe
 
 **Wave 1 (different files):**
 
-- [ ] **T072** [P] [US4] Test the template: a new document's file is the binding's template with the file's base name as its title, CRLF, byte for byte, and no registration (FR-005; US4 scenario 2) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/Template.Tests.cs
-- [ ] **T073** [P] [US4] Test each structure operation against the step of `hierarchical-requirement-structure` and `-edits` that states it, `numbering` and `no-mark` included; `addRequirementBelow` on a top-level requirement refused with its message; an item moved into itself refused; giving a duplicate a new number (FR-026; R17) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/StructureOperations.Tests.cs
-- [ ] **T074** [P] [US4] Test the two context actions and their `ContextShortcutDefinition`s (FR-012; R10; US4 scenario 3) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/ContextActions.Tests.cs
-- [ ] **T075** [P] [US4] Test the page: the control at the end of every item adds without a dialog; the key adds directly below, ready for typing; an item dragged with everything in it, a requirement dragged alone; deleting an entry that holds anything or is named asks first (FR-012 to FR-014) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/editing/AddControl.test.tsx
+- [x] **T072** [P] [US4] Test the template: a new document's file is the binding's template with the file's base name as its title, CRLF, byte for byte, and no registration (FR-005; US4 scenario 2) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/Template.Tests.cs
+- [x] **T073** [P] [US4] Test each structure operation against the step of `hierarchical-requirement-structure` and `-edits` that states it, `numbering` and `no-mark` included; `addRequirementBelow` on a top-level requirement refused with its message; an item moved into itself refused; giving a duplicate a new number (FR-026; R17) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/StructureOperations.Tests.cs
+- [x] **T074** [P] [US4] Test the two context actions and their `ContextShortcutDefinition`s (FR-012; R10; US4 scenario 3) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/ContextActions.Tests.cs
+- [x] **T075** [P] [US4] Test the page: the control at the end of every item adds without a dialog; the key adds directly below, ready for typing; an item dragged with everything in it, a requirement dragged alone; deleting an entry that holds anything or is named asks first (FR-012 to FR-014) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/editing/AddControl.test.tsx
 
 ### Implementation
 
 **Wave 2 (different files):**
 
-- [ ] **T076** [P] [US4] Write the template through `TemplateWriter.Produce` (FR-005) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementDocumentTemplate.cs
-- [ ] **T077** [P] [US4] Write `addTopItem`, `addItem`, `addItemBelow`, `addRequirement`, `addRequirementBelow`, `moveItem`, `moveRequirement`, `deleteEntry` and `renumberDuplicate` (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Operations/StructureOperations.cs
-- [ ] **T078** [P] [US4] Write the context actions `Ctrl+Enter` and `Ctrl+Shift+Enter` (FR-012) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementContextActionProvider.cs
-- [ ] **T079** [P] [US4] Write the add control after `NewRow`, the drag on `usePointerGesture`, and the confirmation by the `.des` `confirm` of `deleteEntry` (FR-012 to FR-014) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/editing/AddControl.tsx
+- [x] **T076** [P] [US4] Write the template through `TemplateWriter.Produce` (FR-005) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementDocumentTemplate.cs
+- [x] **T077** [P] [US4] Write `addTopItem`, `addItem`, `addItemBelow`, `addRequirement`, `addRequirementBelow`, `moveItem`, `moveRequirement`, `deleteEntry` and `renumberDuplicate` (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Operations/StructureOperations.cs
+- [x] **T078** [P] [US4] Write the context actions `Ctrl+Enter` and `Ctrl+Shift+Enter` (FR-012) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementContextActionProvider.cs
+- [x] **T079** [P] [US4] Write the add control after `NewRow`, the drag on `usePointerGesture`, and the confirmation by the `.des` `confirm` of `deleteEntry` (FR-012 to FR-014) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/editing/AddControl.tsx
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T080** [US4] Register the template and the context actions, and map the gestures to the operations · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementGestures.cs
+- [x] **T080** [US4] Register the template and the context actions, and map the gestures to the operations · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementGestures.cs
 
 **⟶ Then:**
 
-- [ ] **T081** [US4] Check in the browser: create, add by control and by key, drag, delete; compare the created file with the template; record it · etalii.adp.ide.standalone/tests.md
-- [ ] **T082** [US4] Deliver pull request 7 · etalii.adp.ide.standalone (pull request 7)
+- [x] **T081** [US4] Check in the browser: create, add by control and by key, drag, delete; compare the created file with the template; record it · etalii.adp.ide.standalone/tests.md
+- [x] **T082** [US4] Deliver pull request 7 · etalii.adp.ide.standalone (pull request 7)
 
 **Checkpoint**: a person can start a document as well as continue one.
 
