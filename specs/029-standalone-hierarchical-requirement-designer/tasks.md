@@ -491,8 +491,8 @@ Extends: `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backe
 
 ## Phase 11: Polish and measurement
 
-- [ ] **T111** On standalone `develop` after pull request 11, run the four gates, `inspect.sh` and the conformance run, and compare the counts with T002's baseline; SC-003's test and SC-006's run pass · etalii.adp.ide.standalone (run, not changed)
-- [ ] **T112** Set the tool's state in the catalogue · etalii.adp.ide.standalone/docs/tools.md
+- [x] **T111** On standalone `develop` after pull request 11, run the four gates, `inspect.sh` and the conformance run, and compare the counts with T002's baseline; SC-003's test and SC-006's run pass · etalii.adp.ide.standalone (run, not changed)
+- [x] **T112** Set the tool's state in the catalogue · etalii.adp.ide.standalone/docs/tools.md
 - [ ] **T113** Write the measurements as they come in: SC-001 as two timed readings of one task on one document, text first, at least a day apart; SC-002 as the share of an agent's changes over the first four weeks read without a finding or a hand repair; SC-004 the maintainer's four weeks on a subject they name; SC-005 if a second person takes it up · etalii.adp/specs/029-standalone-hierarchical-requirement-designer/measurements.md
 
 ---
