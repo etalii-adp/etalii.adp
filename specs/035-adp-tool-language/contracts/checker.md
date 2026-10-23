@@ -16,13 +16,14 @@ The `atd` binary built from `etalii.adp.ide.desktop/crates/adp-atd-cli`. The Bui
 | `atd tables [--grammar <file.lark>]` | Prints the normalized parse tables of the language, or of a grammar in ATD grammar notation | `$defs/ParseTables` | 0 / 1 (conflicts listed) |
 | `atd validate <root.atd> [--case <name>]` | Runs the description's conformance cases (R17) on working copies | the differences, each at a construct | 0 all pass, 1 a difference |
 | `atd record <origin> --cases <dir>` | Records a type's conformance cases from the desktop host's current module (R17) | writes `conformance.json` files | 0 / 1 |
+| `atd record --check` | Records every vendored case and capability fixture into a temporary folder and compares them with the vendored files | the differences | 0 equal, 1 different |
 | `atd new --kind <kind> --origin <vendor/type> --name <name> [--out <dir>]` | Writes a new description from the core's template; it checks clean (FR-060) | the file path | 0 / 1 |
 
 Common options: `--spec-dir <dir>` (the `specifications/atd/` to read the grammar and schema from; default the one compiled in), `--version` (prints the tool's version and the ATD versions it reads).
 
 ## Guarantees
 
-- `check`, `tree`, `fmt` and `tables` never write outside the files named, and `validate` and `record` write only to a temporary working directory and, for `record`, to `--cases`.
+- `check`, `tree`, `fmt` and `tables` never write outside the files named; `validate` writes nothing, its working copies are in memory; `record` writes only to `--cases`, and `record --check` only to a temporary folder.
 - The findings of `atd check` for a text equal the diagnostics the language servers publish for it (FR-054): both call `adp-atd-check` with the same input.
 - `atd fmt` run twice changes nothing the second time (FR-032).
 - The order of findings is stable: by file, position, code.

@@ -11,6 +11,7 @@ The entities of the specification's *Key Entities*, with their fields, relations
 | Grammar | `grammar/<version>/*.lark` for each released minor, `grammar/*.lark` for the current draft; `grammar/atd.flat.lark` generated |
 | Schema | `atd.schema.json`, `$id` `https://etalii.net/adp/atd/schema/0.1/atd.schema.json`, `$defs`: `Tree` (and one entry per construct of the abstract tree), `Findings`, `Finding`, `Trace`, `ConformanceFixture`, `Drawing`, `Capability`, `ParseTables`, plus references to DISL's, DESL's and FBL's `$defs` for settings |
 | Examples | `*.atd` beside the document: one per kind, one per binding family, one with script functions, one split over parts, one with a grammar binding |
+| Worked examples of the other formats | `fixtures/mindmap/basic/` (a conformance case), `mindmap.trace.json` with its companion `mindmap.md`, `capabilities/layout.mindmap/contract.json` (ATD §2.3 to §2.6) |
 | Refused corpus | `refused/<name>.atd` with `refused/<name>.findings.json` (`$defs/Findings`) and a `README.md` in the shape of `specifications/fbl/refused/README.md` |
 | Capabilities | `capabilities/<name>/contract.json` (`$defs/Capability`) and `capabilities/<name>/fixtures/` |
 | Highlighting | `highlighting/atd.tmLanguage.json`, `highlighting/atd.sublime-syntax`, generated |
@@ -116,7 +117,7 @@ One case of one tool type: `definitions/<kind>s/conformance/<type>/<case>/confor
 | `read` | the expected reading: elements, relations, attributes, findings (as `$defs/Finding` of FBL and DISL), unreadable parts |
 | `drawing` | the expected scene after reading (`$defs/Drawing`) |
 | `steps[]` | `select`, `action` (+ `args`), `property`, `move`, `create`, `connect`, `delete`, `undo`, `redo`, each with its expected `splices`, resulting bytes (`expect` or `expectFile`), findings, drawing, or `refused` with its reason |
-| `provenance` | per part (`bytes`, `reading`, `findings`, `drawing`): host, repository, commit, and the source file (a standalone golden or `atd record`) |
+| `provenance` | per part (`bytes`, `reading`, `findings`, `drawing`): host, repository, commit (the reference commit whose behaviour is recorded), `recordedWith` (for a recorded part, the commit `atd record` ran at), and the source file (a standalone golden or `atd record`) |
 
 **Rules**: the bytes after each step equal the reference bytes exactly; a fixture changes only by re-recording, never by hand; `undo` returns the previous bytes exactly.
 

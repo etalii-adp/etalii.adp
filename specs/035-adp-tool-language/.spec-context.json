@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "One Language for Every Tool Type",
   "branch": "claude/project-thread-kykv1z",
-  "currentStep": "tasks",
-  "status": "ready-to-implement",
+  "currentStep": "analyze",
+  "status": "tasking",
   "history": [
     {
       "step": "specify",
@@ -67,6 +67,20 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-10-23T00:18:03.337Z"
+    },
+    {
+      "step": "analyze",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-23T00:20:05.794Z"
+    },
+    {
+      "step": "analyze",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:22:50.603Z"
     }
   ],
   "telemetryInstanceId": "08585035-be37-4ec2-8014-b7ba182a1776",
@@ -118,7 +132,9 @@
       "tasks": [
         "T007",
         "T024",
-        "T029"
+        "T029",
+        "T160",
+        "T161"
       ]
     },
     "FR-002": {
@@ -263,7 +279,8 @@
       "tasks": [
         "T023",
         "T046",
-        "T047"
+        "T047",
+        "T160"
       ]
     },
     "FR-023": {
@@ -271,7 +288,8 @@
         "T046",
         "T047",
         "T048",
-        "T055"
+        "T055",
+        "T160"
       ]
     },
     "FR-024": {
@@ -279,7 +297,9 @@
         "T049",
         "T050",
         "T051",
-        "T052"
+        "T052",
+        "T160",
+        "T163"
       ]
     },
     "FR-025": {
@@ -320,7 +340,8 @@
       "tasks": [
         "T124",
         "T126",
-        "T132"
+        "T132",
+        "T163"
       ]
     },
     "FR-041": {
@@ -334,7 +355,8 @@
       "tasks": [
         "T121",
         "T122",
-        "T126"
+        "T126",
+        "T162"
       ]
     },
     "FR-043": {
@@ -403,7 +425,8 @@
       "tasks": [
         "T128",
         "T136",
-        "T137"
+        "T137",
+        "T162"
       ]
     },
     "FR-070": {
@@ -430,14 +453,16 @@
       "tasks": [
         "T143",
         "T145",
-        "T148"
+        "T148",
+        "T159"
       ]
     },
     "FR-081": {
       "tasks": [
         "T143",
         "T147",
-        "T148"
+        "T148",
+        "T159"
       ]
     },
     "FR-082": {
@@ -487,5 +512,47 @@
         "T153"
       ]
     }
-  }
+  },
+  "concerns": [
+    {
+      "note": "C1 Principle II: FBL 0.9 grammar family (T143, T144, PR 1) changes FBL's document and schema with no .fbl example of the family",
+      "step": "analyze"
+    },
+    {
+      "note": "C2 Principle II: Trace, ConformanceFixture and Drawing get schema defs (T046) but no ATD document section defines them; T046 in PR 3 does not update Appendix A",
+      "step": "analyze"
+    },
+    {
+      "note": "H1 VS Code validation runs adp-atd-runtime as wasm32-unknown-unknown, but T126 uses a temporary directory and analysis.msbuildImports reads files; no task makes the runtime filesystem-free or builds it for wasm (SC-004, FR-063)",
+      "step": "analyze"
+    },
+    {
+      "note": "H2 Description batches that add constructs (tasks line 104) need checker changes in the desktop host, but no paired desktop pull request is planned and the descriptions job falls back to develop",
+      "step": "analyze"
+    },
+    {
+      "note": "M1 Conformance provenance names commit fe5feec, but atd record runs at a later desktop commit, after T125 moved capability code",
+      "step": "analyze"
+    },
+    {
+      "note": "M2 SC-004 'no tool-specific code' is blurred by capabilities that serve one type (layout.mindmap, Wardley and supply-chain readers)",
+      "step": "analyze"
+    },
+    {
+      "note": "M3 SC-004 'pass in both' hosts: VS Code is tested on the mind map only (T136)",
+      "step": "analyze"
+    },
+    {
+      "note": "M4 Story 1 scenario 3 (message names what was found and expected) is untested: atd check --expect ignores messages",
+      "step": "analyze"
+    },
+    {
+      "note": "M5 project-link-picker, which research R18 adds to the host code read, is named in no task",
+      "step": "analyze"
+    },
+    {
+      "note": "M6 Pre-tasks gate checklist: 0 of 55 items reviewed; it gates /speckit-implement",
+      "step": "analyze"
+    }
+  ]
 }

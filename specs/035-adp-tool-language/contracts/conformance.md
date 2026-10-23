@@ -1,6 +1,6 @@
 # Contract: conformance fixtures and traces
 
-The files that show a tool description complete (story 2) and correct (story 4). Research R16 to R18; data-model.md §8 to §10.
+The files that show a tool description complete (story 2) and correct (story 4). Research R16 to R18; data-model.md §8 to §10. Their normative definitions are ATD §2.3 to §2.6, each with a worked example beside the document.
 
 ## Layout in etalii.adp
 
@@ -43,13 +43,13 @@ definitions/
   ],
   "provenance": {
     "bytes": { "host": "standalone", "repository": "etalii.adp.ide.standalone", "commit": "396c776", "source": "etalii.adp.ide.desktop/parity/goldens/freeplane/mindmap/add-sibling/" },
-    "reading": { "host": "desktop", "repository": "etalii.adp.ide.desktop", "commit": "fe5feec", "source": "atd record" },
-    "drawing": { "host": "desktop", "repository": "etalii.adp.ide.desktop", "commit": "fe5feec", "source": "atd record" }
+    "reading": { "host": "desktop", "repository": "etalii.adp.ide.desktop", "commit": "fe5feec", "recordedWith": "<the commit atd record ran at>", "source": "atd record" },
+    "drawing": { "host": "desktop", "repository": "etalii.adp.ide.desktop", "commit": "fe5feec", "recordedWith": "<the commit atd record ran at>", "source": "atd record" }
   }
 }
 ```
 
-Generated ids are recorded as the reference host generated them, as `recorded.json` does today; the runtime is given the recorded ids in order so that bytes can be equal.
+Generated ids are recorded as the reference host generated them, as `recorded.json` does today; the runtime is given the recorded ids in order so that bytes can be equal. `commit` is the reference commit whose behaviour is recorded; `recordedWith` is the commit of the desktop host that `atd record` ran at, and `atd record --check` in the desktop host's Build keeps the two in step.
 
 ## Validation result
 
@@ -79,4 +79,4 @@ The items, paths and lines above are illustrative; the real ones come from readi
 
 - `validate-examples.py`: every `conformance.json` and `*.trace.json` valid against `atd.schema.json`; every input file present; every companion item in its trace exactly once; each `hostConcern` one of the ATD document's list.
 - `atd check --trace`: every `statedBy` resolves in the description.
-- `atd validate`: every case passes in the desktop host; VS Code's *Validate Tool Description* gives the same result (it runs the same core).
+- `atd validate`: every case passes in the desktop host; the WebAssembly module VS Code ships gives the same result for every case in the desktop host's Build, and VS Code's *Validate Tool Description* gives the same result (it runs that module).
