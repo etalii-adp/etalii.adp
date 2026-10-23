@@ -492,11 +492,16 @@ These come before M8's first task, with T295 as the M7 review reduced it.
 - [ ] ~~T256 [US2] Move the other 47 stub definitions into the catalog and delete their projects and readmes from `etalii.adp.ide.standalone/src/diagrams/` and from `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.slnx`; `etalii.adp.ide.standalone/docs/tools.md` still names every type, and the counts of `etalii.adp.ide.standalone/docs/solution-structure.md` and `ArchitecturePages.Tests` are corrected (FR-097, FR-004; SC-027).~~ Struck: DP-1 ruled (c), keep the stubs (maintainer, 2026-10-11).
 - [ ] ~~T257 [US2] Rewrite the part of `etalii.adp.ide.standalone/docs/creating-a-diagram-module.md` that says how a cataloged type becomes an implemented module: its definition leaves the catalog when its own project gains a `Build` delegate (FR-097, FR-004).~~ Struck: DP-1 ruled (c), keep the stubs (maintainer, 2026-10-11).
 
+### Added by the M8 review
+
+- [ ] T317 [P] [US8] Added by the M8 review: one abstract `LineDocumentContract` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/` for the eighteen line-document cases that `DependencyGraphDocument.Tests.cs` and `TimelineDocument.Tests.cs` share (98 shared windows at M8), each module deriving with its corpus folder and extension; every case kept for each corpus (FR-015; SC-005).
+- [ ] T318 [P] [US8] Added by the M8 review: `HierarchicalRequirementFiles` in `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/` finds its module through `RepositoryPaths.Under` instead of a walk of its own, the one root walk left after T250; it lands after any open pull request of `etalii.adp` spec 029 on that file (FR-094).
+
 ### Review
 
-- [ ] T258 [US9] Run `etalii.adp.ide.standalone/.github/tools/analysis/measure.sh` on the merge commit of M8's last pull request, in a freshly created worktree, and save its output as `etalii.adp/specs/025-standalone-code-structure/reviews/M8-measurements.json` (FR-009, FR-010).
-- [ ] T259 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M8-review.md` by `etalii.adp/specs/025-standalone-code-structure/contracts/milestone-review.md`: the comparison with the previous record, the exit condition of M8 (the tests are consolidated and the stub modules unchanged) and the success criteria due, an answer for every candidate named for the M8 review, what the clone scan and the method-length count show that nobody named, the tasks under FR-012 marked *stands*, *reduced* or *overtaken*, and the open rows of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` that M9 needs (FR-010, FR-011, FR-012).
-- [ ] T260 [US9] In the same pull request into `etalii.adp`, update `etalii.adp/specs/025-standalone-code-structure/tasks.md`: tick what is merged, add the tasks the review produced with new numbers, strike what it found unnecessary; amend a success criterion in `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` only with this review named beside it. No task of the next milestone starts before this pull request is merged (FR-010, FR-011, FR-014).
+- [x] T258 [US9] Run `etalii.adp.ide.standalone/.github/tools/analysis/measure.sh` on the merge commit of M8's last pull request, in a freshly created worktree, and save its output as `etalii.adp/specs/025-standalone-code-structure/reviews/M8-measurements.json` (FR-009, FR-010). Done (2026-10-23): [M8-measurements.json](reviews/M8-measurements.json), at `e0a11f9ad`, the merge of standalone pull request 655.
+- [x] T259 [US9] Write `etalii.adp/specs/025-standalone-code-structure/reviews/M8-review.md` by `etalii.adp/specs/025-standalone-code-structure/contracts/milestone-review.md`: the comparison with the previous record, the exit condition of M8 (the tests are consolidated and the stub modules unchanged) and the success criteria due, an answer for every candidate named for the M8 review, what the clone scan and the method-length count show that nobody named, the tasks under FR-012 marked *stands*, *reduced* or *overtaken*, and the open rows of `etalii.adp/specs/025-standalone-code-structure/behaviour-changes.md` that M9 needs (FR-010, FR-011, FR-012). Done (2026-10-23): [M8-review.md](reviews/M8-review.md).
+- [x] T260 [US9] In the same pull request into `etalii.adp`, update `etalii.adp/specs/025-standalone-code-structure/tasks.md`: tick what is merged, add the tasks the review produced with new numbers, strike what it found unnecessary; amend a success criterion in `etalii.adp/specs/025-standalone-code-structure/standalone-code-structure.spec.md` only with this review named beside it. No task of the next milestone starts before this pull request is merged (FR-010, FR-011, FR-014). Done in the pull request of the M8 review (2026-10-23): T258 and T259 ticked, T317 and T318 added, nothing struck, no success criterion amended (SC-005 waits on the review's question 1), and B-41 and B-42 recorded as applied.
 
 ## M9: close
 
@@ -540,7 +545,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-012 | 47 tasks, T010 to T259, T280, T295, T302 and T313 to T315; T225 struck by the M4 review, T231 and T232 by the M7 review |
 | FR-013 | T001 |
 | FR-014 | T042, T066, T117, T154, T184, T206, T230, T244, T260, T264 |
-| FR-015 | T011, T012, T013, T014, T015, T016, T149, T284 |
+| FR-015 | T011, T012, T013, T014, T015, T016, T149, T284, T317 |
 | FR-016 | T017, T018, T022, T023, T024 |
 | FR-017 | T019, T020, T025; T021 struck by the M0 review |
 | FR-018 | T027, T028, T029 |
@@ -619,7 +624,7 @@ Every requirement of the specification with the tasks that claim it, extracted f
 | FR-091 | T239, T240 |
 | FR-092 | T233, T234, T235, T236, T238, T240, T241, T313, T314, T315; T231 and T232 struck by the M7 review |
 | FR-093 | T245, T246 |
-| FR-094 | T247, T248, T249, T250 |
+| FR-094 | T247, T248, T249, T250, T318 |
 | FR-095 | T251, T252, T253, T303 |
 | FR-096 | T254 |
 | FR-097 | none: satisfied by leaving the stubs as they are (DP-1 (c)); T255 to T257 struck |
