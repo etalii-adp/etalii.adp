@@ -494,7 +494,7 @@ These come before M8's first task, with T295 as the M7 review reduced it.
 
 ### Added by the M8 review
 
-- [ ] T317 [P] [US8] Added by the M8 review: one abstract `LineDocumentContract` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/` for the seventeen round-trip cases that `DependencyGraphDocument.Tests.cs` and `TimelineDocument.Tests.cs` share (98 shared windows at M8), each module deriving with its corpus folder and extension; every case kept for each corpus (FR-015; SC-005).
+- [ ] T317 [P] [US8] Added by the M8 review: one abstract `LineDocumentContract` in `etalii.adp.ide.standalone/src/backend/EtAlii.Adp.TestSupport/` for the eighteen line-document cases that `DependencyGraphDocument.Tests.cs` and `TimelineDocument.Tests.cs` share (98 shared windows at M8), each module deriving with its corpus folder and extension; every case kept for each corpus (FR-015; SC-005).
 - [ ] T318 [P] [US8] Added by the M8 review: `HierarchicalRequirementFiles` in `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/` finds its module through `RepositoryPaths.Under` instead of a walk of its own, the one root walk left after T250; it lands after any open pull request of `etalii.adp` spec 029 on that file (FR-094).
 
 ### Review
