@@ -239,6 +239,8 @@ SC-005, as amended on the M7 review's question 2, counts the test lines that the
 
 **Answers.** Not yet given when this review was written. SC-005 stands as amended by the M7 review until question 1 is ruled.
 
+The maintainer answered on a decision card on 2026-10-23 with the recommended option: question 1 (a), count it. SC-005 is amended in the specification with this review named beside it, and is met at 5,726.
+
 ## Ownership
 
 M8 was owned by one developer, signing as `agent-1-<task>` (FR-006), in a cloud session. A Remote Control session of the same developer on a Mac mini did T245, T251, T252 and T246's first four modules; the cloud session took over the rest of T246 when the Mac mini went offline. M9 is owned by the same developer, agent 1, unless the maintainer hands it over with this review.
