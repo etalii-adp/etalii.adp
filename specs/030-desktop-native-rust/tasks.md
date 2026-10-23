@@ -70,7 +70,7 @@
 - [x] T034 [US1] Draw the project list page and the workspace: resizable panes (explorer and search placeholder left, tabs centre, errors and warnings bottom, toolbox and properties right), the ribbon with Save, New, Undo, Redo, contextual groups and the zoom buttons, the context menu, and keyboard navigation with the standalone host's shortcuts (FR-012, FR-015, FR-024) · etalii.adp.ide.desktop/crates/adp-shell/src/workspace/
 - [x] T035 [US1] Draw the prompts with native file dialogs through `rfd` and the other prompts as modal panels (FR-015) · etalii.adp.ide.desktop/crates/adp-shell/src/prompts/
 - [x] T036 [US1] Package the first installers with `cargo-dist` for the three platforms, unsigned and marked so, and publish them from a green `develop` (R11, FR-004, FR-040) · etalii.adp.ide.desktop/dist-workspace.toml and .github/workflows/build.yml
-- [ ] T037 [US1] Walk Story 1 on each platform and record it; set the inventory rows it covers to `checked` · etalii.adp.ide.desktop/parity/walks.md
+- [x] T037 [US1] Walk Story 1 on each platform and record it; set the inventory rows it covers to `checked` · etalii.adp.ide.desktop/parity/walks.md
 
 **Checkpoint**: Story 1 passes on a clean machine of each platform (SC-001).
 
@@ -171,7 +171,7 @@
 - [x] T086 [P] [US6] Port the standalone host's contrast tests and run them against both VS Code themes; adjust tool colours, never VS Code values (FR-042, R9) · etalii.adp.ide.desktop/crates/adp-theme/tests/contrast.rs
 - [x] T087 [P] [US6] Give every tool's canvas and table colours per theme from the active theme (FR-045) · etalii.adp.ide.desktop/modules/*/src/theme.rs
 - [x] T088 [US6] Expose every interactive element through AccessKit with role, name and state, and test the tree of the explorer, menus, dialogs, tabs and the errors panel (FR-041) · etalii.adp.ide.desktop/crates/adp-shell/tests/accessibility.rs
-- [ ] T089 [US6] Walk Story 1 with a screen reader on at least one platform and Story 6 on all three, and record them (SC-009, SC-010) · etalii.adp.ide.desktop/parity/walks.md
+- [x] T089 [US6] Walk Story 1 with a screen reader on at least one platform and Story 6 on all three, and record them (SC-009, SC-010) · etalii.adp.ide.desktop/parity/walks.md
 
 **Checkpoint**: the look matches VS Code value for value; a screen reader user completes Story 1.
 
