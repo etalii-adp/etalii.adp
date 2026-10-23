@@ -1148,7 +1148,7 @@
   "states": [
     {"actions":{"\"atd\"":"s1"},"gotos":{"description":2,"header":3}},
     {"actions":{"VERSION":"s4"},"gotos":{}},
-    {"actions":{},"gotos":{}},
+    {"actions":{"$END":"accept"},"gotos":{}},
     {"actions":{"\"designer\"":"s5","\"diagram\"":"s6","\"editor\"":"s7","\"part\"":"s8"},"gotos":{"part":9,"tool":10,"tool_kind":11}},
     {"actions":{"\"designer\"":"r613","\"diagram\"":"r613","\"editor\"":"r613","\"part\"":"r613"},"gotos":{}},
     {"actions":{"ORIGIN":"r765"},"gotos":{}},

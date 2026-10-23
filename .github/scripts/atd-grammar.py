@@ -408,8 +408,8 @@ def normalized_tables(parser):
             return origin
         helper[origin] = None
         base = [r for r in rules if r.origin.name == origin and (not r.expansion or r.expansion[0].name != origin)]
-        parts = [symbol_name(s) for s in base[0].expansion]
-        helper[origin] = "(" + " ".join(parts) + ")+"
+        alternatives = sorted(" ".join(symbol_name(s) for s in r.expansion) for r in base)
+        helper[origin] = "(" + " | ".join(alternatives) + ")+"
         return helper[origin]
 
     def symbol_name(symbol):
@@ -453,6 +453,8 @@ def normalized_tables(parser):
                     actions[key] = "accept"
                 else:
                     actions[key] = f"r{rule_index[(lhs, rhs)]}"
+        if state == table.end_states["description"]:
+            actions["$END"] = "accept"
         states.append({"actions": dict(sorted(actions.items())), "gotos": dict(sorted(gotos.items()))})
     return {
         "grammar": "specifications/atd/grammar/atd.lark",

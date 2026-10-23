@@ -259,7 +259,7 @@ An implementation builds its tables from the grammar after this expansion, which
 4. `x*` becomes the same rule `H`, and two expansions, one with `H` and one without.
 5. Two repetitions of the same item share one rule `H`, wherever they stand.
 6. Duplicate expansions of a rule are kept once.
-7. The start symbol is `description`; the automaton is augmented with a rule `$root_description: description $END`.
+7. The start symbol is `description`. The automaton is augmented as an LR automaton is: the state the start state reaches on `description` accepts at `$END`; the augmenting rule is not one of the grammar's rules.
 
 ### 4.5 The parse tree
 
@@ -271,7 +271,7 @@ A conforming parser need not build Lark's tree; ATD's own tree is the abstract t
 
 ### 4.7 Parse tables
 
-`grammar/atd.tables.json` (`$defs/ParseTables`) is the LALR(1) automaton of the grammar, normalized so that two implementations can be compared byte for byte: terminals by name, an anonymous string terminal named by its quoted string; the rules after section 4.4, sorted and numbered, a helper of a repetition named `(<symbols>)+`; and the states numbered breadth first from the start state, visiting the shifted symbols in sorted order, each with its actions on terminals (`s<state>`, `r<rule>`, `accept`) and its gotos. `atd-grammar.py --tables` writes it from Lark; `atd tables` writes it from another implementation. The grammar builds with no shift/reduce and no reduce/reduce conflict, and no two terminals a state accepts match the same text (FR-002, SC-001).
+`grammar/atd.tables.json` (`$defs/ParseTables`) is the LALR(1) automaton of the grammar, normalized so that two implementations can be compared byte for byte: terminals by name, an anonymous string terminal named by its quoted string; the rules after section 4.4, sorted and numbered, the rule `H` of a repetition named `(<alternatives>)+`, its expansions that do not start with `H`, sorted and joined with ` | `; and the states numbered breadth first from the start state, visiting the shifted symbols in sorted order, each with its actions on terminals (`s<state>`, `r<rule>`, `accept`) and its gotos. `atd-grammar.py --tables` writes it from Lark; `atd tables` writes it from another implementation. The grammar builds with no shift/reduce and no reduce/reduce conflict, and no two terminals a state accepts match the same text (FR-002, SC-001).
 
 ---
 
