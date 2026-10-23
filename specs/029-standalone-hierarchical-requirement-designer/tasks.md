@@ -275,28 +275,28 @@ Extends: `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backe
 
 **Wave 1 (different files):**
 
-- [ ] **T061** [P] [US2] Test reading again: an outside change is shown without reopening; collapsed entries kept by number, a collapsed item an agent moved still collapsed; the session's own write and identical bytes raise nothing; a change that makes the file unreadable keeps the last readable model read-only (FR-022; US2 scenario 2) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/OutsideChange.Tests.cs
-- [ ] **T062** [P] [US2] Test the refusal: a gesture made against a file an agent has since written is refused with the sentence of R10, nothing is written, and the new model is sent (FR-024) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/Drift.Tests.cs
-- [ ] **T063** [P] [US2] Test undo: past an outside change it gives the history stack's `Outdated` message once and writes nothing (FR-025; US2 scenario 3) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/Undo.Tests.cs
-- [ ] **T064** [P] [US2] Test SC-003: a generated document of 100 items and 500 requirements opens, and shows an outside change, each within two seconds · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/LargeDocument.Tests.cs
-- [ ] **T065** [P] [US2] Test the bar: a new model while a field is open shows it; "Show the file" drops the text; "Keep my text" keeps the field, and committing sends `setTitle` or `setDescription`, refused when the number is gone (FR-023; R11) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/ConflictBar.test.tsx
+- [x] **T061** [P] [US2] Test reading again: an outside change is shown without reopening; collapsed entries kept by number, a collapsed item an agent moved still collapsed; the session's own write and identical bytes raise nothing; a change that makes the file unreadable keeps the last readable model read-only (FR-022; US2 scenario 2) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/OutsideChange.Tests.cs
+- [x] **T062** [P] [US2] Test the refusal: a gesture made against a file an agent has since written is refused with the sentence of R10, nothing is written, and the new model is sent (FR-024) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/Drift.Tests.cs
+- [x] **T063** [P] [US2] Test undo: past an outside change it gives the history stack's `Outdated` message once and writes nothing (FR-025; US2 scenario 3) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/Undo.Tests.cs
+- [x] **T064** [P] [US2] Test SC-003: a generated document of 100 items and 500 requirements opens, and shows an outside change, each within two seconds · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/LargeDocument.Tests.cs
+- [x] **T065** [P] [US2] Test the bar: a new model while a field is open shows it; "Show the file" drops the text; "Keep my text" keeps the field, and committing sends `setTitle` or `setDescription`, refused when the number is gone (FR-023; R11) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/ConflictBar.test.tsx
 
 ### Implementation
 
 **Wave 2 (different files):**
 
-- [ ] **T066** [P] [US2] Write `setTitle` and `setDescription`, making the model changes and bytes the fixtures state (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Operations/TextOperations.cs
-- [ ] **T067** [P] [US2] Write the restore of one or two files that returns `CommandResult.Outdated` after an outside change, after Knowledge's `RestoreKnowledgeFilesCommand` (FR-025; R17) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/RestoreRequirementFilesCommand.cs
-- [ ] **T068** [P] [US2] Write the title and description field and the bar of R10 · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/ConflictBar.tsx
+- [x] **T066** [P] [US2] Write `setTitle` and `setDescription`, making the model changes and bytes the fixtures state (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Operations/TextOperations.cs
+- [x] **T067** [P] [US2] Write the restore of one or two files that returns `CommandResult.Outdated` after an outside change, after Knowledge's `RestoreKnowledgeFilesCommand` (FR-025; R17) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/RestoreRequirementFilesCommand.cs
+- [x] **T068** [P] [US2] Write the title and description field and the bar of R10 · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/ConflictBar.tsx
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T069** [US2] Watch the body and the registration through `WatchedFile`, skip the session's own writes and identical bytes, send the whole model again, and close an open assessment list on a re-read (FR-022; R13) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementSession.cs
+- [x] **T069** [US2] Watch the body and the registration through `WatchedFile`, skip the session's own writes and identical bytes, send the whole model again, and close an open assessment list on a re-read (FR-022; R13) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementSession.cs
 
 **⟶ Then:**
 
-- [ ] **T070** [US2] Check in the browser, side by side with a text editor, each kind of edit on each side; record it · etalii.adp.ide.standalone/tests.md
-- [ ] **T071** [US2] Deliver pull request 6 · etalii.adp.ide.standalone (pull request 6)
+- [x] **T070** [US2] Check in the browser, side by side with a text editor, each kind of edit on each side; record it · etalii.adp.ide.standalone/tests.md
+- [x] **T071** [US2] Deliver pull request 6 · etalii.adp.ide.standalone (pull request 6)
 
 **Checkpoint**: User Stories 1 and 2 together are the problem spec 028 states, solved.
 
