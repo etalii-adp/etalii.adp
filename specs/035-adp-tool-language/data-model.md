@@ -11,7 +11,7 @@ The entities of the specification's *Key Entities*, with their fields, relations
 | Grammar | `grammar/<version>/*.lark` for each released minor, `grammar/*.lark` for the current draft; `grammar/atd.flat.lark` generated |
 | Schema | `atd.schema.json`, `$id` `https://etalii.net/adp/atd/schema/0.1/atd.schema.json`, `$defs`: `Tree` (and one entry per construct of the abstract tree), `Findings`, `Finding`, `Trace`, `ConformanceFixture`, `Drawing`, `Capability`, `ParseTables`, plus references to DISL's, DESL's and FBL's `$defs` for settings |
 | Examples | `*.atd` beside the document: one per kind, one per binding family, one with script functions, one split over parts, one with a grammar binding |
-| Worked examples of the other formats | `fixtures/mindmap/basic/` (a conformance case), `mindmap.trace.json` with its companion `mindmap.md`, `capabilities/layout.mindmap/contract.json` (ATD §2.3 to §2.6) |
+| Worked examples of the other formats | `fixtures/mindmap/basic/` (a conformance case), `mindmap.trace.json` with its companion `mindmap.md`, `capabilities/layout.twoSidedTree/contract.json` (ATD §2.3 to §2.6) |
 | Refused corpus | `refused/<name>.atd` with `refused/<name>.findings.json` (`$defs/Findings`) and a `README.md` in the shape of `specifications/fbl/refused/README.md` |
 | Capabilities | `capabilities/<name>/contract.json` (`$defs/Capability`) and `capabilities/<name>/fixtures/` |
 | Highlighting | `highlighting/atd.tmLanguage.json`, `highlighting/atd.sublime-syntax`, generated |
@@ -94,7 +94,7 @@ The table is the ATD document's normative table; the checker reads it from one p
 
 | Field | Meaning |
 |---|---|
-| `name` | QualifiedId, e.g. `layout.layeredWithBand`, `reader.turtle`, `analysis.elementaryCycles` |
+| `name` | QualifiedId, e.g. `layout.layeredWithBand`, `reader.turtle`, `analysis.elementaryCycles`; in the terms of its algorithm or format, never a tool type's (spec Q7) |
 | `version` | semver; descriptions require a range |
 | `extensionPoint` | `layout`, `routing`, `reader`, `analysis`, `arrange`, `render` |
 | `input`, `args`, `output` | `$defs` references in `atd.schema.json` |
@@ -135,7 +135,7 @@ The scene of one view, in `adp-scene`'s vocabulary: `elements[]` (`id`, `type`, 
 | `description` | root `.atd` |
 | `companion` | `file` and `sections[]`, the headings whose `###` headings and top-level list items are items |
 | `items[]` | `id` (`<section-slug>/<n>`), `text` (first line), `statedBy` (a construct path in the description, e.g. `notation.node Topic.label`, a script function, a binding rule, or a capability) or `hostConcern` with its `reason` from the ATD document's list (FR-022) |
-| `hostCode[]` | `host`, `repository`, `commit` (the reference commit), `path`, `lines`, `behaviour` (one sentence), `statedBy` |
+| `hostCode[]` | `host`, `repository`, `commit` (the reference commit), `path`, `lines`, `behaviour` (one sentence), and either `statedBy` (the reference host's behaviour, which the description states) or `divergesFrom` (another host's different behaviour, not stated; names the `statedBy` of the reference behaviour, spec Q8) |
 
 **Rules** (checked by `validate-examples.py` and `atd check --trace`): every companion item appears exactly once; every `statedBy` resolves in the description; every `hostConcern` reason is one of the ATD document's host concerns (rendering, gestures, text measurement, file dialogs, opening links, the host's undo stack).
 

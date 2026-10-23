@@ -42,15 +42,17 @@ Taken from the specification's table *Where the logic goes* and from what the 36
 
 | Capability | Point | For | Code it comes from in the desktop host |
 |---|---|---|---|
-| `layout.sankey` (relaxation) | layout | Sankey | `modules/diagrams/sankey` |
+| `layout.flowRelaxation` (relaxation of a layered flow) | layout | Sankey | `modules/diagrams/sankey` |
 | `arrange.selfOrganising` | arrange | agent behaviour modelling | `modules/diagrams/agent-behavior-modelling` (the VS Code host's `abm-arrange`) |
 | `analysis.msbuildImports` | analysis | .NET dependency graph | `modules/diagrams/dotnet-dependency-graph` |
 | `render.descriptionLogic` | render | W3C OWL | `modules/diagrams/rdf` |
 | `reader.turtle` | reader | W3C RDF, OWL, SKOS, SHACL, until the grammar family replaces it for RDF (R15) | `modules/diagrams/rdf` |
 | `reader.sparql` | reader | SPARQL query | `modules/diagrams/sparql` |
 | `analysis.elementaryCycles` | analysis | causal loop diagram, only if the script's budget cannot hold it (R13) | `modules/diagrams/causal-loop-diagram` |
-| `layout.mindmap` | layout | mind map | `modules/diagrams/mindmap/src/layout.rs` |
+| `layout.twoSidedTree` | layout | mind map | `modules/diagrams/mindmap/src/layout.rs` |
 | `layout.tidyTree`, `layout.layered`, `layout.layeredWithBand`, `layout.force`, `layout.rowPacked` | layout | the types whose `.dis` names these algorithms | `crates/adp-layout` |
-| the persistence readers of the Databricks, supply chain and Wardley map types (`format: plugin:*` today) | reader | those types | their modules |
+| the persistence readers the Databricks, supply chain and Wardley map types use (`format: plugin:*` today), each named for the format it reads | reader | those types | their modules |
+
+A capability is generic (spec Q7, FR-018): its name, contract, inputs and outputs are in the terms of its algorithm or format, never a tool type's vocabulary, even when one tool type is its only user; the column *For* is informative.
 
 Small algorithms (sibling naming, loop claiming, SKOS cycle breaking, C4 relationship elevation, parent-cycle checks) are script functions in the descriptions, not capabilities.
