@@ -2,8 +2,8 @@
   "workflow": "companion",
   "specName": "The Hierarchical Requirement Designer in the Standalone Host",
   "branch": "features/029-standalone-hierarchical-requirement-designer",
-  "currentStep": "tasks",
-  "status": "ready-to-implement",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -67,6 +67,237 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T22:51:50.124Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "start",
+      "by": "user",
+      "at": "2026-10-23T00:51:44.594Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:44.875Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:55.046Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:55.247Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:55.448Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:55.646Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:55.854Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:56.049Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:56.250Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T011",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:56.452Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:56.648Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:56.850Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T014",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:57.046Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T015",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:57.244Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T016",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:57.448Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T017",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:57.656Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T018",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:57.865Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T020",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:58.060Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T021",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:58.254Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T022",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:58.469Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T023",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:58.670Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T024",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:58.873Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T025",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:59.065Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T026",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:59.262Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T027",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:59.470Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T028",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:59.660Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T029",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:51:59.865Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T030",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:52:00.071Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T031",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-23T00:52:00.272Z"
     }
   ],
   "telemetryInstanceId": "4534790c-e93b-4985-a552-aedf1e2b422a",
@@ -420,5 +651,131 @@
     }
   },
   "approach": "FBL library first (bullets family, declared registration blocks, drift), then envelope routing with an optional registration, then the module's model with the fixtures, then a shared hierarchy surface (session contract, wire, client library), then one pull request per remaining user story.",
-  "assistant": "claude-vscode"
+  "assistant": "claude-vscode",
+  "workingBranch": "features/029-implementing",
+  "currentTask": "T031",
+  "task_summaries": {
+    "T001": {
+      "status": "DONE",
+      "did": "Re-read standalone develop and corrected the paths, recorded the corpus commits; delivered in etalii.adp"
+    },
+    "T002": {
+      "status": "DONE",
+      "did": "In a freshly created worktree of standalone develop, build once, run the four gates and bash…; run before pull request 1, nothing changed"
+    },
+    "T003": {
+      "status": "DONE",
+      "did": "Copy bullets-read/ and bullets-edits/ with its no-section/ sub-folder into the corpus in etalii.adp's…; etalii.adp.ide.standalone #596 (pull request 1)"
+    },
+    "T006": {
+      "status": "DONE",
+      "did": "Write the drift guard; etalii.adp.ide.standalone #596 (pull request 1)"
+    },
+    "T007": {
+      "status": "DONE",
+      "did": "Write the bullets reader and writer on FamilyReader, mirroring bullets_of in…; etalii.adp.ide.standalone #596 (pull request 1)"
+    },
+    "T008": {
+      "status": "DONE",
+      "did": "Add Family.Bullets, parse bullets in ParseFamily, and raise the minor of its LanguageVersion Fbl from 5 to…; etalii.adp.ide.standalone #596 (pull request 1)"
+    },
+    "T009": {
+      "status": "DONE",
+      "did": "Check before planning that the body's bytes are those read, refuse with one sentence owned by the library,…; etalii.adp.ide.standalone #596 (pull request 1)"
+    },
+    "T010": {
+      "status": "DONE",
+      "did": "Choose the bullets reader in CreateFamily; etalii.adp.ide.standalone #596 (pull request 1)"
+    },
+    "T011": {
+      "status": "DONE",
+      "did": "Run the conformance run; etalii.adp.ide.standalone #596 (pull request 1)"
+    },
+    "T012": {
+      "status": "DONE",
+      "did": "Deliver pull request 1 by contracts/pull-request.md, with the corrected pages that list the FBL families; etalii.adp.ide.standalone #596 (pull request 1)"
+    },
+    "T013": {
+      "status": "DONE",
+      "did": "Copy registration-blocks/ into the corpus and log it (FR-028, FR-029); etalii.adp.ide.standalone #600 (pull request 2)"
+    },
+    "T014": {
+      "status": "DONE",
+      "did": "Write the guards for declared blocks; etalii.adp.ide.standalone #600 (pull request 2)"
+    },
+    "T015": {
+      "status": "DONE",
+      "did": "Write the guards for creating the registration on first placement; etalii.adp.ide.standalone #600 (pull request 2)"
+    },
+    "T016": {
+      "status": "DONE",
+      "did": "Read registration.blocks into declarations; etalii.adp.ide.standalone #600 (pull request 2)"
+    },
+    "T017": {
+      "status": "DONE",
+      "did": "Read the declared blocks, and keep every undeclared one as it is; etalii.adp.ide.standalone #600 (pull request 2)"
+    },
+    "T018": {
+      "status": "DONE",
+      "did": "Act on createOnFirstPlacement (R4); etalii.adp.ide.standalone #600 (pull request 2)"
+    },
+    "T020": {
+      "status": "DONE",
+      "did": "Run the conformance run; etalii.adp.ide.standalone #600 (pull request 2)"
+    },
+    "T021": {
+      "status": "DONE",
+      "did": "Deliver pull request 2; etalii.adp.ide.standalone #600 (pull request 2)"
+    },
+    "T022": {
+      "status": "DONE",
+      "did": "Write the routing guards; etalii.adp.ide.standalone #606 (pull request 3)"
+    },
+    "T023": {
+      "status": "DONE",
+      "did": "Write the add guards; etalii.adp.ide.standalone #606 (pull request 3)"
+    },
+    "T024": {
+      "status": "DONE",
+      "did": "Write the delete guards; etalii.adp.ide.standalone #606 (pull request 3)"
+    },
+    "T025": {
+      "status": "DONE",
+      "did": "Cache the first line of each file of an extension a designer claims as shared, up to the first line break…; etalii.adp.ide.standalone #606 (pull request 3)"
+    },
+    "T026": {
+      "status": "DONE",
+      "did": "Make the registration optional in DesignerRouted and IDesignerSessionFactory.Open, and adapt the Knowledge…; etalii.adp.ide.standalone #606 (pull request 3)"
+    },
+    "T027": {
+      "status": "DONE",
+      "did": "Accept an enveloped existing file without writing, refuse one without the envelope naming the line, and…; etalii.adp.ide.standalone #606 (pull request 3)"
+    },
+    "T028": {
+      "status": "DONE",
+      "did": "Keep the body when the registration of such a type is deleted (FR-004); etalii.adp.ide.standalone #606 (pull request 3)"
+    },
+    "T029": {
+      "status": "DONE",
+      "did": "Ask the FBL library's Router and MarkerEvaluator first, through the cache, before the routers of the three…; etalii.adp.ide.standalone #606 (pull request 3)"
+    },
+    "T030": {
+      "status": "DONE",
+      "did": "Correct the module guide; etalii.adp.ide.standalone #606 (pull request 3)"
+    },
+    "T031": {
+      "status": "DONE",
+      "did": "Deliver pull request 3; etalii.adp.ide.standalone #606 (pull request 3)"
+    }
+  },
+  "concerns": [
+    {
+      "note": "T004 and T005 stay open although pull request 1 (#596) is merged: the harness has move, position, slot and expectFile, but setting, occurrence and list edits, and DerivedIds.cs, come with their first fixtures in pull request 4",
+      "step": "implement"
+    },
+    {
+      "note": "T019 stays open although pull request 2 (#600) is merged: writing the whole block with its implicit members on the first change is a designer-session rule and comes with pull requests 4 and 10",
+      "step": "implement"
+    }
+  ]
 }
