@@ -10,7 +10,7 @@
 
 ## Context
 
-**What exists.** A tool engineer specifies a tool type today in up to three files, each in a language of its own written as JSON: a specification in its kind's specification language (DISL for a diagram, DESL for a designer; EDSL for an editor is a placeholder), a binding in FBL when the tool's model lives in another tool's file, and a companion `.md` that lists in prose what neither language can say. What the companion lists is written as code, once per host: the standalone host has 69 diagram modules, one designer and five editors, most of them hand-written; the VS Code host carries five tool-type plugins (`abm-arrange`, `abm-markdown`, `freeplane-mm`, `knowledge-views`, `mindmap-layout`); the IntelliJ host's FreeMind and draw.io tools are hand-written; the desktop host ports the standalone host's tools to Rust. Every host also re-implements the languages themselves (three DISL interpreters, three FBL implementations of together about 32,000 lines). `definitions/` in this repository holds 30 diagram types and 2 designer types.
+**What exists.** A tool engineer specifies a tool type today in up to three files, each in a language of its own written as JSON: a specification in its kind's specification language (DISL for a diagram, DESL for a designer; EDSL for an editor is a placeholder), a binding in FBL when the tool's model lives in another tool's file, and a companion `.md` that lists in prose what neither language can say. What the companion lists is written as code, once per host: the standalone host has 69 diagram modules, one designer and five editors, most of them hand-written; the VS Code host carries five tool-type plugins (`abm-arrange`, `abm-markdown`, `freeplane-mm`, `knowledge-views`, `mindmap-layout`); the IntelliJ host's FreeMind and draw.io tools are hand-written; the desktop host ports the standalone host's tools to Rust. Every host also re-implements the languages themselves (three DISL interpreters, three FBL implementations of together about 32,000 lines). `definitions/` in this repository holds 29 diagram types and 2 designer types.
 
 This specification reads the hosts at these commits of their `develop`, the **reference commits**: `etalii.adp` `222dea4`, `etalii.adp.ide.standalone` `396c776`, `etalii.adp.ide.vscode` `97e403d`, `etalii.adp.ide.intellij` `255c57c`, and `etalii.adp.ide.desktop` at the commit its plan names when planning starts.
 
@@ -20,7 +20,7 @@ This specification reads the hosts at these commits of their `develop`, the **re
 
 **What stays.** DISL, DID, DESL, DED, EDSL, EDD and FBL remain specifications of this repository, and every existing `.dis`, `.des` and `.fbl` keeps being read by every host. DID and DED remain the formats tools store their documents in. No host changes how it runs today's tool types because of this feature. The standalone host plans with spec-workflow in its own repository; its adoption of `.atd` is a feature there, not part of this one. The Notion add-on and the Eclipse host adopt it in features of their own.
 
-**Words.** Those of [docs/terminology.md](../../docs/terminology.md): tool, tool type, diagram, designer, editor, tool engineer, specification, definition, binding, document, body, splice, reading, finding, host, runtime. A **tool description** is one `.atd` file, or a set of `.atd` files one of which is its root, that describes one tool type. `.atd` stands for **ADP Tool Description** (Q4), since ADP's glossary reserves "definition" for the documents users create. The **script** is the part of the ADP tool language in which logic is written. A **capability** is a named algorithm the platform provides and a tool description calls, for work the script is not meant for (section *Where the logic goes*). **Parity** is the state in which a tool run from its `.atd` behaves as the same tool type does in the reference host, with the same bytes on disk.
+**Words.** Those of [docs/terminology.md](../../docs/terminology.md): tool, tool type, diagram, designer, editor, tool engineer, specification, definition, binding, document, body, splice, reading, finding, host, runtime. A **tool description** is one `.atd` file, or a set of `.atd` files one of which is its root, that describes one tool type. `.atd` stands for **ADP Tool Description** (Q4), since ADP's glossary reserves "definition" for the documents users create. The **script** is the part of the ADP tool language in which logic is written. A **capability** is a named algorithm the platform provides and a tool description calls, for work the script is not meant for (section *Where the logic goes*). **Parity** is the state in which a tool run from its `.atd` behaves as the same tool type does in the reference host, with the same bytes on disk. The **reference host** differs by part (Q5): for the bytes a tool writes it is the standalone host, whose behaviour the desktop host's parity goldens record; for readings, findings and drawings it is the desktop host at its reference commit, whose modules port the standalone host's tools. Each conformance fixture names the host and commit of each of its parts.
 
 ## Phases
 
@@ -39,16 +39,24 @@ The research sorted the residue that the companion files and the host code hold 
 | Recurring gaps | positions kept in the registration, findings at file and line, stubs for a missing end, layered layouts with a band, state-dependent labels, drop-onto tools, id schemes | constructs of the language |
 | Formats with a context-free syntax | Turtle, SPARQL, Structurizr DSL, `.owm` | a grammar format family in the binding part of the language |
 | Small algorithms | sibling naming, elementary-cycle enumeration with loop claiming, SKOS cycle breaking, C4 relationship elevation, parent-cycle checks | script functions |
-| Heavy or numeric algorithms | Sankey relaxation, self-organising arrange, MSBuild import evaluation, the description-logic renderer | capabilities, named by the tool description and provided by the platform |
+| Heavy or numeric algorithms | the relaxation of a layered flow (which the Sankey diagram uses), self-organising arrange, MSBuild import evaluation, the description-logic renderer | capabilities, named by the tool description and provided by the platform |
 
 ## Clarifications
 
-Four questions were put to the maintainer, each with options. All four are answered and recorded below.
+Nine questions were put to the maintainer, each with options: four with the specification on 2026-10-22, five after the plan and tasks on 2026-10-23. All are answered and recorded below.
 
 - **Q1, normative form (FR-030).** Answered 2026-10-22: `.atd` alone in the end, after a transition; phase 1 does not move existing tools off their JSON files (see *Phases*).
-- **Q2, which tool types get a tool description (FR-020).** Answered 2026-10-22: every tool type with a specification in `definitions/` (30 diagrams, 2 designers) and every editor the hosts implement (plain text, Markdown, JSON, XML, YAML), with the hosts' code for those tool types as the source of their logic.
+- **Q2, which tool types get a tool description (FR-020).** Answered 2026-10-22: every tool type with a specification in `definitions/` (29 diagrams, 2 designers; the first version of this specification counted 30, which no listing of the files matches) and every editor the hosts implement (plain text, Markdown, JSON, XML, YAML), with the hosts' code for those tool types as the source of their logic.
 - **Q3, which hosts run tools from `.atd` in this feature (FR-040, FR-063).** Answered 2026-10-22: "Desktop host and VS Code, however it is not 'running tools' according to a .adt specification but in the first phase rather the toolchain for editing, validation." Both hosts get the toolchain to edit and validate tool descriptions; neither runs a person's tools from `.atd`.
 - **Q4, the name of the file (Words).** Answered 2026-10-22: "ADP Tool Description", keeping `.atd`; the request's "ADP Tool Definition" is not used, so the glossary keeps one meaning of "definition".
+
+### Session 2026-10-23
+
+- Q5: Which host's behaviour is "the reference" that tool descriptions must match (Parity, FR-024, SC-004)? → A: split by part: bytes from the standalone host (its goldens, vendored in the desktop host), readings, findings and drawings from the desktop host at its reference commit (see *Words*).
+- Q6: Only the desktop host reads the grammar family in phase 1, so how does FR-081's "two hosts write the same bytes" apply? → A: through the family's round-trip fixtures: no second host is required in phase 1, and every host that implements the family later must pass them byte for byte (FR-081).
+- Q7: May a capability serve only one tool type without breaking SC-004's "no tool-specific code"? → A: yes, when it is named by a contract with fixtures, called through its extension point, and generic: named and specified in the terms of its algorithm or format, not in a tool type's vocabulary (FR-018, SC-004).
+- Q8: When hosts implement the same tool type differently, which behaviour does its tool description state? → A: the reference host's; each other host's different behaviour is recorded in the trace as a divergence with host, files and lines, and is not stated in the description (FR-021, FR-023).
+- Q9: Who may take the SC-007 and SC-008 trials as "a tool engineer new to the language"? → A: a person who has not written ATD before where one is available, otherwise a fresh agent session given only the guide and the tools; the measurement note says which took part (SC-007, SC-008).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -82,7 +90,7 @@ A tool engineer opens the `.atd` of any tool type in scope and finds in it every
 
 1. **Given** a tool type's `.dis`, `.des` or `.fbl`, **When** its tool description is complete, **Then** every construct of those files has its counterpart in the description, every CEL expression is carried verbatim, and the JSON files themselves are unchanged.
 2. **Given** a tool type's companion file, **When** its tool description is complete, **Then** each item of the companion's "what the language cannot say" is either a construct, a script function, a binding rule or a named capability in the description, or is recorded as a host's concern with its reason.
-3. **Given** a host's code for a tool type at its reference commit, **When** the tool description is complete, **Then** each behaviour that code implements and the tool type's specification does not (layouts, naming, refusals, menus, read-only reasons, derived data, file reading and writing) is traced to the part of the description that now states it.
+3. **Given** a host's code for a tool type at its reference commit, **When** the tool description is complete, **Then** each behaviour that code implements and the tool type's specification does not (layouts, naming, refusals, menus, read-only reasons, derived data, file reading and writing) is traced to the part of the description that now states it, or, where it differs from the reference host's behaviour, is traced as a divergence.
 4. **Given** the conformance fixtures recorded from the reference host for a tool type, **When** the tool is run from its `.atd`, **Then** its readings, findings, splices and drawings match the fixtures.
 
 ---
@@ -227,16 +235,16 @@ An AI agent asked to create or change a tool type is given the published grammar
 - **FR-015**: Every script call **MUST** run under a step budget the language specification defines, and a call that exceeds it **MUST** stop with a finding and change nothing.
 - **FR-016**: A script **MUST NOT** change a model except through the action set, inside the transaction of the gesture that called it, so that every change stays one command with an exact undo.
 - **FR-017**: Script functions **MUST** be callable from every expression position, from operations, hooks, constraints, derived attributes, labels and binding rules.
-- **FR-018**: The language **MUST** let a tool description name a capability, with its inputs and outputs, and the language specification **MUST** list the capabilities the platform provides, each with its contract and conformance fixtures.
+- **FR-018**: The language **MUST** let a tool description name a capability, with its inputs and outputs, and the language specification **MUST** list the capabilities the platform provides, each with its contract and conformance fixtures. A capability **MAY** serve a single tool type, but it **MUST** be generic: its name, contract, inputs and outputs are phrased in the terms of its algorithm or of the format it reads, never in a tool type's vocabulary (a two-sided tree layout, not a mind map layout; a reader named for its format, not for the tool type that uses it). Code reached only through such a capability is not tool-specific code in the sense of FR-040 and SC-004.
 - **FR-019**: The script **MUST NOT** be an embedded general-purpose language; the research's comparison of Lua, Starlark, JavaScript, Rhai and FBL is recorded in the plan's research as the reason.
 
 ### Tool descriptions
 
 - **FR-020**: Every tool type in scope (Q2) **MUST** get a tool description in this repository, in `definitions/` beside its existing files, which stay as they are.
-- **FR-021**: A tool description **MUST** contain everything its specification, binding and companion file state, and every behaviour the hosts implement in code for that tool type at the reference commits, as constructs, script functions, binding rules or named capabilities.
+- **FR-021**: A tool description **MUST** contain everything its specification, binding and companion file state, and every behaviour the hosts implement in code for that tool type at the reference commits, as constructs, script functions, binding rules or named capabilities. Where hosts implement the tool type differently, the description states the reference host's behaviour (*Words*), and each other host's different behaviour is not stated but recorded in the trace as a divergence (FR-023).
 - **FR-022**: What a description leaves to a host **MUST** be only what the language specification lists as a host's concern (rendering, gestures, text measurement, file dialogs, opening links, the host's undo stack), and each such item in a companion file **MUST** be marked as such with its reason.
-- **FR-023**: Each tool description **MUST** come with a trace that names, for each behaviour taken from host code, the host files it was read from at the reference commit and the part of the description that now states it.
-- **FR-024**: Each tool type in scope **MUST** have conformance fixtures, recorded from the reference host, of its readings, findings, splices and drawings for a fixed set of documents and edits.
+- **FR-023**: Each tool description **MUST** come with a trace that names, for each behaviour taken from host code, the host files it was read from at the reference commit and the part of the description that now states it, and, for each behaviour of a host that differs from the reference host's, a divergence naming that host, its files and lines, and the reference behaviour the description states instead.
+- **FR-024**: Each tool type in scope **MUST** have conformance fixtures, recorded from the reference host as *Words* defines it per part, with the host and commit of each part, of its readings, findings, splices and drawings for a fixed set of documents and edits.
 - **FR-025**: `docs/tools.md` in each host that lists the tool type, and the site's catalogue sources, **MUST NOT** need to change because a tool description exists; a tool description changes no tool type's display name or origin.
 
 ### Normative form and machine edits
@@ -277,7 +285,7 @@ An AI agent asked to create or change a tool type is given the published grammar
 ### The grammar family of FBL
 
 - **FR-080**: The binding part of the language **MUST** admit a grammar family, in which a binding carries an LALR(1) grammar in the same notation and maps parse-tree nodes to elements, relations and attributes, with insert and remove templates for writing.
-- **FR-081**: The grammar family **MUST** keep FBL's guarantees: reading never fails on content, unmapped text is kept byte for byte, every edit is a minimal splice with an exact undo, and two hosts write the same bytes.
+- **FR-081**: The grammar family **MUST** keep FBL's guarantees: reading never fails on content, unmapped text is kept byte for byte, every edit is a minimal splice with an exact undo, and every host that implements the family writes the same bytes. In phase 1 only the desktop host is required to read and write the family; the guarantee across hosts is carried by the family's round-trip fixtures, which every host that implements it later **MUST** pass byte for byte.
 - **FR-082**: The W3C RDF tool type's Turtle reading **MUST** be bound with the grammar family as the first instance, matching the fixtures of today's reader.
 
 ### Agents
@@ -299,9 +307,9 @@ An AI agent asked to create or change a tool type is given the published grammar
 - **Tool description**: one tool type written in the language, in one or more `.atd` files with one root; has a kind, an origin, a version and the language version it is written in.
 - **Grammar module**: a part of the grammar (the core, one per kind's surface, the binding, the script) that composes into the one grammar.
 - **Script function**: a named, typed, bounded unit of logic in a tool description.
-- **Capability**: a named algorithm the platform provides, with a contract and fixtures, that a tool description calls.
+- **Capability**: a named, generic algorithm the platform provides, with a contract and fixtures in its own terms rather than a tool type's (FR-018), that a tool description calls.
 - **Conformance fixture**: a document, a set of edits and the readings, findings, splices and drawings the reference host produced for them.
-- **Trace**: for one tool description, the list of host behaviours it states, each with the host files it was read from.
+- **Trace**: for one tool description, the list of host behaviours it states, each with the host files it was read from, and the divergences of other hosts from the reference host's behaviour.
 - **Language server**: an implementation of the Language Server Protocol for `.atd`, one per IDE family, all reporting the checker's findings.
 - **Debug session**: one paused or running gesture in the desktop host's validation, with its frames, its transaction and its budget.
 
@@ -312,11 +320,11 @@ An AI agent asked to create or change a tool type is given the published grammar
 - **SC-001**: The grammar builds with zero conflicts, and stays so on every pull request.
 - **SC-002**: No `.dis`, `.des` or `.fbl` file in this repository, and no host's tool loading, is changed by this feature.
 - **SC-003**: Every tool type in scope has a tool description that checks without findings, and 100 % of the items its companion file lists are traced to a part of the description or marked as a host's concern.
-- **SC-004**: The validation in the desktop host and in VS Code runs every tool type in scope from its `.atd` with no tool-specific code, and 100 % of their conformance fixtures pass in both, every write byte-identical to the reference host's.
+- **SC-004**: The validation in the desktop host and in VS Code runs every tool type in scope from its `.atd` with no tool-specific code (no code that names a tool type or its vocabulary outside the capabilities of FR-018), and 100 % of their conformance fixtures pass in both, every write byte-identical to the reference host's.
 - **SC-005**: For a fixed walk of 30 edits per IDE, VS Code, IntelliJ and the desktop host give the expected completion, diagnostic, hover, rename and formatting result in 30 of 30, with identical diagnostics across the three.
 - **SC-006**: Diagnostics appear within one second of a keystroke, and completion within half a second, on a tool description of 5,000 lines.
-- **SC-007**: A tool engineer new to the language creates a working tool type of each kind in VS Code in under 30 minutes, following the guide of FR-104.
-- **SC-008**: A tool engineer finds the cause of a seeded defect in a script function with the debugger in under 10 minutes, in three of three seeded defects.
+- **SC-007**: A tool engineer new to the language (a person who has not written ATD before where one is available, otherwise a fresh agent session given only the guide and the tools; the record says which) creates a working tool type of each kind in VS Code in under 30 minutes, following the guide of FR-104.
+- **SC-008**: A tool engineer new to the language, chosen as in SC-007, finds the cause of a seeded defect in a script function with the debugger in under 10 minutes, in three of three seeded defects.
 - **SC-009**: Given the grammar and two examples, an agent produces a tool description for a new tool type that checks without findings within three rounds of findings, in at least four of five trials.
 - **SC-010**: The W3C RDF tool type reads and writes its Turtle fixtures through the grammar family with no persistence plugin, all fixtures passing.
 

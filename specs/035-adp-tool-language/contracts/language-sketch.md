@@ -13,7 +13,7 @@ atd 0.1
 diagram freeplane/mindmap version "1.4.0" {
   label "Mind map"
   import "mindmap.notation.atd"
-  requires capability layout.mindmap@^1
+  requires capability layout.twoSidedTree@^1
 
   model {
     element Topic {
@@ -78,7 +78,7 @@ notation {
 
 layout {
   default mindmap
-  algorithm mindmap capability layout.mindmap { spacing: 24, direction: (self.side == Side.left ? "left" : "right") }
+  algorithm twoSidedTree capability layout.twoSidedTree { spacing: 24, direction: (self.side == Side.left ? "left" : "right") }
 }
 ```
 
