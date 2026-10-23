@@ -361,20 +361,20 @@ Extends: `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backe
 
 **Wave 1 (different files):**
 
-- [ ] **T083** [P] [US5] Test `addAssessment`, `changeAssessment`, `resolveAssessment` and `removeAssessment` against `hierarchical-requirement-assessments` and `first-assessment`, which appends the section; resolving a line written without a checkbox (FR-026; R17) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/AssessmentOperations.Tests.cs
-- [ ] **T084** [P] [US5] Test the icon: none shows a way to add the first, one the kind's icon, two of different kinds the icon for several; a collapsed item's icon counts everything inside it; the list names each assessment's entry and adds, changes, removes and resolves (FR-015, FR-016; US5 scenario 2) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/notes/NoteIcon.test.tsx
+- [x] **T083** [P] [US5] Test `addAssessment`, `changeAssessment`, `resolveAssessment` and `removeAssessment` against `hierarchical-requirement-assessments` and `first-assessment`, which appends the section; resolving a line written without a checkbox (FR-026; R17) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/AssessmentOperations.Tests.cs
+- [x] **T084** [P] [US5] Test the icon: none shows a way to add the first, one the kind's icon, two of different kinds the icon for several; a collapsed item's icon counts everything inside it; the list names each assessment's entry and adds, changes, removes and resolves (FR-015, FR-016; US5 scenario 2) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/notes/NoteIcon.test.tsx
 
 ### Implementation
 
 **Wave 2 (different files):**
 
-- [ ] **T085** [P] [US5] Write the four assessment operations (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Operations/AssessmentOperations.cs
-- [ ] **T086** [P] [US5] Write the icon and the list (FR-015, FR-016) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/notes/NoteList.tsx
+- [x] **T085** [P] [US5] Write the four assessment operations (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Operations/AssessmentOperations.cs
+- [x] **T086** [P] [US5] Write the icon and the list (FR-015, FR-016) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/notes/NoteList.tsx
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T087** [US5] Map the gestures, and place the icon at the top right of every box · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementGestures.cs
-- [ ] **T088** [US5] Check in the browser, record it, and deliver pull request 8 · etalii.adp.ide.standalone/tests.md
+- [x] **T087** [US5] Map the gestures, and place the icon at the top right of every box · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/HierarchicalRequirementGestures.cs
+- [x] **T088** [US5] Check in the browser, record it, and deliver pull request 8 · etalii.adp.ide.standalone/tests.md
 
 **Checkpoint**: the discussion with an agent stays with the requirement.
 
