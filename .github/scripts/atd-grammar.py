@@ -128,6 +128,13 @@ def check_name_rule():
         fail(f"core.lark: `name` lists words no construct uses: {', '.join(module_unused)}")
     if missing := sorted(used - set(listed)):
         fail(f"core.lark: keywords missing from `name` (FR-008): {', '.join(missing)}")
+    document = (atd / "ATD-specification.md").read_text(encoding="utf-8")
+    appendix = document.partition("## Appendix B")[2].partition("## Appendix C")[0]
+    documented = set(re.findall(r"^\| `([A-Za-z_][A-Za-z0-9_]*)` \|", appendix, re.MULTILINE))
+    if undocumented := sorted(used - documented):
+        fail(f"ATD-specification.md: keywords without their entry in Appendix B: {', '.join(undocumented)}")
+    if stale := sorted(documented - used):
+        fail(f"ATD-specification.md: Appendix B documents words that are no keywords: {', '.join(stale)}")
     if misplaced := sorted(w for w in re.findall(r'"([A-Za-z_]+)"', rule.group(0).split("word: NAME")[1])
                            if w in cel_reserved):
         fail(f"core.lark: CEL reserved words in `word`, which CEL identifiers use: {', '.join(misplaced)}")
