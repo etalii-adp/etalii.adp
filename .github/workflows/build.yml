@@ -5,6 +5,8 @@
 # The licence job checks that LICENSE is still the Apache License 2.0 with its copyright line, that no second licence
 # file sits at the root or under specifications/, and that every specification document states that licence in its
 # header table (spec 003-specification-licence).
+# The grammar job builds ATD's grammar in strict LALR(1) mode, lints it, runs the keyword probe and compares the files it
+# generates; the descriptions job checks every tool description with the desktop host's `atd` (spec 035, FR-100).
 name: Build
 
 on:
@@ -29,9 +31,81 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
-      - run: python -m pip install jsonschema pyyaml
+      - run: python -m pip install -r .github/scripts/requirements-atd.txt
       - name: Validate every example against its schema
         run: python .github/scripts/validate-examples.py
+
+  # ATD, the ADP tool language: its grammar is strict LALR(1) with no conflict and no terminal collision, in the notation
+  # and regular expression subsets, every keyword usable as a name, its flattened form accepted by LLGuidance, and the
+  # generated tables, flattened grammar and highlighting grammars as the script writes them (spec 035, T026,
+  # contracts/grammar.md).
+  grammar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r .github/scripts/requirements-atd.txt
+      - name: Build, lint and probe the grammar, and compare its generated files
+        run: python .github/scripts/atd-grammar.py --check
+
+  # Every tool description checked by the desktop host's `atd`, built from this pull request's grammar: the desktop
+  # host's branch of the same name when there is one, else its develop (spec 035, T045, FR-100, research R20). The
+  # abstract trees `atd tree` gives are checked against atd.schema.json by validate-examples.py.
+  descriptions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: etalii.adp
+      - name: Choose the desktop host's branch
+        id: desktop
+        run: |
+          branch="${{ github.head_ref || github.ref_name }}"
+          if git ls-remote --exit-code --heads https://github.com/etalii-adp/etalii.adp.ide.desktop.git "$branch" >/dev/null; then
+            echo "ref=$branch" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=develop" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v7
+        with:
+          repository: etalii-adp/etalii.adp.ide.desktop
+          ref: ${{ steps.desktop.outputs.ref }}
+          path: desktop
+      - name: Install the toolchain the desktop host names
+        working-directory: desktop
+        run: rustup show
+      - name: Reuse the build of earlier runs
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop
+      - name: Build atd from this pull request's grammar
+        working-directory: desktop
+        env:
+          ATD_SPEC_DIR: ${{ github.workspace }}/etalii.adp/specifications/atd
+        run: cargo build --release --no-default-features -p adp-atd-cli
+      - name: Check every description, the refused corpus excepted
+        working-directory: etalii.adp
+        run: |
+          find . -name '*.atd' -not -path './specifications/atd/refused/*' -print0 | sort -z | xargs -0 ../desktop/target/release/atd check
+      - name: Check the refused corpus against its findings
+        working-directory: etalii.adp
+        run: ../desktop/target/release/atd check --corpus specifications/atd/refused
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r etalii.adp/.github/scripts/requirements-atd.txt
+      - name: Check every description's abstract tree against the schema
+        working-directory: etalii.adp
+        run: |
+          trees="$RUNNER_TEMP/trees"
+          mkdir -p "$trees"
+          find . -name '*.atd' -not -path './specifications/atd/refused/*' | sort | while read -r file; do
+            name=$(echo "${file#./}" | tr '/' '_')
+            ../desktop/target/release/atd tree "$file" > "$trees/${name%.atd}.tree.json"
+          done
+          python .github/scripts/validate-examples.py --atd-trees "$trees"
 
   # Flags a retired use of the ADP vocabulary (spec 002, FR-017). The other ADP repositories read this runner and
   # docs/terminology-check.json from develop; this one checks itself with the pull request's own copy, so a change to
