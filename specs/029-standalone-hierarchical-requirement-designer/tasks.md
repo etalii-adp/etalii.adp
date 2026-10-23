@@ -223,37 +223,37 @@ Extends: `etalii.adp.ide.standalone/src/designers/knowledge/backend/EtAlii.Adp.D
 
 **Wave 1 (different files):**
 
-- [ ] **T047** [P] [US1] Write the flow test: the enveloped document opens in the designer with every entry in the model, the ordinary `.md` in the Markdown editor, the Agent Behavior Modelling document in its diagram; an existing enveloped file added as a designer document is accepted; nothing is written (US1 scenarios 2 to 4) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/HierarchySurfaceFlow.Tests.cs
-- [ ] **T048** [P] [US1] Write the session tests: the model's ids by the contract (`line/<n>` for an entry without a usable number); collapsing writes only the registration, creating it, outside the undo history, and the entry is collapsed again on reopening; a later DED version opens read-only with the reason (FR-010, FR-031; US1 scenario 5) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/HierarchicalRequirementSession.Tests.cs
-- [ ] **T049** [P] [US1] Write the page tests: one page and no tree; a box as high as what stands to its right, its requirements above its sub-items, borders shared; number beside the title, tags below, description under; as many levels as fit and the mark on an item that does not fit; focus by the control and by the mark, the trail leading back, nothing sent for focus; a collapsed entry showing number, title, tags and assessment icon only (FR-006 to FR-010) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/HierarchySurface.test.tsx
+- [x] **T047** [P] [US1] Write the flow test: the enveloped document opens in the designer with every entry in the model, the ordinary `.md` in the Markdown editor, the Agent Behavior Modelling document in its diagram; an existing enveloped file added as a designer document is accepted; nothing is written (US1 scenarios 2 to 4) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/HierarchySurfaceFlow.Tests.cs
+- [x] **T048** [P] [US1] Write the session tests: the model's ids by the contract (`line/<n>` for an entry without a usable number); collapsing writes only the registration, creating it, outside the undo history, and the entry is collapsed again on reopening; a later DED version opens read-only with the reason (FR-010, FR-031; US1 scenario 5) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/HierarchicalRequirementSession.Tests.cs
+- [x] **T049** [P] [US1] Write the page tests: one page and no tree; a box as high as what stands to its right, its requirements above its sub-items, borders shared; number beside the title, tags below, description under; as many levels as fit and the mark on an item that does not fit; focus by the control and by the mark, the trail leading back, nothing sent for focus; a collapsed entry showing number, title, tags and assessment icon only (FR-006 to FR-010) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/HierarchySurface.test.tsx
 
 ### Implementation
 
 **Wave 2 (different files):**
 
-- [ ] **T050** [P] [US1] Split the session contract: what both kinds share stays in `IDesignerSession`, the table's members move unchanged to `ITableDesignerSession`, which the Knowledge designer's session implements, and `IHierarchySurfaceSession` is new (FR-032; R8) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Sessions/IHierarchySurfaceSession.cs
-- [ ] **T051** [P] [US1] Write the read model, one type per file, knowing no designer type (FR-032) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Designer/HierarchySurfaceModel/
-- [ ] **T052** [P] [US1] Add the messages and the `hierarchy_surface` member of [contracts/hierarchy-surface.md](contracts/hierarchy-surface.md) · etalii.adp.ide.standalone/src/api/designers.proto
+- [x] **T050** [P] [US1] Split the session contract: what both kinds share stays in `IDesignerSession`, the table's members move unchanged to `ITableDesignerSession`, which the Knowledge designer's session implements, and `IHierarchySurfaceSession` is new (FR-032; R8) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Sessions/IHierarchySurfaceSession.cs
+- [x] **T051** [P] [US1] Write the read model, one type per file, knowing no designer type (FR-032) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Designer/HierarchySurfaceModel/
+- [x] **T052** [P] [US1] Add the messages and the `hierarchy_surface` member of [contracts/hierarchy-surface.md](contracts/hierarchy-surface.md) · etalii.adp.ide.standalone/src/api/designers.proto
 
 **⟶ Wait for Wave 2 to finish, then (different files):**
 
-- [ ] **T053** [P] [US1] Serve `OpenHierarchySurface`, `CloseHierarchySurface` and `HierarchySurfaceGesture`, sending the whole model on the connection's stream, with `// simplified: whole model per change, measured at 100 items and 500 requirements; send deltas when SC-003's test fails at a larger size` (R8) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Workspace/DesignerService.HierarchySurface.cs
-- [ ] **T054** [P] [US1] Write the module's `Designer.cs` (origin `etalii/hierarchical-requirement`, title `Hierarchical Requirement Designer`, icon `mdi-file-tree-outline`, the `.md` format) and its services, session, factory with the registration optional, the mapper to the read model, and the gesture table with `toggleCollapsed` (FR-001, FR-010) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Designer.cs
+- [x] **T053** [P] [US1] Serve `OpenHierarchySurface`, `CloseHierarchySurface` and `HierarchySurfaceGesture`, sending the whole model on the connection's stream, with `// simplified: whole model per change, measured at 100 items and 500 requirements; send deltas when SC-003's test fails at a larger size` (R8) · etalii.adp.ide.standalone/src/backend/EtAlii.Adp.Workspace/DesignerService.HierarchySurface.cs
+- [x] **T054** [P] [US1] Write the module's `Designer.cs` (origin `etalii/hierarchical-requirement`, title `Hierarchical Requirement Designer`, icon `mdi-file-tree-outline`, the `.md` format) and its services, session, factory with the registration optional, the mapper to the read model, and the gesture table with `toggleCollapsed` (FR-001, FR-010) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Designer.cs
 
 **⟶ Wait, then (different files):**
 
-- [ ] **T055** [P] [US1] Open and close the stream in one hook, beside `useTableStream`, with a guard that no other file opens it · etalii.adp.ide.standalone/src/client/src/designers/useHierarchySurfaceStream.ts
-- [ ] **T056** [P] [US1] Draw the page: the boxes, the trail, the focus control and the mark of R10, the collapse control after `NestedRowToggle`, tags with `OptionTag`, the findings list, the read-only reason; colours as theme tokens in both themes, no inline styles (FR-006 to FR-011) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/HierarchySurface.tsx
+- [x] **T055** [P] [US1] Open and close the stream in one hook, beside `useTableStream`, with a guard that no other file opens it · etalii.adp.ide.standalone/src/client/src/designers/useHierarchySurfaceStream.ts
+- [x] **T056** [P] [US1] Draw the page: the boxes, the trail, the focus control and the mark of R10, the collapse control after `NestedRowToggle`, tags with `OptionTag`, the findings list, the read-only reason; colours as theme tokens in both themes, no inline styles (FR-006 to FR-011) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/HierarchySurface.tsx
 
 **⟶ Then:**
 
-- [ ] **T057** [US1] Write the module's client: `register.ts`, the panel mounting the library, `hierarchicalRequirementDefinition.ts` with the note icons and the icon for several; raise `KNOWN_MODULE_CLIENTS` to 2 · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/client/register.ts
+- [x] **T057** [US1] Write the module's client: `register.ts`, the panel mounting the library, `hierarchicalRequirementDefinition.ts` with the note icons and the icon for several; raise `KNOWN_MODULE_CLIENTS` to 2 · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/client/register.ts
 
 **⟶ Then:**
 
-- [ ] **T058** [US1] Check in the browser, in both themes, User Story 1 and the faults of SC-007: one finding at one bullet with the rest editable, or a read-only page with one finding; a document written from the companion alone without a finding but `std.missingId` (SC-009); the looks beside the Knowledge designer's (FR-011); record it · etalii.adp.ide.standalone/tests.md
-- [ ] **T059** [US1] Add the tool's row (kind Designer, origin `etalii/hierarchical-requirement`), the FBL families, the DESL surface kinds `table` and `hierarchy` and DED 0.2 it reads (FR-029, FR-030); the architecture page; retaken screenshots · etalii.adp.ide.standalone/docs/tools.md
-- [ ] **T060** [US1] Deliver pull request 5 · etalii.adp.ide.standalone (pull request 5)
+- [x] **T058** [US1] Check in the browser, in both themes, User Story 1 and the faults of SC-007: one finding at one bullet with the rest editable, or a read-only page with one finding; a document written from the companion alone without a finding but `std.missingId` (SC-009); the looks beside the Knowledge designer's (FR-011); record it · etalii.adp.ide.standalone/tests.md
+- [x] **T059** [US1] Add the tool's row (kind Designer, origin `etalii/hierarchical-requirement`), the FBL families, the DESL surface kinds `table` and `hierarchy` and DED 0.2 it reads (FR-029, FR-030); the architecture page; retaken screenshots · etalii.adp.ide.standalone/docs/tools.md
+- [x] **T060** [US1] Deliver pull request 5 · etalii.adp.ide.standalone (pull request 5)
 
 **Checkpoint**: User Story 1 works on its own: a person opens an agent's file and reads it by its structure.
 
