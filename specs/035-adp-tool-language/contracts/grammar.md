@@ -7,7 +7,7 @@ What `specifications/atd/` must contain for tasks to be complete, and the rules 
 `ATD-specification.md`, 0.1 Working Draft, header table ending in the `Licence` row (licence-check.py):
 
 1. Introduction (*informative*): purpose, the phases of the transition, relation to DISL, DESL, EDSL, FBL, DID and DED.
-2. Conformance: the classes *description* (a file or set of files), *checker*, *language server*, *runtime*; RFC 2119 and RFC 8174 key words.
+2. Conformance: the classes *description* (a file or set of files), *checker*, *language server*, *runtime*; RFC 2119 and RFC 8174 key words; §2.3 conformance fixtures, §2.4 drawings, §2.5 traces, §2.6 capability contracts, each with its `$defs` entry and a worked example.
 3. Lexical structure: UTF-8, line endings, comments (`//` to the end of the line, `/* */` not nested, `///` documentation comments attached to the next construct), the terminal classes, the regex subset (FBL §2.5 without anchors, named groups or lazy quantifiers), the lexing rule (contextual, longest match, priority, string over pattern), soft keywords.
 4. ATD grammar notation: the subset of Lark notation, its meaning (rules, terminals, `?`, `_`, operators, aliases, `%ignore`, `%import`), and how a tree is shaped from it. Normative, because bindings use it too (section 11).
 5. Files and descriptions: the header `atd <major>.<minor>`, root and parts, imports, the description's folder, version selection, unknown versions.

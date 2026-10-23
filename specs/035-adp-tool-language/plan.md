@@ -120,13 +120,13 @@ etalii.adp.ide.intellij/
 
 In the order of research R24; each pull request names `specs/035-adp-tool-language/` here and the etalii.adp commit its tasks came from, and its tasks are ticked here only once it is merged.
 
-1. etalii.adp: glossary, constitution 1.8.0, ATD 0.1 (document, grammar, schema, examples, refused corpus, generated files), FBL 0.9's text, the `grammar` job.
+1. etalii.adp: glossary, constitution 1.8.0, ATD 0.1 (document, grammar, schema, examples, refused corpus, generated files, the formats of conformance fixtures, traces and capability contracts with a worked example of each), the `grammar` job.
 2. etalii.adp.ide.desktop: the toolchain crates, the cross-check with Lark, the shell's `.atd` language support, the `atd-v0.1.0` release with `atd`, `atd-lsp` and `atd-lsp.wasm`.
 3. etalii.adp: the `descriptions` job.
 4. etalii.adp.ide.vscode and etalii.adp.ide.intellij, in parallel: language support from `atd-v0.1.0`.
 5. etalii.adp.ide.desktop: script, runtime, validation, capabilities, `atd record`, the validation view, hot reload, the debugger.
-6. etalii.adp: the descriptions in batches (mind map; the five other DISL-driven types; the two designer types; the five editor types; the hand-written types by module), each with fixtures, traces and capability contracts; etalii.adp.ide.vscode: *Validate Tool Description* after the first batch.
-7. etalii.adp and etalii.adp.ide.desktop: the grammar family and the W3C RDF Turtle binding.
+6. etalii.adp: the descriptions in batches (mind map; the five other DISL-driven types; the two designer types; the five editor types; the hand-written types by module), each with fixtures, traces and capability contracts; a construct a batch adds gets its checker support in an etalii.adp.ide.desktop pull request of the same branch name, merged first; etalii.adp.ide.vscode: *Validate Tool Description* after the first batch.
+7. etalii.adp and etalii.adp.ide.desktop: the grammar family (FBL 0.9's text, schema and `.fbl` example together, Principle II) and the W3C RDF Turtle binding.
 8. etalii.adp: the guide and the measured outcomes (SC-006 to SC-009).
 
 ## Complexity Tracking
