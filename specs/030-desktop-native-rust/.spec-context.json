@@ -50,5 +50,13 @@
   ],
   "telemetryInstanceId": "3701c676-c85d-4b5e-a5e5-42e52c9803fd",
   "assistant": "claude-vscode",
-  "workingBranch": "features/030-desktop-native-rust-plan"
+  "workingBranch": "features/030-desktop-native-rust-plan",
+  "release": {
+    "version": "1.0.0",
+    "tag": "v1.0.0",
+    "commit": "a288796c6b3b2f33b9cb46a6d8907f55885d7ca8",
+    "at": "2026-10-23T01:31:00Z",
+    "url": "https://github.com/etalii-adp/etalii.adp.ide.desktop/releases/tag/v1.0.0",
+    "signed": false
+  }
 }
