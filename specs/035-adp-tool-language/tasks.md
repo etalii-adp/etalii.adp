@@ -120,10 +120,10 @@
 
 ### Batch 1: the mind map (the vertical slice)
 
-- [ ] T052 [US2] Record the mind map's conformance cases · etalii.adp/definitions/diagrams/conformance/mindmap/
-- [ ] T053 [P] [US2] Record the fixtures of the capability `layout.twoSidedTree`, whose contract T161 wrote, with `atd record --capability` from `modules/diagrams/mindmap/src/layout.rs` · etalii.adp/specifications/atd/capabilities/layout.twoSidedTree/
-- [ ] T054 [US2] Write the mind map's description (`freeplane/mindmap`) from `mindmap.dis`, the Freeplane binding, `mindmap.md`, the desktop module `modules/diagrams/mindmap`, VS Code's `mindmap-layout` and `freeplane-mm` plugins and IntelliJ's `freemind` module · etalii.adp/definitions/diagrams/mindmap.atd, etalii.adp/definitions/diagrams/mindmap.*.atd
-- [ ] T055 [US2] Write the mind map's trace · etalii.adp/definitions/diagrams/mindmap.trace.json
+- [x] T052 [US2] Record the mind map's conformance cases · etalii.adp/definitions/diagrams/conformance/mindmap/
+- [x] T053 [P] [US2] Record the fixtures of the capability `layout.twoSidedTree`, whose contract T161 wrote, with `atd record --capability` from `modules/diagrams/mindmap/src/layout.rs` · etalii.adp/specifications/atd/capabilities/layout.twoSidedTree/
+- [x] T054 [US2] Write the mind map's description (`freeplane/mindmap`) from `mindmap.dis`, the Freeplane binding, `mindmap.md`, the desktop module `modules/diagrams/mindmap`, VS Code's `mindmap-layout` and `freeplane-mm` plugins and IntelliJ's `freemind` module · etalii.adp/definitions/diagrams/mindmap.atd, etalii.adp/definitions/diagrams/mindmap.*.atd
+- [x] T055 [US2] Write the mind map's trace · etalii.adp/definitions/diagrams/mindmap.trace.json
 
 ### Batch 2: the five other DISL-driven diagram types
 
