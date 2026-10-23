@@ -10,3 +10,12 @@ specifications/fbl/registrations/** -text
 
 # The knowledge examples are read byte for byte by the knowledge-equivalence fixture, CRLF endings included.
 definitions/designers/examples/** -text
+
+# ATD conformance fixtures (spec 035, data-model.md section 8): the input files of a case and of a capability fixture
+# are compared byte for byte, so Git never converts them; their JSON files stay text.
+definitions/*/conformance/** -text
+definitions/*/conformance/**/*.json text
+specifications/atd/fixtures/** -text
+specifications/atd/fixtures/**/*.json text
+specifications/atd/capabilities/*/fixtures/** -text
+specifications/atd/capabilities/*/fixtures/**/*.json text

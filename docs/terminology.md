@@ -46,6 +46,17 @@ Many tools do not store their model in a definition file of their own: the model
 - **Folder subject**: a body that is a folder rather than a file, such as a Helm chart, recognised by the files in it and watched for changes.
 - **Persistence plugin**: code that reads and writes a body in a format FBL cannot declare, under the plugin contract FBL defines.
 
+## One language for every tool type
+
+A tool type is also described in one language, beside the files above. In phase 1 of the move to it (spec 035), hosts keep running tools from the specification and binding files; a tool description is written, checked, validated and debugged, and no host loads a tool from it.
+
+- **ADP tool language** (ATD): the one language in which a tool type of any kind is described: its identity, model, surface (canvas, form or text), behaviour, bindings and logic, under one LALR(1) grammar. ATD is its acronym, as DISL is the Diagram Specification Language's; it is specified in `specifications/atd/`.
+- **Tool description**: one tool type written in the ADP tool language, in one `.atd` file or in a root `.atd` file with the parts it imports. `.atd` stands for *ADP Tool Description*. A tool description is not a definition: "definition" keeps its one meaning, the documents users create of a tool type.
+- **Script**: the part of the ADP tool language in which a tool type's logic is written: functions with local variables, conditionals, loops with a stated limit and the actions of DISL and DESL as statements, around CEL expressions, deterministic and under a step budget.
+- **Capability**: a named, generic algorithm the platform provides and a tool description calls, for work the script is not meant for (a layered flow's relaxation, a two-sided tree layout, a reader of a format). It is specified by a contract with fixtures, in the terms of its algorithm or format, never in a tool type's vocabulary.
+- **Conformance fixture**: a set of documents, the edits made to them and what the reference host produced for them (readings, findings, splices, drawings and bytes), against which a tool description is validated.
+- **Trace**: the file beside a tool description that names, for each item of its companion file and each behaviour of a host's code, the part of the description that states it, or the host's concern it is, or the other host's behaviour that diverges from it.
+
 ## Related terms
 
 - **Tool type**: one particular tool ADP offers, such as the Wardley map; by kind a *diagram type*, *designer type* or *editor type*. Identified by its **origin**, `<vendor>/<type>`, for example `wardley/map`.

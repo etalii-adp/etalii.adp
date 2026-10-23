@@ -1,6 +1,11 @@
 <!--
 Sync Impact Report
-- Version: 1.6.0 → 1.7.0 (MINOR)
+- Version: 1.7.0 → 1.8.0 (MINOR)
+- Modified: Structure and Naming gains a rule for a language whose authored form is text rather than JSON (its grammar in `grammar/` beside its schema, a schema that describes its parsed tree, its version key as its first construct) and lists `specifications/atd/`, ATD, the ADP tool language, beside FBL as a language that serves every kind. Principle II's "machine-readable schema for every format" is kept: for such a language it is the schema of its parsed tree.
+- Added or removed sections: none.
+- Rationale for MINOR: materially expanded guidance on where a specification's files live (spec 035-adp-tool-language, task T003, research R23, 2026-10-23); no principle removed or redefined.
+- Templates: plan, spec and tasks templates unchanged.
+- Earlier: 1.6.0 → 1.7.0 (MINOR)
 - Modified: the preamble names the desktop host among the IDE hosts, with its repository `etalii.adp.ide.desktop`; Structure and Naming lists `etalii.adp.ide.desktop` among the repositories with principles of their own.
 - Added or removed sections: none. Added `.specify/memory/repositories/etalii.adp.ide.desktop.md`, the principles of the desktop host repository, at 1.0.0.
 - Rationale for MINOR: a sixth host and a fifth principles file a plan can be checked against (spec 030-desktop-native-rust, tasks T003 and T005, 2026-10-20); no principle removed or redefined.
@@ -73,6 +78,7 @@ Rationale: developers work in Rider, and a list of warnings nobody corrects is t
 - `.specify/memory/repositories/<repository>.md` holds the principles of each repository whose code a feature here can land in and that has principles of its own: `etalii.adp.ide.desktop`, `etalii.adp.ide.intellij`, `etalii.adp.ide.vscode`, `etalii.adp.ide.notion` and `etalii.adp.site`.
 - `docs/` holds documentation about the organization and its repositories rather than a format, such as `new-repository.md`.
 - The organization is 'EtAlii' in prose and `etalii-adp` on GitHub; the product is 'ADP', 'A Different Perspective'.
+- A language whose authored form is text rather than JSON carries its grammar in its folder beside its schema, in `specifications/<name>/grammar/`; its schema (`<name>.schema.json`, as for every format) describes the tree its text parses into; and its version key is the first construct of every file (`<name> <major>.<minor>`), so that a reader selects the grammar before it parses anything else. The first is ATD, the ADP tool language, in `specifications/atd/` (`ATD-specification.md`, `atd.schema.json`, `$id` `https://etalii.net/adp/atd/schema/<version>/atd.schema.json`, version key `atd 0.1` as the first construct, extension `.atd`), which, like FBL, serves every kind of tool: a tool type of any kind is described in it as a tool description.
 - Every specification document, placeholders included, states the repository's licence as the last row of its header table: `` | Licence | [Apache License 2.0](https://github.com/etalii-adp/etalii.adp/blob/develop/LICENSE) (`Apache-2.0`) | ``. The repository keeps exactly one licence file of its own, `LICENSE` at its root, carrying the Apache License 2.0 and the line `Copyright © Peter Vrenken 2026`, and none beside it at the root or under `specifications/`.
 - A specification folder is the format's short name in lowercase (`disl`); its document takes the name in capitals (`DISL-specification.md`). A file extension a specification defines is lowercase and short (`.dis`).
 - A change that renames or moves a specification's files MUST update every reference to them in the same pull request.
@@ -90,4 +96,4 @@ Rationale: developers work in Rider, and a list of warnings nobody corrects is t
 
 This constitution supersedes other practices in this repository. Amendments are made through `/speckit-constitution`, recorded in version control, and versioned semantically: MAJOR for removing or redefining a principle, MINOR for adding a principle or materially expanding guidance, PATCH for clarifications. Reviews of plans and changes MUST verify compliance with the principles above; runtime guidance for agents lives in `CLAUDE.md`.
 
-**Version**: 1.7.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-10-20
+**Version**: 1.8.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-10-23
