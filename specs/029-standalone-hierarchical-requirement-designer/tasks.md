@@ -396,20 +396,20 @@ Extends: `etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/edit
 
 **Wave 1 (different files):**
 
-- [ ] **T089** [P] [US6] Test that a description with a picked reference writes the bytes of `hierarchical-requirement-references`, and that a deleted target leaves the finding of `references/deleted` (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/References.Tests.cs
-- [ ] **T090** [P] [US6] Test the lookup and the reveal: typing `#` lists the requirements and items of the same document, narrowed by number or title; selecting a box whose target sits in a collapsed item outside the focus changes focus and expands as far as needed, and the Markdown file is not written (FR-017, FR-018; US6 scenario 2) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/references/reveal.test.ts
+- [x] **T089** [P] [US6] Test that a description with a picked reference writes the bytes of `hierarchical-requirement-references`, and that a deleted target leaves the finding of `references/deleted` (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/References.Tests.cs
+- [x] **T090** [P] [US6] Test the lookup and the reveal: typing `#` lists the requirements and items of the same document, narrowed by number or title; selecting a box whose target sits in a collapsed item outside the focus changes focus and expands as far as needed, and the Markdown file is not written (FR-017, FR-018; US6 scenario 2) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/references/reveal.test.ts
 
 ### Implementation
 
 **Wave 2 (different files):**
 
-- [ ] **T091** [P] [US6] Write the lookup on `SearchList`, opened by `#` (FR-017) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/references/ReferenceLookup.tsx
-- [ ] **T092** [P] [US6] Write the box and the reveal: focus to the nearest item that keeps the target in sight, `toggleCollapsed` for each collapsed ancestor, the filter cleared as far as it hides it (FR-018) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/references/reveal.ts
+- [x] **T091** [P] [US6] Write the lookup on `SearchList`, opened by `#` (FR-017) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/references/ReferenceLookup.tsx
+- [x] **T092** [P] [US6] Write the box and the reveal: focus to the nearest item that keeps the target in sight, `toggleCollapsed` for each collapsed ancestor, the filter cleared as far as it hides it (FR-018) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/references/reveal.ts
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T093** [US6] Mount the lookup in the description field and the boxes in the description · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/editing/EntryTextField.tsx
-- [ ] **T094** [US6] Check in the browser, record it, and deliver pull request 9 · etalii.adp.ide.standalone/tests.md
+- [x] **T093** [US6] Mount the lookup in the description field and the boxes in the description · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/editing/EntryTextField.tsx
+- [x] **T094** [US6] Check in the browser, record it, and deliver pull request 9 · etalii.adp.ide.standalone/tests.md
 
 **Checkpoint**: entries name each other, and a person follows a reference in one gesture.
 
