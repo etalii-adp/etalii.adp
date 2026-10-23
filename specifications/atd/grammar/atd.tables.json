@@ -1,4 +1,5 @@
 {
+  "$schema": "https://etalii.net/adp/atd/schema/0.1/atd.schema.json#/$defs/ParseTables",
   "grammar": "specifications/atd/grammar/atd.lark",
   "start": "description",
   "ignore": ["BLOCK_COMMENT", "COMMENT", "WHITESPACE"],

@@ -487,7 +487,7 @@ def _symbol_key(symbol, terminal_name, helper_name):
 
 def tables_text(parser):
     data = normalized_tables(parser)
-    lines = ["{"]
+    lines = ["{", '  "$schema": "https://etalii.net/adp/atd/schema/0.1/atd.schema.json#/$defs/ParseTables",']
     for key in ("grammar", "start", "ignore"):
         lines.append(f"  {json.dumps(key)}: {json.dumps(data[key])},")
     lines.append('  "terminals": [')
