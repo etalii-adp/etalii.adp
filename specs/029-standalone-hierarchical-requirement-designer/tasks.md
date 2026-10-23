@@ -467,23 +467,23 @@ Extends: `etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backe
 
 **Wave 1 (different files):**
 
-- [ ] **T102** [P] [US8] Test the category and state operations against `hierarchical-requirement-category-state` and `list`, the first of several `category:` words counting (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/CategoryStateOperations.Tests.cs
-- [ ] **T103** [P] [US8] Test `storeFilter`, `renameFilter` and `removeFilter` against `hierarchical-requirement-filters` (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/FilterOperations.Tests.cs
-- [ ] **T104** [P] [US8] Test narrowing and sorting: by tag, category, state and an item pattern with `*` and `?` in any case; each remaining requirement shown with the items containing it; sorting by number, title, category or state sends nothing; a finding whose entry a filter hides stays listed and selecting it shows the entry (FR-019 to FR-021; US8 scenario 2) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/narrowing/filterQuery.test.ts
+- [x] **T102** [P] [US8] Test the category and state operations against `hierarchical-requirement-category-state` and `list`, the first of several `category:` words counting (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/CategoryStateOperations.Tests.cs
+- [x] **T103** [P] [US8] Test `storeFilter`, `renameFilter` and `removeFilter` against `hierarchical-requirement-filters` (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement.Tests/FilterOperations.Tests.cs
+- [x] **T104** [P] [US8] Test narrowing and sorting: by tag, category, state and an item pattern with `*` and `?` in any case; each remaining requirement shown with the items containing it; sorting by number, title, category or state sends nothing; a finding whose entry a filter hides stays listed and selecting it shows the entry (FR-019 to FR-021; US8 scenario 2) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/narrowing/filterQuery.test.ts
 
 ### Implementation
 
 **Wave 2 (different files):**
 
-- [ ] **T105** [P] [US8] Write the category and state operations (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Operations/CategoryStateOperations.cs
-- [ ] **T106** [P] [US8] Write the filter operations (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Operations/FilterOperations.cs
-- [ ] **T107** [P] [US8] Write the category and state picker, with their lists on `LabelListEditor` · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/classification/ClassificationPicker.tsx
-- [ ] **T108** [P] [US8] Write the filter bar, the query in the notation of DESL section 7.7.3, and the sort menu (FR-019, FR-020) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/narrowing/FilterBar.tsx
+- [x] **T105** [P] [US8] Write the category and state operations (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Operations/CategoryStateOperations.cs
+- [x] **T106** [P] [US8] Write the filter operations (FR-026) · etalii.adp.ide.standalone/src/designers/hierarchical-requirement/backend/EtAlii.Adp.Designer.HierarchicalRequirement/Operations/FilterOperations.cs
+- [x] **T107** [P] [US8] Write the category and state picker, with their lists on `LabelListEditor` · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/classification/ClassificationPicker.tsx
+- [x] **T108** [P] [US8] Write the filter bar, the query in the notation of DESL section 7.7.3, and the sort menu (FR-019, FR-020) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/narrowing/FilterBar.tsx
 
 **⟶ Wait for Wave 2 to finish, then:**
 
-- [ ] **T109** [US8] Map the gestures, mount the bar, and make a selected finding reveal its entry (FR-021) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/FindingList.tsx
-- [ ] **T110** [US8] Check in the browser, record it, and deliver pull request 11 · etalii.adp.ide.standalone/tests.md
+- [x] **T109** [US8] Map the gestures, mount the bar, and make a selected finding reveal its entry (FR-021) · etalii.adp.ide.standalone/src/client/src/hierarchySurface/library/FindingList.tsx
+- [x] **T110** [US8] Check in the browser, record it, and deliver pull request 11 · etalii.adp.ide.standalone/tests.md
 
 **Checkpoint**: every story of the specification works in the host.
 
