@@ -3,7 +3,7 @@
   "specName": "One Language for Every Tool Type",
   "branch": "claude/project-thread-kykv1z",
   "currentStep": "analyze",
-  "status": "tasking",
+  "status": "ready-to-implement",
   "history": [
     {
       "step": "specify",
@@ -554,5 +554,11 @@
       "note": "M6 Pre-tasks gate checklist: 0 of 55 items reviewed; it gates /speckit-implement",
       "step": "analyze"
     }
-  ]
+  ],
+  "tasksApproval": {
+    "by": "user",
+    "at": "2026-10-23T00:43:45Z",
+    "commit": "81d829d",
+    "implementedFrom": "Claude application"
+  }
 }
