@@ -4,6 +4,8 @@
 
 **Prerequisites**: the plan's pull request (etalii.adp #455) and the pre-tasks gate checklist's (#456) merged, at etalii.adp `01ad3dc`. [checklists/pre-tasks-gate.md](checklists/pre-tasks-gate.md) is reviewer-owned and gates `/speckit-implement`; its items that ask for a change to the specification are answered there, through `/speckit-clarify`, not by these tasks. T159 to T163 were added after `/speckit-analyze` of 2026-10-23 (its findings C1, C2, H1, H2, M1 and M3) and stand in the phases they belong to; the earlier numbers are unchanged.
 
+**Approval**: the maintainer approved these tasks on 2026-10-23, at etalii.adp `81d829d` (after the analysis remediation, #459, and clarifications Q5 to Q9, #460). A pull request in another repository names that commit, or a later one that changes this file, as the commit its tasks were taken from. The maintainer runs the implementation from the Claude application.
+
 **Tests**: requested. Every story has an *Independent Test* in the specification, and the principles of the three hosts this feature changes require tests first (the desktop host's IV, the VS Code host's IV, the IntelliJ host's IV). Each story's test tasks come before the code they check, and fail first.
 
 **Paths**: every file is named with its repository as prefix: `etalii.adp/`, `etalii.adp.ide.desktop/`, `etalii.adp.ide.vscode/`, `etalii.adp.ide.intellij/`. The clones sit side by side (`C:\git\<repository>` locally, `/home/user/<repository>` in a cloud session). `etalii.adp.ide.standalone`, `etalii.adp.ide.notion`, `etalii.adp.ide.eclipse` and `etalii.adp.site` are not changed.
