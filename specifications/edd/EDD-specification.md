@@ -1,3 +1,10 @@
+---
+id: edd-specification
+type: submodule-design
+title: EDD specification (normative)
+status: draft
+parent: edd
+---
 # EDD — Editor Definition Language
 
 **Specification, no version yet (Placeholder)**

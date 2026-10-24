@@ -133,7 +133,7 @@ def is_example(path: Path) -> bool:
     if designer_examples in path.parents and path.suffix in (".yaml", ".yml", ".xml", ".md"):
         return True
     if path.suffix == ".md":
-        return path.parent == root / "ded" and not path.name.endswith("-specification.md")
+        return path.parent == root / "ded" and not path.name.endswith("-specification.md") and path.name != "SPEC.md"  # SPEC.md is the spec-graph node
     return path.suffix in CURRENT_EXTENSIONS or path.suffix in ALIAS_EXTENSIONS or path.suffix == ".json"
 
 

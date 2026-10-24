@@ -1,3 +1,10 @@
+---
+id: atd-specification
+type: submodule-design
+title: ATD specification (normative)
+status: draft
+parent: atd
+---
 # ATD, the ADP Tool Language
 
 **Specification, version 0.1 (Working Draft)**

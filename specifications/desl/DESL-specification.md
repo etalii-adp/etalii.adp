@@ -1,3 +1,10 @@
+---
+id: desl-specification
+type: submodule-design
+title: DESL specification (normative)
+status: draft
+parent: desl
+---
 # DESL — Designer Specification Language
 
 **Specification, version 0.2 (Draft)**
