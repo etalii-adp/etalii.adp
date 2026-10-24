@@ -11,7 +11,7 @@ parent: host-standalone
 
 ## Responsibility
 
-The primitives every other project shares: `ShortGuid` (the identity type, fixed-length base36), `ToolOrigin`, `ProjectRoot`/`ProjectPath`, and `ToolDefinitionScan`, the reflection scan behind discovering diagram, designer and editor definitions.
+The primitives every other project shares: `ShortGuid` (the identity type, fixed-length base36), `ToolOrigin`, `ProjectRoot`/`ProjectPath`, and `ToolDefinitionScan`, the reflection scan that discovers the tool definitions of all three kinds.
 
 ## Rules
 
