@@ -36,7 +36,7 @@ General-purpose drawing tools can draw any of these pictures, but they know noth
 
 These come from the product steering of the standalone host ([product.md](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/develop/.spec-workflow/steering/product.md)) and hold for every host. The principles of the specifications themselves are in the [constitution](.specify/memory/constitution.md) (`constitution`).
 
-- **Files are the source of truth.** What a tool shows lives in plain, diffable files beside the work it describes, under the same version control. A host never keeps a second copy of a model.
+- **Files are the source of truth.** What a tool shows lives in plain, diffable files beside the work it describes, under the same version control. A host never keeps a second copy of a model. Where a platform has no files, as in Notion, the platform's own store is the model, and the host states what that costs (`host-notion`).
 - **Specialised over generalised.** A tool earns its place by knowing its subject: its element types, what may connect to what, and what a well-formed picture looks like.
 - **Don't reinvent the wheel.** Where a well-known notation, file format or convention exists, ADP embraces it, and a file stays openable by the tool that owns its format (FBL, `fbl`).
 - **Specified, not coded.** Every tool type is described in a specification, and code is written only where a specification cannot express what is needed. The final form of a specification is one ADP tool language description (`.atd`, `atd`) per tool type. Until that transition is complete, several approaches are supported side by side (see `architecture`, *Tool-type approaches*).

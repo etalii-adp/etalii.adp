@@ -17,4 +17,4 @@ Will store editors users create of an EDSL-specified type. It is a placeholder w
 
 ## Boundary
 
-Placeholder: its document states purpose and extension only, and it has no schema.
+Placeholder: its document states purpose and extension only, and it has no schema. Editors that exist today are host code and store plain text files, so no editor definition document exists yet (see `edsl`).

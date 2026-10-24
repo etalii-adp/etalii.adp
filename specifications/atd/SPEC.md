@@ -15,7 +15,7 @@ Module node for `specifications/atd/`, the cross-kind text language for tool des
 
 ## Responsibility
 
-One text language under one strict LALR(1) grammar (`grammar/*.lark`), in which a tool type of any kind is described completely: identity, model, surface, behaviour, bindings and logic.
+The final form of every tool type's specification (spec 035, ruling of 2026-10-22: `.atd` alone in the end, after a transition; see `architecture` *Tool-type approaches*). One text language under one strict LALR(1) grammar (`grammar/*.lark`), in which a tool type of any kind is described completely: identity, model, surface, behaviour, bindings and logic.
 
 ## Boundary
 
