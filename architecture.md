@@ -3,7 +3,7 @@ id: architecture
 type: architecture-design
 title: ADP specifications — architecture
 status: draft
-parent: adp-specifications
+parent: adp
 depends-on:
   - constitution
 ---

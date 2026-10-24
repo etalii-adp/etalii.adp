@@ -3,7 +3,7 @@ id: constitution
 type: architecture-design
 title: etalii.adp constitution
 status: draft
-parent: adp-specifications
+parent: adp
 ---
 <!--
 Sync Impact Report
