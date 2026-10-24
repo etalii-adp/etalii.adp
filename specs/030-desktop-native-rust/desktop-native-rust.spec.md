@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-17
 
-**Status**: Being implemented: the plan and [tasks.md](tasks.md) are approved and under way in `etalii.adp.ide.desktop`; T037, T089 and T092 to T094 (the walks, signing and the 1.0 release) are open.
+**Status**: Implemented: released as [1.0.0](https://github.com/etalii-adp/etalii.adp.ide.desktop/releases/tag/v1.0.0) of `etalii.adp.ide.desktop` on 2026-10-23, with every row of the parity inventory checked. The releases are unsigned: the maintainer dropped signing on 2026-10-24 (T092), and each release says so.
 
 **Input**: The maintainer's request of 2026-10-17: "in the etalii.adp repository create a spec kit specification to duplicate the .NET / web implementation in etalii.adp.ide.standalone to etalii.adp.ide.desktop as a full-native rest implementation." Asked whether "rest" meant Rust or a REST interface, the maintainer answered the same day: Rust, a fully native Rust desktop application. They added minutes later: "the IDE style in terms of colors, thickness etc should be based on VS Code."
 

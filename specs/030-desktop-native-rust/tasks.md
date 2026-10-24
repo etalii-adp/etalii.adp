@@ -186,7 +186,7 @@
 - [x] T103 [P] [US2] Add the ribbon with Save, New, Undo, Redo, Zoom In, Zoom Out, Fit to View and the contextual groups, as the standalone host's, and set P-010 to `checked` · etalii.adp.ide.desktop/crates/adp-shell/src/ribbon.rs
 - [x] T104 [P] [US2] Draw the layout switcher on the canvas where a definition has several layout modes, as the standalone host's `layout-switcher` in `DiagramCanvas.tsx`, and set P-029 to `checked` · etalii.adp.ide.desktop/crates/adp-shell/src/canvas/
 - [x] T105 [US2] Draw a budget's notice on the canvas, read as a status, and leave out what a truncating budget cuts and the lines to it (DISL sections 3.2.1, 6.13), as the standalone host's `c9af7c5` does · etalii.adp.ide.desktop/crates/adp-scene/src/scene/builder.rs
-- [ ] T092 Sign the Windows installers and sign and notarise the macOS ones with the maintainer's certificates (R11) · etalii.adp.ide.desktop/.github/workflows/build.yml
+- [ ] ~~T092 Sign the Windows installers and sign and notarise the macOS ones with the maintainer's certificates (R11) · etalii.adp.ide.desktop/.github/workflows/build.yml~~ **Dropped** on 2026-10-24 by the maintainer: no release is signed for now (R11).
 - [x] T093 Set every inventory row to `checked`, or list what is left; release 1.0 when none is (SC-002) · etalii.adp.ide.desktop/parity/inventory.md
 - [x] T094 Tick in this file every task whose pull request is merged, and record the release in the feature's state · etalii.adp/specs/030-desktop-native-rust/tasks.md
 

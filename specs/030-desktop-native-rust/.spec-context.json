@@ -3,7 +3,7 @@
   "specName": "The Native Desktop Host",
   "branch": "features/030-desktop-native-rust",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -46,6 +46,13 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-10-20T19:48:47.827Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-24T13:16:45.907Z"
     }
   ],
   "telemetryInstanceId": "3701c676-c85d-4b5e-a5e5-42e52c9803fd",
@@ -58,5 +65,12 @@
     "at": "2026-10-23T01:31:00Z",
     "url": "https://github.com/etalii-adp/etalii.adp.ide.desktop/releases/tag/v1.0.0",
     "signed": false
-  }
+  },
+  "currentTask": null,
+  "concerns": [
+    {
+      "note": "finished, unverified",
+      "step": "implement"
+    }
+  ]
 }
