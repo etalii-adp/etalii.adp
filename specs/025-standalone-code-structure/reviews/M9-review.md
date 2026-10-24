@@ -4,7 +4,7 @@
 
 ## In short
 
-The feature is done but for one test. Of the twenty-eight success criteria, twenty-six are met at M9, six of them as a review amended them and SC-014 as ruled, seen on Windows once. SC-002 is not met at this review's run: 19 of 20, with one test of spec 029's designer failing once, which T319 steadies; the spec closes when it is merged and a run is 20 of 20. SC-025's second half did not hold: the architecture pages twice had to be corrected for sentences the work had made false. Every defect D1 to D10 is closed with a guard seen to fail, and none was struck.
+The feature is done but for one test. Of the twenty-eight success criteria, twenty-six are met at M9, six of them as a review amended them and SC-014 as ruled, seen on Windows once. SC-002 is not met at this review's run: 19 of 20, with one test of spec 029's designer failing once, which T319 steadies; the spec closes when it is merged and a run is 20 of 20. It was, as *Afterwards* below records. SC-025's second half did not hold: the architecture pages twice had to be corrected for sentences the work had made false. Every defect D1 to D10 is closed with a guard seen to fail, and none was struck.
 
 At M9:
 - **Test code removed: 5,941 lines net.** That is the sum of the coverage table's tasks against 5,290 (SC-005 as amended), with T317 adding 215 lines to M8's 5,726.
@@ -65,7 +65,7 @@ Every figure is read from [M9-measurements.json](M9-measurements.json) at `86169
 | Criterion | At M9 | Figure | Evidence |
 |---|---|---|---|
 | SC-001, no fixed wait for a stream to become live, and its constant gone | Met | 0 of 25 | Met at M0 (standalone pull request 178). `StreamStartupGrace` appears nowhere under `src/`, and none of the 16 waits in tests is a flow test's |
-| SC-002, twenty identical runs at M0 and at M9 | 19 of 20 at `8616924ec`; T319 steadies the failure | | Met at M0, 20 of 20 at `d5278a3c6`. The record between is in the reviews: 19 or 18 of 20 at M1 and M3 to M6, each failure steadied by a task; 20 of 20 at M2, M7 and M8 |
+| SC-002, twenty identical runs at M0 and at M9 | Met after T319 | 19 of 20 at `8616924ec`; 20 of 20 at `d9b9a136d` | Met at M0, 20 of 20 at `d5278a3c6`. The record between is in the reviews: 19 or 18 of 20 at M1 and M3 to M6, each failure steadied by a task; 20 of 20 at M2, M7 and M8 |
 | SC-003, one sign-in, one add-project and one channel helper from M0; one wait-until helper from M3 | Met as amended | 3 polling helpers, all in `StreamProbe` | Amended by the M0 review (the wait-until helper due at M3) and the M3 review, question 4: `Eventually` and the stream probe. The three helpers of M0 met at M0 |
 | SC-004, no test waits in real time for a debounce, an idle eviction or a retry | Met | 16 fixed waits in tests, the same sites as at M8 | Met at M3, held at M5 and M7, each site read. One site no review named: `CelProgramCache.Tests.cs:19` `Thread.Sleep(20)` (T212, M6), standing in for a slow compiler in a concurrency test. It waits for no debounce, eviction or retry |
 | SC-005, test code 5,000 lines smaller, no test removed without cover | Met as amended | 5,941 net | Amended by the M7 review (the coverage table's tasks remove at least 5,290 test lines net) and the M8 review (pull request 186 counts). M8 summed 5,726. T317 (657) removes 215 more by the same method, `git diff --numstat` against the first parent over the test projects and the two testing projects. Its 36 document cases became 18 in `LineDocumentContract`, which both modules run in full. T318's 8 lines are FR-094's, not SC-005's |
@@ -140,6 +140,8 @@ Added:
 - T319, in M9: the outside-change test of the hierarchical requirement designer counts the pages sent before its write, seen to fail with a delay after the write first; then the Stability workflow runs again (SC-002, FR-005).
 
 Nothing is reduced or struck. T261 and T263 are ticked in this pull request; T264 waits on T319 and a run of 20 of 20.
+
+**Afterwards (2026-10-24).** T319 merged as standalone pull request 665, and [run 40047572220](https://github.com/etalii-adp/etalii.adp.ide.standalone/actions/runs/40047572220) on `develop` `d9b9a136d`, its merge, was 20 of 20. SC-002 is met, twenty-seven of the twenty-eight criteria are met, and T264 closed the specification.
 
 ## Behaviour changes
 
