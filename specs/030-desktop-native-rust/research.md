@@ -107,6 +107,8 @@ Each entry gives the decision, why, and what else was weighed. The standalone ho
 
 **Update 2026-10-21, as built** (etalii-adp/etalii.adp.ide.desktop pull request 12): the first packages are archives built by the `Build` workflow itself (a zip for Windows x64, tar.gz for macOS arm64 and Linux x64), published unsigned as a GitHub pre-release from each green tip of `develop`; MSI, `.dmg` and AppImage through `cargo-dist` follow with signing (T092).
 
+**Update 2026-10-24, signing dropped**: the maintainer chose not to sign any release for now. 1.0.0 was published on 2026-10-23 as the same archives, unsigned, and its notes say that Windows SmartScreen and macOS Gatekeeper warn before the programs start; T092 is dropped rather than done.
+
 **Minimum versions**: Windows 10 22H2, macOS 13, and Linux with glibc 2.35 (Ubuntu 22.04) and Vulkan or GL 3.3.
 
 ## R12. The reference machine and the numbers

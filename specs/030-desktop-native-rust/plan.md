@@ -60,7 +60,7 @@ They do not exist yet; task 1 writes them (R13): native platform citizenship, th
 | 3 | The runtimes: FBL with the registration file, DISL, DESL, DED, CEL; the conformance suite; the recorder and the first goldens | 3 | Conformance green; bodies read and written headless |
 | 4 | The canvas and the diagrams: gestures, toolbox, property grid, layout modes, scenes; then tool types one by one in the order of the standalone host's `docs/tools.md`, each with its goldens | 2, 5 | Each tool type usable as it lands |
 | 5 | The Knowledge designer, windowed tables, views | 4 | The designer usable |
-| 6 | Accessibility walk, the remaining theme and contrast work, signing and notarisation, the parity walk of every row | 6 | Release 1.0: every inventory row `checked` |
+| 6 | Accessibility walk, the remaining theme and contrast work, signing and notarisation (dropped on 2026-10-24: the releases are unsigned), the parity walk of every row | 6 | Release 1.0: every inventory row `checked` |
 
 ## Project Structure
 
