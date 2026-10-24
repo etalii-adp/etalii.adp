@@ -4,6 +4,22 @@ The success criteria of [the specification](standalone-hierarchical-requirement-
 
 Started 2026-10-23, when the last pull request of the build (standalone #644) merged. No reading has been taken yet.
 
+## Resolved by the maintainer's feedback
+
+On 2026-10-24 the maintainer used the designer and sent one list of feedback, ruling that fixing it is the complete feedback that resolves T113, in place of the readings below. The readings stay here for whoever wants to take them later; T113 does not wait on them.
+
+The feedback, and where it was built:
+
+| Feedback | Built in |
+| --- | --- |
+| The collapse icon, number, title and icons aligned to the top, also for a title of several lines; the icons laid out from right to left, wrapping rather than covering the title; focus on hover | standalone #695 |
+| The assessment list above every pane; the kinds with their icons; three rows of text and an Add button below them; resolve, change and remove as icons, beside a long assessment and under a short one | standalone #695 |
+| The edit field the size of the label it replaces; a drag showing where the node lands; "n more levels" at every level, its icon first; the add controls as icons | standalone #695 |
+| Labels smaller and aligned, and tag, category and state each drawn differently; the list editor's first column even, its fields and buttons alike, and a preview while dragging | standalone #695 |
+| An item or requirement deleted by an icon on the selected box, asking first and saying what goes with it; the trail always shown, following the selection | standalone #695 |
+| The filter completing the word being typed from the tags, categories and states | standalone #695 |
+| `@` for a state in the filter, and the widths of the columns dragged and kept in the `.adp` | etalii.adp #508 (DESL 0.2 and the definition), standalone #696 |
+
 ## SC-001: finding and judging, as text and in the designer
 
 The same person does one task on one real requirement document twice, at least a day apart: first with the file read as text in an editor, then in the designer. The task is to find and judge the requirements of one part of the subject, and to say how they fit with the rest. The criterion holds when the designer's time is the shorter.
