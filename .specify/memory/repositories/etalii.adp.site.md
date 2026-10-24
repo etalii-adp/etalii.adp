@@ -1,3 +1,10 @@
+---
+id: principles-site
+type: architecture-design
+title: etalii.adp.site principles
+status: draft
+parent: constitution
+---
 <!--
 Sync Impact Report
 - Version: 1.2.0 → 1.3.0 (MINOR, amended 2026-10-25, ThinkRail and Claude hosts)

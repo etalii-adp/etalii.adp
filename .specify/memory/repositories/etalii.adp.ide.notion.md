@@ -1,3 +1,10 @@
+---
+id: principles-notion
+type: architecture-design
+title: etalii.adp.ide.notion principles
+status: draft
+parent: constitution
+---
 <!--
 Sync Impact Report
 - Version: 1.1.0 → 1.2.0 (MINOR)

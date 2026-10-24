@@ -1,3 +1,10 @@
+---
+id: constitution
+type: architecture-design
+title: etalii.adp constitution
+status: draft
+parent: adp-specifications
+---
 <!--
 Sync Impact Report
 - Version: 1.9.0 → 1.10.0 (MINOR)

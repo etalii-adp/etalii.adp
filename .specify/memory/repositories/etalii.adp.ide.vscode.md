@@ -1,3 +1,10 @@
+---
+id: principles-vscode
+type: architecture-design
+title: etalii.adp.ide.vscode principles
+status: draft
+parent: constitution
+---
 <!--
 Sync Impact Report
 - Version: template → 1.0.0 (first ratification)
