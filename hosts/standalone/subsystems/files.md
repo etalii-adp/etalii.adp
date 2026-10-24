@@ -1,13 +1,13 @@
 ---
 id: standalone-files
 type: submodule-design
-title: "Standalone: Files"
+title: "Files"
 status: draft
 parent: host-standalone
 depends-on:
   - standalone-primitives
 ---
-# Standalone: Files
+# Files
 
 `src/backend/EtAlii.Adp.Files`, part of `host-standalone`.
 

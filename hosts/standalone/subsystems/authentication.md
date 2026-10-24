@@ -1,14 +1,14 @@
 ---
 id: standalone-authentication
 type: submodule-design
-title: "Standalone: Authentication"
+title: "Authentication"
 status: draft
 parent: host-standalone
 depends-on:
   - standalone-primitives
   - standalone-sessions
 ---
-# Standalone: Authentication
+# Authentication
 
 `src/backend/EtAlii.Adp.Authentication`, part of `host-standalone`.
 

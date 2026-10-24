@@ -1,11 +1,11 @@
 ---
 id: standalone-api
 type: submodule-design
-title: "Standalone: gRPC contracts"
+title: "gRPC contracts"
 status: draft
 parent: host-standalone
 ---
-# Standalone: gRPC contracts
+# gRPC contracts
 
 `src/api/*.proto` and the generated stubs, part of `host-standalone`.
 

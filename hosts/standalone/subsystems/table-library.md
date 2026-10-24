@@ -1,13 +1,13 @@
 ---
 id: standalone-table-library
 type: submodule-design
-title: "Standalone: Table library (client)"
+title: "Table library (client)"
 status: draft
 parent: host-standalone
 depends-on:
   - standalone-api
 ---
-# Standalone: Table library (client)
+# Table library (client)
 
 `src/client/src/table/library`, part of `host-standalone`.
 

@@ -1,11 +1,11 @@
 ---
 id: standalone-spec-json
 type: submodule-design
-title: "Standalone: Specification loader plumbing"
+title: "Specification loader plumbing"
 status: draft
 parent: host-standalone
 ---
-# Standalone: Specification loader plumbing
+# Specification loader plumbing
 
 `src/backend/EtAlii.Adp.Specification.Json`, part of `host-standalone`.
 

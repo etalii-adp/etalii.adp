@@ -1,7 +1,7 @@
 ---
 id: standalone-hierarchy
 type: submodule-design
-title: "Standalone: Hierarchy: the workspace tree"
+title: "Hierarchy: the workspace tree"
 status: draft
 parent: host-standalone
 depends-on:
@@ -14,7 +14,7 @@ depends-on:
   - standalone-designer
   - standalone-fbl
 ---
-# Standalone: Hierarchy: the workspace tree
+# Hierarchy: the workspace tree
 
 `src/backend/EtAlii.Adp.Hierarchy`, part of `host-standalone`.
 

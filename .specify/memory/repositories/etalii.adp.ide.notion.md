@@ -1,9 +1,9 @@
 ---
 id: principles-notion
 type: architecture-design
-title: etalii.adp.ide.notion principles
+title: Notion principles
 status: draft
-parent: constitution
+parent: host-notion
 ---
 <!--
 Sync Impact Report

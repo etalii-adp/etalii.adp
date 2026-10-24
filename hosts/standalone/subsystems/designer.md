@@ -1,13 +1,13 @@
 ---
 id: standalone-designer
 type: submodule-design
-title: "Standalone: Designer abstractions"
+title: "Designer abstractions"
 status: draft
 parent: host-standalone
 depends-on:
   - standalone-primitives
 ---
-# Standalone: Designer abstractions
+# Designer abstractions
 
 `src/backend/EtAlii.Adp.Designer`, part of `host-standalone`.
 

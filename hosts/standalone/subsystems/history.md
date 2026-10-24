@@ -1,14 +1,14 @@
 ---
 id: standalone-history
 type: submodule-design
-title: "Standalone: History: commands and undo"
+title: "History: commands and undo"
 status: draft
 parent: host-standalone
 depends-on:
   - standalone-primitives
   - standalone-documents
 ---
-# Standalone: History: commands and undo
+# History: commands and undo
 
 `src/backend/EtAlii.Adp.History`, part of `host-standalone`.
 

@@ -1,11 +1,11 @@
 ---
 id: standalone-layout
 type: submodule-design
-title: "Standalone: Layout: geometry"
+title: "Layout: geometry"
 status: draft
 parent: host-standalone
 ---
-# Standalone: Layout: geometry
+# Layout: geometry
 
 `src/backend/EtAlii.Adp.Layout`, part of `host-standalone`.
 

@@ -1,13 +1,13 @@
 ---
 id: standalone-client-editors
 type: submodule-design
-title: "Standalone: Text editor plumbing (client)"
+title: "Text editor plumbing (client)"
 status: draft
 parent: host-standalone
 depends-on:
   - standalone-api
 ---
-# Standalone: Text editor plumbing (client)
+# Text editor plumbing (client)
 
 `src/client/src/editors`, part of `host-standalone`.
 

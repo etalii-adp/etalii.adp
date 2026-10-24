@@ -1,7 +1,7 @@
 ---
 id: standalone-diagram-modules
 type: submodule-design
-title: "Standalone: Diagram modules"
+title: "Diagram modules"
 status: draft
 parent: host-standalone
 depends-on:
@@ -11,7 +11,7 @@ depends-on:
   - disl
   - fbl
 ---
-# Standalone: Diagram modules
+# Diagram modules
 
 `src/diagrams/<type>/`, part of `host-standalone`.
 

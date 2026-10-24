@@ -1,7 +1,7 @@
 ---
 id: standalone-shell
 type: submodule-design
-title: "Standalone: Workspace shell (client)"
+title: "Workspace shell (client)"
 status: draft
 parent: host-standalone
 depends-on:
@@ -11,7 +11,7 @@ depends-on:
   - standalone-hierarchy-surface-library
   - standalone-client-editors
 ---
-# Standalone: Workspace shell (client)
+# Workspace shell (client)
 
 `src/client/src/shell`, `auth`, `pages`, part of `host-standalone`.
 

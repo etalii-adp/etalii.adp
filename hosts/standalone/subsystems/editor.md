@@ -1,14 +1,14 @@
 ---
 id: standalone-editor
 type: submodule-design
-title: "Standalone: Editor abstractions"
+title: "Editor abstractions"
 status: draft
 parent: host-standalone
 depends-on:
   - standalone-primitives
   - standalone-documents
 ---
-# Standalone: Editor abstractions
+# Editor abstractions
 
 `src/backend/EtAlii.Adp.Editor`, part of `host-standalone`.
 

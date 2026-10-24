@@ -1,7 +1,7 @@
 ---
 id: standalone-designer-modules
 type: submodule-design
-title: "Standalone: Designer modules"
+title: "Designer modules"
 status: draft
 parent: host-standalone
 depends-on:
@@ -12,7 +12,7 @@ depends-on:
   - ded
   - fbl
 ---
-# Standalone: Designer modules
+# Designer modules
 
 `src/designers/<type>/`, part of `host-standalone`.
 

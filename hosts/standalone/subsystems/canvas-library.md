@@ -1,13 +1,13 @@
 ---
 id: standalone-canvas-library
 type: submodule-design
-title: "Standalone: Canvas library (client)"
+title: "Canvas library (client)"
 status: draft
 parent: host-standalone
 depends-on:
   - standalone-api
 ---
-# Standalone: Canvas library (client)
+# Canvas library (client)
 
 `src/client/src/canvas`, part of `host-standalone`.
 

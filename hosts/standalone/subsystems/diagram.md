@@ -1,14 +1,14 @@
 ---
 id: standalone-diagram
 type: submodule-design
-title: "Standalone: Diagram abstractions"
+title: "Diagram abstractions"
 status: draft
 parent: host-standalone
 depends-on:
   - standalone-primitives
   - standalone-documents
 ---
-# Standalone: Diagram abstractions
+# Diagram abstractions
 
 `src/backend/EtAlii.Adp.Diagram`, part of `host-standalone`.
 

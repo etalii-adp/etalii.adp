@@ -1,7 +1,7 @@
 ---
 id: standalone-context
 type: submodule-design
-title: "Standalone: Context: selection and actions"
+title: "Context: selection and actions"
 status: draft
 parent: host-standalone
 depends-on:
@@ -10,7 +10,7 @@ depends-on:
   - standalone-history
   - standalone-projects
 ---
-# Standalone: Context: selection and actions
+# Context: selection and actions
 
 `src/backend/EtAlii.Adp.Context`, part of `host-standalone`.
 

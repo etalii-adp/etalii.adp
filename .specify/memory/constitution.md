@@ -1,7 +1,7 @@
 ---
 id: constitution
 type: architecture-design
-title: etalii.adp constitution
+title: ADP constitution (core principles)
 status: draft
 parent: adp
 ---

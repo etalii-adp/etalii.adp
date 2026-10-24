@@ -1,7 +1,7 @@
 ---
 id: standalone-sessions
 type: submodule-design
-title: "Standalone: Sessions and connection lifetime"
+title: "Sessions and connection lifetime"
 status: draft
 parent: host-standalone
 depends-on:
@@ -11,7 +11,7 @@ depends-on:
   - standalone-editor
   - standalone-history
 ---
-# Standalone: Sessions and connection lifetime
+# Sessions and connection lifetime
 
 `src/backend/EtAlii.Adp.Sessions`, part of `host-standalone`.
 

@@ -1,9 +1,9 @@
 ---
 id: principles-site
 type: architecture-design
-title: etalii.adp.site principles
+title: Site principles
 status: draft
-parent: constitution
+parent: site
 ---
 <!--
 Sync Impact Report

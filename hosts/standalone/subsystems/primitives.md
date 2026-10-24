@@ -1,11 +1,11 @@
 ---
 id: standalone-primitives
 type: submodule-design
-title: "Standalone: Shared primitives (EtAlii.Adp)"
+title: "Shared primitives (EtAlii.Adp)"
 status: draft
 parent: host-standalone
 ---
-# Standalone: Shared primitives (EtAlii.Adp)
+# Shared primitives (EtAlii.Adp)
 
 `src/backend/EtAlii.Adp`, part of `host-standalone`.
 

@@ -1,7 +1,7 @@
 ---
 id: standalone-diagram-modules-base
 type: submodule-design
-title: "Standalone: Diagram module bases (EtAlii.Adp.Diagram.Modules)"
+title: "Diagram module bases (EtAlii.Adp.Diagram.Modules)"
 status: draft
 parent: host-standalone
 depends-on:
@@ -13,7 +13,7 @@ depends-on:
   - standalone-sessions
   - standalone-disl
 ---
-# Standalone: Diagram module bases (EtAlii.Adp.Diagram.Modules)
+# Diagram module bases (EtAlii.Adp.Diagram.Modules)
 
 `src/backend/EtAlii.Adp.Diagram.Modules`, part of `host-standalone`.
 

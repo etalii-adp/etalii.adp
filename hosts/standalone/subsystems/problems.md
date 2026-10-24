@@ -1,7 +1,7 @@
 ---
 id: standalone-problems
 type: submodule-design
-title: "Standalone: Problems"
+title: "Problems"
 status: draft
 parent: host-standalone
 depends-on:
@@ -11,7 +11,7 @@ depends-on:
   - standalone-context
   - standalone-hierarchy
 ---
-# Standalone: Problems
+# Problems
 
 `src/backend/EtAlii.Adp.Problems`, part of `host-standalone`.
 

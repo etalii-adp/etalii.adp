@@ -1,7 +1,7 @@
 ---
 id: standalone-projects
 type: submodule-design
-title: "Standalone: Projects"
+title: "Projects"
 status: draft
 parent: host-standalone
 depends-on:
@@ -9,7 +9,7 @@ depends-on:
   - standalone-sessions
   - standalone-documents
 ---
-# Standalone: Projects
+# Projects
 
 `src/backend/EtAlii.Adp.Projects`, part of `host-standalone`.
 

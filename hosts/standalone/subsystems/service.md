@@ -1,7 +1,7 @@
 ---
 id: standalone-service
 type: submodule-design
-title: "Standalone: Backend host (EtAlii.Adp.Backend.Service)"
+title: "Backend host (EtAlii.Adp.Backend.Service)"
 status: draft
 parent: host-standalone
 depends-on:
@@ -15,7 +15,7 @@ depends-on:
   - standalone-designer-modules
   - standalone-editor-modules
 ---
-# Standalone: Backend host (EtAlii.Adp.Backend.Service)
+# Backend host (EtAlii.Adp.Backend.Service)
 
 `src/backend/EtAlii.Adp.Backend.Service`, part of `host-standalone`.
 

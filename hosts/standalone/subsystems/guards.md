@@ -1,11 +1,11 @@
 ---
 id: standalone-guards
 type: submodule-design
-title: "Standalone: Guards and gates"
+title: "Guards and gates"
 status: draft
 parent: host-standalone
 ---
-# Standalone: Guards and gates
+# Guards and gates
 
 `src/backend/EtAlii.Adp.Repository.Tests`, per-module guard tests, client guard tests, `.github/tools`, `docs/guards.md`, part of `host-standalone`.
 

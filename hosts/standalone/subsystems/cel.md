@@ -1,14 +1,14 @@
 ---
 id: standalone-cel
 type: submodule-design
-title: "Standalone: CEL evaluator"
+title: "CEL evaluator"
 status: draft
 parent: host-standalone
 references:
   - disl
   - fbl
 ---
-# Standalone: CEL evaluator
+# CEL evaluator
 
 `src/backend/EtAlii.Adp.Specification.Cel`, part of `host-standalone`.
 

@@ -1,7 +1,7 @@
 ---
 id: standalone-fbl
 type: submodule-design
-title: "Standalone: FBL runtime"
+title: "FBL runtime"
 status: draft
 parent: host-standalone
 depends-on:
@@ -10,7 +10,7 @@ depends-on:
   - standalone-spec-json
   - fbl
 ---
-# Standalone: FBL runtime
+# FBL runtime
 
 `src/backend/EtAlii.Adp.Specification.Fbl`, part of `host-standalone`.
 

@@ -1,7 +1,7 @@
 ---
 id: standalone-disl
 type: submodule-design
-title: "Standalone: DISL runtime"
+title: "DISL runtime"
 status: draft
 parent: host-standalone
 depends-on:
@@ -10,7 +10,7 @@ depends-on:
   - standalone-spec-json
   - disl
 ---
-# Standalone: DISL runtime
+# DISL runtime
 
 `src/backend/EtAlii.Adp.Specification.Disl`, part of `host-standalone`.
 

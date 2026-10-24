@@ -1,9 +1,9 @@
 ---
 id: principles-desktop
 type: architecture-design
-title: etalii.adp.ide.desktop principles
+title: Desktop principles
 status: draft
-parent: constitution
+parent: host-desktop
 ---
 <!--
 Sync Impact Report

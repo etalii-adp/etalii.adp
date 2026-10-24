@@ -9,7 +9,6 @@ depends-on:
   - fbl
   - host-vscode
 references:
-  - principles-notion
   - host-standalone
   - site
 ---

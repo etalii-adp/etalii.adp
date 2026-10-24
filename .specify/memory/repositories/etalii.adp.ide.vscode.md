@@ -1,9 +1,9 @@
 ---
 id: principles-vscode
 type: architecture-design
-title: etalii.adp.ide.vscode principles
+title: VS Code principles
 status: draft
-parent: constitution
+parent: host-vscode
 ---
 <!--
 Sync Impact Report

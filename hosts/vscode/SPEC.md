@@ -13,7 +13,6 @@ depends-on:
   - definitions
   - host-desktop
 references:
-  - principles-vscode
   - host-standalone
   - host-notion
 ---

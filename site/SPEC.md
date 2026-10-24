@@ -14,8 +14,6 @@ depends-on:
   - terminology
   - hosts
   - host-notion
-references:
-  - principles-site
 ---
 
 # ADP site (`etalii.adp.site`)

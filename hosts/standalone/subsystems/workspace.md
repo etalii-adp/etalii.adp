@@ -1,7 +1,7 @@
 ---
 id: standalone-workspace
 type: submodule-design
-title: "Standalone: Workspace services and streams"
+title: "Workspace services and streams"
 status: draft
 parent: host-standalone
 depends-on:
@@ -14,7 +14,7 @@ depends-on:
   - standalone-designer
   - standalone-sessions
 ---
-# Standalone: Workspace services and streams
+# Workspace services and streams
 
 `src/backend/EtAlii.Adp.Workspace`, part of `host-standalone`.
 

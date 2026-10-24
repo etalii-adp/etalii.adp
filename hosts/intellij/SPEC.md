@@ -9,7 +9,6 @@ depends-on:
   - atd
   - host-desktop
 references:
-  - principles-intellij
   - host-standalone
   - disl
 ---

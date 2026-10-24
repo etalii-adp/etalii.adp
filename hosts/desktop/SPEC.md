@@ -13,7 +13,6 @@ depends-on:
   - atd
   - definitions
 references:
-  - principles-desktop
   - host-standalone
 ---
 

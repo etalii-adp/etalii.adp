@@ -1,13 +1,13 @@
 ---
 id: standalone-hierarchy-surface-library
 type: submodule-design
-title: "Standalone: Hierarchy surface library (client)"
+title: "Hierarchy surface library (client)"
 status: draft
 parent: host-standalone
 depends-on:
   - standalone-api
 ---
-# Standalone: Hierarchy surface library (client)
+# Hierarchy surface library (client)
 
 `src/client/src/hierarchySurface/library`, part of `host-standalone`.
 

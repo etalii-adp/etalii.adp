@@ -1,7 +1,7 @@
 ---
 id: standalone-editor-modules
 type: submodule-design
-title: "Standalone: Editor modules"
+title: "Editor modules"
 status: draft
 parent: host-standalone
 depends-on:
@@ -11,7 +11,7 @@ references:
   - edsl
   - edd
 ---
-# Standalone: Editor modules
+# Editor modules
 
 `src/editors/<editor>/`, part of `host-standalone`.
 
