@@ -15,13 +15,14 @@
 - standalone pull request 695: the box, the notes (assessments) list, editing in place, adding and deleting, the labels, the list editor, the trail and the filter's completion;
 - standalone pull request 696: column widths dragged by the person and kept in the registration, and `@` for a state in the filter;
 - standalone pull requests 700 and 702: one list of icons per box, a row beside the title when it fits and a column otherwise, the title wrapping under the drag handle, one spacing, and a box whose height does not change when it is selected or edited;
-- standalone pull request 705: a 12px left margin for the tags, the description, its edit box and a wrapped title's later lines, and 12px below the description and its edit box.
+- standalone pull request 705: a 12px left margin for the tags, the description, its edit box and a wrapped title's later lines, and 12px below the description and its edit box;
+- standalone pull request 707: the field for typing a new or renamed title is one line high and starts after the item's or requirement's number.
 
 **What the desktop host lacks.** Spec [030](../030-desktop-native-rust/desktop-native-rust.spec.md) built the desktop host at parity with the standalone host at its reference commit `8b6ccfc`, which is older than spec 029. So the desktop host has no Hierarchical Requirement Designer at all: its catalogue keeps `etalii/hierarchical-requirement` apart as a specification the standalone host did not list, it has no `hierarchy` surface, it reads no `bullets` family and no registration blocks, and its conformance run sets the 29 fixtures of those aside as not supported. Its copy of etalii.adp predates pull request 508, so it lacks the `widths` block and `@`. Spec 030 says that a feature added to the standalone host after its reference commit reaches the desktop host through a feature of its own; this is that feature.
 
 **What this feature adds.** The designer in the desktop host, at parity with the standalone host as it is after the T113 feedback: the same page, the same gestures and the same bytes on disk, in the desktop host's native frame and VS Code's looks.
 
-**Words.** Those of spec 028 and spec 029: a **subject**, an **item**, a **requirement**, an **assessment**, a **requirement document**, a **person**, an **agent**, a **conformance run**. **Parity**, the **parity inventory** and a **golden** are spec 030's. The **reference commit** of this feature is the standalone host's `develop` commit the plan names; it includes standalone pull request 705. Other words are those of [docs/terminology.md](../../docs/terminology.md).
+**Words.** Those of spec 028 and spec 029: a **subject**, an **item**, a **requirement**, an **assessment**, a **requirement document**, a **person**, an **agent**, a **conformance run**. **Parity**, the **parity inventory** and a **golden** are spec 030's. The **reference commit** of this feature is the standalone host's `develop` commit the plan names; it includes standalone pull request 707. Other words are those of [docs/terminology.md](../../docs/terminology.md).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -139,6 +140,7 @@ The person reads and edits boxes laid out as the standalone host lays them out a
 8. **Given** the controls of a box, **When** the pointer is not over it, **Then** the focus control and the other hover controls are hidden; add item and add requirement are icons; "n more levels" works at every level.
 9. **Given** the trail, **When** the person selects an entry, **Then** the trail is shown, follows the selection and names items only.
 10. **Given** a new item or requirement, **When** it is added, **Then** it is revealed and selected.
+11. **Given** an entry whose title is being typed, after adding it or to rename it, **When** the field is shown, **Then** it is one line high and starts after the entry's number, on the title's own line.
 
 ---
 
@@ -167,7 +169,7 @@ Each requirement names what it carries: a requirement of spec 029 as "029: FR-0x
 
 - **FR-004**: The desktop host **MUST** keep column widths as standalone #696 does: dragged per depth, stored in the registration's `widths` block, read only within 120 to 2000, reset by a double click or Home, moved by the arrow keys in steps of 16 pixels, one step of undo per gesture, and put back when refused; the number of levels that fit **MUST** count these widths.
 - **FR-005**: The filter **MUST** take `@` as the prefix of a state and **MUST** offer the completion of standalone #695, with its keys.
-- **FR-006**: A box **MUST** lay out its icons, title, tags and description as standalone #700, #702 and #705 do: one icon list in the order of User Story 7 scenario 4, a row or a column chosen per box by its width, the title wrapping under the handle, the paddings and margins of User Story 7 scenarios 5 and 6, and a height that does not change when it is selected or edited.
+- **FR-006**: A box **MUST** lay out its icons, title, tags and description as standalone #700, #702, #705 and #707 do: one icon list in the order of User Story 7 scenario 4, a row or a column chosen per box by its width, the title wrapping under the handle, the paddings and margins of User Story 7 scenarios 5 and 6, a title field of one line after the number, and a height that does not change when it is selected or edited.
 - **FR-007**: The notes list, editing in place, the drop preview, the labels, the list editor and the trail **MUST** behave and look as standalone #695 makes them, as User Stories 4, 5, 6 and 7 state.
 - **FR-008**: Where the desktop host's VS Code looks (desktop FR-044) and a size of this feedback differ, the sizes of User Story 7 **MUST** stand, since the maintainer gave them as numbers; colours stay VS Code's.
 
@@ -182,7 +184,7 @@ Each requirement names what it carries: a requirement of spec 029 as "029: FR-0x
 
 As in spec 029, with two of this feature's own:
 
-- **Reference commit**: the standalone host's `develop` commit this feature is at parity with, including standalone #705.
+- **Reference commit**: the standalone host's `develop` commit this feature is at parity with, including standalone #707.
 - **Column width**: a width the person gave the items of one depth, kept in the registration's `widths` block.
 
 ## Success Criteria *(mandatory)*
@@ -192,14 +194,14 @@ As in spec 029, with two of this feature's own:
 - **SC-001**: Every scenario of spec 029's eight user stories passes in the desktop host.
 - **SC-002**: The desktop host's conformance run sets aside no fixture of `bullets-read`, `bullets-edits`, `behavior-tree-read`, `registration-blocks` or `hierarchical-requirement-*`, passes all of them, and fails on a planted defect.
 - **SC-003**: Every edit script of the designer recorded from the standalone host at the reference commit writes the same bytes in the desktop host.
-- **SC-004**: On the web shop example at the same width and theme, a side-by-side comparison of the two hosts finds each of the ten points of User Story 7 the same, the sizes within one pixel.
+- **SC-004**: On the web shop example at the same width and theme, a side-by-side comparison of the two hosts finds each of the eleven points of User Story 7 the same, the sizes within one pixel.
 - **SC-005**: A requirement document of 100 items and 500 requirements opens within two seconds and shows an agent's change within two seconds (029: SC-003).
 - **SC-006**: The maintainer, given the same document in both hosts, finds no difference in what they can do in the designer.
 
 ## Assumptions
 
 - **The definition files win**, as in spec 029: where this specification and `definitions/designers/hierarchical-requirement.*` disagree, the definition wins and this specification is amended.
-- **The reference commit is the plan's to name**, at or after the merge of standalone #705. A change to the standalone designer after it reaches the desktop host by a feature of its own, as spec 030 says.
+- **The reference commit is the plan's to name**, at or after the merge of standalone #707. A change to the standalone designer after it reaches the desktop host by a feature of its own, as spec 030 says.
 - **The module is written from the definition**, as the desktop host's Knowledge designer was. Reading tool types from ATD tool descriptions (spec 035) is not part of this feature.
 - **The `bullets` family is built as the standalone host built it**, so the Agent Behavior Modelling plugin stays as it is, as in spec 029.
 - **SC-001, SC-002 and SC-004 of spec 029** (the timed readings and four weeks of real use) were measured in the standalone host and resolved by the maintainer's feedback; they are not measured again here.
