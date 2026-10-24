@@ -1,13 +1,13 @@
 ---
 id: did
 type: module-design
-title: DID — Diagram Definition Language
+title: Diagram Definition Language (DID)
 status: draft
-parent: architecture
+parent: languages
 depends-on:
   - disl
 ---
-# DID — Diagram Definition Language
+# Diagram Definition Language (DID)
 
 Module node for `specifications/did/`, the definition language for diagrams. The normative content is [DID-specification.md](DID-specification.md) (`did-specification`), with its schema `did.schema.json` and its examples (`.did`) beside it. This node records only what the language is for and where its boundary runs.
 

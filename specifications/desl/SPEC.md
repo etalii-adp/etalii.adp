@@ -1,13 +1,13 @@
 ---
 id: desl
 type: module-design
-title: DESL — Designer Specification Language
+title: Designer Specification Language (DESL)
 status: draft
-parent: architecture
+parent: languages
 depends-on:
   - fbl
 ---
-# DESL — Designer Specification Language
+# Designer Specification Language (DESL)
 
 Module node for `specifications/desl/`, the specification language for designers. The normative content is [DESL-specification.md](DESL-specification.md) (`desl-specification`), with its schema `desl.schema.json` and its examples (`.des`) beside it. This node records only what the language is for and where its boundary runs.
 

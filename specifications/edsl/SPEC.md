@@ -1,11 +1,11 @@
 ---
 id: edsl
 type: module-design
-title: EDSL — Editor Specification Language
+title: Editor Specification Language (EDSL)
 status: draft
-parent: architecture
+parent: languages
 ---
-# EDSL — Editor Specification Language
+# Editor Specification Language (EDSL)
 
 Module node for `specifications/edsl/`, the specification language for editors (placeholder). The normative content is [EDSL-specification.md](EDSL-specification.md) (`edsl-specification`), with its schema `edsl.schema.json` and its examples (`.eds`) beside it. This node records only what the language is for and where its boundary runs.
 

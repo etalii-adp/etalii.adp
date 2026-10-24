@@ -1,13 +1,13 @@
 ---
 id: edd
 type: module-design
-title: EDD — Editor Definition Language
+title: Editor Definition Language (EDD)
 status: draft
-parent: architecture
+parent: languages
 depends-on:
   - edsl
 ---
-# EDD — Editor Definition Language
+# Editor Definition Language (EDD)
 
 Module node for `specifications/edd/`, the definition language for editors (placeholder). The normative content is [EDD-specification.md](EDD-specification.md) (`edd-specification`), with its schema `edd.schema.json` and its examples (`.edd`) beside it. This node records only what the language is for and where its boundary runs.
 

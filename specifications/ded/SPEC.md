@@ -1,13 +1,13 @@
 ---
 id: ded
 type: module-design
-title: DED — Designer Definition Language
+title: Designer Definition Language (DED)
 status: draft
-parent: architecture
+parent: languages
 depends-on:
   - desl
 ---
-# DED — Designer Definition Language
+# Designer Definition Language (DED)
 
 Module node for `specifications/ded/`, the definition language for designers. The normative content is [DED-specification.md](DED-specification.md) (`ded-specification`), with its schema `ded.schema.json` and its examples (`.ded, or a format the designer type's bindings read, such as .md`) beside it. This node records only what the language is for and where its boundary runs.
 

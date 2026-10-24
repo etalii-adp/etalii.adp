@@ -1,13 +1,13 @@
 ---
 id: disl
 type: module-design
-title: DISL — Diagram Specification Language
+title: Diagram Specification Language (DISL)
 status: draft
-parent: architecture
+parent: languages
 depends-on:
   - fbl
 ---
-# DISL — Diagram Specification Language
+# Diagram Specification Language (DISL)
 
 Module node for `specifications/disl/`, the specification language for diagrams. The normative content is [DISL-specification.md](DISL-specification.md) (`disl-specification`), with its schema `disl.schema.json` and its examples (`.dis`) beside it. This node records only what the language is for and where its boundary runs.
 

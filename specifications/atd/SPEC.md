@@ -1,15 +1,15 @@
 ---
 id: atd
 type: module-design
-title: ATD — ADP tool language
+title: ADP Tool Language (ATD)
 status: draft
-parent: architecture
+parent: languages
 references:
   - disl
   - desl
   - fbl
 ---
-# ATD — ADP tool language
+# ADP Tool Language (ATD)
 
 Module node for `specifications/atd/`, the cross-kind text language for tool descriptions. The normative content is [ATD-specification.md](ATD-specification.md) (`atd-specification`), with its schema `atd.schema.json` and its examples (`.atd`) beside it. This node records only what the language is for and where its boundary runs.
 

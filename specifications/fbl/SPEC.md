@@ -1,11 +1,11 @@
 ---
 id: fbl
 type: module-design
-title: FBL — Format Binding Language
+title: Format Binding Language (FBL)
 status: draft
-parent: architecture
+parent: languages
 ---
-# FBL — Format Binding Language
+# Format Binding Language (FBL)
 
 Module node for `specifications/fbl/`, the cross-kind binding language. The normative content is [FBL-specification.md](FBL-specification.md) (`fbl-specification`), with its schema `fbl.schema.json` and its examples (`.fbl`) beside it. This node records only what the language is for and where its boundary runs.
 
