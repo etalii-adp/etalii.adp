@@ -1,7 +1,7 @@
 ---
 id: did-specification
 type: submodule-design
-title: DID specification (normative)
+title: Diagram Definition Language (DID) — normative specification
 status: draft
 parent: did
 ---

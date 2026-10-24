@@ -1,7 +1,7 @@
 ---
 id: disl-specification
 type: submodule-design
-title: DISL specification (normative)
+title: Diagram Specification Language (DISL) — normative specification
 status: draft
 parent: disl
 ---

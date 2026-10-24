@@ -1,7 +1,7 @@
 ---
 id: edsl-specification
 type: submodule-design
-title: EDSL specification (normative)
+title: Editor Specification Language (EDSL) — normative specification
 status: draft
 parent: edsl
 ---

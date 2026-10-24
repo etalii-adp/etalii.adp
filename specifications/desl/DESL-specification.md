@@ -1,7 +1,7 @@
 ---
 id: desl-specification
 type: submodule-design
-title: DESL specification (normative)
+title: Designer Specification Language (DESL) — normative specification
 status: draft
 parent: desl
 ---

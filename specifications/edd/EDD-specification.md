@@ -1,7 +1,7 @@
 ---
 id: edd-specification
 type: submodule-design
-title: EDD specification (normative)
+title: Editor Definition Language (EDD) — normative specification
 status: draft
 parent: edd
 ---

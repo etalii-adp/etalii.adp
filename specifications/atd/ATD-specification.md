@@ -1,7 +1,7 @@
 ---
 id: atd-specification
 type: submodule-design
-title: ATD specification (normative)
+title: ADP Tool Language (ATD) — normative specification
 status: draft
 parent: atd
 ---

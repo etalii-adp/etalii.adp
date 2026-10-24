@@ -1,7 +1,7 @@
 ---
 id: fbl-specification
 type: submodule-design
-title: FBL specification (normative)
+title: Format Binding Language (FBL) — normative specification
 status: draft
 parent: fbl
 ---

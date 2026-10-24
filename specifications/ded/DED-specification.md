@@ -1,7 +1,7 @@
 ---
 id: ded-specification
 type: submodule-design
-title: DED specification (normative)
+title: Designer Definition Language (DED) — normative specification
 status: draft
 parent: ded
 ---
