@@ -1,0 +1,23 @@
+{
+  "workflow": "speckit",
+  "specName": "The Hierarchical Requirement Designer in the Desktop Host",
+  "branch": "features/036-desktop-hierarchical-requirement",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-24T22:49:46.000Z"
+    },
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-24T22:52:23.756Z"
+    }
+  ]
+}
