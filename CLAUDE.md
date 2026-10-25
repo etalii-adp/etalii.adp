@@ -24,6 +24,8 @@ The SpecKit Companion extension (`.specify/extensions/companion/`) records each 
 
 Specs say *what* and *why*; plans say *how*. Do not put implementation choices in a spec.
 
+`thinkrail/` holds a generated copy of the constitution, the language specifications and every feature's specification in ThinkRail's spec-graph format (see [thinkrail/README.md](thinkrail/README.md)). Never edit it by hand: after changing one of those sources, run `python .github/scripts/thinkrail-specs.py`.
+
 ### Specifications for every repository live here
 
 This repository holds the Spec Kit features of every `etalii-adp` repository, not only its own: a change to `etalii.adp.ide.intellij`, `etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse`, `etalii.adp.ide.thinkrail`, `etalii.adp.ide.notion`, `etalii.adp.ide.claude`, `etalii.adp.site` or `.github` is specified here too, and those repositories have no Spec Kit setup of their own. `etalii.adp.ide.standalone` is the exception: it keeps planning with spec-workflow in its own `.spec-workflow/`.
