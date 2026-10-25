@@ -175,7 +175,8 @@
       "specs/etalii.adp.site/004-*/**",
       "specs/etalii.adp.site/005-*/**",
       "specs/etalii.adp.site/006-*/**",
-      ".github/scripts/validate-examples.py"
+      ".github/scripts/validate-examples.py",
+      "thinkrail/**"
     ],
     "etalii.adp.ide.desktop": [
       "vendor/etalii.adp/**"
@@ -232,6 +233,12 @@
     }
   ],
   "allowedLines": [
+    {
+      "repository": "etalii.adp",
+      "path": ".github/scripts/thinkrail-specs.py",
+      "regex": "^\\s*\"dedl\": \"ded\",",
+      "reason": "maps the retired name in older feature folders (specs/etalii.adp.site/002-dedl-reference) to the language it became"
+    },
     {
       "repository": "etalii.adp",
       "path": ".specify/assessments/host-agnostic-tool-language/intake.md",
