@@ -1289,15 +1289,19 @@ def check_conformance(path: Path) -> list[str]:
             expected = (folder / step["expectFile"]).read_bytes()
         elif "expect" in step:
             expected = step["expect"].encode("utf-8")
-        if step.get("undo"):
+        if "refused" in step:
+            current = history[position]
+        elif "outside" in step:
+            # Another writer's edit starts the history afresh: nothing before it can be undone (ATD section 2.3).
+            current = expected if expected is not None else history[position]
+            history, position = [current], 0
+        elif step.get("undo"):
             position -= 1
             if position < 0:
                 return problems + [f"step {index} undoes with nothing to undo"]
             current = history[position]
         elif step.get("redo"):
             position += 1
-            current = history[position]
-        elif "refused" in step:
             current = history[position]
         else:
             if "splices" in step:
