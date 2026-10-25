@@ -17,7 +17,7 @@ depends-on:
 
 ## Responsibility
 
-The concrete tool types ADP ships, written in this repository's languages: diagram types in `diagrams/` (DISL `.dis`, FBL bindings, ATD descriptions, traces and conformance fixtures), designer types in `designers/` (DESL `.des`, FBL bindings, document schemas and example documents), and `editors/`, a placeholder until EDSL has content. Every file here is validated against its language's schema by `ci-validators`.
+The concrete tool types ADP ships, written in this repository's languages: diagram types in `diagrams/` (DISL `.dis`, FBL bindings, ATD descriptions, traces and conformance fixtures), designer types in `designers/` (DESL `.des`, FBL bindings, ATD descriptions, document schemas and example documents), and `editors/`, a placeholder until EDSL has content. Every file here is validated against its language's schema by `ci-validators`.
 
 ## Boundary
 

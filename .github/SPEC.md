@@ -22,7 +22,7 @@ depends-on:
 Enforce on every pull request into `develop`, and on every change to `develop`, what the constitution requires of a specification (principle II and "Structure and Naming"). The `Build` workflow (`workflows/build.yml`, spec 001) runs these scripts:
 
 - `validate-examples.py`: validates every example, legacy fixture, FBL registration and round-trip fixture, tool definition, designer example document and ATD artefact (findings, traces, conformance fixtures, capability contracts) against its schema.
-- `atd-grammar.py --check`: builds the ATD grammar as strict LALR(1), lints it, runs the keyword probe and compares the generated files.
+- `atd-grammar.py --check`: builds the ATD grammar as strict LALR(1), lints it, runs the keyword probe over the examples beside the specification and the tool descriptions under `definitions/` (so each of them parses), and compares the generated files.
 - `licence-check.py`: checks the Apache-2.0 `LICENSE` and the `Licence` row of every specification document (spec 003).
 - `terminology-check.py`: checks for retired vocabulary against `docs/terminology-check.json` (spec 002).
 - The `descriptions` job: checks every tool description with the desktop host's `atd`, built from the branch of the same name when there is one (spec 035).

@@ -10,8 +10,9 @@ language (ATD section 4), whose root is `atd.lark`. Modes, any number of them to
   `%extend`, imports from outside the language's modules, keep-all-tokens rules, string and regular expression flags,
   ranges, repetition counts) and every terminal outside the regular expression subset of ATD section 3.5, naming the
   file, the line and the construct (rule 2).
-- `--probe`: the keyword probe (rule 3, FR-008). In every example, at every token the parser reads as a name, each
-  keyword is put in its place: the keyword must be read as that name, leaving the parser where the name left it.
+- `--probe`: the keyword probe (rule 3, FR-008). In every example and every tool description under `definitions/`, at
+  every token the parser reads as a name, each keyword is put in its place: the keyword must be read as that name,
+  leaving the parser where the name left it.
 - `--tables`: writes Lark's LALR(1) automaton as `grammar/atd.tables.json`, in the normalized form of
   `atd.schema.json#/$defs/ParseTables` (rule 5).
 - `--flatten`: writes `grammar/atd.flat.lark`, the whole grammar in one file, and has `llguidance`'s Lark front end
@@ -315,7 +316,8 @@ def mode_probe(parser):
     keywords = keyword_terminals(parser)
     by_text = {value: name for name, value in keywords.items()}
     table = parser.parser.parser.parser.parse_table.states
-    examples = sorted(p for p in atd.glob("*.atd")) + sorted(atd.glob("refused/*.atd"))
+    examples = (sorted(p for p in atd.glob("*.atd")) + sorted((repository / "definitions").rglob("*.atd"))
+                + sorted(atd.glob("refused/*.atd")))
     checked = set()
     count = 0
     for example in examples:
