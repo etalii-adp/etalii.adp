@@ -558,7 +558,7 @@ The surface of a designer (`grammar/form.lark`): which element types and attribu
 
 ### 9.3 The hierarchy
 
-`surface hierarchy { … }` (DESL §7.7) holds `levels <Type> { … }`, `entries <Type> { … }`, `notes <Type> { … }`, `filters <Type> { … }` and `labels <attribute> { … }`, each with the attributes that play its parts as settings, and settings of DESL's `Hierarchy` (`collapsed`, `ids`).
+`surface hierarchy { … }` (DESL §7.7) holds `levels <Type> { … }`, `entries <Type> { … }`, `notes <Type> { … }`, `filters <Type> { … }`, `widths <Type> { … }` and `labels <attribute> { … }`, each with the attributes that play its parts as settings (DESL's `HierarchyMembers`, `Notes`, `Filters`, `Widths` and `Labels`), and settings of DESL's `Hierarchy` (`collapsed`, `ids`). `widths` names the element type that keeps the widths of the columns of levels, which the user changes by dragging (DESL §7.7.1): its settings `level` and `width` name the attributes of a column's depth and of its width in pixels.
 
 ---
 
@@ -1255,6 +1255,7 @@ Every keyword of ATD 0.1, by the module that defines it, with the documentation 
 | `table` | `surface table { … }`: a designer's surface of rows and columns (§9.1, DESL §7.2). |
 | `valueType` | In `surface table`: `valueType <key> ["<label>"] { … }`, a value type (DESL §7.5). |
 | `views` | In `surface table`: `views <Type> { … }`, the views' element type (DESL §7.4). |
+| `widths` | In `surface hierarchy`: `widths <Type> { … }`, the element type that keeps the widths of the columns of levels, with the attributes of a column's depth and its width (DESL §7.7.1). |
 
 ### B.6 `text.lark`
 
@@ -2830,7 +2831,7 @@ Every property of DISL 0.6, DESL 0.2 and FBL 0.8, by the JSON pointer of its sch
 
 ### C.2 DESL 0.2
 
-218 properties.
+223 properties.
 
 | JSON pointer | ATD | Section |
 |---|---|---|
@@ -2991,6 +2992,7 @@ Every property of DISL 0.6, DESL 0.2 and FBL 0.8, by the JSON pointer of its sch
 | `desl.schema.json#/$defs/Hierarchy/properties/notes` | `notes Type { … }` | §9.3 |
 | `desl.schema.json#/$defs/Hierarchy/properties/collapsed` | the setting `collapsed` of `surface hierarchy` | §9.3 |
 | `desl.schema.json#/$defs/Hierarchy/properties/filters` | `filters Type { … }` | §9.3 |
+| `desl.schema.json#/$defs/Hierarchy/properties/widths` | `widths Type { … }` | §9.3 |
 | `desl.schema.json#/$defs/Hierarchy/properties/ids` | the setting `ids` of `surface hierarchy` | §9.3 |
 | `desl.schema.json#/$defs/Hierarchy/properties/doc` | the setting `doc` of `surface hierarchy` | §9.3 |
 | `desl.schema.json#/$defs/HierarchyMembers/properties/type` | the key `type` in a value of HierarchyMembers (a settings map, §6.4) | §6.4 |
@@ -3012,6 +3014,10 @@ Every property of DISL 0.6, DESL 0.2 and FBL 0.8, by the JSON pointer of its sch
 | `desl.schema.json#/$defs/Filters/properties/name` | the key `name` in a value of Filters (a settings map, §6.4) | §6.4 |
 | `desl.schema.json#/$defs/Filters/properties/query` | the key `query` in a value of Filters (a settings map, §6.4) | §6.4 |
 | `desl.schema.json#/$defs/Filters/properties/doc` | the key `doc` in a value of Filters (a settings map, §6.4) | §6.4 |
+| `desl.schema.json#/$defs/Widths/properties/type` | the type after `widths` | §9.3 |
+| `desl.schema.json#/$defs/Widths/properties/level` | the setting `level` of `widths` | §9.3 |
+| `desl.schema.json#/$defs/Widths/properties/width` | the setting `width` of `widths` | §9.3 |
+| `desl.schema.json#/$defs/Widths/properties/doc` | the setting `doc` of `widths` | §9.3 |
 | `desl.schema.json#/$defs/Columns/properties/type` | the type after `columns` | §9.1 |
 | `desl.schema.json#/$defs/Columns/properties/name` | the setting `name` of `columns` | §9.1 |
 | `desl.schema.json#/$defs/Columns/properties/valueType` | the setting `valueType` of `columns` | §9.1 |
