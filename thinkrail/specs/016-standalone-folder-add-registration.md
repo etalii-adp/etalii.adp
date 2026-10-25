@@ -3,7 +3,7 @@ id: feature-016-standalone-folder-add-registration
 type: task-spec
 title: "016 Adding a diagram to a folder writes a bare `.adp` registration"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

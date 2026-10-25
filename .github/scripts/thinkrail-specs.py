@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Copy the Spec Kit specifications into ThinkRail's spec-graph format under thinkrail/.
+"""Copy the Spec Kit feature specifications into ThinkRail's spec-graph format under thinkrail/.
+
+The constitution and the language specifications carry their own frontmatter and are nodes of the
+spec graph in place, so they are not copied. The feature specifications have no frontmatter, so each
+is copied here with one, as a child of the feature archive (`specs-archive`, in specs/SPEC.md).
 
 The sources stay the truth: every file under thinkrail/ is generated from one source file,
 which it copies verbatim after a YAML frontmatter (id, type, title, status, parent, references)
@@ -10,8 +14,6 @@ point at the files beside the source.
   python .github/scripts/thinkrail-specs.py --check  # fail if thinkrail/ is out of date
 
 Mapping:
-  .specify/memory/constitution.md              -> thinkrail/constitution.md        goal-and-requirements
-  specifications/<name>/<NAME>-specification.md -> thinkrail/specifications/<name>.md module-design
   specs/NNN-name/<spec file>                    -> thinkrail/specs/NNN-name.md      task-spec
   specs/<repository>/NNN-name/<spec file>       -> thinkrail/specs/<repository>/NNN-name.md task-spec
 """
@@ -29,7 +31,9 @@ ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "thinkrail"
 SCRIPT = ".github/scripts/thinkrail-specs.py"
 
-ROOT_ID = "constitution"
+PARENT_ID = "specs-archive"
+
+FRONTMATTER_ID = re.compile(r"\A---\r?\n(?:.*\r?\n)*?id:\s*(\S+)\s*\r?\n")
 
 # Spec Kit companion status -> ThinkRail lifecycle status.
 STATUS = {
@@ -152,44 +156,30 @@ def feature_status(folder: Path) -> str | None:
     return STATUS.get(status)
 
 
-def language_refs(name: str, languages: set[str]) -> list[str]:
+def graph_ids() -> set[str]:
+    """The ids of the spec-graph nodes that live in place, outside thinkrail/."""
+    ids: set[str] = set()
+    for dirpath, dirnames, filenames in os.walk(ROOT):
+        dirnames[:] = [d for d in dirnames if not d.startswith(".git") and d not in {"node_modules", "thinkrail"}]
+        for name in filenames:
+            if name.endswith(".md"):
+                with open(os.path.join(dirpath, name), encoding="utf-8", errors="replace") as f:
+                    m = FRONTMATTER_ID.match(f.read(4096))
+                if m:
+                    ids.add(m.group(1))
+    return ids
+
+
+def language_refs(name: str, known: set[str]) -> list[str]:
     refs = []
     for word, lang in LANGUAGE_HINTS.items():
-        if re.search(rf"(^|-){re.escape(word)}(-|$)", name) and lang in languages:
-            ref = f"spec-{lang}"
-            if ref not in refs:
-                refs.append(ref)
+        if re.search(rf"(^|-){re.escape(word)}(-|$)", name) and lang in known and lang not in refs:
+            refs.append(lang)
     return refs
 
 
-def collect() -> list[dict]:
+def collect(known: set[str]) -> list[dict]:
     nodes: list[dict] = []
-    constitution = ROOT / ".specify/memory/constitution.md"
-    nodes.append({
-        "id": ROOT_ID, "type": "goal-and-requirements", "source": constitution,
-        "target": OUT / "constitution.md",
-        "title": first_heading(constitution.read_text(encoding="utf-8")) or "etalii.adp Constitution",
-        "status": "active",
-    })
-
-    languages: set[str] = set()
-    for folder in sorted((ROOT / "specifications").iterdir()):
-        if not folder.is_dir():
-            continue
-        prose = folder / f"{folder.name.upper()}-specification.md"
-        if not prose.exists():
-            continue
-        languages.add(folder.name)
-        text = prose.read_text(encoding="utf-8")
-        placeholder = len(text.splitlines()) < 60
-        nodes.append({
-            "id": f"spec-{folder.name}", "type": "module-design", "source": prose,
-            "target": OUT / "specifications" / f"{folder.name}.md",
-            "title": first_heading(text) or folder.name.upper(),
-            "status": "draft" if placeholder else "active",
-            "parent": ROOT_ID, "tags": ["language"],
-        })
-
     specs = ROOT / "specs"
     for folder in sorted(specs.iterdir()):
         if not folder.is_dir():
@@ -214,14 +204,14 @@ def collect() -> list[dict]:
             nodes.append({
                 "id": node_id, "type": "task-spec", "source": source, "target": target,
                 "title": f"{sub.name[:3]} {title}", "status": feature_status(sub),
-                "parent": ROOT_ID, "references": language_refs(sub.name, languages),
+                "parent": PARENT_ID, "references": language_refs(sub.name, known),
                 "tags": ["spec-kit"] + tags,
             })
     return nodes
 
 
-def validate(nodes: list[dict]) -> list[str]:
-    errors, ids = [], {}
+def validate(nodes: list[dict], known: set[str]) -> list[str]:
+    errors, ids = [], dict.fromkeys(known)
     for n in nodes:
         if n["id"] in ids:
             errors.append(f"duplicate id {n['id']}")
@@ -235,8 +225,9 @@ def validate(nodes: list[dict]) -> list[str]:
 
 def main() -> int:
     check = "--check" in sys.argv[1:]
-    nodes = collect()
-    errors = validate(nodes)
+    known = graph_ids()
+    nodes = collect(known)
+    errors = validate(nodes, known)
     if errors:
         print("\n".join(errors), file=sys.stderr)
         return 1

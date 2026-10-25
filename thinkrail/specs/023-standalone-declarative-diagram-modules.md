@@ -3,7 +3,7 @@ id: feature-023-standalone-declarative-diagram-modules
 type: task-spec
 title: "023 Declarative Diagram Modules"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

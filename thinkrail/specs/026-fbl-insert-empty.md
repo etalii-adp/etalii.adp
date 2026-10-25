@@ -3,9 +3,9 @@ id: feature-026-fbl-insert-empty
 type: task-spec
 title: "026 An Insert Applies a Binding's Empty Rule"
 status: done
-parent: constitution
+parent: specs-archive
 references:
-  - spec-fbl
+  - fbl
 tags:
   - spec-kit
 ---

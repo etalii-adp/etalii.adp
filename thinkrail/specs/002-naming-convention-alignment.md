@@ -3,7 +3,7 @@ id: feature-002-naming-convention-alignment
 type: task-spec
 title: "002 Naming Convention Alignment"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

@@ -3,9 +3,9 @@ id: feature-034-disl-relation-flag-inheritance
 type: task-spec
 title: "034 A Relation Type Inherits Its Flags"
 status: done
-parent: constitution
+parent: specs-archive
 references:
-  - spec-disl
+  - disl
 tags:
   - spec-kit
 ---
