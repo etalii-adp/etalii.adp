@@ -175,7 +175,7 @@
       "params": [],
       "returns": "int",
       "uses": ["diagram"],
-      "cel": "diagram.nodesOfType('Annotation').size() == 0 ? 1 : diagram.nodesOfType('Annotation').map(a, a.number).max() + 1",
+      "cel": "diagram.nodesOfType('Annotation').size() == 0 ? 1 : math.greatest(diagram.nodesOfType('Annotation').map(a, a.number)) + 1",
       "doc": "One past the highest annotation number, rather than one past the count: a map whose annotation 2 was removed still has a 3."
     },
     "attitudeWord": {

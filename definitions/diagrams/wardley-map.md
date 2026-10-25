@@ -111,7 +111,7 @@ Found writing the constraints against the transcript. `constraints.order` puts t
 
 ## Definition defects repaired
 
-A definition defect is the specification saying something the tool does not do, or leaving out something it does. The earlier definition was written against DISL 0.1; these were repaired by the rewrite at DISL 0.3:
+A definition defect is the specification saying something the tool does not do, or leaving out something it does. The earlier definition was written against DISL 0.1; these were repaired by the rewrite at DISL 0.3, and the last by the task that loaded it in the standalone library:
 
 | Finding | Was | Is |
 | --- | --- | --- |
@@ -132,6 +132,7 @@ A definition defect is the specification saying something the tool does not do, 
 | A4 | No wire ids | The `x-wardley` block |
 | A9 | An evolution a node type of its own, and a warning for a second `evolve` | The rows Evolves to and Becomes on the component, whose `parse.write` creates, sets or removes the `evolve`; no warning, because the tool gives none |
 | A7 | `wardley.duplicate-name` located on the element's name, which names nothing | At the first holder, with the lines of all holders |
+| Task 4 | The next annotation number taken with `.max()` on a list, which is no function of DISL's CEL, so the standalone loader refused the specification | `math.greatest` over the numbers, one of the math extension's functions DISL requires (12.1) |
 
 `std.duplicateId` is off, because every holder of a repeated key has an id of its own. `std.unreadableEntry` is kept on, as `wardley.line-passed-over`, a warning worded by the reader ("This line is not a statement of a Wardley map, so it was passed over.", "This component statement could not be read, so it was passed over.", "This evolve statement could not be read, so it was passed over.", "This line inside a pipeline is not a component of it, so it was passed over."), because the tool reports those lines today and this keeps the reading as it is.
 
