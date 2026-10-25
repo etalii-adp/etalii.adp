@@ -116,7 +116,7 @@ One case of one tool type: `definitions/<kind>s/conformance/<type>/<case>/confor
 | `inputs` | the body files and the `.adp` registration, kept byte for byte (`.gitattributes` `-text`) |
 | `read` | the expected reading: elements, relations, attributes, findings (as `$defs/Finding` of FBL and DISL), unreadable parts |
 | `drawing` | the expected scene after reading (`$defs/Drawing`) |
-| `steps[]` | `select`, `action` (+ `args`), `property`, `move`, `create`, `connect`, `delete`, `undo`, `redo`, each with its expected `splices`, resulting bytes (`expect` or `expectFile`), findings, drawing, or `refused` with its reason |
+| `steps[]` | `select`, `action` (+ `args`), `property`, `move`, `create`, `connect`, `delete`, `outside` (a file written outside the host), `undo`, `redo`, each with its expected `splices`, resulting bytes (`expect` or `expectFile`), findings, drawing, or `refused` with its reason |
 | `provenance` | per part (`bytes`, `reading`, `findings`, `drawing`): host, repository, commit (the reference commit whose behaviour is recorded), `recordedWith` (for a recorded part, the commit `atd record` ran at), and the source file (a standalone golden or `atd record`) |
 
 **Rules**: the bytes after each step equal the reference bytes exactly; a fixture changes only by re-recording, never by hand; `undo` returns the previous bytes exactly.
