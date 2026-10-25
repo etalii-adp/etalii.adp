@@ -19,3 +19,6 @@ specifications/atd/fixtures/** -text
 specifications/atd/fixtures/**/*.json text
 specifications/atd/capabilities/*/fixtures/** -text
 specifications/atd/capabilities/*/fixtures/**/*.json text
+# A case whose document is itself JSON keeps that document's bytes too (the Databricks pipeline's settings file, CRLF).
+definitions/diagrams/conformance/databricks-pipeline/settings/pipeline.json -text
+definitions/diagrams/conformance/databricks-pipeline/settings/after-*.json -text

@@ -130,6 +130,8 @@ def is_example(path: Path) -> bool:
         return is_fbl_file(path) or designer_examples in path.parents
     if is_fbl_file(path) and "fixtures" in path.relative_to(root / "fbl").parts and path.name != "fixture.json":
         return False  # a fixture's input and expected bodies are checked through its fixture.json
+    if (path.parent / "conformance.json").is_file() and path.name != "conformance.json" and not path.name.startswith("drawing."):
+        return False  # a conformance case's documents (a body in JSON among them) are checked through its conformance.json
     if designer_examples in path.parents and path.suffix in (".yaml", ".yml", ".xml", ".md"):
         return True
     if path.suffix == ".md":
