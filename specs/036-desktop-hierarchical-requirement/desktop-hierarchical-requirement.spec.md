@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-24
 
-**Status**: Draft. Only the specification is written; the plan and tasks wait for the maintainer's approval.
+**Status**: Planned (2026-10-25): the maintainer approved the specification ("Approve, plan and tasks next"), and the plan and [tasks.md](tasks.md) are written. Building waits for the maintainer's word.
 
 **Input**: The maintainer's request of 2026-10-24: "make sure that the improvements on the standalone hierarchical requirement designer are also replicated to the standalone host", confirmed the same evening to mean the desktop host. Asked how the designer should reach the desktop host, which does not have it yet, the maintainer chose "Spec Kit spec for the port".
 
