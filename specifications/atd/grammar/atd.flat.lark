@@ -252,7 +252,7 @@ script__if_stmt: "if" expr script__stmt_block ["else" (script__if_stmt | script_
        | "create" type_ref [script__assignments] ["in" expr] script__create_option* ["as" name] -> script__create_action
        | "connect" type_ref "from" expr "to" expr [script__assignments] ["as" name] -> script__connect_action
        | "delete" expr -> script__delete_action
-       | "move" expr ["to" expr "," expr] ["into" expr] ["slot" name] [script__move_place] -> script__move_action
+       | "move" expr ["to" expr "," expr] ["into" expr] [script__move_slot] [script__move_place] -> script__move_action
        | "resize" expr "to" expr "," expr -> script__resize_action
        | "retype" expr "to" type_ref -> script__retype_action
        | "reparent" expr "to" expr script__reparent_option* -> script__reparent_action
@@ -277,6 +277,7 @@ script__create_option: "after" expr -> script__after
              | "at" expr -> script__at
              | "size" expr -> script__size
              | "place" name -> script__place
+script__move_slot: "slot" name -> script__slot
 script__move_place: "after" expr -> script__after
           | "before" expr -> script__before
 script__reparent_option: "slot" name -> script__slot
