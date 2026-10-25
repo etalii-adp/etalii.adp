@@ -1,3 +1,10 @@
+---
+id: principles-notion
+type: architecture-design
+title: Principles
+status: draft
+parent: host-notion
+---
 <!--
 Sync Impact Report
 - Version: 1.1.0 → 1.2.0 (MINOR)
@@ -9,7 +16,7 @@ Sync Impact Report
 -->
 > These are the principles of [`etalii.adp.ide.notion`](https://github.com/etalii-adp/etalii.adp.ide.notion), written here on 2026-10-07 by spec [011-notion-repository](../../../specs/011-notion-repository/notion-repository.spec.md): that repository has no Spec Kit setup of its own, and its features are specified in etalii.adp. A plan whose code lands in `etalii.adp.ide.notion` checks them beside [etalii.adp's own](../constitution.md). Amend them here, with a pull request into etalii.adp.
 
-# etalii.adp.ide.notion Constitution
+# Principles
 
 ## Terminology
 

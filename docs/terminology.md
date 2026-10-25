@@ -1,4 +1,11 @@
-# ADP terminology
+---
+id: terminology
+type: module-design
+title: Terminology
+status: draft
+parent: architecture
+---
+# Terminology
 
 The words ADP uses for what it offers, and what each one means. This file is the single source of these definitions (spec [002, naming convention alignment](../specs/002-naming-convention-alignment/naming-convention-alignment.spec.md)); the page "ADP terminology" in the Notion workspace and the site's pages `/adp/docs/terminology/` and `/adp/docs/specification-and-definition/` repeat it and point here. A change to a definition is made here first, and the others follow in the same change.
 

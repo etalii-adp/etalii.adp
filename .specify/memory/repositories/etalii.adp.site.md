@@ -1,3 +1,10 @@
+---
+id: principles-site
+type: architecture-design
+title: Site principles
+status: draft
+parent: site
+---
 <!--
 Sync Impact Report
 - Version: 1.2.0 → 1.3.0 (MINOR, amended 2026-10-25, ThinkRail and Claude hosts)
