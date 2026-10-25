@@ -817,6 +817,7 @@ The catalogue is the capabilities with a contract in `capabilities/` beside this
 | Capability | Point | Status |
 |---|---|---|
 | `layout.twoSidedTree` | layout | provisional |
+| `reader.markdown` | reader | provisional |
 | `reader.turtle` | reader | provisional |
 | `render.markdown` | render | provisional |
 
@@ -1026,7 +1027,7 @@ Beside this document, each a complete description that checks without findings:
 
 And the worked examples of section 2: `fixtures/mindmap/basic/`, `mindmap.trace.json` with `mindmap.md`, and `capabilities/*/contract.json`.
 
-The tool descriptions under `definitions/` are examples too, and `atd-grammar.py --probe` reads them with those beside this document: `definitions/designers/hierarchical-requirement.atd`, with its part `hierarchical-requirement.markdown.atd`, is a designer with a hierarchy surface, the widths of its columns, `move` with a place, binding types the type map maps as the document and as unreadable, and rule names with hyphens.
+The tool descriptions under `definitions/` are examples too, and `atd-grammar.py --probe` reads them with those beside this document: `definitions/designers/hierarchical-requirement.atd`, with its part `hierarchical-requirement.markdown.atd`, is a designer with a hierarchy surface, the widths of its columns, `move` with a place, binding types the type map maps as the document and as unreadable, and rule names with hyphens. The five editors under `definitions/editors/` (`plain-text.atd`, `markdown.atd`, `json.atd`, `xml.atd`, `yaml.atd`) are editors with a text surface: files, token classes, checks and completion from sources the editor names, an outline of a model read by a capability, and a preview.
 
 ### 19.2 The walk
 
