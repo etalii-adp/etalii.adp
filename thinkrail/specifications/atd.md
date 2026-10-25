@@ -758,6 +758,14 @@ Every call runs under a **step budget** (FR-015): one step per statement execute
 
 A function whose block, or a function it calls, contains an action is **impure**. An expression position that only reads (a label, a constraint's `when` and `rule`, a derived attribute, a variant's `when`, a binding rule's `when`, a setting's `( CEL )`) **MUST NOT** call an impure function, through any chain of calls (`ATD7002`); an operation, a hook and a fix may.
 
+### 12.8 Host attributes
+
+`hostAttribute(<element>, <name>)` is the value the binding read into the host attribute `<name>` of the element (`persistence`'s `typeMap`, `hostAttributes`, DISL §11.2), as the binding read it, and `null` when it read none. DISL keeps host attributes out of CEL; a description reads them through this one function, by name, so that a rule can judge what the file wrote where the model holds nothing: a relation's end that names no element is unset in the model (DISL §4.9), while the binding can read the id it was written with a second time, into a host attribute (`dependency-graph.atd`'s `writtenEnd`).
+
+- The function only reads, so it may be called from every expression position (section 12.7). A host attribute is document data, so the call is deterministic (section 12.5).
+- A `<name>` written as a string **MUST** be a host attribute of an entry of `persistence`'s `typeMap` (`ATD2001`).
+- A first argument that is not an element of the document, or a second that is not a string, stops the call as a CEL error.
+
 ---
 
 ## 13. Capabilities
