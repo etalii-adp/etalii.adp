@@ -1,6 +1,11 @@
 <!--
 Sync Impact Report
-- Version: 1.8.0 → 1.9.0 (MINOR)
+- Version: 1.9.0 → 1.10.0 (MINOR)
+- Modified: the preamble names ThinkRail (JetBrains ThinkRail) as a sixth IDE host, with its repository `etalii.adp.ide.thinkrail`.
+- Added or removed sections: none. No principles file yet: `etalii.adp.ide.thinkrail` holds no code, and gets `.specify/memory/repositories/etalii.adp.ide.thinkrail.md` with its first feature.
+- Rationale for MINOR: an eighth host (the repository was created on 2026-10-25, Peter chose "An IDE host" on a card); no principle removed or redefined.
+- Templates: plan, spec and tasks templates unchanged.
+- Earlier: 1.8.0 → 1.9.0 (MINOR)
 - Modified: the preamble names Claude as a host that is not an IDE, beside Notion, with its repository `etalii.adp.ide.claude`.
 - Added or removed sections: none. No principles file yet: `etalii.adp.ide.claude` holds no code, and gets `.specify/memory/repositories/etalii.adp.ide.claude.md` with its first feature.
 - Rationale for MINOR: a seventh host (the repository was created on 2026-10-24); no principle removed or redefined.
@@ -22,7 +27,7 @@ Sync Impact Report
 - Templates: plan, spec and tasks templates unchanged; a plan whose code lands in `etalii.adp.ide.notion` now checks that repository's principles in its Constitution Check. In the same change, the site's principles go to 1.2.0.
 --># etalii.adp Constitution
 
-ADP ("A Different Perspective") is a family of task-focused tools: diagrams, designers and editors. They serve (constructive) technology assessment, collaboration between humans and agents, and bringing clarity to textual data. ADP tools run in several hosts, each in its own repository: five IDE hosts (`etalii.adp.ide.standalone`, `etalii.adp.ide.desktop`, `etalii.adp.ide.intellij`, `etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse`) and two hosts that are not IDEs, Notion (`etalii.adp.ide.notion`) and Claude (`etalii.adp.ide.claude`). This repository holds what those hosts share: the specifications of the formats and languages a tool is built from. It also holds the Spec Kit features through which every repository but standalone is changed. Its readers are the developers of the ADP hosts, who implement the specifications; tool engineers, who write specifications and definitions in these formats; and agents working in any ADP repository, who need one place to read what a format means. The words used here (tool, diagram, designer, editor, tool engineer, specification, definition, runtime) are defined in [docs/terminology.md](../../docs/terminology.md).
+ADP ("A Different Perspective") is a family of task-focused tools: diagrams, designers and editors. They serve (constructive) technology assessment, collaboration between humans and agents, and bringing clarity to textual data. ADP tools run in several hosts, each in its own repository: six IDE hosts (`etalii.adp.ide.standalone`, `etalii.adp.ide.desktop`, `etalii.adp.ide.intellij`, `etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse`, `etalii.adp.ide.thinkrail`) and two hosts that are not IDEs, Notion (`etalii.adp.ide.notion`) and Claude (`etalii.adp.ide.claude`). This repository holds what those hosts share: the specifications of the formats and languages a tool is built from. It also holds the Spec Kit features through which every repository but standalone is changed. Its readers are the developers of the ADP hosts, who implement the specifications; tool engineers, who write specifications and definitions in these formats; and agents working in any ADP repository, who need one place to read what a format means. The words used here (tool, diagram, designer, editor, tool engineer, specification, definition, runtime) are defined in [docs/terminology.md](../../docs/terminology.md).
 
 ## Core Principles
 
@@ -101,4 +106,4 @@ Rationale: developers work in Rider, and a list of warnings nobody corrects is t
 
 This constitution supersedes other practices in this repository. Amendments are made through `/speckit-constitution`, recorded in version control, and versioned semantically: MAJOR for removing or redefining a principle, MINOR for adding a principle or materially expanding guidance, PATCH for clarifications. Reviews of plans and changes MUST verify compliance with the principles above; runtime guidance for agents lives in `CLAUDE.md`.
 
-**Version**: 1.9.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-10-24
+**Version**: 1.10.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-10-25
