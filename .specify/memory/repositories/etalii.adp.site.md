@@ -1,5 +1,13 @@
 <!--
 Sync Impact Report
+- Version: 1.2.0 → 1.3.0 (MINOR, amended 2026-10-25, ThinkRail and Claude hosts)
+- Modified principles (titles unchanged): I. One Site for Product and Documentation (the hosts the
+  reference carries gain ThinkRail and Claude).
+- Removed sections: none.
+- Templates: none needs a change.
+- Deferred: none.
+
+Earlier:
 - Version: 1.1.0 → 1.2.0 (MINOR, amended 2026-10-07, etalii.adp spec 011, Notion host repository)
 - Modified principles (titles unchanged): I. One Site for Product and Documentation (the hosts the
   reference carries are the four IDE hosts and Notion).
@@ -46,7 +54,7 @@ The words for what ADP offers (tool; its three kinds, diagram, designer, editor;
 The site is ADP's front door and its reference, in one place.
 
 - It MUST explain what ADP is to someone who has never heard of it: specialized tools: diagrams, designers and editors, for any task where a specialized visualization beats a generic diagram or plain text. It MUST NOT present ADP as an architecture-diagram tool only.
-- It MUST carry the reference material a tool engineer or user needs: the specification and definition languages specified in `etalii-adp/etalii.adp` (DISL and DID first), the tools, and the hosts: the four IDE hosts (standalone, IntelliJ, VS Code, Eclipse) and Notion.
+- It MUST carry the reference material a tool engineer or user needs: the specification and definition languages specified in `etalii-adp/etalii.adp` (DISL and DID first), the tools, and the hosts: the IDE hosts the site shows (standalone, IntelliJ, VS Code, Eclipse, ThinkRail), Notion and Claude.
 - The product part and the documentation part MUST be distinguishable at a glance, and every page MUST be reachable from both the home page and the site's navigation.
 
 Rationale: a visitor who is convinced should find the reference one click away, and an author reading the reference should never have to search a second site.
@@ -112,4 +120,4 @@ Start with the smallest site that does the job and grow it by specification. Too
 
 This constitution supersedes other practices in this repository. Amendments are made through `/speckit-constitution`, recorded in version control, and versioned semantically: MAJOR for removing or redefining a principle, MINOR for adding a principle or materially expanding guidance, PATCH for clarifications. Reviews of plans and changes MUST verify compliance with the principles above; runtime guidance for agents lives in `CLAUDE.md`.
 
-**Version**: 1.2.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-10-07
+**Version**: 1.3.0 | **Ratified**: 2026-09-26 | **Last Amended**: 2026-10-25
