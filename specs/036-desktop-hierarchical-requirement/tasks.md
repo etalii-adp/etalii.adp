@@ -167,10 +167,10 @@
 
 **Independent Test**: [quickstart.md](quickstart.md), "Walk a story by hand", for Story 7's eleven points; a column dragged in both hosts writes the same `.adp`.
 
-- [ ] T050 [P] [US7] Port `ColumnOperations.Tests.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/tests/` and `useColumnWidths` and `ColumnEdge` tests into `etalii.adp.ide.desktop/crates/adp-shell/src/hierarchy/tests.rs`; see them fail
-- [ ] T051 [US7] Port `Operations/ColumnOperations.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/src/operations/columns.rs`: `addColumnWidth`, `setColumnWidth`, `resetColumnWidth`, each writing the `widths` block alone and one step of undo
-- [ ] T052 [US7] Port `columns/{useColumnWidths,ColumnEdge}` into `etalii.adp.ide.desktop/crates/adp-shell/src/hierarchy/layout.rs` and `mod.rs`: each column's right edge dragged with every box of that depth following, one gesture on release, a double click or Home resetting, the arrows moving a focused edge by 16 pixels, a refused gesture putting the column back, and the levels that fit counted with the widths
-- [ ] T053 [US7] Record `columns.json` with its golden and replay test
+- [x] T050 [P] [US7] Port `ColumnOperations.Tests.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/tests/` and `useColumnWidths` and `ColumnEdge` tests into `etalii.adp.ide.desktop/crates/adp-shell/src/hierarchy/tests.rs`; see them fail
+- [x] T051 [US7] Port `Operations/ColumnOperations.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/src/operations/columns.rs`: `addColumnWidth`, `setColumnWidth`, `resetColumnWidth`, each writing the `widths` block alone and one step of undo
+- [x] T052 [US7] Port `columns/{useColumnWidths,ColumnEdge}` into `etalii.adp.ide.desktop/crates/adp-shell/src/hierarchy/layout.rs` and `mod.rs`: each column's right edge dragged with every box of that depth following, one gesture on release, a double click or Home resetting, the arrows moving a focused edge by 16 pixels, a refused gesture putting the column back, and the levels that fit counted with the widths
+- [x] T053 [US7] Record `columns.json` with its golden and replay test
 - [ ] T054 [US7] Walk Story 7 beside the standalone host at `a7fdf03`, in light and dark, and record the eleven points with screenshots and REQ-0003's three heights in `etalii.adp.ide.desktop/parity/walks.md` (SC-004); a point that differs is fixed in `etalii.adp.ide.desktop/crates/adp-shell/src/hierarchy/` or recorded as a difference in `etalii.adp.ide.desktop/parity/inventory.md`
 
 **Checkpoint**: Story 7 passes; the page is the maintainer's.
@@ -179,10 +179,10 @@
 
 ## Phase 10: Polish & Cross-Cutting Concerns (pull request 11)
 
-- [ ] T055 [P] Expose every box, control, field, list, column edge and the trail to AccessKit with role, name and state in `etalii.adp.ide.desktop/crates/adp-shell/src/a11y.rs`, with tests in the style of the table's (FR-011)
-- [ ] T056 [P] Port `LargeDocument.Tests.cs` and `NistControls.Tests.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/tests/` with SC-005's bounds, and add `etalii.adp.ide.desktop/benches/hierarchy.rs` as a bench of `adp-shell` (research R10)
-- [ ] T057 [P] Port `ContextActions.Tests.cs`, `HierarchicalRequirementContextActionProvider.cs` and `HierarchicalRequirementEntrySourceResolver.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/src/{context_actions,selection}.rs`, wired into the explorer's and the properties pane's actions in `etalii.adp.ide.desktop/crates/adp-shell/src/`
-- [ ] T058 Add the inventory rows of this feature, P-071 onwards, to `etalii.adp.ide.desktop/parity/inventory.md`, one per behaviour with its tests and scripts (FR-009), and their states
+- [x] T055 [P] Expose every box, control, field, list, column edge and the trail to AccessKit with role, name and state in `etalii.adp.ide.desktop/crates/adp-shell/src/a11y.rs`, with tests in the style of the table's (FR-011)
+- [x] T056 [P] Port `LargeDocument.Tests.cs` and `NistControls.Tests.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/tests/` with SC-005's bounds, and add `etalii.adp.ide.desktop/benches/hierarchy.rs` as a bench of `adp-shell` (research R10)
+- [x] T057 [P] Port `ContextActions.Tests.cs`, `HierarchicalRequirementContextActionProvider.cs` and `HierarchicalRequirementEntrySourceResolver.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/src/{context_actions,selection}.rs`, wired into the explorer's and the properties pane's actions in `etalii.adp.ide.desktop/crates/adp-shell/src/`
+- [x] T058 Add the inventory rows of this feature, P-071 onwards, to `etalii.adp.ide.desktop/parity/inventory.md`, one per behaviour with its tests and scripts (FR-009), and their states
 - [ ] T059 Walk Stories 1 to 6 beside the standalone host, in both themes and once with a screen reader for Story 1, and record them in `etalii.adp.ide.desktop/parity/walks.md`; set the rows they cover to `checked` (SC-001, SC-006)
 - [ ] T060 Update the desktop host's `etalii.adp.ide.desktop/README.md` tool list, and the spec's status line in `etalii.adp/specs/036-desktop-hierarchical-requirement/desktop-hierarchical-requirement.spec.md`
 
