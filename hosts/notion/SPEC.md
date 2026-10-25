@@ -1,7 +1,7 @@
 ---
 id: host-notion
 type: module-design
-title: Notion host (etalii.adp.ide.notion)
+title: Notion
 status: draft
 parent: hosts
 depends-on:
@@ -13,7 +13,9 @@ references:
   - site
 ---
 
-# Notion host (`etalii.adp.ide.notion`)
+# Notion
+
+Repository: [`etalii.adp.ide.notion`](https://github.com/etalii-adp/etalii.adp.ide.notion)
 
 ADP's diagrams inside Notion. A **Notion add-on** is a static web page shown in a Notion embed block, one page per tool type, at `https://etalii.net/adp-notion/<id>/?store=<database id>`. One published add-on serves any number of graphs, each stored in a Notion database. Its principles are `principles-notion`: one source of truth, stable embeddable addresses, truthfulness about what exists, and simplicity. It is specified by specs 011 and 012.
 
@@ -32,16 +34,13 @@ In progress. One add-on, the Gartner hype cycle graph, covers viewing, editing, 
 
 ## Subsystems
 
-Strict layering, checked by a test: **fbl → disl → history → store → canvas → panels → frame**. A part imports only parts above it.
+Strict layering, checked by a test: **fbl → disl → history → store → canvas → panels → frame**. A part imports only parts above it. `service` stands apart, and `addons` is the published tree.
 
-- **`src/fbl/`:** a byte-for-byte copy of the VS Code host's FBL library (`host-vscode`), refreshed by a sync script. It is never edited and not linted; a shim replaces `node:crypto`.
-- **`src/disl/`:** a DISL interpreter sized to this host, one module per specification section, with CEL through cel-js plus the DISL helpers. Supported features are listed in `support.ts`, and anything unsupported is a finding.
-- **`src/history/`:** commands, a dispatcher and a history stack, modelled on the standalone host's. Every edit, undo and redo goes through it, and one gesture is one command. Why its own: an embed has no part in Notion's undo.
-- **`src/store/`:** the open document of a Notion database: schema, rows ↔ FBL body, splices → row writes, a drift check, hidden internal properties, embed discovery, and the session. Only the session and API modules know the service or the token.
-- **`src/canvas/`, `src/panels/`:** scene, shapes, gestures, snapping and in-place editing; toolbox, property grid, menu and controls. `notion.css` holds the only literal colours, as light and dark `--notion-*` tokens. Appearance follows `prefers-color-scheme` or `?theme=`, because the embed cannot read Notion's theme.
-- **`src/frame/`:** page states and the wiring of each part. `config.ts` is the only place that names the service address.
-- **`service/`:** a platform-free request handler, also run locally (optionally against an in-memory Notion).
-- **`addons/<id>/`:** `index.html`, `addon.json` and synced copies of the `.dis`, the `.fbl` and `PROVENANCE.md`.
+| Group | Nodes |
+|---|---|
+| Shared parts | `notion-fbl`, `notion-disl`, `notion-history`, `notion-store`, `notion-canvas`, `notion-panels`, `notion-frame` |
+| Service | `notion-service` |
+| Published tree | `notion-addons` |
 
 ## How it consumes the specifications
 

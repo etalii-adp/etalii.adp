@@ -1,14 +1,16 @@
 ---
 id: host-claude
 type: module-design
-title: Claude host (etalii.adp.ide.claude)
+title: Claude
 status: draft
 parent: hosts
 references:
   - host-notion
 ---
 
-# Claude host (`etalii.adp.ide.claude`)
+# Claude
+
+Repository: [`etalii.adp.ide.claude`](https://github.com/etalii-adp/etalii.adp.ide.claude)
 
 ADP's tools inside Claude: a host in which ADP tools open **within a Claude conversation**, as the Notion host opens them within a Notion page (README). Like Notion, it is a host that is not an IDE. It serves the goal's focus on collaboration between humans and agents (`adp`): the structure an agent and a person work on together becomes a specialised tool both can read, in the place where they already talk. *(Inferred from the goal; unconfirmed.)*
 

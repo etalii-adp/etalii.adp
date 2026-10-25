@@ -1,7 +1,7 @@
 ---
 id: hosts
 type: architecture-design
-title: ADP hosts
+title: Hosts
 status: draft
 parent: architecture
 references:
@@ -9,7 +9,7 @@ references:
   - definitions
 ---
 
-# ADP hosts
+# Hosts
 
 A **host** is a repository that makes ADP's tools available on one platform. Several hosts exist side by side, and none of them is the reference implementation (goal `adp`). Each one meets the same vision under its own platform's constraints. This node states what every host owes ADP, what each host needs from its platform, and the edges between hosts. Each host's own node holds the rest.
 

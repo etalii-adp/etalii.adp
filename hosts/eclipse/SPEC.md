@@ -1,7 +1,7 @@
 ---
 id: host-eclipse
 type: module-design
-title: Eclipse host (etalii.adp.ide.eclipse)
+title: Eclipse
 status: draft
 parent: hosts
 references:
@@ -9,7 +9,9 @@ references:
   - atd
 ---
 
-# Eclipse host (`etalii.adp.ide.eclipse`)
+# Eclipse
+
+Repository: [`etalii.adp.ide.eclipse`](https://github.com/etalii-adp/etalii.adp.ide.eclipse)
 
 ADP's tools as an Eclipse plug-in, for people whose IDE is Eclipse. It is one of the IDE hosts beside standalone, desktop, IntelliJ and VS Code (`hosts`).
 

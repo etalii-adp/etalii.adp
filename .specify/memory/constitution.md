@@ -1,7 +1,7 @@
 ---
 id: constitution
 type: architecture-design
-title: ADP constitution (core principles)
+title: Constitution / Principles
 status: draft
 parent: adp
 ---
@@ -32,7 +32,8 @@ Sync Impact Report
 - Added or removed sections: none. Added `.specify/memory/repositories/etalii.adp.ide.notion.md`, the principles of the Notion host repository, at 1.0.0.
 - Rationale for MINOR: a fifth host and a fourth principles file a plan can be checked against (spec 011-notion-repository, 2026-10-07); no principle removed or redefined.
 - Templates: plan, spec and tasks templates unchanged; a plan whose code lands in `etalii.adp.ide.notion` now checks that repository's principles in its Constitution Check. In the same change, the site's principles go to 1.2.0.
---># etalii.adp Constitution
+-->
+# Constitution / Principles
 
 ADP ("A Different Perspective") is a family of task-focused tools: diagrams, designers and editors. They serve (constructive) technology assessment, collaboration between humans and agents, and bringing clarity to textual data. ADP tools run in several hosts, each in its own repository: six IDE hosts (`etalii.adp.ide.standalone`, `etalii.adp.ide.desktop`, `etalii.adp.ide.intellij`, `etalii.adp.ide.vscode`, `etalii.adp.ide.eclipse`, `etalii.adp.ide.thinkrail`) and two hosts that are not IDEs, Notion (`etalii.adp.ide.notion`) and Claude (`etalii.adp.ide.claude`). This repository holds what those hosts share: the specifications of the formats and languages a tool is built from. It also holds the Spec Kit features through which every repository but standalone is changed. Its readers are the developers of the ADP hosts, who implement the specifications; tool engineers, who write specifications and definitions in these formats; and agents working in any ADP repository, who need one place to read what a format means. The words used here (tool, diagram, designer, editor, tool engineer, specification, definition, runtime) are defined in [docs/terminology.md](../../docs/terminology.md).
 

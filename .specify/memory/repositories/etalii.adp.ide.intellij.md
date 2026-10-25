@@ -1,13 +1,13 @@
 ---
 id: principles-intellij
 type: architecture-design
-title: IntelliJ principles
+title: Principles
 status: draft
 parent: host-intellij
 ---
 > These are the principles of [`etalii.adp.ide.intellij`](https://github.com/etalii-adp/etalii.adp.ide.intellij), moved here from that repository's `.specify/memory/constitution.md` on 2026-10-05, when its Spec Kit work moved into etalii.adp. A plan whose code lands in `etalii.adp.ide.intellij` checks them beside [etalii.adp's own](../constitution.md). Amend them here, with a pull request into etalii.adp.
 
-# EtAlii.Adp.IntelliJ Constitution
+# Principles
 
 ## Terminology
 

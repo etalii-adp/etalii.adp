@@ -1,7 +1,7 @@
 ---
 id: site
 type: module-design
-title: ADP site (etalii.adp.site)
+title: Website
 status: draft
 parent: architecture
 depends-on:
@@ -16,7 +16,9 @@ depends-on:
   - host-notion
 ---
 
-# ADP site (`etalii.adp.site`)
+# Website
+
+Repository: [`etalii.adp.site`](https://github.com/etalii-adp/etalii.adp.site)
 
 ADP's front door and its published reference, at `https://etalii.net/adp/`. It is for visitors new to ADP, tool engineers and users. It is not a host: it presents the product, its hosts and its tools, and publishes the language reference. Its principles are `principles-site`. It is specified by `specs/etalii.adp.site/001` to `006` and `specs/032-site-desktop-host`.
 

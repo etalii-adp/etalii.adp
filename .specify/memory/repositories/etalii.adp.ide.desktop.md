@@ -1,7 +1,7 @@
 ---
 id: principles-desktop
 type: architecture-design
-title: Desktop principles
+title: Principles
 status: draft
 parent: host-desktop
 ---
@@ -14,7 +14,7 @@ Sync Impact Report
 -->
 > These are the principles of [`etalii.adp.ide.desktop`](https://github.com/etalii-adp/etalii.adp.ide.desktop), written here on 2026-10-20 by spec [030-desktop-native-rust](../../../specs/030-desktop-native-rust/desktop-native-rust.spec.md): that repository has no Spec Kit setup of its own, and its features are specified in etalii.adp. A plan whose code lands in `etalii.adp.ide.desktop` checks them beside [etalii.adp's own](../constitution.md). Amend them here, with a pull request into etalii.adp.
 
-# etalii.adp.ide.desktop Constitution
+# Principles
 
 ## Terminology
 

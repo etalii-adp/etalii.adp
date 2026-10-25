@@ -1,14 +1,14 @@
 ---
 id: architecture
 type: architecture-design
-title: ADP — architecture
+title: Architecture
 status: draft
 parent: adp
 depends-on:
   - constitution
 ---
 
-# ADP — architecture
+# Architecture
 
 ADP is one set of specifications, kept in this repository, and several hosts, each in a repository of its own, that interpret them. The structure and naming rules of this repository are normative in the [constitution](.specify/memory/constitution.md) (`constitution`, "Structure and Naming"). This document does not restate them. It maps the boundaries they produce and the edges between them.
 

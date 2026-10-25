@@ -1,7 +1,7 @@
 ---
 id: principles-vscode
 type: architecture-design
-title: VS Code principles
+title: Principles
 status: draft
 parent: host-vscode
 ---
@@ -14,7 +14,7 @@ Sync Impact Report
 -->
 > These are the principles of [`etalii.adp.ide.vscode`](https://github.com/etalii-adp/etalii.adp.ide.vscode), moved here from that repository's `.specify/memory/constitution.md` on 2026-10-05, when its Spec Kit work moved into etalii.adp. A plan whose code lands in `etalii.adp.ide.vscode` checks them beside [etalii.adp's own](../constitution.md). Amend them here, with a pull request into etalii.adp.
 
-# etalii.adp.ide.vscode Constitution
+# Principles
 
 ## Terminology
 

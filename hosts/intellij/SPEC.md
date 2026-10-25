@@ -1,7 +1,7 @@
 ---
 id: host-intellij
 type: module-design
-title: IntelliJ Platform host (etalii.adp.ide.intellij)
+title: IntelliJ
 status: draft
 parent: hosts
 depends-on:
@@ -13,7 +13,9 @@ references:
   - disl
 ---
 
-# IntelliJ Platform host (`etalii.adp.ide.intellij`)
+# IntelliJ
+
+Repository: [`etalii.adp.ide.intellij`](https://github.com/etalii-adp/etalii.adp.ide.intellij)
 
 One plug-in, id `etalii.adp`, that opens ADP tools in real editors in every IDE built on the IntelliJ Platform: IntelliJ IDEA, Rider, WebStorm, PyCharm, CLion, GoLand, PhpStorm and RubyMine, from 2026.2 (build 262). Its principles are `principles-intellij`. *(That file still calls the IntelliJ Platform "ADP's only host", which is stale: it predates the other hosts.)*
 
@@ -37,18 +39,15 @@ No tool type is interpreted from a specification yet. A placeholder for a bundle
 
 ## Subsystems
 
-- **`core`:** the format-agnostic tool framework.
-  - `AdpToolFileEditor` keeps no copy of the content and re-parses after every change.
-  - A diagram is a `DiagramDefinition` (element and connection types, toolbox, rules, layout; validated once) plus a `DiagramMapping` (read, add, remove, move; each returns range-exact text changes against what it read).
-  - The canvas, the `DiagramFeature` extension point (editing, properties and navigation each register on their own), XML scanning, settings and the problem and read-only banners complete it.
-  - **Core knows no file format.**
-- **`freemind`, `drawio`:** format modules. Each depends only on `core`, never on another format module, and adding one must not change `core`. FreeMind files are content-sniffed, because `.mm` is also Objective-C++. Compressed draw.io files fall back to the text view with an explanation, and anything not shown is preserved.
-- **`fbl`:** a port of the standalone host's FBL library with byte parity and word-for-word finding sentences. It implements FBL at the *Host, declared* level for yaml, json, xml, lines and blocks, plus FBL 0.8's `insert.constant`.
-  - Not covered yet: several readings of one body, the DISL-dependent loader checks and file watching.
-  - It depends on nothing, and a test forbids platform, UI and network imports and any tool-type name.
-  - It is wired to no tool yet: spec 010 forbade that.
-- **`atd`:** `.atd` file type and language, served by the desktop host's `atd-lsp` over stdio. The binaries are fetched from the `atd-v0.1.0` release, SHA-256-pinned in `atd-lsp.lock` and packed per platform. The module loads only where the LSP module exists.
-- **`testing`, `src/integrationTest`:** a tool driver for tests, and Starter/Driver tests against the built plug-in in real IDEs.
+A format module depends only on `core`, never on another format module, and adding a format must not change `core`. `fbl` depends on nothing, and `atd` loads only where the platform's LSP module exists.
+
+| Group | Nodes |
+|---|---|
+| Framework | `intellij-core` |
+| Format modules | `intellij-freemind`, `intellij-drawio` |
+| Specification libraries | `intellij-fbl` |
+| ATD | `intellij-atd` |
+| Tests | `intellij-testing` |
 
 ## How it consumes the specifications
 

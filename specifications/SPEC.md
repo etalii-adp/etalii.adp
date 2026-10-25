@@ -1,14 +1,13 @@
 ---
 id: languages
 type: architecture-design
-title: ADP languages
+title: Languages & Grammars
 status: draft
 parent: architecture
-depends-on:
-  - constitution
+depends-on: [constitution]
 ---
 
-# ADP languages
+# Languages & Grammars
 
 `specifications/` holds one folder per language. Each folder holds the language's normative document `<NAME>-specification.md`, its schema `<name>.schema.json` and its examples `*.<name>` side by side (constitution, "Structure and Naming"). This node groups the languages and holds the edges between them. Each language's own node holds its responsibility and boundary.
 

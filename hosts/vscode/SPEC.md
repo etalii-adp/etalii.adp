@@ -1,7 +1,7 @@
 ---
 id: host-vscode
-type: module-design
-title: Visual Studio Code host (etalii.adp.ide.vscode)
+type: architecture-design
+title: VSCode
 status: draft
 parent: hosts
 depends-on:
@@ -17,7 +17,9 @@ references:
   - host-notion
 ---
 
-# Visual Studio Code host (`etalii.adp.ide.vscode`)
+# VSCode
+
+Repository: [`etalii.adp.ide.vscode`](https://github.com/etalii-adp/etalii.adp.ide.vscode)
 
 One VS Code extension (`adp`, shipped as a `.vsix`) for people who work in VS Code and want ADP's diagrams and designers on files kept in version control, files that agents often read too. Its principles are `principles-vscode`. It is specified by specs 006, 009, 027 and 035.
 
@@ -45,31 +47,29 @@ In progress. Five prototype tool types are interpreted from their definitions:
 - **Bundles and webviews.** Four esbuild bundles: the extension host, an ATD worker, and browser webviews for the canvas, the table, ADP Properties and the ADP Toolbox. The last two live in an "ADP" activity-bar container.
 - **Shared extensions.** Tool types that share a file extension (Markdown, YAML, JSON, XML) are registered as an `option` and reopened in the tool when their marker matches, because a manifest selector can match only file names.
 
-## Subsystems
+## Layers
 
-Lint rules and a words test enforce the layering.
+Three code layers, one per folder under `src/`, enforced by lint and a words test, plus the vendored definitions they read. Arrows point at what a layer depends on.
 
-- **`src/core/`:** definitions, files, models, rules and edits. It must not import `vscode`, the extension or the webviews, and must not touch the DOM. Only two FBL files may use `node:*`.
-  - **`frame`:** the single `ToolType` contract (claims, findings, view, toolbox, fields, actions, `edit`, `newDocument`) and the webview protocol.
-    - `edit` returns an `EditOutcome`: applied with splices, refused with a sentence, confirm, or one of several follow-ups.
-    - A request made on a stale document version is cancelled.
-    - Everything is JSON-serialisable.
-  - **`disl`:** a DISL interpreter (conformance class `standard`) for metamodel, expressions, coordinates, notation, layout, constraints, behaviour, toolbox, forms, persistence and viewpoints. It came from the Notion host and is now owned here. `support.ts` must match `docs/disl-support.md`.
-  - **`desl`:** what DESL 0.1 adds: specification, the table surface and operations.
-  - **`scene`:** a model turned into shapes, lines and labels with geometry.
-  - **`tool`:** `toolTypeFrom` turns a vendored definition folder into a `ToolType`. Alongside it: table views, model changes (one gesture is one composed splice set, which is one undo step), claims, the plugin registry and registration layout.
-  - **`fbl`:** a generic FBL library, *Host, declared*, for yaml, json, xml, lines and blocks; FBL 0.1–0.6 plus 0.8's insert `constant`.
-    - It is a port of the standalone host's library and names no tool type or binding.
-    - It is exposed as `AdpApi.fbl`.
-    - The Notion host copies it from here and never edits it.
-  - **`plugins/<id>`:** the **only** place where code for one tool type may live:
-    - persistence for Freeplane `.mm` and Agent Behavior Modelling Markdown;
-    - the mind map layout;
-    - the Agent Behavior Modelling arrange action;
-    - the project-link picker;
-    - Knowledge's view logic. This is an exception: no definition names it, and etalii.adp issue 162 asks DESL to cover it.
-- **`src/extension/`:** may use `vscode`, has no DOM and must not import the webviews. It opens files and applies edits: splices become **one `WorkspaceEdit`** of the document and its registration together. It also reports findings to the Problems panel, and holds the commands, the Toolbox and Properties views, the webview HTML with its CSP, and the ATD client and worker.
-- **`src/webview/`:** thin renderers for the diagram (SVG), the table, properties and the toolbox. They must not import `vscode` or the extension, and may import only types and pure geometry from the core. They compute nothing specific to a tool type; during a drag they show a stand-in until the edit's scene comes back.
+```mermaid
+flowchart BT
+  core["Core<br/>src/core"]
+  extension["Extension host<br/>src/extension"]
+  webview["Webviews<br/>src/webview"]
+  definitions["Vendored definitions<br/>definitions/"]
+  extension --> core & definitions
+  webview -->|types and pure geometry only| core
+```
+
+| Module | Node | What it holds |
+|---|---|---|
+| Core | `vscode-core` | the frame, FBL, DISL, DESL, the scene, definitions to tool types, plugins |
+| Extension host | `vscode-extension` | activation, custom editors, edits as one `WorkspaceEdit`, views, commands; the ATD client |
+| Webviews | `vscode-webviews` | the canvas, the table, ADP Properties and the ADP Toolbox |
+| Vendored definitions | `vscode-definitions` | the copied definitions and the sync script |
+
+- **The core knows no `vscode` and no DOM.** The extension host may use `vscode` and has no DOM. The webviews import from the core only types and pure geometry, and the extension host and the webviews never import each other; they talk through the webview protocol in `vscode-frame`.
+- **Code for one tool type lives only in `vscode-plugins`.**
 
 ## How it consumes the specifications
 

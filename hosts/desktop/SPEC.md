@@ -1,7 +1,7 @@
 ---
 id: host-desktop
-type: module-design
-title: Desktop host (etalii.adp.ide.desktop)
+type: architecture-design
+title: Desktop
 status: draft
 parent: hosts
 depends-on:
@@ -16,7 +16,9 @@ references:
   - host-standalone
 ---
 
-# Desktop host (`etalii.adp.ide.desktop`)
+# Desktop
+
+Repository: [`etalii.adp.ide.desktop`](https://github.com/etalii-adp/etalii.adp.ide.desktop)
 
 ADP's tools as one native Rust application, for a person working on their own files. There is no sign-in, server, browser or web view. Its principles are `principles-desktop`: native citizenship, the text file as source of truth, one frame for many tools, test-first against real files and the standalone host, simplicity, and no clippy warnings. It is specified by spec 030 (the host) and spec 035 (the ATD toolchain).
 
@@ -35,42 +37,42 @@ A headless **core** of library crates and one **shell** crate, talking through i
   - **Rejected:** iced, Slint, gpui, Xilem, gtk4 and Tauri. Tauri is excluded because the host may run no web view.
 - **Language:** Rust stable, edition 2024. `unsafe_code` is denied workspace-wide. The one exception is `adp-libxml2`, the one C dependency (libxml2 for XSD/DTD validation, which has no pure-Rust equivalent), with all file access through a resolver scoped to the project.
 
-## Subsystems
+## Layers
 
-- **Core** (never depends on egui):
-  - `adp-history`: commands that return their inverse, with a barrier at an outside change.
-  - `adp-context`: selection, actions, prompts and property rows as plain data. One action description feeds the ribbon, the menu and the keyboard.
-  - `adp-core`: per-window handles, the event channel, per-user state, and the tool-type catalogue.
-  - `adp-projects`: `projects.json` in the user's state folder, never in a workspace.
-  - `adp-hierarchy`: the tree and file watching. `.adp` registrations nest under the file they register.
-  - `adp-documents` and `adp-text`: tabs and the text model on a rope, keeping BOM and line endings and refusing binary files.
-  - `adp-problems`: findings cached per project.
-  - `adp-layout`: geometry and layouts, with no drawing.
-  - `adp-theme`: theme values and contrast tests.
-- **Specification runtimes:**
-  - `adp-cel`: a port of the standalone host's CEL evaluator.
-  - `adp-fbl`: families, rules, splices, history, registrations, routing, plugins and legacy sidecars.
-  - `adp-disl`: DISL and DID.
-  - `adp-desl`: DESL and DED (the table model, views and windowed sessions).
-  - `adp-scene`: notation to primitives, culled to the viewport.
-  - `adp-diagram`: diagram sessions, with FBL edits as history commands.
-  - `adp-drawing`: a recording painter that turns a scene into `$defs/Drawing`.
-  - `adp-add`: byte-exact creation of new files.
-- **ATD (spec 035):**
-  - `adp-atd-grammar`, `adp-atd-syntax`: the grammar and a lossless tree.
-  - `adp-atd-check`, `adp-atd-format`: findings with codes and fixes; the canonical layout, with machine edits as splices.
-  - `adp-atd-script`: a step-budgeted interpreter.
-  - `adp-atd-runtime`: a capability registry, lowered onto the DISL, FBL, CEL and layout engines.
-  - `adp-atd-validate`: conformance replay.
-  - `adp-atd-lsp`: a transport-free server, run in-process here, over stdio for IntelliJ and as wasm32 for VS Code.
-  - `adp-atd-cli`: the `atd` command (`check`, `fmt`, `tree`, `tables`, `validate`, `record`).
-- **Oracles:**
-  - `adp-conformance`: replays the vendored FBL fixtures and the standalone host's round-trip tests.
-  - `adp-parity`: replays `parity/scripts` against goldens recorded from the standalone host, byte for byte.
-- **Shell:** `adp-shell` (binary `adp-desktop`): canvas, table, properties, ribbon, explorer, editor, highlighting, the ATD client, accessibility and the add dialog. It is the only crate that uses egui, `rfd` or `syntect`, and the only one that links every module.
-- **Modules:** `modules/diagrams/*` (19), `modules/designers/knowledge`, `modules/editors/{json,markdown,xml,yaml}`.
-  - A module is **residue**: only what DISL and FBL cannot declare, such as Structurizr DSL, Turtle, SPARQL, `.owm`, `.sln` and layouts.
-  - A module depends on core crates and the theme, never on the shell.
+The host is divided into eight modules, each with its crates as submodules. Arrows point at what a layer depends on, and no layer reaches a layer above it.
+
+```mermaid
+flowchart BT
+  foundation["Foundation"]
+  runtimes["Specification runtimes"]
+  workspace["Workspace core"]
+  sessions["Diagram sessions and drawing"]
+  modules["Tool modules"]
+  atd["ATD toolchain"]
+  application["Application"]
+  oracles["Oracles"]
+  workspace --> foundation & runtimes
+  sessions --> foundation & runtimes & workspace
+  modules --> foundation & runtimes & workspace & sessions
+  atd --> foundation & runtimes & sessions
+  application --> foundation & runtimes & workspace & sessions & modules & atd
+  oracles --> application & modules & sessions & workspace & runtimes & foundation
+```
+
+| Module | Node | What it holds |
+|---|---|---|
+| Foundation | `desktop-foundation` | history, context, documents, text, layout, theme, libxml2 |
+| Specification runtimes | `desktop-specification-runtimes` | CEL, FBL, DISL and DID, DESL and DED, the scene |
+| Workspace core | `desktop-workspace` | the window handle and event channel, catalogue, projects, problems, hierarchy |
+| Diagram sessions and drawing | `desktop-diagram-sessions` | open diagrams and the recording painter |
+| Tool modules | `desktop-tool-modules` | the diagram modules' residue, the Knowledge designer, the editors |
+| ATD toolchain | `desktop-atd-toolchain` | spec 035's crates, the `atd` CLI and `atd-lsp` |
+| Application | `desktop-application` | the shell and the add dialog |
+| Oracles | `desktop-oracles` | conformance and parity, test-only |
+
+- **Headless below the application.** Every layer below `desktop-application` is a library that never uses egui, so every behaviour is testable headless. Only the shell uses egui, `rfd` or `syntect`, and only it links every module. A module depends on core crates and the theme, never on the shell.
+- **The ATD toolchain stays clear of the workspace and the shell,** so `atd` and `atd-lsp` ship without the window.
+- **Shape:** the crates sit flat under `crates/`, with the modules under `modules/`. The layers above are this graph's grouping of those crates, by their dependencies. *(The repository itself names no such layers.)*
 
 ## How it consumes the specifications
 

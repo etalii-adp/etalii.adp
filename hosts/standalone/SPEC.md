@@ -1,7 +1,7 @@
 ---
 id: host-standalone
-type: module-design
-title: Standalone host (etalii.adp.ide.standalone)
+type: architecture-design
+title: Standalone
 status: draft
 parent: hosts
 depends-on:
@@ -15,7 +15,9 @@ references:
   - edsl
 ---
 
-# Standalone host (`etalii.adp.ide.standalone`)
+# Standalone
+
+Repository: [`etalii.adp.ide.standalone`](https://github.com/etalii-adp/etalii.adp.ide.standalone)
 
 The standalone web workspace. It opens tools (diagrams, designers and editors) from a user's own workspace folder, draws them and lets the user edit them, while the documents stay plain, diffable files in that folder. It is the host with the widest tool coverage and the worked example the other hosts port from, but it is **not the reference**: its technical shape is how this host works, not a standard (goal `adp`). Sources: the repository's `CLAUDE.md`, `.spec-workflow/steering/` and `docs/architecture.md`. Where this node and those disagree, they win and this node is stale.
 
@@ -37,44 +39,42 @@ flowchart LR
 - **`.proto` is the stable boundary** between backend and client (`standalone-api`). Either side may change freely while the contract holds.
 - **Core never depends on a tool type.** Modules are discovered by reflection, and deleting a module's folder removes the type.
 
-## Subsystems
+## Layers
 
-| Node | Project or folder | References (production) |
+The host is divided into nine modules, each with its subsystems as submodules. Arrows point at what a layer depends on, and no layer reaches a layer above it.
+
+```mermaid
+flowchart BT
+  foundation["Foundation"]
+  runtimes["Specification runtimes"]
+  kinds["Tool-kind abstractions"]
+  services["Workspace services"]
+  modules["Tool modules"]
+  service["Backend"]
+  api["gRPC contracts"]
+  client["Browser client"]
+  runtimes --> foundation
+  kinds --> foundation
+  services --> foundation & kinds & runtimes & api
+  modules --> services & kinds & runtimes & client
+  service --> services & modules
+  client --> api
+```
+
+| Module | Node | What it holds |
 |---|---|---|
-| `standalone-primitives` | `EtAlii.Adp` | — |
-| `standalone-service` | `EtAlii.Adp.Backend.Service` | everything; all modules by wildcard |
-| `standalone-authentication` | `EtAlii.Adp.Authentication` | primitives, Sessions |
-| `standalone-files` | `EtAlii.Adp.Files` | primitives |
-| `standalone-documents` | `EtAlii.Adp.Documents` | primitives, Files |
-| `standalone-history` | `EtAlii.Adp.History` | primitives, Documents |
-| `standalone-context` | `EtAlii.Adp.Context` | primitives, Sessions, History, Projects |
-| `standalone-problems` | `EtAlii.Adp.Problems` | primitives, Documents, Diagram, Context, Hierarchy |
-| `standalone-projects` | `EtAlii.Adp.Projects` | primitives, Sessions, Documents |
-| `standalone-sessions` | `EtAlii.Adp.Sessions` | primitives, Diagram, Designer, Editor, History |
-| `standalone-hierarchy` | `EtAlii.Adp.Hierarchy` | primitives, Context, Documents, Diagram, Projects, Editor, Designer, Specification.Fbl |
-| `standalone-layout` | `EtAlii.Adp.Layout` | — |
-| `standalone-diagram` | `EtAlii.Adp.Diagram` | primitives, Documents |
-| `standalone-diagram-modules-base` | `EtAlii.Adp.Diagram.Modules` | Diagram, Context, History, Hierarchy, Layout, Sessions, Specification.Disl |
-| `standalone-editor` | `EtAlii.Adp.Editor` | primitives, Documents |
-| `standalone-designer` | `EtAlii.Adp.Designer` | primitives |
-| `standalone-workspace` | `EtAlii.Adp.Workspace` | Diagram, Context, History, Hierarchy, Projects, Editor, Designer, Sessions |
-| `standalone-cel` | `EtAlii.Adp.Specification.Cel` | — |
-| `standalone-spec-json` | `EtAlii.Adp.Specification.Json` | — |
-| `standalone-fbl` | `EtAlii.Adp.Specification.Fbl` | primitives, Cel, Json |
-| `standalone-disl` | `EtAlii.Adp.Specification.Disl` | Cel, Fbl, Json |
-| `standalone-api` | `src/api/*.proto` | — |
-| `standalone-canvas-library` | `src/client/src/canvas` | api |
-| `standalone-table-library` | `src/client/src/table/library` | api |
-| `standalone-hierarchy-surface-library` | `src/client/src/hierarchySurface/library` | api |
-| `standalone-client-editors` | `src/client/src/editors` | api |
-| `standalone-shell` | `src/client/src/shell`, `auth`, `pages` | api, the client libraries |
-| `standalone-diagram-modules` | `src/diagrams/*` | core abstractions, never the host |
-| `standalone-designer-modules` | `src/designers/*` | core abstractions, never the host |
-| `standalone-editor-modules` | `src/editors/*` | core abstractions, never the host |
-| `standalone-guards` | `EtAlii.Adp.Repository.Tests`, client guard tests, gate scripts | — |
+| Foundation | `standalone-foundation` | primitives, files, documents, history, layout |
+| Specification runtimes | `standalone-specification-runtimes` | CEL, loader plumbing, FBL, DISL |
+| Tool-kind abstractions | `standalone-tool-kinds` | the diagram, editor and designer contracts |
+| Workspace services | `standalone-workspace-services` | sessions, authentication, context, projects, hierarchy, problems, the gRPC services |
+| Tool modules | `standalone-tool-modules` | the diagram module bases, and one module per tool type of each kind |
+| Backend | `standalone-service` | composition, static hosting, the Vite proxy in development |
+| gRPC contracts | `standalone-api` | the `.proto` boundary between backend and client |
+| Browser client | `standalone-client` | canvas, table and hierarchy-surface libraries, editor plumbing, the shell |
+| Guards and gates | `standalone-guards` | the tests and gates that keep these rules true, across every layer |
 
-- **Direction:** Service → core, never the reverse. Only the service and the host-only projects (Authentication, Problems, Workspace) carry ASP.NET Core or the gRPC server. A module never reaches them.
-- **Shape:** `src/backend/EtAlii.Adp.slnx` is a flat list of 152 projects (51 core, 86 diagram, 10 editor, 4 designer, 1 spanning), so the whole solution opens and builds in Rider.
+- **Direction:** the host process depends on the core, never the reverse. Only the host process and the host-only projects of the workspace services (Authentication, Problems, Workspace) carry ASP.NET Core or the gRPC server. A tool module never reaches them.
+- **Shape:** `src/backend/EtAlii.Adp.slnx` is a flat list of 152 projects (51 core, 86 diagram, 10 editor, 4 designer, 1 spanning), so the whole solution opens and builds in Rider. The layers above are this graph's grouping of those projects, by their references. *(The repository itself names no such layers.)*
 
 ## How it consumes the specifications
 
