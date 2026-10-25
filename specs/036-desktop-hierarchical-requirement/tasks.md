@@ -104,10 +104,10 @@
 
 **Independent Test**: the web shop open in the desktop host and in a text editor; pass 029's Story 2.
 
-- [ ] T031 [P] [US2] Port `OutsideChange.Tests.cs`, `Drift.Tests.cs` and `Undo.Tests.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/tests/`; see them fail
-- [ ] T032 [US2] Read the file again on the watcher's news in `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/src/session.rs` (`file_changed`), keeping collapsed state by number, ending the history, and refusing a gesture planned against a changed file
-- [ ] T033 [US2] Port `ConflictBar.tsx` into `etalii.adp.ide.desktop/crates/adp-shell/src/hierarchy/mod.rs`: the choice between reloading and keeping one's version, and the sentence shown the first time undo meets the end of the history (029: FR-023, FR-025)
-- [ ] T034 [US2] Record `etalii.adp.ide.desktop/parity/scripts/etalii/hierarchical-requirement/two-writers.json` (an outside change, an edit refused after drift, an undo past the change) with its golden and replay test
+- [x] T031 [P] [US2] Port `OutsideChange.Tests.cs`, `Drift.Tests.cs` and `Undo.Tests.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/tests/`; see them fail
+- [x] T032 [US2] Read the file again on the watcher's news in `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/src/session.rs` (`file_changed`), keeping collapsed state by number, ending the history, and refusing a gesture planned against a changed file
+- [x] T033 [US2] Port `ConflictBar.tsx` into `etalii.adp.ide.desktop/crates/adp-shell/src/hierarchy/mod.rs`: the choice between reloading and keeping one's version, and the sentence shown the first time undo meets the end of the history (029: FR-023, FR-025)
+- [x] T034 [US2] Record `etalii.adp.ide.desktop/parity/scripts/etalii/hierarchical-requirement/two-writers.json` (an outside change, an edit refused after drift, an undo past the change) with its golden and replay test
 
 **Checkpoint**: Stories 1 and 2 pass: an agent's file can be kept by a person.
 
@@ -135,10 +135,10 @@
 
 **Independent Test**: pass 029's Story 5 and this spec's Story 5, scenario 2, beside the standalone host.
 
-- [ ] T040 [P] [US5] Port `AssessmentOperations.Tests.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/tests/`; see it fail
-- [ ] T041 [US5] Port `Operations/AssessmentOperations.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/src/operations/assessments.rs`: `addAssessment`, `changeAssessment`, `resolveAssessment`, `removeAssessment`
-- [ ] T042 [US5] Port `notes/{NoteIcon,NoteList}.tsx` and `noteMark.ts` into `etalii.adp.ide.desktop/crates/adp-shell/src/hierarchy/notes.rs`: the icon of one kind, the one for several, the icon of a collapsed item standing for what it hides, and the list over every pane with each kind's icon, a three-line text field with Add below it on the right, and resolve, change and remove as icons with tooltips, beside a note of several lines and below a note of one
-- [ ] T043 [US5] Record `assessments.json` with its golden and replay test
+- [x] T040 [P] [US5] Port `AssessmentOperations.Tests.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/tests/`; see it fail
+- [x] T041 [US5] Port `Operations/AssessmentOperations.cs` into `etalii.adp.ide.desktop/modules/designers/hierarchical-requirement/src/operations/assessments.rs`: `addAssessment`, `changeAssessment`, `resolveAssessment`, `removeAssessment`
+- [x] T042 [US5] Port `notes/{NoteIcon,NoteList}.tsx` and `noteMark.ts` into `etalii.adp.ide.desktop/crates/adp-shell/src/hierarchy/notes.rs`: the icon of one kind, the one for several, the icon of a collapsed item standing for what it hides, and the list over every pane with each kind's icon, a three-line text field with Add below it on the right, and resolve, change and remove as icons with tooltips, beside a note of several lines and below a note of one
+- [x] T043 [US5] Record `assessments.json` with its golden and replay test
 
 **Checkpoint**: Story 5 passes.
 
