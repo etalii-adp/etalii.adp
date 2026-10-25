@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-24
 
-**Status**: Planned (2026-10-25): the maintainer approved the specification ("Approve, plan and tasks next"), and the plan and [tasks.md](tasks.md) are written. Building waits for the maintainer's word.
+**Status**: Implemented (2026-10-25): built in [etalii.adp.ide.desktop](https://github.com/etalii-adp/etalii.adp.ide.desktop) pull requests #90 to #109, every task of [tasks.md](tasks.md) done; the walks of Stories 1 to 7 beside the standalone host at `a7fdf03` are in the desktop host's `parity/walks.md`, and its inventory rows P-071 to P-085 are `checked`.
 
 **Input**: The maintainer's request of 2026-10-24: "make sure that the improvements on the standalone hierarchical requirement designer are also replicated to the standalone host", confirmed the same evening to mean the desktop host. Asked how the designer should reach the desktop host, which does not have it yet, the maintainer chose "Spec Kit spec for the port".
 
