@@ -3,9 +3,9 @@ id: feature-005-format-binding
 type: task-spec
 title: "005 Format Binding"
 status: done
-parent: constitution
+parent: specs-archive
 references:
-  - spec-fbl
+  - fbl
 tags:
   - spec-kit
 ---

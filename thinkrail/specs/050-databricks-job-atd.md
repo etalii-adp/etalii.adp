@@ -3,9 +3,9 @@ id: feature-050-databricks-job-atd
 type: task-spec
 title: "050 The Databricks job as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

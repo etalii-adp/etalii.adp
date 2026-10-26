@@ -3,10 +3,10 @@ id: feature-027-vscode-disl-fbl-tools
 type: task-spec
 title: "027 The Tools on DISL and FBL in Visual Studio Code"
 status: done
-parent: constitution
+parent: specs-archive
 references:
-  - spec-disl
-  - spec-fbl
+  - disl
+  - fbl
 tags:
   - spec-kit
 ---

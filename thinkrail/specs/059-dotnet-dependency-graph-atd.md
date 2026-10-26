@@ -3,9 +3,9 @@ id: feature-059-dotnet-dependency-graph-atd
 type: task-spec
 title: "059 The .NET dependency graph as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

@@ -3,7 +3,7 @@ id: feature-036-desktop-hierarchical-requirement
 type: task-spec
 title: "036 The Hierarchical Requirement Designer in the Desktop Host"
 status: active
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

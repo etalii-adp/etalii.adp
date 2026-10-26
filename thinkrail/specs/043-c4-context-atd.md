@@ -3,9 +3,9 @@ id: feature-043-c4-context-atd
 type: task-spec
 title: "043 The C4 system context diagram as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

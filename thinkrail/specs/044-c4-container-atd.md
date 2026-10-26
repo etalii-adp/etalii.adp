@@ -3,9 +3,9 @@ id: feature-044-c4-container-atd
 type: task-spec
 title: "044 The C4 container diagram as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---
