@@ -3,7 +3,7 @@ id: intellij-004-adp-settings-page
 type: task-spec
 title: "004 ADP Settings Page"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
   - etalii.adp.ide.intellij

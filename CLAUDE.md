@@ -24,7 +24,7 @@ The SpecKit Companion extension (`.specify/extensions/companion/`) records each 
 
 Specs say *what* and *why*; plans say *how*. Do not put implementation choices in a spec.
 
-`thinkrail/` holds a generated copy of the constitution, the language specifications and every feature's specification in ThinkRail's spec-graph format (see [thinkrail/README.md](thinkrail/README.md)). Never edit it by hand: after changing one of those sources, run `python .github/scripts/thinkrail-specs.py`.
+The spec graph that ThinkRail reads lives in place: `goal-and-requirements.md` (`adp`) is its root, and the constitution and the language specifications carry their own frontmatter. `thinkrail/` holds a generated copy of every feature's specification in ThinkRail's spec-graph format, under the feature archive (see [thinkrail/README.md](thinkrail/README.md)). Never edit it by hand: after adding or changing a feature's specification, run `python .github/scripts/thinkrail-specs.py`.
 
 ### Specifications for every repository live here
 

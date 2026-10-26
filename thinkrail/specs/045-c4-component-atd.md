@@ -3,9 +3,9 @@ id: feature-045-c4-component-atd
 type: task-spec
 title: "045 The C4 component diagram as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

@@ -3,7 +3,7 @@ id: feature-012-notion-hype-cycle-addon
 type: task-spec
 title: "012 The Gartner Hype Cycle Graph as a Notion Add-on"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

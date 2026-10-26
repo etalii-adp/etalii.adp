@@ -3,9 +3,9 @@ id: feature-033-fbl-insert-constant
 type: task-spec
 title: "033 An Insert Writes a Constant"
 status: done
-parent: constitution
+parent: specs-archive
 references:
-  - spec-fbl
+  - fbl
 tags:
   - spec-kit
 ---

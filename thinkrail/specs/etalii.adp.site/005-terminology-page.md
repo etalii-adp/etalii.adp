@@ -3,7 +3,7 @@ id: site-005-terminology-page
 type: task-spec
 title: "005 Terminology Page"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
   - etalii.adp.site

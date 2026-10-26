@@ -3,9 +3,9 @@ id: feature-046-c4-deployment-atd
 type: task-spec
 title: "046 The C4 deployment diagram as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

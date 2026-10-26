@@ -3,7 +3,7 @@ id: feature-018-standalone-developer-sign-in-bypass
 type: task-spec
 title: "018 A developer build opens without a sign-in form"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

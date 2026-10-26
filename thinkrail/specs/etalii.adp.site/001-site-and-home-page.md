@@ -3,7 +3,7 @@ id: site-001-site-and-home-page
 type: task-spec
 title: "001 Site and Home Page"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
   - etalii.adp.site

@@ -3,7 +3,7 @@ id: feature-019-standalone-selection-after-drag
 type: task-spec
 title: "019 Selection After a Drag"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

@@ -3,7 +3,7 @@ id: intellij-005-continuous-integration
 type: task-spec
 title: "005 Continuous Integration and Plug-in Downloads"
 status: active
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
   - etalii.adp.ide.intellij
