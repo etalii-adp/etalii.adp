@@ -796,7 +796,7 @@ A capability is called only where its extension point allows:
 | Point | Called from | Input | Output |
 |---|---|---|---|
 | `layout` | `algorithm <name> capability <name> { … }` | nodes with sizes and pins, edges (`$defs/LayoutInput`) | positions (`$defs/LayoutResult`) |
-| `routing` | an edge's `line { routing: … }` | edge ends and obstacles | route points |
+| `routing` | an edge's `line { routing: … }` | edge ends and obstacles (`$defs/RoutingInput`) | route points (`$defs/RoutingResult`) |
 | `reader` | `binding … family capability <name>` | a body (`$defs/ReaderInput`) | a reading and splices (`$defs/ReaderResult`) |
 | `analysis` | a derived element's or relation's `from`, a constraint | a model (`$defs/AnalysisInput`) | derived elements, relations, findings (`$defs/AnalysisResult`) |
 | `arrange` | an operation, as `call plugin <name>(…)` | the selection and the model | actions |
@@ -816,6 +816,7 @@ The catalogue is the capabilities with a contract in `capabilities/` beside this
 
 | Capability | Point | Status |
 |---|---|---|
+| `arrange.selfOrganising` | arrange | provisional |
 | `layout.bandedGrid` | layout | provisional |
 | `layout.bands` | layout | provisional |
 | `layout.depthColumns` | layout | provisional |
@@ -823,6 +824,9 @@ The catalogue is the capabilities with a contract in `capabilities/` beside this
 | `layout.layeredColumns` | layout | provisional |
 | `layout.layeredRegions` | layout | provisional |
 | `layout.rankedBoundaries` | layout | provisional |
+| `layout.rowPacked` | layout | provisional |
+| `layout.rowPacking` | layout | provisional |
+| `layout.tidyTree` | layout | provisional |
 | `layout.twoSidedTree` | layout | provisional |
 | `reader.databricksBundle` | reader | provisional |
 | `reader.markdown` | reader | provisional |
@@ -830,6 +834,7 @@ The catalogue is the capabilities with a contract in `capabilities/` beside this
 | `reader.turtle` | reader | provisional |
 | `render.descriptionLogic` | render | provisional |
 | `render.markdown` | render | provisional |
+| `routing.forwardBezier` | routing | provisional |
 
 ---
 
@@ -1131,7 +1136,9 @@ An agent writing a description is given `grammar/atd.flat.lark`, with which a mo
 | `Capability` | The contract of a capability (ATD §2.6, §13, data-model.md §7). |
 | `CapabilityFixture` | One fixture of a capability: an input, the arguments and the expected output (ATD §2.6). |
 | `LayoutInput` | The input of a `layout` capability: the nodes with their sizes and pins, the edges and the containment, in the canvas's domain units. |
-| `LayoutResult` | The output of a `layout` capability: a position for every node it places, in the canvas's domain units, rounded to 0.01, and optionally route points. |
+| `LayoutResult` | The output of a `layout` capability: a position for every node it places, in the canvas's domain units, rounded to 0.01, optionally the size it gives a node it resizes, and optionally route points. |
+| `RoutingInput` | The input of a `routing` capability: each edge with the boxes of its two ends, and the boxes it must keep clear of, in the canvas's domain units. |
+| `RoutingResult` | The output of a `routing` capability: the route of every edge it routes, by edge id, as path commands from the edge's first point to its last. |
 | `ReaderInput` | The input of a `reader` capability: the body's bytes as text, and the edit to plan when one is asked (FBL §11.2). |
 | `ReaderResult` | The output of a `reader` capability: what FBL §11.2's read returns, or the splices of a planned edit. |
 | `RenderInput` | The input of a `render` capability: a value to render. |

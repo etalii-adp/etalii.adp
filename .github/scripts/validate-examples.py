@@ -1339,9 +1339,25 @@ def check_capability(folder: Path) -> list[str]:
         if target not in schemas[ATD_SCHEMA]["$defs"]:
             problems.append(f"its {part} names {target!r}, which atd.schema.json does not define")
     validator = atd_validator("CapabilityFixture")
+    # A fixture's input and output are its contract's: each is checked against the `$defs` entry the contract names.
+    parts = {}
+    for part in ("input", "output"):
+        target = contract[part]["$ref"].rpartition("#/$defs/")[2]
+        if target in schemas[ATD_SCHEMA]["$defs"]:
+            parts[part] = atd_validator(target)
     for fixture in sorted((folder / "fixtures").glob("*.json")):
-        for error in validator.iter_errors(json.loads(fixture.read_text(encoding="utf-8"))):
+        recorded = json.loads(fixture.read_text(encoding="utf-8"))
+        for error in validator.iter_errors(recorded):
             problems.append(f"fixtures/{fixture.name}: {error.message}")
+        for part, part_validator in parts.items():
+            if part not in recorded:
+                continue
+            for error in part_validator.iter_errors(recorded[part]):
+                where = "/".join(str(step) for step in error.absolute_path) or "(root)"
+                problems.append(f"fixtures/{fixture.name}: its {part} at {where}: {error.message}")
+        for name in recorded.get("args", {}):
+            if name not in contract.get("args", {}):
+                problems.append(f"fixtures/{fixture.name}: its argument {name!r} is not one its contract declares")
     return problems
 
 
