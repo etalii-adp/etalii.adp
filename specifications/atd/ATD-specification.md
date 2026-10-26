@@ -874,7 +874,7 @@ Every expression is type-checked in the CEL environment of its position (DISL §
 
 An expression whose type does not fit the position is a finding (`ATD4001`); an unknown variable (`ATD4004`) and a CEL reserved word used as an identifier (`ATD4003`) are findings too.
 
-A variable that holds an element is read as the type a test `<variable>.isA('<Type>')` names where that test holds: on the right of `&&` when the test is its left operand or the first test of a conjunction there, and in the first branch of `?:` when it is the condition or the first test of one. An attribute of that type is then no `ATD2001` (`timeline.atd`'s `self.isA('Period') && readableTime(self.end)`).
+A variable that holds an element is read as the type a test `<variable>.isA('<Type>')` names where that test holds: on the right of `&&` when the test is one of its left operand's `&&` conjuncts, and in the first branch of `?:` when it is one of the condition's. An attribute of that type is then no `ATD2001` (`timeline.atd`'s `self.isA('Period') && readableTime(self.end)`).
 
 ### 14.6 Settings
 
