@@ -3037,7 +3037,7 @@
           ]
         },
         "move": {
-          "description": "A move gesture.",
+          "description": "A move gesture: to a place (`x`, `y`), or into a parent before its child at `index`, last when it is -1.",
           "type": "object",
           "properties": {
             "element": {
@@ -3051,6 +3051,11 @@
             },
             "parent": {
               "type": "string"
+            },
+            "index": {
+              "description": "With `parent`: the place among the parent's children as they are before the move, the element itself included; -1, or absent, puts it last.",
+              "type": "integer",
+              "minimum": -1
             }
           },
           "additionalProperties": false
