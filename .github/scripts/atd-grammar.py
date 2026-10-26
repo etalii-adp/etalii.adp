@@ -834,7 +834,7 @@ def highlighting(parser):
         ("keyword.control.atd", r"\b(?:" + "|".join(control_words) + r")\b"),
         ("constant.language.atd", r"\b(?:true|false|null)\b"),
         ("keyword.other.atd", r"\b(?:" + "|".join(re.escape(k) for k in construct_words) + r")\b"),
-        ("keyword.operator.atd", r"->|&&|\|\||==|!=|<=|>=|[-+*/%!<>=?]"),
+        ("keyword.operator.atd", r"->|&&|\|\||==|!=|<=|>=|[-+*/%!<>=?|~]"),
         ("punctuation.atd", r"[{}()\[\],.:]"),
         ("variable.other.name.atd", r"\b[A-Za-z_][A-Za-z0-9_]*\b"),
     ]
