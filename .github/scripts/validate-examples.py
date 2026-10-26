@@ -108,11 +108,22 @@ PREVIOUS_SCHEMA_IDS = {
     "https://etalii.net/adp/did/schema/0.1/did.schema.json": "https://etalii.net/adp/did/schema/0.2/did.schema.json",
 }
 
+def is_case_input(path: Path) -> bool:
+    """Whether a conformance case names the file among its inputs: a tool's own data (a Helm chart carries its
+    values.schema.json), which the case's conformance.json checks rather than this script."""
+    for folder in path.parents:
+        fixture = folder / "conformance.json"
+        if fixture.is_file():
+            inputs = json.loads(fixture.read_text(encoding="utf-8")).get("inputs", {})
+            return path.relative_to(folder).as_posix() in inputs.values()
+    return False
+
+
 schemas = {}
 editor_cases = repository / "definitions" / "editors" / "conformance"
 for path in sorted([*root.rglob("*.schema.json"), *(repository / "definitions").rglob("*.schema.json")]):
-    if editor_cases in path.parents:
-        continue  # a document of an editor's case, such as a JSON Schema a JSON document names (spec 035, T066)
+    if editor_cases in path.parents or is_case_input(path):
+        continue  # a document of an editor's case, such as a JSON Schema a JSON document names (spec 035, T066), or of another case
     schema = json.loads(path.read_text(encoding="utf-8"))
     schemas[schema["$id"]] = schema
 registry = Registry().with_resources(
@@ -1252,6 +1263,9 @@ def check_trace(path: Path) -> list[str]:
     companion = path.parent / trace["companion"]["file"]
     if not companion.is_file():
         return problems + [f"its companion {trace['companion']['file']} is not there"]
+    for report in trace["companion"].get("reports", []):
+        if not (path.parent / report).is_file():
+            problems.append(f"its companion report {report} is not there")
     text = companion.read_text(encoding="utf-8")
     headings = set(re.findall(r"^#{1,6}\s+(.*?)\s*$", text, re.MULTILINE))
     for section in trace["companion"]["sections"]:
