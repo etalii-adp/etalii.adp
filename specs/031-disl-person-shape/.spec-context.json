@@ -3,7 +3,7 @@
   "specName": "A Built-in Person Shape in DISL",
   "branch": "features/031-disl-person-shape",
   "currentStep": "implement",
-  "status": "implemented",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -227,6 +227,13 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-10-20T06:50:06.061Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-24T11:47:10.834Z"
     }
   ],
   "currentTask": "T020",

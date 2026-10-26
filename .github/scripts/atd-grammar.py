@@ -10,10 +10,16 @@ language (ATD section 4), whose root is `atd.lark`. Modes, any number of them to
   `%extend`, imports from outside the language's modules, keep-all-tokens rules, string and regular expression flags,
   ranges, repetition counts) and every terminal outside the regular expression subset of ATD section 3.5, naming the
   file, the line and the construct (rule 2).
-- `--probe`: the keyword probe (rule 3, FR-008). In every example, at every token the parser reads as a name, each
-  keyword is put in its place: the keyword must be read as that name, leaving the parser where the name left it.
+- `--probe`: the keyword probe (rule 3, FR-008). In every example and every tool description under `definitions/`, at
+  every token the parser reads as a name, each keyword is put in its place: the keyword must be read as that name,
+  leaving the parser where the name left it.
 - `--tables`: writes Lark's LALR(1) automaton as `grammar/atd.tables.json`, in the normalized form of
-  `atd.schema.json#/$defs/ParseTables` (rule 5).
+  `atd.schema.json#/$defs/ParseTables` (rule 5), and the automaton of every grammar a binding example carries as
+  `grammar/tables/<example>.<binding>.tables.json` (ATD section 11.9).
+- `--bindings`: the grammars bindings carry (FBL 0.9, section 4.9; ATD section 11.9): every grammar of an FBL example
+  (`*.fbl` under `specifications/fbl/` and `definitions/`) and of a tool description, inline or from a file, is linted
+  against the notation subset and built in strict mode from its start rule, its `recover` is checked against the
+  grammar, and every grammar in the refused corpus must fail to build.
 - `--flatten`: writes `grammar/atd.flat.lark`, the whole grammar in one file, and has `llguidance`'s Lark front end
   accept it (rule 4, FR-090).
 - `--highlighting`: writes `highlighting/atd.tmLanguage.json` and `highlighting/atd.sublime-syntax` from the grammar's
@@ -44,6 +50,7 @@ highlighting_dir = atd / "highlighting"
 tm_file = highlighting_dir / "atd.tmLanguage.json"
 sublime_file = highlighting_dir / "atd.sublime-syntax"
 modules = ["atd", "core", "cel", "script", "canvas", "form", "text", "binding", "notation"]
+binding_tables_dir = grammar_dir / "tables"
 
 failures = []
 
@@ -212,60 +219,7 @@ def mode_lint():
     names_ok = True
     for module in modules:
         path = grammar_dir / f"{module}.lark"
-        relative = path.relative_to(repository)
-        text = path.read_text(encoding="utf-8")
-        line = 1
-        at_line_start = True
-        previous = None
-        position = 0
-        while position < len(text):
-            match = grammar_token.match(text, position)
-            if match is None:
-                fail(f"{relative}:{line}: `{text[position]}` is not ATD grammar notation")
-                position += 1
-                continue
-            kind = match.lastgroup if match.lastgroup not in ("string_flags", "regexp_flags") else None
-            kind = next(k for k in ("comment", "string", "regexp", "directive", "word", "range", "punctuation",
-                                    "newline", "space") if match.group(k) is not None)
-            value = match.group(0)
-            where = f"{relative}:{line}"
-            if kind == "string" and match.group("string_flags"):
-                fail(f"{where}: the string flag `{match.group('string_flags')}` of {value} (flags are not admitted)")
-            if kind == "regexp":
-                if match.group("regexp_flags"):
-                    fail(f"{where}: the flag `{match.group('regexp_flags')}` of {value} (flags are not admitted)")
-                body = value[1:len(value) - len(match.group("regexp_flags") or "") - 1]
-                for problem in regex_problems(body):
-                    fail(f"{where}: the terminal {value} uses {problem}, outside the subset of ATD section 3.5")
-            if kind == "directive" and value not in ("%import", "%ignore"):
-                fail(f"{where}: `{value}` is not admitted (only `%import` and `%ignore` are)")
-            if kind == "directive" and value == "%import":
-                rest = text[match.end():].lstrip(" \t")
-                target = re.match(r"\.([a-z_]+)\s*\(", rest)
-                if target is None or target.group(1) not in modules:
-                    fail(f"{where}: an import from outside the language's modules (write `%import .<module> (names)`)")
-            if kind == "word" and at_line_start:
-                head = re.match(r"([?!_]?)([A-Za-z_][A-Za-z0-9_]*)(\.\d+)?", value)
-                after = text[match.end():].lstrip(" \t")
-                if after.startswith(":") or after.startswith("{"):
-                    if head.group(1) == "!":
-                        fail(f"{where}: the keep-all-tokens rule `{value}` is not admitted")
-                    if head.group(3) and head.group(2)[0].islower():
-                        fail(f"{where}: the rule priority of `{value}` is not admitted")
-                    if after.startswith("{"):
-                        fail(f"{where}: the template `{value}{{…}}` is not admitted")
-            if kind == "range":
-                fail(f"{where}: the range `..` is not admitted")
-            if kind == "punctuation" and value == "~":
-                fail(f"{where}: the repetition `~` is not admitted")
-            if kind == "newline":
-                line += 1
-                at_line_start = True
-            elif kind not in ("space", "comment"):
-                at_line_start = False
-            previous = value
-            position = match.end()
-        del previous
+        lint_text(path.read_text(encoding="utf-8"), path.relative_to(repository), modules)
     notation = notation_parser()
     for path in [grammar_dir / f"{module}.lark" for module in modules] + [flat_file]:
         if path.exists():
@@ -276,6 +230,64 @@ def mode_lint():
                      f"notation.lark states it: {str(error).splitlines()[0]}")
     if names_ok:
         print(f"lint: {len(modules)} modules in ATD grammar notation, every terminal in the regular expression subset")
+
+
+def lint_text(text, relative, importable, first_line=1):
+    """Refuses, in one grammar's text, every construct outside the notation subset of ATD section 4.1 and every
+    terminal outside the regular expression subset of section 3.5; an `%import` may name only `importable`."""
+    line = first_line
+    at_line_start = True
+    previous = None
+    position = 0
+    while position < len(text):
+        match = grammar_token.match(text, position)
+        if match is None:
+            fail(f"{relative}:{line}: `{text[position]}` is not ATD grammar notation")
+            position += 1
+            continue
+        kind = match.lastgroup if match.lastgroup not in ("string_flags", "regexp_flags") else None
+        kind = next(k for k in ("comment", "string", "regexp", "directive", "word", "range", "punctuation",
+                                "newline", "space") if match.group(k) is not None)
+        value = match.group(0)
+        where = f"{relative}:{line}"
+        if kind == "string" and match.group("string_flags"):
+            fail(f"{where}: the string flag `{match.group('string_flags')}` of {value} (flags are not admitted)")
+        if kind == "regexp":
+            if match.group("regexp_flags"):
+                fail(f"{where}: the flag `{match.group('regexp_flags')}` of {value} (flags are not admitted)")
+            body = value[1:len(value) - len(match.group("regexp_flags") or "") - 1]
+            for problem in regex_problems(body):
+                fail(f"{where}: the terminal {value} uses {problem}, outside the subset of ATD section 3.5")
+        if kind == "directive" and value not in ("%import", "%ignore"):
+            fail(f"{where}: `{value}` is not admitted (only `%import` and `%ignore` are)")
+        if kind == "directive" and value == "%import":
+            rest = text[match.end():].lstrip(" \t")
+            target = re.match(r"\.([a-z_]+)\s*\(", rest)
+            if target is None or target.group(1) not in importable:
+                fail(f"{where}: an import from outside the language's modules, or a binding's own files beside it "
+                     f"(write `%import .<module> (names)`)")
+        if kind == "word" and at_line_start:
+            head = re.match(r"([?!_]?)([A-Za-z_][A-Za-z0-9_]*)(\.\d+)?", value)
+            after = text[match.end():].lstrip(" \t")
+            if after.startswith(":") or after.startswith("{"):
+                if head.group(1) == "!":
+                    fail(f"{where}: the keep-all-tokens rule `{value}` is not admitted")
+                if head.group(3) and head.group(2)[0].islower():
+                    fail(f"{where}: the rule priority of `{value}` is not admitted")
+                if after.startswith("{"):
+                    fail(f"{where}: the template `{value}{{…}}` is not admitted")
+        if kind == "range":
+            fail(f"{where}: the range `..` is not admitted")
+        if kind == "punctuation" and value == "~":
+            fail(f"{where}: the repetition `~` is not admitted")
+        if kind == "newline":
+            line += 1
+            at_line_start = True
+        elif kind not in ("space", "comment"):
+            at_line_start = False
+        previous = value
+        position = match.end()
+    del previous
 
 
 def notation_parser():
@@ -315,7 +327,8 @@ def mode_probe(parser):
     keywords = keyword_terminals(parser)
     by_text = {value: name for name, value in keywords.items()}
     table = parser.parser.parser.parser.parse_table.states
-    examples = sorted(p for p in atd.glob("*.atd")) + sorted(atd.glob("refused/*.atd"))
+    examples = (sorted(p for p in atd.glob("*.atd")) + sorted((repository / "definitions").rglob("*.atd"))
+                + sorted(atd.glob("refused/*.atd")))
     checked = set()
     count = 0
     for example in examples:
@@ -385,10 +398,11 @@ def _reads_as_name(interactive, token, following, table):
 
 # ---------------------------------------------------------------------------------------------------------------- tables
 
-def normalized_tables(parser):
-    """Lark's automaton in the normalized form of `$defs/ParseTables` (data-model.md section 14)."""
+def normalized_tables(parser, grammar="specifications/atd/grammar/atd.lark", start_symbol="description", texts=None):
+    """Lark's automaton in the normalized form of `$defs/ParseTables` (data-model.md section 14): of ATD's grammar, or
+    of a binding's grammar whose text, with the files it imports, is `texts`."""
     terminals_by_name = {t.name: t for t in parser.terminals}
-    anonymous = {t.name for t in parser.terminals if t.pattern.type == "str" and not _named_in_grammar(t.name)}
+    anonymous = {t.name for t in parser.terminals if t.pattern.type == "str" and not _named_in_grammar(t.name, texts)}
 
     def terminal_name(name):
         if name in ("$END",):
@@ -421,7 +435,7 @@ def normalized_tables(parser):
                                 r.alias or "") for r in rules})
     rule_index = {(lhs, rhs): i for i, (lhs, rhs, _) in enumerate(normalized_rules)}
     table = parser.parser.parser.parser.parse_table
-    start = table.start_states["description"]
+    start = table.start_states[start_symbol]
     order = {start: 0}
     queue = deque([start])
     while queue:
@@ -453,12 +467,12 @@ def normalized_tables(parser):
                     actions[key] = "accept"
                 else:
                     actions[key] = f"r{rule_index[(lhs, rhs)]}"
-        if state == table.end_states["description"]:
+        if state == table.end_states[start_symbol]:
             actions["$END"] = "accept"
         states.append({"actions": dict(sorted(actions.items())), "gotos": dict(sorted(gotos.items()))})
     return {
-        "grammar": "specifications/atd/grammar/atd.lark",
-        "start": "description",
+        "grammar": grammar,
+        "start": start_symbol,
         "terminals": sorted(({"name": terminal_name(t.name),
                               "kind": "string" if t.pattern.type == "str" else "pattern",
                               "value": t.pattern.value, "priority": t.priority}
@@ -473,16 +487,22 @@ def normalized_tables(parser):
 _grammar_names = None
 
 
-def _named_in_grammar(name):
+def _named_in_grammar(name, texts=None):
+    """Whether a terminal is named in the grammar: in ATD's modules, or in `texts`, a binding's grammar and its files."""
     global _grammar_names
-    if _grammar_names is None:
-        _grammar_names = set()
-        for module in modules:
-            for match in re.finditer(r"^\s*_?([A-Z][A-Z0-9_]*)(?:\.\d+)?\s*:", (grammar_dir / f"{module}.lark")
-                                     .read_text(encoding="utf-8"), re.MULTILINE):
-                _grammar_names.add(match.group(1))
+    if texts is None:
+        if _grammar_names is None:
+            _grammar_names = _terminal_names([(grammar_dir / f"{m}.lark").read_text(encoding="utf-8") for m in modules])
+        names = _grammar_names
+    else:
+        names = _terminal_names(texts)
     bare = name.split("__")[-1].lstrip("_")
-    return bare in _grammar_names
+    return bare in names
+
+
+def _terminal_names(texts):
+    return {match.group(1) for text in texts
+            for match in re.finditer(r"^\s*_?([A-Z][A-Z0-9_]*)(?:\.\d+)?\s*:", text, re.MULTILINE)}
 
 
 def _is_terminal(symbol, terminals_by_name):
@@ -494,8 +514,8 @@ def _symbol_key(symbol, terminal_name, helper_name):
         else helper_name(symbol)
 
 
-def tables_text(parser):
-    data = normalized_tables(parser)
+def tables_text(parser, data=None):
+    data = data or normalized_tables(parser)
     lines = ["{", '  "$schema": "https://etalii.net/adp/atd/schema/0.1/atd.schema.json#/$defs/ParseTables",']
     for key in ("grammar", "start", "ignore"):
         lines.append(f"  {json.dumps(key)}: {json.dumps(data[key])},")
@@ -510,6 +530,156 @@ def tables_text(parser):
     lines.append("  ]")
     lines.append("}")
     return "\n".join(lines) + "\n"
+
+
+# ---------------------------------------------------------------------------------------------------------------- bindings
+
+def binding_grammars(parser):
+    """Every grammar a binding carries (FBL 0.9, section 4.9; ATD section 11.9), as dictionaries: `label`, the name of
+    its tables file; `where`, the file and line its text starts at; `text`; `start`; `recover`; `folder`, where the
+    files it imports are; and `refused`, whether it stands in the refused corpus, where it must not build."""
+    grammars = []
+    fbl_examples = sorted((repository / "specifications" / "fbl").glob("*.fbl")) + sorted(
+        (repository / "definitions").rglob("*.fbl"))
+    for path in fbl_examples:
+        for name, binding in json.loads(path.read_text(encoding="utf-8")).get("bindings", {}).items():
+            body = binding.get("body", {})
+            if body.get("family") != "grammar":
+                continue
+            source = body.get("grammar")
+            where = path
+            if isinstance(source, dict):
+                where = path.parent / source["file"]
+                source = where.read_text(encoding="utf-8")
+            grammars.append({"label": f"{path.stem}.{name}", "where": (where, 1), "text": source,
+                             "start": body.get("start", "start"), "recover": body.get("recover"),
+                             "folder": path.parent, "refused": False})
+    descriptions = (sorted(atd.glob("*.atd")) + sorted((repository / "definitions").rglob("*.atd"))
+                    + sorted(atd.glob("refused/*.atd")))
+    for path in descriptions:
+        text = path.read_text(encoding="utf-8")
+        if "grammar" not in text:
+            continue
+        try:
+            tree = parser.parse(text)
+        except UnexpectedInput:
+            continue  # a description that does not parse is the syntax error of the refused corpus
+        for binding in tree.iter_subtrees_topdown():
+            if binding.data != "binding":
+                continue
+            name = _source(text, next(c for c in binding.children if getattr(c, "data", "") == "binding__rule_name"))
+            body = {}
+            for member in binding.children:
+                if getattr(member, "data", "") == "binding__body":
+                    for setting in member.children[0].children:
+                        body[setting.children[0].value.rstrip(": \t")] = _atd_value(setting.children[1])
+            for member in binding.children:
+                kind = getattr(member, "data", "")
+                if kind == "binding__grammar_inline":
+                    node = member.children[0]
+                    source, where, folder = _source(text, node), (path, node.meta.line), path.parent
+                elif kind == "binding__grammar_file":
+                    file = path.parent / json.loads(member.children[0].value)
+                    source, where, folder = file.read_text(encoding="utf-8"), (file, 1), path.parent
+                else:
+                    continue
+                grammars.append({"label": f"{path.stem}.{name}", "where": where, "text": source,
+                                 "start": body.get("start", "start"), "recover": body.get("recover"),
+                                 "folder": folder, "refused": path.parent.name == "refused"})
+    return grammars
+
+
+def _source(text, node):
+    return text[node.meta.start_pos:node.meta.end_pos]
+
+
+def _atd_value(node):
+    """The JSON value of an ATD value (ATD section 6.6), for the settings a binding's grammar takes."""
+    while getattr(node, "data", None) == "value" or getattr(node, "data", None) == "name":
+        node = node.children[0]
+    if isinstance(node, Token):
+        if node.type == "STRING":
+            return json.loads(node.value) if node.value.startswith('"') else node.value[1:-1]
+        return node.value
+    kind = node.data.split("__")[-1]
+    if kind == "word_literal":
+        return _atd_value(node.children[0])
+    if kind == "string_literal":
+        return _atd_value(node.children[0])
+    if kind == "settings_map":
+        return {entry.children[0].value.rstrip(": \t"): _atd_value(entry.children[1]) for entry in node.children}
+    if kind == "value_list":
+        return [_atd_value(item) for item in node.children]
+    return _atd_value(node.children[0])
+
+
+def grammar_imports(text, folder):
+    """The texts of the files a binding's grammar imports, beside it: `%import .name (…)` reads `name.lark`."""
+    return [(folder / f"{name}.lark").read_text(encoding="utf-8")
+            for name in re.findall(r"^%import \.([a-z_][a-z0-9_]*)\s*\(", text, re.MULTILINE)
+            if (folder / f"{name}.lark").is_file()]
+
+
+def mode_bindings(parser, write, tables):
+    grammars = binding_grammars(parser)
+    built = refused = 0
+    labels = set()
+    for grammar in grammars:
+        where, line = grammar["where"]
+        relative = where.relative_to(repository)
+        folder = grammar["folder"]
+        siblings = [p.stem for p in folder.glob("*.lark")]
+        lint_text(grammar["text"], relative, siblings, first_line=line)
+        try:
+            built_parser = Lark(grammar["text"], parser="lalr", lexer="contextual", strict=True,
+                                start=grammar["start"], import_paths=[str(folder)], source_path=str(where),
+                                g_regex_flags=re.ASCII, maybe_placeholders=True)
+        except GrammarError as error:
+            if grammar["refused"]:
+                refused += 1
+            else:
+                fail(f"{relative}:{line}: the grammar of binding `{grammar['label']}` does not build as strict "
+                     f"LALR(1) from `{grammar['start']}`: {str(error).splitlines()[0]}")
+            continue
+        if grammar["refused"]:
+            fail(f"{relative}:{line}: the grammar of binding `{grammar['label']}` builds, but stands in the refused "
+                 f"corpus as one that does not (ATD8001)")
+            continue
+        recover = grammar["recover"]
+        if recover:
+            starts = [r for r in built_parser.rules if r.origin.name == grammar["start"]]
+            unit = recover.get("unit")
+            # `start: unit*` compiles to the empty expansion and one that is a repetition of `unit` alone.
+            shapes = sorted(tuple(s.name for s in r.expansion) for r in starts)
+            repetition = [e for e in shapes if e]
+            ok = len(shapes) == 2 and shapes[0] == () and len(repetition) == 1 and len(repetition[0]) == 1 and any(
+                tuple(s.name for s in r.expansion) == (unit,) for r in built_parser.rules
+                if r.origin.name == repetition[0][0])
+            if not ok:
+                fail(f"{relative}: the start rule `{grammar['start']}` of binding `{grammar['label']}` is not "
+                     f"`{unit}*`, which `recover` asks for (FBL section 4.9)")
+            names = {t.name for t in built_parser.terminals}
+            strings = {t.pattern.value for t in built_parser.terminals if t.pattern.type == "str"}
+            for sync in recover.get("sync", []):
+                if sync not in names and sync not in strings:
+                    fail(f"{relative}: `recover.sync` of binding `{grammar['label']}` names `{sync}`, no terminal of "
+                         f"its grammar (FBL section 4.9)")
+        built += 1
+        if tables:
+            if grammar["label"] in labels:
+                fail(f"{relative}: a second binding grammar named `{grammar['label']}`")
+            labels.add(grammar["label"])
+            texts = [grammar["text"]] + grammar_imports(grammar["text"], folder)
+            data = normalized_tables(built_parser, grammar=where.relative_to(repository).as_posix()
+                                     + ("" if where.suffix == ".lark" else f"#{grammar['label'].split('.')[-1]}"),
+                                     start_symbol=grammar["start"], texts=texts)
+            compare_or_write(binding_tables_dir / f"{grammar['label']}.tables.json", tables_text(built_parser, data),
+                             write)
+    if tables:
+        for stale in sorted(binding_tables_dir.glob("*.tables.json")):
+            if stale.name.removesuffix(".tables.json") not in labels:
+                fail(f"{stale.relative_to(repository)} is the tables of no binding grammar; remove it")
+    print(f"bindings: {built} binding grammar(s) build as strict LALR(1), {refused} in the refused corpus do not")
 
 
 # ---------------------------------------------------------------------------------------------------------------- flatten
@@ -724,7 +894,7 @@ def compare_or_write(path, text, write):
 
 def main():
     arguments = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    for mode in ("build", "lint", "probe", "tables", "flatten", "highlighting", "check"):
+    for mode in ("build", "lint", "probe", "tables", "bindings", "flatten", "highlighting", "check"):
         arguments.add_argument(f"--{mode}", action="store_true")
     options = arguments.parse_args()
     if not any(vars(options).values()):
@@ -732,13 +902,15 @@ def main():
     check = options.check
     if check or options.lint:
         mode_lint()
-    parser = mode_build() if (check or options.build or options.probe or options.tables or options.flatten
-                              or options.highlighting) else None
+    parser = mode_build() if (check or options.build or options.probe or options.tables or options.bindings
+                              or options.flatten or options.highlighting) else None
     if parser is not None:
         if check or options.probe:
             mode_probe(parser)
         if check or options.tables:
             compare_or_write(tables_file, tables_text(parser), write=options.tables and not check)
+        if check or options.tables or options.bindings:
+            mode_bindings(parser, write=options.tables and not check, tables=check or options.tables)
         if check or options.flatten:
             mode_flatten(parser, write=options.flatten and not check)
         if check or options.highlighting:

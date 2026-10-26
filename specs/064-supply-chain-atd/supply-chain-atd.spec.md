@@ -1,0 +1,170 @@
+# Feature Specification: The Supply chain diagram as an ADP Tool Description
+
+**Feature Branch**: in `etalii.adp`, `claude/project-thread-3z2lma` for this specification; the descriptions themselves are written on the branches of spec [035](../035-adp-tool-language/adp-tool-language.spec.md)'s batch 5 (T080, T081, T090)
+
+**Created**: 2026-10-25
+
+**Status**: Draft. This document is the specification only; a plan and tasks follow only after the maintainer approves it (Spec Kit process, 2026-10-12).
+
+**Input**: The maintainer's request of 2026-10-25: "also, start creating spec kit specifications in etalii.adp to define .atd definitions for the other tools as well. One specification per tool."
+
+## Context
+
+**What exists.** The Supply chain diagram (`etalii/supply-chain`, version 0.2.0) is a diagram type whose specification is `definitions/diagrams/supply-chain.dis` in DISL, read and written through `supply-chain.fbl#supply`, with the companion `supply-chain.md` listing what DISL and FBL cannot say. Its own summary reads: "Where things come from and where they go: sources, processors, producers, integrators, hubs, outlets and consumers in their regions, the flows between them with their volumes, and the whole chain up and down from whatever is selected."
+
+The tool type has no tool description yet. Spec 035 (*One Language for Every Tool Type*) defines the ADP tool language and its `.atd` files, and its first description, the mind map's (`definitions/diagrams/mindmap.atd` with its parts `mindmap.notation.atd` and `mindmap.freeplane.atd`, its trace `mindmap.trace.json` and its conformance cases under `definitions/diagrams/conformance/mindmap/`), is the model this specification follows. Spec 035's tasks T080, T081, T090 name this tool type's description, trace and conformance cases in one line each.
+
+**What this feature adds.** The account, for this one tool type, of what its complete tool description is: which constructs of `supply-chain.dis` it must carry, which behaviours of the companion and of the host code it must state, what its notation part and its binding part hold, which capabilities it may name, and which conformance cases show that it behaves as the reference host does. Spec 035 says that every tool type gets a complete description (its FR-020 to FR-024); this specification says what "complete" means for the Supply chain diagram, item by item, so that the description can be written against it and accepted by it.
+
+**Relation to spec 035.** This specification adds no language construct, no host behaviour and no capability of its own. Where the description needs a construct ATD 0.1 lacks, it is added to the language through spec 035's amendment route (its *How each description is written*), not here. The work of writing the files is the work of spec 035's T080, T081, T090; this specification is the per-tool acceptance reference those tasks are checked against.
+
+**Words.** Those of spec 035 and of [docs/terminology.md](../../docs/terminology.md): tool description, script, capability, trace, conformance case, reference host, parity, diagram, specification, binding, companion, finding, refusal.
+
+## User Scenarios & Testing *(mandatory)*
+
+### User Story 1 - Read the whole Supply chain diagram in its tool description (Priority: P1)
+
+A tool engineer opens `definitions/diagrams/supply-chain.atd` and finds everything the Supply chain diagram is: what `supply-chain.dis` declares, what its binding reads and writes, what its companion lists in prose, and the logic the hosts write in code for it, without opening any of those files.
+
+**Why this priority**: it is the description itself; every other story checks it.
+
+**Independent Test**: take `supply-chain.dis` and its binding construct by construct, and the companion's sections listed under FR-020 item by item, and find each one's counterpart in the description; run `atd check` on it.
+
+**Acceptance Scenarios**:
+
+1. **Given** the description, **When** `atd check` runs on it, **Then** it reports no finding.
+2. **Given** each element type, relation, enum, function, operation, rule and layout of `supply-chain.dis`, **When** the description is read, **Then** each has exactly one counterpart, with its CEL carried verbatim.
+3. **Given** the description and `supply-chain.dis`, **When** their identity is compared, **Then** origin `etalii/supply-chain`, version `0.2.0`, id `net.etalii.adp.etalii.supply-chain` and label "Supply chain diagram" are the same.
+
+---
+
+### User Story 2 - Show by conformance cases that the description behaves as the reference host (Priority: P1)
+
+A tool engineer runs the Supply chain diagram's conformance cases and sees, for a fixed set of documents and gestures, the readings, findings, splices and drawings the reference host produced, so that any later runtime that runs the description can be held to them.
+
+**Why this priority**: without cases a description can be complete on paper and wrong in behaviour; spec 035's validation (its Story 4) runs on them.
+
+**Independent Test**: list the cases under `definitions/diagrams/conformance/supply-chain/` and check that every operation, rule, refusal and binding rule named in FR-030 to FR-034 is exercised by at least one of them; validate them with `validate-examples.py`.
+
+**Acceptance Scenarios**:
+
+1. **Given** the cases, **When** they are validated against ATD's schema, **Then** each is a valid conformance fixture naming the host and commit of each of its parts.
+2. **Given** each operation of the tool type, **When** the cases are listed, **Then** at least one case performs it and records its splice and the drawing after it.
+3. **Given** each rule and refusal, **When** the cases are listed, **Then** at least one case produces that finding or that refusal.
+
+---
+
+### User Story 3 - Find the notation in a part of its own (Priority: P2)
+
+A tool engineer who changes how the Supply chain diagram looks opens `supply-chain.notation.atd`, as the mind map's `mindmap.notation.atd`, and finds every node, edge, style, theme token and mode there, apart from the model and the binding.
+
+**Why this priority**: the notation is the largest part of the description and the one most often changed; it reads best apart, but the description is complete without the split.
+
+**Independent Test**: open the part and compare it with the `notation` section of `supply-chain.dis`.
+
+**Acceptance Scenarios**:
+
+1. **Given** the root description, **When** it is read, **Then** it imports the notation part and the binding part, as `mindmap.atd` imports its two.
+2. **Given** the notation part, **When** its drawings are compared with the cases' recorded drawings, **Then** they agree.
+
+---
+
+### User Story 4 - Trace every companion item and host behaviour (Priority: P2)
+
+A reviewer opens `definitions/diagrams/supply-chain.trace.json` and finds, for each item the companion lists and each behaviour the hosts implement in code for the Supply chain diagram, the part of the description that now states it, the host files it was read from, or a host's divergence from the reference behaviour.
+
+**Why this priority**: the trace is the evidence that nothing was left in prose or in host code; spec 035's SC-003 counts it.
+
+**Independent Test**: run `atd check --trace` and compare the trace's companion items with the headings and top-level list items of the sections FR-020 lists.
+
+**Acceptance Scenarios**:
+
+1. **Given** the trace, **When** `atd check --trace` runs, **Then** every `statedBy` resolves in the description.
+2. **Given** each section FR-020 lists, **When** the trace is read, **Then** each of its `###` headings and top-level list items is traced exactly once, or marked as a host's concern with its reason.
+
+### Edge Cases
+
+- A document of the Supply chain diagram that does not read (a foreign file, a broken body): reading does not fail; the description's binding reports what it could not read as findings, and a case records it.
+- An entry whose reference names nothing: the description keeps it, reports it as its rules say, and draws or does not draw it as the reference host does; a case records it.
+- A behaviour the hosts implement differently: the description states the reference host's, and the trace records the other as a divergence (spec 035, Q8).
+- A behaviour that needs a construct ATD 0.1 lacks: the construct is added through spec 035's amendment route with an example and a refused case; this description does not work around it in a comment.
+- A behaviour that is the host's concern (rendering, gestures, text measurement, file dialogs, opening links, the undo stack): it is marked so in the trace with its reason, never stated in the description.
+
+## Requirements *(mandatory)*
+
+### The description
+
+- **FR-001**: The Supply chain diagram **MUST** have a tool description whose root is `definitions/diagrams/supply-chain.atd`, beside `supply-chain.dis`, which stays unchanged (spec 035, FR-020, FR-031).
+- **FR-002**: The root **MUST** declare the kind `diagram`, the origin `etalii/supply-chain`, the version `0.2.0`, the id `net.etalii.adp.etalii.supply-chain` and the label "Supply chain diagram", and the file extension `supply`, as the specification does (spec 035, FR-025).
+- **FR-003**: The description **MUST** be split as the mind map's is: the root, a notation part `supply-chain.notation.atd`, and one part per binding it carries; a part that stays under about 600 lines together with the root **MAY** be folded into it.
+- **FR-004**: The model **MUST** carry every element type of the specification, 2 in all: `Stage`, `Group`; every relation type, 1 in all: `Flow`; and every enum: `StageKind`, each with its attributes, defaults, labels and documentation.
+- **FR-005**: The description **MUST** carry the specification's 18 functions as script functions or CEL definitions of the same name and meaning: `stageLabel`, `nameOf`, `uniqueName`, `uniqueGroupName`, `groupChoices`, `groupNamed`, `members`, `stepOf`, `rowNumber`, `readsAsAmount`, `formatAmount`, `bandWidth`, `quantityShare`, `selection`, `upFrom`, `downFrom`, `nodeTrace`, `traceOf`.
+- **FR-006**: The description **MUST** carry the coordinate systems `canvas`.
+- **FR-008**: The extension settings `x-supply-chain`, `x-adp` **MUST** be carried in ATD's uniform `key: value` form (spec 035, FR-011), or, where the language now states what they stood for, by that construct, which the trace names.
+
+### The notation
+
+- **FR-010**: The notation part **MUST** carry every node of the notation, 2 in all: `Stage`, `Group`; and every edge, 1 in all: `Flow`, with their shapes, sizes, labels, conditions, states, markers, tooltips, accessibility and refusals.
+- **FR-011**: The notation part **MUST** carry the theme's tokens, its modes (`dark`), its styles and the canvas, including its empty hint where one is declared.
+- **FR-012**: The toolbox **MUST** carry its tools (`source`, `processor`, `producer`, `integrator`, `hub`, `outlet`, `consumer`, `group`), its 5 context menus.
+- **FR-013**: The description **MUST** carry the forms `stage`, `flow`, `group`.
+- **FR-014**: The description **MUST** carry the layouts `chain` (`plugin:net.etalii.adp.etalii.supplyChainLayers`), with the default, trigger and respect the specification sets. A layout that the specification leaves to a `plugin:` **MUST** be a named capability, generic in its name and contract (spec 035, FR-018, Q7).
+
+### Behaviour
+
+- **FR-015**: The description **MUST** carry every operation, 14 in all: `increaseQuantity`, `decreaseQuantity`, `increaseVolume`, `decreaseVolume`, `putInNewGroup`, `arrange`, `addSourceHere`, `addProcessorHere`, `addProducerHere`, `addIntegratorHere`, `addHubHere`, `addOutletHere`, `addConsumerHere`, `addGroupHere`, each with its availability, parameters, form and actions, so that each is one command with an exact undo (spec 035, FR-016).
+- **FR-017**: The description **MUST** carry the deletion and clipboard rules and the messages of the specification's `behavior`.
+- **FR-018**: The description **MUST** carry every rule of the constraints, 10 in all: `missingId`, `duplicateId`, `selfFlow`, `danglingSource`, `danglingTarget`, `unknownGroup`, `emptyGroup`, `connectBetweenNodes`, `noSelfFlowWhileDrawing`, `noSecondFlowWhileDrawing`, and the settings of the built-in rules `std.unparseable`, `std.unreadableEntry`, `std.duplicateId`, `std.references`, `std.endpoints`, `std.facets`, with the codes, severities, scopes and messages the specification gives them.
+
+### The binding
+
+- **FR-019**: The binding part **MUST** carry `supply-chain.fbl#supply` (as the desktop host vendors it from the standalone host), mapped onto the model as `persistence` maps it, with its id strategy `uuid-v4`; reading never fails on content, unmapped text is kept byte for byte, and every edit is a minimal splice (FBL's guarantees).
+
+### What the companion and the hosts hold
+
+- **FR-020**: Each item of the companion's gap sections **MUST** be stated in the description as a construct, a script function, a binding rule or a named capability, or marked in the trace as a host's concern with its reason (spec 035, FR-021, FR-022). The sections and items are:
+  - `supply-chain.md`, *Interaction DISL cannot state*: each of its top-level list items.
+  - `supply-chain.md`, *Notation DISL cannot state*: each of its top-level list items.
+  - `supply-chain.md`, *Language gaps*: *1. FBL: a scalar read as written (closed)*; *2. DISL and FBL: membership by a key*; *3. DISL: an entry that is kept, reported and not drawn*; *4. DISL: findings by line*; *9. DISL: the reader's sentences*.
+- **FR-021**: Each plugin the specification names **MUST** become a script function or a named capability, with no tool-specific code (spec 035, FR-018, SC-004): `net.etalii.adp.etalii.supplyChainLayers` (provides layout); `net.etalii.adp.etalii.supplyChainWritten` (provides celFunctions).
+- **FR-022**: Every behaviour the reference host implements in code for this type and its specification does not state (layouts, naming, refusals, menus, read-only reasons, derived data, file reading and writing) **MUST** be stated in the description, and each other host's different behaviour recorded in the trace as a divergence (spec 035, FR-021, Q8).
+- **FR-023**: The reader the type uses **MUST** be a capability named for the format it reads (spec 035's T081).
+
+### Trace
+
+- **FR-028**: `definitions/diagrams/supply-chain.trace.json` **MUST** name the companion files `supply-chain.md` and the sections FR-020 lists, trace each of their items exactly once, and name for each host behaviour the host, repository, commit, path and line range it was read from (spec 035, FR-023).
+
+### Conformance cases
+
+- **FR-030**: The cases **MUST** live under `definitions/diagrams/conformance/supply-chain/`, be recorded with `atd record etalii/supply-chain` from the reference host, never be edited by hand, and name the host and commit of each part (spec 035, FR-024).
+- **FR-031**: There **MUST** be one case per parity edit script of the type in the desktop host's `parity/scripts/`, with its bytes taken unchanged from the matching golden where one exists.
+- **FR-032**: Beyond those, the cases **MUST** together perform every operation of FR-015 and every tool of the toolbox, produce every finding of FR-018 that a document can produce, and meet every refusal the specification declares.
+- **FR-033**: The cases **MUST** include the reading of a document that does not read, so that what the binding reports for it is recorded.
+- **FR-034**: The cases **MUST** use the examples the companion names where it names any, and **MUST NOT** use a document whose licence does not permit it to be kept in this repository.
+
+### Unchanged
+
+- **FR-040**: `supply-chain.dis`, its binding and its companion **MUST NOT** change (spec 035, FR-031, SC-002), and no host's tool loading changes because the description exists.
+
+### Key Entities
+
+- **The Supply chain diagram's tool description**: the root `supply-chain.atd` and its parts, one tool type of kind diagram, origin `etalii/supply-chain`.
+- **Its trace**: `supply-chain.trace.json`, the account of every companion item and host behaviour.
+- **Its conformance cases**: the folders under `conformance/supply-chain/`, each a document, gestures and the recorded readings, findings, splices and drawings.
+
+## Success Criteria *(mandatory)*
+
+### Measurable Outcomes
+
+- **SC-001**: `atd check` and `atd check --trace` report zero findings on the description, in the Build workflow's `descriptions` job.
+- **SC-002**: 100 % of the 46 named constructs counted in FR-004, FR-005, FR-015 and FR-018 have their counterpart in the description.
+- **SC-003**: 100 % of the companion items of FR-020 (5 headed items, plus the top-level list items of their sections) are traced, once each.
+- **SC-004**: Every operation and every rule is exercised by at least one conformance case, and 100 % of the cases pass in the desktop host's validation once spec 035's Story 4 runs them, every write byte-identical to the reference host's.
+- **SC-005**: `git diff` over the feature shows no change to `supply-chain.dis`, its binding or its companion.
+
+## Assumptions
+
+- The reference host is spec 035's, split by part: bytes from the standalone host's goldens as the desktop host vendors them, readings, findings and drawings from the desktop host (spec 035, Q5).
+- The description is written in ATD 0.1 as it stands when spec 035's batch 5 reaches it; a construct it lacks is added there, with its example and refused case, before this description uses it.
+- The plan of this specification, if the maintainer asks for one, names the host files and lines the description is read from; this specification names only the definition's own files.
+- The capabilities named here are those spec 035's tasks name; a new one is added only through spec 035's catalogue, generic in its name and contract.

@@ -3,7 +3,7 @@
   "specName": "The Hierarchical Requirement Designer in the Standalone Host",
   "branch": "features/029-standalone-hierarchical-requirement-designer",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -298,6 +298,13 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-23T00:52:00.272Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-25T22:06:16.334Z"
     }
   ],
   "telemetryInstanceId": "4534790c-e93b-4985-a552-aedf1e2b422a",

@@ -5,7 +5,7 @@
   "branch": "features/028-hierarchical-requirement-designer",
   "selectedAt": "2026-10-13T21:41:45.662Z",
   "currentStep": "implement",
-  "status": "implemented",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -658,6 +658,13 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-14T21:58:49.422Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-24T15:57:19.714Z"
     }
   ],
   "last_action": "T001 to T068 done; pull requests 201, 203, 204, 208 merged; 210 (language corrections) open with a green Build; the definition waits for its merge",
@@ -1850,7 +1857,7 @@
       "command": "python .github/scripts/validate-examples.py",
       "source": "derived",
       "exitCode": 0,
-      "durationSeconds": 2.0,
+      "durationSeconds": 2,
       "result": "ok   specifications/fbl/fixtures/knowledge-equivalence: 3 fixtures read the same 65 elements · ok   definitions/diagrams/agent-activity-diagram.md: its example is valid against agent-activity-diagram.schema.json · 137 example(s), 0 invalid."
     }
   ],
