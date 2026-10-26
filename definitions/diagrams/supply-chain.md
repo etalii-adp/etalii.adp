@@ -172,7 +172,11 @@ Each class the standalone module keeps, as it stands once its edits are decided 
 | --- | --- |
 | `SupplyChainLayout`, `ArrangeSupplyChainCommand`, `PlaceSupplyChainNodesCommand` and their handlers | The layout plugin this definition names, and Arrange writing what it computed (*Layout*) |
 | `SupplyChainElementMapper` | The host's wire: the payloads and the viewport filter |
-| `SupplyChainModel` | The layout's and the mapper's input |
+| `SupplyChainModel`, `SupplyChainGroup`, `SupplyChainNode`, `SupplyChainFlow` (`_Model/`) | What the reading reads into, and what the layout, the mapper and the trace address |
+| `SupplyChainKeys`, `SupplyChainNodeTypes` | The keys and the stage words as the document spells them, which the property and toolbox ids of `x-supply-chain` map onto (finding A4) |
+| `SupplyChainGeometry` | The sizes the document never states: a node is 192 by 96, and a group's frame is computed from its members |
+| `SupplyChainRuleIds`, `SupplyChainBreach` | The seven codes and the shape a finding is handed to the host in, by its line (gaps 4 and 11) |
+| The payload types of `api/supply-chain.proto` (`SupplyChainNodePayload`, `SupplyChainGroupPayload`, `SupplyChainFlowPayload`, `SupplyChainLanePoint`) | Generated from the module's own `.proto`, the host's wire for what the canvas draws, the flow's lanes included (gap 8) |
 | `SupplyChainSession`, `SupplyChainDocumentStore`, `ISupplyChainDocumentStore`, `SupplyChainContextSourceResolver` | The host's shared document lifecycle |
 | `SupplyChainSelections` | The host's record of what each viewer selected, bound as `view` |
 | `SupplyChainTrace` | Gap 12 |
