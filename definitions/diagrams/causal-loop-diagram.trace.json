@@ -241,7 +241,7 @@
       "path": "modules/diagrams/causal-loop-diagram/src/self_organizing.rs",
       "lines": "1-75",
       "behaviour": "Arrange diagram is Meyer's self-organizing graphs made deterministic: a phyllotaxis start, Halton stimuli, ties to the earlier variable, 2,000 iterations, then at most 200 rounds of separation, declined past a budget of 1,000 elements.",
-      "statedBy": "plugin net.etalii.adp.systems.cld"
+      "statedBy": "capability arrange.selfOrganising"
     },
     {
       "host": "desktop",
@@ -250,7 +250,7 @@
       "path": "modules/diagrams/causal-loop-diagram/src/self_organizing.rs",
       "lines": "76-90",
       "behaviour": "A diagram past the budget, or whose boxes still overlap after the separation rounds, is not arranged, and the refusal names the size and the count of overlapping pairs.",
-      "statedBy": "plugin net.etalii.adp.systems.cld"
+      "statedBy": "capability arrange.selfOrganising"
     },
     {
       "host": "desktop",

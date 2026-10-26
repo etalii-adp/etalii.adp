@@ -93,6 +93,7 @@ diagram systems/causal-loop-diagram version "2.0.0" {
 
   import "causal-loop-diagram.notation.atd"
   import "causal-loop-diagram.cld.atd"
+  requires capability arrange.selfOrganising@^1
 
   /// The tool's sentence for a statement no rule of the binding reads, one of four by what it starts like
   /// (`CausalLoopUnreadable.cs`; companion, gap 1).
@@ -671,7 +672,7 @@ diagram systems/causal-loop-diagram version "2.0.0" {
       }
     ]
     icon: mdi-graph-outline
-    layout selfOrganizing on diagram.nodes
+    call plugin arrange.selfOrganising(budget: 1000, separation: 40, rounds: 200)
   }
 
   /// A new link claims, in the same undoable edit, every feedback loop it closes that no statement already names.
@@ -738,6 +739,4 @@ diagram systems/causal-loop-diagram version "2.0.0" {
     }
   }
 
-  /// The deterministic self-organizing layout of Arrange diagram. Without it everything but Arrange diagram works.
-  plugin net.etalii.adp.systems.cld { version: "^1.0.0", provides: [layout], required: false }
 }
