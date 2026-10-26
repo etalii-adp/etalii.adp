@@ -1,0 +1,16 @@
+{
+  "workflow": "speckit",
+  "specName": "The C4 system context diagram as an ADP Tool Description",
+  "branch": "claude/project-thread-3z2lma",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-25T22:56:28.268Z"
+    }
+  ]
+}

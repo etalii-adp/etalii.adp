@@ -3,7 +3,7 @@ id: intellij-003-diagram-designer-framework
 type: task-spec
 title: "003 Diagram Designer Framework"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
   - etalii.adp.ide.intellij

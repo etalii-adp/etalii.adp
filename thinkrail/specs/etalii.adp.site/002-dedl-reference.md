@@ -3,9 +3,9 @@ id: site-002-dedl-reference
 type: task-spec
 title: "002 DEDL Reference"
 status: done
-parent: constitution
+parent: specs-archive
 references:
-  - spec-ded
+  - ded
 tags:
   - spec-kit
   - etalii.adp.site

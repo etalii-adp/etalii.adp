@@ -3,7 +3,7 @@ id: feature-032-site-desktop-host
 type: task-spec
 title: "032 The Desktop Host on the Site"
 status: draft
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

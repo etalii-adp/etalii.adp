@@ -3,7 +3,7 @@ id: feature-022-standalone-dotnet-dependency-graph
 type: task-spec
 title: "022 The .NET Project and Package Dependency Graph"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

@@ -3,7 +3,7 @@ id: feature-003-specification-licence
 type: task-spec
 title: "003 Specification Licence"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

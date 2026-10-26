@@ -3,7 +3,7 @@ id: feature-030-desktop-native-rust
 type: task-spec
 title: "030 The Native Desktop Host"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

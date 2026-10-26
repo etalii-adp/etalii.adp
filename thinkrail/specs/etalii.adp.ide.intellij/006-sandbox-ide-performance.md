@@ -3,7 +3,7 @@ id: intellij-006-sandbox-ide-performance
 type: task-spec
 title: "006 A Fast Sandbox IDE"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
   - etalii.adp.ide.intellij

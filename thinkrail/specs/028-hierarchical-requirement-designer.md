@@ -3,7 +3,7 @@ id: feature-028-hierarchical-requirement-designer
 type: task-spec
 title: "028 The Hierarchical Requirement Designer"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

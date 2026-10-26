@@ -3,7 +3,7 @@ id: feature-014-agent-activity-diagram
 type: task-spec
 title: "014 The Agent Activity Diagram's Definition"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

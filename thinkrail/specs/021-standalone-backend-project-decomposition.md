@@ -3,7 +3,7 @@ id: feature-021-standalone-backend-project-decomposition
 type: task-spec
 title: "021 Backend Project Decomposition"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---
