@@ -7,6 +7,7 @@
 # header table (spec 003-specification-licence).
 # The grammar job builds ATD's grammar in strict LALR(1) mode, lints it, runs the keyword probe and compares the files it
 # generates; the descriptions job checks every tool description with the desktop host's `atd` (spec 035, FR-100).
+# The file-names job refuses a tracked path that Windows cannot check out.
 name: Build
 
 on:
@@ -132,3 +133,15 @@ jobs:
           python-version: '3.13'
       - name: Check the licence file and every specification's licence statement
         run: python .github/scripts/licence-check.py
+
+  # A path Windows cannot create (a name ending in a dot or a space, a reserved device name, a forbidden character, or
+  # two paths differing only in case) stops every Windows clone's checkout, so it is refused here.
+  file-names:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Check that every tracked path can be checked out on Windows
+        run: python .github/scripts/file-names-check.py
