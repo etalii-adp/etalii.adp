@@ -818,8 +818,12 @@ The catalogue is the capabilities with a contract in `capabilities/` beside this
 | Capability | Point | Status |
 |---|---|---|
 | `arrange.selfOrganising` | arrange | provisional |
+| `layout.bandedGrid` | layout | provisional |
 | `layout.bands` | layout | provisional |
+| `layout.depthColumns` | layout | provisional |
+| `layout.grid` | layout | provisional |
 | `layout.layeredColumns` | layout | provisional |
+| `layout.layeredRegions` | layout | provisional |
 | `layout.rankedBoundaries` | layout | provisional |
 | `layout.rowPacked` | layout | provisional |
 | `layout.rowPacking` | layout | provisional |
@@ -829,6 +833,7 @@ The catalogue is the capabilities with a contract in `capabilities/` beside this
 | `reader.markdown` | reader | provisional |
 | `reader.structurizr` | reader | provisional |
 | `reader.turtle` | reader | provisional |
+| `render.descriptionLogic` | render | provisional |
 | `render.markdown` | render | provisional |
 | `routing.forwardBezier` | routing | provisional |
 
