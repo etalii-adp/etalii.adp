@@ -817,11 +817,16 @@ The catalogue is the capabilities with a contract in `capabilities/` beside this
 | Capability | Point | Status |
 |---|---|---|
 | `arrange.selfOrganising` | arrange | provisional |
+| `layout.bands` | layout | provisional |
+| `layout.layeredColumns` | layout | provisional |
+| `layout.rankedBoundaries` | layout | provisional |
 | `layout.rowPacked` | layout | provisional |
 | `layout.rowPacking` | layout | provisional |
 | `layout.tidyTree` | layout | provisional |
 | `layout.twoSidedTree` | layout | provisional |
+| `reader.databricksBundle` | reader | provisional |
 | `reader.markdown` | reader | provisional |
+| `reader.structurizr` | reader | provisional |
 | `reader.turtle` | reader | provisional |
 | `render.markdown` | render | provisional |
 | `routing.forwardBezier` | routing | provisional |
