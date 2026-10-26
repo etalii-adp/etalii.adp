@@ -3,9 +3,9 @@ id: feature-063-sparql-query-atd
 type: task-spec
 title: "063 The SPARQL query as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

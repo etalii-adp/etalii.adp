@@ -3,9 +3,9 @@ id: feature-051-databricks-pipeline-atd
 type: task-spec
 title: "051 The Databricks pipeline as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

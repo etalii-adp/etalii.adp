@@ -3,7 +3,7 @@ id: feature-017-standalone-inline-rename-adoption
 type: task-spec
 title: "017 Inline rename adopted by every diagram whose label is its own"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

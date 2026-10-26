@@ -3,9 +3,9 @@ id: feature-061-helm-chart-atd
 type: task-spec
 title: "061 The Helm chart as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

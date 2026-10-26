@@ -3,9 +3,9 @@ id: feature-037-timeline-atd
 type: task-spec
 title: "037 The Timeline diagram as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

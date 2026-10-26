@@ -3,9 +3,9 @@ id: feature-058-azure-devops-pipeline-atd
 type: task-spec
 title: "058 The Azure DevOps pipeline as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

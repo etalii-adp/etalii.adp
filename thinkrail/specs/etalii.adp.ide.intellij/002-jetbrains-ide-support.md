@@ -3,7 +3,7 @@ id: intellij-002-jetbrains-ide-support
 type: task-spec
 title: "002 JetBrains IDE Support"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
   - etalii.adp.ide.intellij

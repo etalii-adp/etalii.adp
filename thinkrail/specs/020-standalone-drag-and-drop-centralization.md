@@ -3,7 +3,7 @@ id: feature-020-standalone-drag-and-drop-centralization
 type: task-spec
 title: "020 Drag-and-Drop Centralization and Gesture Frame Cost"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

@@ -3,9 +3,9 @@ id: feature-015-fbl-scalar-as-written
 type: task-spec
 title: "015 FBL Reads a Scalar as Written"
 status: done
-parent: constitution
+parent: specs-archive
 references:
-  - spec-fbl
+  - fbl
 tags:
   - spec-kit
 ---

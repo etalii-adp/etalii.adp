@@ -3,9 +3,9 @@ id: feature-055-w3c-skos-atd
 type: task-spec
 title: "055 The SKOS concept scheme as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

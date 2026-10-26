@@ -3,7 +3,7 @@ id: intellij-001-freemind-mindmap-designer
 type: task-spec
 title: "001 FreeMind Mind Map Designer"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
   - etalii.adp.ide.intellij

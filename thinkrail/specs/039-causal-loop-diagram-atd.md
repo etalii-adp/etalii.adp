@@ -3,9 +3,9 @@ id: feature-039-causal-loop-diagram-atd
 type: task-spec
 title: "039 The Causal loop diagram as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

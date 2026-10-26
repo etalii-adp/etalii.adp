@@ -3,9 +3,9 @@ id: feature-010-intellij-fbl-implementation
 type: task-spec
 title: "010 A Generic FBL Implementation for IntelliJ"
 status: done
-parent: constitution
+parent: specs-archive
 references:
-  - spec-fbl
+  - fbl
 tags:
   - spec-kit
 ---
