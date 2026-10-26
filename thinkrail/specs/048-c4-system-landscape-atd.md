@@ -3,9 +3,9 @@ id: feature-048-c4-system-landscape-atd
 type: task-spec
 title: "048 The C4 system landscape diagram as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

@@ -3,9 +3,9 @@ id: feature-009-vscode-fbl-implementation
 type: task-spec
 title: "009 A Generic FBL Implementation for Visual Studio Code"
 status: done
-parent: constitution
+parent: specs-archive
 references:
-  - spec-fbl
+  - fbl
 tags:
   - spec-kit
 ---

@@ -3,9 +3,9 @@ id: feature-035-adp-tool-language
 type: task-spec
 title: "035 One Language for Every Tool Type"
 status: active
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

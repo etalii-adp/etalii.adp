@@ -3,7 +3,7 @@ id: feature-011-notion-repository
 type: task-spec
 title: "011 A Notion Host Repository, Published at etalii.net/adp-notion"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

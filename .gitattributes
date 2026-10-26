@@ -15,7 +15,13 @@ definitions/designers/examples/** -text
 # are compared byte for byte, so Git never converts them; their JSON files stay text.
 definitions/*/conformance/** -text
 definitions/*/conformance/**/*.json text
+# The editors' cases are documents of their own, JSON among them, whose line endings and byte-order marks are what
+# the cases test: every file there is kept byte for byte, its conformance.json included (spec 035, T066).
+definitions/editors/conformance/** -text
 specifications/atd/fixtures/** -text
 specifications/atd/fixtures/**/*.json text
 specifications/atd/capabilities/*/fixtures/** -text
 specifications/atd/capabilities/*/fixtures/**/*.json text
+# A case whose document is itself JSON keeps that document's bytes too (the Databricks pipeline's settings file, CRLF).
+definitions/diagrams/conformance/databricks-pipeline/settings/pipeline.json -text
+definitions/diagrams/conformance/databricks-pipeline/settings/after-*.json -text

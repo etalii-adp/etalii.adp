@@ -3,7 +3,7 @@ id: feature-029-standalone-hierarchical-requirement-designer
 type: task-spec
 title: "029 The Hierarchical Requirement Designer in the Standalone Host"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

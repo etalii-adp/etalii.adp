@@ -3,7 +3,7 @@ id: feature-013-knowledge-designer
 type: task-spec
 title: "013 The Knowledge Designer's Definition"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

@@ -3,7 +3,7 @@ id: site-006-naming-compat
 type: task-spec
 title: "006 Naming Compatibility"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
   - etalii.adp.site

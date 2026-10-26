@@ -3,7 +3,7 @@ id: site-003-designer-catalogue
 type: task-spec
 title: "003 Tool Catalogue"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
   - etalii.adp.site

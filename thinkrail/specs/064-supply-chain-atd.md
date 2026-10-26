@@ -3,9 +3,9 @@ id: feature-064-supply-chain-atd
 type: task-spec
 title: "064 The Supply chain diagram as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

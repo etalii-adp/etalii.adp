@@ -3,7 +3,7 @@ id: feature-001-ci-and-badges
 type: task-spec
 title: "001 A Build Workflow and Status Badge for Every Repository"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---
