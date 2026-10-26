@@ -3,9 +3,9 @@ id: feature-040-dependency-graph-atd
 type: task-spec
 title: "040 The Dependency graph as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

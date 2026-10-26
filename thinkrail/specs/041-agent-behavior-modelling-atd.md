@@ -3,9 +3,9 @@ id: feature-041-agent-behavior-modelling-atd
 type: task-spec
 title: "041 The Agent Behavior Modelling as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

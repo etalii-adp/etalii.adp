@@ -3,9 +3,9 @@ id: feature-060-functional-decomposition-graph-atd
 type: task-spec
 title: "060 The Functional decomposition graph as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

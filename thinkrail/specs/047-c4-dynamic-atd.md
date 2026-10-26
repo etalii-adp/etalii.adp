@@ -3,9 +3,9 @@ id: feature-047-c4-dynamic-atd
 type: task-spec
 title: "047 The C4 dynamic diagram as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

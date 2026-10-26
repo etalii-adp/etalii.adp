@@ -3,9 +3,9 @@ id: feature-053-w3c-owl-atd
 type: task-spec
 title: "053 The OWL ontology as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

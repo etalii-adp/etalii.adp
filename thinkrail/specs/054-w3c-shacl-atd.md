@@ -3,9 +3,9 @@ id: feature-054-w3c-shacl-atd
 type: task-spec
 title: "054 The SHACL shapes as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

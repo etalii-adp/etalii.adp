@@ -3,9 +3,9 @@ id: feature-057-ansible-structure-atd
 type: task-spec
 title: "057 The Ansible project structure as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

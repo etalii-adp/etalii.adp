@@ -3,9 +3,9 @@ id: feature-052-w3c-rdf-atd
 type: task-spec
 title: "052 The RDF graph as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

@@ -3,9 +3,9 @@ id: feature-031-disl-person-shape
 type: task-spec
 title: "031 A Built-in Person Shape in DISL"
 status: done
-parent: constitution
+parent: specs-archive
 references:
-  - spec-disl
+  - disl
 tags:
   - spec-kit
 ---

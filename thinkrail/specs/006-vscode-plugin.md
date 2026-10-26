@@ -3,7 +3,7 @@ id: feature-006-vscode-plugin
 type: task-spec
 title: "006 The ADP Plug-in for Visual Studio Code"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

@@ -3,7 +3,7 @@ id: site-004-content-refresh-procedures
 type: task-spec
 title: "004 Content Refresh Procedures"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
   - etalii.adp.site

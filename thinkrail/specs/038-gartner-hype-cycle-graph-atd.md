@@ -3,9 +3,9 @@ id: feature-038-gartner-hype-cycle-graph-atd
 type: task-spec
 title: "038 The Gartner hype cycle graph as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

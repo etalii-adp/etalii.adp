@@ -3,7 +3,7 @@ id: feature-025-standalone-code-structure
 type: task-spec
 title: "025 The Structure of the Standalone Host's C# Code"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---

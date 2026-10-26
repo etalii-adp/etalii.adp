@@ -3,9 +3,9 @@ id: feature-065-wardley-map-atd
 type: task-spec
 title: "065 The Wardley map as an ADP Tool Description"
 status: draft
-parent: constitution
+parent: specs-archive
 references:
-  - spec-atd
+  - atd
 tags:
   - spec-kit
 ---

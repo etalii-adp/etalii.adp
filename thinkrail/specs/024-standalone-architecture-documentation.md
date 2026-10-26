@@ -3,7 +3,7 @@ id: feature-024-standalone-architecture-documentation
 type: task-spec
 title: "024 Architecture Documentation for Agents"
 status: done
-parent: constitution
+parent: specs-archive
 tags:
   - spec-kit
 ---
