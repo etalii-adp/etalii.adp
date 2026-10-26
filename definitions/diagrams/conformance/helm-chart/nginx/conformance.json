@@ -1865,7 +1865,7 @@
         "element": "values:values.yaml"
       },
       "doc": "The parity script's gesture: {\"refs\":[\"values:values.yaml\"],\"to\":{\"x\":100,\"y\":700}}",
-      "expectFile": "after-1.",
+      "expectFile": "after-1.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.1.json"
@@ -1876,7 +1876,7 @@
         "element": "chart"
       },
       "doc": "The parity script's gesture: {\"refs\":[\"chart\"],\"dx\":50,\"dy\":-25}",
-      "expectFile": "after-2.",
+      "expectFile": "after-2.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.2.json"
@@ -1887,7 +1887,7 @@
         "element": "tpl:templates/hpa.yaml"
       },
       "doc": "The parity script's gesture: {\"refs\":[\"tpl:templates/hpa.yaml\"],\"dx\":12.3456,\"dy\":-7.8912}",
-      "expectFile": "after-3.",
+      "expectFile": "after-3.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.3.json"
@@ -1895,7 +1895,7 @@
     },
     {
       "undo": true,
-      "expectFile": "after-2.",
+      "expectFile": "after-2.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.4.json"
@@ -1903,7 +1903,7 @@
     },
     {
       "redo": true,
-      "expectFile": "after-3.",
+      "expectFile": "after-3.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.5.json"
@@ -1917,7 +1917,7 @@
       "select": [
         "dep:common"
       ],
-      "expectFile": "after-4.",
+      "expectFile": "after-4.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.6.json"
@@ -1928,7 +1928,7 @@
         "element": "sub:charts/common"
       },
       "doc": "The parity script's gesture: {\"refs\":[\"sub:charts/common\"],\"dx\":-30,\"dy\":30}",
-      "expectFile": "after-5.",
+      "expectFile": "after-5.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.7.json"
@@ -1939,7 +1939,7 @@
     },
     {
       "undo": true,
-      "expectFile": "after-3.",
+      "expectFile": "after-3.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.9.json"
@@ -1947,7 +1947,7 @@
     },
     {
       "redo": true,
-      "expectFile": "after-4.",
+      "expectFile": "after-4.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.10.json"
@@ -1961,7 +1961,7 @@
       "refused": {
         "reason": "That element is not something this diagram can move."
       },
-      "expectFile": "after-4.",
+      "expectFile": "after-4.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.11.json"
@@ -1976,7 +1976,7 @@
       "refused": {
         "reason": "A chart element has no parent to move it under; dragging changes where it sits on the canvas."
       },
-      "expectFile": "after-4.",
+      "expectFile": "after-4.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.12.json"
@@ -1991,7 +1991,7 @@
       "refused": {
         "reason": "A helm chart diagram shows the folder as it is and changes nothing in it. Edit the file this value comes from in a text editor."
       },
-      "expectFile": "after-4.",
+      "expectFile": "after-4.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.13.json"
@@ -2002,7 +2002,7 @@
         "element": "lock:Chart.lock"
       },
       "doc": "The parity script's gesture: {\"refs\":[\"lock:Chart.lock\"],\"to\":{\"x\":0.0001,\"y\":3.33333}}",
-      "expectFile": "after-6.",
+      "expectFile": "after-6.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.14.json"
@@ -2013,7 +2013,7 @@
         "element": "tpl:templates/NOTES.txt"
       },
       "doc": "The parity script's gesture: {\"refs\":[\"tpl:templates/NOTES.txt\"],\"to\":{\"x\":-120.5,\"y\":-60.0625}}",
-      "expectFile": "after-7.",
+      "expectFile": "after-7.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.15.json"
@@ -2021,7 +2021,7 @@
     },
     {
       "undo": true,
-      "expectFile": "after-6.",
+      "expectFile": "after-6.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.16.json"
@@ -2032,7 +2032,7 @@
         "element": "tpl:templates/_helpers.tpl"
       },
       "doc": "The parity script's gesture: {\"refs\":[\"tpl:templates/_helpers.tpl\"],\"dx\":5,\"dy\":5}",
-      "expectFile": "after-8.",
+      "expectFile": "after-8.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.17.json"
@@ -2043,7 +2043,7 @@
         "element": "values:values-dev.yaml"
       },
       "doc": "The parity script's gesture: {\"refs\":[\"values:values-dev.yaml\"],\"to\":{\"x\":0,\"y\":0}}",
-      "expectFile": "after-9.",
+      "expectFile": "after-9.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.18.json"
@@ -2054,7 +2054,7 @@
         "element": "tpl:templates/svc.yaml"
       },
       "doc": "The parity script's gesture: {\"refs\":[\"tpl:templates/svc.yaml\"],\"dx\":0,\"dy\":300}",
-      "expectFile": "after-10.",
+      "expectFile": "after-10.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.19.json"
@@ -2065,7 +2065,7 @@
         "element": "schema:values.schema.json"
       },
       "doc": "The parity script's gesture: {\"refs\":[\"schema:values.schema.json\"],\"dx\":181.6,\"dy\":0}",
-      "expectFile": "after-11.",
+      "expectFile": "after-11.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.20.json"
@@ -2079,7 +2079,7 @@
     },
     {
       "undo": true,
-      "expectFile": "after-8.",
+      "expectFile": "after-8.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.23.json"
@@ -2090,7 +2090,7 @@
     },
     {
       "redo": true,
-      "expectFile": "after-10.",
+      "expectFile": "after-10.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.25.json"
@@ -2101,7 +2101,7 @@
         "element": "dep:common"
       },
       "doc": "The parity script's gesture: {\"refs\":[\"dep:common\"],\"dx\":-0.0005,\"dy\":0.0005}",
-      "expectFile": "after-12.",
+      "expectFile": "after-12.adp",
       "findings": [],
       "drawing": {
         "$ref": "drawing.26.json"
