@@ -395,7 +395,7 @@ form loop for Loop {
   }
 }
 
-form addLink "Add link" for Variable {
+form addLink "Add link" {
   icon: mdi-arrow-right-thin
   submitLabel: Apply
   field to "To variable" {
@@ -411,7 +411,7 @@ form addLink "Add link" for Variable {
   }
 }
 
-form claimLoop "Claim a loop" for Variable {
+form claimLoop "Claim a loop" {
   icon: mdi-sync
   submitLabel: Apply
   field identifier "Identifier" {
