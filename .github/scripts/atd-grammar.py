@@ -572,7 +572,7 @@ def binding_grammars(parser):
             for member in binding.children:
                 if getattr(member, "data", "") == "binding__body":
                     for setting in member.children[0].children:
-                        body[setting.children[0].value.rstrip(": \t")] = _atd_value(setting.children[1])
+                        body[setting.children[0].value.rstrip(": \t")] = _atd_value(setting.children[1], text)
             for member in binding.children:
                 kind = getattr(member, "data", "")
                 if kind == "binding__grammar_inline":
@@ -593,24 +593,26 @@ def _source(text, node):
     return text[node.meta.start_pos:node.meta.end_pos]
 
 
-def _atd_value(node):
+def _atd_value(node, text):
     """The JSON value of an ATD value (ATD section 6.6), for the settings a binding's grammar takes."""
     while getattr(node, "data", None) == "value" or getattr(node, "data", None) == "name":
         node = node.children[0]
+    if not isinstance(node, Token) and not node.children:
+        return _source(text, node)  # a keyword read as a name (start: doc) leaves no token in the tree
     if isinstance(node, Token):
         if node.type == "STRING":
             return json.loads(node.value) if node.value.startswith('"') else node.value[1:-1]
         return node.value
     kind = node.data.split("__")[-1]
     if kind == "word_literal":
-        return _atd_value(node.children[0])
+        return _atd_value(node.children[0], text)
     if kind == "string_literal":
-        return _atd_value(node.children[0])
+        return _atd_value(node.children[0], text)
     if kind == "settings_map":
-        return {entry.children[0].value.rstrip(": \t"): _atd_value(entry.children[1]) for entry in node.children}
+        return {entry.children[0].value.rstrip(": \t"): _atd_value(entry.children[1], text) for entry in node.children}
     if kind == "value_list":
-        return [_atd_value(item) for item in node.children]
-    return _atd_value(node.children[0])
+        return [_atd_value(item, text) for item in node.children]
+    return _atd_value(node.children[0], text)
 
 
 def grammar_imports(text, folder):
