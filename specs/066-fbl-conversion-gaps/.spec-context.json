@@ -55,5 +55,6 @@
       "at": "2026-10-29T20:22:00.135Z"
     }
   ],
-  "workingBranch": "features/066-fbl-conversion-gaps-tasks"
+  "workingBranch": "features/066-fbl-conversion-gaps-tasks",
+  "telemetryInstanceId": "bd6e980c-d1db-4ed1-a4fb-19b49d106706"
 }
