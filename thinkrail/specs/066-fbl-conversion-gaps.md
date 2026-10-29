@@ -2,7 +2,7 @@
 id: feature-066-fbl-conversion-gaps
 type: task-spec
 title: "066 FBL 0.10, What the C4, Databricks and Wardley Map Conversions Wait On"
-status: draft
+status: active
 parent: specs-archive
 references:
   - fbl
