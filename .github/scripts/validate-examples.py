@@ -71,6 +71,16 @@ FBL does not read (no `id.from`, or a slot that reaches nothing) has the id DISL
 A registration with a `legacyLayout` also has its legacy layout file read (FBL section 8.7): its keys case-insensitively,
 a key written twice reported as fbl.duplicate-key at its line and a key of the view that names no element of the body as
 fbl.stale-view-data.
+FBL 0.12: a `{node}` slot with `items` reads a list of structured values, one map of its item attributes per node; an
+attribute binding's `map` is applied to what a slot reads. Ids kept in the sidecar (`id.sidecar`) are read by kind and
+natural key, the key computed by CEL with `parent` the containing element's entry, later holders of one key keyed with
+`ordinal`: from the registration's `identities:` block, or, without one, from the legacy identities file, a JSON array
+of `{id, kind, key}` whose entries of a kind no rule declares are reported as fbl.stale-view-data at their line. An
+element with no stored id is read with one DISL makes, and the fixture must not give it a stored one. When the tool type
+of the reading is read by a plugin rather than through FBL, it has no typeMap for the binding, and the reading is the
+binding's alone, as a host's conformance run reads it: every rule's type is its own, a value is the text the slot reads
+(a number where the binding gives `number`), compared with a fixture's number or bool that it is written as, and with
+a fixture's list as all the values the slot reaches.
 
 
 Every `*.dis` that validates is checked for the names DISL 0.4's constructs refer to (DISL section 14.1): a compartment's
@@ -1129,9 +1139,24 @@ CEL_OPERATORS = {"==": operator.eq, "!=": operator.ne, "<": operator.lt, ">": op
                  "%": operator.mod}
 
 
+CEL_ESCAPES = {"n": "\n", "t": "\t", "r": "\r", "\\": "\\", "'": "'", '"': '"'}
+
+
+def cel_unescaped(text):
+    """A CEL string literal's text without its quotes, its escapes resolved: `\\uXXXX`, `\\n`, `\\t`, `\\r`, and a
+    backslash before any other character standing for that character (FBL 0.12's identity keys need `\\u001f`)."""
+    return re.sub(r"\\(u[0-9a-fA-F]{4}|.)", cel_escape, text)
+
+
+def cel_escape(match):
+    """The character one escape of a CEL string literal stands for."""
+    escape = match[1]
+    return chr(int(escape[1:], 16)) if len(escape) == 5 else CEL_ESCAPES.get(escape, escape)
+
+
 class Cel:
     """The part of CEL that bindings' `when` and `value` expressions use (FBL section 2.4), enough for the reading
-    check: literals, lists, field and index access, has(), size(), string(), int(), the methods matches, startsWith,
+    check: literals, lists, field and index access, has(), size(), string(), int(), double(), the methods matches, startsWith,
     endsWith, contains and lowerAscii, the comparison, arithmetic and logical operators, and the conditional."""
 
     def __init__(self, source):
@@ -1227,7 +1252,7 @@ class Cel:
         if kind == "number":
             return ("literal", float(value) if "." in value else int(value))
         if kind == "string":
-            return ("literal", re.sub(r"\\(.)", r"\1", value[1:-1]))
+            return ("literal", cel_unescaped(value[1:-1]))
         if value == "(":
             node = self.conditional()
             self.take(")")
@@ -1305,6 +1330,8 @@ class Cel:
                 return str(values[0])
             if name == "int":
                 return int(values[0])
+            if name == "double":
+                return float(values[0])
             if name == "matches":
                 return re.search(values[1].replace("(?<", "(?P<"), values[0]) is not None
             if name in ("startsWith", "endsWith"):
@@ -1433,6 +1460,15 @@ class ToolTypes:
         return cls.specifications.get(origin)
 
 
+NUMBER_TEXT = re.compile(r"[-+]?(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?")
+
+
+class Values(list):
+    """The values a slot reads, for a reading by the binding alone (FBL 0.12), where no specification says whether an
+    attribute is `many`: a fixture that states a list is compared with all of them, one that states a value with the
+    first."""
+
+
 class ToolType:
     """A tool type's specification as a binding's rule types meet it: the type map's entry of a rule type and the
     metamodel's declaration of an attribute (DISL section 11.2)."""
@@ -1486,12 +1522,16 @@ class GrammarModel:
         self.open_blocks = reader.open_blocks
         self.lines = reader.lines
         self.binding, self.origin = binding, origin
-        specification = ToolTypes.of(origin) or {}
-        self.tool = ToolType(specification)
+        specification = ToolTypes.of(origin)
+        # A tool type read by a plugin, not through this binding, has no typeMap for it: the reading is the binding's
+        # alone, each rule's type its own and each value as the binding reads it (FBL 0.12).
+        self.alone = specification is not None and specification.get("persistence", {}).get("format") != "fbl"
+        self.tool = ToolType({} if self.alone else specification or {})
         self.metamodel = self.tool.metamodel
         self.views = self.read_views(view)
         self.selected = next((v for v in self.views if v["selected"]), None)
-        self.elements, self.document = [], {}
+        self.elements, self.document, self.read_order = [], {}, []
+        self.stored_ids = set()
         self.read_rules()
 
     def read_views(self, wanted):
@@ -1538,6 +1578,7 @@ class GrammarModel:
         for _, (kind, rule, entry) in sorted((self.tree.order[key], claim) for key, claim in claimed.items()):
             element = {"kind": kind, "rule": rule, "entry": entry, "attributes": {}, "id": None, "parent": None}
             selected[id(entry)] = element
+            self.read_order.append(element)
             parent_rules = rule.get("parent", {}).get("rules", [])
             element["parent"] = next((selected[id(a)] for a in self.tree.ancestors(entry)
                                       if id(a) in selected and selected[id(a)]["rule"]["name"] in parent_rules), None)
@@ -1551,6 +1592,42 @@ class GrammarModel:
                 if value is not None:
                     element["attributes"][attribute] = value
             self.place(element)
+
+    def sidecar_kinds(self):
+        """The kinds of the binding's sidecar ids: a rule's `sidecar.kind`, or its type (FBL 0.12, section 8.6)."""
+        return {self.sidecar_kind(rule) for _, rule in self.rules() if "sidecar" in rule.get("id", {})}
+
+    def sidecar_kind(self, rule):
+        return rule["id"]["sidecar"].get("kind", rule["type"])
+
+    def identify(self, stored):
+        """FBL 0.12, section 8.6: the ids of the elements whose rules keep them in the sidecar. Each element's natural
+        key is its rule's `sidecar.key`, with `parent` the entry of the element it is contained in; holders of one
+        kind and key are counted in reading order, and each later one is keyed with `ordinal` and its ordinal, or,
+        without `ordinal`, has an id that is not stored. `stored` maps a kind and a key to the stored id; an element
+        with none is marked `made`, an id DISL makes for it."""
+        self.stored_ids = set(stored.values())
+        counts = {}
+        for element in self.read_order:
+            sidecar = element["rule"].get("id", {}).get("sidecar")
+            if not sidecar:
+                continue
+            parent = element["parent"]
+            variables = {"entry": self.tree.cel(element["entry"]),
+                         "parent": self.tree.cel(parent["entry"]) if parent else None,
+                         "line": self.lines.line(self.tree.span(element["entry"])[0]), "registration": {}}
+            try:
+                key = Cel(sidecar["key"]).evaluate(variables)
+            except CelError:
+                key = None
+            kind = self.sidecar_kind(element["rule"])
+            counts[(kind, key)] = counts.get((kind, key), 0) + 1
+            ordinal = counts[(kind, key)]
+            if key is not None and ordinal > 1:
+                key = key + sidecar["ordinal"].replace("{n}", str(ordinal)) if "ordinal" in sidecar else None
+            element["key"] = key
+            element["id"] = None if key is None else stored.get((kind, key), stored.get((None, key)) if "kind" not in sidecar else None)
+            element["made"] = element["id"] is None
 
     def holds(self, expression, entry, matched):
         parent = next((a for a in self.tree.ancestors(entry) if id(a) in matched), None)
@@ -1570,22 +1647,51 @@ class GrammarModel:
 
     def attribute_value(self, rule, attribute, binding, entry, enclosing):
         declared = self.attribute_type(rule, attribute)
-        values = self.slot_values(entry, binding, enclosing)
+        if "items" in binding:
+            return [self.item(node, binding["items"], enclosing) for node in self.tree.select(entry, binding["node"])
+                    if self.tree.span(node) is not None]
+        values = [self.mapped_value(value, binding) for value in self.slot_values(entry, binding, enclosing)]
         for further in binding.get("gather", []):
             values = values + self.slot_values(entry, further, enclosing)
         if declared.get("many"):
             return [self.converted(value, declared) for value in values]
+        if self.alone:
+            return Values(self.converted(value, binding) for value in values) if values else binding.get("default")
         if not values:
             return binding.get("default")
         return self.converted(values[0], declared)
 
+    def item(self, node, slots, enclosing):
+        """FBL 0.12, a slot's `items`: one structured value, each item attribute read from its slot relative to the
+        item's node."""
+        value = {}
+        for name, slot in slots.items():
+            found = self.slot_values(node, slot, enclosing)
+            if found:
+                value[name] = self.converted(found[0], slot) if self.alone else found[0]
+        return value
+
+    def mapped_value(self, value, binding):
+        """A value through the attribute binding's `map`, wire value to model value (section 5.2)."""
+        wire = binding.get("map")
+        if not wire or not isinstance(value, str):
+            return value
+        return wire.get(value, value)
+
     def converted(self, value, declared):
+        """A value read as text, as the type its declaration names; read by the binding alone, as its `number`
+        option names it."""
+        if self.alone and "number" in declared and isinstance(value, str) and NUMBER_TEXT.fullmatch(value):
+            return float(value)
+        return self.typed(value, declared)
+
+    def typed(self, value, declared):
         kind = declared.get("type")
         if not isinstance(value, str):
             return value
         if kind == "int" and re.fullmatch(r"[-+]?\d+", value):
             return int(value)
-        if kind == "number" and re.fullmatch(r"[-+]?(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?", value):
+        if kind == "number" and NUMBER_TEXT.fullmatch(value):
             return float(value)
         if kind == "bool" and value in ("true", "false"):
             return value == "true"
@@ -1684,7 +1790,40 @@ def reading_of_fixture(path: Path, fixture, binding, folder):
         sidecar = input_path.parent / legacy.replace("{base}", input_path.stem)
         if sidecar.is_file():
             model.findings.extend(legacy_layout_findings(model, sidecar.read_text(encoding="utf-8")))
+    stored = {}
+    if registration.get("identities"):
+        for key, value in registration["identities"].items():
+            kind, separator, natural = key.partition(":")
+            stored[(kind, natural) if separator and kind in model.sidecar_kinds() else (None, key)] = value
+    else:
+        legacy = binding.get("registration", {}).get("legacyIdentities")
+        sidecar = input_path.parent / legacy.replace("{base}", input_path.stem) if legacy else None
+        if sidecar is not None and sidecar.is_file():
+            text = sidecar.read_text(encoding="utf-8")
+            kinds, lines = model.sidecar_kinds(), Lines(text)
+            for start, entry in legacy_identity_entries(text):
+                if entry.get("kind") in kinds:
+                    stored[(entry["kind"], entry.get("key"))] = entry.get("id")
+                else:
+                    model.findings.append({"rule": "fbl.stale-view-data", "line": lines.line(start)})
+    model.identify(stored)
     return model
+
+
+def legacy_identity_entries(text):
+    """FBL 0.12, section 8.7: the entries of a legacy identities file, a JSON array of `{id, kind, key}`, each with the
+    offset it starts at."""
+    decoder = json.JSONDecoder()
+    index = text.index("[") + 1
+    entries = []
+    while True:
+        while index < len(text) and text[index] in " \t\r\n,":
+            index += 1
+        if index >= len(text) or text[index] == "]":
+            return entries
+        entry, end = decoder.raw_decode(text, index)
+        entries.append((index, entry))
+        index = end
 
 
 def legacy_layout_findings(model, text):
@@ -1714,13 +1853,31 @@ def legacy_layout_findings(model, text):
 
 
 def same_value(expected, actual) -> bool:
-    """Whether a value read equals the fixture's, of the same JSON type (a bool is not a number)."""
+    """Whether a value read equals the fixture's, of the same JSON type (a bool is not a number). FBL 0.12: values read
+    by the binding alone (Values) are compared as a list when the fixture states one and as the first otherwise, and a
+    text read so equals a fixture's number or bool that it is written as."""
+    if isinstance(actual, Values):
+        if isinstance(expected, list):
+            return len(expected) == len(actual) and all(same_value(e, written(e, a)) for e, a in zip(expected, actual))
+        return bool(actual) and same_value(expected, written(expected, actual[0]))
+    if isinstance(expected, dict) and isinstance(actual, dict):
+        return expected.keys() == actual.keys() and all(same_value(expected[k], actual[k]) for k in expected)
     if isinstance(expected, bool) or isinstance(actual, bool):
         return isinstance(expected, bool) and isinstance(actual, bool) and expected == actual
     if isinstance(expected, list) and isinstance(actual, list):
         return len(expected) == len(actual) and all(same_value(e, a) for e, a in zip(expected, actual))
     return type(expected) is type(actual) and expected == actual or (
         isinstance(expected, (int, float)) and isinstance(actual, (int, float)) and expected == actual)
+
+
+def written(expected, actual):
+    """A text read by the binding alone, as the fixture's number or bool when it is written as one."""
+    if isinstance(actual, str) and not isinstance(expected, str):
+        if isinstance(expected, bool) and actual in ("true", "false"):
+            return actual == "true"
+        if isinstance(expected, (int, float)) and NUMBER_TEXT.fullmatch(actual):
+            return float(actual)
+    return actual
 
 
 def check_reading(path: Path, fixture) -> str | None:
@@ -1750,6 +1907,8 @@ def check_reading(path: Path, fixture) -> str | None:
                 return f"{where} is read as a {got['rule']['type']}, and the fixture says {want['type']}"
             if got["id"] is not None and want["id"] != got["id"]:
                 return f"{where} is read with the id {got['id']}"
+            if got.get("made") and want["id"] in model.stored_ids:
+                return f"{where} is read without a stored id, and the fixture gives it the stored id {want['id']}"
             if "parent" in want:
                 parent = got["parent"]
                 parent_id = None if parent is None else expected["elements"][position[id(parent)]]["id"] \
