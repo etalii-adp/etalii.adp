@@ -32,7 +32,10 @@ registration under `specifications/fbl/` is parsed from its line form into `fbl.
 (FBL section 8). A `fixture.json` under `specifications/fbl/fixtures/` is validated against `$defs/Fixture` and then
 replayed: every step's splices must turn the document before the step into the document it expects, byte for byte,
 and an undo must return the document the undone edit started from (FBL section 15.3), its splices listed under the
-operations of the splices they invert, as a redo's are. A `setting` step
+operations of the splices they invert, as a redo's are. A splice that names a `file` writes that file beside the input
+(FBL 0.10, a legacy sidecar): its splices are applied to the file as it stands before the step, read from beside the
+fixture the first time a step names it, and give the bytes the step's `expectFiles` states for it, and an undo or redo
+returns every such file, as well as the input, to the bytes it must have. A `setting` step
 on a block the fixture's binding declares with `history: false` is no step of the history (FBL 0.7, section 7.1); an
 undo or redo of an edit made before it is checked by what each of its splices replaces and writes, since that block's
 write stands between. An `.adp` registration's blocks besides `layout:` and `identities:` are read into `blocks`,
@@ -611,14 +614,54 @@ def blocks_outside_history(folder: Path, reference: str) -> set[str]:
     return {block for block, settings in blocks.items() if settings.get("history") is False}
 
 
+def splices_by_file(splices) -> dict:
+    """A step's splices by the file they write (FBL 0.10, section 15.3): None for the input, else the path of a file
+    beside it that a splice names in `file`."""
+    files = {}
+    for splice in splices:
+        files.setdefault(splice.get("file"), []).append(splice)
+    return files
+
+
+def replay_files(folder: Path, files: dict, step, index: int):
+    """Applies a step's splices to the files beside the input that they name (FBL 0.10, `expectFiles`): returns the
+    files after the step, the files the inverse splices give back, and a problem, if any. `files` holds each such
+    file's bytes before the step, read from beside the fixture the first time a step names it."""
+    by_file = splices_by_file(step["splices"])
+    expected_files = step.get("expectFiles", {})
+    names = sorted({name for name in by_file if name is not None} | set(expected_files))
+    result, restored = dict(files), dict(files)
+    for name in names:
+        if name not in files:
+            source = folder / name
+            if not source.is_file():
+                return None, None, f"step {index}: the file {name} its splices or expectFiles name is not beside the fixture"
+            files[name] = result[name] = restored[name] = source.read_bytes()
+        after, back, problem = apply_splices(files[name], by_file.get(name, []))
+        if problem:
+            return None, None, f"step {index}: in {name}: {problem}"
+        if name in expected_files and after != expected_files[name].encode("utf-8"):
+            return None, None, f"step {index}: the splices give a different {name}, first at byte {first_difference(after, expected_files[name].encode('utf-8'))}"
+        if name not in expected_files and name in by_file:
+            return None, None, f"step {index}: its splices write {name}, and expectFiles does not give that file's bytes after it"
+        if back != files[name]:
+            return None, None, f"step {index}: the inverse splices do not restore {name} as it was before the step"
+        result[name] = after
+    return result, restored, None
+
+
 def replay_fixture(path: Path, fixture) -> str | None:
-    """Replays a fixture's steps (FBL section 15.3) and returns the first problem, if any."""
+    """Replays a fixture's steps (FBL section 15.3) and returns the first problem, if any. A splice that names a
+    `file` writes that file beside the input, and the step's `expectFiles` gives its bytes after the step (FBL 0.10);
+    an undo and a redo return every such file as well as the input to the bytes they must have."""
     folder = path.parent
     document = (folder / fixture["input"]).read_bytes()
+    files = {}  # the files beside the input that the steps write (FBL 0.10), by path, as they stand before the step
     outside = blocks_outside_history(folder, fixture["binding"])
-    # (before, after, changes, crossed, operations) of each edit that can be undone, and of each that can be redone; crossed:
-    # a write outside the history (FBL 0.7, section 7.1) came after it, so its undo is compared by what it changes, not by
-    # bytes; operations: the operations its splices are named by, which its undo and redo are listed under (section 15.3)
+    # (before, after, changes, crossed, operations, files before, files after) of each edit that can be undone, and of
+    # each that can be redone; crossed: a write outside the history (FBL 0.7, section 7.1) came after it, so its undo
+    # is compared by what it changes, not by bytes; operations: the operations its splices are named by, which its undo
+    # and redo are listed under (section 15.3); the files: those beside the input, before and after the edit (FBL 0.10)
     done, undone = [], []
     for index, step in enumerate(fixture["steps"], start=1):
         if "expectFile" in step:
@@ -627,16 +670,21 @@ def replay_fixture(path: Path, fixture) -> str | None:
             expected = step["expect"].encode("utf-8")
         else:
             expected = document
-        result, restored, problem = apply_splices(document, step["splices"])
+        input_splices = splices_by_file(step["splices"]).get(None, [])
+        result, restored, problem = apply_splices(document, input_splices)
         if problem:
             return f"step {index}: {problem}"
         if result != expected:
             return f"step {index}: the splices give a different document, first at byte {first_difference(result, expected)}"
         if restored != document:
             return f"step {index}: the inverse splices do not restore the document before the step"
+        files_after, _, problem = replay_files(folder, files, step, index)
+        if problem:
+            return problem
+        files_before = {name: files[name] for name in files_after}
         edit = step.get("edit", {})
         changes_of_edit = edit if isinstance(edit, list) else [edit]  # FBL 0.7: one transaction's changes
-        changes = splice_changes(document, step["splices"])
+        changes = splice_changes(document, input_splices)
         operations = {splice["operation"] for splice in step["splices"]}
         if step.get("undo") or step.get("redo"):
             # An undo lists the inverse splices under the operation of the splice each inverts, and a redo the edit's own
@@ -648,32 +696,42 @@ def replay_fixture(path: Path, fixture) -> str | None:
         if step.get("undo"):
             if not done:
                 return f"step {index}: nothing to undo"
-            before, after, edit_changes, crossed, edit_operations = done.pop()
+            before, after, edit_changes, crossed, edit_operations, edit_files_before, edit_files_after = done.pop()
             if crossed and changes != [(new, old) for old, new in edit_changes]:
                 return f"step {index}: the undo does not put back what the undone edit changed"
             if not crossed and (document != after or result != before):
                 return f"step {index}: the undo does not return the document the undone edit started from"
-            undone.append((before, after, edit_changes, crossed, edit_operations))
+            if not same_files(files_before, edit_files_after) or not same_files(files_after, edit_files_before):
+                return f"step {index}: the undo does not return the files beside the input to what the undone edit started from"
+            undone.append((before, after, edit_changes, crossed, edit_operations, edit_files_before, edit_files_after))
         elif step.get("redo"):
             if not undone:
                 return f"step {index}: nothing to redo"
-            before, after, edit_changes, crossed, edit_operations = undone.pop()
+            before, after, edit_changes, crossed, edit_operations, edit_files_before, edit_files_after = undone.pop()
             if crossed and changes != edit_changes:
                 return f"step {index}: the redo does not make the changes the edit made"
             if not crossed and (document != before or result != after):
                 return f"step {index}: the redo does not return the document the edit produced"
-            done.append((before, after, edit_changes, crossed, edit_operations))
+            if not same_files(files_before, edit_files_before) or not same_files(files_after, edit_files_after):
+                return f"step {index}: the redo does not return the files beside the input to what the edit produced"
+            done.append((before, after, edit_changes, crossed, edit_operations, edit_files_before, edit_files_after))
         elif step.get("refused") or any("save" in change for change in changes_of_edit):
-            if result != document:
+            if result != document or not same_files(files_before, files_after):
                 return f"step {index}: a refused edit or a save without change must leave the document as it is"
         elif all(change.get("setting", {}).get("block") in outside for change in changes_of_edit):  # no step of the history: undo and redo pass it by
-            done = [(before, after, edit_changes, True, edit_operations) for before, after, edit_changes, _, edit_operations in done]
-            undone = [(before, after, edit_changes, True, edit_operations) for before, after, edit_changes, _, edit_operations in undone]
+            done = [(before, after, edit_changes, True, *rest) for before, after, edit_changes, _, *rest in done]
+            undone = [(before, after, edit_changes, True, *rest) for before, after, edit_changes, _, *rest in undone]
         else:
-            done.append((document, result, changes, False, operations))
+            done.append((document, result, changes, False, operations, files_before, files_after))
             undone.clear()
         document = result
+        files = files_after
     return None
+
+
+def same_files(a: dict, b: dict) -> bool:
+    """Whether two states of the files beside a fixture's input agree on every file both of them hold."""
+    return all(a[name] == b[name] for name in a.keys() & b.keys())
 
 
 def resolve_names(document) -> list[str]:

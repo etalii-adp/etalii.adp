@@ -32,7 +32,7 @@
           "type": "string"
         },
         "fbl": {
-          "description": "The FBL version the document is written in: 0.1 to 0.9 (draft); 0.3 names the tool type's specification in place of DISL, lets a specification name one binding per format family, and spells a reference to a stored id as by: \"id\". 0.4 creates and removes the missing levels of a nested container or child mapping. 0.5 defines a scalar's written text, read with read, and adds quoted and fallback to an attribute binding. 0.6 applies an attribute binding's empty rule to an insert as well as to a set. 0.7 adds the bullets family and the drift check before an edit. 0.8 lets an insert of the yaml and json families write a constant. 0.9 adds the grammar family. See FBL 0.9, section 2.7.",
+          "description": "The FBL version the document is written in: 0.1 to 0.10 (draft); 0.3 names the tool type's specification in place of DISL, lets a specification name one binding per format family, and spells a reference to a stored id as by: \"id\". 0.4 creates and removes the missing levels of a nested container or child mapping. 0.5 defines a scalar's written text, read with read, and adds quoted and fallback to an attribute binding. 0.6 applies an attribute binding's empty rule to an insert as well as to a set. 0.7 adds the bullets family and the drift check before an edit. 0.8 lets an insert of the yaml and json families write a constant. 0.9 adds the grammar family. 0.10 extends the grammar family so that Structurizr DSL is bound in it (comments owned and kept, recovery inside blocks, escapes, absent and positional parts, views and the statements of the selected view, a view block that can be added, a value gathered from two places), says how the legacy layout's keys, numbers and stale entries are written, and lets a fixture state a file beside its input (expectFiles). See FBL 0.10, section 2.7.",
           "enum": [
             "0.1",
             "0.2",
@@ -42,7 +42,8 @@
             "0.6",
             "0.7",
             "0.8",
-            "0.9"
+            "0.9",
+            "0.10"
           ]
         },
         "doc": {
@@ -1890,7 +1891,7 @@
       ]
     },
     "Splice": {
-      "description": "One replacement of a byte range: the operation from the catalogue of section 6.1, the file for folder subjects, the UTF-8 byte offsets in the document before the step (start inclusive, end exclusive), and the new text.",
+      "description": "One replacement of a byte range: the operation from the catalogue of section 6.1, the file for folder subjects and (FBL 0.10) for a file beside a fixture's input, the UTF-8 byte offsets in the document before the step (start inclusive, end exclusive), and the new text.",
       "type": "object",
       "properties": {
         "operation": {
@@ -2076,6 +2077,13 @@
               },
               "expectFile": {
                 "type": "string"
+              },
+              "expectFiles": {
+                "description": "(FBL 0.10) The bytes, after the step, of each file beside the input that the step's splices name in their file, by its path relative to the fixture (section 15.3). A splice without file is the input's. Replayed with undo and redo as the input is.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
               }
             },
             "additionalProperties": false,
