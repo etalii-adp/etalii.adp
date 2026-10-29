@@ -53,7 +53,7 @@ origin a rule's `origins` lists, and every origin `registration.resource.byOrigi
 round: each must be valid against the schema and refused by one of these checks, and the run fails when one is
 accepted.
 The fixtures under a folder named `*-equivalence` read one model in different formats: their `read` must be identical.
-A fixture whose binding is of the `grammar` family is also **read** (FBL 0.10, the reading check of spec 066's
+A fixture whose binding is of the `grammar` family is also **read** (FBL 0.11, the reading check of spec 066's
 research R20): its input, or the body its registration names, is parsed with Python Lark under the binding's grammar,
 lexed by ATD section 3.6's rule (the longest match, then the higher priority, then a string terminal), read whole or,
 with `recover`, unit by unit and inside blocks as FBL section 4.9 says; the rules' `at` select the entries, the first
@@ -797,7 +797,7 @@ def same_beside(a: dict, b: dict) -> bool:
 
 
 # ---------------------------------------------------------------------------------------------- the reading check
-# FBL 0.10 (spec 066, research R20): a fixture whose binding is of the grammar family is read here as a host reads it,
+# FBL 0.11 (spec 066, research R20): a fixture whose binding is of the grammar family is read here as a host reads it,
 # with Python Lark under the binding's grammar, and what it reads is compared with the fixture's `read`. It plans no
 # edit; the splices stay checked by replay_fixture.
 
@@ -906,7 +906,7 @@ class GrammarCursor:
 
 
 class GrammarBlock:
-    """A block the reader is inside (FBL 0.10, recover.nested): its open token and its last boundary."""
+    """A block the reader is inside (FBL 0.11, recover.nested): its open token and its last boundary."""
 
     def __init__(self, token, cursor, position):
         self.token = token
@@ -916,7 +916,7 @@ class GrammarBlock:
 
 class GrammarReader:
     """Reads a grammar body as FBL section 4.9 says: whole, or with `recover` unit by unit (FBL 0.9) and inside blocks
-    (FBL 0.10, `nested`), giving the tree's root, the findings and the blocks left open."""
+    (FBL 0.11, `nested`), giving the tree's root, the findings and the blocks left open."""
 
     def __init__(self, body, folder):
         source = body["grammar"]
@@ -985,7 +985,7 @@ class GrammarReader:
         return position
 
     def read_unit(self, start, symbol, whole=False):
-        """One unit from `start` (rules 1 and 2 of section 4.9, and FBL 0.10's rules inside blocks): its tree and the
+        """One unit from `start` (rules 1 and 2 of section 4.9, and FBL 0.11's rules inside blocks): its tree and the
         position after it, or None and the position after the skipped text."""
         cursor = self.cursor(symbol)
         blocks = []
@@ -1014,12 +1014,12 @@ class GrammarReader:
                     return tree, last
             if found is None and position < len(self.text) and self.close and not blocks:
                 probe = self.lexer.token_at(self.text, position, self.lexer.everything)
-                if probe and probe[0] == self.close:  # FBL 0.10, rule 4: skipped alone, and it closes nothing
+                if probe and probe[0] == self.close:  # FBL 0.11, rule 7: skipped alone, and it closes nothing
                     self.finding("fbl.unmatched-close", position)
                     position = probe[1]
                     continue
             if position >= len(self.text) and blocks and self.close_at_end(cursor, blocks, last):
-                continue  # FBL 0.10, rule 3
+                continue  # FBL 0.11, rule 6
             if whole:
                 if position >= len(self.text):
                     tree = cursor.end(self.token("$END", last, last))
@@ -1027,7 +1027,7 @@ class GrammarReader:
                         return tree, last
                 raise ReadingProblem(f"the body does not parse at line {self.lines.line(position)} and the binding "
                                      f"has no `recover`, so it is unreadable (FBL section 7.5)")
-            if blocks:  # FBL 0.10, rule 2: skip from the block's last boundary, and read on from there
+            if blocks:  # FBL 0.11, rule 5: skip from the block's last boundary, and read on from there
                 block = blocks[-1]
                 end = self.skip_end(position, inside=True)
                 self.finding("fbl.unparsed-text", position)
@@ -1041,7 +1041,7 @@ class GrammarReader:
             return None, end
 
     def close_at_end(self, cursor, blocks, last):
-        """FBL 0.10, rule 3: the innermost block still open at the end of the body ends there, reported at its open
+        """FBL 0.11, rule 6: the innermost block still open at the end of the body ends there, reported at its open
         token. Returns whether it could be closed."""
         close = self.token(self.close, last, last)
         attempt = cursor.copy()
@@ -1057,7 +1057,7 @@ class GrammarReader:
 
     def skip_end(self, stop, inside):
         """Where text skipped from the place reading stopped ends: after the first token of a synchronising terminal,
-        lexing with every terminal; inside a block (FBL 0.10) before a close token at the block's own depth when that
+        lexing with every terminal; inside a block (FBL 0.11) before a close token at the block's own depth when that
         comes first; at the end of the body when neither follows."""
         position, depth = stop, 0
         while position < len(self.text):
@@ -1396,7 +1396,7 @@ class ToolTypes:
 class GrammarModel:
     """What reading a grammar body gives for one reading: the elements of the rules, in reading order, with their
     ids, parents and attributes; the attributes of the document from the rules the tool type maps as the diagram;
-    and the findings. FBL sections 4.9, 5, 9.3 and, for `selectedView` and views, FBL 0.10."""
+    and the findings. FBL sections 4.9, 5, 9.3 and, for `selectedView` and views, FBL 0.11."""
 
     def __init__(self, binding, folder, text, origin, view):
         reader = GrammarReader(binding["body"], folder)
@@ -1537,7 +1537,7 @@ class GrammarModel:
         return value
 
     def slot_values(self, entry, slot, enclosing):
-        """Every value a slot reads from an entry, in document order (FBL 0.10: a `many` attribute's `{node}` slot
+        """Every value a slot reads from an entry, in document order (FBL 0.11: a `many` attribute's `{node}` slot
         reads every node it reaches; a single-valued one takes the first)."""
         if "node" in slot:
             values = []
@@ -1586,7 +1586,7 @@ class GrammarModel:
 
 
 def unescaped(value, escape, quote):
-    """FBL 0.10, a slot's `escape`: `with`+`quote` reads as `quote`, `with`+`with` as `with`, and `with` before any other
+    """FBL 0.11, a slot's `escape`: `with`+`quote` reads as `quote`, `with`+`with` as `with`, and `with` before any other
     character stays as it is."""
     result, index = [], 0
     while index < len(value):
@@ -1636,7 +1636,7 @@ def same_value(expected, actual) -> bool:
 
 
 def check_reading(path: Path, fixture) -> str | None:
-    """The reading check (FBL 0.10, research R20): for a fixture whose binding is of the grammar family, what reading
+    """The reading check (FBL 0.11, research R20): for a fixture whose binding is of the grammar family, what reading
     its input gives against the fixture's `read`. Returns the first difference, if any."""
     expected = fixture.get("read")
     binding, folder = grammar_fixture_binding(path, fixture)
@@ -1795,7 +1795,7 @@ def check_origins(document) -> list[str]:
 
 
 def check_grammar_family(path: Path, document) -> list[str]:
-    """Checks FBL 0.10's constructs that the schema cannot (section 14.1, step 6) and returns a problem per finding:
+    """Checks FBL 0.11's constructs that the schema cannot (section 14.1, step 6) and returns a problem per finding:
     `create.after` names attributes of the same rule; `gather` stands only on a read-only attribute binding;
     `selectedView` only in a binding with a block rule that has `view` (a block rule's `origins` are check_origins');
     and `recover.nested` and `recover.unclosed` name terminals of the binding's grammar,

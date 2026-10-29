@@ -18,13 +18,15 @@ language (ATD section 4), whose root is `atd.lark`. Modes, any number of them to
   `grammar/tables/<example>.<binding>.tables.json` (ATD section 11.9).
 - `--bindings`: the grammars bindings carry (FBL 0.9, section 4.9; ATD section 11.9): every grammar of an FBL example
   (`*.fbl` under `specifications/fbl/` and `definitions/`), of a fixture's own binding (`*.fbl` under
-  `specifications/fbl/fixtures/`, FBL 0.10) and of a tool description, inline or from a file, is linted against the
+  `specifications/fbl/fixtures/`, FBL 0.11) and of a tool description, inline or from a file, is linted against the
   notation subset and built in strict mode from its start rule, and its `recover` is checked against the grammar: the
   start rule is `unit*`, and every `sync` entry, `nested.open` and `nested.close` and every key of `unclosed` names a
   terminal of the grammar or the text of one of its anonymous string terminals, each terminal of `unclosed` an ignored
-  one (FBL 0.10). Every grammar binding of the refused corpora (`specifications/atd/refused/*.atd`, and FBL 0.10's
-  `specifications/fbl/refused/*.fbl`) must fail one of these checks, and the run fails when one passes. Only the
-  examples' and tool descriptions' grammars have tables.
+  one (FBL 0.11). Every grammar binding of ATD's refused corpus (`specifications/atd/refused/*.atd`) must fail one of
+  these checks, and the run fails when one passes. The grammar bindings of FBL's refused corpus
+  (`specifications/fbl/refused/*.fbl`) are checked too, and one these checks refuse counts as refused; one they pass is
+  refused by a check of `validate-examples.py` instead, which fails the run when no check refuses a document there.
+  Only the examples' and tool descriptions' grammars have tables.
 - `--flatten`: writes `grammar/atd.flat.lark`, the whole grammar in one file, and has `llguidance`'s Lark front end
   accept it (rule 4, FR-090).
 - `--highlighting`: writes `highlighting/atd.tmLanguage.json` and `highlighting/atd.sublime-syntax` from the grammar's
@@ -547,11 +549,11 @@ def binding_grammars(parser):
     fixture's)."""
     grammars = []
     fbl = repository / "specifications" / "fbl"
-    # The examples' grammars, whose tables are published; the grammars of the fixtures' own bindings (FBL 0.10), held to
-    # the same verdict without tables; and the refused corpus of FBL (FBL 0.10), each of which must fail a check.
+    # The examples' grammars, whose tables are published; the grammars of the fixtures' own bindings (FBL 0.11), held to
+    # the same verdict without tables; and the refused corpus of FBL (FBL 0.11), each of which must fail a check.
     fbl_documents = [(p, "example") for p in sorted(fbl.glob("*.fbl")) + sorted((repository / "definitions").rglob("*.fbl"))]
     fbl_documents += [(p, "fixture") for p in sorted((fbl / "fixtures").rglob("*.fbl"))]
-    fbl_documents += [(p, "refused") for p in sorted((fbl / "refused").glob("*.fbl"))]
+    fbl_documents += [(p, "fbl-refused") for p in sorted((fbl / "refused").glob("*.fbl"))]
     for path, kind in fbl_documents:
         for name, binding in json.loads(path.read_text(encoding="utf-8")).get("bindings", {}).items():
             body = binding.get("body", {})
@@ -564,7 +566,8 @@ def binding_grammars(parser):
                 source = where.read_text(encoding="utf-8")
             grammars.append({"label": f"{path.stem}.{name}", "where": (where, 1), "text": source,
                              "start": body.get("start", "start"), "recover": body.get("recover"),
-                             "folder": path.parent, "refused": kind == "refused", "tables": kind == "example"})
+                             "folder": path.parent, "refused": kind == "fbl-refused", "tables": kind == "example",
+                             "elsewhere": kind == "fbl-refused"})
     descriptions = (sorted(atd.glob("*.atd")) + sorted((repository / "definitions").rglob("*.atd"))
                     + sorted(atd.glob("refused/*.atd")))
     for path in descriptions:
@@ -644,7 +647,7 @@ def mode_bindings(parser, write, tables):
         if grammar["refused"]:
             if problems:
                 refused += 1
-            else:
+            elif not grammar.get("elsewhere"):
                 fail(f"{relative}:{line}: the grammar of binding `{grammar['label']}` passes every check, but stands in "
                      f"the refused corpus as one that does not (ATD8001)")
             continue
@@ -679,7 +682,7 @@ def build_binding(grammar, where):
 
 def binding_problems(grammar, relative, line):
     """What `--bindings` refuses in a binding's grammar: a lint finding, a grammar that does not build as strict
-    LALR(1), and a `recover` that does not fit it (FBL 0.9 and 0.10, section 4.9)."""
+    LALR(1), and a `recover` that does not fit it (FBL 0.9 and 0.11, section 4.9)."""
     problems = []
     before = len(failures)
     siblings = [p.stem for p in grammar["folder"].glob("*.lark")]
@@ -716,16 +719,16 @@ def binding_problems(grammar, relative, line):
     for end, terminal in sorted(recover.get("nested", {}).items()):
         if terminal not in names and terminal not in strings:
             problems.append(f"{relative}: `recover.nested.{end}` of binding `{label}` names `{terminal}`, no terminal "
-                            f"of its grammar (FBL 0.10, section 4.9)")
+                            f"of its grammar (FBL 0.11, section 4.9)")
     ignored = set(built_parser.ignore_tokens)
     for terminal in sorted(recover.get("unclosed", {})):
         named = terminal if terminal in names else strings.get(terminal)
         if named is None:
             problems.append(f"{relative}: `recover.unclosed` of binding `{label}` names `{terminal}`, no terminal of "
-                            f"its grammar (FBL 0.10, section 4.9)")
+                            f"its grammar (FBL 0.11, section 4.9)")
         elif named not in ignored:
             problems.append(f"{relative}: `recover.unclosed` of binding `{label}` names `{terminal}`, which its "
-                            f"grammar does not ignore (FBL 0.10, section 4.9)")
+                            f"grammar does not ignore (FBL 0.11, section 4.9)")
     return problems
 
 
