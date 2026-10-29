@@ -76,7 +76,7 @@ Today a tool engineer specifies a tool type in up to three JSON files, each in a
 
 ### 1.3 Relation to the other specifications
 
-DISL, DID, DESL, DED, EDSL, EDD and FBL remain specifications of this repository. ATD carries every construct of DISL 0.6, DESL 0.2 and FBL 0.8 (Appendix C maps each of their properties to the ATD construct that carries it), and the constructs an editor needs, which EDSL, a placeholder, does not yet have (section 10). ATD reuses their schemas: a setting of an ATD construct is checked against the `$defs` entry of DISL, DESL or FBL for the same thing (section 14.6), and a binding in ATD is an FBL binding written as text. Tools keep storing their documents in DID, DED or a body a binding reads; a tool description replaces none of them.
+DISL, DID, DESL, DED, EDSL, EDD and FBL remain specifications of this repository. ATD carries every construct of DISL 0.6, DESL 0.2 and FBL 0.10 (Appendix C maps each of their properties to the ATD construct that carries it), and the constructs an editor needs, which EDSL, a placeholder, does not yet have (section 10). ATD reuses their schemas: a setting of an ATD construct is checked against the `$defs` entry of DISL, DESL or FBL for the same thing (section 14.6), and a binding in ATD is an FBL binding written as text. Tools keep storing their documents in DID, DED or a body a binding reads; a tool description replaces none of them.
 
 ---
 
@@ -608,7 +608,7 @@ The text's model is the description's model: its element types are what the edit
 
 ## 11. Bindings
 
-A binding (`grammar/binding.lark`) is an FBL 0.9 binding written as text (FBL §3 to §13): every property of FBL's `Binding` has its ATD form in Appendix C. Its meaning, reading and writing are FBL's, unchanged.
+A binding (`grammar/binding.lark`) is an FBL 0.10 binding written as text (FBL §3 to §13): every property of FBL's `Binding` has its ATD form in Appendix C. Its meaning, reading and writing are FBL's, unchanged.
 
 ### 11.1 The binding
 
@@ -630,11 +630,11 @@ A description **MAY** have several bindings, one per format family, as DESL's `p
 `element <Type> [as <name>] [at "<selector>" | line "<regex>"] { … }` is an element rule (FBL §5.1), `relation <Type> [as <name>] […] { … }` a relation rule (FBL §5.4). The name after `as` is FBL's rule `name`, written as FBL writes it, hyphens and dots included (`as unreadable-requirement`, section 3.6); without it the rule's name is its type's. The same holds for every name a binding declares or names: the binding's own, a block's, a section's, and those `parent`, `within`, `files` and `references` name. Members:
 
 - `id from <slot> [{ … }]` or `id { … }` (FBL §5.3);
-- `attribute <name> [from <slot>] [{ … }]`: an attribute binding (FBL §5.2), its options as settings (`empty`, `absent`, `default`, `number`, `time`, `style`, `map`, `override`, `content`, `create`, `readOnly`, `read`, `quoted`, `fallback`), and `references <rules> by <name>` for FBL's `reference` (`by id` for a reference by stored id, FBL §5.7);
+- `attribute <name> [from <slot>] [{ … }]`: an attribute binding (FBL §5.2), its options as settings (`empty`, `absent`, `default`, `number`, `time`, `style`, `map`, `override`, `content`, `create`, `readOnly`, `read`, `quoted`, `fallback`, *(FBL 0.10)* `secondary` and `refusals`), and `references <rules> by <name>` for FBL's `reference` (`by id` for a reference by stored id, FBL §5.7);
 - `parent <rules> [slot <name>]` (FBL §5.5), `within <names>`, `when <CEL>`, `files <names>`;
 - `insert { … }` and `remove { … }` (section 11.5);
 - in a relation rule, `source from <slot>` and `target from <slot>`;
-- settings of FBL's `ElementRule` (`caseInsensitive`, `opens`, `undo`, `readOnly`).
+- settings of FBL's `ElementRule` (`caseInsensitive`, `opens`, `undo`, `readOnly`, *(FBL 0.10)* `origins`, a list of the origins the rule is read for, FBL §5.1), which a relation rule takes as well.
 
 A **slot** is `<kind> [<argument>]`: `key "<key>"`, `attribute "<name>"`, `text`, `group "<name>"`, `continuation`, `parent "<attribute>"`, `capture "<name>"` or `value (<CEL>)`, with the slot's other properties (`child`, `word`, `flag`) in the block that follows it.
 
@@ -644,11 +644,11 @@ A **slot** is `<kind> [<argument>]`: `key "<key>"`, `attribute "<name>"`, `text`
 
 ### 11.5 Inserting and removing
 
-`insert { … }` and `remove { … }` are FBL's `Insert` and `Remove` (FBL §6.2), as settings: `place`, `container`, `emit`, `keys`, `create`, `skeleton`, `constant`, `cascade`.
+`insert { … }` and `remove { … }` are FBL's `Insert` and `Remove` (FBL §6.2), as settings: `place`, `container`, `emit`, `keys`, `create`, `skeleton`, `constant`, *(FBL 0.10)* `refusals` (`when`, `container`), `cascade`.
 
 ### 11.6 Registration and template
 
-`registration { … }` is FBL's `RegistrationSettings` (FBL §8: `blocks`, `createOnFirstPlacement`, `headers`, `resource`, `legacyLayout`, `legacyIdentities`), with the blocks `layout`, `identities` and those a binding declares. `template <value>` is the bytes of a new body (FBL §13): a string, or a settings map of FBL's `Template` (`byOrigin`).
+`registration { … }` is FBL's `RegistrationSettings` (FBL §8: `blocks`, `createOnFirstPlacement`, `headers`, `resource`, its settings map holding `capture` or *(FBL 0.10)* `byOrigin`, a capture per reading's origin, `legacyLayout`, `legacyIdentities`), with the blocks `layout`, `identities` and those a binding declares. `template <value>` is the bytes of a new body (FBL §13): a string, or a settings map of FBL's `Template` (`byOrigin`).
 
 ### 11.7 A capability as the family
 
@@ -1078,6 +1078,7 @@ An agent writing a description is given `grammar/atd.flat.lark`, with which a mo
 - **0.1, amendment of 2026-10-25, FBL 0.9** (spec 035, story 7): the `grammar` family of FBL 0.9 (§11.9, FBL §4.9): `family grammar` with `grammar { … }`, read under `grammar/notation.lark`, which the root module now imports, or `grammar from "<file>.lark"`; the keyword `grammar` (Appendix B); the settings `start` and `recover` of `body` and the slot `node` with its setting `match` (C.3); where `ATD8001`, for a grammar that is not LALR(1), stands (§11.9, §15.1); and the tables of every binding example's grammar under `grammar/tables/` (§11.9). Every description that checked before still checks, with the same meaning.
 - **0.1, amendment of 2026-10-26** (spec 035): a conformance case's `move` step carries `index`, the place among the new parent's children the reference host's gesture put the element in (§2.3, `$defs/ConformanceStep`); without it a case replayed every move into a parent as a move to its end. The mind map's case `example-1` is recorded again with it. Every description and case that was valid before is valid, with the same meaning.
 - **0.1, second amendment of 2026-10-26** (spec 035, batch 5b, for nine diagrams): a trace's item and host behaviour may be `open`, the address of the etalii.adp issue that adds the construct it needs, with its reason, and its companion may name further `reports` (§2.5); an edge notation may draw a reference attribute as `<Type>.<attribute>` (§8.5), and a field of a parameters form names a parameter (§8.7); a layout capability's result may carry `values`, read in CEL as `layout.value(e, name)` (§8.8); and the catalogue gains the capabilities those descriptions require (§13.6). Every example and tool description that checked before still checks, with the same meaning.
+- **0.1, amendment of 2026-10-29, FBL 0.10** (spec 066, pull request B, for the Databricks conversion): FBL 0.10's constructs for one binding that several readings share, as settings and with no change under `grammar/`: a rule's `origins` (§11.3), an attribute binding's `secondary` and `refusals` (§11.3), an insert's `refusals` (§11.5), and `resource`'s `byOrigin` in `registration` (§11.6); C.3 is FBL 0.10's, with a row for each, and for a fixture's `template`. A setting is checked against FBL's `$defs` (§14.6), so a description gains them with the schema. Every description that checked before still checks, with the same meaning.
 
 
 ---
@@ -3133,14 +3134,14 @@ Every property of DISL 0.6, DESL 0.2 and FBL 0.8, by the JSON pointer of its sch
 | `desl.schema.json#/$defs/CelValue/properties/resultType` | the key `resultType` in a value of CelValue (a settings map, §6.4) | §6.4 |
 | `desl.schema.json#/$defs/CelValue/properties/doc` | the key `doc` in a value of CelValue (a settings map, §6.4) | §6.4 |
 
-### C.3 FBL 0.9
+### C.3 FBL 0.10
 
-218 properties.
+225 properties.
 
 | JSON pointer | ATD | Section |
 |---|---|---|
 | `fbl.schema.json#/$defs/Document/properties/$schema` | none | §11.1 |
-| `fbl.schema.json#/$defs/Document/properties/fbl` | the header `atd <version>` (§5.1); a binding is FBL 0.9's in ATD 0.1 | §11.1 |
+| `fbl.schema.json#/$defs/Document/properties/fbl` | the header `atd <version>` (§5.1); a binding is FBL 0.10's in ATD 0.1 | §11.1 |
 | `fbl.schema.json#/$defs/Document/properties/doc` | `doc` and `///` | §11.1 |
 | `fbl.schema.json#/$defs/Document/properties/bindings` | `binding` | §11.1 |
 | `fbl.schema.json#/$defs/Binding/properties/title` | `label` | §11.1 |
@@ -3221,6 +3222,7 @@ Every property of DISL 0.6, DESL 0.2 and FBL 0.8, by the JSON pointer of its sch
 | `fbl.schema.json#/$defs/ElementRule/properties/caseInsensitive` | the setting `caseInsensitive` of `element` (binding rule) | §11.3 |
 | `fbl.schema.json#/$defs/ElementRule/properties/files` | `files names` | §11.3 |
 | `fbl.schema.json#/$defs/ElementRule/properties/when` | `when expression` | §11.3 |
+| `fbl.schema.json#/$defs/ElementRule/properties/origins` | *(FBL 0.10)* the setting `origins` of a rule (a list of strings) | §11.3 |
 | `fbl.schema.json#/$defs/ElementRule/properties/id` | `id from slot` or `id { … }` | §11.3 |
 | `fbl.schema.json#/$defs/ElementRule/properties/parent` | `parent rules slot name` | §11.3 |
 | `fbl.schema.json#/$defs/ElementRule/properties/attributes` | `attribute name from slot { … }` | §11.3 |
@@ -3238,6 +3240,7 @@ Every property of DISL 0.6, DESL 0.2 and FBL 0.8, by the JSON pointer of its sch
 | `fbl.schema.json#/$defs/RelationRule/properties/caseInsensitive` | the setting `caseInsensitive` of `relation` (binding rule) | §11.3 |
 | `fbl.schema.json#/$defs/RelationRule/properties/files` | `files names` | §11.3 |
 | `fbl.schema.json#/$defs/RelationRule/properties/when` | `when expression` | §11.3 |
+| `fbl.schema.json#/$defs/RelationRule/properties/origins` | *(FBL 0.10)* the setting `origins` of a rule (a list of strings) | §11.3 |
 | `fbl.schema.json#/$defs/RelationRule/properties/id` | `id from slot` or `id { … }` | §11.3 |
 | `fbl.schema.json#/$defs/RelationRule/properties/parent` | `parent rules slot name` | §11.3 |
 | `fbl.schema.json#/$defs/RelationRule/properties/attributes` | `attribute name from slot { … }` | §11.3 |
@@ -3287,9 +3290,11 @@ Every property of DISL 0.6, DESL 0.2 and FBL 0.8, by the JSON pointer of its sch
 | `fbl.schema.json#/$defs/AttributeBinding/properties/map` | the setting `map` of `attribute` of a rule | §11.3 |
 | `fbl.schema.json#/$defs/AttributeBinding/properties/absent` | the setting `absent` of `attribute` of a rule | §11.3 |
 | `fbl.schema.json#/$defs/AttributeBinding/properties/override` | the setting `override` of `attribute` of a rule | §11.3 |
+| `fbl.schema.json#/$defs/AttributeBinding/properties/secondary` | *(FBL 0.10)* the setting `secondary` of `attribute` of a rule (a slot as a settings map, §6.4) | §11.3 |
 | `fbl.schema.json#/$defs/AttributeBinding/properties/content` | the setting `content` of `attribute` of a rule | §11.3 |
 | `fbl.schema.json#/$defs/AttributeBinding/properties/create` | the setting `create` of `attribute` of a rule | §11.3 |
 | `fbl.schema.json#/$defs/AttributeBinding/properties/readOnly` | the setting `readOnly` of `attribute` of a rule | §11.3 |
+| `fbl.schema.json#/$defs/AttributeBinding/properties/refusals` | *(FBL 0.10)* the setting `refusals` of `attribute` of a rule (`empty`, `absent`) | §11.3 |
 | `fbl.schema.json#/$defs/Insert/properties/place` | the setting `place` of `insert` | §11.5 |
 | `fbl.schema.json#/$defs/Insert/properties/container` | the setting `container` of `insert` | §11.5 |
 | `fbl.schema.json#/$defs/Insert/properties/create` | the setting `create` of `insert` | §11.5 |
@@ -3298,12 +3303,14 @@ Every property of DISL 0.6, DESL 0.2 and FBL 0.8, by the JSON pointer of its sch
 | `fbl.schema.json#/$defs/Insert/properties/constant` | the setting `constant` of `insert` | §11.5 |
 | `fbl.schema.json#/$defs/Insert/properties/skeleton` | the setting `skeleton` of `insert` | §11.5 |
 | `fbl.schema.json#/$defs/Insert/properties/when` | the setting `when` of `insert` | §11.5 |
+| `fbl.schema.json#/$defs/Insert/properties/refusals` | *(FBL 0.10)* the setting `refusals` of `insert` (`when`, `container`) | §11.5 |
 | `fbl.schema.json#/$defs/Remove/properties/cascade` | the setting `cascade` of `remove` | §11.5 |
 | `fbl.schema.json#/$defs/Remove/properties/container` | the setting `container` of `remove` | §11.5 |
 | `fbl.schema.json#/$defs/RegistrationSettings/properties/headers` | the setting `headers` of `registration` | §11.6 |
 | `fbl.schema.json#/$defs/RegistrationSettings/properties/blocks` | the setting `blocks` of `registration` | §11.6 |
 | `fbl.schema.json#/$defs/RegistrationSettings/properties/createOnFirstPlacement` | the setting `createOnFirstPlacement` of `registration` | §11.6 |
 | `fbl.schema.json#/$defs/RegistrationSettings/properties/resource` | the setting `resource` of `registration` | §11.6 |
+| `fbl.schema.json#/$defs/RegistrationSettings/properties/resource/properties/byOrigin` | *(FBL 0.10)* the key `byOrigin` in the value of `resource` (a settings map, §6.4) | §11.6 |
 | `fbl.schema.json#/$defs/RegistrationSettings/properties/legacyLayout` | the setting `legacyLayout` of `registration` | §11.6 |
 | `fbl.schema.json#/$defs/RegistrationSettings/properties/legacyIdentities` | the setting `legacyIdentities` of `registration` | §11.6 |
 | `fbl.schema.json#/$defs/Template/properties/text` | the setting `text` of `template` (binding) | §11.6 |
@@ -3326,6 +3333,7 @@ Every property of DISL 0.6, DESL 0.2 and FBL 0.8, by the JSON pointer of its sch
 | `fbl.schema.json#/$defs/Fixture/properties/doc` | the key `doc` in a value of Fixture (a settings map, §6.4) | §6.4 |
 | `fbl.schema.json#/$defs/Fixture/properties/binding` | the key `binding` in a value of Fixture (a settings map, §6.4) | §6.4 |
 | `fbl.schema.json#/$defs/Fixture/properties/input` | the key `input` in a value of Fixture (a settings map, §6.4) | §6.4 |
+| `fbl.schema.json#/$defs/Fixture/properties/template` | *(FBL 0.10)* the key `template` in a value of Fixture (a settings map, §6.4) | §6.4 |
 | `fbl.schema.json#/$defs/Fixture/properties/read` | the key `read` in a value of Fixture (a settings map, §6.4) | §6.4 |
 | `fbl.schema.json#/$defs/Fixture/properties/steps` | the key `steps` in a value of Fixture (a settings map, §6.4) | §6.4 |
 | `fbl.schema.json#/$defs/Edit/properties/add` | the key `add` in a value of Edit (a settings map, §6.4) | §6.4 |
