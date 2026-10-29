@@ -32,7 +32,7 @@
           "type": "string"
         },
         "fbl": {
-          "description": "The FBL version the document is written in: 0.1 to 0.9 (draft); 0.3 names the tool type's specification in place of DISL, lets a specification name one binding per format family, and spells a reference to a stored id as by: \"id\". 0.4 creates and removes the missing levels of a nested container or child mapping. 0.5 defines a scalar's written text, read with read, and adds quoted and fallback to an attribute binding. 0.6 applies an attribute binding's empty rule to an insert as well as to a set. 0.7 adds the bullets family and the drift check before an edit. 0.8 lets an insert of the yaml and json families write a constant. 0.9 adds the grammar family. See FBL 0.9, section 2.7.",
+          "description": "The FBL version the document is written in: 0.1 to 0.10 (draft); 0.3 names the tool type's specification in place of DISL, lets a specification name one binding per format family, and spells a reference to a stored id as by: \"id\". 0.4 creates and removes the missing levels of a nested container or child mapping. 0.5 defines a scalar's written text, read with read, and adds quoted and fallback to an attribute binding. 0.6 applies an attribute binding's empty rule to an insert as well as to a set. 0.7 adds the bullets family and the drift check before an edit. 0.8 lets an insert of the yaml and json families write a constant. 0.9 adds the grammar family. 0.10 lets one binding serve readings of different metamodels (origins on a rule, resource.byOrigin, one model per origin of one open body), inserts into a yaml flow sequence, gives a refusal its sentence, writes a nested mapping on an add, and adds secondary, {key:lower} and a fixture's template and expectFiles. See FBL 0.10, section 2.7.",
           "enum": [
             "0.1",
             "0.2",
@@ -42,7 +42,8 @@
             "0.6",
             "0.7",
             "0.8",
-            "0.9"
+            "0.9",
+            "0.10"
           ]
         },
         "doc": {
@@ -858,6 +859,15 @@
         "when": {
           "$ref": "#/$defs/Expression"
         },
+        "origins": {
+          "description": "FBL 0.10, section 5.1: the readings this rule is read for, as origins of the binding's claims.origins. Absent: every reading.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
         "id": {
           "$ref": "#/$defs/IdBinding"
         },
@@ -977,6 +987,15 @@
         },
         "when": {
           "$ref": "#/$defs/Expression"
+        },
+        "origins": {
+          "description": "FBL 0.10, section 5.1: the readings this rule is read for, as origins of the binding's claims.origins. Absent: every reading.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true
         },
         "id": {
           "$ref": "#/$defs/IdBinding"
@@ -1422,6 +1441,10 @@
           "description": "A second slot that wins on read when present and is removed when the value is written (a formatted text beside a plain one).",
           "$ref": "#/$defs/Slot"
         },
+        "secondary": {
+          "description": "FBL 0.10, section 5.2: a second slot read only when the attribute's slot is absent. Writing the attribute writes its slot and removes this one (remove-key). Not with override.",
+          "$ref": "#/$defs/Slot"
+        },
         "content": {
           "description": "xml text slots: 'text' (escaped character data) or 'html-paragraphs' (an HTML body read as plain text, one line per <p>).",
           "enum": [
@@ -1502,11 +1525,34 @@
               "$ref": "#/$defs/LocalizedText"
             }
           ]
+        },
+        "refusals": {
+          "description": "FBL 0.10, section 6.4: the sentence a host shows for each refusal this attribute binding causes, as readOnly gives one: empty, a set or an add refused by empty: \"refuse\"; absent, a set refused by absent.",
+          "type": "object",
+          "properties": {
+            "empty": {
+              "$ref": "#/$defs/LocalizedText"
+            },
+            "absent": {
+              "$ref": "#/$defs/LocalizedText"
+            }
+          },
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
+          }
         }
       },
       "additionalProperties": false,
       "patternProperties": {
         "^x-": true
+      },
+      "not": {
+        "description": "FBL 0.10: secondary is the reverse of override, and an attribute binding takes at most one of them.",
+        "required": [
+          "secondary",
+          "override"
+        ]
       }
     },
     "Insert": {
@@ -1649,6 +1695,22 @@
         },
         "when": {
           "$ref": "#/$defs/Expression"
+        },
+        "refusals": {
+          "description": "FBL 0.10, section 6.4: the sentence a host shows for each refusal of this insert: when, the add refused because when is false; container, the add refused because the container is missing and the insert has no create.",
+          "type": "object",
+          "properties": {
+            "when": {
+              "$ref": "#/$defs/LocalizedText"
+            },
+            "container": {
+              "$ref": "#/$defs/LocalizedText"
+            }
+          },
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
+          }
         }
       },
       "additionalProperties": false,
@@ -1763,19 +1825,51 @@
           "description": "The first placement creates the registration beside a bare body, and (FBL 0.7) so does the first change to a setting a declared block keeps (section 8.4)."
         },
         "resource": {
-          "description": "The selector capture a registration's resource header selects, so one body can hold several diagrams (a bundle file with several jobs). Without the header, the first entry in document order is used.",
+          "description": "The selector capture a registration's resource header selects, so one body can hold several diagrams (a bundle file with several jobs): capture for every reading, or (FBL 0.10) byOrigin, a capture per reading's origin. Without the header, the first entry in document order is used, per origin (section 8.2).",
           "type": "object",
           "properties": {
             "capture": {
               "type": "string"
+            },
+            "byOrigin": {
+              "description": "FBL 0.10, section 8.2: the capture per reading's origin; null: readings of that origin select no resource and see every one. An origin not listed selects none. Every origin is one of claims.origins (section 14.1).",
+              "type": "object",
+              "additionalProperties": {
+                "oneOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "capture": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "capture"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
             }
           },
           "additionalProperties": false,
           "patternProperties": {
             "^x-": true
           },
-          "required": [
-            "capture"
+          "oneOf": [
+            {
+              "required": [
+                "capture"
+              ]
+            },
+            {
+              "required": [
+                "byOrigin"
+              ]
+            }
           ]
         },
         "legacyLayout": {
@@ -1793,7 +1887,7 @@
       }
     },
     "Template": {
-      "description": "The bytes of a new body. Placeholders {name}, {base} and {key} are replaced by the new file's name, its base name, and the base name folded to a key, and {newid:<rule>} by a new id made by that rule's id strategy; nothing else is interpreted. See section 13.",
+      "description": "The bytes of a new body. Placeholders {name}, {base} and {key} are replaced by the new file's name, its base name, and the base name folded to a key, (FBL 0.10) {key:lower} by that key with every ASCII letter in lower case, and {newid:<rule>} by a new id made by that rule's id strategy; nothing else is interpreted. See section 13.",
       "type": "object",
       "properties": {
         "text": {
@@ -1909,7 +2003,8 @@
           ]
         },
         "file": {
-          "type": "string"
+          "type": "string",
+          "description": "The file the splice writes, for folder subjects (section 10.4) and (FBL 0.10) in a fixture, a file beside its input, named relative to the input's folder: the body a registration names, or a sidecar (section 15.3). Absent: the input, or the subject's file."
         },
         "start": {
           "type": "integer",
@@ -1949,6 +2044,28 @@
         },
         "input": {
           "type": "string"
+        },
+        "template": {
+          "description": "FBL 0.10, section 15.3: the input is the new document the binding's template gives for a file of this name and the reading of this origin (section 13), placeholders replaced; the reading the fixture's read and steps describe is of that origin.",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "origin": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "name",
+            "origin"
+          ],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^x-": true
+          }
         },
         "read": {
           "description": "What reading the input yields.",
@@ -2076,6 +2193,13 @@
               },
               "expectFile": {
                 "type": "string"
+              },
+              "expectFiles": {
+                "description": "FBL 0.10, section 15.3: the bytes, after the step, of each file beside the input that the step's splices name in their file, by that name. A splice without file is the input's.",
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
               }
             },
             "additionalProperties": false,
