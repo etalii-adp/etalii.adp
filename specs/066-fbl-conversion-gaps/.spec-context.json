@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "FBL 0.10, What the C4, Databricks and Wardley Map Conversions Wait On",
   "branch": "features/066-fbl-conversion-gaps",
-  "currentStep": "plan",
-  "status": "planned",
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
   "history": [
     {
       "step": "specify",
@@ -39,8 +39,22 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-10-29T13:02:41.200Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-29T20:14:23.812Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-10-29T20:22:00.135Z"
     }
   ],
-  "workingBranch": "features/066-fbl-conversion-gaps-plan",
+  "workingBranch": "features/066-fbl-conversion-gaps-tasks",
   "telemetryInstanceId": "bd6e980c-d1db-4ed1-a4fb-19b49d106706"
 }
