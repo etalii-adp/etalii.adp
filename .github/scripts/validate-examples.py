@@ -1733,6 +1733,50 @@ def check_constants(document) -> list[str]:
     return problems
 
 
+def check_grammar_family(path: Path, document) -> list[str]:
+    """Checks FBL 0.10's constructs that the schema cannot (section 14.1, step 6) and returns a problem per finding:
+    `create.after` names attributes of the same rule; `gather` stands only on a read-only attribute binding;
+    `selectedView` only in a binding with a block rule that has `view`; the `origins` of a block rule are origins of
+    the binding's `claims.origins`; and `recover.nested` and `recover.unclosed` name terminals of the binding's grammar,
+    the terminals of `unclosed` ignored ones, as `atd-grammar.py --bindings` checks too."""
+    problems = []
+    for binding_name, binding in document.get("bindings", {}).items():
+        base = f"/bindings/{binding_name}"
+        claimed = set(binding.get("claims", {}).get("origins", []))
+        views = any("view" in block for block in binding.get("blocks", []))
+        for index, block in enumerate(binding.get("blocks", [])):
+            for origin in block.get("origins", []):
+                if origin not in claimed:
+                    problems.append(f"at {base}/blocks/{index}/origins: {origin!r} is not an origin the binding claims")
+        for kind in ("elements", "relations"):
+            for index, rule in enumerate(binding.get(kind, [])):
+                pointer = f"{base}/{kind}/{index}"
+                if rule.get("selectedView") and not views:
+                    problems.append(f"at {pointer}/selectedView: the binding has no block rule with view, so no view is selected")
+                attributes = rule.get("attributes", {})
+                for attribute, attribute_binding in attributes.items():
+                    if not isinstance(attribute_binding, dict):
+                        continue
+                    for name in attribute_binding.get("create", {}).get("after", []) if isinstance(attribute_binding.get("create"), dict) else []:
+                        if name not in attributes or name == attribute:
+                            problems.append(f"at {pointer}/attributes/{attribute}/create/after: {name!r} is no other attribute of the rule {rule['name']!r}")
+                    if "gather" in attribute_binding and not (attribute_binding.get("readOnly") or rule.get("readOnly") or binding.get("readOnly")):
+                        problems.append(f"at {pointer}/attributes/{attribute}/gather: gather stands only on a read-only attribute binding")
+        body = binding.get("body", {})
+        recover = body.get("recover") or {}
+        if body.get("family") == "grammar" and ("nested" in recover or "unclosed" in recover):
+            try:
+                reader = GrammarReader(body, path.parent)
+            except ReadingProblem as problem:
+                problems.append(f"at {base}/body/recover: {problem}")
+                continue
+            ignored = set(reader.lexer.ignored)
+            for terminal in recover.get("unclosed", {}):
+                if reader.lexer.named(terminal) not in ignored:
+                    problems.append(f"at {base}/body/recover/unclosed: {terminal!r} is not a terminal the grammar ignores")
+    return problems
+
+
 # The names DISL section 2.2 reserves: the built-in fields of an element in CEL, and CEL's keywords. An attribute
 # with one of them would be shadowed by the field, so a host refuses the specification.
 DISL_RESERVED = {
@@ -2118,12 +2162,12 @@ for path in examples:
         failures += 1
         print(f"FAIL {name}: only DISL specifications belong in specifications/disl/refused/")
     elif refused and reference == FBL:
-        if problems := resolve_names(document) + check_constants(document):
+        if problems := resolve_names(document) + check_constants(document) + check_grammar_family(path, document):
             print(f"ok   {name} (refused, as a binding in refused/ must be: {problems[0]})")
         else:
             failures += 1
             print(f"FAIL {name}: a binding in refused/ must be refused by a check of FBL section 14.1, and this one is accepted")
-    elif reference in (FBL, DESL, DISL) and (problems := (resolve_names(document) + check_constants(document) if reference == FBL else resolve_desl(path, document) if reference == DESL else resolve_disl(document))):
+    elif reference in (FBL, DESL, DISL) and (problems := (resolve_names(document) + check_constants(document) + check_grammar_family(path, document) if reference == FBL else resolve_desl(path, document) if reference == DESL else resolve_disl(document))):
         failures += 1
         print(f"FAIL {name}: {len(problems)} name problem(s)")
         for problem in problems[:10]:

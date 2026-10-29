@@ -1,0 +1,61 @@
+{
+  "$schema": "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Document",
+  "fbl": "0.10",
+  "doc": "Refused by FBL 0.10, section 14.1, step 6: the block rule section is a view for readings of example/agenda, an origin the binding's claims do not list, so no reading of the binding is of that origin (sections 5.1, 9.3). The view it names is otherwise well formed.",
+  "bindings": {
+    "outline": {
+      "title": "Outline, a view for a reading the binding does not claim",
+      "claims": {
+        "extensions": [
+          ".outline"
+        ],
+        "origins": [
+          "example/outline"
+        ]
+      },
+      "body": {
+        "kind": "file",
+        "family": "grammar",
+        "grammar": "start: unit*\n?unit: item\n     | _NL\nitem: NAME [label [note]] [block]\nlabel: STRING\nnote: STRING\nblock: \"{\" unit* \"}\"\nNAME: /[a-z]+/\nSTRING: /\"[^\"\\r\\n]*\"/\n_NL: /(\\r?\\n[ \\t]*)+/\nWHITESPACE: /[ \\t]+/\nCOMMENT: /#[^\\r\\n]*/\n%ignore WHITESPACE\n%ignore COMMENT\n",
+        "recover": {
+          "unit": "unit",
+          "sync": [
+            "_NL"
+          ]
+        }
+      },
+      "reader": "declared",
+      "blocks": [
+        {
+          "name": "section",
+          "at": "/item[NAME='section']",
+          "origins": [
+            "example/agenda"
+          ],
+          "view": {
+            "node": "label",
+            "match": "\"(?<value>[^\"]*)\""
+          }
+        }
+      ],
+      "elements": [
+        {
+          "name": "item",
+          "type": "Item",
+          "at": "/item",
+          "id": {
+            "from": {
+              "node": "NAME"
+            }
+          },
+          "attributes": {
+            "label": {
+              "node": "label",
+              "match": "\"(?<value>[^\"]*)\""
+            }
+          }
+        }
+      ]
+    }
+  }
+}
