@@ -97,6 +97,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 from lark import Lark, Token, Tree
+from lark.lexer import Lexer
 from lark.exceptions import UnexpectedInput
 from referencing import Registry, Resource
 
@@ -813,6 +814,16 @@ class CelError(Exception):
     """An expression that has no value for this entry, such as a missing key; in a `when` it does not hold."""
 
 
+class UnusedLexer(Lexer):
+    """The lexer Lark is given for the reading check, which feeds the parser tokens it lexes itself."""
+
+    def __init__(self, lexer_conf):
+        self.lexer_conf = lexer_conf
+
+    def lex(self, lexer_state, parser_state):
+        raise ReadingProblem("the reading check lexes the body itself")
+
+
 class GrammarTerminals:
     """The lexing rule of ATD section 3.6 over a built grammar: at a position, of the candidates that match, the
     longest match, then the higher priority, then a string terminal over a pattern terminal."""
@@ -928,7 +939,9 @@ class GrammarReader:
         self.recover = body.get("recover")
         starts = [self.start] + ([self.recover["unit"]] if self.recover else [])
         try:
-            self.parser = Lark(source, parser="lalr", lexer="contextual", strict=True, start=starts,
+            # The reading check lexes by ATD section 3.6 itself (GrammarTerminals), so Lark's own lexer is not built:
+            # atd-grammar.py --bindings holds the grammar to strict mode, and its collision check is slow.
+            self.parser = Lark(source, parser="lalr", lexer=UnusedLexer, start=starts,
                                import_paths=[str(folder)], source_path=str(where), g_regex_flags=re.ASCII,
                                maybe_placeholders=True, propagate_positions=True)
         except Exception as error:  # noqa: BLE001 - a grammar that does not build is atd-grammar.py's to report
