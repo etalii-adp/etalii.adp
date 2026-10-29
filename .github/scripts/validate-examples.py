@@ -102,6 +102,7 @@ from jsonschema import Draft202012Validator
 from lark import Lark, Token, Tree
 from lark.lexer import Lexer
 from lark.exceptions import UnexpectedInput
+from lark.parsers.lalr_analysis import Shift
 from referencing import Registry, Resource
 
 repository = Path(__file__).resolve().parents[2]
@@ -899,7 +900,30 @@ class GrammarCursor:
     def candidates(self):
         return [s for s in self.state.parse_conf.parse_table.states[self.state.position] if s.isupper() and s != "$END"]
 
+    def takes(self, terminal):
+        """Whether the parser can shift the terminal here (or, for `$END`, accept), found on the parse table alone.
+        A feed that fails after its reductions would have run their callbacks on values the cursor shares with its
+        copies, and Lark's tree builder extends a left-recursive rule's children in place (FBL 0.12: a `.owm`
+        component's segments read twice), so nothing is fed that this does not admit."""
+        states, end_state = self.state.parse_conf.states, self.state.parse_conf.end_state
+        stack = list(self.state.state_stack)
+        while True:
+            entry = states[stack[-1]].get(terminal)
+            if entry is None:
+                return False
+            action, argument = entry
+            if action is Shift:
+                return terminal != "$END"
+            size = len(argument.expansion)
+            if size:
+                del stack[-size:]
+            stack.append(states[stack[-1]][argument.origin.name][1])
+            if terminal == "$END" and stack[-1] == end_state:
+                return True
+
     def feed(self, token):
+        if not self.takes(token.type):
+            return False
         attempt = self.state.copy(deepcopy_values=False)
         try:
             attempt.feed_token(token)
@@ -910,7 +934,7 @@ class GrammarCursor:
 
     def end(self, token):
         """The tree, when the parser can accept here, else None."""
-        if not self.accepts("$END"):
+        if not self.takes("$END"):
             return None
         attempt = self.state.copy(deepcopy_values=False)
         try:
