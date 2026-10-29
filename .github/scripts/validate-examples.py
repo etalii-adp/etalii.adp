@@ -49,6 +49,21 @@ binding, its id or one of its ends. The `*.fbl` documents under `specifications/
 round: each must be valid against the schema and refused by one of these checks, and the run fails when one is
 accepted.
 The fixtures under a folder named `*-equivalence` read one model in different formats: their `read` must be identical.
+A fixture whose binding is of the `grammar` family is also **read** (FBL 0.10, the reading check of spec 066's
+research R20): its input, or the body its registration names, is parsed with Python Lark under the binding's grammar,
+lexed by ATD section 3.6's rule (the longest match, then the higher priority, then a string terminal), read whole or,
+with `recover`, unit by unit and inside blocks as FBL section 4.9 says; the rules' `at` select the entries, the first
+rule in the binding's order whose `when` holds taking an entry; ids and attribute values are read through `{node}`
+slots with `match` and `escape`, a `many` attribute (by the tool type's metamodel) taking every node its slot and its
+`gather` reach, and `{value}` and `{parent}` slots; the views of the binding's block rules for the reading's origin give
+the selected view, inside which alone `selectedView` rules read. The tool type is found by its origin, the
+registration's or, for a body opened alone, the first the binding claims: its `typeMap` puts a type mapped as the
+diagram into the document's attributes (a list gathering every entry's items, a single value the first) and leaves out
+a relation, and its metamodel gives each attribute's type, so that an int reads as a JSON number. What is compared is
+what the fixture's `read` states: `elements` in reading order (type, the id where FBL reads one, `parent` by its
+place, and the attributes named), the `document`'s attributes named, `findings` by rule and line among the codes this
+check reads (GRAMMAR_FINDINGS), and `unreadable`. It plans no edit; splices stay checked by replay. An element whose id
+FBL does not read (no `id.from`, or a slot that reaches nothing) has the id DISL gives it, which is not compared.
 
 Every `*.dis` that validates is checked for the names DISL 0.4's constructs refer to (DISL section 14.1): a compartment's
 `groupBy` names an attribute of every item type it lists, of an enumeration type; a `force` layout's `tiers` name node
@@ -69,12 +84,15 @@ without turning moments into timestamps.
 Prints one line per example and exits 1 when any example is invalid or names an unknown schema.
 """
 import json
+import operator
 import re
 import sys
 import xml.etree.ElementTree as ElementTree
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
+from lark import Lark, Token, Tree
+from lark.exceptions import UnexpectedInput
 from referencing import Registry, Resource
 
 repository = Path(__file__).resolve().parents[2]
@@ -734,6 +752,903 @@ def same_files(a: dict, b: dict) -> bool:
     return all(a[name] == b[name] for name in a.keys() & b.keys())
 
 
+# ---------------------------------------------------------------------------------------------- the reading check
+# FBL 0.10 (spec 066, research R20): a fixture whose binding is of the grammar family is read here as a host reads it,
+# with Python Lark under the binding's grammar, and what it reads is compared with the fixture's `read`. It plans no
+# edit; the splices stay checked by replay_fixture.
+
+GRAMMAR_FINDINGS = {"fbl.unparsed-text", "fbl.unclosed-block", "fbl.unmatched-close", "fbl.unclosed-comment",
+                    "fbl.duplicate-key", "fbl.stale-view-data"}
+
+
+class ReadingProblem(Exception):
+    """A binding, grammar or expression the reading check cannot read: the fixture fails with its message."""
+
+
+class CelError(Exception):
+    """An expression that has no value for this entry, such as a missing key; in a `when` it does not hold."""
+
+
+class GrammarTerminals:
+    """The lexing rule of ATD section 3.6 over a built grammar: at a position, of the candidates that match, the
+    longest match, then the higher priority, then a string terminal over a pattern terminal."""
+
+    def __init__(self, parser):
+        self.terminals = {}
+        for terminal in parser.terminals:
+            source = re.escape(terminal.pattern.value) if terminal.pattern.type == "str" else terminal.pattern.to_regexp()
+            self.terminals[terminal.name] = (re.compile(source, re.ASCII), terminal.priority,
+                                             terminal.pattern.type == "str", terminal.pattern.value)
+        self.ignored = list(parser.ignore_tokens)
+        self.everything = list(self.terminals)
+
+    def named(self, name_or_text):
+        """The terminal a `sync` entry, `nested.open` or `nested.close` names: its name, or the text of an anonymous
+        string terminal (FBL section 4.9)."""
+        if name_or_text in self.terminals:
+            return name_or_text
+        for name, (_, _, is_string, value) in self.terminals.items():
+            if is_string and value == name_or_text:
+                return name
+        raise ReadingProblem(f"`{name_or_text}` names no terminal of the grammar")
+
+    def token_at(self, text, position, candidates):
+        """The (terminal, end) the candidates lex at the position, or None when none of them matches."""
+        best = None
+        for name in candidates:
+            pattern, priority, is_string, _ = self.terminals[name]
+            match = pattern.match(text, position)
+            if not match or match.end() == position:
+                continue
+            key = (match.end(), priority, is_string)
+            if best is None or key > best[0]:
+                best = (key, name)
+        return None if best is None else (best[1], best[0][0])
+
+
+class Lines:
+    """1-based lines and columns of positions in a text, its line endings being CRLF, LF or a lone CR (FBL 2.6)."""
+
+    def __init__(self, text):
+        self.starts = [0] + [m.end() for m in re.finditer(r"\r\n|\n|\r", text)]
+
+    def line(self, position):
+        low, high = 0, len(self.starts)
+        while high - low > 1:
+            middle = (low + high) // 2
+            if self.starts[middle] <= position:
+                low = middle
+            else:
+                high = middle
+        return low + 1
+
+    def column(self, position):
+        return position - self.starts[self.line(position) - 1] + 1
+
+
+class GrammarCursor:
+    """A parser state that a token is fed to only when the parser can take it: a failed feed leaves it as it was."""
+
+    def __init__(self, state):
+        self.state = state
+
+    def copy(self):
+        return GrammarCursor(self.state.copy(deepcopy_values=False))
+
+    def accepts(self, terminal):
+        return terminal in self.state.parse_conf.parse_table.states[self.state.position]
+
+    def candidates(self):
+        return [s for s in self.state.parse_conf.parse_table.states[self.state.position] if s.isupper() and s != "$END"]
+
+    def feed(self, token):
+        attempt = self.state.copy(deepcopy_values=False)
+        try:
+            attempt.feed_token(token)
+        except UnexpectedInput:
+            return False
+        self.state = attempt
+        return True
+
+    def end(self, token):
+        """The tree, when the parser can accept here, else None."""
+        if not self.accepts("$END"):
+            return None
+        attempt = self.state.copy(deepcopy_values=False)
+        try:
+            return attempt.feed_token(token, True)
+        except UnexpectedInput:
+            return None
+
+
+class GrammarBlock:
+    """A block the reader is inside (FBL 0.10, recover.nested): its open token and its last boundary."""
+
+    def __init__(self, token, cursor, position):
+        self.token = token
+        self.cursor = cursor
+        self.position = position
+
+
+class GrammarReader:
+    """Reads a grammar body as FBL section 4.9 says: whole, or with `recover` unit by unit (FBL 0.9) and inside blocks
+    (FBL 0.10, `nested`), giving the tree's root, the findings and the blocks left open."""
+
+    def __init__(self, body, folder):
+        source = body["grammar"]
+        where = folder / "binding.lark"
+        if isinstance(source, dict):
+            where = folder / source["file"]
+            source = where.read_text(encoding="utf-8")
+        self.start = body.get("start", "start")
+        self.recover = body.get("recover")
+        starts = [self.start] + ([self.recover["unit"]] if self.recover else [])
+        try:
+            self.parser = Lark(source, parser="lalr", lexer="contextual", strict=True, start=starts,
+                               import_paths=[str(folder)], source_path=str(where), g_regex_flags=re.ASCII,
+                               maybe_placeholders=True, propagate_positions=True)
+        except Exception as error:  # noqa: BLE001 - a grammar that does not build is atd-grammar.py's to report
+            raise ReadingProblem(f"the binding's grammar does not build: {str(error).splitlines()[0]}") from error
+        self.lexer = GrammarTerminals(self.parser)
+        recover = self.recover or {}
+        self.sync = {self.lexer.named(s) for s in recover.get("sync", [])}
+        nested = recover.get("nested")
+        self.open = self.lexer.named(nested["open"]) if nested else None
+        self.close = self.lexer.named(nested["close"]) if nested else None
+        self.unclosed = {self.lexer.named(name): end for name, end in recover.get("unclosed", {}).items()}
+
+    def cursor(self, start):
+        return GrammarCursor(self.parser.parse_interactive("", start=start).parser_state)
+
+    def token(self, terminal, start, end):
+        return Token(terminal, self.text[start:end], start_pos=start, line=self.lines.line(start),
+                     column=self.lines.column(start), end_line=self.lines.line(max(start, end - 1)),
+                     end_column=self.lines.column(end), end_pos=end)
+
+    def read(self, text):
+        self.text, self.lines = text, Lines(text)
+        self.findings, self.open_blocks, self.trivia = [], [], []
+        if not self.recover:
+            tree, position = self.read_unit(0, self.start, whole=True)
+            root = tree
+        else:
+            units, position = [], 0
+            while True:
+                position = self.pass_trivia(position)
+                if position >= len(text):
+                    break
+                tree, position = self.read_unit(position, self.recover["unit"])
+                if tree is not None and not (isinstance(tree, Tree) and tree.data == self.recover["unit"]
+                                             and not tree.children):
+                    units.append(tree)
+            root = Tree(self.start, units)
+        for token in self.trivia:
+            end = self.unclosed.get(token.type)
+            if end is not None and not token.value.endswith(end):
+                self.finding("fbl.unclosed-comment", token.start_pos)
+        return root
+
+    def finding(self, rule, position):
+        self.findings.append({"rule": rule, "line": self.lines.line(position)})
+
+    def pass_trivia(self, position):
+        while position < len(self.text):
+            found = self.lexer.token_at(self.text, position, self.lexer.ignored)
+            if not found:
+                break
+            self.trivia.append(self.token(found[0], position, found[1]))
+            position = found[1]
+        return position
+
+    def read_unit(self, start, symbol, whole=False):
+        """One unit from `start` (rules 1 and 2 of section 4.9, and FBL 0.10's rules inside blocks): its tree and the
+        position after it, or None and the position after the skipped text."""
+        cursor = self.cursor(symbol)
+        blocks = []
+        position = last = start
+        while True:
+            candidates = cursor.candidates() + self.lexer.ignored
+            found = self.lexer.token_at(self.text, position, candidates) if position < len(self.text) else None
+            if found and found[0] in self.lexer.ignored:
+                self.trivia.append(self.token(found[0], position, found[1]))
+                position = found[1]
+                continue
+            if found:
+                token = self.token(found[0], position, found[1])
+                if cursor.feed(token):
+                    if token.type == self.open:
+                        blocks.append(GrammarBlock(token, cursor.copy(), token.end_pos))
+                    elif token.type == self.close and blocks:
+                        blocks.pop()
+                    elif token.type in self.sync and blocks:
+                        blocks[-1].cursor, blocks[-1].position = cursor.copy(), token.end_pos
+                    position = last = token.end_pos
+                    continue
+            if not whole:  # rule 1: the unit ends after its last token when the parser can accept it there
+                tree = cursor.end(self.token("$END", last, last))
+                if tree is not None:
+                    return tree, last
+            if found is None and position < len(self.text) and self.close and not blocks:
+                probe = self.lexer.token_at(self.text, position, self.lexer.everything)
+                if probe and probe[0] == self.close:  # FBL 0.10, rule 4: skipped alone, and it closes nothing
+                    self.finding("fbl.unmatched-close", position)
+                    position = probe[1]
+                    continue
+            if position >= len(self.text) and blocks and self.close_at_end(cursor, blocks, last):
+                continue  # FBL 0.10, rule 3
+            if whole:
+                if position >= len(self.text):
+                    tree = cursor.end(self.token("$END", last, last))
+                    if tree is not None:
+                        return tree, last
+                raise ReadingProblem(f"the body does not parse at line {self.lines.line(position)} and the binding "
+                                     f"has no `recover`, so it is unreadable (FBL section 7.5)")
+            if blocks:  # FBL 0.10, rule 2: skip from the block's last boundary, and read on from there
+                block = blocks[-1]
+                end = self.skip_end(position, inside=True)
+                self.finding("fbl.unparsed-text", position)
+                if end <= position and position == block.position:
+                    end = found[1] if found else position + 1
+                cursor = block.cursor.copy()
+                position, last = end, block.position
+                continue
+            end = self.skip_end(position, inside=False)  # FBL 0.9, rule 2: the unit is skipped
+            self.finding("fbl.unparsed-text", position)
+            return None, end
+
+    def close_at_end(self, cursor, blocks, last):
+        """FBL 0.10, rule 3: the innermost block still open at the end of the body ends there, reported at its open
+        token. Returns whether it could be closed."""
+        close = self.token(self.close, last, last)
+        attempt = cursor.copy()
+        if not attempt.feed(close):
+            attempt = cursor.copy()
+            if not any(attempt.feed(self.token(sync, last, last)) for sync in sorted(self.sync)) or not attempt.feed(close):
+                return False
+        cursor.state = attempt.state
+        block = blocks.pop()
+        self.open_blocks.append(block.token)
+        self.finding("fbl.unclosed-block", block.token.start_pos)
+        return True
+
+    def skip_end(self, stop, inside):
+        """Where text skipped from the place reading stopped ends: after the first token of a synchronising terminal,
+        lexing with every terminal; inside a block (FBL 0.10) before a close token at the block's own depth when that
+        comes first; at the end of the body when neither follows."""
+        position, depth = stop, 0
+        while position < len(self.text):
+            found = self.lexer.token_at(self.text, position, self.lexer.everything)
+            if not found:
+                position += 1
+                continue
+            name, end = found
+            if inside and name == self.open:
+                depth += 1
+            elif inside and name == self.close:
+                if depth == 0:
+                    return position
+                depth -= 1
+            if name in self.lexer.ignored:
+                self.trivia.append(self.token(name, position, end))
+            if name in self.sync:
+                return end
+            position = end
+        return position
+
+
+CEL_TOKEN = re.compile(r"\s*(?:(?P<number>\d+(?:\.\d+)?)|(?P<string>'(?:[^'\\]|\\.)*'|\"(?:[^\"\\]|\\.)*\")"
+                       r"|(?P<name>[A-Za-z_][A-Za-z0-9_]*)|(?P<operator>==|!=|<=|>=|&&|\|\||[-+*/%<>!?:.,()\[\]{}]))")
+
+
+CEL_OPERATORS = {"==": operator.eq, "!=": operator.ne, "<": operator.lt, ">": operator.gt, "<=": operator.le,
+                 ">=": operator.ge, "+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.truediv,
+                 "%": operator.mod}
+
+
+class Cel:
+    """The part of CEL that bindings' `when` and `value` expressions use (FBL section 2.4), enough for the reading
+    check: literals, lists, field and index access, has(), size(), string(), int(), the methods matches, startsWith,
+    endsWith, contains and lowerAscii, the comparison, arithmetic and logical operators, and the conditional."""
+
+    def __init__(self, source):
+        self.source = source
+        self.tokens = []
+        position = 0
+        while position < len(source):
+            match = CEL_TOKEN.match(source, position)
+            if not match or match.end() == position:
+                if source[position:].strip() == "":
+                    break
+                raise ReadingProblem(f"the expression `{source}` is not read by the reading check at {position}")
+            kind = match.lastgroup
+            self.tokens.append((kind, match.group(kind)))
+            position = match.end()
+        self.index = 0
+        self.tree = self.conditional()
+        if self.index != len(self.tokens):
+            raise ReadingProblem(f"the expression `{source}` is not read by the reading check")
+
+    def peek(self, value=None):
+        if self.index >= len(self.tokens):
+            return None
+        token = self.tokens[self.index]
+        return token if value is None or token[1] == value else None
+
+    def take(self, value=None):
+        token = self.peek(value)
+        if token is None:
+            raise ReadingProblem(f"the expression `{self.source}` is not read by the reading check")
+        self.index += 1
+        return token
+
+    def conditional(self):
+        condition = self.binary(0)
+        if self.peek("?"):
+            self.take("?")
+            then = self.conditional()
+            self.take(":")
+            return ("?", condition, then, self.conditional())
+        return condition
+
+    LEVELS = [["||"], ["&&"], ["==", "!=", "<", ">", "<=", ">=", "in"], ["+", "-"], ["*", "/", "%"]]
+
+    def binary(self, level):
+        if level == len(self.LEVELS):
+            return self.unary()
+        left = self.binary(level + 1)
+        while self.peek() and self.peek()[1] in self.LEVELS[level] and self.peek()[0] in ("operator", "name"):
+            operator = self.take()[1]
+            left = (operator, left, self.binary(level + 1))
+        return left
+
+    def unary(self):
+        if self.peek("!"):
+            self.take("!")
+            return ("!", self.unary())
+        if self.peek("-"):
+            self.take("-")
+            return ("neg", self.unary())
+        return self.member()
+
+    def member(self):
+        node = self.primary()
+        while True:
+            if self.peek("."):
+                self.take(".")
+                name = self.take()[1]
+                if self.peek("("):
+                    node = ("call", name, [node] + self.arguments())
+                else:
+                    node = ("field", node, name)
+            elif self.peek("["):
+                self.take("[")
+                index = self.conditional()
+                self.take("]")
+                node = ("index", node, index)
+            else:
+                return node
+
+    def arguments(self):
+        self.take("(")
+        items = []
+        while not self.peek(")"):
+            items.append(self.conditional())
+            if not self.peek(")"):
+                self.take(",")
+        self.take(")")
+        return items
+
+    def primary(self):
+        kind, value = self.take()
+        if kind == "number":
+            return ("literal", float(value) if "." in value else int(value))
+        if kind == "string":
+            return ("literal", re.sub(r"\\(.)", r"\1", value[1:-1]))
+        if value == "(":
+            node = self.conditional()
+            self.take(")")
+            return node
+        if value == "[":
+            items = []
+            while not self.peek("]"):
+                items.append(self.conditional())
+                if not self.peek("]"):
+                    self.take(",")
+            self.take("]")
+            return ("list", items)
+        if kind == "name":
+            if value in ("true", "false", "null"):
+                return ("literal", {"true": True, "false": False, "null": None}[value])
+            if self.peek("("):
+                return ("call", value, self.arguments())
+            return ("name", value)
+        raise ReadingProblem(f"the expression `{self.source}` is not read by the reading check")
+
+    def evaluate(self, variables):
+        return self.value(self.tree, variables)
+
+    def value(self, node, variables):
+        kind = node[0]
+        if kind == "literal":
+            return node[1]
+        if kind == "list":
+            return [self.value(item, variables) for item in node[1]]
+        if kind == "name":
+            if node[1] not in variables:
+                raise CelError(node[1])
+            return variables[node[1]]
+        if kind == "field":
+            target = self.value(node[1], variables)
+            if not isinstance(target, dict) or node[2] not in target:
+                raise CelError(node[2])
+            return target[node[2]]
+        if kind == "index":
+            target, index = self.value(node[1], variables), self.value(node[2], variables)
+            try:
+                return target[index]
+            except (KeyError, IndexError, TypeError) as error:
+                raise CelError(str(index)) from error
+        if kind == "?":
+            return self.value(node[2] if self.value(node[1], variables) is True else node[3], variables)
+        if kind == "!":
+            return not self.value(node[1], variables)
+        if kind == "neg":
+            return -self.value(node[1], variables)
+        if kind == "call":
+            return self.call(node[1], node[2], variables)
+        if kind == "&&":
+            return self.value(node[1], variables) is True and self.value(node[2], variables) is True
+        if kind == "||":
+            return self.value(node[1], variables) is True or self.value(node[2], variables) is True
+        left, right = self.value(node[1], variables), self.value(node[2], variables)
+        try:
+            return right.__contains__(left) if kind == "in" else CEL_OPERATORS[kind](left, right)
+        except (TypeError, AttributeError) as error:
+            raise CelError(kind) from error
+
+    def call(self, name, arguments, variables):
+        if name == "has":
+            try:
+                self.value(arguments[0], variables)
+            except CelError:
+                return False
+            return True
+        values = [self.value(argument, variables) for argument in arguments]
+        try:
+            if name == "size":
+                return len(values[0])
+            if name == "string":
+                return str(values[0])
+            if name == "int":
+                return int(values[0])
+            if name == "matches":
+                return re.search(values[1].replace("(?<", "(?P<"), values[0]) is not None
+            if name in ("startsWith", "endsWith"):
+                return values[0].startswith(values[1]) if name == "startsWith" else values[0].endswith(values[1])
+            if name == "contains":
+                return values[1] in values[0]
+            if name == "lowerAscii":
+                return values[0].lower()
+        except (TypeError, ValueError, IndexError, AttributeError) as error:
+            raise CelError(name) from error
+        raise ReadingProblem(f"the reading check does not evaluate CEL's `{name}`")
+
+
+SELECTOR_SEGMENT = re.compile(r"^(?P<name>[^\[\]]+)(?:\[(?P<path>[^=\]]+)=(?P<quote>['\"])(?P<value>.*)(?P=quote)\])?$")
+
+
+class GrammarTree:
+    """The tree of a grammar body as FBL section 4.9 presents it: names, children, spans, texts, document order,
+    selectors and the CEL value of a node (section 4.1.4)."""
+
+    def __init__(self, root, text):
+        self.root, self.text = root, text
+        self.parent, self.order = {}, {}
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            self.order[id(node)] = len(self.order)
+            children = self.children(node)
+            for child in children:
+                self.parent[id(child)] = node
+            stack.extend(reversed(children))
+
+    def is_token(self, node):
+        return isinstance(node, Token)
+
+    def name(self, node):
+        return node.type if self.is_token(node) else str(node.data)
+
+    def children(self, node):
+        return [] if self.is_token(node) else [child for child in node.children if child is not None]
+
+    def span(self, node):
+        if node is self.root:
+            return 0, len(self.text)
+        if self.is_token(node):
+            return node.start_pos, node.end_pos
+        return None if node.meta.empty else (node.meta.start_pos, node.meta.end_pos)
+
+    def text_of(self, node):
+        span = self.span(node)
+        return "" if span is None else self.text[span[0]:span[1]]
+
+    def ancestors(self, node):
+        while id(node) in self.parent:
+            node = self.parent[id(node)]
+            yield node
+
+    def ordered(self, nodes):
+        unique = {id(node): node for node in nodes}
+        return [node for _, node in sorted((self.order[key], node) for key, node in unique.items())]
+
+    def select(self, context, selector):
+        """The nodes a selector reaches (section 4.9's table), in document order."""
+        if selector == ".":
+            return [context]
+        if selector.startswith("/"):
+            context, selector = self.root, selector[1:]
+        nodes = [context]
+        for segment in [part for part in selector.split("/") if part]:
+            if segment == "**":
+                reached = []
+                for node in nodes:
+                    reached.extend(self.descendants(node))
+                nodes = reached
+                continue
+            match = SELECTOR_SEGMENT.match(segment)
+            if not match:
+                raise ReadingProblem(f"the selector `{selector}` has a segment the reading check does not read")
+            reached = []
+            for node in nodes:
+                for child in self.children(node):
+                    if match["name"] != "*" and self.name(child) != match["name"]:
+                        continue
+                    if match["path"] and not any(self.text_of(found) == match["value"]
+                                                 for found in self.select(child, match["path"])):
+                        continue
+                    reached.append(child)
+            nodes = reached
+        return self.ordered(nodes)
+
+    def descendants(self, node):
+        found, stack = [], [node]
+        while stack:
+            current = stack.pop()
+            found.append(current)
+            stack.extend(self.children(current))
+        return found
+
+    def cel(self, node):
+        """A node as CEL sees it: its type, text and children, an optional part that matched nothing being null."""
+        if node is None:
+            return None
+        if self.is_token(node):
+            return {"type": node.type, "text": str(node), "children": []}
+        return {"type": str(node.data), "text": self.text_of(node), "children": [self.cel(c) for c in node.children]}
+
+
+class ToolTypes:
+    """The tool type specifications by origin (`language.origin`), for the reading check's typeMap and attribute
+    types (DISL section 11.2)."""
+
+    specifications = None
+
+    @classmethod
+    def of(cls, origin):
+        if cls.specifications is None:
+            cls.specifications = {}
+            for path in sorted(repository.glob("definitions/**/*.dis")) + sorted(root.glob("**/*.dis")):
+                if "refused" in path.parts or "legacy" in path.parts:
+                    continue
+                try:
+                    document = json.loads(path.read_text(encoding="utf-8"))
+                except ValueError:
+                    continue
+                cls.specifications.setdefault(document.get("language", {}).get("origin"), document)
+        return cls.specifications.get(origin)
+
+
+class GrammarModel:
+    """What reading a grammar body gives for one reading: the elements of the rules, in reading order, with their
+    ids, parents and attributes; the attributes of the document from the rules the tool type maps as the diagram;
+    and the findings. FBL sections 4.9, 5, 9.3 and, for `selectedView` and views, FBL 0.10."""
+
+    def __init__(self, binding, folder, text, origin, view):
+        reader = GrammarReader(binding["body"], folder)
+        self.tree = GrammarTree(reader.read(text), text)
+        self.findings = list(reader.findings)
+        self.open_blocks = reader.open_blocks
+        self.lines = reader.lines
+        self.binding, self.origin = binding, origin
+        specification = ToolTypes.of(origin) or {}
+        self.type_map = specification.get("persistence", {}).get("typeMap") or {}
+        self.metamodel = specification.get("metamodel", {})
+        self.views = self.read_views(view)
+        self.selected = next((v for v in self.views if v["selected"]), None)
+        self.elements, self.document = [], {}
+        self.read_rules()
+
+    def read_views(self, wanted):
+        """Every view of the binding's block rules for this reading's origin (section 9.3), the selected one marked."""
+        views = []
+        rules = [rule for rule in self.binding.get("blocks", []) if "at" in rule and "view" in rule]
+        if any("origins" in rule for rule in rules):
+            rules = [rule for rule in rules if self.origin in rule.get("origins", [])]
+        for rule in rules:
+            for entry in self.tree.select(self.tree.root, rule["at"]):
+                values = self.slot_values(entry, rule["view"], None)
+                views.append({"rule": rule, "entry": entry, "name": values[0] if values else None, "selected": False})
+        views = [view for _, _, view in sorted((self.tree.order[id(v["entry"])], i, v) for i, v in enumerate(views))]
+        if wanted is None:
+            if views:
+                views[0]["selected"] = True
+        else:
+            match = next((v for v in views if v["name"] is not None and v["name"].lower() == wanted.lower()), None)
+            if match:
+                match["selected"] = True
+        return views
+
+    def rules(self):
+        return [("element", rule) for rule in self.binding.get("elements", [])] + [
+            ("relation", rule) for rule in self.binding.get("relations", [])]
+
+    def read_rules(self):
+        selected = {}
+        candidates = []
+        for kind, rule in self.rules():
+            for entry in self.tree.select(self.tree.root, rule["at"]):
+                candidates.append((kind, rule, entry))
+        matched = {id(entry) for _, _, entry in candidates}
+        claimed = {}
+        for kind, rule, entry in candidates:
+            if id(entry) in claimed:
+                continue
+            if rule.get("selectedView") and not (self.selected and any(
+                    a is self.selected["entry"] for a in self.tree.ancestors(entry))):
+                continue
+            if "when" in rule and not self.holds(rule["when"], entry, matched):
+                continue
+            claimed[id(entry)] = (kind, rule, entry)
+        for _, (kind, rule, entry) in sorted((self.tree.order[key], claim) for key, claim in claimed.items()):
+            element = {"kind": kind, "rule": rule, "entry": entry, "attributes": {}, "id": None, "parent": None}
+            selected[id(entry)] = element
+            parent_rules = rule.get("parent", {}).get("rules", [])
+            element["parent"] = next((selected[id(a)] for a in self.tree.ancestors(entry)
+                                      if id(a) in selected and selected[id(a)]["rule"]["name"] in parent_rules), None)
+            enclosing = next((selected[id(a)] for a in self.tree.ancestors(entry) if id(a) in selected), None)
+            identifier = rule.get("id", {}).get("from")
+            if identifier:
+                values = self.slot_values(entry, identifier, enclosing)
+                element["id"] = values[0] if values else None
+            for attribute, binding in rule.get("attributes", {}).items():
+                value = self.attribute_value(rule, attribute, binding, entry, enclosing)
+                if value is not None:
+                    element["attributes"][attribute] = value
+            self.place(element)
+
+    def holds(self, expression, entry, matched):
+        parent = next((a for a in self.tree.ancestors(entry) if id(a) in matched), None)
+        variables = {"entry": self.tree.cel(entry), "parent": self.tree.cel(parent),
+                     "line": self.lines.line(self.tree.span(entry)[0]) if self.tree.span(entry) else 0,
+                     "registration": {}}
+        try:
+            return Cel(expression).evaluate(variables) is True
+        except CelError:
+            return False
+
+    def mapped(self, rule):
+        """The type map's entry for the rule's type: ('diagram' | 'relation' | 'element' | other, its renames)."""
+        entry = self.type_map.get(rule["type"])
+        if not entry:
+            return ("relation" if rule["type"] in self.metamodel.get("relations", {}) else "element"), {}, rule["type"]
+        target = entry.get("as", rule["type"])
+        renames = entry.get("attributes", {})
+        if target == "diagram":
+            return "diagram", renames, None
+        if target in self.metamodel.get("relations", {}):
+            return "relation", renames, target
+        if target in ("header", "unreadable"):
+            return target, renames, None
+        return "element", renames, target
+
+    def attribute_type(self, rule, attribute):
+        """The metamodel's declaration of the attribute the binding's attribute maps to, or {} when it has none."""
+        kind, renames, target = self.mapped(rule)
+        name = renames.get(attribute, attribute)
+        if kind == "diagram":
+            return self.metamodel.get("diagram", {}).get("attributes", {}).get(name, {})
+        types = self.metamodel.get("relations" if kind == "relation" else "types", {})
+        seen = set()
+        while target and target not in seen:
+            seen.add(target)
+            declared = types.get(target, {})
+            if name in declared.get("attributes", {}):
+                return declared["attributes"][name]
+            target = declared.get("extends")
+            target = target[0] if isinstance(target, list) else target
+        return {}
+
+    def attribute_value(self, rule, attribute, binding, entry, enclosing):
+        declared = self.attribute_type(rule, attribute)
+        values = self.slot_values(entry, binding, enclosing)
+        for further in binding.get("gather", []):
+            values = values + self.slot_values(entry, further, enclosing)
+        if declared.get("many"):
+            return [self.converted(value, declared) for value in values]
+        if not values:
+            return binding.get("default")
+        return self.converted(values[0], declared)
+
+    def converted(self, value, declared):
+        kind = declared.get("type")
+        if not isinstance(value, str):
+            return value
+        if kind == "int" and re.fullmatch(r"[-+]?\d+", value):
+            return int(value)
+        if kind == "number" and re.fullmatch(r"[-+]?(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?", value):
+            return float(value)
+        if kind == "bool" and value in ("true", "false"):
+            return value == "true"
+        return value
+
+    def slot_values(self, entry, slot, enclosing):
+        """Every value a slot reads from an entry, in document order (FBL 0.10: a `many` attribute's `{node}` slot
+        reads every node it reaches; a single-valued one takes the first)."""
+        if "node" in slot:
+            values = []
+            for node in self.tree.select(entry, slot["node"]):
+                if self.tree.span(node) is None:
+                    continue
+                value = self.tree.text_of(node)
+                if "match" in slot:
+                    match = re.fullmatch(slot["match"].replace("(?<", "(?P<"), value, re.DOTALL)
+                    if not match:
+                        continue
+                    value = match["value"]
+                if "escape" in slot:
+                    value = unescaped(value, slot["escape"]["with"], slot["escape"]["quote"])
+                values.append(value)
+            return values
+        if "value" in slot:
+            try:
+                value = Cel(slot["value"]).evaluate({"entry": self.tree.cel(entry), "line": self.lines.line(
+                    self.tree.span(entry)[0]) if self.tree.span(entry) else 0, "registration": {}, "parent": None})
+            except CelError:
+                return []
+            return [] if value is None else [value]
+        if "parent" in slot:
+            if enclosing is None or slot["parent"] not in enclosing["attributes"]:
+                return []
+            value = enclosing["attributes"][slot["parent"]]
+            return value if isinstance(value, list) else [value]
+        raise ReadingProblem(f"a slot of the grammar family the reading check does not read: {json.dumps(slot)}")
+
+    def place(self, element):
+        """An element as reading yields it: in `elements`, or, for a type the tool type maps as the diagram, in the
+        document's attributes, a list attribute gathering the items of every entry in reading order and a single one
+        taking the first; a relation, a header or an unreadable entry is in neither."""
+        kind, renames, _ = self.mapped(element["rule"])
+        element["mapped"] = kind
+        if kind == "element" and element["kind"] == "element":
+            self.elements.append(element)
+        elif kind == "diagram":
+            for attribute, value in element["attributes"].items():
+                name = renames.get(attribute, attribute)
+                if isinstance(value, list):
+                    self.document[name] = self.document.get(name, []) + value
+                else:
+                    self.document.setdefault(name, value)
+
+
+def unescaped(value, escape, quote):
+    """FBL 0.10, a slot's `escape`: `with`+`quote` reads as `quote`, `with`+`with` as `with`, and `with` before any other
+    character stays as it is."""
+    result, index = [], 0
+    while index < len(value):
+        if value[index] == escape and index + 1 < len(value) and value[index + 1] in (escape, quote):
+            result.append(value[index + 1])
+            index += 2
+        else:
+            result.append(value[index])
+            index += 1
+    return "".join(result)
+
+
+def fixture_binding(path: Path, fixture):
+    """The binding a fixture names, and the folder of its FBL document."""
+    reference, _, name = fixture["binding"].partition("#")
+    document_path = (path.parent / reference).resolve()
+    document = json.loads(document_path.read_text(encoding="utf-8"))
+    return document["bindings"][name], document_path.parent
+
+
+def reading_of_fixture(path: Path, fixture, binding, folder):
+    """What the fixture's input reads as: a body, or a registration that names one (FBL section 8), and the origin of
+    the reading, which is the registration's or, for a body opened alone, the first origin the binding claims."""
+    input_path = path.parent / fixture["input"]
+    view = None
+    origin = (binding.get("claims", {}).get("origins") or [None])[0]
+    if input_path.suffix == ".adp":
+        registration, problem = parse_registration(input_path.read_bytes())
+        if problem:
+            raise ReadingProblem(f"the registration does not parse: {problem}")
+        origin, view = registration["origin"], registration.get("view")
+        if "body" in registration:
+            input_path = input_path.parent / registration["body"]
+        else:
+            input_path = next((input_path.with_suffix(e) for e in binding.get("claims", {}).get("extensions", [])
+                               if input_path.with_suffix(e).is_file()), input_path)
+    text = input_path.read_bytes().decode("utf-8").removeprefix("﻿")
+    return GrammarModel(binding, folder, text, origin, view)
+
+
+def same_value(expected, actual) -> bool:
+    """Whether a value read equals the fixture's, of the same JSON type (a bool is not a number)."""
+    if isinstance(expected, bool) or isinstance(actual, bool):
+        return isinstance(expected, bool) and isinstance(actual, bool) and expected == actual
+    if isinstance(expected, list) and isinstance(actual, list):
+        return len(expected) == len(actual) and all(same_value(e, a) for e, a in zip(expected, actual))
+    return type(expected) is type(actual) and expected == actual or (
+        isinstance(expected, (int, float)) and isinstance(actual, (int, float)) and expected == actual)
+
+
+def check_reading(path: Path, fixture) -> str | None:
+    """The reading check (FBL 0.10, research R20): for a fixture whose binding is of the grammar family, what reading
+    its input gives against the fixture's `read`. Returns the first difference, if any."""
+    expected = fixture.get("read")
+    binding, folder = fixture_binding(path, fixture)
+    if expected is None or binding.get("body", {}).get("family") != "grammar":
+        return None
+    try:
+        model = reading_of_fixture(path, fixture, binding, folder)
+    except ReadingProblem as problem:
+        if expected.get("unreadable") and "unreadable" in str(problem):
+            return None
+        return f"reading: {problem}"
+    if expected.get("unreadable"):
+        return "reading: the fixture says the body is unreadable, and it reads"
+    if "elements" in expected:
+        read = model.elements
+        if len(read) != len(expected["elements"]):
+            listed = ", ".join(f"{e['rule']['type']} {e['id']}" for e in read)
+            return f"reading: {len(read)} element(s) read ({listed}), and the fixture lists {len(expected['elements'])}"
+        position = {id(element): index for index, element in enumerate(read)}
+        for index, (want, got) in enumerate(zip(expected["elements"], read), start=1):
+            where = f"reading: element {index} ({want['id']})"
+            if want["type"] != got["rule"]["type"]:
+                return f"{where} is read as a {got['rule']['type']}, and the fixture says {want['type']}"
+            if got["id"] is not None and want["id"] != got["id"]:
+                return f"{where} is read with the id {got['id']}"
+            if "parent" in want:
+                parent = got["parent"]
+                parent_id = None if parent is None else expected["elements"][position[id(parent)]]["id"] \
+                    if id(parent) in position else parent["id"]
+                if want["parent"] != parent_id:
+                    return f"{where} is read inside {parent_id}, and the fixture says {want['parent']}"
+            for attribute, value in want.get("attributes", {}).items():
+                actual = got["attributes"].get(attribute)
+                if not same_value(value, actual) and not (value is None and attribute not in got["attributes"]):
+                    return f"{where}: {attribute} reads {json.dumps(actual)}, and the fixture says {json.dumps(value)}"
+    if "document" in expected:
+        for attribute, value in expected["document"].get("attributes", {}).items():
+            actual = model.document.get(attribute)
+            if not same_value(value, actual) and not (value is None and attribute not in model.document):
+                return f"reading: the document's {attribute} reads {json.dumps(actual)}, and the fixture says {json.dumps(value)}"
+    if "findings" in expected:
+        got = sorted((f["rule"], f["line"]) for f in model.findings)
+        want = [f for f in expected["findings"] if f["rule"] in GRAMMAR_FINDINGS]
+        remaining = list(got)
+        for finding in want:
+            match = next((g for g in remaining if g[0] == finding["rule"] and finding.get("line", g[1]) == g[1]), None)
+            if match is None:
+                return f"reading: no {finding['rule']} is read{' at line ' + str(finding['line']) if 'line' in finding else ''}; read: {got}"
+            remaining.remove(match)
+        if remaining:
+            return f"reading: {remaining[0][0]} is read at line {remaining[0][1]}, which the fixture does not list"
+    return None
+
+
 def resolve_names(document) -> list[str]:
     """Checks the names an FBL document's rules refer to (FBL section 14.1, step 4) and returns a problem per
     unresolved name, each with the JSON Pointer of where it is used."""
@@ -1180,7 +2095,7 @@ for path in examples:
         for error in errors[:10]:
             location = "/".join(str(part) for part in error.absolute_path) or "(root)"
             print(f"  at {location}: {error.message}")
-    elif reference == FBL_FIXTURE and (problem := replay_fixture(path, document)):
+    elif reference == FBL_FIXTURE and (problem := replay_fixture(path, document) or check_reading(path, document)):
         failures += 1
         print(f"FAIL {name}: {problem}")
     elif reference == KNOWLEDGE and (problems := check_knowledge(document)):
