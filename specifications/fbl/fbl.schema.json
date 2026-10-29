@@ -1295,6 +1295,15 @@
           "properties": {
             "key": {
               "$ref": "#/$defs/Expression"
+            },
+            "kind": {
+              "description": "(FBL 0.12) The kind an entry of this rule is kept under, in the identities block and in a legacy identities file: the key of an entry is the kind and the natural key together, so that elements of different kinds with the same natural key keep different ids. Without it, the rule's type is the kind (section 8.6).",
+              "$ref": "#/$defs/Name"
+            },
+            "ordinal": {
+              "description": "(FBL 0.12) The text appended to the natural key of the n-th later entry of the same kind and key, in document order, with {n} replaced by n, from 2 (section 8.6).",
+              "type": "string",
+              "pattern": "^(?:(?!\\{n\\}).)*\\{n\\}(?:(?!\\{n\\}).)*$"
             }
           },
           "additionalProperties": false,
@@ -1807,6 +1816,18 @@
           },
           "minItems": 1
         },
+        "items": {
+          "description": "(FBL 0.12) grammar, on a {node} slot of a many attribute: a map from an item attribute to a {node} slot relative to each node the selector reaches; the attribute is then a list of structured values, one per node, each a map of its item attributes (sections 5.2, 6.3).",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/Slot"
+          },
+          "minProperties": 1
+        },
+        "separator": {
+          "description": "(FBL 0.12) The text written between two items of an items slot; \", \" when none is given (section 6.3).",
+          "type": "string"
+        },
         "readOnly": {
           "description": "true, or the sentence a host shows as the reason.",
           "anyOf": [
@@ -1849,6 +1870,12 @@
       "dependentRequired": {
         "escape": [
           "node"
+        ],
+        "items": [
+          "node"
+        ],
+        "separator": [
+          "items"
         ]
       }
     },
@@ -2174,7 +2201,7 @@
           "type": "string"
         },
         "legacyIdentities": {
-          "description": "A sidecar of ids read, keyed by natural key: '{base}.identities.json'.",
+          "description": "A sidecar of ids read when the registration has no identities: block, and written back while it exists: '{base}.identities.json'. (FBL 0.12) A JSON array of entries {id, kind, key}, matched to the element of that kind with that natural key (section 8.7).",
           "type": "string"
         }
       },
@@ -3282,7 +3309,7 @@
       "minLength": 1
     },
     "RuleOutsideGrammar": {
-      "description": "(FBL 0.11) What a rule of a binding of another family than grammar does not hold: opens as an object, selectedView, and attribute bindings with escape, gather or create with after (section 4.9).",
+      "description": "(FBL 0.11) What a rule of a binding of another family than grammar does not hold: opens as an object, selectedView, and attribute bindings with escape, gather or create with after (section 4.9); (FBL 0.12) nor items or separator (section 5.2).",
       "not": {
         "anyOf": [
           {
@@ -3318,6 +3345,16 @@
                         {
                           "required": [
                             "gather"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "items"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "separator"
                           ]
                         },
                         {
