@@ -32,7 +32,12 @@ registration under `specifications/fbl/` is parsed from its line form into `fbl.
 (FBL section 8). A `fixture.json` under `specifications/fbl/fixtures/` is validated against `$defs/Fixture` and then
 replayed: every step's splices must turn the document before the step into the document it expects, byte for byte,
 and an undo must return the document the undone edit started from (FBL section 15.3), its splices listed under the
-operations of the splices they invert, as a redo's are. A `setting` step
+operations of the splices they invert, as a redo's are. (FBL 0.10) A splice that names a `file` writes a file beside
+the input, the body a registration names or a sidecar: that file is replayed from its bytes beside the input, the
+step's `expectFiles` gives its bytes after the step, and an undo or a redo is checked over the input and those files
+together. A fixture with a `template` (`{name, origin}`) states that its input is the new document the binding's
+template gives for that file name and origin (FBL section 13): the template is written with its placeholders replaced,
+`{key:lower}` included, and compared with the input byte for byte. A `setting` step
 on a block the fixture's binding declares with `history: false` is no step of the history (FBL 0.7, section 7.1); an
 undo or redo of an edit made before it is checked by what each of its splices replaces and writes, since that block's
 write stands between. An `.adp` registration's blocks besides `layout:` and `identities:` are read into `blocks`,
@@ -42,7 +47,9 @@ then checked for its names (FBL section 14.1, step 4): every rule a `parent`, `c
 every rule it names stores its id with `id.from` (the specification languages reserve `id`, so it is never an attribute's name).
 It is also checked for its constants (FBL 0.8, section 14.1, step 6): an insert's `constant` stands only on a rule that
 reads the yaml or json family, and none of its keys is a key the same rule writes, through a writable attribute
-binding, its id or one of its ends. The `*.fbl` documents under `specifications/fbl/refused/` are the other way
+binding, its id or one of its ends. And it is checked for its origins (FBL 0.10, section 14.1, step 6): every
+origin a rule's `origins` lists, and every origin `registration.resource.byOrigin` names, is one of the binding's
+`claims.origins`. The `*.fbl` documents under `specifications/fbl/refused/` are the other way
 round: each must be valid against the schema and refused by one of these checks, and the run fails when one is
 accepted.
 The fixtures under a folder named `*-equivalence` read one model in different formats: their `read` must be identical.
@@ -611,60 +618,143 @@ def blocks_outside_history(folder: Path, reference: str) -> set[str]:
     return {block for block, settings in blocks.items() if settings.get("history") is False}
 
 
-def replay_fixture(path: Path, fixture) -> str | None:
-    """Replays a fixture's steps (FBL section 15.3) and returns the first problem, if any."""
-    folder = path.parent
+def fixture_binding(folder: Path, reference: str):
+    """The binding a fixture names, or None when it cannot be read."""
+    file, _, name = reference.partition("#")
+    try:
+        return json.loads((folder / file).read_text(encoding="utf-8"))["bindings"][name]
+    except (OSError, ValueError, KeyError):
+        return None
+
+
+def template_key(base: str) -> str:
+    """The `{key}` of a template (FBL section 13): the base name with every character outside ASCII letters, digits
+    and `_` replaced by `_`, leading and trailing `_` removed, `_` prefixed before a leading digit, `untitled` for
+    nothing."""
+    key = re.sub(r"[^A-Za-z0-9_]", "_", base).strip("_")
+    if key[:1].isdigit():
+        key = "_" + key
+    return key or "untitled"
+
+
+def write_template(text: str, name: str) -> tuple[str | None, str | None]:
+    """Writes a binding's template for a new file of that name (FBL section 13, step 2), or returns a problem. Only
+    the placeholders are replaced; `{` and `}` that form none are literal. A `{newid:<rule>}` depends on an id
+    strategy no fixture can state."""
+    base = name.rpartition(".")[0] or name
+    key = template_key(base)
+    values = {"name": name, "base": base, "key": key, "key:lower": key.lower()}  # FBL 0.10: {key:lower}
+    written, position = [], 0
+    for placeholder in re.finditer(r"\{(name|base|key|key:lower|newid:[^{}]*)\}", text):
+        if placeholder.group(1).startswith("newid:"):
+            return None, f"the template holds {placeholder.group(0)}, whose id a fixture cannot state"
+        written.append(text[position:placeholder.start()])
+        written.append(values[placeholder.group(1)])
+        position = placeholder.end()
+    written.append(text[position:])
+    return "".join(written), None
+
+
+def check_template(folder: Path, fixture) -> str | None:
+    """FBL 0.10, section 15.3: a fixture's `template` says that its input is the new document the binding's template
+    gives for that file name and origin; the template is written so and compared with the input byte for byte."""
+    binding = fixture_binding(folder, fixture["binding"])
+    if binding is None:
+        return f"its binding {fixture['binding']} cannot be read"
+    origin = fixture["template"]["origin"]
+    if origin not in binding.get("claims", {}).get("origins", []):
+        return f"its template names the origin {origin!r}, which the binding does not claim"
+    template = binding.get("template")
+    if template is None:
+        return "its binding has no template"
+    written, problem = write_template(template.get("byOrigin", {}).get(origin, template["text"]), fixture["template"]["name"])
+    if problem:
+        return problem
+    expected = written.encode("utf-8")
     document = (folder / fixture["input"]).read_bytes()
+    if document != expected:
+        return f"the input is not the template the binding writes for {fixture['template']['name']!r} as {origin}, first at byte {first_difference(document, expected)}"
+    return None
+
+
+def replay_fixture(path: Path, fixture) -> str | None:
+    """Replays a fixture's steps (FBL section 15.3) and returns the first problem, if any. The document is the input
+    and (FBL 0.10) every file beside it that a step's splices name in `file`, by that name: each file's splices turn
+    its bytes before the step into those `expectFiles` gives, and an undo or a redo is checked over all of them."""
+    folder = path.parent
+    if "template" in fixture and (problem := check_template(folder, fixture)):
+        return problem
+    beside = (folder / fixture["input"]).parent
+    files = {None: (folder / fixture["input"]).read_bytes()}  # None: the input; otherwise a file beside it
     outside = blocks_outside_history(folder, fixture["binding"])
-    # (before, after, changes, crossed, operations) of each edit that can be undone, and of each that can be redone; crossed:
-    # a write outside the history (FBL 0.7, section 7.1) came after it, so its undo is compared by what it changes, not by
-    # bytes; operations: the operations its splices are named by, which its undo and redo are listed under (section 15.3)
+    # (before, after, changes, crossed, operations) of each edit that can be undone, and of each that can be redone:
+    # before and after hold every file; changes the input's; crossed: a write outside the history (FBL 0.7, section
+    # 7.1) came after it, so its undo is compared by what it changes in the input, not by bytes; operations: the
+    # operations its splices are named by, which its undo and redo are listed under (section 15.3)
     done, undone = [], []
     for index, step in enumerate(fixture["steps"], start=1):
-        if "expectFile" in step:
-            expected = (folder / step["expectFile"]).read_bytes()
-        elif "expect" in step:
-            expected = step["expect"].encode("utf-8")
-        else:
-            expected = document
-        result, restored, problem = apply_splices(document, step["splices"])
-        if problem:
-            return f"step {index}: {problem}"
-        if result != expected:
-            return f"step {index}: the splices give a different document, first at byte {first_difference(result, expected)}"
-        if restored != document:
-            return f"step {index}: the inverse splices do not restore the document before the step"
+        expected_files = step.get("expectFiles", {})
+        named = {splice["file"] for splice in step["splices"] if "file" in splice} | set(expected_files)
+        for name in sorted(named - set(files)):
+            try:
+                files[name] = (beside / name).read_bytes()
+            except OSError:
+                return f"step {index}: the file {name!r} is not beside the input"
+        for name in sorted(named - set(expected_files)):
+            return f"step {index}: its splices write {name!r}, and expectFiles does not give that file's bytes after the step"
+        before_step = dict(files)
+        after_step = {}
+        for name, document in files.items():
+            splices = [splice for splice in step["splices"] if splice.get("file") == name]
+            result, restored, problem = apply_splices(document, splices)
+            where = "" if name is None else f" in {name!r}"
+            if problem:
+                return f"step {index}: {problem}{where}"
+            if name is None and "expectFile" in step:
+                expected = (folder / step["expectFile"]).read_bytes()
+            elif name is None and "expect" in step:
+                expected = step["expect"].encode("utf-8")
+            elif name is None:
+                expected = document
+            else:
+                expected = expected_files.get(name, document.decode("utf-8")).encode("utf-8")
+            if result != expected:
+                return f"step {index}: the splices give a different document{where}, first at byte {first_difference(result, expected)}"
+            if restored != document:
+                return f"step {index}: the inverse splices do not restore the document before the step{where}"
+            after_step[name] = result
+        document, result = before_step, after_step
         edit = step.get("edit", {})
         changes_of_edit = edit if isinstance(edit, list) else [edit]  # FBL 0.7: one transaction's changes
-        changes = splice_changes(document, step["splices"])
+        changes = splice_changes(before_step[None], [splice for splice in step["splices"] if "file" not in splice])
         operations = {splice["operation"] for splice in step["splices"]}
         if step.get("undo") or step.get("redo"):
             # An undo lists the inverse splices under the operation of the splice each inverts, and a redo the edit's own
             # (section 15.3); a snapshot's one splice is under the operation of the edit's first (section 7.1).
             stack = done if step.get("undo") else undone
             if stack and not operations <= stack[-1][4]:
-                named = ", ".join(sorted(operations - stack[-1][4]))
-                return f"step {index}: the {'undo' if step.get('undo') else 'redo'} names an operation the edit it replays has not: {named}"
+                named_operations = ", ".join(sorted(operations - stack[-1][4]))
+                return f"step {index}: the {'undo' if step.get('undo') else 'redo'} names an operation the edit it replays has not: {named_operations}"
         if step.get("undo"):
             if not done:
                 return f"step {index}: nothing to undo"
             before, after, edit_changes, crossed, edit_operations = done.pop()
-            if crossed and changes != [(new, old) for old, new in edit_changes]:
+            if crossed and (changes != [(new, old) for old, new in edit_changes] or not same_beside(document, after) or not same_beside(result, before)):
                 return f"step {index}: the undo does not put back what the undone edit changed"
-            if not crossed and (document != after or result != before):
+            if not crossed and (not same_files(document, after) or not same_files(result, before)):
                 return f"step {index}: the undo does not return the document the undone edit started from"
             undone.append((before, after, edit_changes, crossed, edit_operations))
         elif step.get("redo"):
             if not undone:
                 return f"step {index}: nothing to redo"
             before, after, edit_changes, crossed, edit_operations = undone.pop()
-            if crossed and changes != edit_changes:
+            if crossed and (changes != edit_changes or not same_beside(document, before) or not same_beside(result, after)):
                 return f"step {index}: the redo does not make the changes the edit made"
-            if not crossed and (document != before or result != after):
+            if not crossed and (not same_files(document, before) or not same_files(result, after)):
                 return f"step {index}: the redo does not return the document the edit produced"
             done.append((before, after, edit_changes, crossed, edit_operations))
         elif step.get("refused") or any("save" in change for change in changes_of_edit):
-            if result != document:
+            if not same_files(result, document):
                 return f"step {index}: a refused edit or a save without change must leave the document as it is"
         elif all(change.get("setting", {}).get("block") in outside for change in changes_of_edit):  # no step of the history: undo and redo pass it by
             done = [(before, after, edit_changes, True, edit_operations) for before, after, edit_changes, _, edit_operations in done]
@@ -672,8 +762,19 @@ def replay_fixture(path: Path, fixture) -> str | None:
         else:
             done.append((document, result, changes, False, operations))
             undone.clear()
-        document = result
+        files = result
     return None
+
+
+def same_files(a: dict, b: dict) -> bool:
+    """Whether two states of a fixture's files hold the same bytes; a file one of them has not read yet is as it is
+    beside the input in the other, since only a step's splices change a file."""
+    return all(a.get(name, b[name]) == b[name] for name in b) and all(b.get(name, a[name]) == a[name] for name in a)
+
+
+def same_beside(a: dict, b: dict) -> bool:
+    """Whether two states of a fixture's files hold the same bytes in every file beside the input."""
+    return same_files({name: data for name, data in a.items() if name is not None}, {name: data for name, data in b.items() if name is not None})
 
 
 def resolve_names(document) -> list[str]:
@@ -757,6 +858,25 @@ def check_constants(document) -> list[str]:
                 for key in constant:
                     if key in written:
                         problems.append(f"at {pointer}/{key}: the rule {rule['name']!r} also writes the key {key!r}, through {written[key]}")
+    return problems
+
+
+def check_origins(document) -> list[str]:
+    """Checks the origins an FBL document's rules and resource captures name (FBL 0.10, section 14.1, step 6): every
+    origin a rule's `origins` lists, and every origin `registration.resource.byOrigin` names, is one of the binding's
+    `claims.origins`. Returns a problem per origin that is not, with the JSON Pointer of where it is named."""
+    problems = []
+    for binding_name, binding in document.get("bindings", {}).items():
+        base = f"/bindings/{binding_name}"
+        claimed = set(binding.get("claims", {}).get("origins", []))
+        for kind in ("elements", "relations", "blocks"):
+            for index, rule in enumerate(binding.get(kind, [])):
+                for origin in rule.get("origins", []):
+                    if origin not in claimed:
+                        problems.append(f"at {base}/{kind}/{index}/origins: the rule {rule['name']!r} is read for {origin!r}, which the binding does not claim")
+        for origin in binding.get("registration", {}).get("resource", {}).get("byOrigin", {}):
+            if origin not in claimed:
+                problems.append(f"at {base}/registration/resource/byOrigin: names the origin {origin!r}, which the binding does not claim")
     return problems
 
 
@@ -1145,12 +1265,12 @@ for path in examples:
         failures += 1
         print(f"FAIL {name}: only DISL specifications belong in specifications/disl/refused/")
     elif refused and reference == FBL:
-        if problems := resolve_names(document) + check_constants(document):
+        if problems := resolve_names(document) + check_constants(document) + check_origins(document):
             print(f"ok   {name} (refused, as a binding in refused/ must be: {problems[0]})")
         else:
             failures += 1
             print(f"FAIL {name}: a binding in refused/ must be refused by a check of FBL section 14.1, and this one is accepted")
-    elif reference in (FBL, DESL, DISL) and (problems := (resolve_names(document) + check_constants(document) if reference == FBL else resolve_desl(path, document) if reference == DESL else resolve_disl(document))):
+    elif reference in (FBL, DESL, DISL) and (problems := (resolve_names(document) + check_constants(document) + check_origins(document) if reference == FBL else resolve_desl(path, document) if reference == DESL else resolve_disl(document))):
         failures += 1
         print(f"FAIL {name}: {len(problems)} name problem(s)")
         for problem in problems[:10]:

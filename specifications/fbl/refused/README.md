@@ -7,3 +7,5 @@ The FBL documents in this folder are valid against [`fbl.schema.json`](../fbl.sc
 | Document | Refused by |
 |---|---|
 | `insert-constant-collision.fbl` | *(FBL 0.8)* Section 14.1, step 6: an insert's `constant` names a key that the same rule writes through a writable attribute binding (section 6.2). |
+| `origins-not-claimed.fbl` | *(FBL 0.10)* Section 14.1, step 6: a rule's `origins` lists an origin that is not one of the binding's `claims.origins` (section 5.1). |
+| `resource-by-origin-not-claimed.fbl` | *(FBL 0.10)* Section 14.1, step 6: `registration.resource.byOrigin` names an origin that is not one of the binding's `claims.origins` (section 8.2). |
