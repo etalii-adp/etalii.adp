@@ -17,9 +17,16 @@ language (ATD section 4), whose root is `atd.lark`. Modes, any number of them to
   `atd.schema.json#/$defs/ParseTables` (rule 5), and the automaton of every grammar a binding example carries as
   `grammar/tables/<example>.<binding>.tables.json` (ATD section 11.9).
 - `--bindings`: the grammars bindings carry (FBL 0.9, section 4.9; ATD section 11.9): every grammar of an FBL example
-  (`*.fbl` under `specifications/fbl/` and `definitions/`) and of a tool description, inline or from a file, is linted
-  against the notation subset and built in strict mode from its start rule, its `recover` is checked against the
-  grammar, and every grammar in the refused corpus must fail to build.
+  (`*.fbl` under `specifications/fbl/` and `definitions/`), of a fixture's own binding (`*.fbl` under
+  `specifications/fbl/fixtures/`, FBL 0.11) and of a tool description, inline or from a file, is linted against the
+  notation subset and built in strict mode from its start rule, and its `recover` is checked against the grammar: the
+  start rule is `unit*`, and every `sync` entry, `nested.open` and `nested.close` and every key of `unclosed` names a
+  terminal of the grammar or the text of one of its anonymous string terminals, each terminal of `unclosed` an ignored
+  one (FBL 0.11). Every grammar binding of ATD's refused corpus (`specifications/atd/refused/*.atd`) must fail one of
+  these checks, and the run fails when one passes. The grammar bindings of FBL's refused corpus
+  (`specifications/fbl/refused/*.fbl`) are checked too, and one these checks refuse counts as refused; one they pass is
+  refused by a check of `validate-examples.py` instead, which fails the run when no check refuses a document there.
+  Only the examples' and tool descriptions' grammars have tables.
 - `--flatten`: writes `grammar/atd.flat.lark`, the whole grammar in one file, and has `llguidance`'s Lark front end
   accept it (rule 4, FR-090).
 - `--highlighting`: writes `highlighting/atd.tmLanguage.json` and `highlighting/atd.sublime-syntax` from the grammar's
@@ -537,11 +544,17 @@ def tables_text(parser, data=None):
 def binding_grammars(parser):
     """Every grammar a binding carries (FBL 0.9, section 4.9; ATD section 11.9), as dictionaries: `label`, the name of
     its tables file; `where`, the file and line its text starts at; `text`; `start`; `recover`; `folder`, where the
-    files it imports are; and `refused`, whether it stands in the refused corpus, where it must not build."""
+    files it imports are; `refused`, whether it stands in a refused corpus, where it must fail a check of
+    `--bindings`; and `tables`, whether its tables are published (an example's or a tool description's, not a
+    fixture's)."""
     grammars = []
-    fbl_examples = sorted((repository / "specifications" / "fbl").glob("*.fbl")) + sorted(
-        (repository / "definitions").rglob("*.fbl"))
-    for path in fbl_examples:
+    fbl = repository / "specifications" / "fbl"
+    # The examples' grammars, whose tables are published; the grammars of the fixtures' own bindings (FBL 0.11), held to
+    # the same verdict without tables; and the refused corpus of FBL (FBL 0.11), each of which must fail a check.
+    fbl_documents = [(p, "example") for p in sorted(fbl.glob("*.fbl")) + sorted((repository / "definitions").rglob("*.fbl"))]
+    fbl_documents += [(p, "fixture") for p in sorted((fbl / "fixtures").rglob("*.fbl"))]
+    fbl_documents += [(p, "fbl-refused") for p in sorted((fbl / "refused").glob("*.fbl"))]
+    for path, kind in fbl_documents:
         for name, binding in json.loads(path.read_text(encoding="utf-8")).get("bindings", {}).items():
             body = binding.get("body", {})
             if body.get("family") != "grammar":
@@ -553,7 +566,8 @@ def binding_grammars(parser):
                 source = where.read_text(encoding="utf-8")
             grammars.append({"label": f"{path.stem}.{name}", "where": (where, 1), "text": source,
                              "start": body.get("start", "start"), "recover": body.get("recover"),
-                             "folder": path.parent, "refused": False})
+                             "folder": path.parent, "refused": kind == "fbl-refused", "tables": kind == "example",
+                             "elsewhere": kind == "fbl-refused"})
     descriptions = (sorted(atd.glob("*.atd")) + sorted((repository / "definitions").rglob("*.atd"))
                     + sorted(atd.glob("refused/*.atd")))
     for path in descriptions:
@@ -585,7 +599,7 @@ def binding_grammars(parser):
                     continue
                 grammars.append({"label": f"{path.stem}.{name}", "where": where, "text": source,
                                  "start": body.get("start", "start"), "recover": body.get("recover"),
-                                 "folder": folder, "refused": path.parent.name == "refused"})
+                                 "folder": folder, "refused": path.parent.name == "refused", "tables": True})
     return grammars
 
 
@@ -629,49 +643,25 @@ def mode_bindings(parser, write, tables):
     for grammar in grammars:
         where, line = grammar["where"]
         relative = where.relative_to(repository)
-        folder = grammar["folder"]
-        siblings = [p.stem for p in folder.glob("*.lark")]
-        lint_text(grammar["text"], relative, siblings, first_line=line)
-        try:
-            built_parser = Lark(grammar["text"], parser="lalr", lexer="contextual", strict=True,
-                                start=grammar["start"], import_paths=[str(folder)], source_path=str(where),
-                                g_regex_flags=re.ASCII, maybe_placeholders=True)
-        except GrammarError as error:
-            if grammar["refused"]:
-                refused += 1
-            else:
-                fail(f"{relative}:{line}: the grammar of binding `{grammar['label']}` does not build as strict "
-                     f"LALR(1) from `{grammar['start']}`: {str(error).splitlines()[0]}")
-            continue
+        problems = binding_problems(grammar, relative, line)
         if grammar["refused"]:
-            fail(f"{relative}:{line}: the grammar of binding `{grammar['label']}` builds, but stands in the refused "
-                 f"corpus as one that does not (ATD8001)")
+            if problems:
+                refused += 1
+            elif not grammar.get("elsewhere"):
+                fail(f"{relative}:{line}: the grammar of binding `{grammar['label']}` passes every check, but stands in "
+                     f"the refused corpus as one that does not (ATD8001)")
             continue
-        recover = grammar["recover"]
-        if recover:
-            starts = [r for r in built_parser.rules if r.origin.name == grammar["start"]]
-            unit = recover.get("unit")
-            # `start: unit*` compiles to the empty expansion and one that is a repetition of `unit` alone.
-            shapes = sorted(tuple(s.name for s in r.expansion) for r in starts)
-            repetition = [e for e in shapes if e]
-            ok = len(shapes) == 2 and shapes[0] == () and len(repetition) == 1 and len(repetition[0]) == 1 and any(
-                tuple(s.name for s in r.expansion) == (unit,) for r in built_parser.rules
-                if r.origin.name == repetition[0][0])
-            if not ok:
-                fail(f"{relative}: the start rule `{grammar['start']}` of binding `{grammar['label']}` is not "
-                     f"`{unit}*`, which `recover` asks for (FBL section 4.9)")
-            names = {t.name for t in built_parser.terminals}
-            strings = {t.pattern.value for t in built_parser.terminals if t.pattern.type == "str"}
-            for sync in recover.get("sync", []):
-                if sync not in names and sync not in strings:
-                    fail(f"{relative}: `recover.sync` of binding `{grammar['label']}` names `{sync}`, no terminal of "
-                         f"its grammar (FBL section 4.9)")
+        for problem in problems:
+            fail(problem)
+        if problems:
+            continue
         built += 1
-        if tables:
+        if tables and grammar["tables"]:
+            built_parser = build_binding(grammar, where)
             if grammar["label"] in labels:
                 fail(f"{relative}: a second binding grammar named `{grammar['label']}`")
             labels.add(grammar["label"])
-            texts = [grammar["text"]] + grammar_imports(grammar["text"], folder)
+            texts = [grammar["text"]] + grammar_imports(grammar["text"], grammar["folder"])
             data = normalized_tables(built_parser, grammar=where.relative_to(repository).as_posix()
                                      + ("" if where.suffix == ".lark" else f"#{grammar['label'].split('.')[-1]}"),
                                      start_symbol=grammar["start"], texts=texts)
@@ -682,6 +672,64 @@ def mode_bindings(parser, write, tables):
             if stale.name.removesuffix(".tables.json") not in labels:
                 fail(f"{stale.relative_to(repository)} is the tables of no binding grammar; remove it")
     print(f"bindings: {built} binding grammar(s) build as strict LALR(1), {refused} in the refused corpus do not")
+
+
+def build_binding(grammar, where):
+    return Lark(grammar["text"], parser="lalr", lexer="contextual", strict=True, start=grammar["start"],
+                import_paths=[str(grammar["folder"])], source_path=str(where), g_regex_flags=re.ASCII,
+                maybe_placeholders=True)
+
+
+def binding_problems(grammar, relative, line):
+    """What `--bindings` refuses in a binding's grammar: a lint finding, a grammar that does not build as strict
+    LALR(1), and a `recover` that does not fit it (FBL 0.9 and 0.11, section 4.9)."""
+    problems = []
+    before = len(failures)
+    siblings = [p.stem for p in grammar["folder"].glob("*.lark")]
+    lint_text(grammar["text"], relative, siblings, first_line=line)
+    if grammar["refused"]:  # a lint finding in the refused corpus is its refusal, not a failure of the run
+        problems.extend(failures[before:])
+        del failures[before:]
+    try:
+        built_parser = build_binding(grammar, grammar["where"][0])
+    except GrammarError as error:
+        return problems + [f"{relative}:{line}: the grammar of binding `{grammar['label']}` does not build as strict "
+                           f"LALR(1) from `{grammar['start']}`: {str(error).splitlines()[0]}"]
+    recover = grammar["recover"]
+    if not recover:
+        return problems
+    label = grammar["label"]
+    starts = [r for r in built_parser.rules if r.origin.name == grammar["start"]]
+    unit = recover.get("unit")
+    # `start: unit*` compiles to the empty expansion and one that is a repetition of `unit` alone.
+    shapes = sorted(tuple(s.name for s in r.expansion) for r in starts)
+    repetition = [e for e in shapes if e]
+    ok = len(shapes) == 2 and shapes[0] == () and len(repetition) == 1 and len(repetition[0]) == 1 and any(
+        tuple(s.name for s in r.expansion) == (unit,) for r in built_parser.rules
+        if r.origin.name == repetition[0][0])
+    if not ok:
+        problems.append(f"{relative}: the start rule `{grammar['start']}` of binding `{label}` is not `{unit}*`, which "
+                        f"`recover` asks for (FBL section 4.9)")
+    names = {t.name for t in built_parser.terminals}
+    strings = {t.pattern.value: t.name for t in built_parser.terminals if t.pattern.type == "str"}
+    for sync in recover.get("sync", []):
+        if sync not in names and sync not in strings:
+            problems.append(f"{relative}: `recover.sync` of binding `{label}` names `{sync}`, no terminal of its "
+                            f"grammar (FBL section 4.9)")
+    for end, terminal in sorted(recover.get("nested", {}).items()):
+        if terminal not in names and terminal not in strings:
+            problems.append(f"{relative}: `recover.nested.{end}` of binding `{label}` names `{terminal}`, no terminal "
+                            f"of its grammar (FBL 0.11, section 4.9)")
+    ignored = set(built_parser.ignore_tokens)
+    for terminal in sorted(recover.get("unclosed", {})):
+        named = terminal if terminal in names else strings.get(terminal)
+        if named is None:
+            problems.append(f"{relative}: `recover.unclosed` of binding `{label}` names `{terminal}`, no terminal of "
+                            f"its grammar (FBL 0.11, section 4.9)")
+        elif named not in ignored:
+            problems.append(f"{relative}: `recover.unclosed` of binding `{label}` names `{terminal}`, which its "
+                            f"grammar does not ignore (FBL 0.11, section 4.9)")
+    return problems
 
 
 # ---------------------------------------------------------------------------------------------------------------- flatten
