@@ -68,6 +68,9 @@ what the fixture's `read` states: `elements` in reading order (type, the id wher
 place, and the attributes named), the `document`'s attributes named, `findings` by rule and line among the codes this
 check reads (GRAMMAR_FINDINGS), and `unreadable`. It plans no edit; splices stay checked by replay. An element whose id
 FBL does not read (no `id.from`, or a slot that reaches nothing) has the id DISL gives it, which is not compared.
+A registration with a `legacyLayout` also has its legacy layout file read (FBL section 8.7): its keys case-insensitively,
+a key written twice reported as fbl.duplicate-key at its line and a key of the view that names no element of the body as
+fbl.stale-view-data.
 
 
 Every `*.dis` that validates is checked for the names DISL 0.4's constructs refer to (DISL section 14.1): a compartment's
@@ -1622,9 +1625,10 @@ def reading_of_fixture(path: Path, fixture, binding, folder):
     """What the fixture's input reads as: a body, or a registration that names one (FBL section 8), and the origin of
     the reading, which is the registration's or, for a body opened alone, the first origin the binding claims."""
     input_path = path.parent / fixture["input"]
-    view = None
+    view, registration = None, {}
     origin = (binding.get("claims", {}).get("origins") or [None])[0]
-    if input_path.suffix == ".adp":
+    registration_input = input_path.suffix == ".adp"
+    if registration_input:
         registration, problem = parse_registration(input_path.read_bytes())
         if problem:
             raise ReadingProblem(f"the registration does not parse: {problem}")
@@ -1635,7 +1639,39 @@ def reading_of_fixture(path: Path, fixture, binding, folder):
             input_path = next((input_path.with_suffix(e) for e in binding.get("claims", {}).get("extensions", [])
                                if input_path.with_suffix(e).is_file()), input_path)
     text = input_path.read_bytes().decode("utf-8").removeprefix("﻿")
-    return GrammarModel(binding, folder, text, origin, view)
+    model = GrammarModel(binding, folder, text, origin, view)
+    legacy = binding.get("registration", {}).get("legacyLayout")
+    if registration_input and legacy and "layout" not in registration:
+        sidecar = input_path.parent / legacy.replace("{base}", input_path.stem)
+        if sidecar.is_file():
+            model.findings.extend(legacy_layout_findings(model, sidecar.read_text(encoding="utf-8")))
+    return model
+
+
+def legacy_layout_findings(model, text):
+    """FBL 0.11, section 8.7: what reading a legacy layout reports for the reading's view. The view's object and its
+    element keys are matched ignoring the case of ASCII letters; of two keys that match one id the first applies and
+    each later one is `fbl.duplicate-key`, and a key that names no element of the body is `fbl.stale-view-data`, each
+    at its line in the sidecar. The other views of the file are not read."""
+    findings = []
+    view = model.selected["name"] if model.selected else None
+    layout = json.loads(text, object_pairs_hook=list)
+    entries = next((value for key, value in layout if view is not None and key.lower() == view.lower()), None)
+    if entries is None:
+        return findings
+    ids = {element["id"].lower(): element["id"] for element in model.elements if element["id"]}
+    applied = set()
+    lines = Lines(text)
+    searched = 0
+    for key, _ in entries:
+        searched = text.index(json.dumps(key), searched)
+        line = lines.line(searched)
+        if key.lower() not in ids:
+            findings.append({"rule": "fbl.stale-view-data", "line": line})
+        elif key.lower() in applied:
+            findings.append({"rule": "fbl.duplicate-key", "line": line})
+        applied.add(key.lower())
+    return findings
 
 
 def same_value(expected, actual) -> bool:
