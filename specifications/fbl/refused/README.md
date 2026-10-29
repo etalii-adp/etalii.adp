@@ -13,3 +13,4 @@ The FBL documents in this folder are valid against [`fbl.schema.json`](../fbl.sc
 | `grammar-create-after-unknown.fbl` | *(FBL 0.11)* Section 14.1, step 6: an attribute binding's `create.after` names an attribute the rule does not bind (section 4.9). |
 | `grammar-selected-view-without-views.fbl` | *(FBL 0.11)* Section 14.1, step 6: a rule with `selectedView` in a binding with no block rule that has `view` (sections 4.9, 9.3). |
 | `grammar-gather-writable.fbl` | *(FBL 0.11)* Section 14.1, step 6: `gather` on an attribute binding that is not read-only (section 4.9). |
+| `items-not-many.fbl` | *(FBL 0.12)* Section 14.1, step 6: `items` on an attribute that the tool type the binding is read for declares single-valued (section 5.2). |

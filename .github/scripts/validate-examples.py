@@ -1433,6 +1433,47 @@ class ToolTypes:
         return cls.specifications.get(origin)
 
 
+class ToolType:
+    """A tool type's specification as a binding's rule types meet it: the type map's entry of a rule type and the
+    metamodel's declaration of an attribute (DISL section 11.2)."""
+
+    def __init__(self, specification):
+        self.type_map = specification.get("persistence", {}).get("typeMap") or {}
+        self.metamodel = specification.get("metamodel", {})
+
+    def mapped(self, rule_type):
+        """The type map's entry for the rule's type: ('diagram' | 'relation' | 'element' | other, its renames)."""
+        entry = self.type_map.get(rule_type)
+        if not entry:
+            return ("relation" if rule_type in self.metamodel.get("relations", {}) else "element"), {}, rule_type
+        target = entry.get("as", rule_type)
+        renames = entry.get("attributes", {})
+        if target == "diagram":
+            return "diagram", renames, None
+        if target in self.metamodel.get("relations", {}):
+            return "relation", renames, target
+        if target in ("header", "unreadable"):
+            return target, renames, None
+        return "element", renames, target
+
+    def attribute_type(self, rule_type, attribute):
+        """The metamodel's declaration of the attribute the binding's attribute maps to, or {} when it has none."""
+        kind, renames, target = self.mapped(rule_type)
+        name = renames.get(attribute, attribute)
+        if kind == "diagram":
+            return self.metamodel.get("diagram", {}).get("attributes", {}).get(name, {})
+        types = self.metamodel.get("relations" if kind == "relation" else "types", {})
+        seen = set()
+        while target and target not in seen:
+            seen.add(target)
+            declared = types.get(target, {})
+            if name in declared.get("attributes", {}):
+                return declared["attributes"][name]
+            target = declared.get("extends")
+            target = target[0] if isinstance(target, list) else target
+        return {}
+
+
 class GrammarModel:
     """What reading a grammar body gives for one reading: the elements of the rules, in reading order, with their
     ids, parents and attributes; the attributes of the document from the rules the tool type maps as the diagram;
@@ -1446,8 +1487,8 @@ class GrammarModel:
         self.lines = reader.lines
         self.binding, self.origin = binding, origin
         specification = ToolTypes.of(origin) or {}
-        self.type_map = specification.get("persistence", {}).get("typeMap") or {}
-        self.metamodel = specification.get("metamodel", {})
+        self.tool = ToolType(specification)
+        self.metamodel = self.tool.metamodel
         self.views = self.read_views(view)
         self.selected = next((v for v in self.views if v["selected"]), None)
         self.elements, self.document = [], {}
@@ -1522,36 +1563,10 @@ class GrammarModel:
             return False
 
     def mapped(self, rule):
-        """The type map's entry for the rule's type: ('diagram' | 'relation' | 'element' | other, its renames)."""
-        entry = self.type_map.get(rule["type"])
-        if not entry:
-            return ("relation" if rule["type"] in self.metamodel.get("relations", {}) else "element"), {}, rule["type"]
-        target = entry.get("as", rule["type"])
-        renames = entry.get("attributes", {})
-        if target == "diagram":
-            return "diagram", renames, None
-        if target in self.metamodel.get("relations", {}):
-            return "relation", renames, target
-        if target in ("header", "unreadable"):
-            return target, renames, None
-        return "element", renames, target
+        return self.tool.mapped(rule["type"])
 
     def attribute_type(self, rule, attribute):
-        """The metamodel's declaration of the attribute the binding's attribute maps to, or {} when it has none."""
-        kind, renames, target = self.mapped(rule)
-        name = renames.get(attribute, attribute)
-        if kind == "diagram":
-            return self.metamodel.get("diagram", {}).get("attributes", {}).get(name, {})
-        types = self.metamodel.get("relations" if kind == "relation" else "types", {})
-        seen = set()
-        while target and target not in seen:
-            seen.add(target)
-            declared = types.get(target, {})
-            if name in declared.get("attributes", {}):
-                return declared["attributes"][name]
-            target = declared.get("extends")
-            target = target[0] if isinstance(target, list) else target
-        return {}
+        return self.tool.attribute_type(rule["type"], attribute)
 
     def attribute_value(self, rule, attribute, binding, entry, enclosing):
         declared = self.attribute_type(rule, attribute)
@@ -1872,7 +1887,9 @@ def check_grammar_family(path: Path, document) -> list[str]:
     `create.after` names attributes of the same rule; `gather` stands only on a read-only attribute binding;
     `selectedView` only in a binding with a block rule that has `view` (a block rule's `origins` are check_origins');
     and `recover.nested` and `recover.unclosed` name terminals of the binding's grammar,
-    the terminals of `unclosed` ignored ones, as `atd-grammar.py --bindings` checks too."""
+    the terminals of `unclosed` ignored ones, as `atd-grammar.py --bindings` checks too. FBL 0.12: `items` stands only
+    on an attribute that is `many` in the tool type's specification (items_not_many); the schema keeps `items` and
+    `separator` to a `{node}` slot of the grammar family and `{n}` once in `sidecar.ordinal`."""
     problems = []
     for binding_name, binding in document.get("bindings", {}).items():
         base = f"/bindings/{binding_name}"
@@ -1891,6 +1908,8 @@ def check_grammar_family(path: Path, document) -> list[str]:
                             problems.append(f"at {pointer}/attributes/{attribute}/create/after: {name!r} is no other attribute of the rule {rule['name']!r}")
                     if "gather" in attribute_binding and not (attribute_binding.get("readOnly") or rule.get("readOnly") or binding.get("readOnly")):
                         problems.append(f"at {pointer}/attributes/{attribute}/gather: gather stands only on a read-only attribute binding")
+                    if "items" in attribute_binding:
+                        problems.extend(items_not_many(binding, rule, attribute, f"{pointer}/attributes/{attribute}/items"))
         body = binding.get("body", {})
         recover = body.get("recover") or {}
         if body.get("family") == "grammar" and ("nested" in recover or "unclosed" in recover):
@@ -1903,6 +1922,22 @@ def check_grammar_family(path: Path, document) -> list[str]:
             for terminal in recover.get("unclosed", {}):
                 if reader.lexer.named(terminal) not in ignored:
                     problems.append(f"at {base}/body/recover/unclosed: {terminal!r} is not a terminal the grammar ignores")
+    return problems
+
+
+def items_not_many(binding, rule, attribute, pointer) -> list[str]:
+    """FBL 0.12, section 14.1, step 6: an attribute binding with `items` binds an attribute that is `many` in the tool
+    type's specification, the attribute a `typeMap` maps it to included. It is checked against each specification of
+    an origin the binding claims that is read through FBL, since that is the one loaded with the binding; one read
+    by a plugin, or a rule type or attribute the specification does not declare, says nothing."""
+    problems = []
+    for origin in binding.get("claims", {}).get("origins", []):
+        specification = ToolTypes.of(origin)
+        if not specification or specification.get("persistence", {}).get("format") != "fbl":
+            continue
+        declared = ToolType(specification).attribute_type(rule["type"], attribute)
+        if declared and not declared.get("many"):
+            problems.append(f"at {pointer}: items stands only on a many attribute, and {origin} declares {attribute!r} of {rule['type']!r} single-valued")
     return problems
 
 

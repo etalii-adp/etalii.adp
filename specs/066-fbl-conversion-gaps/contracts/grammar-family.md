@@ -110,15 +110,15 @@ Section 6.1's table: `insert-key` "… optional segment or word (lines, blocks, 
 "positions": {
   "node": "positions/position",
   "items": {
-    "visibility": { "node": "NUMBER[0]" },
-    "maturity":   { "node": "NUMBER[1]" }
+    "visibility": { "node": "visibility" },
+    "maturity":   { "node": "maturity" }
   },
   "separator": ",",
   "create": { "emit": "[{visibility},{maturity}]", "after": ["positions"] }
 }
 ```
 
-(`NUMBER[0]` stands for "the first `NUMBER` child"; whether selectors gain an index or the grammar names the two numbers as rules of their own is settled with the grammar, research R4, and the contract follows that choice.)
+(Settled with the grammar, research R4: `wardley-map.lark` names the two numbers of a position as the rules `visibility` and `maturity`, so selectors gain no index.)
 
 Each item is a map of its attributes; a set of one item's value is a `replace-value` of that value's span; an added item an `insert-key` of `separator` and the item's `emit` after the last item; a removed item a `remove-key` of the item and one separator (the one before it, or for the first item the one after it).
 

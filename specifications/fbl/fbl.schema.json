@@ -1381,6 +1381,18 @@
           "description": "(FBL 0.9) With node: a regular expression with a named group 'value' that the whole text of the node must match; the value is that group, and its span the value's span (section 5.2).",
           "$ref": "#/$defs/Regex"
         },
+        "items": {
+          "description": "(FBL 0.12) grammar, on the {node} slot of a many attribute: a map from an item attribute to a {node} slot relative to each node the selector reaches; the attribute is then a list of structured values, one per node, each a map of its item attributes (sections 5.2, 6.3).",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/Slot"
+          },
+          "minProperties": 1
+        },
+        "separator": {
+          "description": "(FBL 0.12) The text written between two items of an items slot; \", \" when none is given (section 6.3).",
+          "type": "string"
+        },
         "escape": {
           "description": "FBL 0.11, section 4.9, grammar, with node: the escapes of a quoted value. Reading replaces with+quote by quote and with+with by with, and keeps with before any other character; writing escapes every quote and with character of the value.",
           "type": "object",
@@ -1460,6 +1472,12 @@
       "dependentRequired": {
         "escape": [
           "node"
+        ],
+        "items": [
+          "node"
+        ],
+        "separator": [
+          "items"
         ]
       }
     },
