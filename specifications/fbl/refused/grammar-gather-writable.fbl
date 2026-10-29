@@ -1,6 +1,6 @@
 {
   "$schema": "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Document",
-  "fbl": "0.10",
+  "fbl": "0.11",
   "doc": "Refused by FBL 0.10, section 14.1, step 6: the attribute words gathers a second slot (gather), and its binding is writable, so a set would not say which of the places to write (section 4.9; section 3.3's one-place rule). The same binding marked readOnly loads.",
   "bindings": {
     "outline": {

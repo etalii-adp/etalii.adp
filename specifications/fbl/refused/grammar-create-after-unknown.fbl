@@ -1,6 +1,6 @@
 {
   "$schema": "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Document",
-  "fbl": "0.10",
+  "fbl": "0.11",
   "doc": "Refused by FBL 0.10, section 14.1, step 6: the create of the attribute note writes its part after the attribute caption, which the rule item does not bind, so the place of the part is not stated (section 4.9, Writing). Its other names resolve.",
   "bindings": {
     "outline": {

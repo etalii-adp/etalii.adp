@@ -1,6 +1,6 @@
 {
   "$schema": "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Document",
-  "fbl": "0.10",
+  "fbl": "0.11",
   "doc": "Refused by FBL 0.10, section 14.1, step 6, which atd-grammar.py --bindings makes: recover.nested.close names ']', which is neither a terminal of the binding's grammar nor the text of one of its anonymous string terminals, so the reader cannot tell where a block ends (section 4.9, Reading in part). Its open, '{', is the text of one, and nothing else in the document is refused.",
   "bindings": {
     "outline": {

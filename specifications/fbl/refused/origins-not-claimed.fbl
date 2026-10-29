@@ -1,59 +1,28 @@
 {
   "$schema": "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Document",
   "fbl": "0.10",
-  "doc": "Refused by FBL 0.10, section 14.1, step 6: the block rule section is a view for readings of example/agenda, an origin the binding's claims do not list, so no reading of the binding is of that origin (sections 5.1, 9.3). The view it names is otherwise well formed.",
+  "doc": "Refused by FBL 0.10, section 14.1, step 6: the rule pipeline is read for the reading databricks/pipelines, which is not one of the binding's claims.origins (section 5.1), so no reading would ever read it. The rule resource lists a claimed origin and the registration's resource.byOrigin names only claimed origins, so this document is refused for the one reason this sentence names.",
   "bindings": {
-    "outline": {
-      "title": "Outline, a view for a reading the binding does not claim",
-      "claims": {
-        "extensions": [
-          ".outline"
-        ],
-        "origins": [
-          "example/outline"
-        ]
-      },
-      "body": {
-        "kind": "file",
-        "family": "grammar",
-        "grammar": "start: unit*\n?unit: item\n     | _NL\nitem: NAME [label [note]] [block]\nlabel: STRING\nnote: STRING\nblock: \"{\" unit* \"}\"\nNAME: /[a-z]+/\nSTRING: /\"[^\"\\r\\n]*\"/\n_NL: /(\\r?\\n[ \\t]*)+/\nWHITESPACE: /[ \\t]+/\nCOMMENT: /#[^\\r\\n]*/\n%ignore WHITESPACE\n%ignore COMMENT\n",
-        "recover": {
-          "unit": "unit",
-          "sync": [
-            "_NL"
-          ]
-        }
-      },
+    "configuration": {
+      "title": "A rule read for an origin the binding does not claim",
+      "claims": { "extensions": [".yml"], "shared": true, "registrationOnly": true, "origins": ["databricks/bundle", "databricks/pipeline"] },
+      "body": { "kind": "file", "family": "yaml" },
       "reader": "declared",
-      "blocks": [
-        {
-          "name": "section",
-          "at": "/item[NAME='section']",
-          "origins": [
-            "example/agenda"
-          ],
-          "view": {
-            "node": "label",
-            "match": "\"(?<value>[^\"]*)\""
-          }
-        }
-      ],
+      "registration": { "resource": { "byOrigin": { "databricks/pipeline": { "capture": "pipeline" }, "databricks/bundle": null } } },
       "elements": [
         {
-          "name": "item",
-          "type": "Item",
-          "at": "/item",
-          "id": {
-            "from": {
-              "node": "NAME"
-            }
-          },
-          "attributes": {
-            "label": {
-              "node": "label",
-              "match": "\"(?<value>[^\"]*)\""
-            }
-          }
+          "name": "resource",
+          "type": "Resource",
+          "at": "/resources/pipelines/{pipeline}",
+          "origins": ["databricks/bundle"],
+          "attributes": { "key": { "capture": "pipeline", "readOnly": true } }
+        },
+        {
+          "name": "pipeline",
+          "type": "Pipeline",
+          "at": "/resources/pipelines/{pipeline}",
+          "origins": ["databricks/pipelines"],
+          "attributes": { "name": { "key": "name", "empty": "refuse" } }
         }
       ]
     }
