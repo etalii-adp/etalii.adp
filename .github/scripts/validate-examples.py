@@ -1657,7 +1657,7 @@ class GrammarModel:
             return [self.converted(value, declared) for value in values]
         if self.alone:
             values = values or ([binding["default"]] if "default" in binding else [])
-            return Values(self.converted(value, binding) for value in values) if values else None
+            return Values(self.converted(value, binding) for value in values)
         if not values:
             return binding.get("default")
         return self.converted(values[0], declared)
@@ -1855,12 +1855,13 @@ def legacy_layout_findings(model, text):
 
 def same_value(expected, actual) -> bool:
     """Whether a value read equals the fixture's, of the same JSON type (a bool is not a number). FBL 0.12: values read
-    by the binding alone (Values) are compared as a list when the fixture states one and as the first otherwise, and a
+    by the binding alone (Values) are compared as a list when the fixture states one and as the first otherwise, none
+    being null, and a
     text read so equals a fixture's number or bool that it is written as."""
     if isinstance(actual, Values):
         if isinstance(expected, list):
             return len(expected) == len(actual) and all(same_value(e, written(e, a)) for e, a in zip(expected, actual))
-        return bool(actual) and same_value(expected, written(expected, actual[0]))
+        return expected is None if not actual else same_value(expected, written(expected, actual[0]))
     if isinstance(expected, dict) and isinstance(actual, dict):
         return expected.keys() == actual.keys() and all(same_value(expected[k], written(expected[k], actual[k])) for k in expected)
     if isinstance(expected, bool) or isinstance(actual, bool):
