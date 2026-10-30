@@ -23,7 +23,9 @@
 //   parser's state can shift it and is a WORD elsewhere (ATD section 3.6).
 // - A pipeline's block opens with OPEN, a `{` that the line ends before it may precede, so that `pipeline Kettle` with
 //   `{` on the line below and `pipeline Kettle {` read alike; OPEN wins over the line end by being longer. Nothing
-//   else opens a block, and CLOSE, its `}`, wins over free text so that a `}` alone on a line is a CLOSE token.
+//   else opens a block: a `{` alone where a statement may start is a lone_brace, which the tool passes over without a
+//   word, and CLOSE, a `}`, wins over free text so that a `}` alone on a line is a CLOSE token, which recover reports
+//   as unmatched outside a block, as the tool reports that line.
 // - What follows a component's coordinates is segments in any order, each a node of its own: `label [dx, dy]`,
 //   `(decorator)`, `inertia`, `url(name)`, and any other word.
 // - An annotation's positions are `position` nodes of two numbers, inside outer brackets or as one bare pair.
@@ -31,7 +33,12 @@
 start: unit*
 
 ?unit: statement
+     | lone_brace
      | _NL
+
+// A `{` alone where a statement may start, which the tool passes over: it opens nothing, as no statement before it
+// opens a block, and no rule maps it, so it is kept as written without a finding (FBL section 4.9).
+lone_brace: "{"
 
 ?statement: title
           | style
@@ -78,7 +85,9 @@ url: _URL url_name "[" address "]"
 url_name: WORD
 address: URL
 
-evolve: _EVOLVE evolved [_ARROW renamed] maturity
+// What follows the arrow, the arrow included, is one node, so that a new name is written and removed with its arrow.
+evolve: _EVOLVE evolved [becomes] maturity
+becomes: _ARROW renamed
 
 // The nested form, with or without its block, and the older form with two numbers on the statement's line.
 pipeline: _PIPELINE name [_pipeline_block]
@@ -104,8 +113,10 @@ accelerator: _ACCELERATOR name coords
 deaccelerator: _DEACCELERATOR name coords
 attitude: ATTITUDE "[" visibility "," maturity "," visibility2 "," maturity2 "]"
 
-dependency: source _ARROW target [";" [context]]
-flow: source _FLOW target [";" [context]]
+// A link's context is a node with its `;`, so that a context is written and removed with it.
+dependency: source _ARROW target [context]
+flow: source _FLOW target [context]
+context: ";" [text]
 
 unmodelled: UNMODELLED [text]
 
@@ -128,7 +139,6 @@ target: _target_words
 _target_words: WORD
              | _target_words WORD
 text: TEXT
-context: TEXT
 number: NUMBER
 visibility: NUMBER
 maturity: NUMBER
