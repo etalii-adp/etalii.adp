@@ -13,6 +13,7 @@ Every path carries its repository as prefix; every file these tasks change is in
 | A | `features/066-fbl-conversion-gaps-structurizr` | 0.10 | User Story 1 and the constructs User Stories 1 and 3 share (FR-001 to FR-013, FR-023's block written by an add, FR-024's `many` nodes, FR-030 to FR-037 for what it adds) | when this `tasks.md` is merged |
 | B | `features/066-fbl-conversion-gaps-databricks` | 0.11 (0.10 if it merges before A) | User Story 2 (FR-014 to FR-022, FR-030 to FR-036 for what it adds) | when this `tasks.md` is merged; independent of A |
 | C | `features/066-fbl-conversion-gaps-wardley` | 0.12 | User Story 3 (FR-023's next-line brace, FR-024 to FR-029, FR-030 to FR-036 for what it adds) | when A is merged |
+| D | `features/066-fbl-gap16-split-slot` | 0.13 | *(Amendment of 2026-10-30)* FR-038, the C4 companions' gap 16 (User Story 1 s12, s13), with FR-031 to FR-035 for what it adds, and this amendment of the specification, plan, contracts and tasks | by the maintainer's ruling of 2026-10-30, after A, B and C merged; its tasks are ticked by a pull request of their own once it has merged |
 
 Whichever of A and B merges second takes the next minor version and brings the status paragraph, the version lists and the schema's `fbl` enum up to date with the first (T073). The stories' "FBL 0.10" reads as "FBL 0.10 or later" (plan, open question 1).
 
@@ -253,6 +254,31 @@ Each under `etalii.adp/specifications/fbl/fixtures/`, binding `../../wardley-map
 
 ---
 
+# Pull request D: several items in one argument, FBL 0.13 (amendment of 2026-10-30)
+
+By the maintainer's ruling of 2026-10-30 (the specification's *Clarifications*, Session 2026-10-30): the C4 companions' gap 16 is answered by a new FBL construct, FR-038, designed in research R25 and contracts/grammar-family.md, *Several items in one node*. The amendment of the specification, the plan, the contracts and these tasks is part of the same pull request.
+
+## Phase 11: User Story 1, several items in one argument (Priority: P1)
+
+**Goal**: `tags "Extra, More"` reads as the two tags `Extra` and `More` through `structurizr.fbl`, as the C4 tool reads it, and a set of a split attribute is written into the argument by splices that keep every byte it does not change.
+
+**Independent test**: `structurizr-split-tags` and `grammar-split-slot` replay and pass the reading check, `structurizr-gathered-tags` reads `Last` and `Least`, each fails with one planted wrong offset or with `split` taken out of its binding, and the two refused bindings fail when made valid.
+
+- [ ] T101 Make the worktree `etalii.adp/.claude/worktrees/066-gap16/` on `features/066-fbl-gap16-split-slot` from `origin/develop`, set its `user.name` and read it back; amend `etalii.adp/specs/066-fbl-conversion-gaps/` in place (FR-038, User Story 1 s12 and s13, its edge cases, SC-004 to SC-006, research R25, the plan's *Amendment of 2026-10-30*, contracts/grammar-family.md, contracts/fixtures.md, data-model.md, quickstart.md and these tasks), naming the ruling and its date in the commit.
+- [ ] T102 [US1] Make `etalii.adp/specifications/fbl/FBL-specification.md` version 0.13: the header and its date, section 2.1's table, section 2.7, section 15.2's sentence on a host that supports the family at 0.9 only, and the status paragraph's FBL 0.13 sentence (spec 066, gap 16, the ruling of 2026-10-30); add `"0.13"` to the `fbl` enum of `etalii.adp/specifications/fbl/fbl.schema.json` and its description (FR-038; FR-030 as it reads for this version).
+- [ ] T103 [US1] Add `split` (a string of one character or more) to `$defs/Slot` and `$defs/AttributeBinding` of `etalii.adp/specifications/fbl/fbl.schema.json`, with `"split": ["node"]` in `dependentRequired`, `separator` beside `items` or `split` and `split` never beside `items` (`dependentSchemas`), and `split` in `$defs/RuleOutsideGrammar`; state the reading in section 4.9 (*Several items in one node*) and section 5.2's `{node}` row, the writing in section 6.3 (*An item of a slot with `split`*), and the load checks in section 14.1, step 6, as contracts/grammar-family.md gives them (FR-038; US1 s12, s13).
+- [ ] T104 [US1] Extend the reading check of `etalii.adp/.github/scripts/validate-examples.py` to read `split` as T103 states, with the white space of Unicode's `White_Space` property, a fixture's own binding being read by the binding alone; check `split` on a `many` attribute only, as `items` is, and no character of the slot's `escape` in it (FR-038, FR-032).
+- [ ] T105 [US1] Declare `"split": ","` on every tags binding of `etalii.adp/specifications/fbl/structurizr.fbl` and on each of their gathered slots, raise its `fbl` to 0.13 and say so in its `doc`; update the `read` and `doc` of `etalii.adp/specifications/fbl/fixtures/structurizr-gathered-tags/fixture.json`, whose `"Last, Least"` is then two tags, and nothing else of it (FR-038, FR-033; SC-004 as amended).
+- [ ] T106 [P] [US1] Add `etalii.adp/specifications/fbl/fixtures/structurizr-split-tags/` from `etalii.adp.ide.standalone/src/diagrams/c4/backend/EtAlii.Adp.Diagram.C4.Tests/Fixtures/findings/tags-in-block.dsl` at `edbddc92e`, byte for byte: `Extra` and `More` read as two tags after `Core`, `Existing System` one, and a set of the read-only tags refused (FR-038, FR-032; US1 s12).
+- [ ] T107 [P] [US1] Add `etalii.adp/specifications/fbl/fixtures/grammar-split-slot/` with its own binding `labels.fbl`, whose tags are writable, and `labels.txt`: an added tag, the first and a later tag removed, a changed tag, an argument that holds none given two, a new tag holding a quote, every tag of an argument removed, and an argument written where there was none, each with its undo (FR-038, FR-032; US1 s13; the edge cases of FR-038).
+- [ ] T108 [P] [US1] Add `etalii.adp/specifications/fbl/refused/split-not-many.fbl` and `etalii.adp/specifications/fbl/refused/split-escape-collision.fbl`, with their rows in `etalii.adp/specifications/fbl/refused/README.md`, each refused by T104's check and accepted once made valid (FR-038; SC-003).
+- [ ] T109 [US1] Carry `split` in `etalii.adp/specifications/atd/ATD-specification.md`: sections 1.3 and 11 name FBL 0.13, section 11.3's list of an attribute binding's settings and section 11.9 gain it, the *Changes* list its amendment, and Appendix C's section C.3 is retitled FBL 0.13 with a row for each new property and its count (FR-035). In `etalii.adp/definitions/diagrams/c4-*.md`, record gap 16 as answered by FBL 0.13 with its fixtures, in the gaps' introduction, their table, its section and the *Stand-ins* row of the tags, and keep each companion's trace (`etalii.adp/definitions/diagrams/c4-*.trace.json`) matching its items (FR-034; SC-006 as amended).
+- [ ] T110 Confirm FR-031 and SC-004 as amended (every earlier example, registration and fixture passes, `structurizr-gathered-tags`'s `read` the one change), SC-003 (each new fixture and refused binding seen to fail), and FR-036 (no DISL, DESL, DID or DED file changed); run `python .github/scripts/validate-examples.py`, `python .github/scripts/atd-grammar.py --check`, `python .github/scripts/terminology-check.py --name etalii.adp`, `python .github/scripts/licence-check.py`, `python .github/scripts/file-names-check.py` and `python .github/scripts/thinkrail-specs.py`, committing what it writes, recording each exit code; run the coverage diff over FR-038 and read two traces back to their artefacts; push, open the pull request into `develop`, ready for review, its description linking `specs/066-fbl-conversion-gaps/` and naming the ruling, and merge it with a merge commit once every check on its head has passed.
+
+**Checkpoint**: gap 16 is specified, exemplified and checked; c4-disl-fbl tasks 14 and 17 can name FBL 0.13's sections 4.9, 5.2 and 6.3 and the fixtures `structurizr-split-tags` and `grammar-split-slot` for the tags `C4Disl` reads, once `fbl-grammar-family` has given the standalone library the 0.9 family.
+
+---
+
 ## Coverage
 
 Every functional requirement and success criterion, and the tasks that claim it. A task's own text names what it shows; the closing tasks of each pull request (T051, T077, T100) re-run this table against the merged text and read two traces back.
@@ -288,23 +314,24 @@ Every functional requirement and success criterion, and the tasks that claim it.
 | FR-027 | T085, T086, T092 | C |
 | FR-028 | T085, T086, T093 | C |
 | FR-029 | T085, T093 | C |
-| FR-030 | T002, T003, T046, T053, T072, T073, T079, T096 | A, B, C |
-| FR-031 | T006, T043, T049, T075, T098 | A, B, C |
-| FR-032 | T004, T005, T006, T042, T047, T054, and every fixture task | A, B, C |
-| FR-033 | T032, T033, T044, T063, T070, T076, T080, T087, T094 | A, B, C |
-| FR-034 | T045, T071, T095 | A, B, C |
-| FR-035 | T048, T074, T097 | A, B, C |
-| FR-036 | T049, T075, T098 | A, B, C |
+| FR-030 | T002, T003, T046, T053, T072, T073, T079, T096, T102 | A, B, C, D |
+| FR-031 | T006, T043, T049, T075, T098, T105, T110 | A, B, C, D |
+| FR-032 | T004, T005, T006, T042, T047, T054, T104, and every fixture task | A, B, C, D |
+| FR-033 | T032, T033, T044, T063, T070, T076, T080, T087, T094, T105 | A, B, C, D |
+| FR-034 | T045, T071, T095, T109 | A, B, C, D |
+| FR-035 | T048, T074, T097, T109 | A, B, C, D |
+| FR-036 | T049, T075, T098, T110 | A, B, C, D |
 | FR-037 | T046, T047 | A |
+| FR-038 | T101, T102, T103, T104, T105, T106, T107, T108, T109, T110 | D |
 | SC-001 | T045, T050, T071, T076, T095, T099 | A, B, C |
 | SC-002 | T033, T050, T063, T076, T087, T099 | A, B, C |
-| SC-003 | T005, T006, T049, T075, T098, and every fixture and refused-binding task | A, B, C |
-| SC-004 | T006, T043, T049, T075, T098 | A, B, C |
-| SC-005 | T050, T076, T099 | A, B, C |
-| SC-006 | T045, T071, T095 | A, B, C |
+| SC-003 | T005, T006, T049, T075, T098, T110, and every fixture and refused-binding task | A, B, C, D |
+| SC-004 | T006, T043, T049, T075, T098, T105, T110 | A, B, C, D |
+| SC-005 | T050, T076, T099, T103 | A, B, C, D |
+| SC-006 | T045, T071, T095, T109 | A, B, C, D |
 | SC-007 | T047, T099 | A, C |
 
-**Claimed by the document's shape rather than by one task**: the edge cases are claimed by the task that states or shows each, named in its text (edge cases 1 to 20, in the specification's order); the specification's *Gap to requirement* table maps every gap to the requirements above, so a gap is covered when its requirements are. The gaps FBL 0.9 already answers (Databricks gaps 3 and 6 in part, Wardley map gap 5 in the `lines` and `blocks` families) are no requirement and take no task. FR-036's permitted `typeMap` value is not used (research R22), so its only task is the check that nothing changed.
+**Claimed by the document's shape rather than by one task**: the edge cases are claimed by the task that states or shows each, named in its text (edge cases 1 to 23, in the specification's order, 21 to 23 being FR-038's, which T103 states and T107 shows); the specification's *Gap to requirement* table maps every gap to the requirements above, so a gap is covered when its requirements are. The gaps FBL 0.9 already answers (Databricks gaps 3 and 6 in part, Wardley map gap 5 in the `lines` and `blocks` families) are no requirement and take no task. FR-036's permitted `typeMap` value is not used (research R22), so its only task is the check that nothing changed.
 
 ---
 
@@ -315,6 +342,7 @@ Every functional requirement and success criterion, and the tasks that claim it.
 - **A** (Phases 1 to 4) starts when this `tasks.md` is merged.
 - **B** (Phases 5 to 7) starts when this `tasks.md` is merged, side by side with A; it shares no file region with A except the version lists, the status paragraph, section 5.1's `origins` and ATD's C.3 heading, which T073 reconciles.
 - **C** (Phases 8 to 10) starts when A is merged: it uses A's comments, recovery, absent parts, `many` nodes, `opens`, `expectFiles` and the reading check. It does not wait on B.
+- **D** (Phase 11, amendment of 2026-10-30) starts after A, B and C have merged, by the maintainer's ruling of 2026-10-30; it uses A's `many` nodes, escapes, `create` and `gather`, and C's `separator`. T101 first; T102 to T105 in any order; T106 to T108 after T103 to T105; T109 after T102 and T103; T110 last. Its ticks are a pull request of their own after it has merged.
 
 ### Within pull request A
 

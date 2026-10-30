@@ -69,9 +69,18 @@ Binding `../../wardley-map.fbl#map`. Sources are under `src/diagrams/wardley-map
 | `wardley-duplicate-names/` | `duplicate-names.owm` and `same-key-twice.owm` (two subfolders) | Each holder of `Tea` has an id of its own, the later ones keyed with `ordinal`; the entry first written with the next write of the body (`expectFiles`) | FR-028; s8 |
 | `wardley-rename-identity/` | `example 2/annotations-and-labels.owm` with its `.identities.json` | A rename moves the identity entry in the same edit (`expectFiles`), and the undo moves it back; a rename to a name another holder has is refused | FR-029; s9; edge case 19 |
 
+## Pull request D: several items in one argument (amendment of 2026-10-30)
+
+| Folder | Input, and its source | Shows | Requirements, scenarios |
+|---|---|---|---|
+| `structurizr-split-tags/` | `tags-in-block.dsl`, the standalone host's `src/diagrams/c4/backend/EtAlii.Adp.Diagram.C4.Tests/Fixtures/findings/tags-in-block.dsl` at `edbddc92e`, binding `../../structurizr.fbl#workspace` | `tags "Extra, More"` read as `Extra` and `More` after the declaration's `Core`; `"Existing System"` one tag; a set of the read-only tags refused | FR-038; US1 s12 |
+| `grammar-split-slot/` | `labels.txt`, written here, with its own binding `labels.fbl#labels` whose tags are writable | An added, a changed and a removed tag, the first and a later one, an argument that holds none, an escaped quote in a new tag, every tag of an argument removed, and an argument written where there was none, each with its undo | FR-038; US1 s13; the edge cases of FR-038 |
+
+`structurizr-gathered-tags` reads `"Last, Least"` as `Last` and `Least` once `structurizr.fbl` splits its tags; its input and steps are unchanged (SC-004 as amended).
+
 ## The refused bindings
 
-Under `refused/`, each valid against the schema and refused by a check of section 14.1 that the schema cannot make, its `doc` naming the check (data-model.md, *Validation*): `grammar-gather-writable.fbl` (A), `grammar-selected-view-without-views.fbl` (A), `grammar-create-after-unknown.fbl` (A), `grammar-recover-nested-unknown-terminal.fbl` (A, refused by `atd-grammar.py --bindings`), `origins-not-claimed.fbl` (A or B), `items-not-many.fbl` (C).
+Under `refused/`, each valid against the schema and refused by a check of section 14.1 that the schema cannot make, its `doc` naming the check (data-model.md, *Validation*): *(D)* `split-not-many.fbl` (`split` on a single-valued attribute) and `split-escape-collision.fbl` (a `split` holding a character of the slot's `escape`); `grammar-gather-writable.fbl` (A), `grammar-selected-view-without-views.fbl` (A), `grammar-create-after-unknown.fbl` (A), `grammar-recover-nested-unknown-terminal.fbl` (A, refused by `atd-grammar.py --bindings`), `origins-not-claimed.fbl` (A or B), `items-not-many.fbl` (C).
 
 ## The operation coverage
 

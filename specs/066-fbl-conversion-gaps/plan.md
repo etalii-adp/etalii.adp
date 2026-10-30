@@ -104,6 +104,8 @@ thinkrail/specs/066-fbl-conversion-gaps.md   (regenerated)
 | 3a | etalii.adp | `features/066-fbl-conversion-gaps-structurizr` | A, FBL 0.10 | User Story 1 and the shared constructs | 2 |
 | 3b | etalii.adp | `features/066-fbl-conversion-gaps-databricks` | B, FBL 0.11 (0.10 if it merges first) | User Story 2 | 2; independent of A |
 | 4 | etalii.adp | `features/066-fbl-conversion-gaps-wardley` | C, FBL 0.12 | User Story 3 | A merged |
+| 5 | etalii.adp | `features/066-fbl-gap16-split-slot` | D, FBL 0.13 (amendment of 2026-10-30) | FR-038, the C4 companions' gap 16, with this amendment of the specification, plan, contracts and tasks | A, B and C merged; the maintainer's ruling of 2026-10-30 |
+| 6 | etalii.adp | a branch of its own | the ticks of pull request D's tasks | `tasks.md` | D merged |
 
 Each is merged with a merge commit and ticks its own tasks. Whichever of A and B merges second takes the next version and brings its status paragraph and schema enum up to date with the first, a conflict in two places that its task names. No pull request in another repository belongs to this feature; the host work follows under the hosts' own specifications (below).
 
@@ -126,6 +128,7 @@ In `etalii.adp.ide.standalone`, at `ad1a4680a`. A task "waits on" what its own `
 | wardley-map-disl-fbl 11 (read through the binding) | gap 1, gaps 2 to 4 as far as Q2 needs them, and gap 7 | **C** for gap 1 (FR-023) and gap 7 (FR-026); **A** for gaps 2 and 3 (FR-002, FR-003, FR-001); **A and C** for gap 4 (FR-006, FR-024); gaps 5 and 6 (FR-024's sets, FR-025) retire stand-ins. **And** the 0.9 `grammar` family in the standalone library (open question 2). |
 | wardley-map-disl-fbl 12 (write by splices, ids through the registration) | task 11 and gap 8 | C: FR-027, FR-028, FR-029 |
 | wardley-map-disl-fbl 13 (close) | task 12 | C, through 12 |
+| c4-disl-fbl 14 and 17, the tags read by `C4Disl` (the companions' gap 16) | the module's parser splitting a tags argument at its commas | **D** (amendment of 2026-10-30): FR-038's `split`, `structurizr-split-tags` and `grammar-split-slot`, so that the tags read through the binding are the tool's |
 
 The three conversions' own documents then change under their own process, not this feature's: the binding drafts in their `requirements.md` appendices are redone in the `grammar` family (C4, Wardley map) and in FBL 0.10's `yaml` constructs (Databricks), following the example bindings; c4-disl-fbl task 13's placeholder names and wardley-map-disl-fbl task 11's `Files/Lines/LinesFamily.cs` give way to the `grammar` family; and each stand-in a construct retires is named by the owner's small amendment or a card, as that repository rules. The conversions vendor this repository's fixtures unchanged and see each fail before the library change (their tasks say so).
 
@@ -133,10 +136,14 @@ The three conversions' own documents then change under their own process, not th
 
 | Host | What it takes, and when |
 |---|---|
-| etalii.adp.ide.standalone | The 0.9 `grammar` family on `EtAlii.Lark` (`Files/Grammar/` beside the other families, `FblDocumentLoader` raised to the version it reads in full), then the constructs of A, B and C in the waiting tasks above. |
+| etalii.adp.ide.standalone | The 0.9 `grammar` family on `EtAlii.Lark` (`Files/Grammar/` beside the other families, `FblDocumentLoader` raised to the version it reads in full), then the constructs of A, B and C in the waiting tasks above. *(Amendment of 2026-10-30)* And D's `split`, read and written as FBL 0.13 says, for the tags `C4Disl` reads (gap 16), against `structurizr-split-tags` and `grammar-split-slot`. |
 | etalii.adp.ide.desktop | Each construct when its parity work follows a standalone conversion (principle II); its `adp-fbl` grammar family is already on `etalii-lark`. Vendoring etalii.adp after A, B or C breaks nothing: `fixtures.rs` replays the new fixtures as the validator does, and a `grammar` fixture is read only once it is listed. |
 | etalii.adp.ide.vscode, etalii.adp.ide.notion | When a tool there binds Structurizr DSL, `.owm` or a Databricks file (FR-037), under its own feature, on `@etalii/lark`. |
 | etalii.adp.ide.intellij | As Visual Studio Code, once a JVM Lark package is settled (R2). |
+
+## Amendment of 2026-10-30: gap 16, FBL 0.13
+
+By the maintainer's ruling of 2026-10-30 (specification, *Clarifications*), the C4 companions' gap 16 is answered in this feature, as FR-038, by a fourth pull request, D, after A, B and C had merged. Its design is research R25 and [contracts/grammar-family.md](contracts/grammar-family.md), *Several items in one node*: a `{node}` slot's `split`, a text at which each node's value is cut into the items of a `many` attribute, written by the splices FBL 0.12 states for `items` and FBL 0.7 for word slots. It is FBL 0.13, a minor version with its status paragraph, schema, `structurizr.fbl`, fixtures (`structurizr-split-tags`, `grammar-split-slot`, contracts/fixtures.md), two refused bindings, validator support, ATD rows and the companions, in one pull request; the constitution check above holds for it unchanged (principle II: document, schema, examples and fixtures together). Its tasks are T101 to T110, ticked by a pull request of their own once D has merged.
 
 ## Open questions
 

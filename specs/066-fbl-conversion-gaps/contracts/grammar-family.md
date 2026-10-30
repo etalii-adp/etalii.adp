@@ -152,6 +152,47 @@ The splices are `open-block` (the opening, after the entry's last token and befo
 }
 ```
 
+## Several items in one node (FR-038, pull request D, amendment of 2026-10-30), `split`
+
+On `$defs/Slot` and `$defs/AttributeBinding`, beside `items` and `separator`:
+
+```json
+"split": {
+  "description": "(FBL 0.13) grammar, on a {node} slot of a many attribute: the text at which the slot's value is cut into items; each piece without the white space at its start and end is an item with its own span, and an empty piece is no item. Not beside items, and holding neither character of the slot's escape (sections 4.9, 5.2, 6.3, 14.1).",
+  "type": "string",
+  "minLength": 1
+}
+```
+
+`dependentRequired` gains `"split": ["node"]`; `separator` stands beside `items` or `split` (`dependentSchemas`), and `split` never beside `items`. `RuleOutsideGrammar` refuses `split` outside the `grammar` family. Section 14.1 checks what the schema cannot: `split` on a `many` attribute only, as `items`, and no character of the slot's `escape` in it.
+
+```json
+"tags": {
+  "node": "tags",
+  "match": "\"?(?<value>(?:[^\"\\\\]|\\\\.)*)\"?",
+  "escape": { "with": "\\", "quote": "\"" },
+  "split": ",",
+  "gather": [ { "node": "tags_statement/tag", "match": "…", "escape": { "with": "\\", "quote": "\"" }, "split": "," } ],
+  "readOnly": true
+}
+```
+
+Reading (section 4.9, *Several items in one node*): the value after `match` is cut at every occurrence of `split`, from the left; each piece without the white space at its start and end (Unicode's `White_Space`) is an item, its span those bytes; an empty piece is no item; each item's escapes are resolved after the cut. `tags "Extra, More"` reads `Extra`, `More`; `" Extra ,More,, "` the same two; `""` none.
+
+Writing (section 6.3, *An item of a slot with `split`*), the difference by the longest common subsequence, as a `many` slot:
+
+| Change | Splice | Example |
+|---|---|---|
+| A changed item | `replace-value` of the item's span, escaped by the slot's `escape` | `"One ,Two,  Three"` with `2` for `Two`: `"One ,2,  Three"` |
+| A new item | `insert-key` of `separator` (`", "` by default) and the value, right after the last item the slot reaches | `"Extra, More"` given `Most`: `"Extra, More, Most"` |
+| New items where no node holds an item | `replace-value` of the last node's value span, the items joined by `separator` | `""` given `Extra`, `More`: `"Extra, More"` |
+| New items where the slot reaches no node | `insert-key` of the slot's `create`, its `{value}` the items joined by `separator` | `epsilon` given `X`, `Y`: `epsilon "X, Y"` |
+| A run of removed items after a kept item of the same node | `remove-key` from the end of that kept item to the end of the run's last item | `"One ,Two,  Three"` without `Two`: `"One,  Three"` |
+| A run of removed items at the start of a node | `remove-key` from the start of the run's first item to the start of the next kept item | `"Extra, More"` without `Extra`: `"More"` |
+| Every item of a node removed | `remove-key` of the node and the whitespace before it, as for a node of a `many` slot without `split` | `alpha "Extra, More"` without both: `alpha` |
+
+Every byte of an item the set keeps, and between two items it keeps, stays, empty pieces included. Undo is the inverse splices. A gathered attribute stays read-only (section 3.3), so `structurizr.fbl`'s tags are never written; `grammar-split-slot` shows the writing on a binding of its own whose tags are writable.
+
 ## Section 15.1 (FR-037)
 
 The *Host — full* row's sentence on the family becomes: no host is required to support the `grammar` family, except that a host which reads or writes Structurizr DSL workspaces or `.owm` maps through their declared bindings (the six C4 tool types and the Wardley map) **MUST** support it with every construct of this version, say so, and pass its fixtures byte for byte with the same splices as every other host. The section's last paragraph adds: a host that supports the family only at 0.9 treats a binding that uses a 0.10 construct of the family as one whose family it does not support.
