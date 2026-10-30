@@ -42,6 +42,12 @@ The maintainer ruled on the specification's three questions on 2026-10-27; Q1 ag
 - Q: Does FBL 0.10 also take the gaps that only retire a named stand-in (FR-012, FR-013, FR-019 to FR-022, FR-025), or only those a waiting task names? → A: Every gap, the stand-in ones included.
 - Q: Is a registration whose `view` names no view of the body reported as a finding, or opened in silence as the tool does today? → A: Empty and silent: it shows no view's content and no finding is reported (FR-011), as C4's question Q4 ("switched off, and today's order kept") was ruled.
 
+### Session 2026-10-30
+
+The maintainer ruled on one question raised after the feature's three pull requests had merged, by a decision card, and so amended the feature in place (FR-038, User Story 1 scenarios 12 and 13).
+
+- Q: How should C4 handle several tags written in one quoted argument? The standalone C4 module splits the tags `"Extra, More"` into two tags, while FBL 0.12 reads them as one; the C4 companions record this as gap 16. → A: A new FBL construct, amending spec 066 with a schema change and a fixture, not leaving the gap open nor accepting FBL's one-tag reading (Peter, 2026-10-30). It is FBL 0.13 (FR-038).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - A Structurizr DSL workspace is read and written through a declared binding (Priority: P1)
@@ -65,6 +71,8 @@ A tool engineer writes one binding in the `grammar` family for a Structurizr DSL
 9. **Given** `<base>.layout.json` whose element keys differ in case from the ids, **When** the reading opens, **Then** every stored position applies, matched as FBL states, and a move writes the file back in the number form FBL states.
 10. **Given** a registration whose `view` names no view of the body, **When** it opens, **Then** it shows no view's content, no finding is reported, and a move is refused with a reason and writes nothing.
 11. **Given** a host that does not support the `grammar` family, **When** it opens a workspace through the binding, **Then** it opens it read-only, if it can read it at all, and says why (section 15.1).
+12. *(Amendment of 2026-10-30, FR-038)* **Given** `tags "Extra, More"` in a software system's block, **When** the body is read, **Then** the system's tags are `Extra` and `More`, after the tags of its declaration, as Structurizr and the C4 tool read them; `"Existing System"` is one tag, since only a comma cuts.
+13. *(Amendment of 2026-10-30, FR-038)* **Given** a binding whose tags are writable and an argument `"One ,Two,  Three"`, **When** a set removes `Two`, adds a tag or changes one, **Then** only the bytes of that tag and of one separator change: the removal writes `"One,  Three"`, an added tag is written after the last with the separator, and every byte of a tag the set keeps, and between two tags it keeps, stays; an undo restores the argument byte for byte.
 
 ---
 
@@ -132,6 +140,9 @@ A tool engineer writes a binding in the `grammar` family for the Wardley map's `
 - **An identities entry of the legacy file whose kind no rule declares**: it is kept as written and reported as stale.
 - **A rename to a name another holder already has**: refused, as today (section 5.7).
 - **A host that supports the `grammar` family at 0.9 only** and opens a 0.10 binding that uses a construct of this feature: it treats the binding as one whose family it does not support (FR-037).
+- *(FR-038)* **An argument with an empty piece or nothing but white space** (`"A,,B"`, `""`, `" "`): an empty piece is no item, so `"A,,B"` holds two and `""` none; a tag added to an argument that holds none is written as its value.
+- *(FR-038)* **A set that removes every tag of an argument**: the argument goes as a removed node of a `many` slot does, with the white space before it; FBL states it.
+- *(FR-038)* **A separator that the slot's escape could write** (a backslash in it): the binding is refused when it is loaded, so that the items do not depend on whether the escapes are resolved before the cut.
 
 ## Requirements *(mandatory)*
 
@@ -162,6 +173,7 @@ Every construct below is stated by what a binding can declare and what a host th
 | wardley-map-disl-fbl | 6, a list of structured values | FR-025 |
 | wardley-map-disl-fbl | 7, the legacy identities file | FR-026 |
 | wardley-map-disl-fbl | 8, identity key spaces, repeated keys and key changes | FR-027, FR-028, FR-029 |
+| The C4 companions (`definitions/diagrams/c4-*.md`) | 16, several items written in one argument, found while binding the format (amendment of 2026-10-30) | FR-038 |
 
 What every story needs (the version, defaults, fixtures, examples, companions, ATD, DISL and host support) is FR-030 to FR-037.
 
@@ -219,6 +231,10 @@ What every story needs (the version, defaults, fixtures, examples, companions, A
 - **FR-036**: No DISL or DESL construct changes in this feature; a `typeMap` that FR-014 needs to leave a type out of a reading **MAY** gain a value for it, which is then the one DISL change, stated in DISL §11.2 in the same pull request.
 - **FR-037**: Section 15.1 **MUST** state that a host which reads or writes Structurizr DSL workspaces or `.owm` maps through their declared bindings (the six C4 tool types and the Wardley map) **MUST** support the `grammar` family with every construct of FBL 0.10, say so, and pass its fixtures byte for byte with the same splices as every other host. A host that does not support the family, or supports only its 0.9 constructs, opens those documents as section 15.1's last paragraph says, read-only if it can read them at all and with a reason. The family stays optional for every other format.
 
+**Amendment of 2026-10-30, C4 gap 16, in the `grammar` family (FBL 0.13).** By the maintainer's ruling of 2026-10-30 (Clarifications), after pull requests A, B and C had merged.
+
+- **FR-038** (C4 companions' gap 16; US1 s12, s13): A `grammar` binding **MUST** be able to declare that one node a slot of a `many` attribute reaches holds several items, cut at a separator the binding states, each item without the white space around it and an empty piece being no item, so that Structurizr's `tags "Extra, More"` reads as the two tags `Extra` and `More` while `"Existing System"` stays one; a read-only gathered slot (FR-013) **MUST** be able to do the same. A set of such an attribute **MUST** be written into the node by splices that change only the bytes of the items it changes, adds or removes and of one separator for each item added or removed, keeping every byte of an item it keeps and between two items it keeps, with an exact undo; FBL **MUST** state where an added item goes, which separator a removed one takes, and what happens to a node whose every item is removed or that holds none. It **MUST** be a new FBL version, 0.13, whose status paragraph says what it adds, with a round-trip fixture of the C4 tool's own `findings/tags-in-block.dsl` that reads `Extra` and `More` as two tags and one that plans an edit and its undo for each of an added, a changed and a removed item (FR-032); `structurizr.fbl` **MUST** use it for every tags argument, which changes what `structurizr-gathered-tags` reads of `"Last, Least"` and nothing else of an earlier fixture (FR-031, SC-004 as amended); ATD **MUST** carry it (FR-035); and the C4 companions **MUST** record gap 16 as answered by it (FR-034).
+
 ### Key Entities
 
 - **Comment**: an ignored token of the grammar that holds a character other than whitespace; trivia, owned by the entry FBL states, after a statement, after a brace, or across lines.
@@ -230,6 +246,7 @@ What every story needs (the version, defaults, fixtures, examples, companions, A
 - **Reading's origin set**: the origins a rule or a resource capture applies to, within a binding several tool types share.
 - **Identity kind**: the key space of an `identities:` entry, declared by a rule, in which a holder's ordinal tells repeated natural keys apart.
 - **Legacy identities file**: the Wardley map's `<base>.identities.json`, an array of `{id, kind, key}`.
+- **Split slot** *(amendment of 2026-10-30)*: a slot whose one node holds several items of a `many` attribute, cut at a separator the binding declares, each item with a span of its own.
 
 ## Success Criteria *(mandatory)*
 
@@ -238,9 +255,9 @@ What every story needs (the version, defaults, fixtures, examples, companions, A
 - **SC-001**: Each of the twelve waiting tasks (c4-disl-fbl 13 to 17, databricks-disl-fbl 10 to 13, wardley-map-disl-fbl 11 to 13; Databricks task 14 excepted, which waits on the client) can name, for every gap it waits on, the FBL 0.10 section that answers it and a fixture to implement against.
 - **SC-002**: The three conversions' binding drafts can be written in valid FBL 0.10, the C4 and Wardley map drafts in the `grammar` family and the Databricks draft in the `yaml` family, with no property marked as not FBL; the example bindings of FR-033 are those drafts.
 - **SC-003**: Every new fixture passes `python .github/scripts/validate-examples.py`, and each fails it with one planted wrong offset.
-- **SC-004**: Every example, registration and fixture that passes the validator today passes it unchanged, `structurizr-open-block` included under the rewritten `structurizr.fbl`.
-- **SC-005**: A reader of FBL 0.10 alone can say, for each of the 29 acceptance scenarios above, which bytes the host reads and writes, without reading a host's code.
-- **SC-006**: The companions list no FBL gap of the three conversions as open that FBL 0.10 answers, and every gap still open names why.
+- **SC-004**: Every example, registration and fixture that passes the validator today passes it unchanged, `structurizr-open-block` included under the rewritten `structurizr.fbl`. *(Amendment of 2026-10-30)* The one exception is the `read` of `structurizr-gathered-tags`, whose argument `"Last, Least"` FR-038 reads as two tags because `structurizr.fbl` declares the split; its input, its steps and every other fixture stay as they were.
+- **SC-005**: A reader of FBL 0.10 alone (*(amendment of 2026-10-30)* of FBL 0.13 for User Story 1's scenarios 12 and 13) can say, for each of the 31 acceptance scenarios above, which bytes the host reads and writes, without reading a host's code.
+- **SC-006**: The companions list no FBL gap of the three conversions as open that FBL 0.10 answers, and every gap still open names why. *(Amendment of 2026-10-30)* The C4 companions list gap 16 as answered by FBL 0.13, and no FBL gap of theirs is open.
 - **SC-007**: A reader of section 15.1 alone can say which hosts must support the `grammar` family, and what a host that does not support it does with a C4 workspace or a Wardley map.
 
 ## Assumptions

@@ -47,6 +47,7 @@ Every construct the feature adds to FBL, by the `$defs` entry of `fbl.schema.jso
 |---|---|---|---|---|
 | `escape` | `{with, quote}`, one character each | Read and write escapes inside the value (R8). | FR-005 | A |
 | `items` | map attribute → `{node}` Slot, and `separator` | A list of structured values from the repeated nodes the selector reaches (R17). | FR-025 | C |
+| `split` | string, one character or more, and `separator` | Several items of a `many` attribute in one node, cut at the text, each without the white space around it, an empty piece no item; on a slot of `gather` too; not beside `items`, and holding no character of the slot's `escape` (R25). | FR-038 | D |
 
 ### `$defs/AttributeBinding`
 

@@ -44,6 +44,13 @@ For the grammars: add an alternative to `structurizr.lark` that makes a statemen
 - `wardley-legacy-identities` reads every id of `annotations-and-labels.identities.json` for its element, and no element gets a new id.
 - Section 17 names `wardley-map.fbl` for the Wardley map.
 
+## Pull request D (amendment of 2026-10-30)
+
+- `structurizr-split-tags` reads `Extra` and `More` as two tags of the system `s`, and `structurizr-gathered-tags` reads `Last` and `Least`; removing `split` from `structurizr.fbl` makes both fail their reading check.
+- `grammar-split-slot` replays every add, change and removal with its undo; removing `split` from `labels.fbl` makes its reading check fail.
+- `split-not-many.fbl` and `split-escape-collision.fbl` are refused; without `split`, or with `split` `","`, each is accepted and the run fails.
+- The C4 companions name gap 16 as answered: `grep -n "^| 16 " definitions/diagrams/c4-*.md` shows FBL 0.13 on each.
+
 ## In a host (not this feature's tasks)
 
 A host that implements a construct vendors the merged fixtures unchanged and runs its conformance suite over them; each test is seen to fail before the library change (the standalone host's rule, and the desktop host's principle IV). For the standalone host that is c4-disl-fbl task 13, databricks-disl-fbl task 10 and wardley-map-disl-fbl task 11, with that repository's four gates and `inspect.sh` (constitution principle VI).

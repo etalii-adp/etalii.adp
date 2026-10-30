@@ -81,6 +81,10 @@ of the reading is read by a plugin rather than through FBL, it has no typeMap fo
 binding's alone, as a host's conformance run reads it: every rule's type is its own, a value is the text the slot reads
 (a number where the binding gives `number`), compared with a fixture's number or bool that it is written as, and with
 a fixture's list as all the values the slot reaches.
+FBL 0.13: a `{node}` slot with `split` reads the items its value is cut into at that text, each without the white space
+around it, an empty piece no item, each item's escapes resolved after the cut; a reading of an origin no tool type
+has, a fixture's own binding, is the binding's alone too. An attribute binding with `split` is checked, as one with
+`items` is, to bind a `many` attribute, and a slot's `split` to hold neither character of its `escape`.
 
 
 Every `*.dis` that validates is checked for the names DISL 0.4's constructs refer to (DISL section 14.1): a compartment's
@@ -1528,8 +1532,9 @@ class GrammarModel:
         self.binding, self.origin = binding, origin
         specification = ToolTypes.of(origin)
         # A tool type read by a plugin, not through this binding, has no typeMap for it: the reading is the binding's
-        # alone, each rule's type its own and each value as the binding reads it (FBL 0.12).
-        self.alone = specification is not None and specification.get("persistence", {}).get("format") != "fbl"
+        # alone, each rule's type its own and each value as the binding reads it (FBL 0.12). So is the reading of an
+        # origin no tool type has, a fixture's own binding (FBL 0.13), whose list attributes only the fixture states.
+        self.alone = specification is None or specification.get("persistence", {}).get("format") != "fbl"
         self.tool = ToolType({} if self.alone else specification or {})
         self.metamodel = self.tool.metamodel
         self.views = self.read_views(view)
@@ -1716,6 +1721,9 @@ class GrammarModel:
                     if not match:
                         continue
                     value = match["value"]
+                if "split" in slot:
+                    values.extend(split_items(value, slot))
+                    continue
                 if "escape" in slot:
                     value = unescaped(value, slot["escape"]["with"], slot["escape"]["quote"])
                 values.append(value)
@@ -1749,6 +1757,26 @@ class GrammarModel:
                     self.document[name] = self.document.get(name, []) + value
                 else:
                     self.document.setdefault(name, value)
+
+
+# FBL 0.13, section 4.9: the white space an item of a `split` slot is read without, Unicode's White_Space property,
+# which is what the C4 tool's `StringSplitOptions.TrimEntries` (char.IsWhiteSpace) takes off too. Python's str.strip()
+# also takes U+001C to U+001F, which are no White_Space, so the set is stated here.
+WHITE_SPACE = "\t\n\v\f\r \x85\xa0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000"
+
+
+def split_items(value, slot):
+    """FBL 0.13, a slot's `split`: the value cut at every occurrence of the text, each piece without the white space at
+    its start and end an item, an empty piece no item, and each item's escapes resolved after the cut."""
+    items = []
+    for piece in value.split(slot["split"]):
+        item = piece.strip(WHITE_SPACE)
+        if not item:
+            continue
+        if "escape" in slot:
+            item = unescaped(item, slot["escape"]["with"], slot["escape"]["quote"])
+        items.append(item)
+    return items
 
 
 def unescaped(value, escape, quote):
@@ -2054,7 +2082,9 @@ def check_grammar_family(path: Path, document) -> list[str]:
     and `recover.nested` and `recover.unclosed` name terminals of the binding's grammar,
     the terminals of `unclosed` ignored ones, as `atd-grammar.py --bindings` checks too. FBL 0.12: `items` stands only
     on an attribute that is `many` in the tool type's specification (items_not_many); the schema keeps `items` and
-    `separator` to a `{node}` slot of the grammar family and `{n}` once in `sidecar.ordinal`."""
+    `separator` to a `{node}` slot of the grammar family and `{n}` once in `sidecar.ordinal`. FBL 0.13: `split` stands
+    only on a `many` attribute too (items_not_many), and holds neither character of its slot's `escape`
+    (split_escape_collision); the schema keeps it to a `{node}` slot of the grammar family and from beside `items`."""
     problems = []
     for binding_name, binding in document.get("bindings", {}).items():
         base = f"/bindings/{binding_name}"
@@ -2075,6 +2105,11 @@ def check_grammar_family(path: Path, document) -> list[str]:
                         problems.append(f"at {pointer}/attributes/{attribute}/gather: gather stands only on a read-only attribute binding")
                     if "items" in attribute_binding:
                         problems.extend(items_not_many(binding, rule, attribute, f"{pointer}/attributes/{attribute}/items"))
+                    if "split" in attribute_binding:
+                        problems.extend(items_not_many(binding, rule, attribute, f"{pointer}/attributes/{attribute}/split", "split"))
+                    for index, slot in enumerate([attribute_binding] + attribute_binding.get("gather", [])):
+                        where = f"{pointer}/attributes/{attribute}" + (f"/gather/{index - 1}" if index else "")
+                        problems.extend(split_escape_collision(slot, where))
         body = binding.get("body", {})
         recover = body.get("recover") or {}
         if body.get("family") == "grammar" and ("nested" in recover or "unclosed" in recover):
@@ -2090,8 +2125,17 @@ def check_grammar_family(path: Path, document) -> list[str]:
     return problems
 
 
-def items_not_many(binding, rule, attribute, pointer) -> list[str]:
-    """FBL 0.12, section 14.1, step 6: an attribute binding with `items` binds an attribute that is `many` in the tool
+def split_escape_collision(slot, pointer) -> list[str]:
+    """FBL 0.13, section 14.1, step 6: a slot's `split` holds neither character of its `escape`, so that cutting a value
+    before its escapes are resolved gives the items cutting after would."""
+    if "split" not in slot or "escape" not in slot:
+        return []
+    held = [c for c in (slot["escape"]["with"], slot["escape"]["quote"]) if c in slot["split"]]
+    return [f"at {pointer}/split: holds {c!r}, a character of the slot's escape" for c in held]
+
+
+def items_not_many(binding, rule, attribute, pointer, construct="items") -> list[str]:
+    """FBL 0.12, section 14.1, step 6: an attribute binding with `items` (FBL 0.13: or `split`) binds an attribute that is `many` in the tool
     type's specification, the attribute a `typeMap` maps it to included. It is checked against each specification of
     an origin the binding claims that is read through FBL, since that is the one loaded with the binding; one read
     by a plugin, or a rule type or attribute the specification does not declare, says nothing."""
@@ -2102,7 +2146,7 @@ def items_not_many(binding, rule, attribute, pointer) -> list[str]:
             continue
         declared = ToolType(specification).attribute_type(rule["type"], attribute)
         if declared and not declared.get("many"):
-            problems.append(f"at {pointer}: items stands only on a many attribute, and {origin} declares {attribute!r} of {rule['type']!r} single-valued")
+            problems.append(f"at {pointer}: {construct} stands only on a many attribute, and {origin} declares {attribute!r} of {rule['type']!r} single-valued")
     return problems
 
 
