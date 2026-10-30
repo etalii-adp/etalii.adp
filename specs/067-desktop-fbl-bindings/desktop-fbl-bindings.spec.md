@@ -35,6 +35,12 @@ The formats fall into three groups:
 - **Not the other hosts.** Standalone, VS Code and IntelliJ follow FBL under their own specifications.
 - **Not a change to what the cases expect.** A case's expected bytes, readings, findings and drawings are the reference and do not change to suit a description. Only how a gesture is written in a step changes (story 3).
 
+## Clarifications
+
+### Session 2026-10-30
+
+- Q: Is a refusal's wording compared when the host wrote it rather than the description? → A: Only a description's own reason is compared exactly; the host's sentence that a gesture is not offered counts as the same refusal (Peter, 2026-10-30; FR-011).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - The desktop host reads and writes everything FBL states (Priority: P1)
@@ -124,7 +130,7 @@ A tool engineer validates the RDF, OWL, SHACL or SKOS description, and its Turtl
 - **FR-008**: FBL MUST gain what Turtle needs, each construct with its fixture and its schema, as a minor version: reaching a statement's subject from a triple inside it, expanding a prefix, stable blank-node ordinals, and unescaping a literal.
 - **FR-009**: The RDF, OWL, SHACL and SKOS descriptions MUST bind Turtle with the grammar family and pass their cases with no persistence plugin, including Turtle cases with inserts and removals recorded from the desktop host's reader (spec 035, T149, FR-082, SC-010).
 - **FR-010**: A person who opens a document MUST keep today's tool, and validating MUST write no file of the description or the case.
-- **FR-011**: Comparing a refusal: [NEEDS CLARIFICATION: is a refusal's wording compared when the host wrote it rather than the description? Some modules say "Unknown action 'x'." where the runtime says "'x' does not apply to this selection." Recommended: a description's own reason is compared exactly; the host's sentence that a gesture is not offered counts as the same refusal whatever its wording.]
+- **FR-011**: Comparing a refusal, a reason the description wrote MUST match exactly. The host's own sentence that a gesture is not offered, such as "Unknown action 'x'." or "'x' does not apply to this selection.", MUST count as the same refusal whatever its wording, and ATD §2.3 MUST state this.
 
 ### Key Entities
 
