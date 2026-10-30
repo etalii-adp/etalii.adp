@@ -107,3 +107,35 @@ Section 6.2's `keys` row adds: *(FBL 0.10)* an attribute bound with `child` that
 ## A lowercased key placeholder (FR-022)
 
 Section 13, step 2 adds `{key:lower}`: `{key}` with every ASCII letter in lower case, so `My_Job.yml` gives `my_job`.
+
+## A member added to a mapping (FR-039, pull request E, amendment of 2026-10-30)
+
+Written to the recommended answer of the maintainer's pending card (specification, *Clarifications*). FBL sections 2.7, 6.2 and 14.1, and `fbl.schema.json`. Research: R26.
+
+No new property of `$defs/Insert`: a rule of the `yaml` or `json` family whose `at` ends in a `{c}` segment reads the members of a mapping by key, and its `insert` adds a **member** to that mapping. `$defs/Insert/properties/refusals` gains two sentences beside FBL 0.10's `when` and `container`:
+
+```json
+"key": { "$ref": "#/$defs/LocalizedText" },
+"duplicate": { "$ref": "#/$defs/LocalizedText" }
+```
+
+`databricks.fbl#configuration`, rule `jobResource` (and `pipelineResource` alike, on `/resources/pipelines` with a pipeline's skeleton):
+
+```json
+"insert": { "place": "after-last", "container": "/resources/jobs", "when": "attributes.resourceKind == 'jobs'", "create": { "at": "end" },
+  "skeleton": "name: {key}\ntasks:\n  - task_key: main\n    notebook_task:\n      notebook_path: notebooks/{key}\n",
+  "refusals": { "key": "A resource needs a key.", "duplicate": "A job with that key is already there." } },
+"remove": { "container": "remove-empty-levels" }
+```
+
+Section 6.2 gains the paragraph *A new member, named by its key*:
+
+- The key is the value the add gives the attribute bound to `{capture: c}`; it is the new entry's key, not a set of the attribute, so the binding's `readOnly` on `key` (which refuses a rename) does not refuse the add.
+- yaml: the key as section 6.3 writes a new string value (plain when plain-safe, else in `text.quote`), `:` and the line ending, then the entry's `keys`, constants and `skeleton` one indentation step deeper. json: a string, `: ` and an object holding them, one member per line as its siblings are, with one `,` separator.
+- `place`: `after-last` right after the line span of the rule's last member, before the members of any other rule (finding B11: a new job follows the last job); `end`, `start` and `{before: key}` as for any insert. Indentation is the member's it follows, else the one it precedes, else one step deeper than the container's key.
+- A missing container is created by `create`, with its missing levels (FBL 0.4), `resources:` at the end of the body and `jobs:` at the end of `resources`; `jobs:` alone takes the member as the first of a block mapping below it; `jobs: {}` takes no insert.
+- An add whose key is missing or empty is refused with `refusals.key`; one whose key the mapping already holds, compared as written text (section 4.1.5), with `refusals.duplicate`.
+- The add is the `ensure-container` splices of the levels it creates and one `insert-entry` of the member, all at one offset; its undo removes exactly those bytes.
+- Removing the entry removes its key's line and every line of its value (with one separator in json); `remove.container` decides what becomes of an emptied container, `remove-empty-levels` removing `jobs:` and then `resources:`.
+
+Section 14.1, step 6 checks that a rule with such an `insert` binds an attribute to `{capture: c}`, and that `refusals.key` and `refusals.duplicate` stand only on an insert that adds a member. `validate-examples.py` makes both checks (`check_members`) and replays the member's splices as any insert's.
