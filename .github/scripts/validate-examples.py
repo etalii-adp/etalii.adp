@@ -1039,7 +1039,7 @@ class GrammarReader:
         position after it, or None and the position after the skipped text."""
         cursor = self.cursor(symbol)
         blocks = []
-        position = last = start
+        position = last = skipped = start  # skipped: the end of the last text skipped inside a block (rule 5)
         while True:
             candidates = cursor.candidates() + self.lexer.ignored
             found = self.lexer.token_at(self.text, position, candidates) if position < len(self.text) else None
@@ -1060,8 +1060,8 @@ class GrammarReader:
                     continue
             if not whole:  # rule 1: the unit ends after its last token when the parser can accept it there
                 tree = cursor.end(self.token("$END", last, last))
-                if tree is not None:
-                    return tree, last
+                if tree is not None:  # FBL 0.12: text skipped inside a block that the body's end closed is not read again
+                    return tree, max(last, skipped)
             if found is None and position < len(self.text) and self.close and not blocks:
                 probe = self.lexer.token_at(self.text, position, self.lexer.everything)
                 if probe and probe[0] == self.close:  # FBL 0.11, rule 7: skipped alone, and it closes nothing
@@ -1084,7 +1084,7 @@ class GrammarReader:
                 if end <= position and position == block.position:
                     end = found[1] if found else position + 1
                 cursor = block.cursor.copy()
-                position, last = end, block.position
+                position, last, skipped = end, block.position, end
                 continue
             end = self.skip_end(position, inside=False)  # FBL 0.9, rule 2: the unit is skipped
             self.finding("fbl.unparsed-text", position)
@@ -1656,7 +1656,8 @@ class GrammarModel:
         if declared.get("many"):
             return [self.converted(value, declared) for value in values]
         if self.alone:
-            return Values(self.converted(value, binding) for value in values) if values else binding.get("default")
+            values = values or ([binding["default"]] if "default" in binding else [])
+            return Values(self.converted(value, binding) for value in values) if values else None
         if not values:
             return binding.get("default")
         return self.converted(values[0], declared)
@@ -1861,7 +1862,7 @@ def same_value(expected, actual) -> bool:
             return len(expected) == len(actual) and all(same_value(e, written(e, a)) for e, a in zip(expected, actual))
         return bool(actual) and same_value(expected, written(expected, actual[0]))
     if isinstance(expected, dict) and isinstance(actual, dict):
-        return expected.keys() == actual.keys() and all(same_value(expected[k], actual[k]) for k in expected)
+        return expected.keys() == actual.keys() and all(same_value(expected[k], written(expected[k], actual[k])) for k in expected)
     if isinstance(expected, bool) or isinstance(actual, bool):
         return isinstance(expected, bool) and isinstance(actual, bool) and expected == actual
     if isinstance(expected, list) and isinstance(actual, list):
