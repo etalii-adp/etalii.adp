@@ -39,7 +39,7 @@ Nine, each a candidate change for this repository, numbered as the conversion's 
 | 3 | FBL | A YAML scalar as written | B4 | Answered by FBL 0.5 |
 | 4 | FBL | Writing into an empty or one-line flow collection | B12 | Answered by FBL 0.10 (`databricks-flow-empty`, `databricks-flow-one-line`) |
 | 5 | FBL | A refusal's sentence | B19 | Answered by FBL 0.10 (`databricks-refusals`) |
-| 6 | FBL | Which rule plans an add; two containers created by one insert; a nested mapping written for a YAML sequence item | B17 | The first two answered by FBL 0.4 and 0.7; the third by FBL 0.10 (`databricks-library-add`) |
+| 6 | FBL | Which rule plans an add; two containers created by one insert; a nested mapping written for a YAML sequence item | B17 | The first two answered by FBL 0.4 and 0.7; the third by FBL 0.10 (`databricks-library-add`); a resource added under its key by FBL 0.14 (`databricks-resource-add`) |
 | 7 | FBL | A slot read when another is absent; a lowercased key placeholder | B18, B20 | Answered by FBL 0.10 (`databricks-secondary`, `databricks-template-key`) |
 | 8 | DISL | A placeholder node for a reference that names nothing; an element with no entry of its own that keeps a stored position | A9, A10 | Open; DISL's, since what is drawn for an end that names nothing, and for an element with no entry, is the metamodel's to say and not a binding's |
 | 9 | DISL | The order of findings across rules and readings; the first free name of a pattern | A7, A8, A11 | Open; DISL's, since the order of findings and a fresh name come from how a specification is evaluated, not from how a body is read |
@@ -83,7 +83,7 @@ Nine, each a candidate change for this repository, numbered as the conversion's 
 
 - **Construct.** A dropped task's skeleton depends on its type (three types are reachable from the palette, seven are known to the writer); a resource added to a file without `resources:` creates two containers at once; and a YAML library, `- notebook:` with `path:` beneath it, is a nested mapping whose `kind` and `path` the example binding binds by expression, so the one-place rule (3.3) leaves it unwritable, while its `emit` covers JSON only.
 - **Shown by.** `every-task-type.yml`, `no-resources.yml`, and the libraries of `examples/lakehouse/databricks.yml`.
-- **Answered in part.** An add is planned by the first rule of its type whose insert's `when` holds (6.2), so a rule per task type carries that type's skeleton; and every missing level of a container is created by one insert (6.2, *Missing levels*, FBL 0.4).
+- **Answered in part.** An add is planned by the first rule of its type whose insert's `when` holds (6.2), so a rule per task type carries that type's skeleton; and every missing level of a container is created by one insert (6.2, *Missing levels*, FBL 0.4). *(FBL 0.14)* A resource is added as a member of `resources.jobs` or `resources.pipelines`, under the key the add gives, after the last of its kind, with its missing levels (6.2, *A new member, named by its key*); `databricks-resource-add` shows it, from the module's `bundle.yml`.
 - **Answered, the rest.** FBL 0.10, 6.2 (`keys`): an add writes an attribute bound with `child` under the levels of `child`, as a set creates them, so a library added to a YAML pipeline is `- notebook:` with `path:` below it and reads back as the library added; `databricks-library-add` shows it.
 - **Meanwhile.** `PipelineWriter` writes the library's lines.
 
