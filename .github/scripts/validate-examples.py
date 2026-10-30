@@ -2075,6 +2075,36 @@ def check_origins(document) -> list[str]:
     return problems
 
 
+def check_members(document) -> list[str]:
+    """Checks FBL 0.14's inserts of a member (section 14.1, step 6) and returns a problem per finding: a rule of the yaml
+    or json family whose `at` ends in a `{c}` segment and that has an `insert` binds an attribute to `{capture: c}`, the
+    new member's key; and `refusals.key` and `refusals.duplicate` stand only on such an insert."""
+    problems = []
+    for binding_name, binding in document.get("bindings", {}).items():
+        if binding.get("body", {}).get("family") not in ("yaml", "json"):
+            continue
+        for kind in ("elements", "relations"):
+            for index, rule in enumerate(binding.get(kind, [])):
+                insert = rule.get("insert")
+                if not isinstance(insert, dict):
+                    continue
+                pointer = f"/bindings/{binding_name}/{kind}/{index}/insert"
+                last = MEMBER_SEGMENT.search(rule.get("at", ""))
+                if last:
+                    captured = [b for b in rule.get("attributes", {}).values() if isinstance(b, dict) and b.get("capture") == last["capture"]]
+                    if not captured:
+                        problems.append(f"at {pointer}: the rule {rule['name']!r} adds a member named by {{{last['capture']}}}, and binds no attribute to that capture")
+                else:
+                    for refusal in ("key", "duplicate"):
+                        if refusal in insert.get("refusals", {}):
+                            problems.append(f"at {pointer}/refusals/{refusal}: the rule {rule['name']!r} adds no member, since its at does not end in a capture")
+    return problems
+
+
+# FBL 0.14, section 6.2: the last segment of an `at` that names the members of a mapping by their key.
+MEMBER_SEGMENT = re.compile(r"/\{(?P<capture>[^}/]+)\}$")
+
+
 def check_grammar_family(path: Path, document) -> list[str]:
     """Checks FBL 0.11's constructs that the schema cannot (section 14.1, step 6) and returns a problem per finding:
     `create.after` names attributes of the same rule; `gather` stands only on a read-only attribute binding;
@@ -2535,12 +2565,12 @@ for path in examples:
         failures += 1
         print(f"FAIL {name}: only DISL specifications belong in specifications/disl/refused/")
     elif refused and reference == FBL:
-        if problems := resolve_names(document) + check_constants(document) + check_origins(document) + check_grammar_family(path, document):
+        if problems := resolve_names(document) + check_constants(document) + check_origins(document) + check_members(document) + check_grammar_family(path, document):
             print(f"ok   {name} (refused, as a binding in refused/ must be: {problems[0]})")
         else:
             failures += 1
             print(f"FAIL {name}: a binding in refused/ must be refused by a check of FBL section 14.1, and this one is accepted")
-    elif reference in (FBL, DESL, DISL) and (problems := (resolve_names(document) + check_constants(document) + check_origins(document) + check_grammar_family(path, document) if reference == FBL else resolve_desl(path, document) if reference == DESL else resolve_disl(document))):
+    elif reference in (FBL, DESL, DISL) and (problems := (resolve_names(document) + check_constants(document) + check_origins(document) + check_members(document) + check_grammar_family(path, document) if reference == FBL else resolve_desl(path, document) if reference == DESL else resolve_disl(document))):
         failures += 1
         print(f"FAIL {name}: {len(problems)} name problem(s)")
         for problem in problems[:10]:

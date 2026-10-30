@@ -58,9 +58,10 @@ The maintainer ruled on the specification's three questions on 2026-10-27; Q1 ag
 
 ### Session 2026-10-30
 
-The maintainer ruled on one question raised after the feature's three pull requests had merged, by a decision card, and so amended the feature in place (FR-038, User Story 1 scenarios 12 and 13).
+The maintainer ruled on one question raised after the feature's three pull requests had merged, by a decision card, and so amended the feature in place (FR-038, User Story 1 scenarios 12 and 13). A second question, raised the same day by the standalone Databricks conversion, waits on its card; the feature is amended to its recommended answer (FR-039, User Story 2 scenarios 10 and 11), and the pull request that delivers it is not merged before the ruling.
 
 - Q: How should C4 handle several tags written in one quoted argument? The standalone C4 module splits the tags `"Extra, More"` into two tags, while FBL 0.12 reads them as one; the C4 companions record this as gap 16. → A: A new FBL construct, amending spec 066 with a schema change and a fixture, not leaving the gap open nor accepting FBL's one-tag reading (Peter, 2026-10-30). It is FBL 0.13 (FR-038).
+- Q: Should FBL be extended so that an insert of the `yaml` family can add an entry under a new key of a mapping, such as a job under `resources.jobs`? databricks-disl-fbl task 12 found that a resource cannot be added through the binding: the standalone library refuses with "The /resources/jobs of this file is not a list a Resource can be added to.", since FBL 0.13 states an insert into a sequence and none into a mapping. → *Pending, on the maintainer's card.* Recommended: yes, as FBL 0.14 (FR-039), the same construct covering the members of a JSON object. The amendment is written to that answer; were it no, FR-039 and its tasks would be withdrawn and the module would keep adding resources itself.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -109,6 +110,8 @@ A tool engineer writes one binding for a Databricks bundle file that the bundle,
 7. **Given** a pipeline that has `target` and no `schema`, **When** it is read, **Then** its schema is the value of `target`; **and When** the schema is set, **Then** it is written to `schema` and `target` is removed.
 8. **Given** a new document named `My_Job.yml`, **When** it is created from the template, **Then** its key is `my_job`.
 9. **Given** a library added to a YAML pipeline, **When** it is written, **Then** it is a nested mapping (`- notebook:` with `path:` below it) that reads back as the library added.
+10. *(Amendment of 2026-10-30, FR-039)* **Given** `resources:` holding `jobs:` with the job `nightly_ingest` and then `pipelines:`, **When** the bundle reading adds a job keyed `weekly_rollup`, **Then** `weekly_rollup:` is written as a member of `jobs` right after `nightly_ingest`'s lines and before `pipelines:`, indented as `nightly_ingest:` is, with the job's skeleton below it, every other byte of the file is kept, the bundle reads back with the new job, and one undo restores the file byte for byte; **and Given** a file with no `resources:` or with `resources:` and no `jobs:`, **When** a job is added, **Then** the missing levels are written first, at the end of the body and of `resources` respectively, in the same edit.
+11. *(Amendment of 2026-10-30, FR-039)* **Given** a job keyed `nightly_ingest` already in the file, **When** a job of that key or of no key is added, **Then** the add is refused with the sentence the binding gives, and nothing is written; **and When** the job `nightly_ingest` is removed, **Then** its key's line and every line of its value go, and `jobs:` with them when nothing else is in it.
 
 ---
 
@@ -157,6 +160,9 @@ A tool engineer writes a binding in the `grammar` family for the Wardley map's `
 - *(FR-038)* **An argument with an empty piece or nothing but white space** (`"A,,B"`, `""`, `" "`): an empty piece is no item, so `"A,,B"` holds two and `""` none; a tag added to an argument that holds none is written as its value.
 - *(FR-038)* **A set that removes every tag of an argument**: the argument goes as a removed node of a `many` slot does, with the white space before it; FBL states it.
 - *(FR-038)* **A separator that the slot's escape could write** (a backslash in it): the binding is refused when it is loaded, so that the items do not depend on whether the escapes are resolved before the cut.
+- *(FR-039)* **A key that would need quoting** (`my job`, `true`): it is written as section 6.3 writes a new string value, quoted where a plain scalar would read otherwise, and compared with the mapping's keys as written text.
+- *(FR-039)* **A mapping written in flow form** (`jobs: {}`): it takes no insert, as the edge case of a flow mapping above says; a key written alone (`jobs:`) takes the member as the first of a block mapping below it.
+- *(FR-039)* **A rule that adds a member and binds nothing to its key's capture**: the binding is refused when it is loaded, since the add would have no key to write.
 
 ## Requirements *(mandatory)*
 
@@ -188,6 +194,7 @@ Every construct below is stated by what a binding can declare and what a host th
 | wardley-map-disl-fbl | 7, the legacy identities file | FR-026 |
 | wardley-map-disl-fbl | 8, identity key spaces, repeated keys and key changes | FR-027, FR-028, FR-029 |
 | The C4 companions (`definitions/diagrams/c4-*.md`) | 16, several items written in one argument, found while binding the format (amendment of 2026-10-30) | FR-038 |
+| databricks-disl-fbl | task 12, a resource added under a new key of a mapping, found while implementing (amendment of 2026-10-30, pending the maintainer's card) | FR-039 |
 
 What every story needs (the version, defaults, fixtures, examples, companions, ATD, DISL and host support) is FR-030 to FR-037.
 
@@ -249,6 +256,10 @@ What every story needs (the version, defaults, fixtures, examples, companions, A
 
 - **FR-038** (C4 companions' gap 16; US1 s12, s13): A `grammar` binding **MUST** be able to declare that one node a slot of a `many` attribute reaches holds several items, cut at a separator the binding states, each item without the white space around it and an empty piece being no item, so that Structurizr's `tags "Extra, More"` reads as the two tags `Extra` and `More` while `"Existing System"` stays one; a read-only gathered slot (FR-013) **MUST** be able to do the same. A set of such an attribute **MUST** be written into the node by splices that change only the bytes of the items it changes, adds or removes and of one separator for each item added or removed, keeping every byte of an item it keeps and between two items it keeps, with an exact undo; FBL **MUST** state where an added item goes, which separator a removed one takes, and what happens to a node whose every item is removed or that holds none. It **MUST** be a new FBL version, 0.13, whose status paragraph says what it adds, with a round-trip fixture of the C4 tool's own `findings/tags-in-block.dsl` that reads `Extra` and `More` as two tags and one that plans an edit and its undo for each of an added, a changed and a removed item (FR-032); `structurizr.fbl` **MUST** use it for every tags argument, which changes what `structurizr-gathered-tags` reads of `"Last, Least"` and nothing else of an earlier fixture (FR-031, SC-004 as amended); ATD **MUST** carry it (FR-035); and the C4 companions **MUST** record gap 16 as answered by it (FR-034).
 
+**Amendment of 2026-10-30, a member added to a mapping, in the `yaml` and `json` families (FBL 0.14).** Written to the recommended answer of the maintainer's card (Clarifications), which is pending; its pull request is not merged before the ruling.
+
+- **FR-039** (databricks-disl-fbl task 12; US2 s10, s11): An `insert` of the `yaml` family **MUST** be able to add an entry to a mapping whose members its rule reads by key (`/resources/jobs/{job}`), as a new member under the key the add gives the attribute bound to that key, and the same construct **MUST** do so for the members of a `json` object. FBL **MUST** state how the key is written, that it is the new entry's key and not a set of the attribute (so a read-only key does not refuse the add), where the member goes among the container's members (after the last member of its rule, as the conversion's finding B11 places a new resource, a missing container at the end of its parent), how its value is indented, what a container written as its key alone or in flow form takes, and that an add whose key is missing, empty or already in the mapping is refused with a sentence the binding can give (FR-019). The add **MUST** be one edit of splices that change no byte outside the new member and the levels it creates, with an exact undo, and the removal of such an entry **MUST** take its key's line and its value's lines, the binding's `remove` deciding what becomes of a container left empty. It **MUST** be a new FBL version, 0.14, whose status paragraph says what it adds, with a round-trip fixture over the standalone module's `bundle.yml` that adds a job and a pipeline, refuses a duplicate and an empty key and removes a job, each with its undo, fixtures for a body without `resources:` and without `jobs:`, and one for a JSON object (FR-032); `databricks.fbl` **MUST** use it for adds to `resources.jobs` and `resources.pipelines`; ATD **MUST** carry it (FR-035); and the Databricks companions **MUST** record it under gap 6 (FR-034).
+
 ### Key Entities
 
 - **Comment**: an ignored token of the grammar that holds a character other than whitespace; trivia, owned by the entry FBL states, after a statement, after a brace, or across lines.
@@ -261,6 +272,7 @@ What every story needs (the version, defaults, fixtures, examples, companions, A
 - **Identity kind**: the key space of an `identities:` entry, declared by a rule, in which a holder's ordinal tells repeated natural keys apart.
 - **Legacy identities file**: the Wardley map's `<base>.identities.json`, an array of `{id, kind, key}`.
 - **Split slot** *(amendment of 2026-10-30)*: a slot whose one node holds several items of a `many` attribute, cut at a separator the binding declares, each item with a span of its own.
+- **Member insert** *(amendment of 2026-10-30)*: an insert that adds an entry to a mapping or object as a new member, under the key the add gives the attribute its rule reads from the key.
 
 ## Success Criteria *(mandatory)*
 
@@ -270,8 +282,8 @@ What every story needs (the version, defaults, fixtures, examples, companions, A
 - **SC-002**: The three conversions' binding drafts can be written in valid FBL 0.10, the C4 and Wardley map drafts in the `grammar` family and the Databricks draft in the `yaml` family, with no property marked as not FBL; the example bindings of FR-033 are those drafts.
 - **SC-003**: Every new fixture passes `python .github/scripts/validate-examples.py`, and each fails it with one planted wrong offset.
 - **SC-004**: Every example, registration and fixture that passes the validator today passes it unchanged, `structurizr-open-block` included under the rewritten `structurizr.fbl`. *(Amendment of 2026-10-30)* The one exception is the `read` of `structurizr-gathered-tags`, whose argument `"Last, Least"` FR-038 reads as two tags because `structurizr.fbl` declares the split; its input, its steps and every other fixture stay as they were.
-- **SC-005**: A reader of FBL 0.10 alone (*(amendment of 2026-10-30)* of FBL 0.13 for User Story 1's scenarios 12 and 13) can say, for each of the 31 acceptance scenarios above, which bytes the host reads and writes, without reading a host's code.
-- **SC-006**: The companions list no FBL gap of the three conversions as open that FBL 0.10 answers, and every gap still open names why. *(Amendment of 2026-10-30)* The C4 companions list gap 16 as answered by FBL 0.13, and no FBL gap of theirs is open.
+- **SC-005**: A reader of FBL 0.10 alone (*(amendment of 2026-10-30)* of FBL 0.13 for User Story 1's scenarios 12 and 13, and of FBL 0.14 for User Story 2's scenarios 10 and 11) can say, for each of the 33 acceptance scenarios above, which bytes the host reads and writes, without reading a host's code.
+- **SC-006**: The companions list no FBL gap of the three conversions as open that FBL 0.10 answers, and every gap still open names why. *(Amendment of 2026-10-30)* The C4 companions list gap 16 as answered by FBL 0.13, and no FBL gap of theirs is open; the Databricks companions name FBL 0.14 under gap 6 for a resource added under its key.
 - **SC-007**: A reader of section 15.1 alone can say which hosts must support the `grammar` family, and what a host that does not support it does with a C4 workspace or a Wardley map.
 
 ## Assumptions

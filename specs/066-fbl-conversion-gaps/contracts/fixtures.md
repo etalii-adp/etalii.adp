@@ -78,9 +78,18 @@ Binding `../../wardley-map.fbl#map`. Sources are under `src/diagrams/wardley-map
 
 `structurizr-gathered-tags` reads `"Last, Least"` as `Last` and `Least` once `structurizr.fbl` splits its tags; its input and steps are unchanged (SC-004 as amended).
 
+## Pull request E: a member added to a mapping (amendment of 2026-10-30, pending the maintainer's card)
+
+| Folder | Input, and its source | Shows | Requirements, scenarios |
+|---|---|---|---|
+| `databricks-resource-add/bundle/` | `bundle.yml`, the standalone host's `src/diagrams/databricks/backend/EtAlii.Adp.Diagram.Databricks.Tests/Fixtures/bundle.yml` at `edbddc92e` (CRLF), through the bundle reading's registration and `../../databricks.fbl#configuration` | A job `weekly_rollup` added after `nightly_ingest` and before `pipelines:`, a pipeline `silver` after `bronze_to_gold`, each with its skeleton and its undo; a duplicate key and an empty key refused with the binding's sentences; `nightly_ingest` removed, `jobs:` with it, and the undo | FR-039; US2 s10, s11 |
+| `databricks-resource-add/fresh/` | `fresh.yml`, the document of the standalone test `AddResourceSkeleton_OnAFileWithoutResources_CreatesTheSection` at `edbddc92e` | A pipeline added to a file without `resources:`: `resources:` and `pipelines:` created at the end of the body, then the member, in one edit, and the undo | FR-039; US2 s10 |
+| `databricks-resource-add/no-jobs/` | `no-jobs.yml`, written here as finding B11's case | A job added to `resources` holding only `pipelines`: `jobs:` created at the end of `resources`, then the member | FR-039; US2 s10; finding B11 |
+| `insert-member-json/` | `lanes.json`, written here, with its own binding `lanes.fbl#lanes` | A member added to a JSON object after the last, with `,` before it, and its undo; a duplicate and a missing key refused; a member removed with one separator, and the undo | FR-039, its JSON half |
+
 ## The refused bindings
 
-Under `refused/`, each valid against the schema and refused by a check of section 14.1 that the schema cannot make, its `doc` naming the check (data-model.md, *Validation*): *(D)* `split-not-many.fbl` (`split` on a single-valued attribute) and `split-escape-collision.fbl` (a `split` holding a character of the slot's `escape`); `grammar-gather-writable.fbl` (A), `grammar-selected-view-without-views.fbl` (A), `grammar-create-after-unknown.fbl` (A), `grammar-recover-nested-unknown-terminal.fbl` (A, refused by `atd-grammar.py --bindings`), `origins-not-claimed.fbl` (A or B), `items-not-many.fbl` (C).
+Under `refused/`, each valid against the schema and refused by a check of section 14.1 that the schema cannot make, its `doc` naming the check (data-model.md, *Validation*): *(E)* `insert-member-without-capture.fbl` (a rule that adds a member and binds nothing to its key's capture) and `insert-refusals-not-member.fbl` (`refusals.key` or `refusals.duplicate` on an insert that adds no member); *(D)* `split-not-many.fbl` (`split` on a single-valued attribute) and `split-escape-collision.fbl` (a `split` holding a character of the slot's `escape`); `grammar-gather-writable.fbl` (A), `grammar-selected-view-without-views.fbl` (A), `grammar-create-after-unknown.fbl` (A), `grammar-recover-nested-unknown-terminal.fbl` (A, refused by `atd-grammar.py --bindings`), `origins-not-claimed.fbl` (A or B), `items-not-many.fbl` (C).
 
 ## The operation coverage
 

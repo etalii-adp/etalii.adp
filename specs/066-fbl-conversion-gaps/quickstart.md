@@ -51,6 +51,13 @@ For the grammars: add an alternative to `structurizr.lark` that makes a statemen
 - `split-not-many.fbl` and `split-escape-collision.fbl` are refused; without `split`, or with `split` `","`, each is accepted and the run fails.
 - The C4 companions name gap 16 as answered: `grep -n "^| 16 " definitions/diagrams/c4-*.md` shows FBL 0.13 on each.
 
+## Pull request E (amendment of 2026-10-30, pending the maintainer's card)
+
+- `databricks-resource-add` replays the job and pipeline adds, the refusals and the removal with their undo, in `bundle/`, `fresh/` and `no-jobs/`; shifting any planted offset by one makes its step fail.
+- `insert-member-json` replays the same construct in a JSON object, the `,` separator included.
+- `insert-member-without-capture.fbl` and `insert-refusals-not-member.fbl` are refused; with the key attribute bound, or without the two sentences, each is accepted and the run fails.
+- The Databricks companions name FBL 0.14 under gap 6: `grep -n "FBL 0.14" definitions/diagrams/databricks-*.md` shows it on each.
+
 ## In a host (not this feature's tasks)
 
 A host that implements a construct vendors the merged fixtures unchanged and runs its conformance suite over them; each test is seen to fail before the library change (the standalone host's rule, and the desktop host's principle IV). For the standalone host that is c4-disl-fbl task 13, databricks-disl-fbl task 10 and wardley-map-disl-fbl task 11, with that repository's four gates and `inspect.sh` (constitution principle VI).

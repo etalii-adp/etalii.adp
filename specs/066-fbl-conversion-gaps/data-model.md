@@ -67,6 +67,7 @@ A `{node}` slot of a `many` attribute reads every node it reaches (R17; FR-024, 
 | Property | Type | Rule | FR | PR |
 |---|---|---|---|---|
 | `refusals` | `{when, container}`, each LocalizedText | The sentence when `when` is false, or when the container is missing and there is no `create` (R14). | FR-019 | B |
+| `refusals.key`, `refusals.duplicate` | LocalizedText each | *(Amendment of 2026-10-30)* On an insert that adds a member (its rule's `at` ending in `{c}`, `yaml` or `json`): the sentence when the new member's key is missing or empty, and when the mapping already holds it (R26). | FR-039 | E |
 
 ### `$defs/RegistrationSettings`
 
@@ -106,6 +107,7 @@ A `{node}` slot of a `many` attribute reads every node it reaches (R17; FR-024, 
 | `resource.capture` and `resource.byOrigin` not both | schema | B |
 | `ordinal` holds `{n}` once; `kind` is a Name | schema (pattern) | C |
 | `items` only on a `many` attribute's `{node}` slot | step 6 | C |
+| A `yaml` or `json` rule whose `at` ends in `{c}` and that has an `insert` binds an attribute to `{capture: c}`; `refusals.key` and `refusals.duplicate` only on such an insert | step 6 (`check_members`) | E |
 
 Each check the schema cannot make has a refused document under `specifications/fbl/refused/`.
 
@@ -147,3 +149,15 @@ An add into a block reported `fbl.unclosed-block` is refused.
 ### The open body with several origins (R12)
 
 One open body per path and binding: one lossless reading, one history, one model per origin. A registration's resource selection is a view of its origin's model. An edit is planned once against the body and shown in every reading of every origin.
+
+### A member added to a mapping (R26, amendment of 2026-10-30)
+
+| Add | What is written |
+|---|---|
+| key missing or empty | nothing; refused with `refusals.key` |
+| key the mapping holds, as written text | nothing; refused with `refusals.duplicate` |
+| container present, members of the rule present | one `insert-entry` after the line span of the rule's last member (`after-last`), indented as it |
+| container written as its key alone (`jobs:`) | one `insert-entry`, the first member of a block mapping one step deeper than the key |
+| container or its parent missing, with `create` | the `ensure-container` of each missing level, then the `insert-entry`, at one offset |
+| container in flow form (`jobs: {}`) | nothing; refused, as an insert into a flow mapping |
+| removal of the member | its key's line and its value's lines (one separator in json); `remove.container` decides an emptied container |

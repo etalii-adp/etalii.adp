@@ -106,6 +106,8 @@ thinkrail/specs/066-fbl-conversion-gaps.md   (regenerated)
 | 4 | etalii.adp | `features/066-fbl-conversion-gaps-wardley` | C, FBL 0.12 | User Story 3 | A merged |
 | 5 | etalii.adp | `features/066-fbl-gap16-split-slot` | D, FBL 0.13 (amendment of 2026-10-30) | FR-038, the C4 companions' gap 16, with this amendment of the specification, plan, contracts and tasks | A, B and C merged; the maintainer's ruling of 2026-10-30 |
 | 6 | etalii.adp | a branch of its own | the ticks of pull request D's tasks | `tasks.md` | D merged |
+| 7 | etalii.adp | `features/066-fbl-yaml-new-key` | E, FBL 0.14 (amendment of 2026-10-30) | FR-039, databricks-disl-fbl task 12's add of a resource, with this amendment of the specification, plan, contracts and tasks | D merged; the maintainer's ruling on the card, before it merges |
+| 8 | etalii.adp | a branch of its own | the ticks of pull request E's tasks | `tasks.md` | E merged |
 
 Each is merged with a merge commit and ticks its own tasks. Whichever of A and B merges second takes the next version and brings its status paragraph and schema enum up to date with the first, a conflict in two places that its task names. No pull request in another repository belongs to this feature; the host work follows under the hosts' own specifications (below).
 
@@ -124,6 +126,7 @@ In `etalii.adp.ide.standalone`, at `ad1a4680a`. A task "waits on" what its own `
 | databricks-disl-fbl 11 (one binding, three readings) | task 10 | B, through task 10; `databricks.fbl` is the example its binding follows (FR-033) |
 | databricks-disl-fbl 12 (write by splices) | task 11, and gaps 4 to 7 only for its stand-ins | B: gap 5 FR-019, gap 6 part 3 FR-020, gap 7 FR-021, FR-022 retire the named stand-ins |
 | databricks-disl-fbl 13 (a move through the registration writer) | task 12 | nothing new; follows 12 |
+| databricks-disl-fbl 12, a resource added through the binding (found while implementing it) | an insert that adds a member under a new key of `resources.jobs` or `resources.pipelines` | **E** (amendment of 2026-10-30): FR-039's member insert, `databricks-resource-add` and `insert-member-json`, and `databricks.fbl`'s inserts on `jobResource` and `pipelineResource` |
 | databricks-disl-fbl 14 (the `simulate` player) | the client's canvas library | not this feature |
 | wardley-map-disl-fbl 11 (read through the binding) | gap 1, gaps 2 to 4 as far as Q2 needs them, and gap 7 | **C** for gap 1 (FR-023) and gap 7 (FR-026); **A** for gaps 2 and 3 (FR-002, FR-003, FR-001); **A and C** for gap 4 (FR-006, FR-024); gaps 5 and 6 (FR-024's sets, FR-025) retire stand-ins. **And** the 0.9 `grammar` family in the standalone library (open question 2). |
 | wardley-map-disl-fbl 12 (write by splices, ids through the registration) | task 11 and gap 8 | C: FR-027, FR-028, FR-029 |
@@ -136,7 +139,7 @@ The three conversions' own documents then change under their own process, not th
 
 | Host | What it takes, and when |
 |---|---|
-| etalii.adp.ide.standalone | The 0.9 `grammar` family on `EtAlii.Lark` (`Files/Grammar/` beside the other families, `FblDocumentLoader` raised to the version it reads in full), then the constructs of A, B and C in the waiting tasks above. *(Amendment of 2026-10-30)* And D's `split`, read and written as FBL 0.13 says, for the tags `C4Disl` reads (gap 16), against `structurizr-split-tags` and `grammar-split-slot`. |
+| etalii.adp.ide.standalone | The 0.9 `grammar` family on `EtAlii.Lark` (`Files/Grammar/` beside the other families, `FblDocumentLoader` raised to the version it reads in full), then the constructs of A, B and C in the waiting tasks above. *(Amendment of 2026-10-30)* And D's `split`, read and written as FBL 0.13 says, for the tags `C4Disl` reads (gap 16), against `structurizr-split-tags` and `grammar-split-slot`. And E's member insert and its removal, in the `yaml` family for databricks-disl-fbl task 12 and in the `json` family with it, against `databricks-resource-add` and `insert-member-json`. |
 | etalii.adp.ide.desktop | Each construct when its parity work follows a standalone conversion (principle II); its `adp-fbl` grammar family is already on `etalii-lark`. Vendoring etalii.adp after A, B or C breaks nothing: `fixtures.rs` replays the new fixtures as the validator does, and a `grammar` fixture is read only once it is listed. |
 | etalii.adp.ide.vscode, etalii.adp.ide.notion | When a tool there binds Structurizr DSL, `.owm` or a Databricks file (FR-037), under its own feature, on `@etalii/lark`. |
 | etalii.adp.ide.intellij | As Visual Studio Code, once a JVM Lark package is settled (R2). |
@@ -144,6 +147,10 @@ The three conversions' own documents then change under their own process, not th
 ## Amendment of 2026-10-30: gap 16, FBL 0.13
 
 By the maintainer's ruling of 2026-10-30 (specification, *Clarifications*), the C4 companions' gap 16 is answered in this feature, as FR-038, by a fourth pull request, D, after A, B and C had merged. Its design is research R25 and [contracts/grammar-family.md](contracts/grammar-family.md), *Several items in one node*: a `{node}` slot's `split`, a text at which each node's value is cut into the items of a `many` attribute, written by the splices FBL 0.12 states for `items` and FBL 0.7 for word slots. It is FBL 0.13, a minor version with its status paragraph, schema, `structurizr.fbl`, fixtures (`structurizr-split-tags`, `grammar-split-slot`, contracts/fixtures.md), two refused bindings, validator support, ATD rows and the companions, in one pull request; the constitution check above holds for it unchanged (principle II: document, schema, examples and fixtures together). Its tasks are T101 to T110, ticked by a pull request of their own once D has merged.
+
+## Amendment of 2026-10-30: a member added to a mapping, FBL 0.14
+
+Written to the recommended answer of the maintainer's card on databricks-disl-fbl task 12 (specification, *Clarifications*), which is pending, as FR-039, by a fifth pull request, E, after D had merged; E is not merged before the ruling, and were the answer no, it would be closed and this section, FR-039 and tasks T111 to T120 withdrawn. Its design is research R26 and [contracts/readings-and-yaml.md](contracts/readings-and-yaml.md), *A member added to a mapping*: no new insert property, but a rule whose `at` ends in a `{capture}` segment, whose `insert` then adds a member under the key the add gives the attribute bound to that capture, placed by `place` among the container's members, with two refusal sentences, `key` and `duplicate`, beside FBL 0.10's. It is FBL 0.14, a minor version with its status paragraph, schema, `databricks.fbl`, fixtures (`databricks-resource-add`, `insert-member-json`, contracts/fixtures.md), two refused bindings, validator support, ATD rows and the Databricks companions, in one pull request; the constitution check above holds for it unchanged. Its tasks are T111 to T120, ticked by a pull request of their own once E has merged.
 
 ## Open questions
 
