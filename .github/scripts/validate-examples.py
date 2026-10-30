@@ -716,6 +716,10 @@ def replay_fixture(path: Path, fixture) -> str | None:
     and (FBL 0.10) every file beside it that a step's splices name in `file`, by that name: each file's splices turn
     its bytes before the step into those `expectFiles` gives, and an undo or a redo is checked over all of them."""
     folder = path.parent
+    if fixture_binding(folder, fixture["binding"]) is None:
+        # Without this a binding path that names no file passed silently: nothing below reads the binding unless the
+        # fixture has a template or a refusal, so the databricks-* fixtures named one '..' too many unnoticed.
+        return f"its binding {fixture['binding']} names no binding that can be read"
     if "template" in fixture and (problem := check_template(folder, fixture)):
         return problem
     beside = (folder / fixture["input"]).parent
