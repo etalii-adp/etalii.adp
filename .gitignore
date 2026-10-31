@@ -16,6 +16,7 @@ Thumbs.db
 # server pointed at this folder recreates these, so keep them out of the tree
 .spec-workflow/
 audit.log
-definitions/diagrams/conformance/dotnet-dependency-graph/pipeline-toolkit/src/Pipeline.Cli/obj/Debug/*
+definitions/diagrams/conformance/dotnet-dependency-graph/pipeline-toolkit/src/Pipeline.Cli/obj/*
 definitions/diagrams/conformance/dotnet-dependency-graph/pipeline-toolkit/src/Pipeline.Storage/obj/*
-
+definitions/diagrams/conformance/dotnet-dependency-graph/pipeline-toolkit/src/Pipeline.Core/obj/*
+definitions/diagrams/conformance/dotnet-dependency-graph/pipeline-toolkit/tests/Pipeline.Core.Tests/obj/*
