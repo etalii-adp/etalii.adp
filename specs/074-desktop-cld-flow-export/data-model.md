@@ -23,7 +23,7 @@ All of them are in the property group `Flow page`, except Title, which is in `Id
 | `start` | Starting level | number | 0 to 1 | 0.5 | `start=<n>` in the variable's tail |
 | `push` | Outside push | number | -4 to 4 | 0 | `push=<n>` in the variable's tail |
 
-Both are in the group `Flow page`.
+Both are in the group `Flow page`. A Starting level only affects a variable no link points to, as its description says (the maintainer, 2026-10-31): the page's Reset puts every other variable back at 0.5 (FR-036).
 
 ### On a link
 
