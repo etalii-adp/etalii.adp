@@ -14,8 +14,8 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 ## Phase 1: Setup
 
-- [ ] T001 Replay a fixture's splices per file with `expectFiles`, undo and redo included, in place of skipping it · etalii.adp.ide.desktop/crates/adp-conformance/tests/fixtures.rs
-- [ ] T002 Move `grammar-comment-start` off the not-supported list, which already passes (R2) · etalii.adp.ide.desktop/crates/adp-conformance/tests/standalone.rs
+- [x] T001 Replay a fixture's splices per file with `expectFiles`, undo and redo included, in place of skipping it · etalii.adp.ide.desktop/crates/adp-conformance/tests/fixtures.rs
+- [x] T002 Move `grammar-comment-start` off the not-supported list, which already passes (R2) · etalii.adp.ide.desktop/crates/adp-conformance/tests/standalone.rs
 
 ---
 
@@ -23,32 +23,32 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 **Goal**: FR-001, FR-002, SC-001. **Independent test**: `NOT_SUPPORTED` holds only the 5 names that predate spec 066. In every task, a fixture leaves the list in the same pull request that makes it pass.
 
-### FBL 0.10 (pull request A)
+### The grammar constructs, marked FBL 0.11 in FBL (pull request A, [#133](https://github.com/etalii-adp/etalii.adp.ide.desktop/pull/133))
 
-- [ ] T003 [US1] Comments in the grammar family: owned, kept out of values, surviving every splice (`structurizr-comments`, `-block-comments`, `-trailing-comments`, `-rename`) · etalii.adp.ide.desktop/crates/adp-fbl/src/grammar/
-- [ ] T004 [US1] Escapes inside a quoted value, read and written (`structurizr-escapes`) · etalii.adp.ide.desktop/crates/adp-fbl/src/grammar/
-- [ ] T005 [US1] Reading in part inside blocks, with `recover.nested` and `recover.unclosed` and their findings (`structurizr-recover-edges`, `-recover-nested`) · etalii.adp.ide.desktop/crates/adp-fbl/src/grammar/
-- [ ] T006 [US1] A value written where its node is absent, and removed (`structurizr-absent-arguments`, `grammar-remove-part`) · etalii.adp.ide.desktop/crates/adp-fbl/src/families/grammar.rs
-- [ ] T007 [US1] A block written around a first child (`structurizr-open-block`, `structurizr-add-view`) · etalii.adp.ide.desktop/crates/adp-fbl/src/families/grammar.rs
-- [ ] T008 [US1] Views of a grammar binding, and a read-only value gathered from several places (`structurizr-view-statements`, `-view-without-key`, `-gathered-tags`) · etalii.adp.ide.desktop/crates/adp-fbl/src/
-- [ ] T009 [US1] The legacy layout, as a registration change (R4) (`structurizr-legacy-layout`) · etalii.adp.ide.desktop/crates/adp-fbl/src/registration/
+- [x] T003 [US1] Comments in the grammar family: owned, kept out of values, surviving every splice (`structurizr-comments`, `-block-comments`, `-trailing-comments`, `-rename`) · etalii.adp.ide.desktop/crates/adp-fbl/src/grammar/
+- [x] T004 [US1] Escapes inside a quoted value, read and written (`structurizr-escapes`) · etalii.adp.ide.desktop/crates/adp-fbl/src/grammar/
+- [x] T005 [US1] Reading in part inside blocks, with `recover.nested` and `recover.unclosed` and their findings (`structurizr-recover-edges`, `-recover-nested`) · etalii.adp.ide.desktop/crates/adp-fbl/src/grammar/
+- [x] T006 [US1] A value written where its node is absent, and removed (`structurizr-absent-arguments`, `grammar-remove-part`) · etalii.adp.ide.desktop/crates/adp-fbl/src/families/grammar.rs
+- [x] T007 [US1] A block written around a first child (`structurizr-open-block`, `structurizr-add-view`) · etalii.adp.ide.desktop/crates/adp-fbl/src/families/grammar.rs
+- [x] T008 [US1] Views of a grammar binding, and a read-only value gathered from several places (`structurizr-view-statements`, `-view-without-key`, `-gathered-tags`) · etalii.adp.ide.desktop/crates/adp-fbl/src/
+- [x] T009 [US1] The legacy layout, as a registration change (R4) (`structurizr-legacy-layout`) · etalii.adp.ide.desktop/crates/adp-fbl/src/registration/
 
-### FBL 0.11 (pull request B)
+### One binding, several readings, marked FBL 0.10 in FBL (pull request B, [#134](https://github.com/etalii-adp/etalii.adp.ide.desktop/pull/134))
 
-- [ ] T010 [US1] A rule's `origins` and `resource` by origin: one binding, several readings (`databricks-readings`, `-resources`, `-secondary`, `-rename-shared`) · etalii.adp.ide.desktop/crates/adp-fbl/src/rules/
-- [ ] T011 [US1] Inserts into YAML flow sequences, and their refusals (`databricks-flow-empty`, `-flow-one-line`, `-refusals`) · etalii.adp.ide.desktop/crates/adp-fbl/src/families/yaml/
-- [ ] T012 [US1] Nested mappings, a secondary slot, a lowercased key and a template's key (`databricks-library-add`, `-template-key`) · etalii.adp.ide.desktop/crates/adp-fbl/src/
+- [x] T010 [US1] A rule's `origins` and `resource` by origin: one binding, several readings (`databricks-readings`, `-resources`, `-secondary`, `-rename-shared`) · etalii.adp.ide.desktop/crates/adp-fbl/src/rules/
+- [x] T011 [US1] Inserts into YAML flow sequences, and their refusals (`databricks-flow-empty`, `-flow-one-line`, `-refusals`) · etalii.adp.ide.desktop/crates/adp-fbl/src/families/yaml/
+- [x] T012 [US1] Nested mappings, a secondary slot, a lowercased key and a template's key (`databricks-library-add`, `-template-key`) · etalii.adp.ide.desktop/crates/adp-fbl/src/
 
-### FBL 0.12 (pull request C)
+### FBL 0.12 (pull request C, [#135](https://github.com/etalii-adp/etalii.adp.ide.desktop/pull/135))
 
-- [ ] T013 [US1] The Wardley grammar's reading: annotations, comments, pipelines, trailers, brace endings (`wardley-annotation-positions`, `-comments`, `-pipelines`, `-trailer`, `-brace-ending`, `-unclosed-pipeline`) · etalii.adp.ide.desktop/crates/adp-fbl/src/grammar/
-- [ ] T014 [US1] Identities: the legacy file, kinds, repeated keys, and a key that follows a rename in one edit with the body (`wardley-duplicate-names`, `-legacy-identities`, `-rename-identity`, `-strategy-identities`) · etalii.adp.ide.desktop/crates/adp-fbl/src/registration/
+- [x] T013 [US1] The Wardley grammar's reading: annotations, comments, pipelines, trailers, brace endings (`wardley-annotation-positions`, `-comments`, `-pipelines`, `-trailer`, `-brace-ending`, `-unclosed-pipeline`) · etalii.adp.ide.desktop/crates/adp-fbl/src/grammar/
+- [x] T014 [US1] Identities: the legacy file, kinds, repeated keys, and a key that follows a rename in one edit with the body (`wardley-duplicate-names`, `-legacy-identities`, `-rename-identity`, `-strategy-identities`) · etalii.adp.ide.desktop/crates/adp-fbl/src/registration/
 
-### FBL 0.13 and later (pull request D)
+### FBL 0.13 and later (T015 in pull request C; pull request D)
 
-- [ ] T015 [US1] Several items in one argument (`grammar-split-slot`, `structurizr-split-tags`) · etalii.adp.ide.desktop/crates/adp-fbl/src/grammar/
-- [ ] T016 [US1] FBL 0.14's new mapping key when spec 066's pull request E has merged, with its fixtures vendored · etalii.adp.ide.desktop/crates/adp-fbl/src/families/yaml/
-- [ ] T017 [US1] Run the desktop's standalone parity and confirm the same bytes on every fixture above (FR-001, SC-005) · etalii.adp.ide.desktop/crates/adp-conformance/tests/
+- [x] T015 [US1] Several items in one argument (`grammar-split-slot`, `structurizr-split-tags`) · etalii.adp.ide.desktop/crates/adp-fbl/src/grammar/
+- [x] T016 [US1] FBL 0.14's new mapping key when spec 066's pull request E has merged, with its fixtures vendored · etalii.adp.ide.desktop/crates/adp-fbl/src/families/yaml/
+- [ ] T017 [US1] Run the desktop's standalone parity and confirm the same bytes on every fixture above (FR-001, SC-005) · etalii.adp.ide.desktop/crates/adp-conformance/tests/. Open: on 2026-10-31 the desktop matches the fixtures' bytes, but the standalone host vendors only 24 of them, so this waits on its spec 068 to 072.
 
 **Checkpoint**: SC-001 holds.
 
@@ -75,6 +75,7 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 **Goal**: FR-003, FR-004, SC-002. **Independent test**: `atd validate` on the 10 descriptions, with no reader capability required.
 
+- [ ] T045 [US2] Open a description's documents with their reading's origin, resource and view, and over `OpenDocument` where a registration holds a legacy layout or identities; add section 9.1's one open body shared across registrations if a case needs it, a person's tool unchanged · etalii.adp.ide.desktop/crates/adp-diagram/src/
 - [ ] T026 [P] [US2] Move `layout.rankedBoundaries` into the capability registry, the C4 module calling it there, registered once its 115 fixtures pass · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/, etalii.adp.ide.desktop/modules/diagrams/c4/src/
 - [ ] T027 [P] [US2] Move `layout.layeredColumns` and `layout.bands` likewise (14 and 7 fixtures) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/, etalii.adp.ide.desktop/modules/diagrams/databricks/src/
 - [ ] T028 [US2] Rewrite the six C4 binding parts from `structurizr.fbl`, without the reader capability; a test holds the six equal (R6) · etalii.adp/definitions/diagrams/c4-*.structurizr.atd
@@ -115,6 +116,6 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 ## Dependencies
 
-Phase 1, then pull requests A, B, C and D in order. Phase 3 and T026 to T027 are independent of them. T028 to T034 need A to D and Phase 3. Phase 5 needs Phase 2 and Phase 3.
+Phase 1, then pull requests A, B, C and D in order. Phase 3 and T026 to T027 are independent of them. T028 to T034 need A to D, T045 and Phase 3. Phase 5 needs Phase 2 and Phase 3.
 
 **MVP**: Phases 1 to 4 for the C4 descriptions (T028, T029), which gives 115 cases on a declared binding.
