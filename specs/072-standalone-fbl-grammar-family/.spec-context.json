@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "The FBL library reads the grammar family",
   "branch": "features/fbl-grammar-family in etalii.adp.ide.standalone, one pull request per task into its develop",
-  "status": "specified",
-  "currentStep": "specify",
+  "status": "ready-to-implement",
+  "currentStep": "tasks",
   "history": [
     {
       "step": "specify",
@@ -11,9 +11,38 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-31T11:27:46.071Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T11:32:21.140Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "extension",
+      "at": "2026-10-31T11:32:21.236Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T11:32:21.310Z"
     }
   ],
   "intent": "Migrated from the spec-workflow specification of etalii.adp.ide.standalone (commit bd7e2ea), which stopped using spec-workflow on 2026-10-31",
-  "last_action": "Migrated to Spec Kit on 2026-10-31; no tasks were written in spec-workflow",
-  "telemetryInstanceId": "533268b1-01a0-4ecd-aefb-fcf441fa5d07"
+  "last_action": "Amended (split slot, Peter 2026-10-31), planned and split into 8 tasks on 2026-10-31",
+  "telemetryInstanceId": "533268b1-01a0-4ecd-aefb-fcf441fa5d07",
+  "workingBranch": "features/072-standalone-fbl-grammar-family"
 }
