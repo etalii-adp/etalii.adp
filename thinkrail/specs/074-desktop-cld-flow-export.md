@@ -16,7 +16,7 @@ tags:
 
 **Created**: 2026-10-31
 
-**Status**: Implemented on 2026-10-31. Left to the maintainer: pressing the button in the running application, which SC-001 and SC-007 need (T035)
+**Status**: Implemented on 2026-10-31. The maintainer pressed the button in the running application the same day: it worked and matches the prototype, which closes SC-001 and SC-007 (T035)
 
 **Input**: The maintainer's request of 2026-10-31: "In terms of the desktop designer, can you create an export button in the command bar that generates these html files from the CLD, and then opens them? This can be done completely outside of the FBL/DISL and ATD approaches. Build a spec so that this can be made nicely. It should be applicable for any CLD, not solely the mental model." "These html files" are the animated page the maintainer asked for on 2026-10-30 for the mental health example, described under Context.
 
