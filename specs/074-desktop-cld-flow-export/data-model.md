@@ -32,8 +32,9 @@ Both are in the group `Flow page`.
 ### Validation
 
 - A value outside its range raises a finding on its line. The constraint's sentence is "`<Label>` is <value>; it must be between <min> and <max>." The page uses the nearest value in range (User Story 8 scenario 6).
-- An unknown `flow` key is kept byte for byte and reported as unread.
-- A second `title` or `flow` statement is kept. The last one wins for each key, and the earlier one is reported.
+- A `flow` line with an unknown key or a value that does not read is no `flow` statement: FBL cannot report one word, so the whole line is kept byte for byte and reported as unread, and none of its keys is read.
+- A second `title` or `flow` statement is kept, and the last one wins for each key. Nothing reports the earlier one: neither language can state that, and the hosts add no finding of their own.
+- A finding on the diagram has no line, since DISL gives a diagram-scoped rule none; a finding on a variable stands on its line.
 
 ## The page's data (embedded JSON, `contracts/flow-page.md`)
 
