@@ -128,6 +128,7 @@ etalii.adp.site/
 | D3 | etalii.adp.ide.desktop | `features/074-flow-page-export` | export hook, ribbon button, opener, status, inventory, walks | D2 |
 | W1 | etalii.adp.ide.standalone | `features/074-flow-page-screenshot` | screenshot and its readme row | D3 |
 | W2 | etalii.adp.site | `refresh/screenshots` | screenshots refresh, with the note's text | W1 |
+| W3 | etalii.adp.site | `features/074-flow-pages-on-site` | the published flow pages, the documentation page listing them, the tool page's link (User Story 10) | D3, W2 |
 | T | etalii.adp | `features/074-ticks` | ticks of the merged tasks, status Implemented | each merge, batched |
 
 Every pull request enables auto-merge with a merge commit when it is opened. Its description links this folder and names the etalii.adp commit its tasks were taken from.

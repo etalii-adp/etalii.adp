@@ -39,6 +39,8 @@ node tools/flow-page-check/check.mjs   # the headless page check (R6)
 python tools/sync-etalii-adp.py --check
 ```
 
-## 4. The website (User Story 9)
+## 4. The website (User Stories 9 and 10)
 
 After W2 merges and `deploy` runs, open `https://etalii.net/adp/tools/systems/causal-loop-diagram/`. Expected: the flow page screenshot, and beside it the capability text of User Story 9 scenario 2.
+
+From the same tool page, follow the link to the documentation's page of flow pages. Expected: one flow page per example, each opening on its own and moving.
