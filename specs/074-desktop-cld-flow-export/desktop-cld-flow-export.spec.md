@@ -148,8 +148,11 @@ The person mails the page to a colleague, or opens it without a network. It work
 - A label holding characters that mean something in a web page (`<`, `&`, quotes, a script tag): shown as text, never run or read as markup.
 - A weight of zero, negative or very large: zero gives a link that carries nothing until its strength is raised; a negative weight is read as its size; every weight is limited to the strength slider's range.
 - A large diagram (200 variables, 600 links): the page opens and moves smoothly; dots are thinned rather than the page slowed.
-- A diagram never saved: exported under the name the tab shows.
-- The same diagram exported again while its earlier page is open: the earlier file is replaced and the new one opened, so the person does not collect copies.
+- A diagram with no file on disk yet: the button is disabled and says to save the diagram first, since the page is written beside its file.
+- The same diagram exported again a minute or more later: a new page is written under the new time and the earlier pages are left as they are, so the person keeps a dated series.
+- The same diagram exported twice within one minute: both have the same name, and the second replaces the first.
+- The diagram's folder cannot be written to: nothing is written, and the host says why.
+- A file name with spaces, dots or characters outside ASCII: kept as it is in the page's name.
 - The page in a light or dark system setting: it is readable in both.
 - A narrow browser window or a phone: the drawing and the controls stack, and nothing scrolls sideways.
 
@@ -161,8 +164,8 @@ The person mails the page to a colleague, or opens it without a network. It work
 
 - **FR-001**: The desktop host **MUST** show an Export flow page button on the ribbon, enabled while a causal loop diagram is the open document and disabled otherwise with the reason, as other ribbon buttons are (spec 030 P-010).
 - **FR-002**: The button **MUST** be offered by the causal loop diagram, not named in the frame: the ribbon learns from the open tool type that it has an export, so that another tool type can offer one later without the frame changing (desktop Principle III).
-- **FR-003**: Pressing it **MUST** write the flow page of the diagram as the canvas holds it, unsaved edits and current positions included, and **MUST NOT** write to the diagram, its registration or any file beside them.
-- **FR-004**: The page **MUST** be written to a folder of the person's own for exported pages, outside the diagram's folder, under the diagram's file name with the extension `.html`; exporting the same diagram again **MUST** replace that file.
+- **FR-003**: Pressing it **MUST** write the flow page of the diagram as the canvas holds it, unsaved edits and current positions included, and **MUST NOT** change the diagram, its registration or any other existing file except an earlier page of the same name (FR-004).
+- **FR-004**: The page **MUST** be written in the diagram's own folder, beside its `.cld` file, named `FILENAME {yyyy-mm-dd hh.mm}.html`: `FILENAME` is the diagram's file name without its extension, and the date and time are the local time of the export, in minutes, zero-padded, with a dot between hours and minutes (the maintainer, 2026-10-31). For `mental-health.cld` exported at 14:05 on 31 October 2026 that is `mental-health {2026-10-31 14.05}.html`. An existing file of that name **MUST** be replaced; every other file is left as it is.
 - **FR-005**: After writing, the host **MUST** ask the platform to open the page with the person's program for web pages, and **MUST** say in the status where the page was written, whether or not it opened.
 - **FR-006**: The button **MUST** be exposed to the platform's accessibility interface with its role, name and state, its name being Export flow page (desktop Principle I).
 
@@ -205,7 +208,7 @@ The person mails the page to a colleague, or opens it without a network. It work
 - **External variable**: a variable no link points to, set by a slider.
 - **Dot**: a visible piece of influence on a link, set off at the source and delivered at the target.
 - **Heatmap reading**: one of Backlog, Pressure, Throughput and Level, the measure the colours show.
-- **Export folder**: the folder of the person's own the pages are written to.
+- **Page name**: `FILENAME {yyyy-mm-dd hh.mm}.html`, beside the diagram, one per minute of export.
 
 ## Success Criteria *(mandatory)*
 
@@ -222,7 +225,7 @@ The person mails the page to a colleague, or opens it without a network. It work
 ## Assumptions
 
 - **"The desktop designer" is the desktop host**, `etalii.adp.ide.desktop`, and "the command bar" is its ribbon. The standalone host gets no button from this feature.
-- **The export folder** is a folder of the person's own for exported pages, so that pressing the button again leaves no copies in a repository; the plan names it per platform. Writing beside the diagram instead, or asking each time, is the maintainer's to choose before the plan.
+- **Where the page goes** was chosen by the maintainer on 2026-10-31: beside the `.cld`, under `FILENAME {yyyy-mm-dd hh.mm}.html`. Whether the pages are kept out of version control is the person's to decide in their own repository; the host neither adds nor changes an ignore file.
 - **The prototype's scenarios are left out**: they were written for the mental health subject and have no counterpart for an arbitrary diagram. The generic page starts every external variable at 0.5.
 - **The model is the prototype's**: simple, smooth, and the same for every diagram. It shows how the structure behaves, not a calibrated simulation; no units, stocks or equations are read from the diagram.
 - **The page is not a tool**: it is not a diagram, designer or editor of ADP, reads no definition, and is not listed in `docs/tools.md`.
@@ -241,6 +244,6 @@ The person mails the page to a colleague, or opens it without a network. It work
 
 - `Export flow page`: the button's label.
 - `Backlog`, `Pressure`, `Throughput`, `Level`: the heatmap readings, in that order.
-- `.html`: the page's extension.
+- `FILENAME {yyyy-mm-dd hh.mm}.html`: the page's name, beside the diagram (the maintainer, 2026-10-31).
 - 0 to 1: a variable's level; 0.5: its start.
 - Seven: the most series the chart starts with.
