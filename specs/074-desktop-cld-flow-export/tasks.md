@@ -70,6 +70,13 @@
 - [ ] T037 [US9] Run "Refresh the screenshots" in `etalii.adp.site`; in its pull request, answer the decision linking the image to `systems/causal-loop-diagram` and write its `whyItMatters` in `src/content/catalogue/screenshot-notes.json` with User Story 9 scenarios 2 and 3: one self-contained page from the desktop host's ribbon, offline; watching influence flow and delays hold it; the four heatmap readings; external variables and the dynamics; pushing or jolting a variable; changing a link; loops and their gain; the chart; pan, zoom and moving variables; numbers from a simple model (FR-033, FR-034)
 - [ ] T038 [US9] Check the published tool page as quickstart section 4 says (SC-010)
 
+## Phase 7a: User Story 10, the published flow pages (PR W3)
+
+- [ ] T041 [US10] Generate the flow page of each example under `etalii.adp.ide.standalone/src/examples/diagrams/causal-loop-diagram/` (business-philosophy, mental-health, on-call, reference) with the desktop host's generator and its registration, and commit each as `etalii.adp.site/public/docs/causal-loop-flow-pages/<example>.html`, with a test that the folder holds one page per example and each loads nothing from outside itself (FR-037, FR-040)
+- [ ] T042 [US10] Write `etalii.adp.site/src/content/docs/docs/causal-loop-flow-pages.mdx` listing them, with its entry in the documentation's sidebar (FR-038)
+- [ ] T043 [US10] Put one link per published flow page, named for its example, on the causal loop diagram's tool page by the route `etalii.adp.site`'s rules for a tool allow, with a test that the tool page holds a link to every page in the folder (FR-039)
+- [ ] T044 [US10] Check the published pages as User Story 10 says (SC-011)
+
 ## Phase 8: Polish
 
 - [ ] T039 Update `etalii.adp.ide.desktop/README.md` with the export, and `docs/tools.md` in etalii.adp.ide.standalone if T013 left it short
@@ -115,3 +122,7 @@
 | SC-008 | T012, T016 |
 | SC-009 | T008 |
 | SC-010 | T038 |
+| FR-037, FR-040 | T041 |
+| FR-038 | T042 |
+| FR-039 | T043 |
+| SC-011 | T044 |
