@@ -18,6 +18,8 @@ Each entry records a decision the plan rests on. The FBL constructs themselves a
 
 Sorted by the first failure each fixture gave on the desktop on 2026-10-30:
 
+The versions here follow the order of delivery; FBL itself marks the first row 0.11 and the second 0.10, as spec 066's pull requests merged in that order.
+
 | Version | Failure seen | Construct (spec 066 research) |
 |---|---|---|
 | 0.10 | `std.duplicateId`, `fbl.unmatched-close` absent, text with its escapes, absent values refused, `grammar-remove-part` splices | comments (R5), nested recovery (R6), absent parts (R7), escapes (R8), block written around a first child (R9), views (R10), gathered values (R11), legacy layout (R15) |
