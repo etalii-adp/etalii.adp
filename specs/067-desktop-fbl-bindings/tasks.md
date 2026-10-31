@@ -58,14 +58,14 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 **Goal**: FR-005 to FR-007, FR-011, SC-004. It comes before story 2 because story 2's cases need it. **Independent test**: no step carries a module's target string, and `atd record --check` passes.
 
-- [ ] T018 [US3] Record `new:x,y` targets as `create` steps, the type from the action's toolbox entry (R7) · etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/mod.rs
-- [ ] T019 [US3] Record `rel:a->b` and `rel:a->new:x,y` as `connect` steps (R7) · etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/mod.rs
-- [ ] T020 [US3] Record element targets and prefixed targets as `select`, naming what cannot be translated (FR-007) · etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/mod.rs
-- [ ] T021 [US3] Replay `create`, `connect` and `delete` steps, reference host and runtime alike · etalii.adp.ide.desktop/crates/adp-atd-validate/src/lib.rs
-- [ ] T022 [US3] State the host's "not offered" sentences in §2.3 as a closed set (R8, FR-011) · etalii.adp/specifications/atd/ATD-specification.md
-- [ ] T023 [US3] Treat those sentences as one refusal, comparing every other reason exactly, with a test for each · etalii.adp.ide.desktop/crates/adp-atd-validate/src/lib.rs
-- [ ] T024 [US3] Record every affected case again; confirm by diff that only steps' gestures and `recordedWith` changed (FR-006) · etalii.adp/definitions/diagrams/conformance/
-- [ ] T025 [US3] Vendor the cases and update the tests' lists of known differences · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/validate.rs
+- [x] T018 [US3] Record `new:x,y` targets as `create` steps, the type from the action's toolbox entry (R7) · etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/mod.rs
+- [x] T019 [US3] Record `rel:a->b` and `rel:a->new:x,y` as `connect` steps (R7) · etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/mod.rs
+- [x] T020 [US3] Record element targets and prefixed targets as `select`, naming what cannot be translated (FR-007) · etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/mod.rs
+- [x] T021 [US3] Replay `create`, `connect` and `delete` steps, reference host and runtime alike · etalii.adp.ide.desktop/crates/adp-atd-validate/src/lib.rs
+- [x] T022 [US3] State the host's "not offered" sentences in §2.3 as a closed set (R8, FR-011) · etalii.adp/specifications/atd/ATD-specification.md
+- [x] T023 [US3] Treat those sentences as one refusal, comparing every other reason exactly, with a test for each · etalii.adp.ide.desktop/crates/adp-atd-validate/src/lib.rs
+- [x] T024 [US3] Record every affected case again; confirm by diff that only steps' gestures and `recordedWith` changed (FR-006) · etalii.adp/definitions/diagrams/conformance/
+- [x] T025 [US3] Vendor the cases and update the tests' lists of known differences · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/validate.rs
 
 **Checkpoint**: SC-004 holds; every description's refused gestures are its own.
 
@@ -75,10 +75,10 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 **Goal**: FR-003, FR-004, SC-002. **Independent test**: `atd validate` on the 10 descriptions, with no reader capability required.
 
-- [ ] T045 [US2] Open a description's documents with their reading's origin, resource and view, and over `OpenDocument` where a registration holds a legacy layout or identities; add section 9.1's one open body shared across registrations if a case needs it, a person's tool unchanged · etalii.adp.ide.desktop/crates/adp-diagram/src/
-- [ ] T026 [P] [US2] Move `layout.rankedBoundaries` into the capability registry, the C4 module calling it there, registered once its 115 fixtures pass · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/, etalii.adp.ide.desktop/modules/diagrams/c4/src/
+- [x] T045 [US2] Open a description's documents with their reading's origin, resource and view, and over `OpenDocument` where a registration holds a legacy layout or identities; add section 9.1's one open body shared across registrations if a case needs it, a person's tool unchanged · etalii.adp.ide.desktop/crates/adp-diagram/src/
+- [x] T026 [P] [US2] Move `layout.rankedBoundaries` into the capability registry, the C4 module calling it there, registered once its 115 fixtures pass · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/, etalii.adp.ide.desktop/modules/diagrams/c4/src/
 - [ ] T027 [P] [US2] Move `layout.layeredColumns` and `layout.bands` likewise (14 and 7 fixtures) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/, etalii.adp.ide.desktop/modules/diagrams/databricks/src/
-- [ ] T028 [US2] Rewrite the six C4 binding parts from `structurizr.fbl`, without the reader capability; a test holds the six equal (R6) · etalii.adp/definitions/diagrams/c4-*.structurizr.atd
+- [x] T028 [US2] Rewrite the six C4 binding parts from `structurizr.fbl`, without the reader capability; a test holds the six equal (R6) · etalii.adp/definitions/diagrams/c4-*.structurizr.atd
 - [ ] T029 [US2] Correct the C4 descriptions until their 115 cases pass, listing any module quirk by name · etalii.adp/definitions/diagrams/c4-*.atd
 - [ ] T030 [US2] Rewrite the three Databricks binding parts from `databricks*.fbl`, without the reader capability · etalii.adp/definitions/diagrams/databricks-*.bundle.atd
 - [ ] T031 [US2] Correct the Databricks descriptions until their 21 cases pass · etalii.adp/definitions/diagrams/databricks-*.atd
