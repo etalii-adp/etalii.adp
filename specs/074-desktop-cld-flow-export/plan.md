@@ -26,7 +26,7 @@ Three things are built, in this order, because each needs the one before it.
 
 **Project Type**: a definition change (etalii.adp), a desktop application feature (etalii.adp.ide.desktop), a parity update (etalii.adp.ide.standalone) and a content refresh (etalii.adp.site).
 
-**Performance Goals**: SC-001, under two seconds from the press to a moving page for 100 variables; SC-003, 30 frames a second or more for 200 variables and 600 links.
+**Performance Goals**: SC-001, under two seconds from the press to a moving page for 100 variables; SC-003, a page of 200 variables and 600 links moves as the prototype runs.
 
 **Constraints**: the page fetches nothing (FR-009) and is byte-identical for the same input (FR-010). The export never changes the `.cld` or its registration (FR-003). A file without flow properties round-trips byte-identical (FR-029). The core crates never depend on egui (desktop Principle III).
 

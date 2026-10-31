@@ -2,7 +2,7 @@
 id: feature-074-desktop-cld-flow-export
 type: task-spec
 title: "074 Export a Causal Loop Diagram as an Animated Flow Page from the Desktop Host"
-status: active
+status: done
 parent: specs-archive
 tags:
   - spec-kit
@@ -16,7 +16,7 @@ tags:
 
 **Created**: 2026-10-31
 
-**Status**: Planned; plan and tasks written on the maintainer's approval of 2026-10-31 00:25, amended the same night with the page's name, the flow properties and the site page; building waits for the maintainer's word
+**Status**: Implemented on 2026-10-31. Left to the maintainer: pressing the button in the running application, which SC-001 and SC-007 need (T035)
 
 **Input**: The maintainer's request of 2026-10-31: "In terms of the desktop designer, can you create an export button in the command bar that generates these html files from the CLD, and then opens them? This can be done completely outside of the FBL/DISL and ATD approaches. Build a spec so that this can be made nicely. It should be applicable for any CLD, not solely the mental model." "These html files" are the animated page the maintainer asked for on 2026-10-30 for the mental health example, described under Context.
 
