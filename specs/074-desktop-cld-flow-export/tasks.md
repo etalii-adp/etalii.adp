@@ -62,7 +62,7 @@
 - [x] T032 [US1] Add `crates/adp-shell/src/platform_open.rs` (R4) and the status sentence naming the file, also when opening fails (FR-005, User Story 1 scenario 5); test the command line per platform
 - [x] T033 [US1] Expose the button to AccessKit with its role, name and state, and test it in `crates/adp-shell`'s accessibility tests (FR-006)
 - [x] T034 [US1] Add the export's rows to `parity/inventory.md` as desktop-only, with no standalone counterpart, and their tests (FR-023)
-- [ ] T035 *(left open: pressing the button in the running application is the maintainer's hand check, with SC-001 and SC-007; `parity/walks.md` in the desktop host records what was run instead)* [US1] Walk quickstart sections 1 and 2 on the mental health example in the desktop host on one platform, and record the walk with its screenshots in `parity/walks.md` (SC-001, SC-007)
+- [x] T035 *(the maintainer pressed the button on 2026-10-31: it worked and matches the prototype; `parity/walks.md` in the desktop host records what an agent ran before that)* [US1] Walk quickstart sections 1 and 2 on the mental health example in the desktop host on one platform, and record the walk with its screenshots in `parity/walks.md` (SC-001, SC-007)
 
 ## Phase 7: User Story 9, the website (PRs W1, W2)
 
