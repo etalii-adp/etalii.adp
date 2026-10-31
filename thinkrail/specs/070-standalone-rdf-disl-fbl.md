@@ -17,7 +17,7 @@ tags:
 
 **Feature Branch**: none of its own here: the code lands in `etalii.adp.ide.standalone`, on a `features/` branch per task, through pull requests into its `develop`
 **Migrated**: 2026-10-31, from standalone commit [`bd7e2ea`](https://github.com/etalii-adp/etalii.adp.ide.standalone/tree/bd7e2ea95b8e4195bf6f8d97f7aede9ab4dc3ad8/.spec-workflow/specs/rdf-disl-fbl)
-**Status**: In progress: 6 of 18 tasks done when migrated
+**Status**: In progress: 6 of 18 tasks done on 2026-10-31, the same as when it was migrated
 **Input**: The spec-workflow specification `rdf-disl-fbl` of `etalii.adp.ide.standalone`: [requirements.md](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/bd7e2ea95b8e4195bf6f8d97f7aede9ab4dc3ad8/.spec-workflow/specs/rdf-disl-fbl/requirements.md), [design.md](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/bd7e2ea95b8e4195bf6f8d97f7aede9ab4dc3ad8/.spec-workflow/specs/rdf-disl-fbl/design.md), [tasks.md](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/bd7e2ea95b8e4195bf6f8d97f7aede9ab4dc3ad8/.spec-workflow/specs/rdf-disl-fbl/tasks.md), read at that repository's commit `bd7e2ea`; the dashboard approved the requirements on 2026-10-09; the dashboard approved the design on 2026-10-09; the dashboard approved the tasks on 2026-10-09. Standalone stopped using spec-workflow on 2026-10-31 (Peter); the text below is the source's, verbatim, and its references to spec-workflow, the dashboard and `.spec-workflow/` describe how it was written then.
 
 ## Requirements Document

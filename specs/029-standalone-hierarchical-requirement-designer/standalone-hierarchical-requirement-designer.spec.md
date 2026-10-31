@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-14
 
-**Status**: Planned (2026-10-15): the plan and [tasks.md](tasks.md) are written and none of the tasks is started. Building waits for spec 025-standalone-code-structure to be done and for the maintainer's word.
+**Status**: Completed (2026-10-24): all 113 tasks in [tasks.md](tasks.md) are merged in `etalii.adp.ide.standalone`.
 
 **Input**: Task T070 of [spec 028](../028-hierarchical-requirement-designer/tasks.md), "Write the host's specification from the merged definition and [contracts/host-handoff.md](../028-hierarchical-requirement-designer/contracts/host-handoff.md)", and the maintainer's question of 2026-10-14 when it came up: "Can't you just write T070 in this repo?", answered by choosing a feature of its own here. The definition is the one pull request 212 merged, at `etalii.adp` commit `bfb0c27`.
 

@@ -2,7 +2,7 @@
   "workflow": "speckit",
   "specName": "Databricks diagrams read from their DISL definitions and their FBL binding",
   "branch": "features/databricks-disl-fbl in etalii.adp.ide.standalone, one pull request per task into its develop",
-  "status": "implementing",
+  "status": "completed",
   "currentStep": "implement",
   "history": [
     {
@@ -121,9 +121,40 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T012",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T11:45:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T013",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T11:45:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T015",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T11:45:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T11:45:00.000Z"
     }
   ],
   "intent": "Migrated from the spec-workflow specification of etalii.adp.ide.standalone (commit bd7e2ea), which stopped using spec-workflow on 2026-10-31",
-  "last_action": "Migrated to Spec Kit on 2026-10-31 with 12 of 15 tasks done",
+  "last_action": "All 15 tasks merged in etalii.adp.ide.standalone on 2026-10-31",
   "telemetryInstanceId": "8b2db031-f635-4894-93ca-1cbd667b80d4"
 }
