@@ -71,3 +71,15 @@ Across the vendored cases on 2026-10-30: 390 `action` steps, 142 `move`, 140 `pr
 - **Decision**: a new FBL minor version after 0.14, specified with fixtures in etalii.adp first, for the four constructs of FR-008: a selector that reaches up from a triple to its statement's subject, a value expanded through the document's prefix directives, a stable ordinal for a blank node, and an unescaped literal slot. Bound on `w3c-turtle.lark`, which exists.
 - **Rationale**: T149's attempt on 2026-10-27 stopped on exactly these. Story 1's constructs may cover part of them (escapes, R8 of spec 066), so the version's first task checks that before adding anything.
 - **Alternatives considered**: keeping `reader.turtle`, refused by Peter's choice of 2026-10-30.
+- **What FBL through 0.14 answers (T035, 2026-10-31)**, checked against `FBL-specification.md` at 0.14 and the reader's contract:
+
+| FR-008's construct | FBL through 0.14 | So FBL 0.15 adds |
+|---|---|---|
+| Reaching a statement's subject from a triple inside it | Not answered. A `{node}` selector goes down only; `{parent: a}` reads a slot of an enclosing entry a rule matched, and no type of the model stands for a statement, nor could a rule match the forms a subject takes in one slot. | `..` and `+` in a slot's selector, and `or`, further slots of which the first present is read, for the forms of a term. The name of a node (`name`) says which form was met. |
+| Expanding a prefix | Not answered: no slot reads another part of the body. A `map` is fixed text. | `body.prefixes`, a slot's `expand`, and writing a term back through the file's own declarations. |
+| Stable blank-node ordinals | Not answered. `{value: cel}` sees one entry, and `sidecar` ids are stored, which a blank node's must not be. | `body.ordinals`, a slot's `ordinal`. |
+| Unescaping a literal | In part. 0.11's `escape` resolves `\\"` and `\\\\` and keeps every other sequence; `match` can read one quoting form per group. Turtle's `\\n`, `\\t`, `\\uXXXX` and the rewriting of `'x'` and long strings as `"x"` are not answered. | `sequences`, `unicode`, `writes` and `requote` on `escape`. |
+
+Reading the triples in the reader's order, inner constructs first, also needs `body.order: closed`, because a card's place follows the order the file first names it through the triples (T037). A collection's `rdf:first` and `rdf:rest` need no construct: each member's `object` is one entry and its only child another, and `+` reaches the next.
+
+- **What 0.15 does not answer, and is not in FR-008 (T035)**: writing a triple as the reader's contract says. An add that continues its subject's statement with `;` (replacing the terminator), a removal that takes its separator, the whole statement when it is the last, and a part of a `;` or `,` list shared with other triples are gaps 1, 3 and 4 of `w3c-rdf.md`, and no splice of a declared binding states them. The descriptions write a new triple as a statement of its own and refuse a removal, and the steps that differ are listed by name in the desktop's tests, for Peter's ruling (spec 067, scenario 5 of story 4).

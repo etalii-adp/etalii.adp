@@ -81,6 +81,10 @@ of the reading is read by a plugin rather than through FBL, it has no typeMap fo
 binding's alone, as a host's conformance run reads it: every rule's type is its own, a value is the text the slot reads
 (a number where the binding gives `number`), compared with a fixture's number or bool that it is written as, and with
 a fixture's list as all the values the slot reaches.
+FBL 0.15: a slot's selector may reach up with `..` and across with `+`; `or` names further slots, the first present read;
+`expand` reads a term through the body's `prefixes`, a prefix no declaration in force names making the body unreadable;
+`ordinal` reads a node's number in the body's `ordinals`, and `name` its name; `escape` takes `sequences` and `unicode`;
+and `body.order` `closed` reads the elements in the order their entries end.
 FBL 0.13: a `{node}` slot with `split` reads the items its value is cut into at that text, each without the white space
 around it, an empty piece no item, each item's escapes resolved after the cut; a reading of an origin no tool type
 has, a fixture's own binding, is the binding's alone too. An attribute binding with `split` is checked, as one with
@@ -111,6 +115,7 @@ import re
 import sys
 import xml.etree.ElementTree as ElementTree
 from pathlib import Path
+from urllib.parse import urljoin
 
 from jsonschema import Draft202012Validator
 from lark import Lark, Token, Tree
@@ -1415,6 +1420,21 @@ class GrammarTree:
                     reached.extend(self.descendants(node))
                 nodes = reached
                 continue
+            if segment in ("..", "+"):  # FBL 0.15, in a slot
+                reached = []
+                for node in nodes:
+                    holder = self.parent.get(id(node))
+                    if holder is None:
+                        continue
+                    if segment == "..":
+                        reached.append(holder)
+                        continue
+                    siblings = [c for c in self.children(holder)]
+                    place = next((i for i, c in enumerate(siblings) if c is node), None)
+                    if place is not None and place + 1 < len(siblings):
+                        reached.append(siblings[place + 1])
+                nodes = reached
+                continue
             match = SELECTOR_SEGMENT.match(segment)
             if not match:
                 raise ReadingProblem(f"the selector `{selector}` has a segment the reading check does not read")
@@ -1541,7 +1561,91 @@ class GrammarModel:
         self.selected = next((v for v in self.views if v["selected"]), None)
         self.elements, self.document, self.read_order = [], {}, []
         self.stored_ids = set()
+        self.read_directives()
+        self.read_ordinals()
         self.read_rules()
+
+    def read_directives(self):
+        """FBL 0.15, `body.prefixes`: the prefixes and bases the body declares, each in force from the end of its entry;
+        a term under a prefix none is in force for makes the body unreadable."""
+        settings = self.binding["body"].get("prefixes")
+        self.prefixes, self.bases = settings, ([], [])
+        if not settings:
+            return
+        directives = []
+        for directive in settings["declarations"] + settings.get("bases", []):
+            directives += [(self.tree.order[id(entry)], id(entry), entry, directive)
+                           for entry in self.tree.select(self.tree.root, directive["at"])]
+        declared, bases = [], []
+        for _, _, entry, directive in sorted(directives, key=lambda d: d[:2]):
+            end = self.tree.span(entry)[1]
+            iri = self.whole(self.first_text(entry, directive["iri"]), bases[-1][1] if bases else None)
+            if "name" in directive:
+                declared.append((end, self.first_text(entry, directive["name"]), iri))
+            else:
+                bases.append((end, iri))
+        self.bases = (declared, bases)
+        inside = [self.tree.span(entry) for directive in settings["declarations"]
+                  for entry in self.tree.select(self.tree.root, directive["at"])]
+        for node in self.tree.descendants(self.tree.root):
+            if not self.tree.is_token(node) or node.type not in settings["terminals"]:
+                continue
+            match = re.fullmatch(settings["prefixed"].replace("(?<", "(?P<"), str(node), re.DOTALL)
+            start = node.start_pos
+            if match and not any(a <= start < b for a, b in inside) and not any(
+                    at <= start and name == match["prefix"] for at, name, _ in declared):
+                raise ReadingProblem(f"the body is unreadable: the prefix '{match['prefix']}:' is not declared")
+
+    def first_text(self, entry, slot):
+        return next(iter(self.slot_values(entry, slot, None)), "")
+
+    def whole(self, written, base):
+        """A term written whole: what `absolute` keeps, its numeric escapes read, resolved against the base."""
+        match = re.fullmatch(self.prefixes["absolute"].replace("(?<", "(?P<"), written, re.DOTALL)
+        value = re.sub(r"\\u([0-9A-Fa-f]{4})|\\U([0-9A-Fa-f]{8})", lambda m: chr(int(m[1] or m[2], 16)),
+                       match["value"] if match else written)
+        if base is None:
+            return value
+        if not value:
+            return base
+        return value if re.match(r"[A-Za-z][A-Za-z0-9+.-]*:", value) else urljoin(base, value)
+
+    def expanded(self, node, expand):
+        """FBL 0.15, a slot's `expand`: a keyword's IRI, the IRI of a prefixed name under the last declaration in force
+        where it stands, or the IRI written whole against the base in force there."""
+        text = self.tree.text_of(node)
+        if isinstance(expand, dict) and text in expand.get("keywords", {}):
+            return expand["keywords"][text]
+        start = self.tree.span(node)[0]
+        declared, bases = self.bases
+        match = re.fullmatch(self.prefixes["prefixed"].replace("(?<", "(?P<"), text, re.DOTALL)
+        if match:
+            found = [iri for at, name, iri in declared if at <= start and name == match["prefix"]]
+            return found[-1] + re.sub(r"\\(.)", r"\1", match["local"]) if found else text
+        in_force = [iri for at, iri in bases if at <= start]
+        return self.whole(text, in_force[-1] if in_force else None)
+
+    def read_ordinals(self):
+        """FBL 0.15, `body.ordinals`: the nodes each numbering's selectors reach, numbered from 0 in document order, a node
+        before the nodes it holds, and a token of the terminal `same` taking the number of an earlier one with its text."""
+        self.ordinals = {}
+        for name, numbering in self.binding["body"].get("ordinals", {}).items():
+            nodes = []
+            for selector in numbering["at"]:
+                nodes.extend(self.tree.select(self.tree.root, selector))
+            unique = {id(node): node for node in nodes if self.tree.span(node) is not None}.values()
+            depth = lambda node: sum(1 for _ in self.tree.ancestors(node))
+            seen, next_number = {}, 0
+            for node in sorted(unique, key=lambda n: (self.tree.span(n)[0], -self.tree.span(n)[1], depth(n))):
+                if self.tree.name(node) == numbering.get("same"):
+                    text = self.tree.text_of(node)
+                    if text not in seen:
+                        seen[text] = next_number
+                        next_number += 1
+                    self.ordinals[(name, id(node))] = seen[text]
+                else:
+                    self.ordinals[(name, id(node))] = next_number
+                    next_number += 1
 
     def read_views(self, wanted):
         """Every view of the binding's block rules for this reading's origin (section 9.3), the selected one marked."""
@@ -1584,7 +1688,8 @@ class GrammarModel:
             if "when" in rule and not self.holds(rule["when"], entry, matched):
                 continue
             claimed[id(entry)] = (kind, rule, entry)
-        for _, (kind, rule, entry) in sorted((self.tree.order[key], claim) for key, claim in claimed.items()):
+        claims = sorted(((self.tree.order[key], claim) for key, claim in claimed.items()), key=lambda c: c[0])
+        for _, (kind, rule, entry) in claims:
             element = {"kind": kind, "rule": rule, "entry": entry, "attributes": {}, "id": None, "parent": None}
             selected[id(entry)] = element
             self.read_order.append(element)
@@ -1601,6 +1706,13 @@ class GrammarModel:
                 if value is not None:
                     element["attributes"][attribute] = value
             self.place(element)
+        # FBL 0.15, `body.order`: in the order the entries end, an entry held by another first.
+        if self.binding["body"].get("order") == "closed":
+            def closed(element):
+                span = self.tree.span(element["entry"])
+                return (span[1], -span[0], -sum(1 for _ in self.tree.ancestors(element["entry"])))
+            self.read_order.sort(key=closed)
+            self.elements.sort(key=closed)
 
     def sidecar_kinds(self):
         """The kinds of the binding's sidecar ids: a rule's `sidecar.kind`, or its type (FBL 0.12, section 8.6)."""
@@ -1659,7 +1771,12 @@ class GrammarModel:
         if "items" in binding:
             return [self.item(node, binding["items"], enclosing) for node in self.tree.select(entry, binding["node"])
                     if self.tree.span(node) is not None]
-        values = [self.mapped_value(value, binding) for value in self.slot_values(entry, binding, enclosing)]
+        read = self.slot_values(entry, binding, enclosing)
+        for further in binding.get("or", []):  # FBL 0.15: the first present
+            if read:
+                break
+            read = self.slot_values(entry, further, enclosing)
+        values = [self.mapped_value(value, binding) for value in read]
         for further in binding.get("gather", []):
             values = values + self.slot_values(entry, further, enclosing)
         if declared.get("many"):
@@ -1715,6 +1832,17 @@ class GrammarModel:
             for node in self.tree.select(entry, slot["node"]):
                 if self.tree.span(node) is None:
                     continue
+                if "ordinal" in slot:
+                    number = self.ordinals.get((slot["ordinal"], id(node)))
+                    if number is not None:
+                        values.append(str(number))
+                    continue
+                if slot.get("name"):
+                    values.append(self.tree.name(node))
+                    continue
+                if slot.get("expand"):
+                    values.append(self.expanded(node, slot["expand"]))
+                    continue
                 value = self.tree.text_of(node)
                 if "match" in slot:
                     match = re.fullmatch(slot["match"].replace("(?<", "(?P<"), value, re.DOTALL)
@@ -1725,7 +1853,7 @@ class GrammarModel:
                     values.extend(split_items(value, slot))
                     continue
                 if "escape" in slot:
-                    value = unescaped(value, slot["escape"]["with"], slot["escape"]["quote"])
+                    value = unescaped(value, slot["escape"]["with"], slot["escape"]["quote"], slot["escape"])
                 values.append(value)
             return values
         if "value" in slot:
@@ -1779,12 +1907,24 @@ def split_items(value, slot):
     return items
 
 
-def unescaped(value, escape, quote):
+def unescaped(value, escape, quote, settings=None):
     """FBL 0.11, a slot's `escape`: `with`+`quote` reads as `quote`, `with`+`with` as `with`, and `with` before any other
-    character stays as it is."""
+    character stays as it is. FBL 0.15: and `with` before a key of `sequences` as what it stands for, before a key of
+    `unicode` and that many hexadecimal digits as that code point."""
+    settings = settings or {}
+    sequences, unicode = settings.get("sequences", {}), settings.get("unicode", {})
     result, index = [], 0
     while index < len(value):
-        if value[index] == escape and index + 1 < len(value) and value[index + 1] in (escape, quote):
+        following = value[index + 1] if value[index] == escape and index + 1 < len(value) else None
+        digits = unicode.get(following) if following else None
+        hexadecimal = value[index + 2:index + 2 + digits] if digits else ""
+        if following in sequences:
+            result.append(sequences[following])
+            index += 2
+        elif digits and len(hexadecimal) == digits and re.fullmatch("[0-9A-Fa-f]+", hexadecimal) and int(hexadecimal, 16) <= 0x10FFFF:
+            result.append(chr(int(hexadecimal, 16)))
+            index += 2 + digits
+        elif value[index] == escape and index + 1 < len(value) and value[index + 1] in (escape, quote):
             result.append(value[index + 1])
             index += 2
         else:
@@ -2131,6 +2271,12 @@ def check_grammar_family(path: Path, document) -> list[str]:
                     for name in attribute_binding.get("create", {}).get("after", []) if isinstance(attribute_binding.get("create"), dict) else []:
                         if name not in attributes or name == attribute:
                             problems.append(f"at {pointer}/attributes/{attribute}/create/after: {name!r} is no other attribute of the rule {rule['name']!r}")
+                    # FBL 0.15, section 14.1: an `ordinal` names one of the body's numberings, and `expand` reads through its prefixes.
+                    for slot in [attribute_binding] + attribute_binding.get("or", []):
+                        if "ordinal" in slot and slot["ordinal"] not in binding.get("body", {}).get("ordinals", {}):
+                            problems.append(f"at {pointer}/attributes/{attribute}/ordinal: `{slot['ordinal']}` is not one of the body's ordinals (FBL 0.15 section 14.1)")
+                        if "expand" in slot and "prefixes" not in binding.get("body", {}):
+                            problems.append(f"at {pointer}/attributes/{attribute}/expand: a slot with expand needs the body's prefixes (FBL 0.15 section 14.1)")
                     if "gather" in attribute_binding and not (attribute_binding.get("readOnly") or rule.get("readOnly") or binding.get("readOnly")):
                         problems.append(f"at {pointer}/attributes/{attribute}/gather: gather stands only on a read-only attribute binding")
                     if "items" in attribute_binding:
