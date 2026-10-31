@@ -216,7 +216,7 @@ A visitor to the causal loop diagram's page on the ADP website finds a link to t
 - Lines the binding cannot read: the page shows what was read, as the canvas does.
 - A label holding characters that mean something in a web page (`<`, `&`, quotes, a script tag): shown as text, never run or read as markup.
 - A weight of zero, negative or very large: zero gives a link that carries nothing until its strength is raised; a negative weight is read as its size; every weight is limited to the strength slider's range.
-- A large diagram (200 variables, 600 links): the page opens and moves smoothly; dots are thinned rather than the page slowed.
+- A large diagram (200 variables, 600 links): the page opens and moves as the prototype runs (SC-003).
 - A diagram with no file on disk yet: the button is disabled and says to save the diagram first, since the page is written beside its file.
 - The same diagram exported again a minute or more later: a new page is written under the new time and the earlier pages are left as they are, so the person keeps a dated series.
 - The same diagram exported twice within one minute: both have the same name, and the second replaces the first.
@@ -314,7 +314,7 @@ A visitor to the causal loop diagram's page on the ADP website finds a link to t
 
 - **SC-001**: From the press of the button to the page moving in the browser takes under two seconds for a diagram of 100 variables.
 - **SC-002**: Every causal loop diagram example the desktop host carries, and the mental health example, exports to a page holding all of its variables, links and loops, checked by count.
-- **SC-003**: A page of 200 variables and 600 links keeps a smooth animation (30 frames a second or more) in the current release of each of the three mainstream browsers on an ordinary laptop.
+- **SC-003**: A page of 200 variables and 600 links moves as the prototype runs: FR-035 keeps its drawing exactly as the prototype's, so no frame rate is required beyond that (the maintainer, 2026-10-31, choosing the exact page over 30 frames a second). `tools/flow-page-check` measures and prints the frame time.
 - **SC-004**: An exported page opened with the network off makes no request and runs as it does online.
 - **SC-005**: Exporting the same diagram twice gives byte-identical files.
 - **SC-006**: A label made of web-page markup and script shows as its own text in the page, and runs nothing.
