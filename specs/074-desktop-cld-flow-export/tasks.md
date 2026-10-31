@@ -74,7 +74,7 @@
 
 - [ ] T041 [US10] Generate the flow page of each example under `etalii.adp.ide.standalone/src/examples/diagrams/causal-loop-diagram/` (business-philosophy, mental-health, on-call, reference) with the desktop host's generator and its registration, and commit each as `etalii.adp.site/public/docs/causal-loop-flow-pages/<example>.html`, with a test that the folder holds one page per example and each loads nothing from outside itself (FR-037, FR-040)
 - [ ] T042 [US10] Write `etalii.adp.site/src/content/docs/docs/causal-loop-flow-pages.mdx` listing them, with its entry in the documentation's sidebar (FR-038)
-- [ ] T043 [US10] Link the causal loop diagram's tool page to it by the route `etalii.adp.site`'s rules for a tool allow, with a test that the tool page holds the link (FR-039)
+- [ ] T043 [US10] Put one link per published flow page, named for its example, on the causal loop diagram's tool page by the route `etalii.adp.site`'s rules for a tool allow, with a test that the tool page holds a link to every page in the folder (FR-039)
 - [ ] T044 [US10] Check the published pages as User Story 10 says (SC-011)
 
 ## Phase 8: Polish
