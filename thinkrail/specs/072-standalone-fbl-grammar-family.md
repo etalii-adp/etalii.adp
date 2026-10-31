@@ -2,7 +2,7 @@
 id: feature-072-standalone-fbl-grammar-family
 type: task-spec
 title: "072 The FBL library reads the grammar family"
-status: draft
+status: active
 parent: specs-archive
 references:
   - fbl
@@ -16,8 +16,17 @@ tags:
 
 **Feature Branch**: none of its own here: the code lands in `etalii.adp.ide.standalone`, on a `features/` branch per task, through pull requests into its `develop`
 **Migrated**: 2026-10-31, from standalone commit [`bd7e2ea`](https://github.com/etalii-adp/etalii.adp.ide.standalone/tree/bd7e2ea95b8e4195bf6f8d97f7aede9ab4dc3ad8/.spec-workflow/specs/fbl-grammar-family)
-**Status**: Specified; awaiting approval, no tasks yet
+**Status**: Approved by Peter on 2026-10-31, with FBL 0.13's `split` slot added to its scope as a small amendment (below); planned in [plan.md](../../specs/072-standalone-fbl-grammar-family/plan.md), split into [tasks.md](../../specs/072-standalone-fbl-grammar-family/tasks.md)
 **Input**: The spec-workflow specification `fbl-grammar-family` of `etalii.adp.ide.standalone`: [requirements.md](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/bd7e2ea95b8e4195bf6f8d97f7aede9ab4dc3ad8/.spec-workflow/specs/fbl-grammar-family/requirements.md), read at that repository's commit `bd7e2ea`; no approval of the requirements was recorded. Standalone stopped using spec-workflow on 2026-10-31 (Peter); the text below is the source's, verbatim, and its references to spec-workflow, the dashboard and `.spec-workflow/` describe how it was written then.
+
+## Amendment of 2026-10-31
+
+Peter approved this specification on 2026-10-31 at 11:19 UTC, by tapping "Approve" on the card "Approve the grammar family spec (072) so I can write its plan and tasks?", whose option read "I add the 0.13 split slot to its scope as a small amendment, then write the plan and tasks and start building." The amendment, applied here by the specification's owner:
+
+- **FBL 0.13's `split` slot is in scope** (Requirement 11): a `{node}` slot of a `many` attribute whose one node holds several items, cut at a separator the binding declares, as etalii.adp spec 066 states it (FR-038, User Story 1 scenarios 12 and 13, its edge cases, tasks T101 to T110), with FBL sections 4.9 *Several items in one node*, 5.2's `{node}` row, 6.3 *An item of a slot with `split`* and 14.1 step 6.
+- **The constructs of FBL 0.11 that the split slot's own fixture uses come with it, and no others**: `escape` on a `{node}` slot, `create` with `emit` and `after` for an absent part, and a `{node}` slot of a `many` attribute read as every node its selector reaches, each item written by `insert-key`, `replace-value` and `remove-key` (FBL sections 4.9, 5.2, 6.3). Requirement 6.4 is amended to allow them. `pad`, `gather`, `items`, views, nested recovery and the rest of FBL 0.10 to 0.12 stay out of scope.
+- **The fixtures**: `fixtures/grammar-split-slot/` and the refused bindings `refused/split-not-many.fbl` and `refused/split-escape-collision.fbl` are vendored and held here (Requirements 7.1, 11.6, 11.7). `fixtures/structurizr-split-tags/` is not run here: its binding, `structurizr.fbl`, uses constructs of FBL 0.10 to 0.12 that this specification leaves out (`gather` among them), so it is vendored and run with that binding under the next step (Requirement 10.3); the reading it shows, `Extra` and `More` two items and `Existing System` one, is held here by a test of the cut (Requirement 11.2).
+- The rest of the scope is as it was: the FBL 0.9 grammar family, through `EtAlii.Lark` 0.4.0 or later.
 
 ## Requirements Document
 
@@ -125,7 +134,7 @@ One definition per tool, interpreted by a core in each host, needs every host's 
 1. A set SHALL be one `replace-value` of the value's span, the group `value` of the slot's `match` or the node's own span, with the new value as text, unescaped and unquoted; a number written as FBL section 6.3 *Numbers* says, `true` and `false` as such.
 2. An add SHALL be one `insert-entry` of the rule's `emit`, its placeholders replaced as for `lines`, each line feed in `emit` written as the body's line ending followed by the new entry's indentation; placed `after-last`, `end`, `next-sibling`, `start` or `end-of-document` in the container `insert.container` selects, the root when it is absent, exactly as FBL section 6.3 *Where it goes* says, the body keeping or lacking its final line ending.
 3. A removal SHALL be one `remove-entry` of the entry's line span, its leading comment included, or of its own span when it does not start and end its lines; a reference SHALL be rewritten by `rewrite-reference` of its value's span (FBL sections 5.7, 6.3).
-4. The family SHALL plan no `insert-key` or `remove-key`: a set of an attribute whose node is absent from the entry SHALL be refused with a reason, and an attribute whose node is present SHALL only be set, never removed (FBL section 4.9 *Writing*).
+4. The family SHALL plan no `insert-key` or `remove-key`: a set of an attribute whose node is absent from the entry SHALL be refused with a reason, and an attribute whose node is present SHALL only be set, never removed (FBL section 4.9 *Writing*). *(Amendment of 2026-10-31)* The exceptions are the constructs of Requirement 11: an absent part written by its binding's `create`, and the items of a `many` slot, with or without `split`, added and removed as FBL sections 4.9 and 6.3 say.
 5. Before an edit is applied, the changed entry SHALL be read again: a set after which the entry does not read with the value set, and an add after which the body does not read with one more entry of the rule having the add's values, SHALL be refused with a reason, and nothing SHALL be written (FBL sections 4.9, 6.4).
 6. Every edit of the family SHALL have an exact undo and redo by bytes, refused on drift, as every other family's (FBL section 7).
 
@@ -135,8 +144,8 @@ One definition per tool, interpreted by a core in each host, needs every host's 
 
 #### Acceptance Criteria
 
-1. `w3c-turtle-grammar.fbl`, `w3c-turtle.lark`, `fixtures/w3c-turtle-grammar/` and `fixtures/w3c-turtle-grammar-partial/` SHALL be vendored from etalii.adp's `specifications/fbl/` at `88377a1` or later, unchanged, with the conformance readme naming the commit, and their bytes SHALL be kept as the source holds them, line endings included, because the fixtures' offsets are byte offsets.
-2. Both fixtures SHALL pass byte for byte with the same splices, in the order the fixture lists them (FBL sections 6.5, 15.1); a refused step SHALL be refused.
+1. `w3c-turtle-grammar.fbl`, `w3c-turtle.lark`, `fixtures/w3c-turtle-grammar/` and `fixtures/w3c-turtle-grammar-partial/`, and *(amendment of 2026-10-31)* `fixtures/grammar-split-slot/`, `refused/split-not-many.fbl` and `refused/split-escape-collision.fbl`, SHALL be vendored from etalii.adp's `specifications/fbl/` at `88377a1` or later, unchanged, with the conformance readme naming the commit, and their bytes SHALL be kept as the source holds them, line endings included, because the fixtures' offsets are byte offsets.
+2. Both fixtures, and *(amendment of 2026-10-31)* `grammar-split-slot`, SHALL pass byte for byte with the same splices, in the order the fixture lists them (FBL sections 6.5, 15.1); a refused step SHALL be refused.
 3. A test SHALL show the runner fails on a copy of a grammar fixture with one planted wrong offset, so that the comparison is seen to compare for the family.
 4. Every fixture vendored before SHALL pass, unchanged in what it expects.
 5. The library SHALL say that it supports the `grammar` family (FBL section 15.1), in the conformance readme and wherever the library states the families it reads.
@@ -174,6 +183,21 @@ One definition per tool, interpreted by a core in each host, needs every host's 
 4. The delivery report SHALL list anything in FBL 0.9 or ATD sections 3.5, 3.6, 4.1, 4.4 and 4.5 that the implementation found unclear, as a candidate change for etalii.adp.
 5. WHEN the tasks document is written THEN every acceptance criterion here SHALL be claimed by a task, established by diffing the two sets, and two traces SHALL be read back to their artefacts.
 
+### Requirement 11: Several items in one node *(amendment of 2026-10-31)*
+
+**User Story:** As a tool engineer, I want a binding to say that one token holds several items, cut at a separator, so that Structurizr's `tags "Extra, More"` reads as two tags and a set of them changes only the bytes of the tags it changes.
+
+#### Acceptance Criteria
+
+1. The loader SHALL read `split`, a text of one character or more, on a `{node}` slot of an attribute binding, and SHALL refuse, each with a problem at its JSON Pointer, a `split` beside `items`, a `split` on a slot of another family, and a `split` that holds the `with` or the `quote` character of the slot's `escape` (FBL sections 4.9, 14.1 step 6).
+2. Reading SHALL cut the slot's value, the group `value` of its `match` or else the node's text, at every occurrence of `split` from the left; each piece without the white space at its start and end (Unicode's `White_Space` property) SHALL be an item whose span is those bytes, and a piece that is then empty SHALL be no item, so `" Extra ,More,, "` holds `Extra` and `More`, `""` none, and `"Existing System"` one; with `escape`, each item's escapes SHALL be resolved after the cut; the items of every node the slot reaches SHALL follow each other in document order (FBL section 4.9).
+3. The constructs of FBL 0.11 that the slot's fixture uses SHALL be read and written as FBL says, and no others of 0.10 to 0.12: `escape` on a `{node}` slot, read by resolving `with` before `quote` or `with` and written by escaping every `quote` and `with`; `create` with `emit` and `after`, an absent part written by one `insert-key` right after the last token of the first present attribute of `after`, and refused when none is present; and a `{node}` slot of a `many` attribute, read as every node its selector reaches, in document order, each an item (FBL sections 4.9, 5.2, 6.3).
+4. A set of a `split` attribute SHALL write the difference between the old list and the new one as FBL section 6.3 *An item of a slot with `split`* says: the items of their longest common subsequence stay; a changed item is a `replace-value` of its span, escaped by the slot's `escape`; a new item an `insert-key` of `separator` and the value right after the last item the slot reaches; where no node the slot reaches holds an item, the new items joined by `separator` are a `replace-value` of the value's span of the last node; where it reaches no node, they are the `{value}` of the node `create` writes; a run of removed items after a kept item is a `remove-key` from the end of that item to the end of the run, and a run at the start of a node a `remove-key` from the start of the run to the start of the kept item; a node whose every item is removed is removed by a `remove-key` of the node and the whitespace before it. Every byte of a kept item, and between two kept items, SHALL stay, and every such edit SHALL have its exact undo.
+5. The read-again check of Requirement 6.5 SHALL hold for these edits as for every other edit of the family.
+6. `fixtures/grammar-split-slot/` SHALL pass byte for byte with the same splices, in the order the fixture lists them, each step followed by its undo (FBL section 15.3).
+7. `refused/split-escape-collision.fbl` SHALL be refused at its slot's `split` and load once its `split` is `,`; `refused/split-not-many.fbl` SHALL be refused by the check the library offers against a tool type's attribute types, given the causal loop diagram's `Loop.title` as single-valued, and SHALL load without that check, since the binding alone does not say which attributes are `many` (FBL section 14.1 step 6).
+8. `fixtures/structurizr-split-tags/` SHALL NOT be run under this specification, since its binding uses constructs of FBL 0.10 to 0.12 left out here; Requirement 10.3's report SHALL name it as part of the next step.
+
 ## Non-Functional Requirements
 
 ### Code Architecture and Modularity
@@ -198,7 +222,7 @@ One definition per tool, interpreted by a core in each host, needs every host's 
 
 ## Out of scope
 
-- The constructs FBL 0.10 and 0.12 add to the family under etalii.adp spec 066 (comments after a brace and across lines, recovery inside blocks, escapes, absent and positional parts, views of a `grammar` binding, the next-line brace, trailer segments, the legacy identities), and the 0.11 `yaml` constructs for Databricks. They follow under `c4-disl-fbl` task 13, `wardley-map-disl-fbl` task 11 and `databricks-disl-fbl` task 10, once spec 066's pull requests are merged (Requirement 10.3).
+- The constructs FBL 0.10 to 0.12 add to the family under etalii.adp spec 066 (comments after a brace and across lines, recovery inside blocks, positional parts and `pad`, `gather`, `items`, views of a `grammar` binding, the next-line brace, trailer segments, the legacy identities), apart from the three Requirement 11.3 names *(amendment of 2026-10-31)*: `escape`, `create` with `emit` and `after`, and the items of a `many` slot; and the 0.11 `yaml` constructs for Databricks. They follow under `c4-disl-fbl` task 13, `wardley-map-disl-fbl` task 11 and `databricks-disl-fbl` task 10, once spec 066's pull requests are merged (Requirement 10.3).
 - Converting any tool, the RDF module's Turtle included.
 - Comparing the library's automaton with `w3c-turtle-grammar.turtle.tables.json`. FBL does not require it of a host, and a grammar's one verdict is held by `EtAlii.Lark`'s own conformance with Lark; the fixtures are this library's test.
 - The FBL implementations of the other hosts.
