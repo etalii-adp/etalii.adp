@@ -62,6 +62,9 @@ Found while running the C4 descriptions on their binding: their bytes matched on
 - Q: How is a case's reading and drawing compared for a tool whose module opens its own documents? → A: By what is meaningful: a reading by ids, parents, ends and values, a drawing by which elements appear and where. Bytes stay exact, and no expected result changes (Peter, 2026-10-31; FR-012).
 - Q: What can a rule about the model see of a view, given a reading holds only its own view's statements? → A: Every view, with its members: `diagram.views` is implemented, and a reading keeps each view's statements as data (Peter, 2026-10-31; FR-013).
 - Q: Does FBL's Structurizr example change where the module differs from it? → A: Yes: `structurizr.fbl` takes `place: end` and `empty: keep` (Peter, 2026-10-31; FR-014).
+- Q: Does a C4 reading show only a view of its own kind? → A: No: it shows a view of any kind, as the module does, so `structurizr.fbl` drops `origins` from its view blocks and `selectedView` also covers the view's own entry (Peter, 2026-10-31; FR-015).
+- Q: May a rule see the scope a view is written with and where it stands? → A: Yes: DISL's `View` exposes both, so `c4.unknown-view-scope` and the line of `c4.empty-view` are rules of the descriptions (Peter, 2026-10-31; FR-016).
+- Q: Does DISL take the module's order of findings? → A: No: it stays a module's quirk, listed by name, and DISL does not change for it (Peter, 2026-10-31).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -156,6 +159,8 @@ A tool engineer validates the RDF, OWL, SHACL or SKOS description, and its Turtl
 - **FR-012**: A case recorded from a module that opens its own documents MUST say so, and `atd validate` MUST then compare its reading by ids, parents, ends and values, and its drawing by which elements appear and where they are, in place of comparing the module's own type names, wire attributes, shapes and painted chrome. Bytes, splices, findings and refusals MUST stay compared as before, and a case recorded from a declared tool MUST stay compared exactly.
 - **FR-013**: `diagram.views` MUST be available to a rule, listing every view of the body with its members, whichever view the reading shows, and a reading MUST keep each view's statements as data for it.
 - **FR-014**: `specifications/fbl/structurizr.fbl` MUST state `place: end` for persons and software systems and `empty: keep` on `name`, its fixtures still passing.
+- **FR-015**: `specifications/fbl/structurizr.fbl` MUST NOT state `origins` on its view blocks, its fixtures still passing, and FBL MUST state that a rule with `selectedView` also matches the entry of the view the reading shows.
+- **FR-016**: DISL's `View` MUST expose the scope the view is written with and its location, and the C4 descriptions MUST state `c4.unknown-view-scope` and the line of `c4.empty-view` as rules.
 
 ### Key Entities
 
