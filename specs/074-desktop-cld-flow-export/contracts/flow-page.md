@@ -51,6 +51,10 @@ Reset sets every level back to its `start` and clears the dots and the chart. It
 
 Pan by dragging the background, zoom with the wheel or a pinch, and move a variable by dragging it. Hovering a variable shows its level, its target and its backlog. Hovering a link shows its ends, polarity, delay, note and dots in transit.
 
+## The page is the prototype
+
+The page is [../reference/mental-health-cld-flows.html](../reference/mental-health-cld-flows.html) apart from the places FR-035 names; where this contract and the reference differ outside those places, the reference wins (FR-036).
+
 ## Look
 
 - Light and dark palettes under `prefers-color-scheme`. The dots are teal for positive and pink for negative in both. The heat scale runs from dark blue through purple and orange to yellow.

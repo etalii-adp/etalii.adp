@@ -235,8 +235,8 @@ A visitor to the causal loop diagram's page on the ADP website sees a screenshot
 
 #### Looks
 
-- **FR-020**: The page **MUST** read in a light and a dark system setting, and **MUST** have no sideways scroll at a phone's width.
-- **FR-021**: The page **MUST** say, in one visible sentence, that its numbers come from a simple model of the diagram's structure and are not measurements.
+- **FR-020**: The page **MUST** have no sideways scroll at a phone's width. *(Its light setting is withdrawn by FR-036.)*
+- **FR-021**: *Withdrawn by FR-036: the page keeps the prototype's own header text.*
 
 #### Fit with the desktop host
 
@@ -253,6 +253,11 @@ A visitor to the causal loop diagram's page on the ADP website sees a screenshot
 - **FR-029**: A `.cld` without the properties **MUST** open and save byte-identical in every host that reads the new definition, and a host still holding the old definition **MUST** keep the new statements byte for byte, reported as unread on their lines, as it does every unread statement.
 - **FR-030**: The ATD tool descriptions of the causal loop diagram (spec 039) **MUST** describe the same properties, and the definition's examples and FBL fixtures **MUST** include a file that sets every one of them.
 - **FR-031**: The desktop host and the standalone host **MUST** read the new definition, show the properties in their property panels as User Story 8 states, and write the same bytes for the same edit (desktop Principle II); the other hosts take it with their next copy of the definition.
+
+#### The page is the prototype (the maintainer, 2026-10-31 00:52 and 00:53)
+
+- **FR-035**: The page **MUST** be [reference/mental-health-cld-flows.html](reference/mental-health-cld-flows.html) byte for byte, except in these places: (a) the embedded diagram data; (b) the scenario list, which **MUST** hold one scenario, `Diagram as saved`, that sets every external variable to its Starting level and every variable's push to its Outside push; and, because without them the page fails on any other diagram or ignores the properties the maintainer asked for, (c) the chart's series, the seven variables in the most loops instead of the mental health example's named variables; (d) every label and note the page writes as HTML, escaped; (e) the page's title and heading, the diagram's Title or its file name; and (f) the dynamics controls and the heatmap reading starting at the diagram's properties. The maintainer chose "Data, and scenarios generic" over adding the specification's other extras.
+- **FR-036**: Where another requirement of this specification asks for what the prototype does not have, FR-035 wins and that part is withdrawn: the light palette of FR-020 and the edge case of a light setting, FR-021's sentence and User Story 7 scenario 3's sentence, User Story 6 scenario 2's adding to and removing from the chart, the sentence counting omitted statements, the words "jump" for the prototype's "Shock up" and "Shock down", and Reset keeping the levels' starting values other than 0.5. FR-020's phone width stands, since the prototype has it.
 
 #### The website (the maintainer, 2026-10-31)
 
@@ -288,7 +293,7 @@ A visitor to the causal loop diagram's page on the ADP website sees a screenshot
 
 - **"The desktop designer" is the desktop host**, `etalii.adp.ide.desktop`, and "the command bar" is its ribbon. The standalone host gets no button from this feature.
 - **Where the page goes** was chosen by the maintainer on 2026-10-31: beside the `.cld`, under `FILENAME {yyyy-mm-dd hh.mm}.html`. Whether the pages are kept out of version control is the person's to decide in their own repository; the host neither adds nor changes an ignore file.
-- **The prototype's scenarios are left out**: they were written for the mental health subject and have no counterpart for an arbitrary diagram. A diagram's own starting levels and pushes now play that part (User Story 8).
+- **The prototype's scenarios are replaced** by one, `Diagram as saved`, built from the diagram's own starting levels and pushes (FR-035, the maintainer's choice of 2026-10-31).
 - **The definition's "simulates nothing"** changes to say that the diagram still simulates nothing itself: its flow properties are starting values for an exported page, and a weight is the starting strength of its link there.
 - **The model is the prototype's**: simple, smooth, and the same for every diagram. It shows how the structure behaves, not a calibrated simulation; no units, stocks or equations are read from the diagram.
 - **The page is not a tool**: it is not a diagram, designer or editor of ADP, reads no definition, and is not listed in `docs/tools.md`.
@@ -312,3 +317,5 @@ A visitor to the causal loop diagram's page on the ADP website sees a screenshot
 - `FILENAME {yyyy-mm-dd hh.mm}.html`: the page's name, beside the diagram (the maintainer, 2026-10-31).
 - 0 to 1: a variable's level; 0.5: its start.
 - Seven: the most series the chart starts with.
+- `Diagram as saved`: the one scenario of an exported page.
+- [reference/mental-health-cld-flows.html](reference/mental-health-cld-flows.html): the page, byte for byte apart from FR-035's places.

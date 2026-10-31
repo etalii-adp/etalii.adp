@@ -25,3 +25,6 @@ specifications/atd/capabilities/*/fixtures/**/*.json text
 # A case whose document is itself JSON keeps that document's bytes too (the Databricks pipeline's settings file, CRLF).
 definitions/diagrams/conformance/databricks-pipeline/settings/pipeline.json -text
 definitions/diagrams/conformance/databricks-pipeline/settings/after-*.json -text
+
+# Spec 074: the prototype flow page is the exported page's exact reference, so Git never converts it.
+specs/074-desktop-cld-flow-export/reference/*.html -text

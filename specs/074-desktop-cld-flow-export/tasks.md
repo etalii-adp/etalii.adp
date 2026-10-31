@@ -14,7 +14,7 @@
 ## Phase 1: Setup
 
 - [ ] T001 Check R2 against the current binding: add an FBL fixture in which an older copy of `etalii.adp/specifications/fbl/causal-loop-diagram.fbl` reads `variable a "A" start=0.7`, and record whether the line is kept with its rest reported or refused. Amend research R2 and the contract if it is refused (PR A)
-- [ ] T002 [P] Generalise the prototype into the template: remove the scenarios, read every starting value from `DATA`, add the light palette and the `omitted` sentence, and keep it outside the repositories until T030 takes it (PR D2)
+- [ ] T002 [P] Make the template from `etalii.adp/specs/074-desktop-cld-flow-export/reference/mental-health-cld-flows.html`, changing only FR-035's places (a) to (f); a test diffs the template against the reference and fails on any other change (FR-035, FR-036) (PR D2)
 
 ## Phase 2: Foundational, the flow properties in the definition (PR A) — blocks every story
 
@@ -49,8 +49,8 @@
 - [ ] T022 [P] [US8] Test that the flow properties, or their defaults, are the data's `settings`, `start`, `push` and `weight`, limited to their ranges (FR-017, FR-027, User Story 8 scenario 7)
 - [ ] T023 Test the edge cases: no links, a self-link, two opposite links, a link naming no variable (counted in `omitted`), a link of unstated polarity, weights of 0, -3 and 1e21
 - [ ] T024 Write `modules/diagrams/causal-loop-diagram/src/flow_page.rs` (the data from the open session, serialised as contracts/flow-page.md says) and `flow_page.html` (T002's template, held with `include_str!`); T018 to T023 pass
-- [ ] T025 [US2] [US3] [US4] [US6] Write `etalii.adp.ide.desktop/tools/flow-page-check/check.mjs` (R6): it generates pages from the fixtures and asserts no request; the counts; dots on every link, teal for positive and pink for negative, larger from a higher source (FR-014); a raised source raising a positive link's target and lowering a negative one's, a plain link's target answering before a delayed one's, and a delayed link holding more dots (FR-011 to FR-013); every heatmap reading recolouring (FR-015); the loop list and its gains, marked at 1 (FR-016); every control of contracts/flow-page.md changing its state and nothing leaving the page (FR-017, FR-019); pan, zoom, dragging a variable and the hover texts (FR-018); the chart's seven series; and the model sentence (FR-021); see it fail against a template with the model stubbed, then pass
-- [ ] T026 [US7] Extend the check with the 200-variable, 600-link fixture measuring frame time (SC-003), the phone width with no sideways scroll, and both colour schemes (FR-020)
+- [ ] T025 [US2] [US3] [US4] [US6] Write `etalii.adp.ide.desktop/tools/flow-page-check/check.mjs` (R6): it generates pages from the fixtures and asserts no request; the counts; dots on every link, teal for positive and pink for negative, larger from a higher source (FR-014); a raised source raising a positive link's target and lowering a negative one's, a plain link's target answering before a delayed one's, and a delayed link holding more dots (FR-011 to FR-013); every heatmap reading recolouring (FR-015); the loop list and its gains, marked at 1 (FR-016); every control of contracts/flow-page.md changing its state and nothing leaving the page (FR-017, FR-019); pan, zoom, dragging a variable and the hover texts (FR-018); the chart's seven series; see it fail against a template with the model stubbed, then pass
+- [ ] T026 [US7] Extend the check with the 200-variable, 600-link fixture measuring frame time (SC-003), and the phone width with no sideways scroll (FR-020)
 - [ ] T027 Run the check in the desktop host's `Build` workflow after `cargo test`, on Linux
 
 ## Phase 6: User Story 1, the button (PR D3)
@@ -95,7 +95,8 @@
 | FR-017 | T022 (starting values), T025 (controls) |
 | FR-018, FR-019 | T025 |
 | FR-020 | T026 |
-| FR-021 | T002, T025 |
+| FR-021 | withdrawn (FR-036) |
+| FR-035, FR-036 | T002, T024 |
 | FR-022 | T004, T005 (no language construct), plan's Constitution Check |
 | FR-023 | T034 |
 | FR-024 | T032 |
