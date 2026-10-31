@@ -2,6 +2,7 @@
 id: feature-067-desktop-fbl-bindings
 type: task-spec
 title: "067 Reading C4, Databricks, Wardley Map and Turtle Through Declared Bindings on the Desktop"
+status: draft
 parent: specs-archive
 references:
   - fbl

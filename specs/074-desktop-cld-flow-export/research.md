@@ -7,7 +7,7 @@
 - `title "<text>"` sets the diagram's Title;
 - `flow` followed by `key=value` words (`strength=`, `delay=`, `inertia=`, `speed=`, `density=`, `heatmap=`) sets the six dynamics properties.
 
-The binding writes each statement after the header when it is first needed. It writes only the keys that differ from their defaults, and removes the statement once it holds none (FR-028). See [contracts/cld-flow-statements.md](contracts/cld-flow-statements.md).
+The binding writes each statement after the header when it is first needed. It writes only the keys that differ from their defaults, and removes the statement once it holds none (FR-028). No host could write a diagram attribute when this was decided, so the plan's S and D1 add one generic write path: a form for the diagram committed by its row, and the attribute written to the entry its `typeMap` entry names it under, by the existing set, remove and add changes. `after-header` needs a binding `header`, which would raise a warning for a file without one (`no-header.cld`), so a new statement is an add with the position `{after}` of FBL section 11.2, naming the header or the title; FBL's prose said only what an index means for a declared binding, and now says what `{after}` means for an entry of another type. Neither adds a construct (FR-022). See [contracts/cld-flow-statements.md](contracts/cld-flow-statements.md).
 
 **Rationale**: DISL 0.3 already maps a binding type onto the diagram (`typeMap … "as": "diagram"`). The hype cycle graph's `Unit` line and the supply chain's `Document` use it, so no language construct is added (FR-022). Words of the form `key=value` in a tail are the binding's existing way of writing a number, as `weight=` is.
 
@@ -19,7 +19,7 @@ The binding writes each statement after the header when it is first needed. It w
 
 **Rationale**: the variable rule already captures a tail (`(?<rest>.*)`), so an older host keeps such a line byte for byte. An older binding reads it as a variable whose rest is unread, which FR-029 accepts.
 
-**Check before building** (T001): an older binding reads `variable a "A" start=0.7` with `rest` unbound, so the line is kept and its rest reported, not refused as a whole. If it is refused, the fallback is a statement of its own, `level a start=0.7 push=1`, mapped by name; T001 decides between the two and this research is amended.
+**Checked** (T001, the fixture `causal-loop-flow-older`): an older binding reads `variable a "A" start=0.7` with its rest unbound, so the line is kept and takes edits, and its rest is kept byte for byte. It is not reported, since FBL reports unmatched statements and not unbound words. FR-029's "reported as unread" therefore holds for the `title` and `flow` statements and not for these two words. The fallback statement is not needed. Regular expressions in FBL have no lookahead, so to keep `variable a start=0.7` from reading `start=0.7` as a label, the label and the two words read one tail group, and a bare label holds no `=`.
 
 ## R3. How the ribbon learns of an export without naming the tool type
 
