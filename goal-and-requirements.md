@@ -34,7 +34,7 @@ General-purpose drawing tools can draw any of these pictures, but they know noth
 
 ## Principles
 
-These come from the product steering of the standalone host ([product.md](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/develop/.spec-workflow/steering/product.md)) and hold for every host. The principles of the specifications themselves are in the [constitution](.specify/memory/constitution.md) (`constitution`).
+These come from the product steering of the standalone host ([product.md](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/develop/docs/steering/product.md)) and hold for every host. The principles of the specifications themselves are in the [constitution](.specify/memory/constitution.md) (`constitution`).
 
 - **Files are the source of truth.** What a tool shows lives in plain, diffable files beside the work it describes, under the same version control. A host never keeps a second copy of a model. Where a platform has no files, as in Notion, the platform's own store is the model, and the host states what that costs (`host-notion`).
 - **Specialised over generalised.** A tool earns its place by knowing its subject: its element types, what may connect to what, and what a well-formed picture looks like.
@@ -79,9 +79,8 @@ These come from the product steering of the standalone host ([product.md](https:
 
 ## How this graph relates to the planning systems
 
-This graph is the durable map: what ADP is, how it is divided, and where each boundary runs. ADP is moving its planning to ThinkRail and this graph. Until that move is complete, the existing systems stay authoritative for the work they hold:
+This graph is the durable map: what ADP is, how it is divided, and where each boundary runs. ADP is moving its planning to ThinkRail and this graph. Until that move is complete, the existing system stays authoritative for the work it holds:
 
-- GitHub Spec Kit (`specs-archive`, with the constitution) for every repository except standalone;
-- spec-workflow (`.spec-workflow/` in `etalii.adp.ide.standalone`) for the standalone host.
+- GitHub Spec Kit (`specs-archive`, with the constitution) for every repository, the standalone host included since it stopped using spec-workflow on 2026-10-31.
 
-Neither is to be disregarded or duplicated here.
+It is not to be disregarded or duplicated here.

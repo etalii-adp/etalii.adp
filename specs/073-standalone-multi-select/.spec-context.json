@@ -1,0 +1,26 @@
+{
+  "workflow": "speckit",
+  "specName": "Selecting several things on a diagram canvas",
+  "branch": "features/multi-select in etalii.adp.ide.standalone, one pull request per task into its develop",
+  "status": "specified",
+  "currentStep": "plan",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    }
+  ],
+  "intent": "Migrated from the spec-workflow specification of etalii.adp.ide.standalone (commit bd7e2ea), which stopped using spec-workflow on 2026-10-31",
+  "last_action": "Migrated to Spec Kit on 2026-10-31; no tasks were written in spec-workflow",
+  "telemetryInstanceId": "d9792743-6665-4d8c-8025-22c6eb483caa"
+}

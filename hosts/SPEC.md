@@ -38,7 +38,7 @@ The site (`site`) is not a host. It presents the hosts and the tools.
 - **No network at run time and no downloaded code.** The exception is a host whose platform is itself a service (Notion's OAuth Worker). A tool is never fetched and executed (DISL §13.1, §16).
 - **One frame, many tool types.** Generic code names no tool type; per-tool-type code lives in a module, plugin or residue that is declared as such. Hosts enforce this with lint rules and word tests.
 - **Shared vocabulary and delivery.** Every host's CI runs `etalii.adp`'s terminology check. Delivery follows the organisation's rules (`docs/new-repository.md`): `develop`, pull requests only, merge commits.
-- **Planning.** Every host except standalone is changed through a Spec Kit feature in this repository (`specs-archive`), checked against its principles (`principles-*`). Standalone plans in its own spec-workflow until the move to ThinkRail is complete.
+- **Planning.** Every host is changed through a Spec Kit feature in this repository (`specs-archive`), checked against its principles (`principles-*`). Standalone planned in its own spec-workflow until 2026-10-31.
 
 ## What each host needs from its platform
 
