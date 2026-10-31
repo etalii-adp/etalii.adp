@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "Export a Causal Loop Diagram as an Animated Flow Page from the Desktop Host",
   "branch": "claude/project-thread-mevaun in etalii.adp; in etalii.adp.ide.desktop, one branch per pull request as the plan cuts them",
-  "status": "specified",
-  "currentStep": "specify",
+  "status": "ready-to-implement",
+  "currentStep": "tasks",
   "history": [
     {
       "step": "specify",
@@ -18,6 +18,35 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-10-31T00:45:00.000Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "start",
+      "by": "ai",
+      "at": "2026-10-31T00:35:00.000Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T01:05:00.000Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "start",
+      "by": "ai",
+      "at": "2026-10-31T01:05:00.000Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T01:15:00.000Z"
     }
-  ]
+  ],
+  "last_action": "Plan and tasks written on the maintainer's approval of 2026-10-31 00:25; building waits for the maintainer's word"
 }
