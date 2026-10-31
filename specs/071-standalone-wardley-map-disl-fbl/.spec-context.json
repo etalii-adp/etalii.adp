@@ -1,0 +1,113 @@
+{
+  "workflow": "speckit",
+  "specName": "Wardley maps read from their DISL definition and their FBL binding",
+  "branch": "features/wardley-map-disl-fbl in etalii.adp.ide.standalone, one pull request per task into its develop",
+  "status": "implementing",
+  "currentStep": "implement",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T001",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T002",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T003",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T004",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T005",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T006",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T007",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T008",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T009",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "task": "T010",
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    }
+  ],
+  "intent": "Migrated from the spec-workflow specification of etalii.adp.ide.standalone (commit bd7e2ea), which stopped using spec-workflow on 2026-10-31",
+  "last_action": "Migrated to Spec Kit on 2026-10-31 with 10 of 13 tasks done",
+  "telemetryInstanceId": "f9f1f0c0-6e07-4742-a571-ecee5c5b7996"
+}

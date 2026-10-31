@@ -1,0 +1,19 @@
+{
+  "workflow": "speckit",
+  "specName": "The FBL library reads the grammar family",
+  "branch": "features/fbl-grammar-family in etalii.adp.ide.standalone, one pull request per task into its develop",
+  "status": "specified",
+  "currentStep": "specify",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-10-31T00:30:00.000Z"
+    }
+  ],
+  "intent": "Migrated from the spec-workflow specification of etalii.adp.ide.standalone (commit bd7e2ea), which stopped using spec-workflow on 2026-10-31",
+  "last_action": "Migrated to Spec Kit on 2026-10-31; no tasks were written in spec-workflow",
+  "telemetryInstanceId": "533268b1-01a0-4ecd-aefb-fcf441fa5d07"
+}

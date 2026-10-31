@@ -19,7 +19,7 @@ references:
 
 Repository: [`etalii.adp.ide.standalone`](https://github.com/etalii-adp/etalii.adp.ide.standalone)
 
-The standalone web workspace. It opens tools (diagrams, designers and editors) from a user's own workspace folder, draws them and lets the user edit them, while the documents stay plain, diffable files in that folder. It is the host with the widest tool coverage and the worked example the other hosts port from, but it is **not the reference**: its technical shape is how this host works, not a standard (goal `adp`). Sources: the repository's `CLAUDE.md`, `.spec-workflow/steering/` and `docs/architecture.md`. Where this node and those disagree, they win and this node is stale.
+The standalone web workspace. It opens tools (diagrams, designers and editors) from a user's own workspace folder, draws them and lets the user edit them, while the documents stay plain, diffable files in that folder. It is the host with the widest tool coverage and the worked example the other hosts port from, but it is **not the reference**: its technical shape is how this host works, not a standard (goal `adp`). Sources: the repository's `CLAUDE.md`, `docs/steering/` (spec-workflow's `.spec-workflow/steering/` until 2026-10-31) and `docs/architecture.md`. Where this node and those disagree, they win and this node is stale.
 
 ## State
 
@@ -103,7 +103,6 @@ From `tech.md`'s decision log, each with its why:
 
 ## Process
 
-- **Planning:** standalone plans in **spec-workflow** (`.spec-workflow/`, with the approval dashboard and steering documents), not in this repository's Spec Kit. Its nine finished archived specs were migrated into `specs/016-*` to `specs/024-*` here.
-- **Transition:** ADP is moving its planning to ThinkRail. Until that is complete, spec-workflow stays authoritative for this host and is neither disregarded nor duplicated here (goal `adp`).
-- **Team:** one Scrum master, four Developers (one per specification, exclusively), two Architects and two Testers (`steering/roles.md`).
+- **Planning:** standalone is changed through Spec Kit features in this repository, `specs/NNN-standalone-*`, checked against its principles (`principles-standalone`). It planned in **spec-workflow** (`.spec-workflow/`, with an approval dashboard) until 2026-10-31: its nine finished archived specs were migrated into `specs/016-*` to `specs/024-*` on 2026-10-10, and its six unfinished ones into `specs/068-*` to `specs/073-*` when it was retired; its steering documents moved to `docs/steering/` in that repository.
+- **Team:** one Scrum master, four Developers (one per specification, exclusively), two Architects and two Testers (`docs/steering/roles.md`).
 - **Gates and CI:** four local gates (`npm test`, typecheck, `dotnet format style`, `dotnet test`) and CI with InspectCode (constitution VI). See `standalone-guards`.
