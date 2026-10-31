@@ -34,5 +34,5 @@
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`
 - **Single file and web page.** "One single HTML file" is the maintainer's own requirement, so the page's being one self-contained web page is a constraint, not an implementation choice; how it is generated, and in which crate, is the plan's.
 - **The model.** FR-011 to FR-016 state the page's behaviour as a person sees it (what moves, when, and how fast); they follow the prototype the maintainer accepted on 2026-10-30, so a plan can test it without guessing.
-- **No markers.** The one open choice, where the page is written, is settled under Assumptions (a folder of the person's own) and put to the maintainer as a selection before the plan.
+- **No markers.** Where the page is written and how it is named is the maintainer's answer of 2026-10-31 (FR-004).
 - **Principle I.** The desktop host must not need a browser; FR-024 keeps the export within that, as an output opened by the platform.
