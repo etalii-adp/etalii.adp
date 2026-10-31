@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "Export a Causal Loop Diagram as an Animated Flow Page from the Desktop Host",
   "branch": "claude/project-thread-mevaun in etalii.adp; in etalii.adp.ide.desktop, one branch per pull request as the plan cuts them",
-  "status": "ready-to-implement",
-  "currentStep": "tasks",
+  "status": "completed",
+  "currentStep": "implement",
   "history": [
     {
       "step": "specify",
