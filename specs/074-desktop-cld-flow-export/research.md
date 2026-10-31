@@ -61,6 +61,8 @@ The `Build` workflow runs it on Linux after `cargo test`.
 
 ## R7. The page's template and determinism
 
+**Reference**: the prototype itself is kept byte for byte in [reference/mental-health-cld-flows.html](reference/mental-health-cld-flows.html) (the maintainer, 2026-10-31: "it needs to be the exact prototype page"). The template is that file; what may differ from it is the maintainer's to rule.
+
 **Decision**: the page is the prototype, generalised. The mental health scenarios are removed. Every starting value is read from the embedded data (the flow properties, or defaults). The chart picks the seven variables in the most loops. The page holds a light and a dark palette under `prefers-color-scheme`. The diagram's data is embedded as one JSON object, written with sorted keys and numbers in their shortest form. Every string in it is escaped for HTML script content (`<` as `<`, `&` as `&`, and U+2028 and U+2029 escaped). Labels are written into the page only through `textContent` or the canvas's `fillText`. The template has no timestamp and no random seed, so the same input gives the same bytes (FR-010). Randomness is used only at run time, for the dots' scatter.
 
 ## R8. The screenshot's route to the website
