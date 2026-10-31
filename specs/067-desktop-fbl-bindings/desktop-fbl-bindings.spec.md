@@ -33,13 +33,21 @@ The formats fall into three groups:
 - **Not the whole of T132.** Descriptions outside the table's first four rows stay as they are, and so do the differences of the descriptions that do not depend on a reader, except where story 3 removes them.
 - **Not retiring the modules.** A person who opens a document keeps today's tool (spec 035, story 4 scenario 4). The modules stay the reference the cases were recorded from.
 - **Not the other hosts.** Standalone, VS Code and IntelliJ follow FBL under their own specifications.
-- **Not a change to what the cases expect.** A case's expected bytes, readings, findings and drawings are the reference and do not change to suit a description. Only how a gesture is written in a step changes (story 3).
+- **Not a change to what the cases expect.** A case's expected bytes, readings, findings and drawings are the reference and do not change to suit a description. Only how a gesture is written in a step changes (story 3), and a case states which host kind recorded it (FR-012).
 
 ## Clarifications
 
 ### Session 2026-10-30
 
 - Q: Is a refusal's wording compared when the host wrote it rather than the description? → A: Only a description's own reason is compared exactly; the host's sentence that a gesture is not offered counts as the same refusal (Peter, 2026-10-30; FR-011).
+
+### Session 2026-10-31
+
+Found while running the C4 descriptions on their binding: their bytes matched on every step, yet no case could pass.
+
+- Q: How is a case's reading and drawing compared for a tool whose module opens its own documents? → A: By what is meaningful: a reading by ids, parents, ends and values, a drawing by which elements appear and where. Bytes stay exact, and no expected result changes (Peter, 2026-10-31; FR-012).
+- Q: What can a rule about the model see of a view, given a reading holds only its own view's statements? → A: Every view, with its members: `diagram.views` is implemented, and a reading keeps each view's statements as data (Peter, 2026-10-31; FR-013).
+- Q: Does FBL's Structurizr example change where the module differs from it? → A: Yes: `structurizr.fbl` takes `place: end` and `empty: keep` (Peter, 2026-10-31; FR-014).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -131,6 +139,9 @@ A tool engineer validates the RDF, OWL, SHACL or SKOS description, and its Turtl
 - **FR-009**: The RDF, OWL, SHACL and SKOS descriptions MUST bind Turtle with the grammar family and pass their cases with no persistence plugin, including Turtle cases with inserts and removals recorded from the desktop host's reader (spec 035, T149, FR-082, SC-010).
 - **FR-010**: A person who opens a document MUST keep today's tool, and validating MUST write no file of the description or the case.
 - **FR-011**: Comparing a refusal, a reason the description wrote MUST match exactly. The host's own sentence that a gesture is not offered, such as "Unknown action 'x'." or "'x' does not apply to this selection.", MUST count as the same refusal whatever its wording, and ATD §2.3 MUST state this.
+- **FR-012**: A case recorded from a module that opens its own documents MUST say so, and `atd validate` MUST then compare its reading by ids, parents, ends and values, and its drawing by which elements appear and where they are, in place of comparing the module's own type names, wire attributes, shapes and painted chrome. Bytes, splices, findings and refusals MUST stay compared as before, and a case recorded from a declared tool MUST stay compared exactly.
+- **FR-013**: `diagram.views` MUST be available to a rule, listing every view of the body with its members, whichever view the reading shows, and a reading MUST keep each view's statements as data for it.
+- **FR-014**: `specifications/fbl/structurizr.fbl` MUST state `place: end` for persons and software systems and `empty: keep` on `name`, its fixtures still passing.
 
 ### Key Entities
 
@@ -144,7 +155,7 @@ A tool engineer validates the RDF, OWL, SHACL or SKOS description, and its Turtl
 ### Measurable Outcomes
 
 - **SC-001**: All 56 fixtures added by FBL 0.10 to 0.13, and any added until the plan is written, pass on the desktop host (1 passes today).
-- **SC-002**: Every case of the 10 descriptions of story 2 passes `atd validate`, every write byte-identical, apart from differences listed by name as a module's quirk (0 pass today).
+- **SC-002**: Every case of the 10 descriptions of story 2 passes `atd validate` under FR-012's comparison, every write byte-identical, apart from differences listed by name as a module's quirk (0 pass today).
 - **SC-003**: Every case of the 4 descriptions of story 4 passes `atd validate` with no persistence plugin registered (0 pass today).
 - **SC-004**: No recorded case step carries a module's target string, and `atd record --check` passes.
 - **SC-005**: Every existing test and parity golden of the desktop host stays green, and a document opened by a person draws and saves as before.
