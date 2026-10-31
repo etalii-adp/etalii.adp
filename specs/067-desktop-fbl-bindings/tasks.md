@@ -99,12 +99,12 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 **Goal**: FR-008, FR-009, SC-003. **Independent test**: `atd validate` on the four descriptions with no persistence plugin.
 
-- [ ] T035 [US4] Check which of FR-008's constructs FBL through 0.14 already answers, and record it in research R9 · etalii.adp/specs/067-desktop-fbl-bindings/research.md
-- [ ] T036 [US4] Write the FBL minor version for what remains: its text, schema, fixtures and ATD rows · etalii.adp/specifications/fbl/
-- [ ] T037 [US4] Finish the Turtle binding on `w3c-turtle.lark`, every fixture of the version passing · etalii.adp/specifications/fbl/w3c-turtle-grammar.fbl
-- [ ] T038 [US4] Implement the version on the desktop, its fixtures passing · etalii.adp.ide.desktop/crates/adp-fbl/src/
-- [ ] T039 [US4] Bind the four descriptions' Turtle with the grammar family, without the reader capability · etalii.adp/definitions/diagrams/w3c-*.turtle.atd
-- [ ] T040 [US4] Register their layouts (`layout.bandedGrid`, `.grid`, `.depthColumns`, `.layeredRegions`) with their fixtures · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/
+- [x] T035 [US4] Check which of FR-008's constructs FBL through 0.14 already answers, and record it in research R9 · etalii.adp/specs/067-desktop-fbl-bindings/research.md
+- [x] T036 [US4] Write the FBL minor version for what remains: its text, schema, fixtures and ATD rows · etalii.adp/specifications/fbl/
+- [x] T037 [US4] Finish the Turtle binding on `w3c-turtle.lark`, every fixture of the version passing · etalii.adp/specifications/fbl/w3c-turtle-grammar.fbl
+- [x] T038 [US4] Implement the version on the desktop, its fixtures passing · etalii.adp.ide.desktop/crates/adp-fbl/src/
+- [x] T039 [US4] Bind the four descriptions' Turtle with the grammar family, without the reader capability · etalii.adp/definitions/diagrams/w3c-*.turtle.atd
+- [x] T040 [US4] Register their layouts (`layout.bandedGrid`, `.grid`, `.depthColumns`, `.layeredRegions`) with their fixtures · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/
 - [ ] T041 [US4] Add Turtle cases with inserts and removals recorded from the desktop's reader, update the trace, and correct the descriptions until their cases pass; this also does spec 035's T149 · etalii.adp/definitions/diagrams/w3c-*
 
 **Checkpoint**: SC-003 holds.
