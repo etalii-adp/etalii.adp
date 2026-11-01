@@ -7,8 +7,8 @@ language (ATD section 4), whose root is `atd.lark`. Modes, any number of them to
   `description`, with `interegular` installed so that two terminals a parser state accepts and that match the same text
   fail the build (rule 1). On a conflict it prints the terminal and the two rules involved, with the state's items.
 - `--lint`: refuses every construct outside the notation subset (templates, rule priorities, `%declare`, `%override`,
-  `%extend`, imports from outside the language's modules, keep-all-tokens rules, string and regular expression flags,
-  ranges, repetition counts) and every terminal outside the regular expression subset of ATD section 3.5, naming the
+  `%extend`, imports from outside the language's modules, keep-all-tokens rules, regular expression flags, string
+  flags other than `i`, ranges, repetition counts) and every terminal outside the regular expression subset of ATD section 3.5, naming the
   file, the line and the construct (rule 2).
 - `--probe`: the keyword probe (rule 3, FR-008). In every example and every tool description under `definitions/`, at
   every token the parser reads as a name, each keyword is put in its place: the keyword must be read as that name,
@@ -257,8 +257,11 @@ def lint_text(text, relative, importable, first_line=1):
                                 "newline", "space") if match.group(k) is not None)
         value = match.group(0)
         where = f"{relative}:{line}"
-        if kind == "string" and match.group("string_flags"):
-            fail(f"{where}: the string flag `{match.group('string_flags')}` of {value} (flags are not admitted)")
+        if kind == "string" and match.group("string_flags") not in ("", "i"):
+            fail(f"{where}: the string flag `{match.group('string_flags')}` of {value} (only `i` is admitted, ATD section "
+                 f"4.1)")
+        elif kind == "string" and match.group("string_flags") == "i" and not value.isascii():
+            fail(f"{where}: {value} is matched in any case and holds a character outside ASCII (ATD section 4.1)")
         if kind == "regexp":
             if match.group("regexp_flags"):
                 fail(f"{where}: the flag `{match.group('regexp_flags')}` of {value} (flags are not admitted)")
@@ -301,7 +304,7 @@ def notation_parser():
     """A parser of ATD grammar notation from the module `notation` (ATD section 4), which every module reads under."""
     text = "\n".join([
         "start: grammar_text",
-        "%import .notation (grammar_text, name, KEY, STRING, NAME, INLINE_HEAD, PRIORITY_HEAD, REGEXP)",
+        "%import .notation (grammar_text, name, KEY, NAME, INLINE_HEAD, PRIORITY_HEAD, REGEXP, GRAMMAR_STRING)",
         "%import .core (name, word, NAME, KEY, STRING, WHITESPACE, COMMENT, BLOCK_COMMENT)",
         "%ignore WHITESPACE", "%ignore COMMENT", "%ignore BLOCK_COMMENT", ""])
     return Lark(text, parser="lalr", lexer="contextual", strict=True, import_paths=[str(grammar_dir)],
@@ -482,7 +485,8 @@ def normalized_tables(parser, grammar="specifications/atd/grammar/atd.lark", sta
         "start": start_symbol,
         "terminals": sorted(({"name": terminal_name(t.name),
                               "kind": "string" if t.pattern.type == "str" else "pattern",
-                              "value": t.pattern.value, "priority": t.priority}
+                              "value": t.pattern.value, "priority": t.priority,
+                              **({"flags": "".join(sorted(t.pattern.flags))} if t.pattern.flags else {})}
                              for t in parser.terminals), key=lambda t: t["name"]),
         "ignore": sorted(parser.ignore_tokens),
         "rules": [{"lhs": lhs, "rhs": list(rhs), **({"alias": alias} if alias else {})}

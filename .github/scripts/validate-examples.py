@@ -55,7 +55,8 @@ accepted.
 The fixtures under a folder named `*-equivalence` read one model in different formats: their `read` must be identical.
 A fixture whose binding is of the `grammar` family is also **read** (FBL 0.11, the reading check of spec 066's
 research R20): its input, or the body its registration names, is parsed with Python Lark under the binding's grammar,
-lexed by ATD section 3.6's rule (the longest match, then the higher priority, then a string terminal), read whole or,
+lexed by ATD section 3.6's rule, which is Lark's contextual lexer's (a keyword a pattern terminal of its priority
+matches whole is read as that pattern, then retyped when the match spells it; the rest by priority first), read whole or,
 with `recover`, unit by unit and inside blocks as FBL section 4.9 says; the rules' `at` select the entries, the first
 rule in the binding's order whose `when` holds taking an entry; ids and attribute values are read through `{node}`
 slots with `match` and `escape`, a `many` attribute (by the tool type's metamodel) taking every node its slot and its
@@ -855,40 +856,70 @@ class UnusedLexer(Lexer):
 
 
 class GrammarTerminals:
-    """The lexing rule of ATD section 3.6 over a built grammar: at a position, of the candidates that match, the
-    longest match, then the higher priority, then a string terminal over a pattern terminal."""
+    """The lexing rule of ATD section 3.6 over a built grammar, which is Lark's contextual lexer's. Of the candidates, a
+    string terminal that a pattern terminal of the same priority matches whole is that pattern's keyword, and is not
+    tried alone unless it has a flag the pattern lacks; the others are tried by priority, then the longest text they
+    can match, then the length of their pattern, then their name, and the first that matches wins. When that is a
+    pattern whose match is spelled as one of its keywords (in any case, for a keyword with `i`), the token is the
+    keyword's."""
 
     def __init__(self, parser):
         self.terminals = {}
         for terminal in parser.terminals:
-            source = re.escape(terminal.pattern.value) if terminal.pattern.type == "str" else terminal.pattern.to_regexp()
-            self.terminals[terminal.name] = (re.compile(source, re.ASCII), terminal.priority,
-                                             terminal.pattern.type == "str", terminal.pattern.value)
+            pattern = terminal.pattern
+            self.terminals[terminal.name] = (re.compile(pattern.to_regexp(), re.ASCII), terminal.priority,
+                                             pattern.type == "str", pattern.value, frozenset(pattern.flags),
+                                             (-terminal.priority, -pattern.max_width, -len(pattern.value),
+                                              terminal.name))
         self.ignored = list(parser.ignore_tokens)
         self.everything = list(self.terminals)
+        self.lexers = {}
 
     def named(self, name_or_text):
         """The terminal a `sync` entry, `nested.open` or `nested.close` names: its name, or the text of an anonymous
         string terminal (FBL section 4.9)."""
         if name_or_text in self.terminals:
             return name_or_text
-        for name, (_, _, is_string, value) in self.terminals.items():
+        for name, (_, _, is_string, value, _, _) in self.terminals.items():
             if is_string and value == name_or_text:
                 return name
         raise ReadingProblem(f"`{name_or_text}` names no terminal of the grammar")
 
+    def lexer(self, candidates):
+        """The candidates in the order they are tried, and each pattern's keywords (Lark's `_create_unless`)."""
+        key = frozenset(candidates)
+        if key not in self.lexers:
+            ordered = sorted(key, key=lambda name: self.terminals[name][5])
+            strings = [name for name in ordered if self.terminals[name][2]]
+            keywords, embedded = {}, set()
+            for name in ordered:
+                pattern, priority, is_string, _, flags, _ = self.terminals[name]
+                if is_string:
+                    continue
+                for string in strings:
+                    _, string_priority, _, value, string_flags, _ = self.terminals[string]
+                    if string_priority != priority:
+                        continue
+                    match = re.match(pattern.pattern, value, re.ASCII)
+                    if match and match.group(0) == value:
+                        keywords.setdefault(name, []).append(string)
+                        if string_flags <= flags:
+                            embedded.add(string)
+            self.lexers[key] = ([name for name in ordered if name not in embedded], keywords)
+        return self.lexers[key]
+
     def token_at(self, text, position, candidates):
         """The (terminal, end) the candidates lex at the position, or None when none of them matches."""
-        best = None
-        for name in candidates:
-            pattern, priority, is_string, _ = self.terminals[name]
-            match = pattern.match(text, position)
+        ordered, keywords = self.lexer(candidates)
+        for name in ordered:
+            match = self.terminals[name][0].match(text, position)
             if not match or match.end() == position:
                 continue
-            key = (match.end(), priority, is_string)
-            if best is None or key > best[0]:
-                best = (key, name)
-        return None if best is None else (best[1], best[0][0])
+            for keyword in keywords.get(name, ()):
+                if self.terminals[keyword][0].fullmatch(match.group(0)):
+                    return keyword, match.end()
+            return name, match.end()
+        return None
 
 
 class Lines:
