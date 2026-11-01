@@ -85,6 +85,9 @@ FBL 0.15: a slot's selector may reach up with `..` and across with `+`; `or` nam
 `expand` reads a term through the body's `prefixes`, a prefix no declaration in force names making the body unreadable;
 `ordinal` reads a node's number in the body's `ordinals`, and `name` its name; `escape` takes `sequences` and `unicode`;
 and `body.order` `closed` reads the elements in the order their entries end.
+FBL 0.16: an insert's `continues` and a remove's `parts` and `whole` are checked to stand in the grammar family, the keys
+of `continues.same` to be attributes of the rule, and `whole` to stand beside `parts`; `replace-separator` is replayed as
+every splice is.
 FBL 0.13: a `{node}` slot with `split` reads the items its value is cut into at that text, each without the white space
 around it, an empty piece no item, each item's escapes resolved after the cut; a reading of an origin no tool type
 has, a fixture's own binding, is the binding's alone too. An attribute binding with `split` is checked, as one with
@@ -2265,6 +2268,21 @@ def check_grammar_family(path: Path, document) -> list[str]:
                 if rule.get("selectedView") and not views:
                     problems.append(f"at {pointer}/selectedView: the binding has no block rule with view, so no view is selected")
                 attributes = rule.get("attributes", {})
+                # FBL 0.16, section 14.1: an insert's continues and a remove's parts and whole stand only in the grammar family,
+                # continues.same names attributes the rule binds, and whole stands only beside parts.
+                family = binding.get("body", {}).get("family")
+                continues = rule.get("insert", {}).get("continues") if isinstance(rule.get("insert"), dict) else None
+                if continues is not None:
+                    if family != "grammar":
+                        problems.append(f"at {pointer}/insert/continues: continues stands only in a binding of the grammar family (FBL 0.16 section 14.1)")
+                    for name in continues.get("same", {}):
+                        if name not in attributes:
+                            problems.append(f"at {pointer}/insert/continues/same/{name}: {name!r} is not an attribute the rule binds (FBL 0.16 section 14.1)")
+                removal = rule.get("remove") if isinstance(rule.get("remove"), dict) else {}
+                if family != "grammar" and ("parts" in removal or "whole" in removal):
+                    problems.append(f"at {pointer}/remove: parts and whole stand only in a binding of the grammar family (FBL 0.16 section 14.1)")
+                if "whole" in removal and "parts" not in removal:
+                    problems.append(f"at {pointer}/remove/whole: whole stands only beside parts (FBL 0.16 section 14.1)")
                 for attribute, attribute_binding in attributes.items():
                     if not isinstance(attribute_binding, dict):
                         continue
