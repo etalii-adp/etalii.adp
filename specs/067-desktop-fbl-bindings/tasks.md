@@ -105,7 +105,7 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 - [x] T038 [US4] Implement the version on the desktop, its fixtures passing · etalii.adp.ide.desktop/crates/adp-fbl/src/
 - [x] T039 [US4] Bind the four descriptions' Turtle with the grammar family, without the reader capability · etalii.adp/definitions/diagrams/w3c-*.turtle.atd
 - [x] T040 [US4] Register their layouts (`layout.bandedGrid`, `.grid`, `.depthColumns`, `.layeredRegions`) with their fixtures · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/
-- [ ] T041 [US4] Add Turtle cases with inserts and removals recorded from the desktop's reader, update the trace, and correct the descriptions until their cases pass; this also does spec 035's T149 · etalii.adp/definitions/diagrams/w3c-*
+- [x] T041 [US4] Add Turtle cases with inserts and removals recorded from the desktop's reader, update the trace, and correct the descriptions until their cases pass; this also does spec 035's T149 · etalii.adp/definitions/diagrams/w3c-*. Done under SC-003: what differs in `nobel-1903`, `prov-o`, `turtle-edits-skos` and the four `broken` cases is listed by name in `w3c.rs`, by Peter's answers of 2026-11-01, and `geographic-names` stays ignored for spec 075.
 
 **Checkpoint**: SC-003 holds.
 
@@ -115,7 +115,7 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 - [x] T042 [P] Add the changes to the parity inventory · etalii.adp.ide.desktop/parity/inventory.md
 - [x] T043 [P] Confirm the native and WebAssembly validations agree on every changed description (SC-006) · etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs. The Build's WebAssembly step passed on etalii.adp.ide.desktop#148, at etalii.adp ff6967b, for every vendored description; `geographic-names` is not replayed by it.
-- [ ] T044 Tick spec 035's T125 and T149 where these tasks did them, and record what T121, T131 and T132 still wait on · etalii.adp/specs/035-adp-tool-language/tasks.md
+- [x] T044 Tick spec 035's T125 and T149 where these tasks did them, and record what T121, T131 and T132 still wait on · etalii.adp/specs/035-adp-tool-language/tasks.md. T149 ticked; T125 stays open, and T121, T131 and T132 say what they wait on.
 
 ---
 
