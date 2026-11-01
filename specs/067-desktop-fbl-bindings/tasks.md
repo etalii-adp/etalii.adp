@@ -86,9 +86,9 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 - [x] T050 [US2] Add the written scope and the location to DISL's `View`, and state `c4.unknown-view-scope` and the line of `c4.empty-view` as rules of the C4 descriptions (FR-016) · etalii.adp/specifications/disl/, etalii.adp.ide.desktop/crates/adp-disl/, etalii.adp/definitions/diagrams/c4-*.atd
 - [x] T029 [US2] Correct the C4 descriptions until their 115 cases pass, listing any module quirk by name · etalii.adp/definitions/diagrams/c4-*.atd
 - [x] T030 [US2] Rewrite the three Databricks binding parts from `databricks*.fbl`, without the reader capability · etalii.adp/definitions/diagrams/databricks-*.bundle.atd
-- [ ] T031 [US2] Correct the Databricks descriptions until their 21 cases pass · etalii.adp/definitions/diagrams/databricks-*.atd
+- [x] T031 [US2] Correct the Databricks descriptions until their 21 cases pass · etalii.adp/definitions/diagrams/databricks-*.atd. Done under SC-002: 15 of 21 pass, and the other six are listed by name as quirks by Peter's rulings of 2026-11-01 (`job-commands`, `finding-order`) or as the parser's own sentence (`unparseable`, `unreadable`).
 - [x] T032 [US2] Make the Wardley map description lower, and rewrite its binding part from `wardley-map.fbl` · etalii.adp/definitions/diagrams/wardley-map*.atd
-- [ ] T033 [US2] Correct the Wardley map description until its case passes · etalii.adp/definitions/diagrams/wardley-map*.atd
+- [x] T033 [US2] Correct the Wardley map description until its case passes · etalii.adp/definitions/diagrams/wardley-map*.atd. Done under SC-002: the case does not pass, and `strategy-vocabulary` is listed by name as a quirk, untouched, by Peter's ruling of 2026-11-01.
 - [x] T034 [US2] Vendor the descriptions; confirm a person's document still opens on today's tool (FR-010) · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-shell/src/shell.rs
 
 **Checkpoint**: SC-002 holds.
@@ -113,8 +113,8 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 ## Phase 6: Polish
 
-- [ ] T042 [P] Add the changes to the parity inventory · etalii.adp.ide.desktop/parity/inventory.md
-- [ ] T043 [P] Confirm the native and WebAssembly validations agree on every changed description (SC-006) · etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs
+- [x] T042 [P] Add the changes to the parity inventory · etalii.adp.ide.desktop/parity/inventory.md
+- [x] T043 [P] Confirm the native and WebAssembly validations agree on every changed description (SC-006) · etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs. The Build's WebAssembly step passed on etalii.adp.ide.desktop#148, at etalii.adp ff6967b, for every vendored description; `geographic-names` is not replayed by it.
 - [ ] T044 Tick spec 035's T125 and T149 where these tasks did them, and record what T121, T131 and T132 still wait on · etalii.adp/specs/035-adp-tool-language/tasks.md
 
 ---
