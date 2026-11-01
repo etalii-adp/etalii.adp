@@ -63,8 +63,8 @@ Across the vendored cases on 2026-10-30: 390 `action` steps, 142 `move`, 140 `pr
 
 ## R8. Comparing a refusal (FR-011)
 
-- **Decision**: `adp-atd-validate` compares a refusal's reason exactly unless both sides are one of the host's own "not offered" sentences. ATD §2.3 lists them as a closed set: "Unknown action 'x'.", "'x' does not apply to this selection." and "That action is not available for this item."
-- **Rationale**: a closed set can't hide a real wording difference from a description's own reason.
+- **Decision**: `adp-atd-validate` compares a refusal's reason exactly unless the case's is one of the "not offered" sentences. ATD §2.3 lists them as a closed set: "Unknown action 'x'.", "'x' does not apply to this selection.", "'x' cannot be edited on this selection." and "That action is not available for this item." Peter widened it on 2026-11-01: any reason given for refusing that step counts as that sentence, a description's own included, since both tools refuse it.
+- **Rationale**: a closed set can't hide a real wording difference between two reasons a tool wrote, and a step one tool refuses and the other makes stays a difference.
 
 ## R9. What Turtle needs of FBL (story 4)
 
@@ -83,3 +83,4 @@ Across the vendored cases on 2026-10-30: 390 `action` steps, 142 `move`, 140 `pr
 Reading the triples in the reader's order, inner constructs first, also needs `body.order: closed`, because a card's place follows the order the file first names it through the triples (T037). A collection's `rdf:first` and `rdf:rest` need no construct: each member's `object` is one entry and its only child another, and `+` reaches the next.
 
 - **What 0.15 does not answer, and is not in FR-008 (T035)**: writing a triple as the reader's contract says. An add that continues its subject's statement with `;` (replacing the terminator), a removal that takes its separator, the whole statement when it is the last, and a part of a `;` or `,` list shared with other triples are gaps 1, 3 and 4 of `w3c-rdf.md`, and no splice of a declared binding states them. The descriptions write a new triple as a statement of its own and refuse a removal, and the steps that differ are listed by name in the desktop's tests, for Peter's ruling (spec 067, scenario 5 of story 4).
+- **What FBL 0.16 adds, by Peter's ruling of 2026-11-01**: an insert's `continues`, the operation `replace-separator`, and a remove's `parts` and `whole` state what 0.15 left open. Three things follow from them and are stated with them: a run of removals is planned bottom-up (FBL §6.4), as `RdfWriter` removes a resource; two entries of a rule on one line have places of their own (FBL §5.3), since a removal and a set must name one of them; and a removal that would not read back is refused. The whole statement goes without a comment above it, unlike a removed entry's line span (FBL §4.9), because the module keeps that comment and the cases are the reference.
