@@ -215,7 +215,7 @@ Twenty-eight of the 65 are claimed by a waiting task of the second stage (tasks 
 
 Every task below waits. The preamble's table says on what.
 
-- [ ] **T013** [13] FBL library work for the gaps, and the binding read beside the parser
+- [x] **T013** [13] FBL library work for the gaps, and the binding read beside the parser
   - Waits on etalii.adp: a language change for each of gaps C1 to C7 that this task implements. Each part starts when its change is merged there.
   - Files: `src/backend/EtAlii.Adp.Specification.Fbl/` (the constructs FBL gained), `src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/` (vendored again, `structurizr.fbl` included), `Conformance/readme.md`, `RealFiles/divergences.json`, `src/diagrams/c4/backend/EtAlii.Adp.Diagram.C4/structurizr.fbl`, `specifications/fbl/structurizr.fbl` in etalii.adp, `src/diagrams/c4/backend/EtAlii.Adp.Diagram.C4.Tests/C4BindingBesideParser.Tests.cs` (new)
   - For each gap FBL answered: implement the construct in `EtAlii.Adp.Specification.Fbl`, with the conformance fixture vendored unchanged from etalii.adp and seen to fail before the change. A defect in the library that a fixture of task 1 shows is repaired here with its own failing test. A language gap FBL has not answered is not repaired here and not worked around.
@@ -225,6 +225,7 @@ Every task below waits. The preamble's table says on what.
   - _Leverage: `src/backend/EtAlii.Adp.Specification.Fbl.Tests/Conformance/ConformanceFixtures.Tests.cs`, `RealFiles/ModuleCrossCheck.Tests.cs`, `RealFiles/Registrations.Tests.cs`, `RealFiles/Divergences.cs`_
   - _Requirements: 10.4, 11.2_
   - _Prompt: Implement the task for spec c4-disl-fbl, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Library developer on EtAlii.Adp.Specification.Fbl | Task: Implement in the FBL library each construct the language gained for gaps C1 to C7, each with its vendored conformance fixture, widen the module's binding with them, align and vendor the example binding again, remove the divergences that no longer occur, and read the corpus through the binding beside the parser | Restrictions: Start a part only when its language change is merged in etalii.adp; never edit a vendored file, only vendor again; no module name in a library; a divergence entry is removed only when the suite shows it gone, never to make a run green; a gap FBL has not answered is not worked around | _Leverage: the conformance and real-file suites | _Requirements: 10.4, 11.2 | Success: every implemented construct has a conformance fixture seen to fail first, the remaining divergences are each explained by a named gap, the beside-the-parser comparison lists no unexplained difference, the transcript is unchanged, four gates exit zero | Instructions: set this task to [-] in tasks.md before starting, log the work with log-implementation when done, then set it to [x]._
+  - Log: [task-13_2026-11-01T0720_5e27878f.md](implementation-logs/task-13_2026-11-01T0720_5e27878f.md)
 
 - [ ] **T014** [14] Read the body through the binding
   - Waits on task 13 for gaps C1, C2 and C6, and for C3 and C4 where a fixture of task 1 shows them.
