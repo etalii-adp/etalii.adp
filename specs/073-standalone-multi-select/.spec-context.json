@@ -3,7 +3,7 @@
   "specName": "Selecting several things on a diagram canvas",
   "branch": "features/multi-select in etalii.adp.ide.standalone, one pull request per task into its develop",
   "status": "specified",
-  "currentStep": "plan",
+  "currentStep": "specify",
   "history": [
     {
       "step": "specify",
