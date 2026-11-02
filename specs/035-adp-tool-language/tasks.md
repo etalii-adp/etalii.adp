@@ -324,8 +324,8 @@
 
 ## Phase 11: Polish & Cross-Cutting Concerns
 
-- [ ] T153 Write the guide for tool engineers: a tool type of each kind written step by step, with the mind map, the Knowledge designer and the Markdown editor as worked examples, how to check, format, validate and debug, and how to hand the flattened grammar and two examples to an agent (FR-104) · etalii.adp/specifications/atd/ATD-guide.md
-- [ ] T154 Write ATD §1 *Introduction* and §19 *Complete examples*, and the *Changes* entry for 0.1 · etalii.adp/specifications/atd/ATD-specification.md
+- [x] T153 Write the guide for tool engineers: a tool type of each kind written step by step, with the mind map, the Knowledge designer and the Markdown editor as worked examples, how to check, format, validate and debug, and how to hand the flattened grammar and two examples to an agent (FR-104) · etalii.adp/specifications/atd/ATD-guide.md
+- [x] T154 Write ATD §1 *Introduction* and §19 *Complete examples*, and the *Changes* entry for 0.1 · etalii.adp/specifications/atd/ATD-specification.md
 - [ ] T155 Run the SC-007 trial (a tool engineer new to the language makes one working tool type of each kind in VS Code with the guide, in under 30 minutes) and the SC-008 trial (each seeded defect found with the debugger in under 10 minutes), and record who took part (a person new to ATD where one is available, otherwise a fresh agent session given only the guide and the tools, spec Q9), the times and the results; record SC-006's measured times from the benchmark and the VS Code test · etalii.adp/specs/035-adp-tool-language/measurements.md
 - [ ] T156 Freeze 0.1 when it is released: copy the grammar to `grammar/0.1/`, have `atd-grammar.py --check` build every kept version, and have the `descriptions` job check every `.atd` under its declared version and under the current draft (FR-101, FR-102, R5) · etalii.adp/specifications/atd/grammar/0.1/, etalii.adp/.github/scripts/atd-grammar.py, etalii.adp/.github/workflows/build.yml
 - [ ] T157 [P] Run the quickstart from step 1 to step 10 in all four repositories and correct what does not hold · etalii.adp/specs/035-adp-tool-language/quickstart.md
