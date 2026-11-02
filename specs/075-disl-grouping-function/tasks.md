@@ -57,7 +57,7 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 ## Phase 4: User Story 3, the check (Priority: P2), in pull request B
 
-**Goal**: FR-005's estimate. **Independent test**: `atd check` on the two descriptions below equals their findings files. No host has an estimator today (R7), so this story holds what is true and states the rule any estimator follows; whether to build one is Peter's (R12).
+**Goal**: FR-005's estimate. **Independent test**: `atd check` on the two descriptions below equals their findings files. No host has an estimator today (R7), so this story holds what is true and states the rule any estimator follows; Peter ruled on 2026-11-02 that none is built.
 
 - [ ] T021 [US3] Add a description that groups a list of the limit's size and reads its groups, with a findings file naming no cost; check it · etalii.adp/specifications/atd/fixtures/grouping-at-limit/, etalii.adp.ide.desktop/crates/adp-atd-check/tests/
 - [ ] T022 [US3] Add a description that still filters a whole list once per item, with a findings file equal to what `atd check` gives before this feature · etalii.adp/specifications/atd/fixtures/filtering-per-item/, etalii.adp.ide.desktop/crates/adp-atd-check/tests/
@@ -76,10 +76,12 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 - [ ] T026 [US2] Walk once per `from`, each item carrying its place, and read the place in the budget's `order` (R11) · etalii.adp/definitions/diagrams/w3c-skos.atd
 - [ ] T027 [US2] Replace `distinct()` on long lists of strings by `groupBy(x, x).keys()`, `familyTruncated` among them, so that nothing goes over `limits.celCost` (R2, R11) · etalii.adp/definitions/diagrams/w3c-skos.atd
 - [ ] T028 [US2] Draw a `Related` edge from the end whose id sorts first, as its own `doc` says and the case records (R12) · etalii.adp/definitions/diagrams/w3c-skos.atd
+- [ ] T045 [US2] Add a test that setting `skos.doc:definition` writes the triple with the module's bytes, seen failing first, from step 2 of `geographic-names` (FR-012) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs
+- [ ] T046 [US2] Let the SKOS description write a concept's definition set through its row, and stop if DISL or FBL cannot state it, for Peter's ruling (FR-012, R12) · etalii.adp/definitions/diagrams/w3c-skos.atd
 - [ ] T029 [US2] Declare `cel.groupBy` in the description's `requires.features` (R11) · etalii.adp/definitions/diagrams/w3c-skos.atd
 - [ ] T030 [US2] Say in the companion that the rules read groups, update the trace's items where they moved, and confirm by diff that no `conformance/` file changed (FR-009, SC-004) · etalii.adp/definitions/diagrams/w3c-skos.md, w3c-skos.trace.json
 - [ ] T031 [US2] Vendor C's merge commit · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/vendor/etalii.adp.lock
-- [ ] T032 [US2] Remove `TOO_LONG` and its filter, and let `the_skos_cases_pass_but_for_what_is_listed` count all 25 cases; list what still differs in the case by name, by Peter's ruling on R12's point (a) (FR-010, SC-003) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs
+- [ ] T032 [US2] Remove `TOO_LONG` and its filter, and let `the_skos_cases_pass_but_for_what_is_listed` count all 25 cases; list what still differs in the case by name, which is the label row's refusal and the bytes that follow from it (FR-010, SC-003, R12) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs
 - [ ] T033 [US2] Remove the skip from the WebAssembly check: `TOO_LONG`, its comment, its test in the loop and `--except`, and confirm the result equals the native one (FR-010, SC-003, story 2 scenario 2) · etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs
 - [ ] T034 [US2] Remove the comment at the head of `w3c.rs` that says the rules are quadratic, and `Cargo.toml`'s note of the same, if the dev profile's time no longer needs the optimised packages they name; keep whichever the measure says is still needed · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs, etalii.adp.ide.desktop/Cargo.toml
 - [ ] T035 [US2] Hold SC-002 in the Build: a step that runs `atd validate --case geographic-names` in the release build under a time limit, its wall time in the log · etalii.adp.ide.desktop/.github/workflows/build.yml
@@ -126,6 +128,7 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 | FR-009 | T025 to T030, T036 to T038 |
 | FR-010 | T023, T032, T033 |
 | FR-011 | T039 |
+| FR-012 | T045, T046 |
 | SC-001 | T013, T019, T041 |
 | SC-002 | T023, T035, T042 |
 | SC-003 | T032, T033, T041 |
@@ -136,6 +139,6 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 ## Dependencies
 
-Phase 1, then A (Phase 2), then B (Phases 3 and 4), then C and D (Phase 5), then E and F (Phase 6). T023 and T024 go on D's branch before C merges, and are seen failing against the vendored description as it stands. In C, T025 to T027 and T028 can be reviewed apart but land together. T032 needs Peter's ruling on R12.
+Phase 1, then A (Phase 2), then B (Phases 3 and 4), then C and D (Phase 5), then E and F (Phase 6). T023 and T024 go on D's branch before C merges, and are seen failing against the vendored description as it stands. In C, T025 to T027 and T028 can be reviewed apart but land together. T045 and T046 come before T032. Implementation waits on Peter's word.
 
 **MVP**: Phases 1 to 5, which take `geographic-names` off the ignored list.
