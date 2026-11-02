@@ -368,7 +368,7 @@ diagram c4/system-landscape version "0.2.0" {
     return e.isA('Container') || e.isA('Component') || e.isA('DeploymentNode') || e.isA('InfrastructureNode')
   }
 
-  /// The two kinds that have no name in C4: an instance stands for what it is an instance of, which its first argument names.
+  /// The two kinds that have no name and no description in C4: an instance stands for what it is an instance of, which its first argument names.
   fn isInstance(e: dyn) -> bool {
     return e.isA('ContainerInstance') || e.isA('SoftwareSystemInstance')
   }
@@ -738,6 +738,13 @@ diagram c4/system-landscape version "0.2.0" {
       enforcement: prevent
     }
 
+    constraint noDescriptionHere for Element {
+      rule attribute != 'description' || !isInstance(self)
+      message ('A ' + self.type.lowerAscii() + ' has no description in C4; it stands for what it is an instance of.')
+      kind: change
+      enforcement: prevent
+    }
+
     constraint dragDoesNotReparent {
       label "Dragging does not change containment"
       when gesture == 'move'
@@ -769,6 +776,11 @@ diagram c4/system-landscape version "0.2.0" {
 
   operation editDescription for Element {
     label (self.description != '' ? 'Edit description…' : 'Add description…')
+    unavailable [{
+      when: (isInstance(self))
+      message: ('A ' + self.type.lowerAscii() + ' has no description in C4; it stands for what it is an instance of.')
+    }
+    ]
     param description: text { label: "Description" }
     icon: "mdi-text-box-outline"
     paramsForm: "describeElement"
