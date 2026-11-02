@@ -50,7 +50,7 @@
       "id": "language-gaps/2",
       "text": "5 and 6. FBL 5.2: decorators and annotation positions, answered",
       "open": "https://github.com/etalii-adp/etalii.adp/issues/562",
-      "reason": "The model's five decorator booleans have no order, so the order a statement writes its decorators in is not readable and writtenDecorators lists them in the notation's order (wardley-map.md, gap 5)."
+      "reason": "CEL cannot keep the first of each word of a list, so writtenDecorators cannot list each of the five decorators once, in lower case, in the order the statement first writes them, and its fallback lists them in the notation's order (wardley-map.md, gap 5)."
     },
     {
       "id": "language-gaps/3",
@@ -85,7 +85,7 @@
       "id": "other-differences-a-runtime-will-meet/1",
       "text": "**Decorator order.** The row `wardley.decorators` lists the decorators in the order the",
       "open": "https://github.com/etalii-adp/etalii.adp/issues/562",
-      "reason": "The model's five decorator booleans have no order, so the order a statement writes its decorators in is not readable and writtenDecorators lists them in the notation's order (wardley-map.md, gap 5)."
+      "reason": "CEL cannot keep the first of each word of a list, so writtenDecorators cannot list each of the five decorators once, in lower case, in the order the statement first writes them, and its fallback lists them in the notation's order (wardley-map.md, gap 5)."
     },
     {
       "id": "other-differences-a-runtime-will-meet/2",
@@ -94,7 +94,7 @@
     },
     {
       "id": "other-differences-a-runtime-will-meet/3",
-      "text": "**Annotation positions.** The plugin function `positions` reads the occurrences as the",
+      "text": "**Annotation positions.** The binding reads an annotation's occurrences as structured",
       "statedBy": "fn positions"
     },
     {
