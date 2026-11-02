@@ -105,14 +105,16 @@ A tool engineer writes a grouping in a description and checks it. The cost estim
 ### Measurable Outcomes
 
 - **SC-001**: Every fixture of the function passes on the desktop host, native and WebAssembly.
-- **SC-002**: `geographic-names` validates natively in under 30 seconds in a release build (12 minutes today), with no expression over its cost limit.
+- **SC-002**: `geographic-names` validates natively in under 60 seconds in a release build (13 minutes today), with no expression over its cost limit and no reading over its step budget.
+
+  *Changed by the plan on 2026-11-02, from 30 seconds and "12 minutes today": a prototype takes 36 seconds, of which most is no longer in the expressions, and the case's measured time today is 789 seconds. What stops the card types today is ATD's step budget rather than the cost limit, so the criterion names both ([research R2 and R9](research.md#r9-whether-sc-002s-30-seconds-is-right)). Pending Peter's word.*
 - **SC-003**: `geographic-names` runs in the build's native and WebAssembly validation, and neither skips it.
 - **SC-004**: The number of cases of the four W3C descriptions that pass does not fall, and no expected result changes.
 - **SC-005**: Opening `stw/geographic-names.ttl` and `stw/business-economics.ttl` draws them within the description's budgets, with no finding of a cost exceeded.
 
 ## Assumptions
 
-- The cost is in the rules' repeated filtering, as `w3c-rdf.md` says. The plan measures this first, and if something else dominates `geographic-names`, this specification comes back to Peter before anything is built.
-- 30 seconds is a first bound, chosen because the build runs the case on every pull request; the plan may propose another from what it measures.
+- The cost is in the rules' repeated filtering, as `w3c-rdf.md` says. The plan measures this first, and if something else dominates `geographic-names`, this specification comes back to Peter before anything is built. The plan measured it on 2026-11-02, and it holds: 98% of the time ([research R1](research.md#r1-what-was-measured)).
+- 30 seconds was a first bound, chosen because the build runs the case on every pull request; the plan proposes 60 from what it measured (SC-002).
 - The standalone host follows under its own specification, as each host has for FBL. Until it does, a description using the function declares the DISL version that says so, and a host at an earlier version treats it as the versioning rules already say.
 - The function's name and exact signature are the plan's to propose.
