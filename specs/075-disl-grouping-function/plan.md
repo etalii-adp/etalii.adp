@@ -19,7 +19,7 @@ The prototype also shows three things the specification did not state, and the p
 - **Measures**: the grouping fixtures' count of passes, native and WebAssembly (SC-001); `atd validate --case geographic-names`'s wall time in a release build (SC-002); `w3c.rs`'s lists and the cases passing per description (SC-003, SC-004).
 - **Constraints**: no case's expected result changes; `limits.celCost` and the step budget stay as they are; the core does not depend on the UI toolkit; a description that does not use the function behaves as before.
 - **Scale**: 5,083 triples and 436 terms in `geographic-names`, 17,683 triples and 1,151 terms in `business-economics`, 93 cases across the four descriptions.
-- **Unknowns**: Peter's ruling on what is listed in R12, which changes one list in `w3c.rs`, not the design.
+- **Unknowns**: none in the design. Peter ruled on R12 on 2026-11-02. Writing the definition (FR-012) depends on how the description's rows reach triples, which T045 and T046 settle. Implementation waits on his word.
 
 ## Constitution Check
 

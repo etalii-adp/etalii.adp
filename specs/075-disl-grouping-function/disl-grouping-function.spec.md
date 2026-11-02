@@ -18,10 +18,19 @@ A description can say what it means today, but only at this cost. The language n
 
 ### What this feature is not
 
-- **Not a change to what any description means.** Every case gives the same result as before, only sooner.
+- **Not a change to what any description means**, but for FR-012's one addition. Every case gives the same result as before, only sooner.
 - **Not the SKOS per-language label row.** `turtle-edits-skos` stays a listed quirk (Peter, 2026-11-01).
 - **Not a general query language or an index the author manages.** One function, in the existing expression language.
 - **Not a raised limit.** The cost limit stays as it is, and the case comes under it.
+
+## Clarifications
+
+### Session 2026-11-02
+
+- Q: Step 2 of `geographic-names` sets a concept's definition, which the description refuses and the module writes. Quirk, or written? → A: Written: the SKOS description writes a definition set through its row, as the module does (Peter; FR-012).
+- Q: What is SC-002's bound? → A: 60 seconds (Peter; research R9).
+- Q: Does this feature build a validation-time cost estimator? → A: No: no host has one, so DISL states the rule and a too-costly description is caught when it runs (Peter; research R7, FR-005).
+- Q: Does building start with the plan? → A: No: Peter holds implementation until he says so.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -87,13 +96,14 @@ A tool engineer writes a grouping in a description and checks it. The cost estim
 - **FR-002**: The groups MUST be deterministic: items within a group keep their list order, and listing the keys gives them in order of first appearance (DISL §12.5).
 - **FR-003**: Reading an absent key MUST give an empty group.
 - **FR-004**: A failing key MUST be handled as the expression's context already handles a failing expression (DISL §2.5); the function adds no failure handling of its own.
-- **FR-005**: The cost of a grouping MUST count as one evaluation of the key per item, and the read of a group as no more than the size of that group, in both the run-time cost and the validation-time estimate.
+- **FR-005**: The cost of a grouping MUST count as one evaluation of the key per item, and the read of a group as no more than the size of that group, in the run-time cost. DISL MUST state the same rule for a validation-time estimate, which no host has and this feature does not build.
 - **FR-006**: Every description valid before MUST stay valid with the same meaning.
 - **FR-007**: The specification MUST carry the function with fixtures and with its schema and ATD changes where it has any, and ATD MUST state the DISL version it carries.
 - **FR-008**: The desktop host's expression evaluator MUST implement the function, native and WebAssembly alike.
 - **FR-009**: The SKOS description MUST use the function so that `geographic-names` runs to its end, and the RDF, OWL and SHACL descriptions MUST use it where the same filtering dominates, leaving no case's expected result changed.
 - **FR-010**: The case `geographic-names` MUST then run in the native test and in the WebAssembly check, its remaining differences listed by name as a module's quirk if it has any.
 - **FR-011**: `w3c-rdf.md`'s gap 6 MUST be closed or, if a body still goes over, say which and by how much.
+- **FR-012**: The SKOS description MUST write a concept's definition set through its row `skos.doc:definition`, with the bytes the module writes, so that step 2 of `geographic-names` is no longer refused.
 
 ### Key Entities
 
@@ -107,7 +117,7 @@ A tool engineer writes a grouping in a description and checks it. The cost estim
 - **SC-001**: Every fixture of the function passes on the desktop host, native and WebAssembly.
 - **SC-002**: `geographic-names` validates natively in under 60 seconds in a release build (13 minutes today), with no expression over its cost limit and no reading over its step budget.
 
-  *Changed by the plan on 2026-11-02, from 30 seconds and "12 minutes today": a prototype takes 36 seconds, of which most is no longer in the expressions, and the case's measured time today is 789 seconds. What stops the card types today is ATD's step budget rather than the cost limit, so the criterion names both ([research R2 and R9](research.md#r9-whether-sc-002s-30-seconds-is-right)). Pending Peter's word.*
+  *Changed by the plan on 2026-11-02, from 30 seconds and "12 minutes today": a prototype takes 36 seconds, of which most is no longer in the expressions, and the case's measured time today is 789 seconds. What stops the card types today is ATD's step budget rather than the cost limit, so the criterion names both ([research R2 and R9](research.md#r9-whether-sc-002s-30-seconds-is-right)).*
 - **SC-003**: `geographic-names` runs in the build's native and WebAssembly validation, and neither skips it.
 - **SC-004**: The number of cases of the four W3C descriptions that pass does not fall, and no expected result changes.
 - **SC-005**: Opening `stw/geographic-names.ttl` and `stw/business-economics.ttl` draws them within the description's budgets, with no finding of a cost exceeded.
@@ -115,6 +125,6 @@ A tool engineer writes a grouping in a description and checks it. The cost estim
 ## Assumptions
 
 - The cost is in the rules' repeated filtering, as `w3c-rdf.md` says. The plan measures this first, and if something else dominates `geographic-names`, this specification comes back to Peter before anything is built. The plan measured it on 2026-11-02, and it holds: 98% of the time ([research R1](research.md#r1-what-was-measured)).
-- 30 seconds was a first bound, chosen because the build runs the case on every pull request; the plan proposes 60 from what it measured (SC-002).
+- 30 seconds was a first bound, chosen because the build runs the case on every pull request; Peter set 60 on 2026-11-02 from what the plan measured (SC-002).
 - The standalone host follows under its own specification, as each host has for FBL. Until it does, a description using the function declares the DISL version that says so, and a host at an earlier version treats it as the versioning rules already say.
 - The function's name and exact signature are the plan's to propose.

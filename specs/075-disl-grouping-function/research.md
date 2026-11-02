@@ -192,9 +192,9 @@ Nobody has seen this case run to its end, and it now shows two differences unrel
    - **Step 2 is new.** It sets `skos.doc:definition` on a concept, and the description refuses it with "The model has no element or relation 'res:…/70002'." The definition is a derived attribute with no `edits` entry, so the planner looks for a stored element. The module writes a `skos:definition` triple. Peter's ruling does not cover this.
    - Steps 3 to 17 each differ only in the bytes, by the two edits not made. All readings, findings and drawings at every step match the case.
 
-**For Peter:**
+**What Peter ruled:**
 
-- **(a)** Is step 2 a quirk to list by name, as the label row is, or should the description write the definition, which is a change outside this feature's "not a change to what any description means"? The plan lists it, pending his word (T032). `the_geographic_names_case` then holds 18 places.
-- **(b)** SC-002 goes from 30 to 60 seconds (R9).
-- **(c)** Story 3 stays without an estimator, since no host has one (R7). The alternative is a feature of its own for DISL §2.5's "SHOULD".
+- **(a)** Step 2: Peter ruled on 2026-11-02 that the description writes the definition (FR-012, T045, T046). Only the label row's refusal then stays listed, and the later steps' bytes differ by that one edit; the exact places are measured when T046 is done, and are fewer than the 18 above.
+- **(b)** SC-002 goes from 30 to 60 seconds: Peter agreed on 2026-11-02 (R9).
+- **(c)** Story 3 stays without an estimator, since no host has one (R7): Peter agreed on 2026-11-02.
 - **(d)** SC-003 puts the case in the Build's WebAssembly validation, which then runs it twice, natively and through the module: about 76 seconds on this machine, and no more than that is added. This is for information.
