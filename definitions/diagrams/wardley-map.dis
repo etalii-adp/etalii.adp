@@ -61,7 +61,7 @@
           "params": [{"name": "element", "type": "dyn"}],
           "returns": "string",
           "cost": 1,
-          "fallback": "decoratorNames().filter(d, decorated(element, d)).join(', ')",
+          "fallback": "['market', 'ecosystem', 'build', 'buy', 'outsource'].filter(d, d == 'market' ? element.market : d == 'ecosystem' ? element.ecosystem : d == 'build' ? element.build : d == 'buy' ? element.buy : element.outsource).join(', ')",
           "doc": "The five decorators an element carries, each once and in lower case, in the order its statement first writes them, joined by `, `: `outsource, market` for `(Outsource) (market) (outsource)`. A word that is none of the five stays in `decorators` and is left out here. CEL cannot keep the first of each word of a list (gap 5). The fallback lists them in this notation's order."
         }
       ]
