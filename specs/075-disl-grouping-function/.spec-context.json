@@ -3,8 +3,24 @@
   "specName": "075-disl-grouping-function",
   "branch": "075-disl-grouping-function",
   "selectedAt": "2026-11-01T12:45:00.000Z",
-  "currentStep": "specify",
-  "status": "draft",
-  "history": [],
-  "telemetryInstanceId": "52dda81f-ac37-46d9-b047-807fad3d2b68"
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
+  "history": [
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-02T06:55:34.323Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-02T06:55:34.450Z"
+    }
+  ],
+  "telemetryInstanceId": "52dda81f-ac37-46d9-b047-807fad3d2b68",
+  "last_action": "Plan, research and tasks written on Peter's approval of 2026-11-02; building waits for his word"
 }
