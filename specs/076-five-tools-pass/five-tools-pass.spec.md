@@ -1,0 +1,125 @@
+# Feature Specification: Every Case Passes for Five More Tool Types
+
+**Feature Branch**: `features/076-five-tools-pass`
+
+**Created**: 2026-11-02
+
+**Status**: Draft
+
+**Input**: Peter asked on 2026-11-02 that every case also passes for agent behavior trees, Gartner hype cycle graphs, causal loop diagrams, the knowledge management designer and the hierarchical requirement designer.
+
+## Context
+
+Spec 035's tool descriptions are meant to replace the desktop host's hand-written modules, and its T132 asks that every conformance case passes on the description alone. Spec 067 did this for the C4, Databricks, Wardley map and W3C descriptions, and the mind map has its own test. Each of these is held by a desktop test that lists any remaining difference by name. The Build's WebAssembly step only requires native and WebAssembly to agree, so nothing yet requires these five tool types to pass.
+
+Measured on 2026-11-02, with `atd validate` at the desktop's develop:
+
+| Tool type | Cases | Passing | What stands in the way |
+|---|---|---|---|
+| Agent behavior modelling | 5 | 0 | The description reads a section differently from the module, so that a document reads as one element; most other differences follow from that. |
+| Causal loop diagram | 4 | 0 | The runtime refuses the notation's edge variant, so nothing draws, and it cannot run the `plugin` an action calls. |
+| Gartner hype cycle graph | 4 | 1 | Positions and written dates differ, and two refusals and a finding are missing. |
+| Hierarchical requirement designer | 12 | not runnable | A description exists with 12 recorded cases, but `atd validate` says a designer's description has no runtime yet. |
+| Knowledge management designer | none | not runnable | A module, a `knowledge.des` and a binding exist, but no tool description and no recorded case. |
+
+These causes are first readings of the differences. The plan confirms them.
+
+### What this feature is not
+
+- **Not the whole of T132.** Other descriptions stay as they are.
+- **Not a change to what a person sees.** Today's modules stay what a person's document opens on, and the cases are recorded from them.
+- **Not a change to any recorded expected result.**
+
+## User Scenarios & Testing *(mandatory)*
+
+### User Story 1 - The three diagrams pass (Priority: P1)
+
+A tool engineer validates the agent behavior modelling, causal loop or Gartner hype cycle description, and every case passes on the description alone, with no module involved.
+
+**Why this priority**: These use the runtime that already exists, so they give the most for the least, and they are what most of the five needs.
+
+**Independent Test**: `atd validate` on each of the three descriptions, and a desktop test for each that holds its results.
+
+**Acceptance Scenarios**:
+
+1. **Given** the agent behavior modelling description, **When** its 5 cases are validated, **Then** each passes.
+2. **Given** the causal loop diagram description, **When** its 4 cases are validated, **Then** each passes, its edges drawn and its self-organising action run.
+3. **Given** the Gartner hype cycle description, **When** its 4 cases are validated, **Then** each passes.
+4. **Given** any of the three, **When** it is validated through WebAssembly, **Then** the result is the native one.
+
+---
+
+### User Story 2 - A designer's description can be validated (Priority: P2)
+
+A tool engineer validates the hierarchical requirement designer's description, and its 12 cases pass on the description alone, in the same way a diagram's do.
+
+**Why this priority**: The designer's cases exist, but nothing can run them until the validation can run a designer. This is larger than story 1 and independent of it.
+
+**Independent Test**: `atd validate` on the description runs and reports each case, and a desktop test holds the results.
+
+**Acceptance Scenarios**:
+
+1. **Given** the hierarchical requirement description, **When** it is validated, **Then** the command runs rather than saying a designer has no runtime.
+2. **Given** its 12 cases, **When** they are validated, **Then** each passes, every write byte-identical.
+3. **Given** a seeded difference in a copy of the description, **When** it is validated, **Then** exactly one difference is reported, at that construct.
+
+---
+
+### User Story 3 - The knowledge designer has a description and cases (Priority: P3)
+
+A tool engineer validates the knowledge management designer as any other tool type, because it now has a description and cases recorded from its module.
+
+**Why this priority**: It depends on story 2, and it starts with no description or case at all.
+
+**Independent Test**: `atd check` and `atd validate` on the new description, and `atd record --check` on its cases.
+
+**Acceptance Scenarios**:
+
+1. **Given** the knowledge designer's existing definition and binding, **When** its description is written, **Then** `atd check` passes and its parts trace to what they replace.
+2. **Given** the module, **When** cases are recorded from it, **Then** they cover its reading, its writes, its refusals and its findings.
+3. **Given** those cases, **When** they are validated, **Then** each passes on the description alone.
+
+### Edge Cases
+
+- A difference no description could state, such as a module's own sentence, is reported to Peter rather than listed or worked around.
+- A difference that shows a mistake in the description is corrected in the description, as with spec 075's `Related` edges.
+- A module's behaviour that a case records and the language cannot state is a language gap, which goes to Peter before the language changes.
+- A case that takes too long for a build stays run, and its time is reported.
+
+## Requirements *(mandatory)*
+
+### Functional Requirements
+
+- **FR-001**: Every case of the agent behavior modelling, causal loop and Gartner hype cycle descriptions MUST pass `atd validate`, every write byte-identical.
+- **FR-002**: `atd validate` MUST run a designer's description and report its differences as it does a diagram's, natively and through WebAssembly.
+- **FR-003**: Every case of the hierarchical requirement description MUST pass.
+- **FR-004**: The knowledge management designer MUST have a tool description, with its trace and companion, that `atd check` accepts.
+- **FR-005**: The knowledge management designer MUST have cases recorded from its module, of the kinds other tool types have, and each MUST pass.
+- **FR-006**: A desktop test MUST hold each of the five tool types to its results, so that a new difference fails the build, as spec 067's tests do for theirs.
+- **FR-007**: A difference MAY stay listed only by Peter's ruling on that difference, and is then listed by name with its reason.
+- **FR-008**: No recorded expected result MAY change, and new cases MUST be recorded rather than written by hand.
+- **FR-009**: Any language change MUST be specified with fixtures in etalii.adp first, as a minor version, and leave every earlier description's meaning unchanged.
+- **FR-010**: A person's document MUST keep opening on today's module, with its tests and parity goldens unchanged.
+
+### Key Entities
+
+- **Case**: a document and its steps recorded from a module, with the expected reading, drawing, findings, refusals and bytes.
+- **Listed difference**: a place in a case where a description may differ by Peter's ruling, named in a test with its reason.
+
+## Success Criteria *(mandatory)*
+
+### Measurable Outcomes
+
+- **SC-001**: All 13 cases of the three diagrams pass, apart from differences Peter has ruled on (1 passes today).
+- **SC-002**: All 12 cases of the hierarchical requirement designer pass, apart from differences Peter has ruled on (none can run today).
+- **SC-003**: The knowledge management designer has a description and recorded cases, and all of them pass, apart from differences Peter has ruled on (it has neither today).
+- **SC-004**: Native and WebAssembly validation agree on all five.
+- **SC-005**: Removing any listed difference from a test, or adding a new difference to a description, fails the build.
+- **SC-006**: Every existing test and parity golden of the desktop host stays green.
+
+## Assumptions
+
+- "Agent behavior trees" means the tool type `agent-behavior-modelling`, the only behavior tree tool with a description.
+- "Passes" means what it means for spec 067's descriptions: no difference, or one listed by name by Peter's ruling.
+- Stories 2 and 3 are this feature's own work and the validation's runtime for designers is new; if the plan finds that a designer's surface needs much of its own specification, it proposes splitting them off.
+- The desktop is the host this feature builds on. Other hosts follow under their own specifications.
