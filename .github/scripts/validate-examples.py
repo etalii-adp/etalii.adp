@@ -1555,21 +1555,32 @@ class ToolType:
         return "element", renames, target
 
     def attribute_type(self, rule_type, attribute):
-        """The metamodel's declaration of the attribute the binding's attribute maps to, or {} when it has none."""
+        """The metamodel's declaration of the attribute the binding's attribute maps to, or {} when it has none. An
+        attribute of a constrained primitive, a data type with a `base` (DISL section 4.4), is declared with that base
+        as its type, which is what its value is read as."""
         kind, renames, target = self.mapped(rule_type)
         name = renames.get(attribute, attribute)
         if kind == "diagram":
-            return self.metamodel.get("diagram", {}).get("attributes", {}).get(name, {})
+            return self.primitive(self.metamodel.get("diagram", {}).get("attributes", {}).get(name, {}))
         types = self.metamodel.get("relations" if kind == "relation" else "types", {})
         seen = set()
         while target and target not in seen:
             seen.add(target)
             declared = types.get(target, {})
             if name in declared.get("attributes", {}):
-                return declared["attributes"][name]
+                return self.primitive(declared["attributes"][name])
             target = declared.get("extends")
             target = target[0] if isinstance(target, list) else target
         return {}
+
+    def primitive(self, declared):
+        """`declared` with the type of a constrained primitive replaced by its base, following a base that is itself one."""
+        data_types = self.metamodel.get("dataTypes", {})
+        kind, seen = declared.get("type"), set()
+        while kind in data_types and "base" in data_types[kind] and kind not in seen:
+            seen.add(kind)
+            kind = data_types[kind]["base"]
+        return declared if kind == declared.get("type") else {**declared, "type": kind}
 
 
 class GrammarModel:
@@ -1819,7 +1830,8 @@ class GrammarModel:
             values = values or ([binding["default"]] if "default" in binding else [])
             return Values(self.converted(value, binding) for value in values)
         if not values:
-            return binding.get("default")
+            # A default is read as the attribute's type, as a written value is (FBL 0.5 section 5.2).
+            return self.converted(binding["default"], declared) if "default" in binding else None
         return self.converted(values[0], declared)
 
     def item(self, node, slots, enclosing):
