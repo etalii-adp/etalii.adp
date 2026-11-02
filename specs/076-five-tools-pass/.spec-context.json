@@ -3,6 +3,23 @@
   "specName": "076-five-tools-pass",
   "branch": "076-five-tools-pass",
   "selectedAt": "2026-11-02T07:40:00.000Z",
-  "currentStep": "specify",
-  "status": "draft"
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
+  "history": [
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-02T12:00:00.000Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-02T12:00:00.100Z"
+    }
+  ],
+  "last_action": "Plan, research and tasks written from a diagnosis on Peter's approval of 2026-11-02; building waits for his word"
 }

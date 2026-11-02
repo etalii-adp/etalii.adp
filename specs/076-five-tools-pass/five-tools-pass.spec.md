@@ -16,13 +16,13 @@ Measured on 2026-11-02, with `atd validate` at the desktop's develop:
 
 | Tool type | Cases | Passing | What stands in the way |
 |---|---|---|---|
-| Agent behavior modelling | 5 | 0 | The description reads a section differently from the module, so that a document reads as one element; most other differences follow from that. |
-| Causal loop diagram | 4 | 0 | The runtime refuses the notation's edge variant, so nothing draws, and it cannot run the `plugin` an action calls. |
-| Gartner hype cycle graph | 4 | 1 | Positions and written dates differ, and two refusals and a finding are missing. |
+| Agent behavior modelling | 5 | 0 | The runtime's lowering drops a binding rule's `within`, so a document reads as one element, and it does not run the tidy tree. Most other differences follow from those, and from gestures the runtime does not make yet. |
+| Causal loop diagram | 4 | 0 | The runtime refuses the notation's edge variant over one key, so nothing draws; it has no ring and no findings for unreadable lines, and cannot run the `plugin` an action calls. |
+| Gartner hype cycle graph | 4 | 1 | The runtime does not apply the time axis's origin and scale, and runs neither change constraints nor change hooks on a property, so positions and written dates differ and refusals are missing. |
 | Hierarchical requirement designer | 12 | not runnable | A description exists with 12 recorded cases, but `atd validate` says a designer's description has no runtime yet. |
 | Knowledge management designer | none | not runnable | A module, a `knowledge.des` and a binding exist, but no tool description and no recorded case. |
 
-These causes are first readings of the differences. The plan confirms them.
+*Changed on 2026-11-02 by the plan's diagnosis* ([research.md](research.md), R1 to R16): this table first said that the behavior model's description reads a section differently from the module, and that the hype cycle graph's differences were of positions and dates alone. Those were first readings. Nearly all of the three diagrams' differences are gaps of the desktop's runtime for descriptions, and few are mistakes of a description.
 
 ### What this feature is not
 
@@ -121,5 +121,5 @@ A tool engineer validates the knowledge management designer as any other tool ty
 
 - "Agent behavior trees" means the tool type `agent-behavior-modelling`, the only behavior tree tool with a description.
 - "Passes" means what it means for spec 067's descriptions: no difference, or one listed by name by Peter's ruling.
-- Stories 2 and 3 are this feature's own work and the validation's runtime for designers is new; if the plan finds that a designer's surface needs much of its own specification, it proposes splitting them off.
+- Stories 2 and 3 are this feature's own work and the validation's runtime for designers is new; if the plan finds that a designer's surface needs much of its own specification, it proposes splitting them off. *The plan's finding, 2026-11-02* ([research.md](research.md), R17 to R19): it does not, because a designer's case states no surface, and a designer's description already runs through the diagrams' runtime once a few names are mapped. The plan proposes that they stay here and that Peter may stop after any story.
 - The desktop is the host this feature builds on. Other hosts follow under their own specifications.
