@@ -8,7 +8,7 @@
 
 The diagnosis in [research.md](research.md) replaces the specification's first readings. Nearly every difference of the three diagrams is a gap of the desktop's runtime for descriptions, and each is small. A binding rule's `within` is dropped in lowering, which alone takes 55 of the behavior model's 172 differences (R2). One key refuses the causal loop diagram's whole notation (R7), and with its ring and its unreadable lines, 3 of its 4 cases pass (R8, R9). A time axis's origin and scale are not read, and change constraints and change hooks do not run on a property (R13, R14). Few are mistakes of a description (R5, R15), and three places, in two cases of one tool type, are language gaps for Peter (R21).
 
-The designers turn out to be closer than the specification supposed. A designer's description lowers onto the diagrams' runtime with 12 errors of two kinds, and once those are mapped its 12 cases run and give 217 differences, mostly repeats of a few causes (R17). So story 2 is a lowering, an id strategy, the registration's blocks and a few replay steps, not a second engine. Story 3 is the largest single piece of writing: a description of 55 operations and three formats, and a recorder for tables (R20).
+The two designers turn out to be closer than the specification supposed. A designer's description lowers onto the diagrams' runtime with 12 errors of two kinds, and once those are mapped its 12 cases run and give 217 differences, mostly repeats of a few causes (R17). So story 2 is a lowering, an id strategy, the registration's blocks and a few replay steps, not a second engine. Story 3 is the largest single piece of writing: a description of 55 operations and three formats, and a recorder for tables (R20).
 
 ## Technical Context
 

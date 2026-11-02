@@ -137,7 +137,7 @@ A designer's description has the same parts as a diagram's: a `model`, `operatio
 
 Story 2 is two pull requests and about 1,500 lines of Rust: the lowering (about 300), the counter (about 300), the registration's blocks as elements (about 300), arguments and the replay's `outside` (about 200), tests. It needs little specification: ATD §2.3 on a designer's findings and the answer to Q3. Most of the 217 differences repeat, and 39 distinct operations run through a runner that already exists. That is measured for the first run and estimated from there.
 
-## R19. Whether to split the designers off
+## R19. Whether to split the two designers off
 
 The specification's assumption is to split if a designer's surface needs much of its own specification. It does not: no case states a surface (a designer's case states no drawing, ATD §2.3), so the surface is not run at all, and DESL states the rest. The recommendation is that they **stay in this feature**, as stories that land after story 1 and independently of it, and Peter may stop after any story. What would change this is T046 going badly (R17), and then story 2 becomes its own specification.
 
@@ -158,7 +158,7 @@ Nothing here is decided by this plan. The tasks that depend on them say so.
 - **Q1. The `abm.no-behavior` finding.** The module says "This file has no Behavior heading…" at line 1, and "The Behavior section holds no list yet…" at the heading's line. A DISL rule sees the model and no heading, so the description has one sentence and no line. That differs at `read:findings` in `no-behavior` and `empty-section`, and only the language could state it. **Should these two be listed by name as a module quirk, or should FBL and DISL expose a section's heading to a rule?** Recommendation: list them. It is two places, and exposing headings is language for one sentence.
 - **Q2. Where a first item goes in a section with prose.** FBL §6.3 puts it after the section's last line, and the module right under the heading, so `empty-section` differs in its bytes at step 1 and nowhere else. **Should this be listed by name, or should FBL gain an `insert.place` that means right after the heading?** Recommendation: list it. FBL's rule is defensible and a section that holds prose and no list is rare; a new `place` would be a minor version for one step of one case.
 - **Q3. The id of an entry written with a placeholder.** All 12 hierarchical requirement cases read `REQ-NEW` as `line/44`, an id only the module gives, in the reading and in the finding. DESL §5.3.5 says such an element "has no usable id" and does not name it. **Should DESL state that a host names it `line/<line>`, as a minor version, or should `line/44` be listed in all 12 cases?** Recommendation: state it in DESL, as one sentence with a fixture. Twelve lists would say the same thing twelve times, and a host has to call it something.
-- **Q4. Whether to split the designers off.** See R19. Recommendation: no.
+- **Q4. Whether to split the two designers off.** See R19. Recommendation: no.
 
 ## R22. How this lands
 
