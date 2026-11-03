@@ -82,6 +82,18 @@
       "reason": "Findings of one code are listed by location; no construct orders them by the kind of what they concern (wardley-map.md, gap 12)."
     },
     {
+      "id": "language-gaps/8",
+      "text": "13. FBL: an evolution of a name ending in a number",
+      "open": "https://github.com/etalii-adp/etalii.adp/issues/706",
+      "reason": "The binding's strict LALR(1) grammar cannot tell a number ending a component's name from the maturity in an evolve statement, so an evolution of a name ending in a number cannot be written (wardley-map.md, gap 13)."
+    },
+    {
+      "id": "language-gaps/9",
+      "text": "14. FBL: an insert after an unclosed block",
+      "open": "https://github.com/etalii-adp/etalii.adp/issues/707",
+      "reason": "A statement inserted at the end of a body whose last block never closes lands inside that block, and FBL does not say it lands after it or that the add is refused (wardley-map.md, gap 14)."
+    },
+    {
       "id": "other-differences-a-runtime-will-meet/1",
       "text": "**Decorator order.** The row `wardley.decorators` lists the decorators in the order the",
       "open": "https://github.com/etalii-adp/etalii.adp/issues/562",
