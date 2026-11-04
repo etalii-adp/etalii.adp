@@ -89,6 +89,10 @@ and `body.order` `closed` reads the elements in the order their entries end.
 FBL 0.16: an insert's `continues` and a remove's `parts` and `whole` are checked to stand in the grammar family, the keys
 of `continues.same` to be attributes of the rule, and `whole` to stand beside `parts`; `replace-separator` is replayed as
 every splice is.
+FBL 0.18: a `{node}` slot with `holds` reads a bool, true when a node it reaches has that value, ASCII letters compared
+without regard to case, and false when none does. An attribute binding with `holds` is checked to stand on its own slot
+of the grammar family, writable only with a `create`, and on an attribute that is a single-valued `bool` in the tool
+type's specification.
 FBL 0.13: a `{node}` slot with `split` reads the items its value is cut into at that text, each without the white space
 around it, an empty piece no item, each item's escapes resolved after the cut; a reading of an origin no tool type
 has, a fixture's own binding, is the binding's alone too. An attribute binding with `split` is checked, as one with
@@ -1813,6 +1817,10 @@ class GrammarModel:
 
     def attribute_value(self, rule, attribute, binding, entry, enclosing):
         declared = self.attribute_type(rule, attribute)
+        if "holds" in binding:  # FBL 0.18: a flag, true when a node the slot reaches holds the text
+            held = any(ascii_folded(value) == ascii_folded(binding["holds"])
+                       for value in self.slot_values(entry, binding, enclosing) if isinstance(value, str))
+            return Values([held]) if self.alone else held
         if "items" in binding:
             return [self.item(node, binding["items"], enclosing) for node in self.tree.select(entry, binding["node"])
                     if self.tree.span(node) is not None]
@@ -1937,6 +1945,15 @@ class GrammarModel:
 # which is what the C4 tool's `StringSplitOptions.TrimEntries` (char.IsWhiteSpace) takes off too. Python's str.strip()
 # also takes U+001C to U+001F, which are no White_Space, so the set is stated here.
 WHITE_SPACE = "\t\n\v\f\r \x85\xa0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000"
+
+
+def ascii_folded(text):
+    """FBL 0.18, a slot's `holds`: a text with its ASCII letters in lower case and every other character as it is, so that
+    `Market` holds `market` and no letter outside ASCII is folded."""
+    return text.translate(ASCII_LOWER)
+
+
+ASCII_LOWER = str.maketrans("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz")
 
 
 def split_items(value, slot):
@@ -2344,6 +2361,8 @@ def check_grammar_family(path: Path, document) -> list[str]:
                         problems.extend(items_not_many(binding, rule, attribute, f"{pointer}/attributes/{attribute}/items"))
                     if "split" in attribute_binding:
                         problems.extend(items_not_many(binding, rule, attribute, f"{pointer}/attributes/{attribute}/split", "split"))
+                    if "holds" in attribute_binding:
+                        problems.extend(holds_problems(binding, rule, attribute, attribute_binding, f"{pointer}/attributes/{attribute}"))
                     for index, slot in enumerate([attribute_binding] + attribute_binding.get("gather", [])):
                         where = f"{pointer}/attributes/{attribute}" + (f"/gather/{index - 1}" if index else "")
                         problems.extend(split_escape_collision(slot, where))
@@ -2369,6 +2388,31 @@ def split_escape_collision(slot, pointer) -> list[str]:
         return []
     held = [c for c in (slot["escape"]["with"], slot["escape"]["quote"]) if c in slot["split"]]
     return [f"at {pointer}/split: holds {c!r}, a character of the slot's escape" for c in held]
+
+
+def holds_problems(binding, rule, attribute, attribute_binding, pointer) -> list[str]:
+    """FBL 0.18, section 14.1, step 6: `holds` stands only in a binding of the grammar family (the schema keeps it to an
+    attribute binding's own `{node}` slot, from beside the options that read another value); a writable one has `create`
+    with `emit` and without `pad`; and its attribute is a single-valued `bool` in the tool type's specification, the
+    attribute a `typeMap` maps it to included, checked against each specification of an origin the binding claims that
+    is read through FBL, as items_not_many checks `items`."""
+    problems = []
+    if binding.get("body", {}).get("family") != "grammar":
+        problems.append(f"at {pointer}/holds: holds stands only in a binding of the grammar family (FBL 0.18 section 14.1)")
+    writable = not (attribute_binding.get("readOnly") or rule.get("readOnly") or binding.get("readOnly"))
+    create = attribute_binding.get("create")
+    if writable and not (isinstance(create, dict) and "emit" in create):
+        problems.append(f"at {pointer}/holds: a writable flag needs a create with emit to write its node (FBL 0.18 section 14.1)")
+    if isinstance(create, dict) and create.get("pad"):
+        problems.append(f"at {pointer}/create/pad: a flag is never padded (FBL 0.18 section 14.1)")
+    for origin in binding.get("claims", {}).get("origins", []):
+        specification = ToolTypes.of(origin)
+        if not specification or specification.get("persistence", {}).get("format") != "fbl":
+            continue
+        declared = ToolType(specification).attribute_type(rule["type"], attribute)
+        if declared and (declared.get("many") or declared.get("type") != "bool"):
+            problems.append(f"at {pointer}/holds: holds stands only on a single-valued bool attribute, and {origin} declares {attribute!r} of {rule['type']!r} otherwise")
+    return problems
 
 
 def items_not_many(binding, rule, attribute, pointer, construct="items") -> list[str]:
