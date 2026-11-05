@@ -14,7 +14,7 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 ## Phase 1: Setup
 
-- [ ] T001 Check that DISL is still at 0.8 on `develop`; if another version has appeared, this feature's version is the next one, and every 0.9 below changes with it · etalii.adp/specifications/disl/DISL-specification.md
+- [x] T001 Check that DISL is still at 0.8 on `develop`; if another version has appeared, this feature's version is the next one, and every 0.9 below changes with it · etalii.adp/specifications/disl/DISL-specification.md
 
 ---
 
@@ -22,16 +22,16 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 **Goal**: FR-001 to FR-004, FR-006, FR-007. **Independent test**: `validate-examples.py` validates every fixture against its `$defs`, and the worked example against its findings.
 
-- [ ] T002 [P] [US1] Write the fixtures of order and reading: each distinct key one group in list order, keys in order of first appearance, an absent key's empty group, an empty list (FR-002, FR-003) · etalii.adp/specifications/disl/fixtures/grouping/order-*.json, absent-*.json, empty.json
-- [ ] T003 [P] [US1] Write the fixtures of keys: a string, a bool and a number, an int and a double of one value being one key, 0.0 and -0.0 being one key, and null, NaN, a list and a map each being a failing key (R8) · etalii.adp/specifications/disl/fixtures/grouping/key-*.json
-- [ ] T004 [P] [US1] Write the fixtures of failure: a key expression that fails on one item fails the whole grouping, and `&&` and `||` absorb a failure in a key as they do elsewhere (FR-004) · etalii.adp/specifications/disl/fixtures/grouping/failing-*.json
-- [ ] T005 [US1] Add `$defs/GroupingFixture`, and DISL 0.9 to the schema's title and to the version key's text, and have `validate-examples.py` validate the fixtures and refuse one that does not validate · etalii.adp/specifications/disl/disl.schema.json, etalii.adp/.github/scripts/validate-examples.py
-- [ ] T006 [US1] State `l.groupBy(x, key)`, `g.get(k)` and `g.keys()` in §12.4 with their order, their absent key, their keys' kinds and their failure, name the macro in §12.1, and add the feature id `cel.groupBy` to Appendix B.8 (R3, R4, R8) · etalii.adp/specifications/disl/DISL-specification.md
-- [ ] T007 [US1] State in §12.4 and §12.5 that a grouping is free of side effects and deterministic, that a runtime MAY keep one while its list and what its key read are unchanged, and that the result MUST equal grouping again (R5, R6) · etalii.adp/specifications/disl/DISL-specification.md
-- [ ] T008 [US1] State the cost in §12.4, at run time and for an estimate, the charge being the same whether or not a runtime kept the grouping (FR-005, R7) · etalii.adp/specifications/disl/DISL-specification.md
-- [ ] T009 [US1] Add 0.9 to §2.9, the header's version and date, and *Changes from 0.8*, saying that every 0.8 specification is a 0.9 specification with the same meaning (FR-006) · etalii.adp/specifications/disl/DISL-specification.md
-- [ ] T010 [US1] Add the worked example: a small specification that derives terms through the macro, its definition, and its findings, one derived type's key failing to show §2.5's row (FR-004, Constitution II) · etalii.adp/specifications/disl/grouping-terms.dis, grouping-terms.did, grouping-terms.findings.json
-- [ ] T011 [US1] State that ATD carries DISL 0.9, add `groupBy` to the macros of §6.3, and add a line to *Changes* (FR-007) · etalii.adp/specifications/atd/ATD-specification.md
+- [x] T002 [P] [US1] Write the fixtures of order and reading: each distinct key one group in list order, keys in order of first appearance, an absent key's empty group, an empty list (FR-002, FR-003) · etalii.adp/specifications/disl/fixtures/grouping/order-*.json, absent-*.json, empty.json
+- [x] T003 [P] [US1] Write the fixtures of keys: a string, a bool and a number, an int and a double of one value being one key, 0.0 and -0.0 being one key, and null, NaN, a list and a map each being a failing key (R8) · etalii.adp/specifications/disl/fixtures/grouping/key-*.json
+- [x] T004 [P] [US1] Write the fixtures of failure: a key expression that fails on one item fails the whole grouping, and `&&` and `||` absorb a failure in a key as they do elsewhere (FR-004) · etalii.adp/specifications/disl/fixtures/grouping/failing-*.json
+- [x] T005 [US1] Add `$defs/GroupingFixture`, and DISL 0.9 to the schema's title and to the version key's text, and have `validate-examples.py` validate the fixtures and refuse one that does not validate · etalii.adp/specifications/disl/disl.schema.json, etalii.adp/.github/scripts/validate-examples.py
+- [x] T006 [US1] State `l.groupBy(x, key)`, `g.get(k)` and `g.keys()` in §12.4 with their order, their absent key, their keys' kinds and their failure, name the macro in §12.1, and add the feature id `cel.groupBy` to Appendix B.8 (R3, R4, R8) · etalii.adp/specifications/disl/DISL-specification.md
+- [x] T007 [US1] State in §12.4 and §12.5 that a grouping is free of side effects and deterministic, that a runtime MAY keep one while its list and what its key read are unchanged, and that the result MUST equal grouping again (R5, R6) · etalii.adp/specifications/disl/DISL-specification.md
+- [x] T008 [US1] State the cost in §12.4, at run time and for an estimate, the charge being the same whether or not a runtime kept the grouping (FR-005, R7) · etalii.adp/specifications/disl/DISL-specification.md
+- [x] T009 [US1] Add 0.9 to §2.9, the header's version and date, and *Changes from 0.8*, saying that every 0.8 specification is a 0.9 specification with the same meaning (FR-006) · etalii.adp/specifications/disl/DISL-specification.md
+- [x] T010 [US1] Add the worked example: a small specification that derives terms through the macro, its definition, and its findings, one derived type's key failing to show §2.5's row (FR-004, Constitution II) · etalii.adp/specifications/disl/grouping-terms.dis, grouping-terms.did, grouping-terms.findings.json
+- [x] T011 [US1] State that ATD carries DISL 0.9, add `groupBy` to the macros of §6.3, and add a line to *Changes* (FR-007) · etalii.adp/specifications/atd/ATD-specification.md
 
 **Checkpoint**: pull request A is merged; the desktop can vendor it.
 
