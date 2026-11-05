@@ -14,6 +14,8 @@ The kinds of cause are these. A **runtime gap** is something the language states
 | Hierarchical requirement designer | 12 | not runnable | not runnable | 217 through the diagrams' runtime, see R17 | 0 |
 | Knowledge management designer | none | no description | no description | not tried, see R20 | none |
 
+*Measured again on 2026-11-05 (T002)*, with the desktop at `81c1fdc` against both its vendored etalii.adp `55b62e1` and etalii.adp's develop at `ef04189`: every number of the three diagrams is as above, so neither the descriptions nor the runtime moved in between.
+
 The specification's first readings hold in part. The agent behavior modelling cases read one element for the reason the specification gives only in its effect: the module and the description do not read a section differently, because the description's `within` never reaches the binding (R2). The causal loop diagram's refused variant is one misplaced word in the notation's compiler (R7), and its drawings then show a second cause, the ring (R8). The specification now says so.
 
 ## R2. Agent behavior modelling: `within` is not lowered
@@ -159,6 +161,13 @@ Nothing here is decided by this plan. The tasks that depend on them say so.
 - **Q2. Where a first item goes in a section with prose.** FBL §6.3 puts it after the section's last line, and the module right under the heading, so `empty-section` differs in its bytes at step 1 and nowhere else. **Should this be listed by name, or should FBL gain an `insert.place` that means right after the heading?** Recommendation: list it. FBL's rule is defensible and a section that holds prose and no list is rare; a new `place` would be a minor version for one step of one case.
 - **Q3. The id of an entry written with a placeholder.** All 12 hierarchical requirement cases read `REQ-NEW` as `line/44`, an id only the module gives, in the reading and in the finding. DESL §5.3.5 says such an element "has no usable id" and does not name it. **Should DESL state that a host names it `line/<line>`, as a minor version, or should `line/44` be listed in all 12 cases?** Recommendation: state it in DESL, as one sentence with a fixture. Twelve lists would say the same thing twelve times, and a host has to call it something.
 - **Q4. Whether to split the two designers off.** See R19. Recommendation: no.
+
+**Peter's answers, 2026-11-05.** Building is approved ("4a"): story 1 first, without asking between tasks, stopping only for a new language gap.
+
+- **Q1: listed.** Peter did not rule, so the default this plan recommended was taken: `read:findings` of `no-behavior` and `empty-section` are listed by name as a module quirk. He can overrule it.
+- **Q2: a new FBL `place`** (b). FBL gains it as a minor version with its fixtures, in etalii.adp first: FBL 0.19, since 0.18 is develop's latest on 2026-11-05. `empty-section`'s `1:bytes` is then not listed.
+- **Q3: stated in DESL** (a), as one sentence with a fixture, as a minor version of DESL. `line/44` is then listed in no case.
+- **Q4: no split.** Stories 2 and 3 follow story 1, as the plan orders them.
 
 ## R22. How this lands
 
