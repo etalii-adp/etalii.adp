@@ -421,7 +421,7 @@ diagram w3c/skos version "1.0.0" {
   /// the second and so on, in reading order.
   fn repeatSuffix(e: Element) -> string {
     // uses: ["diagram"]
-    return cel.bind(same, e.isA('Triple') ? diagram.nodesOfType('Triple').groupBy(u, u.s + '|' + u.p + '|' + u.o).get(e.s + '|' + e.p + '|' + e.o) : diagram.nodesOfType('Prefix').filter(u, u.name == e.name), cel.bind(n, e.positionIn(same), n > 0 ? '|' + string(n) : ''))
+    return cel.bind(same, e.isA('Triple') ? diagram.nodesOfType('Triple').groupBy(u, u.s + ' ' + u.p + ' ' + u.o).get(e.s + ' ' + e.p + ' ' + e.o) : diagram.nodesOfType('Prefix').filter(u, u.name == e.name), cel.bind(n, e.positionIn(same), n > 0 ? '|' + string(n) : ''))
   }
 
   /// Each item of `xs`, whose first entry is its key, with the number of earlier items of the same key appended: the
