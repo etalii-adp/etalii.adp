@@ -4,7 +4,7 @@
   "branch": "076-five-tools-pass",
   "selectedAt": "2026-11-02T07:40:00.000Z",
   "currentStep": "tasks",
-  "status": "ready-to-implement",
+  "status": "implementing",
   "history": [
     {
       "step": "plan",
@@ -21,5 +21,5 @@
       "at": "2026-11-02T12:00:00.100Z"
     }
   ],
-  "last_action": "Plan, research and tasks written from a diagnosis on Peter's approval of 2026-11-02; building waits for his word"
+  "last_action": "Story 1 built and merged on 2026-11-05 (etalii.adp #709, #712, #714, #715, #716; desktop #155); stories 2 and 3 not started"
 }

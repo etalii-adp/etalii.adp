@@ -18,6 +18,8 @@ The kinds of cause are these. A **runtime gap** is something the language states
 
 The specification's first readings hold in part. The agent behavior modelling cases read one element for the reason the specification gives only in its effect: the module and the description do not read a section differently, because the description's `within` never reaches the binding (R2). The causal loop diagram's refused variant is one misplaced word in the notation's compiler (R7), and its drawings then show a second cause, the ring (R8). The specification now says so.
 
+*Measured on 2026-11-05 after story 1 (T082, partly)*, with `atd validate` at the desktop's `features/076-abm-description` vendoring etalii.adp `df797ef`: agent behavior modelling 3 of 5 pass, 2 differences, both `read:findings` and listed by default (Q1); causal loop diagram 4 of 4; Gartner hype cycle graph 4 of 4. The two designers are not yet built (stories 2 and 3).
+
 ## R2. Agent behavior modelling: `within` is not lowered
 
 - **Cause, a runtime gap, measured.** `rule()` in `etalii.adp.ide.desktop/crates/adp-atd-runtime/src/lowering/fbl.rs` lowers `parent`, `id`, `source`, `target`, `attribute`, `insert`, `remove`, `when` and `setting`, and drops every other member. The parsed tree of `agent-behavior-modelling.abm.atd` has `{"kind": "within", "rules": [{"text": "behavior"}]}` in each rule. `bullets_candidates` in `crates/adp-fbl/src/families/bullets/mod.rs` reads a rule with no `within` as one that matches statements and not items. So the items of the section are not read at all, and the one prose line of a body reads as an implicit Do. That is the "one element" of the sample: `Every rule of the tool, once.` in `findings`, and nothing at all in `refusals`, whose body has no prose.
