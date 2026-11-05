@@ -2,7 +2,7 @@
 
 **Input**: [five-tools-pass.spec.md](five-tools-pass.spec.md), [plan.md](plan.md), [research.md](research.md)
 
-**Approved**: plan and tasks by Peter on 2026-11-02. No implementation is approved by that; building waits for his word.
+**Approved**: plan and tasks by Peter on 2026-11-02; building by Peter on 2026-11-05 ("4a"), story 1 first. His answers to Q1 to Q4 are in research R21 and the specification's clarifications: Q1 listed (he did not rule, the default was taken), Q2 a new FBL `place`, Q3 a sentence of DESL, Q4 no split.
 
 Every path carries its repository as prefix. Tasks are ticked in etalii.adp once their pull request has merged, batched into one tick pull request.
 
@@ -48,7 +48,10 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 - [ ] T017 [US1] Give `self.view` of a description's element from the registration's positions and the layout's bounds, so that `n.view.pinned` and `candidate.view.bounds` read (DISL §11.6, R6) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs
 - [ ] T018 [US1] Run a drop's and a `create`'s `place`, a parent placement of DISL §9.1, with its `refusal` (R6) · etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs, etalii.adp.ide.desktop/crates/adp-disl/src/behavior/
 - [ ] T019 [US1] Correct in the description what the steps then show, and take to Peter what no description can state (FR-007, edge cases) · etalii.adp/definitions/diagrams/agent-behavior-modelling*.atd
-- [ ] T020 [US1] List by name, with its reason, only what Peter has ruled on: by R21's recommendations, `read:findings` of `no-behavior` and `empty-section`, and `1:bytes` of `empty-section` · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/agent_behavior.rs
+- [ ] T086 [US1] Specify FBL 0.19's `place` `under-heading` for the bullets family, the first item of a section that holds none written right after its heading, with its fixture and the reference validator reading it, ATD's C.3 following (Q2, FR-009) · etalii.adp/specifications/fbl/FBL-specification.md, etalii.adp/specifications/fbl/fbl.schema.json, etalii.adp/specifications/fbl/fixtures/bullets-under-heading/, etalii.adp/.github/scripts/validate-examples.py, etalii.adp/specifications/atd/ATD-specification.md
+- [ ] T087 [US1] Write the test that the bullets planner writes a first item `under-heading` right after the heading, and `last-child` as before, and see it fail; then plan it, with the fixture run (Q2) · etalii.adp.ide.desktop/crates/adp-fbl/src/families/bullets/mod.rs, etalii.adp.ide.desktop/crates/adp-fbl/tests/
+- [ ] T088 [US1] Have the binding place a root `under-heading`, in the description and in `behavior-tree.fbl`, and see `empty-section` step 1's bytes pass (Q2) · etalii.adp/definitions/diagrams/agent-behavior-modelling.abm.atd, etalii.adp/specifications/fbl/behavior-tree.fbl
+- [ ] T020 [US1] List by name, with its reason, only what Peter has ruled on: `read:findings` of `no-behavior` and `empty-section` (Q1, listed by default) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/agent_behavior.rs
 - [ ] T021 [US1] Vendor A's merge commit · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/vendor/etalii.adp.lock
 
 **Checkpoint**: all 5 cases pass, but for what Peter has ruled on. Today 0, and 1 by R1's corrections.
@@ -121,7 +124,7 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 ### The language
 
 - [ ] T054 [US2] State in ATD §2.3 what a designer's case states of a finding, `code` where a diagram's states `rule` · etalii.adp/specifications/atd/ATD-specification.md, etalii.adp/specifications/atd/atd.schema.json
-- [ ] T055 [US2] If Peter so rules on Q3: state in DESL what a host names an element read with a placeholder, as a minor version with its fixture, and that every earlier designer means the same (FR-009); otherwise list `line/44` in all 12 cases in T050's test · etalii.adp/specifications/desl/DESL-specification.md, etalii.adp/specifications/desl/desl.schema.json
+- [ ] T055 [US2] State in DESL what a host names an element read with a placeholder, `line/<line>`, in one sentence, as a minor version with its fixture, and that every earlier designer means the same (Q3, FR-009) · etalii.adp/specifications/desl/DESL-specification.md, etalii.adp/specifications/desl/desl.schema.json
 
 ### The runtime
 
@@ -195,7 +198,7 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 | FR-006 | T003, T022, T036, T050, T075, T079 |
 | FR-007 | T001, T019, T020, T047, T048, T064, T065, T077, T078 |
 | FR-008 | T027, T074, and the Checks line of this file |
-| FR-009 | T024, T025, T054, T055 |
+| FR-009 | T024, T025, T054, T055, T086 |
 | FR-010 | T005, T038, T041, T080 |
 | SC-001 | T003, T020, T035, T048 |
 | SC-002 | T050, T051, T065 |
@@ -208,6 +211,6 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 ## Dependencies
 
-Phase 1, then each story on its own: a story's etalii.adp pull request merges first, is vendored, and then its desktop pull request merges (plan, *Delivery*). In Phases 2, 3 and 4 the tasks marked for etalii.adp go in A, C and E, and the rest in B, D and F; those three pairs can land in any order, and whichever first needs T041's method carries it. T026 goes before T027, and C opens once D's branch can record. Phase 6 needs T007, carried by H if B has not merged. Phase 7 needs Phase 6, and T074 needs I. T020, T055 and every list need Peter's answers (T001). Implementation waits on Peter's word.
+Phase 1, then each story on its own: a story's etalii.adp pull request merges first, is vendored, and then its desktop pull request merges (plan, *Delivery*). In Phases 2, 3 and 4 the tasks marked for etalii.adp go in A, C and E, and the rest in B, D and F; those three pairs can land in any order, and whichever first needs T041's method carries it. T026 goes before T027, and C opens once D's branch can record. Phase 6 needs T007, carried by H if B has not merged. Phase 7 needs Phase 6, and T074 needs I. T020, T055 and every list need Peter's answers (T001), given on 2026-11-05. T086 goes in A, T087 in B, and T088 in A once B's branch plans it, since the `descriptions` job builds `atd` from B's branch.
 
 **MVP**: Phases 1 to 5, which pass the 13 cases of the three diagrams on runtime that already exists.

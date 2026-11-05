@@ -42,6 +42,15 @@ Measured on 2026-11-02, with `atd validate` at the desktop's develop:
 - **Not a change to what a person sees.** Today's modules stay what a person's document opens on, and the cases are recorded from them.
 - **Not a change to any recorded expected result.**
 
+## Clarifications
+
+### Session 2026-11-05
+
+- Q: Q1, the `abm.no-behavior` finding's line and sentence in `no-behavior` and `empty-section`: listed as a module quirk, or a section's heading exposed to a rule? → A: Listed by name as a module quirk, at `read:findings` of the two cases. Peter did not rule, and the default the plan recommended was taken, so that he can overrule it (FR-007; research R21).
+- Q: Q2, where the first item goes in a section that holds prose (`empty-section`, step 1): listed, or a new FBL `place`? → A: A new FBL `place`, right after the heading, as a minor version of FBL with its fixtures, specified in etalii.adp first (Peter, 2026-11-05; FR-009; research R21).
+- Q: Q3, `line/44` in all 12 hierarchical requirement cases: stated in DESL, or listed in each? → A: Stated in DESL, as one sentence with a fixture (Peter, 2026-11-05; FR-009; research R21).
+- Q: Q4, whether to split the two designers off. → A: No: Peter approved building story 1 first, then stories 2 and 3 as the plan orders them (Peter, 2026-11-05, "4a").
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - The three diagrams pass (Priority: P1)
