@@ -88,28 +88,28 @@
   "output": {
     "positions": {
       "variable:population": {
-        "x": 0.0,
-        "y": -183.5
+        "x": -45.0,
+        "y": -203.3
       },
       "variable:births": {
-        "x": 158.92,
-        "y": -91.75
+        "x": 113.92,
+        "y": -111.55
       },
       "variable:deaths": {
-        "x": 0.0,
-        "y": 183.5
+        "x": -45.0,
+        "y": 163.7
       },
       "variable:crowding": {
-        "x": -158.92,
-        "y": -91.75
+        "x": -203.92,
+        "y": -111.55
       },
       "variable:sanitation": {
-        "x": -158.92,
-        "y": 91.75
+        "x": -211.42,
+        "y": 71.95
       },
       "variable:foodPerCapita": {
-        "x": 158.92,
-        "y": 91.75
+        "x": 87.17,
+        "y": 71.95
       }
     }
   }
