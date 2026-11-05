@@ -571,7 +571,7 @@ form node "Behavior node" for BehaviorNode {
       visible: (self.type == 'Retry')
       validate: [
         {
-          rule: (value >= 1)
+          rule: (string(value).matches('^[0-9]+$') && int(string(value)) >= 1)
           message: ('\'' + string(value) + '\' is not a number of attempts; a Retry allows at least 1.')
           timing: commit
         }
