@@ -14,8 +14,8 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 ## Phase 1: Setup
 
-- [ ] T001 Have Peter's answers to Q1, Q2, Q3 and Q4 (R21) recorded in research; a list or a language task below follows from them · etalii.adp/specs/076-five-tools-pass/research.md
-- [ ] T002 Measure R1's table again at the commit that starts, since the description and the runtime may have moved · etalii.adp/specs/076-five-tools-pass/research.md
+- [x] T001 Have Peter's answers to Q1, Q2, Q3 and Q4 (R21) recorded in research; a list or a language task below follows from them · etalii.adp/specs/076-five-tools-pass/research.md
+- [x] T002 Measure R1's table again at the commit that starts, since the description and the runtime may have moved · etalii.adp/specs/076-five-tools-pass/research.md
 
 ---
 
@@ -25,36 +25,36 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 ### Tests first, in B
 
-- [ ] T003 [US1] Write the tool type's test as `c4.rs` is, with a list of what each of the 5 cases differs in today, by `step:part`, and with the number of cases held · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/agent_behavior.rs
-- [ ] T004 [P] [US1] Write the test that a rule's `within` lowers as `specifications/fbl/behavior-tree.fbl` states it, and see it fail · etalii.adp.ide.desktop/crates/adp-atd-runtime/tests/lowering.rs
+- [x] T003 [US1] Write the tool type's test as `c4.rs` is, with a list of what each of the 5 cases differs in today, by `step:part`, and with the number of cases held · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/agent_behavior.rs
+- [x] T004 [P] [US1] Write the test that a rule's `within` lowers as `specifications/fbl/behavior-tree.fbl` states it, and see it fail · etalii.adp.ide.desktop/crates/adp-atd-runtime/tests/lowering.rs
 - [ ] T005 [P] [US1] Write the test that an `Add` under a node with a derived id, and a `Move` into one, reach the planner by the id the binding read, and that a person's module gets the same bytes as before · etalii.adp.ide.desktop/crates/adp-diagram/tests/
-- [ ] T006 [P] [US1] Write the fixture run of `layout.tidyTree` by registering it in the test's expected names, and see it fail · etalii.adp.ide.desktop/crates/adp-atd-runtime/tests/capabilities.rs
+- [x] T006 [P] [US1] Write the fixture run of `layout.tidyTree` by registering it in the test's expected names, and see it fail · etalii.adp.ide.desktop/crates/adp-atd-runtime/tests/capabilities.rs
 
 ### The reading and the drawing
 
-- [ ] T007 [US1] Lower `within` in a binding's rule (R2) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/lowering/fbl.rs
-- [ ] T008 [US1] Move the tree's `compute` and `pack` into the capability `layout.tidyTree`, with the module calling them there, and register it once its fixtures pass (R3) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/tidy_tree.rs, etalii.adp.ide.desktop/modules/diagrams/agent-behavior-modelling/src/layout.rs
-- [ ] T009 [US1] Run DISL's standard algorithm `tidyTree` through that code, with `spacing` as its gaps and `rows.stored` and `rows.minGap` from the registration's positions, and read a node's `size.default` (R3) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs
-- [ ] T010 [US1] Add `attribute implicit from value "false"` to the rule `do`, and `args: { label: label }` to the menu's Rename, with the companion and the trace (R5) · etalii.adp/definitions/diagrams/agent-behavior-modelling.abm.atd, agent-behavior-modelling.notation.atd, agent-behavior-modelling.md, agent-behavior-modelling.trace.json
+- [x] T007 [US1] Lower `within` in a binding's rule (R2) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/lowering/fbl.rs
+- [x] T008 [US1] Move the tree's `compute` and `pack` into the capability `layout.tidyTree`, with the module calling them there, and register it once its fixtures pass (R3) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/tidy_tree.rs, etalii.adp.ide.desktop/modules/diagrams/agent-behavior-modelling/src/layout.rs
+- [x] T009 [US1] Run DISL's standard algorithm `tidyTree` through that code, with `spacing` as its gaps and `rows.stored` and `rows.minGap` from the registration's positions, and read a node's `size.default` (R3) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs
+- [x] T010 [US1] Add `attribute implicit from value "false"` to the rule `do`, and `args: { label: label }` to the menu's Rename, with the companion and the trace (R5) · etalii.adp/definitions/diagrams/agent-behavior-modelling.abm.atd, agent-behavior-modelling.notation.atd, agent-behavior-modelling.md, agent-behavior-modelling.trace.json
 
 ### The gestures
 
-- [ ] T011 [US1] Address the parent of an `Add` and the new parent of a `Move` by the id the binding read (R4) · etalii.adp.ide.desktop/crates/adp-diagram/src/document.rs
-- [ ] T012 [US1] Name a created element by the id it reads as once the edit is written, in what an operation hands back, with a test of `editLabel` on a new node under a derived id (R4) · etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs, etalii.adp.ide.desktop/crates/adp-atd-validate/src/lib.rs
-- [ ] T013 [US1] Have a `connect` step that names the wire id of a derived relation's `edits.connect` run that operation, with its refusals, and test it on `refusals` steps 3 to 6 (R6) · etalii.adp.ide.desktop/crates/adp-atd-validate/src/lib.rs, etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs
-- [ ] T014 [US1] Write the test of a retype through a `bullets` binding as one `re-emit-line`, the item's continuation and children staying; then plan a declared retype as FBL §6.4 states, with its fixtures run · etalii.adp.ide.desktop/crates/adp-fbl/src/planning/planner.rs, etalii.adp.ide.desktop/crates/adp-fbl/src/planning/tests.rs
-- [ ] T015 [US1] Commit a form's `kind: type` row, reading its `refusals` before its options (R6) · etalii.adp.ide.desktop/crates/adp-disl/src/derivation/form_commit.rs, etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs
-- [ ] T016 [US1] Run the menu kinds `moveUp` and `moveDown` (R6) · etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs
-- [ ] T017 [US1] Give `self.view` of a description's element from the registration's positions and the layout's bounds, so that `n.view.pinned` and `candidate.view.bounds` read (DISL §11.6, R6) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs
-- [ ] T018 [US1] Run a drop's and a `create`'s `place`, a parent placement of DISL §9.1, with its `refusal` (R6) · etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs, etalii.adp.ide.desktop/crates/adp-disl/src/behavior/
-- [ ] T019 [US1] Correct in the description what the steps then show, and take to Peter what no description can state (FR-007, edge cases) · etalii.adp/definitions/diagrams/agent-behavior-modelling*.atd
-- [ ] T086 [US1] Specify FBL 0.19's `place` `under-heading` for the bullets family, the first item of a section that holds none written right after its heading, with its fixture and the reference validator reading it, ATD's C.3 following (Q2, FR-009) · etalii.adp/specifications/fbl/FBL-specification.md, etalii.adp/specifications/fbl/fbl.schema.json, etalii.adp/specifications/fbl/fixtures/bullets-under-heading/, etalii.adp/.github/scripts/validate-examples.py, etalii.adp/specifications/atd/ATD-specification.md
-- [ ] T087 [US1] Write the test that the bullets planner writes a first item `under-heading` right after the heading, and `last-child` as before, and see it fail; then plan it, with the fixture run (Q2) · etalii.adp.ide.desktop/crates/adp-fbl/src/families/bullets/mod.rs, etalii.adp.ide.desktop/crates/adp-fbl/tests/
-- [ ] T088 [US1] Have the binding place a root `under-heading`, in the description and in `behavior-tree.fbl`, and see `empty-section` step 1's bytes pass (Q2) · etalii.adp/definitions/diagrams/agent-behavior-modelling.abm.atd, etalii.adp/specifications/fbl/behavior-tree.fbl
-- [ ] T020 [US1] List by name, with its reason, only what Peter has ruled on: `read:findings` of `no-behavior` and `empty-section` (Q1, listed by default) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/agent_behavior.rs
-- [ ] T021 [US1] Vendor A's merge commit · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/vendor/etalii.adp.lock
+- [x] T011 [US1] Address the parent of an `Add` and the new parent of a `Move` by the id the binding read (R4) · etalii.adp.ide.desktop/crates/adp-diagram/src/document.rs
+- [x] T012 [US1] Name a created element by the id it reads as once the edit is written, in what an operation hands back, with a test of `editLabel` on a new node under a derived id (R4) · etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs, etalii.adp.ide.desktop/crates/adp-atd-validate/src/lib.rs
+- [x] T013 [US1] Have a `connect` step that names the wire id of a derived relation's `edits.connect` run that operation, with its refusals, and test it on `refusals` steps 3 to 6 (R6) · etalii.adp.ide.desktop/crates/adp-atd-validate/src/lib.rs, etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs
+- [x] T014 [US1] Write the test of a retype through a `bullets` binding as one `re-emit-line`, the item's continuation and children staying; then plan a declared retype as FBL §6.4 states, with its fixtures run · etalii.adp.ide.desktop/crates/adp-fbl/src/planning/planner.rs, etalii.adp.ide.desktop/crates/adp-fbl/src/planning/tests.rs
+- [x] T015 [US1] Commit a form's `kind: type` row, reading its `refusals` before its options (R6) · etalii.adp.ide.desktop/crates/adp-disl/src/derivation/form_commit.rs, etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs
+- [x] T016 [US1] Run the menu kinds `moveUp` and `moveDown` (R6) · etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs
+- [x] T017 [US1] Give `self.view` of a description's element from the registration's positions and the layout's bounds, so that `n.view.pinned` and `candidate.view.bounds` read (DISL §11.6, R6) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs
+- [x] T018 [US1] Run a drop's and a `create`'s `place`, a parent placement of DISL §9.1, with its `refusal` (R6) · etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs, etalii.adp.ide.desktop/crates/adp-disl/src/behavior/
+- [x] T019 [US1] Correct in the description what the steps then show, and take to Peter what no description can state (FR-007, edge cases) · etalii.adp/definitions/diagrams/agent-behavior-modelling*.atd
+- [x] T086 [US1] Specify FBL 0.19's `place` `under-heading` for the bullets family, the first item of a section that holds none written right after its heading, with its fixture and the reference validator reading it, ATD's C.3 following (Q2, FR-009) · etalii.adp/specifications/fbl/FBL-specification.md, etalii.adp/specifications/fbl/fbl.schema.json, etalii.adp/specifications/fbl/fixtures/bullets-under-heading/, etalii.adp/.github/scripts/validate-examples.py, etalii.adp/specifications/atd/ATD-specification.md
+- [x] T087 [US1] Write the test that the bullets planner writes a first item `under-heading` right after the heading, and `last-child` as before, and see it fail; then plan it, with the fixture run (Q2) · etalii.adp.ide.desktop/crates/adp-fbl/src/families/bullets/mod.rs, etalii.adp.ide.desktop/crates/adp-fbl/tests/
+- [x] T088 [US1] Have the binding place a root `under-heading`, in the description and in `behavior-tree.fbl`, and see `empty-section` step 1's bytes pass (Q2) · etalii.adp/definitions/diagrams/agent-behavior-modelling.abm.atd, etalii.adp/specifications/fbl/behavior-tree.fbl
+- [x] T020 [US1] List by name, with its reason, only what Peter has ruled on: `read:findings` of `no-behavior` and `empty-section` (Q1, listed by default) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/agent_behavior.rs
+- [x] T021 [US1] Vendor A's merge commit · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/vendor/etalii.adp.lock
 
-**Checkpoint**: all 5 cases pass, but for what Peter has ruled on. Today 0, and 1 by R1's corrections.
+**Checkpoint**: all 5 cases pass, but for what Peter has ruled on. Today 0, and 1 by R1's corrections. *Reached 2026-11-05* (etalii.adp #712, desktop #155): 3 pass, and `no-behavior` and `empty-section` differ only at `read:findings`, listed by default (Q1). T004's test is in `crates/adp-atd-runtime/tests/tool.rs`, beside the mind map's; T005's session behaviour is held by the behavior model's cases and the parity goldens, with no test of its own yet.
 
 ---
 
@@ -62,22 +62,22 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 **Goal**: FR-001, FR-006, FR-009, FR-010, SC-001. **Independent test**: `cargo test -p adp-atd-validate --test causal_loop`.
 
-- [ ] T022 [US1] Write the tool type's test, with today's differences of its 4 cases listed · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/causal_loop.rs
-- [ ] T023 [P] [US1] Write the test that a variant with an `id` compiles as the same curve bowed otherwise, and that a variant changing anything else is still refused · etalii.adp.ide.desktop/crates/adp-scene/src/notation/
-- [ ] T024 [P] [US1] Write `layout.ring`'s contract: the seating by a depth-first walk of the relations, its start, its direction and its separation, as `ring.rs` does them · etalii.adp/specifications/atd/capabilities/layout.ring/contract.json
-- [ ] T025 [P] [US1] Add `layout.ring` to ATD §13's catalogue, with a line in *Changes* (FR-009, R8) · etalii.adp/specifications/atd/ATD-specification.md
-- [ ] T026 [US1] Add `layout.ring` to `atd record --capability`, from the module's `ring::compute` on every causal loop document of its parity scripts · etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/capability/ring.rs, etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/capability/mod.rs
-- [ ] T027 [US1] Record its fixtures from D's branch, for C (R22); never by hand · etalii.adp/specifications/atd/capabilities/layout.ring/fixtures/
-- [ ] T028 [US1] Allow a variant's `id` (R7) · etalii.adp.ide.desktop/crates/adp-scene/src/notation/compile.rs
-- [ ] T029 [US1] Move `ring.rs` into the capability, the module calling it there, registered once its fixtures pass, with the variable's fitted size given as its input (R8) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/ring.rs, etalii.adp.ide.desktop/modules/diagrams/causal-loop-diagram/src/
-- [ ] T030 [US1] Name the capability in the description's layout and in its `requires`, and close gap 5 in the companion, with the trace (R8) · etalii.adp/definitions/diagrams/causal-loop-diagram.notation.atd, causal-loop-diagram.atd, causal-loop-diagram.md, causal-loop-diagram.trace.json
-- [ ] T031 [US1] Give the session a description's unreadable entries as `std.unreadableEntry`, with their line and their text, the built-in's `code` and `message` wording them, and see `findings` pass (R9) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs, etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs
-- [ ] T032 [US1] Write the test of the extension point `arrange`: `arrange.selfOrganising`'s fixtures, its budget's refusal, and a `move` action per element · etalii.adp.ide.desktop/crates/adp-atd-runtime/tests/capabilities.rs
-- [ ] T033 [US1] Move `self_organizing.rs` into the capability, with the trait of its extension point, the module calling it there, registered once its fixtures pass (R10) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/self_organising.rs, etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/mod.rs, etalii.adp.ide.desktop/modules/diagrams/causal-loop-diagram/src/
-- [ ] T034 [US1] Carry out `HostAction::Plugin` through a `DiagramModule` method, which `RuntimeModule` answers with the capability's moves as registration writes, one undo, and see `on-call` steps 1, 2, 3 and 7 pass (R10) · etalii.adp.ide.desktop/crates/adp-diagram/src/module.rs, etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs, etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs
-- [ ] T035 [US1] Vendor C's merge commit, and empty the test's list · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/causal_loop.rs
+- [x] T022 [US1] Write the tool type's test, with today's differences of its 4 cases listed · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/causal_loop.rs
+- [x] T023 [P] [US1] Write the test that a variant with an `id` compiles as the same curve bowed otherwise, and that a variant changing anything else is still refused · etalii.adp.ide.desktop/crates/adp-scene/src/notation/
+- [x] T024 [P] [US1] Write `layout.ring`'s contract: the seating by a depth-first walk of the relations, its start, its direction and its separation, as `ring.rs` does them · etalii.adp/specifications/atd/capabilities/layout.ring/contract.json
+- [x] T025 [P] [US1] Add `layout.ring` to ATD §13's catalogue, with a line in *Changes* (FR-009, R8) · etalii.adp/specifications/atd/ATD-specification.md
+- [x] T026 [US1] Add `layout.ring` to `atd record --capability`, from the module's `ring::compute` on every causal loop document of its parity scripts · etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/capability/ring.rs, etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/capability/mod.rs
+- [x] T027 [US1] Record its fixtures from D's branch, for C (R22); never by hand · etalii.adp/specifications/atd/capabilities/layout.ring/fixtures/
+- [x] T028 [US1] Allow a variant's `id` (R7) · etalii.adp.ide.desktop/crates/adp-scene/src/notation/compile.rs
+- [x] T029 [US1] Move `ring.rs` into the capability, the module calling it there, registered once its fixtures pass, with the variable's fitted size given as its input (R8) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/ring.rs, etalii.adp.ide.desktop/modules/diagrams/causal-loop-diagram/src/
+- [x] T030 [US1] Name the capability in the description's layout and in its `requires`, and close gap 5 in the companion, with the trace (R8) · etalii.adp/definitions/diagrams/causal-loop-diagram.notation.atd, causal-loop-diagram.atd, causal-loop-diagram.md, causal-loop-diagram.trace.json
+- [x] T031 [US1] Give the session a description's unreadable entries as `std.unreadableEntry`, with their line and their text, the built-in's `code` and `message` wording them, and see `findings` pass (R9) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs, etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs
+- [x] T032 [US1] Write the test of the extension point `arrange`: `arrange.selfOrganising`'s fixtures, its budget's refusal, and a `move` action per element · etalii.adp.ide.desktop/crates/adp-atd-runtime/tests/capabilities.rs
+- [x] T033 [US1] Move `self_organizing.rs` into the capability, with the trait of its extension point, the module calling it there, registered once its fixtures pass (R10) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/self_organising.rs, etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/mod.rs, etalii.adp.ide.desktop/modules/diagrams/causal-loop-diagram/src/
+- [x] T034 [US1] Carry out `HostAction::Plugin` through a `DiagramModule` method, which `RuntimeModule` answers with the capability's moves as registration writes, one undo, and see `on-call` steps 1, 2, 3 and 7 pass (R10) · etalii.adp.ide.desktop/crates/adp-diagram/src/module.rs, etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs, etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs
+- [x] T035 [US1] Vendor C's merge commit, and empty the test's list · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/causal_loop.rs
 
-**Checkpoint**: all 4 cases pass. Today 0, and 3 by R1's corrections.
+**Checkpoint**: all 4 cases pass. Today 0, and 3 by R1's corrections. *Reached 2026-11-05* (etalii.adp #714, #716, desktop #155). The Variable style states the padding its width is fitted with, and a `fitWidth` node is seated by its fitted width and drawn at its stated size.
 
 ---
 
@@ -85,20 +85,20 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 **Goal**: FR-001, FR-006, FR-010, SC-001. **Independent test**: `cargo test -p adp-atd-validate --test hype_cycle`.
 
-- [ ] T036 [US1] Write the tool type's test, with today's differences of its 4 cases listed · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/hype_cycle.rs
+- [x] T036 [US1] Write the tool type's test, with today's differences of its 4 cases listed · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/hype_cycle.rs
 - [ ] T037 [P] [US1] Write the test of a time axis: a `yearMonth` value to canvas and back, in each `@unit`, on both sides of the origin · etalii.adp.ide.desktop/crates/adp-atd-runtime/tests/tool.rs
 - [ ] T038 [P] [US1] Write the test that a change constraint refuses a property with its message and that a change hook's sets are one edit with it, on a description; and the test that a hand-written module sees neither (FR-010, R14) · etalii.adp.ide.desktop/crates/adp-atd-runtime/tests/tool.rs, etalii.adp.ide.desktop/crates/adp-diagram/tests/
-- [ ] T039 [US1] Read a time axis's scale as `{unit, size}` and its origin, in both directions, and write a gesture's value as the axis's value type (R13) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs
-- [ ] T040 [US1] Read a placement's `offset`, and give the anchored point as the case records it, the Wardley map's list held (R16) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/databricks_wardley.rs
-- [ ] T041 [US1] Add the `DiagramModule` method that says the session runs a description's change rules, on in `RuntimeModule` only; run `gestures::change` with the domain value, and `hooks::after_change` on the assigned working element, in one edit (R14) · etalii.adp.ide.desktop/crates/adp-diagram/src/module.rs, etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs, etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs
-- [ ] T042 [US1] Read `std.endpoints`' `refusal` for a connect gesture before an id is drawn, and see `refusals` steps 5, 6 and 7 pass (R15) · etalii.adp.ide.desktop/crates/adp-disl/src/derivation/gestures.rs, etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs
-- [ ] T043 [US1] Add a hook on connect for `Influence` that writes its ends as `edits.rs` does, the phases named, and say so in the companion and the trace (R15) · etalii.adp/definitions/diagrams/gartner-hype-cycle-graph.atd, gartner-hype-cycle-graph.md, gartner-hype-cycle-graph.trace.json
-- [ ] T044 [US1] Give `position_in` from the description's axes and its snapping, a drop's `byGesture` included, and see steps 16, 19 and 20 of `coal-technologies` write the module's row and date (R16) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs
+- [x] T039 [US1] Read a time axis's scale as `{unit, size}` and its origin, in both directions, and write a gesture's value as the axis's value type (R13) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs
+- [x] T040 [US1] Read a placement's `offset`, and give the anchored point as the case records it, the Wardley map's list held (R16) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/databricks_wardley.rs
+- [x] T041 [US1] Add the `DiagramModule` method that says the session runs a description's change rules, on in `RuntimeModule` only; run `gestures::change` with the domain value, and `hooks::after_change` on the assigned working element, in one edit (R14) · etalii.adp.ide.desktop/crates/adp-diagram/src/module.rs, etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs, etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs
+- [x] T042 [US1] Read `std.endpoints`' `refusal` for a connect gesture before an id is drawn, and see `refusals` steps 5, 6 and 7 pass (R15) · etalii.adp.ide.desktop/crates/adp-disl/src/derivation/gestures.rs, etalii.adp.ide.desktop/crates/adp-diagram/src/session.rs
+- [x] T043 [US1] Add a hook on connect for `Influence` that writes its ends as `edits.rs` does, the phases named, and say so in the companion and the trace (R15) · etalii.adp/definitions/diagrams/gartner-hype-cycle-graph.atd, gartner-hype-cycle-graph.md, gartner-hype-cycle-graph.trace.json
+- [x] T044 [US1] Give `position_in` from the description's axes and its snapping, a drop's `byGesture` included, and see steps 16, 19 and 20 of `coal-technologies` write the module's row and date (R16) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/tool.rs
 - [ ] T045 [US1] Move `arrangement.rs` into the runtime as DISL's standard `rows`, the module calling it there, and answer a `layout` action with it, with a test against `coal-technologies` step 33 (R16) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/rows.rs, etalii.adp.ide.desktop/modules/diagrams/gartner-hype-cycle-graph/src/arrangement.rs
-- [ ] T047 [US1] Correct in the description what the steps then show, among them the module's clamp of a boundary and its range checks, and take to Peter what no description can state · etalii.adp/definitions/diagrams/gartner-hype-cycle-graph*.atd
-- [ ] T048 [US1] Vendor E's merge commit, and empty the test's list but for what Peter has ruled on · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/hype_cycle.rs
+- [x] T047 [US1] Correct in the description what the steps then show, among them the module's clamp of a boundary and its range checks, and take to Peter what no description can state · etalii.adp/definitions/diagrams/gartner-hype-cycle-graph*.atd
+- [x] T048 [US1] Vendor E's merge commit, and empty the test's list but for what Peter has ruled on · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/hype_cycle.rs
 
-**Checkpoint**: SC-001: all 13 cases of the three diagrams pass, but for what Peter has ruled on.
+**Checkpoint**: SC-001: all 13 cases of the three diagrams pass, but for what Peter has ruled on. *Reached 2026-11-05* (etalii.adp #715, desktop #155): 4 of 4 pass. T045 runs DISL's `rows` through the shared row packer (`adp-layout`'s `row_packing`) rather than moving the module's `arrangement.rs`, which still feeds it its own way; T037 and T038 have no test of their own yet, their behaviour held by the cases and the hand-written module's tests.
 
 ---
 
@@ -106,7 +106,7 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 **Goal**: story 1, scenario 4, SC-004. In each of B, D and F.
 
-- [ ] T049 [US1] Confirm that the Build's WebAssembly step gives the native result for each description, with the capabilities and the extension point registered in that build · etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs, etalii.adp.ide.desktop/crates/adp-atd-lsp/src/
+- [x] T049 [US1] Confirm that the Build's WebAssembly step gives the native result for each description, with the capabilities and the extension point registered in that build · etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs, etalii.adp.ide.desktop/crates/adp-atd-lsp/src/
 
 ---
 
