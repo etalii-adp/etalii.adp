@@ -111,6 +111,10 @@ are, like the FBL ones, each valid against the schema and refused by one of thes
 accepted. The findings a definition gives (such as `service-calls.findings.json`) are validated against
 `$defs/ValidatorOutput` only; the hosts' tests compute them.
 
+The grouping fixtures (`specifications/disl/fixtures/grouping/*.json`, DISL 0.9, section 12.4) are validated against
+`$defs/GroupingFixture`, and each must name it, have one group per key, and hold every item of its list in exactly one
+group; the hosts' tests evaluate them.
+
 A diagram type whose file has a JSON Schema beside its definition (`definitions/diagrams/<name>.schema.json`) shows a
 complete file in the first YAML block of its companion `<name>.md`; that example is validated against the schema, read
 without turning moments into timestamps.
@@ -3068,6 +3072,40 @@ if "--atd-trees" in sys.argv:
     for tree in tree_files:
         errors = sorted(tree_validator.iter_errors(json.loads(tree.read_text(encoding="utf-8"))), key=lambda e: list(e.absolute_path))
         atd_checks.append((tree, [f"at {'/'.join(str(p) for p in e.absolute_path) or '(root)'}: {e.message}" for e in errors[:10]]))
+GROUPING_FIXTURE = DISL.partition("#")[0] + "#/$defs/GroupingFixture"
+
+
+def check_grouping_fixture(path: Path) -> list[str]:
+    """What a grouping fixture (DISL 0.9, section 12.4) must hold besides its schema: it names $defs/GroupingFixture,
+    its groups are one per key, and together they hold the list's items, each once; a read's group holds items of the
+    list only."""
+    fixture = json.loads(path.read_text(encoding="utf-8"))
+    problems = []
+    if fixture.get("$schema") != GROUPING_FIXTURE:
+        problems.append(f"names {fixture.get('$schema')!r}, not {GROUPING_FIXTURE}")
+    items = fixture.get("list", [])
+    if "groups" in fixture:
+        keys, groups = fixture.get("keys", []), fixture["groups"]
+        if len(keys) != len(groups):
+            problems.append(f"it has {len(keys)} key(s) and {len(groups)} group(s)")
+        grouped = sum(len(group) for group in groups)
+        if grouped != len(items):
+            problems.append(f"its groups hold {grouped} item(s), its list {len(items)}")
+        for index, group in enumerate(groups):
+            if not group:
+                problems.append(f"its group {index} is empty, which no key's group is")
+    for read in fixture.get("reads", []):
+        for item in read["group"]:
+            if item not in items:
+                problems.append(f"the read of {read['key']!r} gives {item!r}, which is not in the list")
+    return problems
+
+
+grouping_fixtures = sorted((root / "disl" / "fixtures" / "grouping").glob("*.json"))
+if not grouping_fixtures:
+    atd_checks.append((root / "disl" / "fixtures" / "grouping", ["holds no grouping fixture"]))
+for fixture in grouping_fixtures:
+    atd_checks.append((fixture, check_grouping_fixture(fixture)))
 for path, problems in atd_checks:
     name = path.relative_to(repository).as_posix() if repository in path.parents else path.as_posix()
     if problems:
