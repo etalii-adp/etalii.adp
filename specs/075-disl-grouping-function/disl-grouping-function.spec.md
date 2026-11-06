@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-01
 
-**Status**: Draft
+**Status**: Completed (2026-11-06). Every task in [tasks.md](tasks.md) is ticked.
 
 **Input**: Peter ruled on 2026-11-01 that the SKOS case `geographic-names` stays ignored and that a DISL grouping function is proposed as its own specification, and asked for that specification the same day.
 

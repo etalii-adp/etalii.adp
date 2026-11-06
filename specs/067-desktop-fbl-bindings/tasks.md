@@ -105,7 +105,7 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 - [x] T038 [US4] Implement the version on the desktop, its fixtures passing · etalii.adp.ide.desktop/crates/adp-fbl/src/
 - [x] T039 [US4] Bind the four descriptions' Turtle with the grammar family, without the reader capability · etalii.adp/definitions/diagrams/w3c-*.turtle.atd
 - [x] T040 [US4] Register their layouts (`layout.bandedGrid`, `.grid`, `.depthColumns`, `.layeredRegions`) with their fixtures · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/capabilities/
-- [x] T041 [US4] Add Turtle cases with inserts and removals recorded from the desktop's reader, update the trace, and correct the descriptions until their cases pass; this also does spec 035's T149 · etalii.adp/definitions/diagrams/w3c-*. Done under SC-003: what differs in `nobel-1903`, `prov-o`, `turtle-edits-skos` and the four `broken` cases is listed by name in `w3c.rs`, by Peter's answers of 2026-11-01, and `geographic-names` stays ignored for spec 075.
+- [x] T041 [US4] Add Turtle cases with inserts and removals recorded from the desktop's reader, update the trace, and correct the descriptions until their cases pass; this also does spec 035's T149 · etalii.adp/definitions/diagrams/w3c-*. Done under SC-003: what differs in `nobel-1903`, `prov-o`, `turtle-edits-skos` and the four `broken` cases is listed by name in `w3c.rs`, by Peter's answers of 2026-11-01, and `geographic-names`, ignored until spec 075, runs with the rest since etalii.adp.ide.desktop#156, its differences listed by name.
 
 **Checkpoint**: SC-003 holds.
 

@@ -198,3 +198,26 @@ Nobody has seen this case run to its end, and it now shows two differences unrel
 - **(b)** SC-002 goes from 30 to 60 seconds: Peter agreed on 2026-11-02 (R9).
 - **(c)** Story 3 stays without an estimator, since no host has one (R7): Peter agreed on 2026-11-02.
 - **(d)** SC-003 puts the case in the Build's WebAssembly validation, which then runs it twice, natively and through the module: about 76 seconds on this machine, and no more than that is added. This is for information.
+
+## R13. The last measures (T042)
+
+Measured on 2026-11-05, on the same 8-core Apple Silicon Mac as R1, in a release build of `atd` at the desktop's spec 075 B (#154), one run each, with the descriptions as merged in etalii.adp #717 (C) and #718 (E). Other builds shared the machine at times; each figure says the load where it mattered.
+
+| Run | Before (R1) | After |
+|---|---:|---:|
+| `atd validate --case geographic-names`, the SKOS description | 789 s | 29.8 s (load average about 2), 25.6 s with the prototype's rules |
+| The research prototype, measured beside it | | 40.3 s |
+| `geographic-names`, the case's differences | 299, then 18 with R12's fix | 17: the label row's refusal at step 1 and the bytes of steps 1–14, 16 and 17 that follow from it |
+
+One reading of each body, with no step, through each description:
+
+| Description | `stw/geographic-names.ttl`, before | after | `stw/business-economics.ttl`, after |
+|---|---:|---:|---:|
+| `w3c-skos` | 70.1 s, no card derived | 2.6 s | 4.7 s |
+| `w3c-rdf` | 52.1 s (86 s in R1) | 17.8 s | 74.6 s |
+| `w3c-owl` | 155.8 s (162 s in R1) | 6.4 s | 38.5 s |
+| `w3c-shacl` | 20.7 s (23 s in R1) | 2.3 s | 3.3 s |
+
+No expression goes over `limits.celCost` and no reading over its steps on either body. On a GitHub runner, the Build's time-limited step took 50 s of wall time for the case (etalii.adp.ide.desktop#156), within SC-002's 60. The SKOS readings derive all 436 and 1,151 terms (the desktop's `the_stw_vocabularies_draw_within_the_budgets`). What still grows with the body is the RDF description's budget order, which makes the list of every card again for each card, and the OWL description's per-term reads that are no filter; neither goes over a limit.
+
+Cases passing, before and after: RDF 20 of 22, OWL 21 of 23 and SHACL 22 of 23, unchanged, every result identical. SKOS 22 of 24 before, with `geographic-names` ignored; 22 of 25 after, `geographic-names` running and differing only as listed (SC-004).
