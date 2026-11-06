@@ -117,7 +117,7 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 ### Tests first, in H
 
 - [x] T050 [US2] Write the tool type's test: all 12 cases, today's differences listed, and that a designer no longer answers "has no runtime" · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/hierarchical_requirement.rs
-- [ ] T051 [US2] Write the seeded differences: a copy of the description with one seeded difference each, in a binding rule's attribute, a constraint's rule and an operation's action, each reporting exactly one difference at that construct (story 2, scenario 3) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/validate.rs
+- [x] T051 [US2] Write the seeded differences: a copy of the description with one seeded difference each, in a binding rule's attribute, a constraint's rule and an operation's action, each reporting exactly one difference at that construct (story 2, scenario 3) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/validate.rs
 - [x] T052 [P] [US2] Write the test that a lowered designer has its operations, constraints and ids, with `document` read as the diagram and a reserved attribute kept under an internal name that the reading shows as its own · etalii.adp.ide.desktop/crates/adp-atd-runtime/tests/lowering.rs
 - [x] T053 [P] [US2] Write the test of the `counter` strategy: a number from the mark line, a placeholder numbered with the next edit in reading order, the mark written, `std.missingId` with its sentence · etalii.adp.ide.desktop/crates/adp-disl/tests/
 
@@ -150,27 +150,27 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 ### The recorder and its scripts, I
 
-- [ ] T066 [US3] Write the test that `atd record etalii/knowledge` gives a case for each script, whose bytes equal the script's goldens, and see it fail · etalii.adp.ide.desktop/crates/adp-atd-cli/tests/record.rs
-- [ ] T067 [US3] Record a designer of the `table` kind, its steps translated from `table` gestures to the operations of `knowledge.md`'s table, its reading the model's elements, its documents kept as inputs; name what cannot be translated · etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/table.rs, etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/mod.rs
-- [ ] T068 [P] [US3] Add a parity script of refusals from the module, one step for each sentence it refuses with in `command.rs`, `edits.rs` and `validator.rs`, with its goldens · etalii.adp.ide.desktop/parity/scripts/etalii/knowledge/refusals.json, etalii.adp.ide.desktop/crates/adp-parity/
-- [ ] T069 [P] [US3] Add a parity script over a body with each of `knowledge.md`'s findings, with its goldens · etalii.adp.ide.desktop/parity/scripts/etalii/knowledge/findings.json, etalii.adp.ide.desktop/crates/adp-parity/
+- [x] T066 [US3] Write the test that `atd record etalii/knowledge` gives a case for each script, whose bytes equal the script's goldens, and see it fail · etalii.adp.ide.desktop/crates/adp-atd-cli/tests/record.rs
+- [x] T067 [US3] Record a designer of the `table` kind, its steps translated from `table` gestures to the operations of `knowledge.md`'s table, its reading the model's elements, its documents kept as inputs; name what cannot be translated · etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/table.rs, etalii.adp.ide.desktop/crates/adp-atd-cli/src/record/mod.rs
+- [x] T068 [P] [US3] Add a parity script of refusals from the module, one step for each sentence it refuses with in `command.rs`, `edits.rs` and `validator.rs`, with its goldens · etalii.adp.ide.desktop/parity/scripts/etalii/knowledge/refusals.json, etalii.adp.ide.desktop/crates/adp-parity/
+- [x] T069 [P] [US3] Add a parity script over a body with each of `knowledge.md`'s findings, with its goldens · etalii.adp.ide.desktop/parity/scripts/etalii/knowledge/findings.json, etalii.adp.ide.desktop/crates/adp-parity/
 
 ### The description, J
 
-- [ ] T070 [US3] Write the model, the persistence and the table surface from `knowledge.des`, with `atd check` clean at each step · etalii.adp/definitions/designers/knowledge.atd
-- [ ] T071 [P] [US3] Write the three bindings from `knowledge.fbl`, each a part, a test holding the lowered form equal to the file · etalii.adp/definitions/designers/knowledge.yaml.atd, knowledge.json.atd, knowledge.xml.atd
-- [ ] T072 [US3] Write the 55 operations and the constraints from `knowledge.des` and `knowledge.md`, with `knowledge.parent-cycle` as a script function (R20; spec 035, T064) · etalii.adp/definitions/designers/knowledge.atd
-- [ ] T073 [US3] Write the trace, and say in the companion what the description cannot state and why that is no language gap (FR-004, R20) · etalii.adp/definitions/designers/knowledge.trace.json, etalii.adp/definitions/designers/knowledge.md, etalii.adp/definitions/designers/README.md
-- [ ] T074 [US3] Record the cases with I's `atd record`, on a branch of the desktop named as J: reading, writes, undo, refusals and findings, in each format, never by hand (FR-005, FR-008) · etalii.adp/definitions/designers/conformance/knowledge/
+- [x] T070 [US3] Write the model, the persistence and the table surface from `knowledge.des`, with `atd check` clean at each step · etalii.adp/definitions/designers/knowledge.atd
+- [x] T071 [P] [US3] Write the three bindings from `knowledge.fbl`, each a part, a test holding the lowered form equal to the file · etalii.adp/definitions/designers/knowledge.yaml.atd, knowledge.json.atd, knowledge.xml.atd
+- [x] T072 [US3] Write the 55 operations and the constraints from `knowledge.des` and `knowledge.md`, with `knowledge.parent-cycle` as a script function (R20; spec 035, T064) · etalii.adp/definitions/designers/knowledge.atd
+- [x] T073 [US3] Write the trace, and say in the companion what the description cannot state and why that is no language gap (FR-004, R20) · etalii.adp/definitions/designers/knowledge.trace.json, etalii.adp/definitions/designers/knowledge.md, etalii.adp/definitions/designers/README.md
+- [x] T074 [US3] Record the cases with I's `atd record`, on a branch of the desktop named as J: reading, writes, undo, refusals and findings, in each format, never by hand (FR-005, FR-008) · etalii.adp/definitions/designers/conformance/knowledge/
 
 ### The validation, K
 
-- [ ] T075 [US3] Write the tool type's test, with every case and what it differs in listed, and see it fail · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/knowledge.rs
-- [ ] T076 [US3] Run a lowered table designer: nested `Cell` and `CellItem` elements, the three families, and a relation's row of another file read as a plain id (R20) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/lowering/designer.rs, etalii.adp.ide.desktop/crates/adp-atd-validate/src/parts.rs
-- [ ] T077 [US3] Correct in the description until each case passes, and take to Peter what no description can state · etalii.adp/definitions/designers/knowledge*.atd
-- [ ] T078 [US3] Vendor J's merge commit, empty the test's list but for what Peter has ruled on, and confirm that the WebAssembly check gives the native result (SC-004) · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/knowledge.rs, etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs
+- [x] T075 [US3] Write the tool type's test, with every case and what it differs in listed, and see it fail · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/knowledge.rs
+- [x] T076 [US3] Run a lowered table designer: nested `Cell` and `CellItem` elements, the three families, and a relation's row of another file read as a plain id (R20) · etalii.adp.ide.desktop/crates/adp-atd-runtime/src/lowering/designer.rs, etalii.adp.ide.desktop/crates/adp-atd-validate/src/parts.rs
+- [x] T077 [US3] Correct in the description until each case passes, and take to Peter what no description can state · etalii.adp/definitions/designers/knowledge*.atd
+- [x] T078 [US3] Vendor J's merge commit, empty the test's list but for what Peter has ruled on, and confirm that the WebAssembly check gives the native result (SC-004) · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/knowledge.rs, etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs
 
-**Checkpoint**: SC-003 holds.
+**Checkpoint**: SC-003 holds. *Reached 2026-11-06* (desktop #160 and #161, etalii.adp #725): 4 of the Knowledge designer's 5 cases pass; `findings` differs at `read:findings` and `read:reading`, the host's findings, listed awaiting Peter's ruling. T051's seeded differences are in the Knowledge designer's description, which has a constraint of its own where the hierarchical requirement designer's has none.
 
 ---
 
