@@ -2,7 +2,7 @@
 id: feature-075-disl-grouping-function
 type: task-spec
 title: "075 A DISL Function That Groups a List by Key"
-status: active
+status: done
 parent: specs-archive
 references:
   - disl
@@ -18,7 +18,7 @@ tags:
 
 **Created**: 2026-11-01
 
-**Status**: Draft
+**Status**: Completed (2026-11-06). Every task in [tasks.md](../../specs/075-disl-grouping-function/tasks.md) is ticked.
 
 **Input**: Peter ruled on 2026-11-01 that the SKOS case `geographic-names` stays ignored and that a DISL grouping function is proposed as its own specification, and asked for that specification the same day.
 

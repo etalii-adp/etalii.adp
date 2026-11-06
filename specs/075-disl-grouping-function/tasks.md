@@ -2,7 +2,7 @@
 
 **Input**: [disl-grouping-function.spec.md](disl-grouping-function.spec.md), [plan.md](plan.md), [research.md](research.md)
 
-**Approved**: plan and tasks by Peter on 2026-11-02. No implementation is approved by that; building waits for his word.
+**Approved**: plan and tasks by Peter on 2026-11-02, and building on 2026-11-05. Every task is ticked: etalii.adp #711, #713, #717, #718; etalii.adp.ide.desktop #153 (the vendor's catch-up it needed), #154, #156, #157.
 
 Every path carries its repository as prefix. Tasks are ticked in etalii.adp once their pull request has merged, batched into one tick pull request.
 
@@ -41,15 +41,15 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 **Goal**: FR-005, FR-008, SC-001. **Independent test**: `cargo test -p adp-disl --test grouping_fixtures`, native and WebAssembly.
 
-- [ ] T012 [US1] Vendor A's merge commit with `tools/sync-etalii-adp.py`, never by hand · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/vendor/etalii.adp.lock
-- [ ] T013 [US1] Write the test that runs every grouping fixture, with its files included at compile time so that it builds for WebAssembly; see it fail · etalii.adp.ide.desktop/crates/adp-disl/tests/grouping_fixtures.rs
-- [ ] T014 [US1] Add `Macro::GroupBy` and the value it gives, with `get` and `keys`, offered in DISL's environment and not in FBL's (R3, R4, R8) · etalii.adp.ide.desktop/crates/adp-cel/src/eval.rs, function.rs, group.rs, etalii.adp.ide.desktop/crates/adp-disl/src/expressions/library.rs
-- [ ] T015 [US1] Write the test of the charge: a grouping charges one evaluation of its key per item, a `get` the size of its group, and a kept grouping the same as a fresh one; then implement it (FR-005, R7) · etalii.adp.ide.desktop/crates/adp-disl/tests/grouping_cost.rs, etalii.adp.ide.desktop/crates/adp-cel/src/eval.rs
-- [ ] T016 [US1] Write the tests of what is kept: a grouping is made once over an unchanged list, and made again after an attribute, a parent, a type or an end changes, and after a node of the list is added or removed; then keep `nodesOfType` and `relationsOfType` lists while their elements are the same, and forget groupings where the budgets are forgotten for an element's value (edge case, R5) · etalii.adp.ide.desktop/crates/adp-disl/tests/grouping_kept.rs, etalii.adp.ide.desktop/crates/adp-disl/src/model/diagram.rs, element.rs
-- [ ] T017 [US1] Write the tests of what is not kept: a key that reads a variable other than its own, `diagram`, an element's `id`, a derived attribute, another element or a description's function is grouped again each time and gives the same result as ever; then implement the check, made during the pass (R5, R6) · etalii.adp.ide.desktop/crates/adp-disl/tests/grouping_kept.rs, etalii.adp.ide.desktop/crates/adp-cel/src/eval.rs
-- [ ] T018 [US1] Teach ATD's lowering that `groupBy` is a macro and that it lowers to DISL 0.9, and its check the macro, the methods and their types, with a test that an `.atd` using them checks clean and has an abstract tree the schema accepts · etalii.adp.ide.desktop/crates/adp-atd-syntax/src/lower.rs, etalii.adp.ide.desktop/crates/adp-atd-runtime/src/lowering/disl.rs, etalii.adp.ide.desktop/crates/adp-atd-check/src/cel.rs, etalii.adp.ide.desktop/crates/adp-atd-check/tests/
-- [ ] T019 [US1] Run the fixtures for WebAssembly in the Build, with `wasm-bindgen-test` as a development dependency only (R10, SC-001) · etalii.adp.ide.desktop/crates/adp-disl/Cargo.toml, etalii.adp.ide.desktop/.github/workflows/build.yml
-- [ ] T020 [US1] Add the macro to the parity inventory, and to what the desktop's DISL runtime states of itself · etalii.adp.ide.desktop/parity/inventory.md, etalii.adp/hosts/desktop/specification-runtimes/disl.md
+- [x] T012 [US1] Vendor A's merge commit with `tools/sync-etalii-adp.py`, never by hand · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/vendor/etalii.adp.lock
+- [x] T013 [US1] Write the test that runs every grouping fixture, with its files included at compile time so that it builds for WebAssembly; see it fail · etalii.adp.ide.desktop/crates/adp-disl/tests/grouping_fixtures.rs
+- [x] T014 [US1] Add `Macro::GroupBy` and the value it gives, with `get` and `keys`, offered in DISL's environment and not in FBL's (R3, R4, R8) · etalii.adp.ide.desktop/crates/adp-cel/src/eval.rs, function.rs, group.rs, etalii.adp.ide.desktop/crates/adp-disl/src/expressions/library.rs
+- [x] T015 [US1] Write the test of the charge: a grouping charges one evaluation of its key per item, a `get` the size of its group, and a kept grouping the same as a fresh one; then implement it (FR-005, R7) · etalii.adp.ide.desktop/crates/adp-disl/tests/grouping_cost.rs, etalii.adp.ide.desktop/crates/adp-cel/src/eval.rs
+- [x] T016 [US1] Write the tests of what is kept: a grouping is made once over an unchanged list, and made again after an attribute, a parent, a type or an end changes, and after a node of the list is added or removed; then keep `nodesOfType` and `relationsOfType` lists while their elements are the same, and forget groupings where the budgets are forgotten for an element's value (edge case, R5) · etalii.adp.ide.desktop/crates/adp-disl/tests/grouping_kept.rs, etalii.adp.ide.desktop/crates/adp-disl/src/model/diagram.rs, element.rs
+- [x] T017 [US1] Write the tests of what is not kept: a key that reads a variable other than its own, `diagram`, an element's `id`, a derived attribute, another element or a description's function is grouped again each time and gives the same result as ever; then implement the check, made during the pass (R5, R6) · etalii.adp.ide.desktop/crates/adp-disl/tests/grouping_kept.rs, etalii.adp.ide.desktop/crates/adp-cel/src/eval.rs
+- [x] T018 [US1] Teach ATD's lowering that `groupBy` is a macro and that it lowers to DISL 0.9, and its check the macro, the methods and their types, with a test that an `.atd` using them checks clean and has an abstract tree the schema accepts · etalii.adp.ide.desktop/crates/adp-atd-syntax/src/lower.rs, etalii.adp.ide.desktop/crates/adp-atd-runtime/src/lowering/disl.rs, etalii.adp.ide.desktop/crates/adp-atd-check/src/cel.rs, etalii.adp.ide.desktop/crates/adp-atd-check/tests/
+- [x] T019 [US1] Run the fixtures for WebAssembly in the Build, with `wasm-bindgen-test` as a development dependency only (R10, SC-001) · etalii.adp.ide.desktop/crates/adp-disl/Cargo.toml, etalii.adp.ide.desktop/.github/workflows/build.yml
+- [x] T020 [US1] Add the macro to the parity inventory, and to what the desktop's DISL runtime states of itself · etalii.adp.ide.desktop/parity/inventory.md, etalii.adp/hosts/desktop/specification-runtimes/disl.md
 
 **Checkpoint**: SC-001 holds.
 
@@ -59,8 +59,8 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 **Goal**: FR-005's estimate. **Independent test**: `atd check` on the two descriptions below equals their findings files. No host has an estimator today (R7), so this story holds what is true and states the rule any estimator follows; Peter ruled on 2026-11-02 that none is built.
 
-- [ ] T021 [US3] Add a description that groups a list of the limit's size and reads its groups, with a findings file naming no cost; check it · etalii.adp/specifications/atd/fixtures/grouping-at-limit/, etalii.adp.ide.desktop/crates/adp-atd-check/tests/
-- [ ] T022 [US3] Add a description that still filters a whole list once per item, with a findings file equal to what `atd check` gives before this feature · etalii.adp/specifications/atd/fixtures/filtering-per-item/, etalii.adp.ide.desktop/crates/adp-atd-check/tests/
+- [x] T021 [US3] Add a description that groups a list of the limit's size and reads its groups, with a findings file naming no cost; check it · etalii.adp/specifications/atd/fixtures/grouping-at-limit/, etalii.adp.ide.desktop/crates/adp-atd-check/tests/
+- [x] T022 [US3] Add a description that still filters a whole list once per item, with a findings file equal to what `atd check` gives before this feature · etalii.adp/specifications/atd/fixtures/filtering-per-item/, etalii.adp.ide.desktop/crates/adp-atd-check/tests/
 
 **Checkpoint**: pull request B is merged.
 
@@ -70,21 +70,21 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 **Goal**: FR-009 and FR-010 for SKOS, SC-002, SC-003, SC-005. **Independent test**: `atd validate --case geographic-names` in the time SC-002 states, the case's differences being those `w3c.rs` lists.
 
-- [ ] T023 [US2] On D's branch, before the description moves, remove `#[ignore]` from `the_geographic_names_case` and make it compare its differences with what is listed; record the failure in the pull request's description · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs
-- [ ] T024 [US2] Write the test for SC-005: `stw/geographic-names.ttl` and `stw/business-economics.ttl` draw through the description, with no finding of a cost exceeded and no derived type failing, and the budget's notice on the second; see it fail · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs
-- [ ] T025 [US2] Move the SKOS description's whole-list reads onto groups with inline keys: `repeatSuffix`, `isCell`, `collectionMembers`, `skosIsTyped`, `skosDrawable`, `skosMember`, `skosTops`, `skosChildren`, the broader ends, `skosLabels` and each derived type's attributes and `sources` (R11) · etalii.adp/definitions/diagrams/w3c-skos.atd
-- [ ] T026 [US2] Walk once per `from`, each item carrying its place, and read the place in the budget's `order` (R11) · etalii.adp/definitions/diagrams/w3c-skos.atd
-- [ ] T027 [US2] Replace `distinct()` on long lists of strings by `groupBy(x, x).keys()`, `familyTruncated` among them, so that nothing goes over `limits.celCost` (R2, R11) · etalii.adp/definitions/diagrams/w3c-skos.atd
-- [ ] T028 [US2] Draw a `Related` edge from the end whose id sorts first, as its own `doc` says and the case records (R12) · etalii.adp/definitions/diagrams/w3c-skos.atd
-- [ ] T045 [US2] Add a test that setting `skos.doc:definition` writes the triple with the module's bytes, seen failing first, from step 2 of `geographic-names` (FR-012) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs
-- [ ] T046 [US2] Let the SKOS description write a concept's definition set through its row, and stop if DISL or FBL cannot state it, for Peter's ruling (FR-012, R12) · etalii.adp/definitions/diagrams/w3c-skos.atd
-- [ ] T029 [US2] Declare `cel.groupBy` in the description's `requires.features` (R11) · etalii.adp/definitions/diagrams/w3c-skos.atd
-- [ ] T030 [US2] Say in the companion that the rules read groups, update the trace's items where they moved, and confirm by diff that no `conformance/` file changed (FR-009, SC-004) · etalii.adp/definitions/diagrams/w3c-skos.md, w3c-skos.trace.json
-- [ ] T031 [US2] Vendor C's merge commit · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/vendor/etalii.adp.lock
-- [ ] T032 [US2] Remove `TOO_LONG` and its filter, and let `the_skos_cases_pass_but_for_what_is_listed` count all 25 cases; list what still differs in the case by name, which is the label row's refusal and the bytes that follow from it (FR-010, SC-003, R12) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs
-- [ ] T033 [US2] Remove the skip from the WebAssembly check: `TOO_LONG`, its comment, its test in the loop and `--except`, and confirm the result equals the native one (FR-010, SC-003, story 2 scenario 2) · etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs
-- [ ] T034 [US2] Remove the comment at the head of `w3c.rs` that says the rules are quadratic, and `Cargo.toml`'s note of the same, if the dev profile's time no longer needs the optimised packages they name; keep whichever the measure says is still needed · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs, etalii.adp.ide.desktop/Cargo.toml
-- [ ] T035 [US2] Hold SC-002 in the Build: a step that runs `atd validate --case geographic-names` in the release build under a time limit, its wall time in the log · etalii.adp.ide.desktop/.github/workflows/build.yml
+- [x] T023 [US2] On D's branch, before the description moves, remove `#[ignore]` from `the_geographic_names_case` and make it compare its differences with what is listed; record the failure in the pull request's description · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs
+- [x] T024 [US2] Write the test for SC-005: `stw/geographic-names.ttl` and `stw/business-economics.ttl` draw through the description, with no finding of a cost exceeded and no derived type failing, and the budget's notice on the second; see it fail · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs
+- [x] T025 [US2] Move the SKOS description's whole-list reads onto groups with inline keys: `repeatSuffix`, `isCell`, `collectionMembers`, `skosIsTyped`, `skosDrawable`, `skosMember`, `skosTops`, `skosChildren`, the broader ends, `skosLabels` and each derived type's attributes and `sources` (R11) · etalii.adp/definitions/diagrams/w3c-skos.atd
+- [x] T026 [US2] Walk once per `from`, each item carrying its place, and read the place in the budget's `order` (R11) · etalii.adp/definitions/diagrams/w3c-skos.atd
+- [x] T027 [US2] Replace `distinct()` on long lists of strings by `groupBy(x, x).keys()`, `familyTruncated` among them, so that nothing goes over `limits.celCost` (R2, R11) · etalii.adp/definitions/diagrams/w3c-skos.atd
+- [x] T028 [US2] Draw a `Related` edge from the end whose id sorts first, as its own `doc` says and the case records (R12) · etalii.adp/definitions/diagrams/w3c-skos.atd
+- [x] T045 [US2] Add a test that setting `skos.doc:definition` writes the triple with the module's bytes, seen failing first, from step 2 of `geographic-names` (FR-012) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs
+- [x] T046 [US2] Let the SKOS description write a concept's definition set through its row, and stop if DISL or FBL cannot state it, for Peter's ruling (FR-012, R12) · etalii.adp/definitions/diagrams/w3c-skos.atd
+- [x] T029 [US2] Declare `cel.groupBy` in the description's `requires.features` (R11) · etalii.adp/definitions/diagrams/w3c-skos.atd
+- [x] T030 [US2] Say in the companion that the rules read groups, update the trace's items where they moved, and confirm by diff that no `conformance/` file changed (FR-009, SC-004) · etalii.adp/definitions/diagrams/w3c-skos.md, w3c-skos.trace.json
+- [x] T031 [US2] Vendor C's merge commit · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/vendor/etalii.adp.lock
+- [x] T032 [US2] Remove `TOO_LONG` and its filter, and let `the_skos_cases_pass_but_for_what_is_listed` count all 25 cases; list what still differs in the case by name, which is the label row's refusal and the bytes that follow from it (FR-010, SC-003, R12) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs
+- [x] T033 [US2] Remove the skip from the WebAssembly check: `TOO_LONG`, its comment, its test in the loop and `--except`, and confirm the result equals the native one (FR-010, SC-003, story 2 scenario 2) · etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs
+- [x] T034 [US2] Remove the comment at the head of `w3c.rs` that says the rules are quadratic, and `Cargo.toml`'s note of the same, if the dev profile's time no longer needs the optimised packages they name; keep whichever the measure says is still needed · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs, etalii.adp.ide.desktop/Cargo.toml
+- [x] T035 [US2] Hold SC-002 in the Build: a step that runs `atd validate --case geographic-names` in the release build under a time limit, its wall time in the log · etalii.adp.ide.desktop/.github/workflows/build.yml
 
 **Checkpoint**: SC-002, SC-003 and SC-005 hold.
 
@@ -94,11 +94,11 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 **Goal**: FR-009 and FR-011, SC-004. **Independent test**: `w3c.rs`'s four description tests with unchanged lists, and each description's reading of `stw/geographic-names.ttl` measured beside R1's figures.
 
-- [ ] T036 [P] [US2] Move the RDF description: `repeatSuffix`, `isCell`, `collectionMembers`, the per-item `distinct().indexOf(id)` that goes over its cost on this body, and the attributes' whole-list filters (R1) · etalii.adp/definitions/diagrams/w3c-rdf.atd
-- [ ] T037 [P] [US2] Move the OWL description: `repeatSuffix` and the per-IRI `exists` reads that take 150 seconds of its 160; check whether `celCost: 100000000` is still needed, and say so rather than change it (R1) · etalii.adp/definitions/diagrams/w3c-owl.atd
-- [ ] T038 [P] [US2] Move the SHACL description: `repeatSuffix`, which is nearly all its time, and no more unless a measure asks (R1) · etalii.adp/definitions/diagrams/w3c-shacl.atd
-- [ ] T039 [US2] Close gap 6: state how the case and each body measured, or which body still goes over and by how much, and correct the sentence after the table that says the case stays ignored; say the same in the other companions and traces where it applies (FR-011) · etalii.adp/definitions/diagrams/w3c-rdf.md, w3c-owl.md, w3c-shacl.md, w3c-skos.md, and their `.trace.json`
-- [ ] T040 [US2] Confirm by diff that no `conformance/` file changed, then vendor E's merge commit, each description's list staying what it is (SC-004) · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs
+- [x] T036 [P] [US2] Move the RDF description: `repeatSuffix`, `isCell`, `collectionMembers`, the per-item `distinct().indexOf(id)` that goes over its cost on this body, and the attributes' whole-list filters (R1) · etalii.adp/definitions/diagrams/w3c-rdf.atd
+- [x] T037 [P] [US2] Move the OWL description: `repeatSuffix` and the per-IRI `exists` reads that take 150 seconds of its 160; check whether `celCost: 100000000` is still needed, and say so rather than change it (R1) · etalii.adp/definitions/diagrams/w3c-owl.atd
+- [x] T038 [P] [US2] Move the SHACL description: `repeatSuffix`, which is nearly all its time, and no more unless a measure asks (R1) · etalii.adp/definitions/diagrams/w3c-shacl.atd
+- [x] T039 [US2] Close gap 6: state how the case and each body measured, or which body still goes over and by how much, and correct the sentence after the table that says the case stays ignored; say the same in the other companions and traces where it applies (FR-011) · etalii.adp/definitions/diagrams/w3c-rdf.md, w3c-owl.md, w3c-shacl.md, w3c-skos.md, and their `.trace.json`
+- [x] T040 [US2] Confirm by diff that no `conformance/` file changed, then vendor E's merge commit, each description's list staying what it is (SC-004) · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/w3c.rs
 
 **Checkpoint**: SC-004 holds; gap 6 is closed or says what remains.
 
@@ -106,10 +106,10 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 
 ## Phase 7: Polish
 
-- [ ] T041 [P] Confirm the native and WebAssembly validations agree on all four descriptions at F's commit, with the Build's log as the record (SC-001, SC-003) · etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs
-- [ ] T042 [P] Record the last measures beside R1's, in a release build on the same machine where possible (SC-002) · etalii.adp/specs/075-disl-grouping-function/research.md
-- [ ] T043 Mark the feature's status, and regenerate ThinkRail's copy · etalii.adp/specs/075-disl-grouping-function/.spec-context.json, etalii.adp/thinkrail/
-- [ ] T044 Tick the merged tasks in one pull request · etalii.adp/specs/075-disl-grouping-function/tasks.md, and spec 067's note on `geographic-names` where it says the case stays ignored · etalii.adp/specs/067-desktop-fbl-bindings/tasks.md
+- [x] T041 [P] Confirm the native and WebAssembly validations agree on all four descriptions at F's commit, with the Build's log as the record (SC-001, SC-003) · etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs
+- [x] T042 [P] Record the last measures beside R1's, in a release build on the same machine where possible (SC-002) · etalii.adp/specs/075-disl-grouping-function/research.md
+- [x] T043 Mark the feature's status, and regenerate ThinkRail's copy · etalii.adp/specs/075-disl-grouping-function/.spec-context.json, etalii.adp/thinkrail/
+- [x] T044 Tick the merged tasks in one pull request · etalii.adp/specs/075-disl-grouping-function/tasks.md, and spec 067's note on `geographic-names` where it says the case stays ignored · etalii.adp/specs/067-desktop-fbl-bindings/tasks.md
 
 ---
 

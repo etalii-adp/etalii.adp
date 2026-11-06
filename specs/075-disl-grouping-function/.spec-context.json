@@ -3,8 +3,8 @@
   "specName": "075-disl-grouping-function",
   "branch": "075-disl-grouping-function",
   "selectedAt": "2026-11-01T12:45:00.000Z",
-  "currentStep": "tasks",
-  "status": "ready-to-implement",
+  "currentStep": "implement",
+  "status": "completed",
   "history": [
     {
       "step": "plan",
@@ -19,8 +19,15 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-11-02T06:55:34.450Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-06T00:00:00.000Z"
     }
   ],
   "telemetryInstanceId": "52dda81f-ac37-46d9-b047-807fad3d2b68",
-  "last_action": "Plan, research and tasks written on Peter's approval of 2026-11-02; building waits for his word"
+  "last_action": "Built on Peter's word of 2026-11-05: etalii.adp #711, #717, #718; etalii.adp.ide.desktop #153, #154, #156 and the F pull request"
 }
