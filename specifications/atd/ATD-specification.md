@@ -1213,13 +1213,6 @@ designer example/reading-list version "0.1.0" {
     create Book
   }
 
-  /// Every selected book, in one step: an operation of the selection, bound as `selection` (DESL section 8.1).
-  operation removeBooks "Remove" for selection {
-    for b in selection.filter(e, e.isA('Book')) limit 100000 {
-      delete b
-    }
-  }
-
   binding yaml family yaml {
     label "Reading list"
     claims { extensions: [".yaml", ".yml"], shared: true, marker: { rootKey: designer, value: "example/reading-list" }, origins: ["example/reading-list"] }
@@ -1267,6 +1260,13 @@ views:
   - id: {newid:view}
     name: All books
 """
+  }
+
+  /// Every selected book, in one step: an operation of the selection, bound as `selection` (DESL section 8.1).
+  operation removeBooks "Remove" for selection {
+    for b in selection.filter(e, e.isA('Book')) limit 100000 {
+      delete b
+    }
   }
 }
 ```
