@@ -1,0 +1,105 @@
+# Feature Specification: The RDF Description Orders Its Cards Once per Reading
+
+**Feature Branch**: `features/078-rdf-budget-order`
+
+**Created**: 2026-11-08
+
+**Status**: Draft
+
+**Input**: Peter ruled on 2026-11-07, by a 👍 on a decision card read as its recommended option, that the RDF description's budget order, which still grows with the square of the body after spec 075, is specified as its own feature: each card carries its place through its `from`, as the SKOS description already carries `walkOrder`.
+
+## Context
+
+Spec 075 gave DISL 0.9's `groupBy`, and the four W3C descriptions read groups where their rules filtered every triple again. That closed `w3c-rdf.md`'s gap 6, and every reading of the corpus's two largest bodies now stays within `limits.celCost` and ATD's step budget. One cost was left: `w3c-rdf.md` and spec 075's research both name the RDF description's budget order, which makes the list of every card again for each card it orders, as what still grows with the body.
+
+The place of a card among the cards, in the order the file first names them, is what the description's layout fills its bands in. Today each card asks for its place on its own, and each ask builds the whole ordered list of cards from the triples before looking the card up in it. With one card per term, a reading builds that list once per card, so its work grows with the number of cards times the size of the body.
+
+The 2026-11-05 measurement of spec 075 (one reading of each body, with no step, in a release build, on an 8-core Apple Silicon Mac) shows the cost:
+
+| Description | `stw/geographic-names.ttl`, 5,083 triples | `stw/business-economics.ttl`, 17,683 triples |
+| --- | ---: | ---: |
+| `w3c-skos` | 2.6 s | 4.7 s |
+| `w3c-rdf` | 17.8 s | 74.6 s |
+| `w3c-shacl` | 2.3 s | 3.3 s |
+
+The SKOS description had the same shape of cost during spec 075, an order made again for each term, and removed it by walking its terms once for each derived type and carrying each term's place with it (spec 075, research R11, task T026); `business-economics` then fell from 60 seconds to 12.4 through that change alone. A person opening `business-economics.ttl` in the RDF tool waits about 75 seconds for a reading that stays within every limit, which is no defect a check reports, but is a wait nobody should have.
+
+### What this feature is not
+
+- **Not a change to what the RDF description means.** Every card keeps its place, every case gives the result it gives today, and nothing is recorded again.
+- **Not a language change.** The description can already carry a value through a derived type's `from`, as the SKOS description does; no DISL, ATD or FBL construct is added.
+- **Not the OWL description's per-term reads**, which spec 075 also names as growing with the body; they are not an order, stay within every limit, and are not part of Peter's ruling.
+- **Not a raised or lowered limit.** `limits.celCost`, the step budget and the budget of 1000 cards stay as they are.
+- **Not a change to the budget's rule.** Which cards a truncated reading draws, and the notice it shows, stay as they are.
+
+## User Scenarios & Testing *(mandatory)*
+
+### User Story 1 - A large RDF file opens in seconds (Priority: P1)
+
+A person opens a large Turtle file, such as `stw/business-economics.ttl`, in the RDF tool. The cards appear in the same places as today, in the order the file first names them, but the reading no longer builds the whole order again for each card, so the person waits seconds rather than more than a minute.
+
+**Why this priority**: It is the reason for the feature: the wait is the only thing that changes.
+
+**Independent Test**: One reading of each of the corpus's two largest bodies through the RDF description, with no step, in a release build, timed and compared with the 2026-11-05 figures, and the cards' places compared with today's.
+
+**Acceptance Scenarios**:
+
+1. **Given** `stw/business-economics.ttl`, **When** it is read through the RDF description, **Then** the reading finishes within SC-001's bound and every card has the place it has today.
+2. **Given** `stw/geographic-names.ttl`, **When** it is read through the RDF description, **Then** the reading takes less time than today's 17.8 seconds, with every card in its place.
+3. **Given** a body with more cards than the budget of 1000, **When** it is read, **Then** the same cards are drawn, in the same order, with the same notice as today.
+
+---
+
+### User Story 2 - The cases still say the same (Priority: P1)
+
+A tool engineer validates the RDF description after the change. Every case that passes today passes, every case that differs today differs only as it is listed, and no expected result is touched.
+
+**Why this priority**: A faster reading that draws anything differently would be a change of meaning, which this feature rules out.
+
+**Independent Test**: `atd validate` on the RDF description, natively and through the WebAssembly module, compared with today's results case by case.
+
+**Acceptance Scenarios**:
+
+1. **Given** the RDF description's 22 cases, **When** they are validated, **Then** the same 20 pass and the other two differ only as the desktop's tests list them today.
+2. **Given** a step of a case that adds, renames or removes a resource, **When** it is replayed, **Then** the cards after it have the places they have today, the new or renamed card included.
+
+### Edge Cases
+
+- A term the file names first as an object and later as a subject keeps the place of its first naming, as today.
+- A blank node and an IRI share one order: a card's place counts the cards of both kinds before it, as today.
+- A term named only inside a collection, or only as a type, is placed, or not drawn, exactly as today.
+- An edit that adds, renames or removes a card gives every card the place a fresh reading of the edited body would give it.
+- An empty body has no cards, and so no order to make.
+
+## Requirements *(mandatory)*
+
+### Functional Requirements
+
+- **FR-001**: The RDF description MUST give each card its place among the cards, in the order the file first names them, without making the whole order again for each card: each card MUST carry its place through its derived type's `from`, as the SKOS description carries `walkOrder` (Peter, 2026-11-07).
+- **FR-002**: Every card's place MUST be the place it has today, for every body and after every edit.
+- **FR-003**: The layout MUST read each card's place from what the card carries.
+- **FR-004**: The budget of 1000 cards MUST keep the cards it keeps today, in the same order, with the same notice and the same withheld edits.
+- **FR-005**: No case's expected result MAY change, and no case MAY be recorded again for this feature.
+- **FR-006**: No limit MAY be raised, and no language construct MAY be added.
+- **FR-007**: `w3c-rdf.md` MUST state the new measurement of both bodies beside the 2026-11-05 one, and stop naming the budget order as what still grows with the body if it no longer does; its trace MUST say the same where it says so today.
+
+### Key Entities
+
+- **Card**: a resource or a blank node drawn from the triples, one per term in subject or object position.
+- **Place**: where a card stands among all the cards, in the order the file first names their terms; the order the layout fills its bands in.
+
+## Success Criteria *(mandatory)*
+
+### Measurable Outcomes
+
+- **SC-001**: One reading of `stw/business-economics.ttl` through the RDF description, with no step, takes under 15 seconds in a release build on the machine of the 2026-11-05 measurement (74.6 seconds then).
+- **SC-002**: One reading of `stw/geographic-names.ttl` through the RDF description takes less time than its 17.8 seconds of 2026-11-05.
+- **SC-003**: The RDF description's cases give, natively and through the WebAssembly module, exactly the results they give before the change: 20 of 22 passing, the other two differing only as listed.
+- **SC-004**: Both bodies' readings draw every card they draw today, each in its place, with no expression over `limits.celCost` and no reading over its step budget.
+
+## Assumptions
+
+- The order made again for each card is what dominates the RDF description's reading of the largest bodies, as spec 075's research and `w3c-rdf.md` say. The plan measures this first; if something else dominates, this specification comes back to Peter before anything is built.
+- SC-001's 15 seconds is a first bound, taken from what the same change did for the SKOS description (60 seconds to 12.4 on `business-economics`); the plan may propose another from what it measures, as spec 075's plan did for its SC-002.
+- Only the RDF description changes, in etalii.adp; the desktop host vendors it and its tests confirm SC-003 and SC-004. No other host is touched.
+- Planning and building wait for Peter's approval of this specification.
