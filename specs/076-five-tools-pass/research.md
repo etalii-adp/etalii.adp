@@ -171,6 +171,8 @@ Nothing here is decided by this plan. The tasks that depend on them say so.
 - **Q3: stated in DESL** (a), as one sentence with a fixture, as a minor version of DESL. `line/44` is then listed in no case.
 - **Q4: no split.** Stories 2 and 3 follow story 1, as the plan orders them.
 
+**Peter's answers, 2026-11-07** (Q5 to Q10 of the specification's clarifications, each a 👍 on its card, read as the recommended option). The prefix "could not be written:" is our recorder's and goes, with the hierarchical requirement cases recorded again (Q5); `fbl.stale-view-data` stays `info` and `structure` 11 and `structure-lf` 11 are listed as a quirk (Q6); the validator runs `hierarchy.add` by writing the binding's template, which ATD §2.3 states (Q7); the Knowledge designer's `findings` case is listed as module behaviour (Q8); ATD's checker accepts `for selection` and `deleteRows` takes it (Q9); `knowledge.des` gains `setNewOption` and `setCondition`'s value parameters (Q10).
+
 ## R22. How this lands
 
 - **Decision.** The order Peter asked for: etalii.adp first, then vendoring with `tools/sync-etalii-adp.py`, then the desktop's pull request, per tool type so that each is reviewed against its own test. The contract `layout.ring` and its fixtures are in etalii.adp first. Its fixtures are recorded with `atd record --capability` from the desktop branch that will vendor them, so that `recordedWith` names that branch's commit and `atd record --check` holds in that pull request.
