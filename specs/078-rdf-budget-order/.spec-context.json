@@ -1,0 +1,18 @@
+{
+  "workflow": "companion",
+  "specName": "078-rdf-budget-order",
+  "branch": "078-rdf-budget-order",
+  "selectedAt": "2026-11-08T10:00:00.000Z",
+  "currentStep": "specify",
+  "status": "draft",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-08T10:00:00.000Z"
+    }
+  ],
+  "last_action": "Specification written on Peter's ruling of 2026-11-07 (a 👍 on the recommended option); planning waits for his approval"
+}
