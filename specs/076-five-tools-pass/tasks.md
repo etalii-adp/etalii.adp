@@ -137,10 +137,10 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 - [x] T062 [US2] Replay an `outside` step on the working copies, with the history starting afresh, and word a write over a changed file as the watcher does (ATD §2.3) · etalii.adp.ide.desktop/crates/adp-atd-validate/src/lib.rs, etalii.adp.ide.desktop/crates/adp-diagram/src/workspace.rs
 - [x] T063 [US2] Let `validate_description` run a designer, and the WebAssembly check validate it rather than report it cannot, with the native result (FR-002, SC-004) · etalii.adp.ide.desktop/crates/adp-atd-validate/src/cases.rs, etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs
 - [ ] T046 [US2] Report in the pull request each place where the lowering had to say more than a name, and take the list to Peter if it shows DESL and DISL meaning different things (R17) · etalii.adp/specs/076-five-tools-pass/research.md
-- [ ] T064 [US2] Correct in the description what the steps then show, with its trace and companion, and take to Peter what no description can state · etalii.adp/definitions/designers/hierarchical-requirement*.atd, hierarchical-requirement.md, hierarchical-requirement.trace.json
-- [ ] T065 [US2] Vendor G's merge commit, empty the test's list but for what Peter has ruled on, and report any case's time · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/hierarchical_requirement.rs
+- [x] T064 [US2] Correct in the description what the steps then show, with its trace and companion, and take to Peter what no description can state · etalii.adp/definitions/designers/hierarchical-requirement*.atd, hierarchical-requirement.md, hierarchical-requirement.trace.json
+- [x] T065 [US2] Vendor G's merge commit, empty the test's list but for what Peter has ruled on, and report any case's time · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/hierarchical_requirement.rs
 
-**Checkpoint**: SC-002 holds, every write byte-identical.
+**Checkpoint**: SC-002 holds, every write byte-identical. *Reached 2026-11-08* (etalii.adp #729, desktop #163), by Peter's rulings of 2026-11-07 (Q5 to Q7): 10 of 12 cases pass, `structure` and `structure-lf` differing only at step 11's findings, `fbl.stale-view-data` as FBL §13 says, listed by name as a module quirk (Q6). Each case takes 0.5 to 0.6 seconds in a release build, the 12 together 1.3 (research R1). T064's correction is `addColumnWidth` refusing a depth that has a width, as the module does.
 
 ---
 
@@ -170,19 +170,19 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 - [x] T077 [US3] Correct in the description until each case passes, and take to Peter what no description can state · etalii.adp/definitions/designers/knowledge*.atd
 - [x] T078 [US3] Vendor J's merge commit, empty the test's list but for what Peter has ruled on, and confirm that the WebAssembly check gives the native result (SC-004) · etalii.adp.ide.desktop/vendor/etalii.adp/, etalii.adp.ide.desktop/crates/adp-atd-validate/tests/knowledge.rs, etalii.adp.ide.desktop/crates/adp-atd-lsp/tests/wasm/validate.mjs
 
-**Checkpoint**: SC-003 holds. *Reached 2026-11-06* (desktop #160 and #161, etalii.adp #725): 4 of the Knowledge designer's 5 cases pass; `findings` differs at `read:findings` and `read:reading`, the host's findings, listed awaiting Peter's ruling. T051's seeded differences are in the Knowledge designer's description, which has a constraint of its own where the hierarchical requirement designer's has none.
+**Checkpoint**: SC-003 holds. *Reached 2026-11-06* (desktop #160 and #161, etalii.adp #725): 4 of the Knowledge designer's 5 cases pass; `findings` differs at `read:findings` and `read:reading`, the host's findings, listed awaiting Peter's ruling, and since 2026-11-07 listed by name as module behaviour, by his ruling (Q8). T051's seeded differences are in the Knowledge designer's description, which has a constraint of its own where the hierarchical requirement designer's has none.
 
 ---
 
 ## Phase 8: Polish, pull request L and the last desktop pull request of each story
 
-- [ ] T079 [P] Write the test for SC-005 in each tool type's file: a name removed from a list fails it and a difference not listed fails it, by the shape `c4.rs` has; confirm by seeding one in a copy (SC-005) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/
-- [ ] T080 [P] Confirm that a person's document still opens on today's module for each of the five, and that every existing test and parity golden is green (FR-010, SC-006) · etalii.adp.ide.desktop/crates/adp-shell/src/shell.rs, etalii.adp.ide.desktop/crates/adp-parity/
-- [ ] T081 [P] Add what moved and what is validated to the parity inventory and to what the desktop's runtimes state of themselves · etalii.adp.ide.desktop/parity/inventory.md, etalii.adp/hosts/desktop/specification-runtimes/
-- [ ] T082 [P] Record the last measures beside R1's · etalii.adp/specs/076-five-tools-pass/research.md
-- [ ] T083 Update spec 035's own tasks: its T063 and T064 ticked when story 3 is done, its T093's 36th root, its T125 for what moved, and what its T121 and T132 still wait on · etalii.adp/specs/035-adp-tool-language/tasks.md
-- [ ] T084 Mark the feature's status, and regenerate ThinkRail's copy · etalii.adp/specs/076-five-tools-pass/.spec-context.json, etalii.adp/thinkrail/
-- [ ] T085 Tick the merged tasks in one pull request · etalii.adp/specs/076-five-tools-pass/tasks.md
+- [x] T079 [P] Write the test for SC-005 in each tool type's file: a name removed from a list fails it and a difference not listed fails it, by the shape `c4.rs` has; confirm by seeding one in a copy (SC-005) · etalii.adp.ide.desktop/crates/adp-atd-validate/tests/
+- [x] T080 [P] Confirm that a person's document still opens on today's module for each of the five, and that every existing test and parity golden is green (FR-010, SC-006) · etalii.adp.ide.desktop/crates/adp-shell/src/shell.rs, etalii.adp.ide.desktop/crates/adp-parity/
+- [x] T081 [P] Add what moved and what is validated to the parity inventory and to what the desktop's runtimes state of themselves · etalii.adp.ide.desktop/parity/inventory.md, etalii.adp/hosts/desktop/specification-runtimes/
+- [x] T082 [P] Record the last measures beside R1's · etalii.adp/specs/076-five-tools-pass/research.md
+- [x] T083 Update spec 035's own tasks: its T063 and T064 ticked when story 3 is done, its T093's 36th root, its T125 for what moved, and what its T121 and T132 still wait on · etalii.adp/specs/035-adp-tool-language/tasks.md
+- [x] T084 Mark the feature's status, and regenerate ThinkRail's copy · etalii.adp/specs/076-five-tools-pass/.spec-context.json, etalii.adp/thinkrail/
+- [x] T085 Tick the merged tasks in one pull request · etalii.adp/specs/076-five-tools-pass/tasks.md
 
 ---
 
@@ -214,3 +214,5 @@ Every path carries its repository as prefix. Tasks are ticked in etalii.adp once
 Phase 1, then each story on its own: a story's etalii.adp pull request merges first, is vendored, and then its desktop pull request merges (plan, *Delivery*). In Phases 2, 3 and 4 the tasks marked for etalii.adp go in A, C and E, and the rest in B, D and F; those three pairs can land in any order, and whichever first needs T041's method carries it. T026 goes before T027, and C opens once D's branch can record. Phase 6 needs T007, carried by H if B has not merged. Phase 7 needs Phase 6, and T074 needs I. T020, T055 and every list need Peter's answers (T001), given on 2026-11-05. T086 goes in A, T087 in B, and T088 in A once B's branch plans it, since the `descriptions` job builds `atd` from B's branch.
 
 **MVP**: Phases 1 to 5, which pass the 13 cases of the three diagrams on runtime that already exists.
+
+**Polish, 2026-11-08** (desktop #163 and this pull request): T079's check is `crates/adp-atd-validate/tests/listed/mod.rs`, which each of the five tool types' tests calls, with a test seeding a name taken off its list and a difference not listed in copies. T080 holds by the workspace's tests and parity goldens, all green with the descriptions vendored. T081 is the inventory's D-011 and a rule of `hosts/desktop/specification-runtimes/desl.md`.
