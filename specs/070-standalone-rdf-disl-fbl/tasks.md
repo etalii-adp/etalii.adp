@@ -1,7 +1,7 @@
 # Tasks: RDF diagrams read from their DISL definition and their FBL binding
 
 **Input**: [plan.md](plan.md), [standalone-rdf-disl-fbl.spec.md](standalone-rdf-disl-fbl.spec.md) and the spec-workflow [tasks.md](https://github.com/etalii-adp/etalii.adp.ide.standalone/blob/bd7e2ea95b8e4195bf6f8d97f7aede9ab4dc3ad8/.spec-workflow/specs/rdf-disl-fbl/tasks.md), read at standalone commit `bd7e2ea`, whose task numbers are kept in brackets.
-**Status**: 7 of 18 tasks done, 6 of them when migrated. A task is ticked here once its standalone pull request is merged. Implementation logs written in spec-workflow are copied to [implementation-logs/](implementation-logs/); a task finished after the migration records its log there as a Markdown file of the same shape.
+**Status**: 8 of 18 tasks done, 6 of them when migrated. A task is ticked here once its standalone pull request is merged. Implementation logs written in spec-workflow are copied to [implementation-logs/](implementation-logs/); a task finished after the migration records its log there as a Markdown file of the same shape.
 
 ## Tasks Document
 
@@ -197,7 +197,7 @@ One Developer owns this specification, per CLAUDE.md's one-owner-per-specificati
   - _Requirements: 4.1, 4.6, 4.7, 6.1, 8.2_
   - _Prompt: Implement the task for spec rdf-disl-fbl, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Backend developer who knows the DISL derivations | Task: Make the OWL reading's elements, toolbox, menus, rows and findings come from w3c-owl.dis, and prove over all four readings that derived elements equal the projections, that the twenty-three findings are unchanged with none added, that no module code computes an id, and that the projections, validator rules and provider logic have left the product code | Restrictions: The regenerated diff may hold only OWL entries leaving other readings; commands and writers are not changed; a search that finds nothing must be shown to find a planted match first; a reading that failed its measurement keeps its projection under its own name and is said so, never claimed as derived; no module name in a library | _Leverage: task 8's oracle and tests; the OWL projection, renderer and validator tests | _Requirements: 4.1, 4.6, 4.7, 6.1, 8.2 | Success: derived equals hand-written for every document under every reading, twenty-three findings and no other, every id shape is the definition's, the oracle lives only in the test project, four gates exit zero | Instructions: set this task to [-] in tasks.md before starting, log the work with log-implementation when done, then set it to [x]._
 
-- [ ] **T012** [12] Write N-Triples into an `.nt` body
+- [x] **T012** [12] Write N-Triples into an `.nt` body
   - May land at any time after task 1.
   - Files: `src/diagrams/rdf/backend/EtAlii.Adp.Diagram.Rdf/RdfWriter.cs`, `Commands/AddRdfTripleCommand.cs`, `src/diagrams/rdf/backend/EtAlii.Adp.Diagram.Rdf.Tests/RdfWriterNTriples.Tests.cs` (new), `Fixtures/simple.nt`, the `edits` of the `.nt` documents in the four `Parity/*.transcript.json`
   - Write the guard first: adding a triple to a subject of an `.nt` body that already has one gives a full statement line and a body that is N-Triples. See it fail against today's writer, which writes `;`, and record the failure.
@@ -206,6 +206,7 @@ One Developer owns this specification, per CLAUDE.md's one-owner-per-specificati
   - _Leverage: `RdfWriter.Tests.cs`, `RdfCommands.Tests.cs`_
   - _Requirements: 5.5_
   - _Prompt: Implement the task for spec rdf-disl-fbl, first run spec-workflow-guide to get the workflow guide then implement the task: Role: Backend developer | Task: Make adding a triple to an .nt body write a full N-Triples statement line, behind a guard written first | Restrictions: The guard must be seen to fail against today's writer for the reason finding B7 gives; touch the file after restoring so the build does not keep the old binary; a .ttl body's bytes do not change; the regenerated diff may hold only that edit's hunk in .nt documents | _Leverage: the existing writer and command tests | _Requirements: 5.5 | Success: the guard failed for the right reason before and passes after, every .ttl hunk of the transcripts is byte-identical, the .nt hunks are reviewed, four gates exit zero | Instructions: set this task to [-] in tasks.md before starting, log the work with log-implementation when done, then set it to [x]._
+  - Log: [task-12_2026-11-08T0525_7d3f1a92.md](implementation-logs/task-12_2026-11-08T0525_7d3f1a92.md) (standalone pull request [#813](https://github.com/etalii-adp/etalii.adp.ide.standalone/pull/813), merged as `96f12dbf0b7a9f157f7c003156833a9cacc46f61`)
 
 - [ ] **T013** [13] Compile the RDF graph canvas
   - Waits on task 8.
