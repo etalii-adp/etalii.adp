@@ -51,6 +51,17 @@ Measured on 2026-11-02, with `atd validate` at the desktop's develop:
 - Q: Q3, `line/44` in all 12 hierarchical requirement cases: stated in DESL, or listed in each? → A: Stated in DESL, as one sentence with a fixture (Peter, 2026-11-05; FR-009; research R21).
 - Q: Q4, whether to split the two designers off. → A: No: Peter approved building story 1 first, then stories 2 and 3 as the plan orders them (Peter, 2026-11-05, "4a").
 
+### Session 2026-11-07
+
+Peter answered six cards with 👍, each read as the option the card recommended.
+
+- Q: Q5, the prefix "could not be written:" before a refusal in `classification` 12 and 13, `tags` 10, `structure` 9, `structure-lf` 9 and `columns` 9: from the standalone host, or from our recorder? → A: From our parity recorder (`adp-parity`), not from the standalone host. The recorder drops it and the hierarchical requirement cases are recorded again; ATD is not amended (Peter, 2026-11-07, 👍 on the card, read as the recommended option).
+- Q: Q6, `fbl.stale-view-data`, an error in the reference host and information in FBL §13, in `structure` 11 and `structure-lf` 11? → A: It stays `info`, as FBL §13 says, and `11:findings` of the two cases is listed by name as a module quirk (Peter, 2026-11-07, 👍 on the card, read as the recommended option).
+- Q: Q7, `hierarchy.add` in `new-document` 1 and 2, the explorer's gesture that adds a document from the designer's template? → A: The validator supports it by writing the binding's template, and ATD §2.3 states it, with a fixture or a test (Peter, 2026-11-07, 👍 on the card, read as the recommended option).
+- Q: Q8, the Knowledge designer's `findings` case, `read:findings` and `read:reading`, which `knowledge.md` gives to the host? → A: Listed by name as module behaviour (Peter, 2026-11-07, 👍 on the card, read as the recommended option).
+- Q: Q9, `for selection` on an operation, which DESL allows and ATD's checker refuses? → A: ATD's checker accepts it, as a minor change of ATD with a fixture, and the Knowledge designer's `deleteRows` is then offered `for selection` (Peter, 2026-11-07, 👍 on the card, read as the recommended option).
+- Q: Q10, `setNewOption` and `setCondition`'s value parameters, which `knowledge.atd` has and `knowledge.des` does not? → A: `knowledge.des` gains them, so that it agrees with `knowledge.atd` (Peter, 2026-11-07, 👍 on the card, read as the recommended option).
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - The three diagrams pass (Priority: P1)
