@@ -3,8 +3,8 @@
   "specName": "078-rdf-budget-order",
   "branch": "078-rdf-budget-order",
   "selectedAt": "2026-11-08T10:00:00.000Z",
-  "currentStep": "specify",
-  "status": "draft",
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
   "history": [
     {
       "step": "specify",
@@ -12,7 +12,21 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-11-08T10:00:00.000Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-09T22:45:00.000Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-09T22:45:00.000Z"
     }
   ],
-  "last_action": "Specification written on Peter's ruling of 2026-11-07 (a 👍 on the recommended option); planning waits for his approval"
+  "last_action": "Plan and tasks written on Peter's approval of 2026-11-09; SC-001's 15 s confirmed by measurement (8.2 s); R3 and R5 go to Peter before B and C merge"
 }

@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-08
 
-**Status**: Draft
+**Status**: Approved 2026-11-09
 
 **Input**: Peter ruled on 2026-11-07, by a 👍 on a decision card read as its recommended option, that the RDF description's budget order, which still grows with the square of the body after spec 075, is specified as its own feature: each card carries its place through its `from`, as the SKOS description already carries `walkOrder`.
 
@@ -31,6 +31,12 @@ The SKOS description had the same shape of cost during spec 075, an order made a
 - **Not the OWL description's per-term reads**, which spec 075 also names as growing with the body; they are not an order, stay within every limit, and are not part of Peter's ruling.
 - **Not a raised or lowered limit.** `limits.celCost`, the step budget and the budget of 1000 cards stay as they are.
 - **Not a change to the budget's rule.** Which cards a truncated reading draws, and the notice it shows, stay as they are.
+
+## Clarifications
+
+### Session 2026-11-09
+
+- Q: Does SC-001 keep its 15 seconds before anything is measured? (SC-001, Assumptions) → A: Keep 15 s as a first bound; the plan confirms it once it has measured. Then write the plan and tasks. (Peter, 2026-11-09: 👍 on the card, read as the recommended option.)
 
 ## User Scenarios & Testing *(mandatory)*
 
