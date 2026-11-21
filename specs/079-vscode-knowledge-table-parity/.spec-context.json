@@ -1,0 +1,18 @@
+{
+  "workflow": "companion",
+  "specName": "079-vscode-knowledge-table-parity",
+  "branch": "079-vscode-knowledge-table-parity",
+  "selectedAt": "2026-11-21T16:20:00.000Z",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-21T16:30:00.000Z"
+    }
+  ],
+  "last_action": "Specification written on Peter's 2026-11-21 choice of all 32 differences; plan and tasks wait for his approval"
+}
