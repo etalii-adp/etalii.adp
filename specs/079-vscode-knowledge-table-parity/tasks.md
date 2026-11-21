@@ -46,7 +46,7 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 - [x] T014 [US1] Draw the header without row numbers: kind icon, name, press opens the menu; the first column's handle and checkbox and the header's select-all (FR-010, FR-011's press) · vscode/src/webview/table/header.ts, vscode/src/webview/table/rows.ts
 - [ ] T015 [US1] The `+` after the last header and Insert left and right open the panel that asks name then type; a nameless property asks its name in its header; the toolbar of document actions goes (FR-014, FR-015) · vscode/src/webview/table/header.ts
 - [x] T016 [US1] Rounded option tags in light, dark and high contrast (FR-023) · vscode/src/webview/table/table.css
-- [ ] T017 [US1] Split what is left of `table.ts` into the parts the plan names, behaviour unchanged, with the existing tests passing · vscode/src/webview/table/
+- [x] T017 [US1] Split what is left of `table.ts` into the parts the plan names, behaviour unchanged, with the existing tests passing · vscode/src/webview/table/
 - [ ] T018 [US1] Remove the rows of `docs/disl-support.md` and `docs/parity.md` this closes · vscode/docs/disl-support.md, vscode/docs/parity.md
 
 **Checkpoint**: B merged; rows 1, 5, 7, 12, 13, 17 and 26 of the inventory are closed.
@@ -59,7 +59,7 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 
 - [ ] T019 [P] [US2] Write the tests: the column menu's entries, groups and order as the standalone menu's, disabled entries with their reason, missing entries where they do not suit, each entry sending its gesture · vscode/test/webview/table/columnMenu.test.ts
 - [x] T020 [P] [US3] Write the tests: the settings menu's four entries, one editor open at a time; the filter editor's nesting to three levels; the sort editor; the group editor's order, eyes and "Show N hidden groups"; property visibility with the title fixed · vscode/test/webview/table/editors.test.ts
-- [ ] T021 [P] [US2] Write the real-IDE test: "Sort descending" from Population's menu adds one sort and one undo step takes it back · vscode/test/vscode/knowledge.test.ts
+- [x] T021 [P] [US2] Write the real-IDE test: "Sort descending" from Population's menu adds one sort and one undo step takes it back · vscode/test/vscode/knowledge.test.ts
 - [x] T022 [US2] Draw the column menu from the view's `columnMenu` (FR-011) · vscode/src/webview/table/columnMenu.ts
 - [x] T023 [US3] The settings control and its four editors (FR-005, FR-007, FR-008, FR-009) · vscode/src/webview/table/editors/
 - [x] T024 [US2] The options panel: rename in place, colour, delete with the definition's question (FR-016) · vscode/src/webview/table/options.ts
@@ -118,12 +118,12 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 
 Ticked from etalii.adp.ide.vscode #45 to #50, all merged on 2026-11-21. Where the code differs from what a task names:
 
-- **Files**: the plan's part names (`tabs.ts`, `viewBar.ts`, `header.ts`, `rows.ts`, `columnMenu.ts`, `options.ts`, `calculations.ts`, `editors/`) were not kept as files. Tabs, view bar, header, rows, column menu and calculation line are in `vscode/src/webview/table/table.ts`; the editors and the options panel are in `panels.ts` and `editors.ts`; the gesture entries are in `entries.ts`. T017's split into `windowing.ts`, `requests.ts`, `selection.ts` and `cellList.ts` is in #51, still open.
+- **Files**: the plan's part names (`tabs.ts`, `viewBar.ts`, `header.ts`, `rows.ts`, `columnMenu.ts`, `options.ts`, `calculations.ts`, `editors/`) were not kept as files. Tabs, view bar, header, rows, column menu and calculation line are in `vscode/src/webview/table/table.ts`; the editors and the options panel are in `panels.ts` and `editors.ts`; the gesture entries are in `entries.ts`. T017's split into `windowing.ts`, `requests.ts`, `selection.ts` and `cellList.ts` is in #51.
 - **T005, T006, T007**: no separate `gesture` request kind. The plugin gives the view its gestures as entries with ready requests (`TableGestures`, with `moves`, `widths` and `inPlace` added in #49), so `steps` is the only new request kind. `columnMenu`, `rowMenu`, `findings`, the calculations per type and the hidden groups are carried as the task says.
 - **Tests**: the core tests of T004, T008, T028 and the findings of T037 are in `vscode/test/core/plugins/knowledgeGestures.test.ts`; the webview tests of T011, T019, T020, T027, T029 and T041 are in `vscode/test/webview/table/gestures.test.ts`, not in the files the tasks name.
 - **T047**: measured in headless Chromium on the view message of a generated 10,000-row file, not in a Visual Studio Code window, which this container cannot download; recorded as R9 in [research.md](research.md).
 
-Not ticked: T004 (some column gestures have no test of their own yet), T010 (waits on Peter's word on R3), T015 (a nameless property asking its name in its header), T017 and T021 (#51, open), T018 and T026 (closed with T045's comparison), T019 (in part), T045, T046 (needs a machine that runs Visual Studio Code), T048, T049.
+Not ticked: T004 (some column gestures have no test of their own yet), T010 (waits on Peter's word on R3), T015 (a nameless property asking its name in its header), T018 and T026 (closed with T045's comparison), T019 (in part), T045, T046 (needs a machine that runs Visual Studio Code), T048, T049.
 
 ---
 

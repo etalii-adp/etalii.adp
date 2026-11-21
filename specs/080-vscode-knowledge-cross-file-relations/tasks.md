@@ -10,7 +10,7 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 
 ## Phase 1: Setup, pull request A
 
-- [ ] T001 Record how the core learns a second file, one undo over two files, finding the files that name this one, which files may be written, and what changes in VS Code's record (R1 – R5) · etalii.adp/specs/080-vscode-knowledge-cross-file-relations/research.md
+- [x] T001 Record how the core learns a second file, one undo over two files, finding the files that name this one, which files may be written, and what changes in VS Code's record (R1 – R5) · etalii.adp/specs/080-vscode-knowledge-cross-file-relations/research.md
 
 ---
 
@@ -18,15 +18,15 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 
 **Goal**: FR-001 – FR-005; SC-001, SC-003. **Independent test**: `test/core/tool/tableRelated.test.ts`, the real-IDE link test.
 
-- [ ] T002 [P] [US1] Write the core tests on the vendored relations example: titles for related rows, the id for an unresolved one, the target's rows for the picker, `knowledge.unresolved-target` and `knowledge.unresolved-row`, a limit of one replacing · vscode/test/core/tool/tableRelated.test.ts
-- [ ] T003 [P] [US1] Write the real-IDE tests: pressing a related row opens `provinces.yaml` with that row selected; a change of `provinces.yaml` in another editor updates the titles · vscode/test/vscode/knowledge.test.ts
-- [ ] T004 [US1] Add `related` to `Source`, and read it through the binding (R1) · vscode/src/core/frame/toolType.ts, vscode/src/core/tool/toolTypeFrom.ts
-- [ ] T005 [US1] Titles, links and the target's rows in the table view; the two findings (FR-001, FR-003, FR-005) · vscode/src/core/tool/tableView.ts, vscode/src/core/tool/toolTypeFrom.ts
-- [ ] T006 [US2] A relation limited to one row replaces its value (FR-003) · vscode/src/core/plugins/knowledge-views/index.ts
-- [ ] T007 [US1] Gather the related texts from open documents and disk and follow their changes (FR-004) · vscode/src/extension/relatedFiles.ts, vscode/src/extension/toolEditor.ts
-- [ ] T008 [US1] The link opens the row where it lives (FR-002) · vscode/src/webview/table/rows.ts, vscode/src/extension/toolEditor.ts
-- [ ] T009 [US2] The searchable row picker (FR-003) · vscode/src/webview/table/cellList.ts
-- [ ] T010 [US1] Remove "A relation to another file" and "A relation limited to one row" from the record · vscode/docs/disl-support.md
+- [x] T002 [P] [US1] Write the core tests on the vendored relations example: titles for related rows, the id for an unresolved one, the target's rows for the picker, `knowledge.unresolved-target` and `knowledge.unresolved-row`, a limit of one replacing · vscode/test/core/tool/tableRelated.test.ts
+- [x] T003 [P] [US1] Write the real-IDE tests: pressing a related row opens `provinces.yaml` with that row selected; a change of `provinces.yaml` in another editor updates the titles · vscode/test/vscode/knowledge.test.ts
+- [x] T004 [US1] Add `related` to `Source`, and read it through the binding (R1) · vscode/src/core/frame/toolType.ts, vscode/src/core/tool/toolTypeFrom.ts
+- [x] T005 [US1] Titles, links and the target's rows in the table view; the two findings (FR-001, FR-003, FR-005) · vscode/src/core/tool/tableView.ts, vscode/src/core/tool/toolTypeFrom.ts
+- [x] T006 [US2] A relation limited to one row replaces its value (FR-003) · vscode/src/core/plugins/knowledge-views/index.ts
+- [x] T007 [US1] Gather the related texts from open documents and disk and follow their changes (FR-004) · vscode/src/extension/relatedFiles.ts, vscode/src/extension/toolEditor.ts
+- [x] T008 [US1] The link opens the row where it lives (FR-002) · vscode/src/webview/table/rows.ts, vscode/src/extension/toolEditor.ts
+- [x] T009 [US2] The searchable row picker (FR-003) · vscode/src/webview/table/cellList.ts
+- [x] T010 [US1] Remove "A relation to another file" and "A relation limited to one row" from the record · vscode/docs/disl-support.md
 
 **Checkpoint**: B merged; row 28 is closed.
 
@@ -84,3 +84,7 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 ## Dependencies
 
 Phase 1 (A) first. Phase 2 (B) needs spec 079's pull request C. Phase 3 (C) follows B. Phase 4 follows C.
+
+## Notes
+
+Ticked: T001 (research.md, R1 to R5), T002 to T010 (etalii.adp.ide.vscode #52). T011 to T019 are in etalii.adp.ide.vscode #53, open. "Edit relation" (T019) has no operation in the definition, raised as issue #739.
