@@ -63,3 +63,16 @@ Every operation the definition has stays reachable; none is added.
 **Decision**: The plugin says which calculations a property's type offers, from `knowledge.md` section *Views* (every type: the counts and percentages; dates and dates and times: earliest, latest, date range; numbers: sum, average, median, min, max, range), as the labels of the enum `Calculation`. The calculation line offers None and those.
 
 **Rationale**: `knowledge.md` states the list per type and DESL cannot; it is view logic, which the plugin already carries.
+
+## R9. SC-003 measured (T047)
+
+**Measurement**: a generated `cities.yaml` of 10,000 rows, its view message (3.5 MB) drawn in headless Chromium at 1600 × 900 and scrolled from top to bottom, frame by frame.
+
+| View | First drawing | Worst frame | Median frame |
+|---|---|---|---|
+| Unsorted, 10,000 rows | 242 ms | 88 ms | 25 ms |
+| Grouped, 5,000 rows | 151 ms | 65 ms | 26 ms |
+
+No frame is over SC-003's 100 ms. Making the view from the model took about 13 s before the lookups were indexed (etalii.adp.ide.vscode #50) and about 0.2 s after.
+
+**Outside this feature**: reading and checking the 10,000-row file takes about 4.5 s, because the YAML is parsed about three times (well-formedness, routing, reading) and the constraints take 0.8 s. That is the FBL reader's cost, not the table's.
