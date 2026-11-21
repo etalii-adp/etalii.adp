@@ -24,7 +24,7 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 **Goal**: R1, R2, R6, R8; FR-029. **Independent test**: `test/core/tool/tableSteps.test.ts`, `test/core/plugins/knowledgeGestures.test.ts`.
 
 - [x] T003 [P] Write the tests: a `steps` request of `addOption` then `setOption` on `cities.yaml` is one write whose splices undo together, `$created:0` names step 0's new option, a refused step writes nothing · vscode/test/core/tool/tableSteps.test.ts
-- [ ] T004 [P] Write the tests: each standalone column gesture (hide, show, wrap, resize, freeze, unfreeze, sort ascending and descending, filter, group, nest, calculate, insert left and right) resolves to the operations `knowledge.md` names, with the column's other settings kept · vscode/test/core/plugins/knowledgeGestures.test.ts
+- [x] T004 [P] Write the tests: each standalone column gesture (hide, show, wrap, resize, freeze, unfreeze, sort ascending and descending, filter, group, nest, calculate, insert left and right) resolves to the operations `knowledge.md` names, with the column's other settings kept · vscode/test/core/plugins/knowledgeGestures.test.ts
 - [x] T005 Add `steps` and `gesture` to `TableRequest`, and `columnMenu`, `rowMenu`, `findings`, `calculations` and `hiddenGroups` to `TableView`, in the surface's own words · vscode/src/core/tool/tableView.ts
 - [x] T006 Run `steps` in order on the model and write their changes once; resolve `$created:N`; run `gesture` through the plugin's table into steps · vscode/src/core/tool/toolTypeFrom.ts
 - [x] T007 Give the Knowledge designer's plugin its gesture table, its calculations per type (R8), and the hidden groups of a view; record it as code for one tool type · vscode/src/core/plugins/knowledge-views/index.ts, vscode/docs/disl-support.md
@@ -44,10 +44,10 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 - [x] T012 [US1] Draw the tabs with their `+` and the menu on the active tab's press; Delete disabled on the only view (FR-001) · vscode/src/webview/table/tabs.ts
 - [x] T013 [US1] Draw the view bar: the magnifier that opens and closes the search, the settings control, the sort and filter items in words with their × (FR-004, FR-006) · vscode/src/webview/table/viewBar.ts
 - [x] T014 [US1] Draw the header without row numbers: kind icon, name, press opens the menu; the first column's handle and checkbox and the header's select-all (FR-010, FR-011's press) · vscode/src/webview/table/header.ts, vscode/src/webview/table/rows.ts
-- [ ] T015 [US1] The `+` after the last header and Insert left and right open the panel that asks name then type; a nameless property asks its name in its header; the toolbar of document actions goes (FR-014, FR-015) · vscode/src/webview/table/header.ts
+- [x] T015 [US1] The `+` after the last header and Insert left and right open the panel that asks name then type; a nameless property asks its name in its header; the toolbar of document actions goes (FR-014, FR-015) · vscode/src/webview/table/header.ts
 - [x] T016 [US1] Rounded option tags in light, dark and high contrast (FR-023) · vscode/src/webview/table/table.css
 - [x] T017 [US1] Split what is left of `table.ts` into the parts the plan names, behaviour unchanged, with the existing tests passing · vscode/src/webview/table/
-- [ ] T018 [US1] Remove the rows of `docs/disl-support.md` and `docs/parity.md` this closes · vscode/docs/disl-support.md, vscode/docs/parity.md
+- [x] T018 [US1] Remove the rows of `docs/disl-support.md` and `docs/parity.md` this closes · vscode/docs/disl-support.md, vscode/docs/parity.md
 
 **Checkpoint**: B merged; rows 1, 5, 7, 12, 13, 17 and 26 of the inventory are closed.
 
@@ -57,14 +57,14 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 
 **Goal**: FR-005, FR-007, FR-008 (but drag), FR-009, FR-011, FR-016 (but drag), FR-026. **Independent test**: `test/webview/table/columnMenu.test.ts`, `editors.test.ts`, and `test/vscode/knowledge.test.ts`.
 
-- [ ] T019 [P] [US2] Write the tests: the column menu's entries, groups and order as the standalone menu's, disabled entries with their reason, missing entries where they do not suit, each entry sending its gesture · vscode/test/webview/table/columnMenu.test.ts
+- [x] T019 [P] [US2] Write the tests: the column menu's entries, groups and order as the standalone menu's, disabled entries with their reason, missing entries where they do not suit, each entry sending its gesture · vscode/test/webview/table/columnMenu.test.ts
 - [x] T020 [P] [US3] Write the tests: the settings menu's four entries, one editor open at a time; the filter editor's nesting to three levels; the sort editor; the group editor's order, eyes and "Show N hidden groups"; property visibility with the title fixed · vscode/test/webview/table/editors.test.ts
 - [x] T021 [P] [US2] Write the real-IDE test: "Sort descending" from Population's menu adds one sort and one undo step takes it back · vscode/test/vscode/knowledge.test.ts
 - [x] T022 [US2] Draw the column menu from the view's `columnMenu` (FR-011) · vscode/src/webview/table/columnMenu.ts
 - [x] T023 [US3] The settings control and its four editors (FR-005, FR-007, FR-008, FR-009) · vscode/src/webview/table/editors/
 - [x] T024 [US2] The options panel: rename in place, colour, delete with the definition's question (FR-016) · vscode/src/webview/table/options.ts
 - [x] T025 [US2] The calculation line with "Calculate" and the type's calculations (FR-026) · vscode/src/webview/table/calculations.ts
-- [ ] T026 [US2] Remove the rows this closes · vscode/docs/disl-support.md, vscode/docs/parity.md
+- [x] T026 [US2] Remove the rows this closes · vscode/docs/disl-support.md, vscode/docs/parity.md
 
 **Checkpoint**: C merged; rows 6, 8 – 11, 14, 18 and 30 are closed, and SC-002 holds.
 
@@ -123,7 +123,7 @@ Ticked from etalii.adp.ide.vscode #45 to #50, all merged on 2026-11-21. Where th
 - **Tests**: the core tests of T004, T008, T028 and the findings of T037 are in `vscode/test/core/plugins/knowledgeGestures.test.ts`; the webview tests of T011, T019, T020, T027, T029 and T041 are in `vscode/test/webview/table/gestures.test.ts`, not in the files the tasks name.
 - **T047**: measured in headless Chromium on the view message of a generated 10,000-row file, not in a Visual Studio Code window, which this container cannot download; recorded as R9 in [research.md](research.md).
 
-Not ticked: T004 (some column gestures have no test of their own yet), T010 (waits on Peter's word on R3), T015 (a nameless property asking its name in its header), T018 and T026 (closed with T045's comparison), T019 (in part), T045, T046 (needs a machine that runs Visual Studio Code), T048, T049.
+T004 and T019 are in etalii.adp.ide.vscode #54, T015 in #55. T018 and T026: no row of `docs/disl-support.md` or `docs/parity.md` still describes a gap these phases closed; the Knowledge "The gestures" row describes what is built. Not ticked: T010 (waits on Peter's word on R3), T045, T046 (needs a machine that runs Visual Studio Code), T048, T049.
 
 ---
 
