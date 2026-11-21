@@ -2,7 +2,7 @@
 id: feature-079-vscode-knowledge-table-parity
 type: task-spec
 title: "079 The VS Code Knowledge Designer Looks and Works as the Standalone One"
-status: draft
+status: active
 parent: specs-archive
 tags:
   - spec-kit
@@ -16,7 +16,7 @@ tags:
 
 **Created**: 2026-11-21
 
-**Status**: Draft
+**Status**: Approved 2026-11-21
 
 **Input**: Peter, 2026-11-21: "The implementation of the knowledge designer differs from the VS code one to the standalone one. A lot of aspects are not implemented or wrongly positioned. Make an inventory of the differences (the standalone version is the better one) + a correctly proposal." The inventory found 32 differences; on a decision card the same day Peter chose to close all 32, cross-file relations included. This feature covers the 29 that need no second file; [spec 080](../../specs/080-vscode-knowledge-cross-file-relations/vscode-knowledge-cross-file-relations.spec.md) covers the three that do.
 

@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-21
 
-**Status**: Draft
+**Status**: Approved 2026-11-21
 
 **Input**: Peter, 2026-11-21, on a decision card about bringing the VS Code Knowledge designer in line with the standalone one: "All 32, incl. cross-file". The inventory of that day found 32 differences; [spec 079](../079-vscode-knowledge-table-parity/vscode-knowledge-table-parity.spec.md) covers the 29 that need nothing outside the open document, and this feature the ones that need a relation's target file: rows 19 (the two-way relation and the delete that asks about its other side) and 28 (related rows shown by title, opened, and picked from a list).
 
