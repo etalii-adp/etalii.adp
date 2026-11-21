@@ -36,16 +36,16 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 
 **Goal**: FR-006 – FR-012; SC-002, SC-004. **Independent test**: `test/core/tool/tableTwoFiles.test.ts`, the real-IDE undo and rename tests.
 
-- [ ] T011 [P] [US3] Write the core tests: a two-way relation's splices of both files equal the standalone host's; either refused writes neither; both delete choices; the rows that relate to a row counted (FR-007 – FR-009) · vscode/test/core/tool/tableTwoFiles.test.ts
+- [x] T011 [P] [US3] Write the core tests: a two-way relation's splices of both files equal the standalone host's; either refused writes neither; both delete choices; the rows that relate to a row counted (FR-007 – FR-009) · vscode/test/core/tool/tableTwoFiles.test.ts
 - [ ] T012 [P] [US3] Write the real-IDE tests: one Undo after a two-way creation restores both files' bytes, and Redo both; a rename of `provinces.yaml` rewrites `target` in `cities.yaml` (SC-002, FR-010) · vscode/test/vscode/knowledge.test.ts
-- [ ] T013 [US3] Two-file outcomes in the core: splices per file, both planned before either is given (R2) · vscode/src/core/tool/toolTypeFrom.ts
-- [ ] T014 [US3] The new-property panel's relation steps: target among knowledge files, this file first, limit, other side and its name (FR-006) · vscode/src/webview/table/header.ts, vscode/src/extension/relatedFiles.ts
-- [ ] T015 [US3] Apply a two-file outcome as one `WorkspaceEdit` · vscode/src/extension/toolEditor.ts
-- [ ] T016 [US3] Delete one side of a two-way relation with the choice between its two ends (FR-008) · vscode/src/webview/table/columnMenu.ts
-- [ ] T017 [US4] Say how many rows relate before deleting rows (FR-009) · vscode/src/extension/relatedFiles.ts, vscode/src/extension/toolEditor.ts
-- [ ] T018 [US4] Rewrite `target` with a rename or move, in one step with it (FR-010, R3) · vscode/src/extension/relatedFiles.ts
-- [ ] T019 [US3] "Edit relation" in the column menu (FR-011) · vscode/src/webview/table/columnMenu.ts
-- [ ] T020 Restate the one-document rule with its exception and remove the rows this closes (FR-012, R5) · vscode/docs/disl-support.md, vscode/docs/parity.md
+- [x] T013 [US3] Two-file outcomes in the core: splices per file, both planned before either is given (R2) · vscode/src/core/tool/toolTypeFrom.ts
+- [x] T014 [US3] The new-property panel's relation steps: target among knowledge files, this file first, limit, other side and its name (FR-006) · vscode/src/webview/table/header.ts, vscode/src/extension/relatedFiles.ts
+- [x] T015 [US3] Apply a two-file outcome as one `WorkspaceEdit` · vscode/src/extension/toolEditor.ts
+- [x] T016 [US3] Delete one side of a two-way relation with the choice between its two ends (FR-008) · vscode/src/webview/table/columnMenu.ts
+- [x] T017 [US4] Say how many rows relate before deleting rows (FR-009) · vscode/src/extension/relatedFiles.ts, vscode/src/extension/toolEditor.ts
+- [x] T018 [US4] Rewrite `target` with a rename or move, in one step with it (FR-010, R3) · vscode/src/extension/relatedFiles.ts
+- [x] T019 [US3] "Edit relation" in the column menu (FR-011) · vscode/src/webview/table/columnMenu.ts
+- [x] T020 Restate the one-document rule with its exception and remove the rows this closes (FR-012, R5) · vscode/docs/disl-support.md, vscode/docs/parity.md
 
 **Checkpoint**: C merged; row 19 is closed.
 
@@ -87,4 +87,4 @@ Phase 1 (A) first. Phase 2 (B) needs spec 079's pull request C. Phase 3 (C) foll
 
 ## Notes
 
-Ticked: T001 (research.md, R1 to R5), T002 to T010 (etalii.adp.ide.vscode #52). T011 to T019 are in etalii.adp.ide.vscode #53, open. "Edit relation" (T019) has no operation in the definition, raised as issue #739.
+Ticked: T001 (research.md, R1 to R5), T002 to T010 (etalii.adp.ide.vscode #52). T011 and T013 to T020 (etalii.adp.ide.vscode #53). "Edit relation" (T019) has no operation in the definition, raised as issue #739. Not ticked: T012, whose rename test is in #53 but whose one-undo test over both files waits on the platform's "Undo in all files" dialog (T022); T021 to T024.
