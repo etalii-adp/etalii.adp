@@ -1,0 +1,200 @@
+# Feature Specification: The Causal Loop Diagram in VS Code, as the Standalone One
+
+**Feature Branch**: `features/081-vscode-causal-loop-diagram`
+
+**Created**: 2026-11-22
+
+**Status**: Draft, awaiting Peter's approval
+
+**Input**: Peter, 2026-11-22: "now do the same for the causal loop diagram, also bring that into VS code but feature identical as how it is in the standalone version." "The same" is the Knowledge designer's parity work ([spec 079](../079-vscode-knowledge-table-parity/vscode-knowledge-table-parity.spec.md)): an inventory of the differences with a proposed fix for each, confirmed before anything is built. The inventory found 40 differences; on a decision card the same day Peter chose to close all 40 in five pull requests, and on a second card to show the hover tooltips the definition states, which the standalone host does not draw.
+
+## Context
+
+The causal loop diagram (`systems/causal-loop-diagram`, extension `.cld`) is defined in `definitions/diagrams/causal-loop-diagram.dis`, its companion `causal-loop-diagram.md` and the binding `causal-loop-diagram.fbl` in `etalii.adp.ide.standalone`. The standalone host draws it from that definition, with the code the companion lists under *What stays code*. The VS Code host (`etalii.adp.ide.vscode`) builds every tool type from its definition, and has no causal loop diagram: none of its `definitions/` folders is this tool type.
+
+The inventory ("Causal loop diagram: VS Code parity", 2026-11-22; standalone `develop` at `6da7f5a`, VS Code `develop` at `5fe49cd`, etalii.adp `develop` at `2ef4c05`) copied the definition into VS Code on a scratch branch and opened the standalone examples through VS Code's own interpreter. No link was drawn (each link's ends named no variable), every variable sat at one point with an empty caption, four of the definition's rules could not be evaluated, and the loops had no place. The inventory's rows are the references below, so each requirement traces to a difference seen and each difference to a requirement. Rows marked the same in the inventory (B7, B14, C1, C4, C8, C10, D11) need no change and are held by SC-002 alone.
+
+| Rows | Difference, standalone first | This feature |
+| --- | --- | --- |
+| A1, A10 | A `.cld` opens in the diagram and a new one can be made; six examples | FR-001, FR-002 |
+| A2 – A5 | Ids by name, links found by their variables' names, captions, positions kept in the registration | FR-003 – FR-006 |
+| A6 | The ring a file without positions opens on | FR-007 |
+| A7 – A9 | A note read as the tool reads it, the four sentences of an unreadable line, a weight's written form | FR-008 – FR-010 |
+| B1 – B13 | The drawing: pills, curved and flipped links, polarity marks, delay strokes, the weight's width, self-loops, loop markers, their turn and colour, the wavy underline, the empty-canvas sentence | FR-011 – FR-021 |
+| C2, C3, C5 – C7, C9, C11, C12 | Gestures, menus and dialogs | FR-022 – FR-029 |
+| D1 – D4 | Cycles, a loop's polarity, the seven findings and their order | FR-030 – FR-033 |
+| D5 | Arrange diagram | FR-034 |
+| D6 – D9 | The properties of the diagram, a variable, a link and a loop | FR-035 – FR-038 |
+| D10 | Tooltips (Peter: show them, as defined) | FR-039 |
+
+### What this feature is not
+
+- **Not a change to the standalone host.** It is the reference; nothing there changes.
+- **Not a change to the definition.** VS Code reads the definition as it is. Where the definition and the standalone host disagree, the standalone host's behaviour that the companion records is followed, as the companion asks a runtime to do, and only the tooltips follow the definition instead, by Peter's choice.
+- **Not the flow page export.** Exporting a flow page is the desktop host's alone ([spec 074](../074-desktop-cld-flow-export/desktop-cld-flow-export.spec.md)); the standalone host has no such button either. The flow properties themselves are edited here (FR-035, FR-036).
+- **Not a host for one tool type.** What VS Code lacks of DISL (curved routing, edge labels, mid markers, node icons, the circular layout, operation dialogs, the diagram's own properties and the rest) is built for every diagram it reads. What only this tool type needs is carried as plugins its definition names, or listed under "Code for one tool type" in VS Code's `docs/disl-support.md` with its reason.
+
+## User Scenarios & Testing *(mandatory)*
+
+### User Story 1 - Open a causal loop diagram and read it (Priority: P1)
+
+A person opens `on-call.cld` in VS Code and sees what the standalone host shows: the variables as pills on a ring, the links as curves with their `+` or `−` beside the arrowhead and two strokes across a delayed one, and each loop's circular arrow and caption among its variables, blue when it reinforces and orange when it balances.
+
+**Why this priority**: Nothing else is of use until a file opens and draws.
+
+**Independent Test**: Each of the six examples opened in both hosts and the two screenshots compared part by part against rows A1 – A6 and B1 – B13.
+
+**Acceptance Scenarios**:
+
+1. **Given** `on-call.cld` with no stored positions, **When** it opens in VS Code, **Then** its nine variables stand on a ring seated as the standalone host seats them, and every link of the file is drawn.
+2. **Given** `business-philosophy.cld`, whose registration keeps a position for each variable, **When** it opens, **Then** each variable stands where the registration says.
+3. **Given** a loop the arrows make balancing, **When** it is drawn, **Then** its arrow turns anticlockwise and its caption is orange; **and given** a loop whose stated letter disagrees with its arrows, **Then** its caption is underlined with a wavy line.
+4. **Given** a new causal loop diagram made with **New Causal loop diagram**, **When** it opens, **Then** it holds *Births beget births*: two variables feeding each other, claimed as R1.
+
+---
+
+### User Story 2 - Build a diagram with the toolbox, the menus and the canvas (Priority: P1)
+
+A person drops a Variable on the canvas and gets `variable3` at that point; drops a Causal link on a variable and is asked which variable it affects; right-drags from one variable to another and gets the link, together with the loops it closes, each named R or B; and uses each element's menu to change a link's direction, delay or curve, rename, or remove.
+
+**Why this priority**: It is how a diagram is made; a viewer alone is not the tool Peter has in the standalone host.
+
+**Independent Test**: For every entry of the standalone toolbox and menus, the same gesture in VS Code on the same file makes the same change to the file and the same undo step.
+
+**Acceptance Scenarios**:
+
+1. **Given** the canvas, **When** a Variable is dropped, **Then** a variable with the lowest free number is added at the drop point, and one undo removes both it and its position.
+2. **Given** a Causal link or a Feedback loop dropped on empty canvas, **Then** nothing changes and "Drop a link or a loop onto a variable." is shown.
+3. **Given** a link drawn from Fatigue to Mistakes where Mistakes already leads back to Fatigue through decided links, **Then** the link and the loop it closes are added in one undo step, the loop named with the next free R or B.
+4. **Given** a variable's menu, **When** Claim a loop from here… is chosen, **Then** a dialog offers the lowest free identifier and refuses one that is already stated with the definition's sentence.
+
+---
+
+### User Story 3 - Check what the loops say (Priority: P2)
+
+A person writing a causal loop diagram sees in the Problems panel the same findings the standalone host gives, in the same order: a cycle no loop claims, a loop whose letter disagrees with its arrows, an undecidable loop, a line that cannot be read and why.
+
+**Why this priority**: The check is what ADP adds to the notation (the tool catalogue says so); without it the tool is a drawing program.
+
+**Independent Test**: The findings for the 23 documents of the standalone transcript, compared with the transcript's.
+
+**Acceptance Scenarios**:
+
+1. **Given** `reference.cld`, **When** it opens, **Then** the Problems panel lists the findings the transcript records for it, with the same codes, sentences, lines and order.
+2. **Given** `unreadable-lines.cld`, **Then** its four unreadable lines each get the standalone host's own sentence.
+
+---
+
+### User Story 4 - Edit properties and arrange (Priority: P2)
+
+A person selects nothing and edits the diagram's Title and its Flow page values in ADP Properties; selects a variable, a link or a loop and edits its rows; and chooses Arrange diagram to lay the diagram out as the standalone host does.
+
+**Why this priority**: The flow properties are what the desktop host's flow page reads, and Arrange is the one way to tidy a large diagram.
+
+**Independent Test**: Each property row of the transcript set and read back in both hosts gives the same bytes; Arrange on each example gives the same positions as the standalone host.
+
+**Acceptance Scenarios**:
+
+1. **Given** nothing selected, **When** Link strength is set to 9, **Then** it is refused with "Link strength is 9; it must be between 0.5 and 8."; **and when** it is set to 3, **Then** the `flow` statement loses `strength`.
+2. **Given** `mental-health.cld`, **When** Arrange diagram is chosen, **Then** every variable stands where the standalone host's Arrange puts it, and one undo restores the previous positions.
+
+### Edge Cases
+
+- A file that declares a variable twice (`duplicate-variable.cld`): it opens, draws and edits without failing; the first declaration is the one read, as in the standalone host.
+- A link whose end names no variable (`dangling-link.cld`): kept in the file, not drawn, and reported.
+- More than 1000 cycles: the search stops at the bound and the cycle-bound finding says so.
+- A file with one variable: Arrange diagram is offered disabled with "There is nothing to arrange until this diagram has two variables."
+- A value committed that equals the current one (a loop set to the cycle it already runs, Delayed on a delayed link): no change and no undo step.
+- A flow value out of range already in the file: kept as written, reported, and refused if typed.
+- A file opened read-only: no toolbox, no menu entries that edit, no dialogs.
+
+## Requirements *(mandatory)*
+
+### Functional Requirements
+
+Each requirement names the inventory rows it closes. "As the standalone host does" means as the standalone module `src/diagrams/causal-loop-diagram/` on `develop` at `6da7f5a` does, which its parity transcript `causal-loop.transcript.json` records for 23 documents.
+
+**Opening and reading**
+
+- **FR-001** (A1): A `.cld` file **MUST** open in the causal loop diagram in VS Code, and a new one **MUST** be creatable, holding the definition's starter *Births beget births*.
+- **FR-002** (A10): VS Code's examples **MUST** include the standalone host's six causal loop examples with their registrations, their readme and the licence and source files that come with them.
+- **FR-003** (A2): Elements **MUST** carry the ids the definition's natural id strategy gives (`variable:<name>`, `link:<from>|<to>`, `loop:<identifier>`), and renaming a variable's identifier **MUST** carry the ids of its links with it.
+- **FR-004** (A3): A link **MUST** be joined to the variables its two ends name.
+- **FR-005** (A4): A variable's caption **MUST** be its label, or its identifier where it has no label.
+- **FR-006** (A5): The position of every variable that was moved, added at a point or arranged **MUST** be kept in the registration's `layout:` block under its id, and read from there when the file opens.
+- **FR-007** (A6): A variable with no kept position **MUST** be placed on the ring the standalone host opens a file on: seated by a depth-first walk of the links in declaration order, from the top, clockwise, on a radius that grows with the widest variable and the count.
+- **FR-008** (A7): A link's note **MUST** be read as the standalone host reads it: a bare word is a note, and of two notes the last one wins; an edited note **MUST** be written over the word it was read from.
+- **FR-009** (A8): A line no rule reads **MUST** be reported with the standalone host's sentence for it, of the four the companion lists under gap 1.
+- **FR-010** (A9): A weight **MUST** be shown and written in the form the standalone host uses, an exponent included (`1E+21`, `1E-07`).
+
+**The drawing**
+
+- **FR-011** (B1): A variable **MUST** be drawn as a pill as wide as its caption needs and never narrower than 90.
+- **FR-012** (B2): A link **MUST** be drawn as one curve bowed to the left of its direction by 0.2 of its chord, so that two links between the same variables in opposite directions draw as an ellipse.
+- **FR-013** (B3): A flipped link **MUST** bow to the right instead.
+- **FR-014** (B4): A link **MUST** show `+` or `−` beside its arrowhead for a stated polarity and nothing for an unstated one.
+- **FR-015** (B5): A delayed link **MUST** carry two strokes across it near its middle.
+- **FR-016** (B6): A link's line **MUST** be 2.5 wide for a weight of 2 or more, 1.0 for a weight of 0.5 or less, and 1.5 otherwise or without a weight.
+- **FR-017** (B8): A link from a variable to itself **MUST** be drawn as a small arc on its top.
+- **FR-018** (B9): A loop **MUST** be drawn as a circular arrow above its caption, at the centre of the variables it runs through, and **MUST** follow them when they move.
+- **FR-019** (B10, B11): A loop's arrow **MUST** turn clockwise for a reinforcing or undecidable loop and anticlockwise for a balancing one; its caption **MUST** be blue for reinforcing, orange for balancing and grey for undecidable, in the light and the dark theme.
+- **FR-020** (B12): A loop whose stated letter disagrees with its arrows **MUST** have its caption underlined with a wavy line, in the caption's colour and as wide as its text.
+- **FR-021** (B13): A diagram with no variables **MUST** show "This causal loop diagram states no variables yet."
+
+**Gestures, menus and dialogs**
+
+- **FR-022** (C2): A Variable dropped on the canvas, and Add variable from the canvas menu, **MUST** add a variable with the lowest free number at that point with no dialog, the statement and its position as one undo step.
+- **FR-023** (C3): A Causal link or a Feedback loop **MUST** act on the variable it is dropped on, as that variable's Add link from here… or Claim a loop from here…; dropped anywhere else it **MUST** be refused with "Drop a link or a loop onto a variable."
+- **FR-024** (C5): A new link, however it is made, **MUST** claim in the same undo step every loop it closes whose polarity its arrows decide and that no loop already claims, each named with the next free R or B identifier.
+- **FR-025** (C6): Every menu entry **MUST** have the label the definition computes for it, the reference count of Remove variable included.
+- **FR-026** (C7): Add link from here…, Claim a loop from here… and Rename loop… **MUST** open a dialog with the definition's fields, initial values and Apply, refusing an invalid value with the definition's sentence and keeping the dialog open with what was typed.
+- **FR-027** (C9): Arrange diagram **MUST** be on the canvas menu, disabled with its reason under two variables.
+- **FR-028** (C11): Renaming a variable in place **MUST** start from the caption drawn and **MUST** refuse an empty name, a quote or a line break with "A name needs at least one character, and cannot contain a quote or a line break."
+- **FR-029** (C12): Dragging a loop **MUST** move nothing and show "Only a variable can be moved; a link is drawn between its ends and a loop label among its members."
+
+**Loops and findings**
+
+- **FR-030** (D1): The cycles the links form **MUST** be found in the standalone host's order and bounded at 1000; a host without the tool's cycle finder **MUST** still find the same cycles, in DISL's order.
+- **FR-031** (D2): A loop's polarity **MUST** be counted from its links: reinforcing on an even count of negative links, balancing on an odd one, undecidable where a link is unstated.
+- **FR-032** (D3): The seven findings the definition states **MUST** be raised with its codes, sentences and lines: unlabelled loop, label disagrees, undecidable loop, loop is not a cycle, cycle bound reached, flow value out of range, and unreadable line.
+- **FR-033** (D4): The findings **MUST** be listed in the definition's declared order: unreadable lines, dangling links and the cycle bound first, the rest by line, findings without a line last.
+
+**Arrange and properties**
+
+- **FR-034** (D5): Arrange diagram **MUST** place every variable as the standalone host's self-organizing layout does for the same file, write the positions to the registration, and be one undo step.
+- **FR-035** (D6): With nothing selected, ADP Properties **MUST** show the diagram's own rows: Title under Identity, and Link strength, Delay length, Inertia, Simulation speed, Dot density and Heatmap reading under Flow page.
+- **FR-036** (D7): A variable's rows **MUST** be Label, Identifier, Starting level and Outside push, each value parsed and refused as the definition's form says, and an empty value or the default **MUST** remove what held it.
+- **FR-037** (D8): A link's rows **MUST** show Cause and Effect read-only with their reason, and Note, Polarity, Delayed and Weight editable, Polarity accepting `+`, `s`, `S`, `-`, `o` and `O` as the definition's form does.
+- **FR-038** (D9): A loop's rows **MUST** show Identifier, Name, its Variables as a choice of the cycles through it, its Computed polarity, and its Stated polarity where it disagrees, each read-only row with its reason.
+- **FR-039** (D10): A variable, a link and a loop **MUST** show on hover the tooltip the definition states. This is the one place VS Code differs from the standalone host on purpose (Peter, 2026-11-22), and VS Code's parity record **MUST** say so.
+
+**Throughout**
+
+- **FR-040**: Every gesture **MUST** be one edit of the text document and one step of VS Code's undo, leaving every byte it does not concern as it was; a refused gesture **MUST** change nothing and show its reason.
+- **FR-041**: What VS Code builds here of DISL **MUST** serve every diagram it reads and name no tool type; what only this tool type needs **MUST** be a plugin its definition names or a row under "Code for one tool type" in VS Code's `docs/disl-support.md`.
+- **FR-042**: VS Code's `docs/tools.md`, `README.md`, `docs/disl-support.md` and `docs/parity.md` **MUST** describe the causal loop diagram as built, in the change that builds it, and a screenshot of it **MUST** be added.
+
+### Key Entities
+
+- **Variable**: a quantity of the system, keyed by its identifier, with a label and the flow page's starting level and outside push.
+- **Causal link**: a claim that one variable affects another, with a polarity, a delay, a curve direction, a weight and a note.
+- **Loop**: a claim about a cycle, with an identifier, a name and its variables in order; its polarity is counted, never stored.
+- **Registration**: the `.adp` file beside the `.cld` that keeps the variables' positions.
+- **Transcript**: the standalone host's record of what its causal loop diagram answers for 23 documents (toolbox, menus, rows, findings, payloads and every edit's bytes).
+
+## Success Criteria *(mandatory)*
+
+### Measurable Outcomes
+
+- **SC-001**: Of the 40 inventory rows this feature owns, 40 are closed: a side-by-side check of the six examples in both hosts finds none of them again, apart from the tooltips of FR-039.
+- **SC-002**: For each of the 23 documents of the standalone transcript, VS Code gives the same toolbox, menus, property rows and findings, and every edit of the transcript writes the same bytes, apart from what VS Code's parity record lists with its reason.
+- **SC-003**: Every expression of the definition evaluates in VS Code without a finding that it could not be evaluated, and the definition reads with no finding that a part of it is unsupported.
+- **SC-004**: The largest example, `uk-cod-population.cld` (49 variables), opens and draws in VS Code within two seconds, and Arrange diagram completes on it within five.
+- **SC-005**: No part of VS Code's shared DISL support built for this feature names a tool type, an element type or an attribute of the causal loop diagram, as VS Code's existing word check holds.
+
+## Assumptions
+
+- The standalone host on `develop` at `6da7f5a` and its transcript are the reference; where the standalone host and the definition disagree, the companion's record of the standalone host's behaviour is followed, except for the tooltips (FR-039). A difference this feature meets that the companion does not record is raised as an issue in etalii.adp.
+- The definition is read as it is in etalii.adp at `2ef4c05`; a newer copy taken during the work is followed if it changes nothing this feature relies on.
+- The inventory's row numbers are stable references; the inventory is the artifact "Causal loop diagram: VS Code parity" of 2026-11-22.
+- The work lands in `etalii.adp.ide.vscode` in five pull requests: opening and drawing, loops and findings, gestures and dialogs, properties and Arrange, and the transcript test with the documents. The side-by-side check and the screenshot are taken on the Mac mini.
