@@ -24,6 +24,8 @@
 
 **Decision**: Build FR-017 with R2 and ask Peter, as a small amendment (CLAUDE.md, *Specification bookkeeping*), to drop the sentence that asks for the amendment. Task T010 waits on that answer and does nothing if the sentence is dropped.
 
+**Answer**: Peter dropped the amendment on 2026-11-22, and FR-017 was reworded to say the host sets the group's value as `addRow`'s `doc` gives it to do. T010 does nothing.
+
 ## R4. Confirmations
 
 **Decision**: Questions are the platform's dialogs, as they are today in VS Code (principle I, *confirmations MUST be the platform's dialogs*): the question before a row delete, before deleting an option rows use, and before deleting a property with values. The standalone host's inline "Delete / Keep" bar is not copied.

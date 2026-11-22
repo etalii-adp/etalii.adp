@@ -2,7 +2,7 @@
 
 **Input**: [vscode-knowledge-table-parity.spec.md](vscode-knowledge-table-parity.spec.md), [plan.md](plan.md), [research.md](research.md)
 
-**Approved**: the specification by Peter on 2026-11-21, with the plan and tasks asked for. One finding waits on his word: FR-017's amendment of `addRow` is not needed (research R3); T010 depends on it.
+**Approved**: the specification by Peter on 2026-11-21, with the plan and tasks asked for. FR-017's amendment of `addRow` was not needed (research R3), and Peter dropped it on 2026-11-22, so T010 does nothing.
 
 Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.ide.vscode/`. Tasks are ticked in etalii.adp once their pull request has merged, batched into one tick pull request.
 
@@ -30,7 +30,7 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 - [x] T007 Give the Knowledge designer's plugin its gesture table, its calculations per type (R8), and the hidden groups of a view; record it as code for one tool type · vscode/src/core/plugins/knowledge-views/index.ts, vscode/docs/disl-support.md
 - [x] T008 Carry the document's findings in the table view by element, cells by their row and property (R6) · vscode/src/core/tool/toolTypeFrom.ts, vscode/test/core/tool/tableFindings.test.ts
 - [x] T009 Hold `words.test.ts` over the new code: no tool type's name under `src/core/tool/` · vscode/test/core/tool/words.test.ts
-- [ ] T010 Only if Peter keeps FR-017's amendment (R3): give `addRow` the group's value in `knowledge.des`, its `knowledge.md` text and fixtures, and refresh both hosts' copies · etalii.adp/definitions/designers/knowledge.des, etalii.adp/definitions/designers/knowledge.md
+- [x] T010 Only if Peter keeps FR-017's amendment (R3): give `addRow` the group's value in `knowledge.des`, its `knowledge.md` text and fixtures, and refresh both hosts' copies · etalii.adp/definitions/designers/knowledge.des, etalii.adp/definitions/designers/knowledge.md
 
 **Checkpoint**: a gesture and a composite edit each make one undo step in the core tests.
 
@@ -123,7 +123,7 @@ Ticked from etalii.adp.ide.vscode #45 to #50, all merged on 2026-11-21. Where th
 - **Tests**: the core tests of T004, T008, T028 and the findings of T037 are in `vscode/test/core/plugins/knowledgeGestures.test.ts`; the webview tests of T011, T019, T020, T027, T029 and T041 are in `vscode/test/webview/table/gestures.test.ts`, not in the files the tasks name.
 - **T047**: measured in headless Chromium on the view message of a generated 10,000-row file, not in a Visual Studio Code window, which this container cannot download; recorded as R9 in [research.md](research.md).
 
-T004 and T019 are in etalii.adp.ide.vscode #54, T015 in #55. T018 and T026: no row of `docs/disl-support.md` or `docs/parity.md` still describes a gap these phases closed; the Knowledge "The gestures" row describes what is built. Not ticked: T010 (waits on Peter's word on R3), T045, T046 (needs a machine that runs Visual Studio Code), T048, T049.
+T004 and T019 are in etalii.adp.ide.vscode #54, T015 in #55. T018 and T026: no row of `docs/disl-support.md` or `docs/parity.md` still describes a gap these phases closed; the Knowledge "The gestures" row describes what is built. T010: nothing to do, since Peter dropped the amendment on 2026-11-22. Not ticked: T045, T046 (needs a machine that runs Visual Studio Code), T048, T049.
 
 ---
 
