@@ -1,0 +1,18 @@
+{
+  "workflow": "companion",
+  "specName": "082-vscode-cld-flow-export",
+  "branch": "082-vscode-cld-flow-export",
+  "selectedAt": "2026-11-22T23:40:00.000Z",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-22T23:55:00.000Z"
+    }
+  ],
+  "last_action": "Specification written; awaiting Peter's approval before plan and tasks"
+}
