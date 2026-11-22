@@ -53,10 +53,10 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 
 ## Phase 4: Polish
 
-- [ ] T021 Compare the relations example between the two hosts, step by step (SC-002, SC-004) · vscode/docs/disl-support.md
-- [ ] T022 Record the platform's "Undo in all files" dialog once Peter has seen it · vscode/docs/parity.md
-- [ ] T023 Mark the feature's status and regenerate ThinkRail's copy · etalii.adp/specs/080-vscode-knowledge-cross-file-relations/.spec-context.json, etalii.adp/thinkrail/
-- [ ] T024 Tick the merged tasks in one pull request · etalii.adp/specs/080-vscode-knowledge-cross-file-relations/tasks.md
+- [x] T021 Compare the relations example between the two hosts, step by step (SC-002, SC-004) · vscode/docs/disl-support.md
+- [x] T022 Record the platform's "Undo in all files" dialog once Peter has seen it · vscode/docs/parity.md
+- [x] T023 Mark the feature's status and regenerate ThinkRail's copy · etalii.adp/specs/080-vscode-knowledge-cross-file-relations/.spec-context.json, etalii.adp/thinkrail/
+- [x] T024 Tick the merged tasks in one pull request · etalii.adp/specs/080-vscode-knowledge-cross-file-relations/tasks.md
 
 ---
 

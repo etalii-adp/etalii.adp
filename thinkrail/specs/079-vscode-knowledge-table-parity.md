@@ -2,7 +2,7 @@
 id: feature-079-vscode-knowledge-table-parity
 type: task-spec
 title: "079 The VS Code Knowledge Designer Looks and Works as the Standalone One"
-status: active
+status: done
 parent: specs-archive
 tags:
   - spec-kit

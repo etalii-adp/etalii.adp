@@ -3,8 +3,8 @@
   "specName": "079-vscode-knowledge-table-parity",
   "branch": "079-vscode-knowledge-table-parity",
   "selectedAt": "2026-11-21T16:20:00.000Z",
-  "currentStep": "tasks",
-  "status": "ready-to-implement",
+  "currentStep": "implement",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -26,7 +26,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-11-21T20:00:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-22T13:40:00.000Z"
     }
   ],
-  "last_action": "Plan and tasks written on Peter's approval of 2026-11-21 (decision card 'Approve both'); R3 (FR-017's amendment not needed) goes to Peter"
+  "last_action": "Built on Peter's approval of 2026-11-21: etalii.adp.ide.vscode #53, #55 and #56 (side-by-side check on the Mac mini, 56 of 68 gestures identical, the rest fixed or recorded for issue 162)"
 }
