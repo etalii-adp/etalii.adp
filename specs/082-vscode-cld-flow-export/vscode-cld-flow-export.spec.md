@@ -4,9 +4,14 @@
 
 **Created**: 2026-11-22
 
-**Status**: Draft, awaiting Peter's approval before plan and tasks
+**Status**: Approved on 2026-11-22 (decision card "Approve, then build")
 
 **Input**: Peter, 2026-11-22: "is the CLD export also available in the VS Code host?", and, told that it is not, "Yes, but do it from an ADP (context) menu item." "The CLD export" is the flow page of [spec 074](../074-desktop-cld-flow-export/desktop-cld-flow-export.spec.md): one self-contained, animated web page of a causal loop diagram, which until now only the desktop host writes, from its ribbon.
+
+**Amendments of 2026-11-22**, Peter's own answers in the project thread:
+
+- 23:40, where the menu item goes: "all options you proposed and a window menu item under the root "ADP"". The options proposed were the diagram's right-click menu with the Command Palette, the Explorer's right-click on a `.cld`, and the editor tab's right-click (FR-001 to FR-003b).
+- 23:41: VS Code gives an extension no menu of its own in the window's menu bar, so a root "ADP" menu cannot be made there. On a decision card Peter chose an ADP submenu in the editor title bar instead (FR-003c).
 
 ## Context
 
@@ -56,20 +61,20 @@ The person exports the same diagram from VS Code and from the desktop host and g
 
 ---
 
-### User Story 3 - Export a diagram from the Explorer without opening it (Priority: P2)
+### User Story 3 - Export from wherever the person is (Priority: P2)
 
-*Depends on the decision card "Where the ADP menu item goes"; withdrawn if Peter chooses the diagram's menu only.*
+The person right-clicks a `.cld` file in VS Code's Explorer, or the tab of an open causal loop diagram, or opens the ADP menu in the title bar of the diagram's editor, and chooses Export flow page.
 
-The person right-clicks a `.cld` file in VS Code's Explorer and chooses Export flow page under ADP, without opening the diagram.
+**Why this priority**: Peter asked for every place (2026-11-22); the diagram's menu alone already serves the request.
 
-**Why this priority**: it saves opening a diagram only to export it, but the diagram's menu already serves the request.
-
-**Independent Test**: right-click each example's `.cld` in the Explorer, export, and compare the page with the one exported from the opened diagram before any edit or drag.
+**Independent Test**: export each example once from each place and compare the pages with the one exported from the diagram's menu.
 
 **Acceptance Scenarios**:
 
-1. **Given** a `.cld` file in the Explorer, **When** the person right-clicks it, **Then** an ADP entry offers Export flow page; for any other file it is not offered.
-2. **Given** the file is not open, or open with unsaved edits, **When** it is exported from the Explorer, **Then** the page is made from the file as saved on disk, with its registration's positions and, for a variable without one, the ring the diagram opens on.
+1. **Given** a `.cld` file in the Explorer, **When** the person right-clicks it, **Then** Export flow page is offered; for a file of no tool type with an export it is not offered.
+2. **Given** the tab of an open causal loop diagram, **When** the person right-clicks it, **Then** Export flow page is offered.
+3. **Given** a causal loop diagram open in its editor, **Then** the editor's title bar holds an ADP menu, and Export flow page is in it.
+4. **Given** the diagram is open in VS Code, **When** it is exported from any place, **Then** the page shows it as VS Code holds it, unsaved edits included; **given** it is not open, **Then** the page is made from the file as saved, with its registration's positions and, for a variable without one, the ring the diagram opens on.
 
 ### Edge Cases
 
@@ -90,7 +95,10 @@ The person right-clicks a `.cld` file in VS Code's Explorer and chooses Export f
 
 - **FR-001**: The diagram's menu of a causal loop diagram open in VS Code **MUST** offer Export flow page when the empty canvas is right-clicked, enabled while the diagram has a file on disk and disabled with its reason otherwise, as the menu's other unavailable entries are.
 - **FR-002**: The same export **MUST** be a command in the Command Palette under the category ADP, titled Export Flow Page, with a rebindable shortcut and no default key, offered only while a causal loop diagram is the active editor (VS Code Principle I).
-- **FR-003**: *If Peter chooses it on the decision card*: VS Code's Explorer **MUST** offer Export flow page under ADP on the right-click of a `.cld` file, exporting the file as saved on disk (User Story 3).
+- **FR-003**: VS Code's Explorer **MUST** offer Export flow page on the right-click of a `.cld` file (Peter, 2026-11-22).
+- **FR-003a**: The right-click menu of an open causal loop diagram's editor tab **MUST** offer Export flow page.
+- **FR-003b**: Every place **MUST** export the diagram as VS Code holds it where it is open, unsaved edits and the positions its editor shows included, and the file as saved where it is not (User Story 3).
+- **FR-003c**: The editor title bar of an open causal loop diagram **MUST** hold an ADP menu, with Export flow page in it, standing in for the root ADP menu VS Code does not let an extension add to the window's menu bar (Peter's choice, 2026-11-22). The ADP menu **MUST** be one for every tool, holding what the active tool type offers, so a later tool type adds to it without the frame changing.
 - **FR-004**: The menu item **MUST** be offered by the causal loop diagram, not named by the shared frame: what VS Code builds once for every tool (the canvas, the menu, the commands) **MUST NOT** name the causal loop diagram, so that another tool type could offer an export later without the frame changing (VS Code Principle III, `test/core/tool/words.test.ts`).
 
 **What it writes**
@@ -119,6 +127,7 @@ The person right-clicks a `.cld` file in VS Code's Explorer and chooses Export f
 
 - **Flow page**: spec 074's page, one self-contained file per export.
 - **Diagram's menu**: the right-click menu of VS Code's causal loop diagram canvas, where Export flow page is offered.
+- **ADP menu**: the submenu in the title bar of an open tool's editor, holding what its tool type offers.
 - **Page name**: `FILENAME {yyyy-mm-dd hh.mm}.html`, beside the diagram.
 
 ## Success Criteria *(mandatory)*
@@ -135,7 +144,7 @@ The person right-clicks a `.cld` file in VS Code's Explorer and chooses Export f
 
 ## Assumptions
 
-- **"An ADP (context) menu item"** is read as the diagram's own right-click menu on the canvas, which holds the ADP diagram's other commands (Arrange diagram), together with the Command Palette's ADP category that VS Code Principle I asks of every command. Whether the Explorer's right-click on a `.cld` file gets it too is asked on a decision card; User Story 3 and FR-003 stand or fall with the answer.
+- **Where the item goes** was chosen by Peter on 2026-11-22: the diagram's own right-click menu, the Command Palette, the Explorer's and the editor tab's right-click menus, and an ADP menu in the editor title bar in place of a root ADP menu in the menu bar, which VS Code does not let an extension add.
 - **The label** is spec 074's, Export flow page, in the diagram's menu, and Export Flow Page in the Command Palette, following VS Code's title case there (as Arrange Diagram does).
 - **The desktop host's page is the reference.** Its template and generator on `develop` are what VS Code matches; VS Code's copy of the template records the commit it came from.
 - **The positions** are those VS Code's canvas holds: from the registration, from a drag, from Arrange diagram, or on the ring a file without positions opens on, which spec 081 made the standalone host's.
