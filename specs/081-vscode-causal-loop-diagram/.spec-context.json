@@ -1,0 +1,18 @@
+{
+  "workflow": "companion",
+  "specName": "081-vscode-causal-loop-diagram",
+  "branch": "081-vscode-causal-loop-diagram",
+  "selectedAt": "2026-11-22T16:25:00.000Z",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-22T16:35:00.000Z"
+    }
+  ],
+  "last_action": "Specified from the 40-row inventory on Peter's cards of 2026-11-22 (all 40, five PRs; tooltips as defined); plan and tasks wait for his approval"
+}
