@@ -69,12 +69,12 @@
 - [x] T047 [P] `uk-cod-population.cld` drawn within two seconds and arranged within five [SC-004]
 - [x] T048 [P] `words.test.ts` passes with the causal loop diagram's names [FR-041, SC-005]
 - [x] T049 `etalii.adp.ide.vscode/docs/tools.md` row, `README.md`, `docs/disl-support.md` and `docs/parity.md` describe the tool as built [FR-042]
-- [ ] T050 Side-by-side check of the six examples in both hosts on the Mac mini, and `etalii.adp.ide.vscode/docs/screenshots/causal-loop.png` [FR-042, SC-001]
+- [x] T050 Side-by-side check of the six examples in both hosts on the Mac mini, and `etalii.adp.ide.vscode/docs/screenshots/causal-loop.png` [FR-042, SC-001]
 - [x] T051 Open pull request F; turn auto-merge on
 
 ## Phase 6: Ticks (pull request G)
 
-- [ ] T052 Tick every task whose pull request merged, and set the specification's status to Implemented
+- [x] T052 Tick every task whose pull request merged, and set the specification's status to Implemented
 
 ## Dependencies
 
