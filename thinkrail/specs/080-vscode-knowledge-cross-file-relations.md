@@ -2,7 +2,7 @@
 id: feature-080-vscode-knowledge-cross-file-relations
 type: task-spec
 title: "080 The VS Code Knowledge Designer Follows Relations into Other Files"
-status: active
+status: done
 parent: specs-archive
 tags:
   - spec-kit

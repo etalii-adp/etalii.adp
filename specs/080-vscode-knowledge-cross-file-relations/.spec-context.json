@@ -4,7 +4,7 @@
   "branch": "080-vscode-knowledge-cross-file-relations",
   "selectedAt": "2026-11-21T16:20:00.000Z",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -26,7 +26,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-11-21T20:00:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-22T16:40:00.000Z"
     }
   ],
-  "last_action": "Built on Peter's approval of 2026-11-21: etalii.adp.ide.vscode #53, #55 and #56; T012's real-IDE Undo/Redo test is still open (the rename test is in, the two-file Undo was checked by hand on the Mac mini)"
+  "last_action": "Built on Peter's approval of 2026-11-21: etalii.adp.ide.vscode #53, #55, #56 and #58 (T012's real-IDE Undo/Redo test, seen to fail against a sabotage)"
 }
