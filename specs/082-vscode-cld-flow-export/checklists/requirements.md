@@ -32,5 +32,5 @@
 ## Notes
 
 - The requirements name VS Code's menus, Command Palette, notifications and record documents, and spec 074's page contract, because those are what the feature is about; they name no code.
-- One open choice is asked on a decision card instead of a marker: whether the Explorer's right-click on a `.cld` offers the export too (User Story 3, FR-003).
-- Plan and tasks follow only after Peter approves this specification.
+- Where the menu item goes was settled by Peter on 2026-11-22 (Amendments).
+- Peter approved the specification on 2026-11-22; plan and tasks followed.

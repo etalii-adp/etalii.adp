@@ -3,8 +3,8 @@
   "specName": "082-vscode-cld-flow-export",
   "branch": "082-vscode-cld-flow-export",
   "selectedAt": "2026-11-22T23:40:00.000Z",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "implement",
+  "status": "implementing",
   "history": [
     {
       "step": "specify",
@@ -12,7 +12,21 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-11-22T23:55:00.000Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-23T00:05:00.000Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-23T00:05:00.000Z"
     }
   ],
-  "last_action": "Specification written; awaiting Peter's approval before plan and tasks"
+  "last_action": "Approved by Peter 2026-11-22 (Approve, then build); placement amended; plan and 14 tasks written"
 }
