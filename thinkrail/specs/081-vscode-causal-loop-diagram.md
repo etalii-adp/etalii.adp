@@ -2,7 +2,7 @@
 id: feature-081-vscode-causal-loop-diagram
 type: task-spec
 title: "081 The Causal Loop Diagram in VS Code, as the Standalone One"
-status: draft
+status: active
 parent: specs-archive
 tags:
   - spec-kit
@@ -16,7 +16,7 @@ tags:
 
 **Created**: 2026-11-22
 
-**Status**: Draft, awaiting Peter's approval
+**Status**: Approved 2026-11-22
 
 **Input**: Peter, 2026-11-22: "now do the same for the causal loop diagram, also bring that into VS code but feature identical as how it is in the standalone version." "The same" is the Knowledge designer's parity work ([spec 079](../../specs/079-vscode-knowledge-table-parity/vscode-knowledge-table-parity.spec.md)): an inventory of the differences with a proposed fix for each, confirmed before anything is built. The inventory found 40 differences; on a decision card the same day Peter chose to close all 40 in five pull requests, and on a second card to show the hover tooltips the definition states, which the standalone host does not draw.
 

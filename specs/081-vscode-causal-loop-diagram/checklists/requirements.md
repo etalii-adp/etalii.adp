@@ -33,4 +33,4 @@
 
 - The requirements name the causal loop diagram's definition, its findings and sentences, and VS Code's own records of where it differs, since those are what the feature is about; they name no code.
 - Every inventory row that differs (40) is traced to a requirement in the Context table; the seven rows already the same are held by SC-002.
-- Plan and tasks wait for Peter's approval of this specification.
+- Peter approved the specification on 2026-11-22; plan and tasks followed.
