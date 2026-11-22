@@ -37,7 +37,7 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 **Goal**: FR-006 – FR-012; SC-002, SC-004. **Independent test**: `test/core/tool/tableTwoFiles.test.ts`, the real-IDE undo and rename tests.
 
 - [x] T011 [P] [US3] Write the core tests: a two-way relation's splices of both files equal the standalone host's; either refused writes neither; both delete choices; the rows that relate to a row counted (FR-007 – FR-009) · vscode/test/core/tool/tableTwoFiles.test.ts
-- [ ] T012 [P] [US3] Write the real-IDE tests: one Undo after a two-way creation restores both files' bytes, and Redo both; a rename of `provinces.yaml` rewrites `target` in `cities.yaml` (SC-002, FR-010) · vscode/test/vscode/knowledge.test.ts
+- [x] T012 [P] [US3] Write the real-IDE tests: one Undo after a two-way creation restores both files' bytes, and Redo both; a rename of `provinces.yaml` rewrites `target` in `cities.yaml` (SC-002, FR-010) · vscode/test/vscode/knowledge.test.ts
 - [x] T013 [US3] Two-file outcomes in the core: splices per file, both planned before either is given (R2) · vscode/src/core/tool/toolTypeFrom.ts
 - [x] T014 [US3] The new-property panel's relation steps: target among knowledge files, this file first, limit, other side and its name (FR-006) · vscode/src/webview/table/header.ts, vscode/src/extension/relatedFiles.ts
 - [x] T015 [US3] Apply a two-file outcome as one `WorkspaceEdit` · vscode/src/extension/toolEditor.ts
