@@ -361,7 +361,8 @@
       "variable": {
         "fill": { "token": "color.surface" },
         "stroke": { "color": { "token": "color.border" }, "width": 1 },
-        "font": { "family": { "token": "font.body" }, "size": 14, "color": { "token": "color.text" } }
+        "font": { "family": { "token": "font.body" }, "size": 14, "color": { "token": "color.text" } },
+        "padding": [10, 14]
       },
       "link": {
         "stroke": { "color": { "token": "color.text" }, "width": 1.5 }
