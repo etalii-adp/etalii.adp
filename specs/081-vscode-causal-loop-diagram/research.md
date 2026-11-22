@@ -16,7 +16,7 @@ Measured on VS Code `develop` at `5fe49cd`, standalone at `6da7f5a`, etalii.adp 
 
 ## R3. Positions in the registration
 
-- **Decision**: The stored kind `bounds` (DISL 11.6) is kept in the registration's `layout:` block as the top-left corner of each element, through the corners `registrationLayout.ts` already writes for pins. A move, an add at a point and Arrange write it in the same edit as any body change.
+- **Decision**: The stored kind `bounds` (DISL 11.6) is kept in the registration's `layout:` block as the point of each element its placement anchor names, the centre of a variable's pill (the definition's `placement.anchor: "center"`, as the standalone host stores it), through the block `registrationLayout.ts` already writes for pins. A move, an add at a point and Arrange write it in the same edit as any body change.
 - **Rationale**: The four authored examples keep their arrangement there; VS Code reads that block today only for `pinned`.
 
 ## R4. CEL functions, and functions a plugin provides
