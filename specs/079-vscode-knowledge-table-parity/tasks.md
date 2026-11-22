@@ -108,11 +108,11 @@ Every path carries its repository as prefix; `vscode/` stands for `etalii.adp.id
 
 ## Phase 7: Polish
 
-- [ ] T045 Compare every gesture of FR-001 – FR-027 on `cities.yaml` between the two hosts, file against file (SC-004), and record what differs as fixed or raised · vscode/docs/disl-support.md
-- [ ] T046 Retake the Knowledge screenshot as its readme says (FR-032) · vscode/docs/screenshots/knowledge.png
+- [x] T045 Compare every gesture of FR-001 – FR-027 on `cities.yaml` between the two hosts, file against file (SC-004), and record what differs as fixed or raised · vscode/docs/disl-support.md
+- [x] T046 Retake the Knowledge screenshot as its readme says (FR-032) · vscode/docs/screenshots/knowledge.png
 - [x] T047 Measure SC-003 in a real window with a generated 10,000-row file · etalii.adp/specs/079-vscode-knowledge-table-parity/research.md
-- [ ] T048 Mark the feature's status and regenerate ThinkRail's copy · etalii.adp/specs/079-vscode-knowledge-table-parity/.spec-context.json, etalii.adp/thinkrail/
-- [ ] T049 Tick the merged tasks in one pull request · etalii.adp/specs/079-vscode-knowledge-table-parity/tasks.md
+- [x] T048 Mark the feature's status and regenerate ThinkRail's copy · etalii.adp/specs/079-vscode-knowledge-table-parity/.spec-context.json, etalii.adp/thinkrail/
+- [x] T049 Tick the merged tasks in one pull request · etalii.adp/specs/079-vscode-knowledge-table-parity/tasks.md
 
 ## Notes on the ticks
 
