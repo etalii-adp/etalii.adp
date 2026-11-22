@@ -28,7 +28,7 @@ Row 24 (nesting by the parent relation) was first counted with the cross-file ro
 ### What this feature is not
 
 - **Not a change to the standalone host.** It is the reference; nothing there changes.
-- **Not a change to what a knowledge file holds.** Every gesture makes the model change its operation in `knowledge.des` makes today; only how the gesture is reached changes. The one exception is FR-017's amendment of `addRow`.
+- **Not a change to what a knowledge file holds.** Every gesture makes the model change its operation in `knowledge.des` makes today; only how the gesture is reached changes.
 - **Not reading another file.** Everything here is a function of the open document's text; spec 080 is where VS Code reads a relation's target.
 - **Not a new surface for other designers.** What is built is the table surface every DESL `table` tool type gets in VS Code, driven by the roles and operations its definition declares; the Knowledge designer is the one that has those roles today.
 
@@ -165,7 +165,7 @@ Each requirement names the inventory rows it closes. "As the standalone host doe
 
 **Rows and groups**
 
-- **FR-017** (row 20): A `+ New` line **MUST** end the table and every group, and a row added from a group's line **MUST** get the value that puts it in that group. Because `addRow` in `knowledge.des` takes no value today, this feature **MUST** amend the definition so that it can, with its `knowledge.md` text and fixtures, and the standalone host's copy refreshed.
+- **FR-017** (row 20): A `+ New` line **MUST** end the table and every group, and a row added from a group's line **MUST** get the value that puts it in that group. The host sets that value in the same step as `addRow`, as `addRow`'s `doc` in `knowledge.des` already gives it to do; the definition is not changed (Peter, 2026-11-22).
 - **FR-018** (row 21): Rows **MUST** be selectable by their checkboxes, singly and all at once. While rows are selected a bar **MUST** say how many, and offer to set one property for all of them (one undo step), to delete them, and to clear the selection.
 - **FR-019** (row 22): A row **MUST** be movable by dragging its handle, except in a view with a sort, where the handle **MUST NOT** move it.
 - **FR-020** (row 23): A row's context menu **MUST** offer what the standalone row menu offers (Delete row, or Delete N rows for a selection), and **MUST NOT** list the per-value setters of the definition (Set text, Set number and the like), which are reached by editing a cell.
@@ -211,4 +211,4 @@ Each requirement names the inventory rows it closes. "As the standalone host doe
 
 - The standalone host on `develop` at `6da7f5a` is the reference; where it and `knowledge.md` disagree, the definition wins and the difference is raised in etalii.adp, as VS Code's rules require.
 - The inventory's row numbers are stable references; the inventory is Peter's 2026-11-21 Claude Doc "Knowledge designer: VS Code vs standalone".
-- The work lands in `etalii.adp.ide.vscode` in several pull requests, plus one in etalii.adp for FR-017's amendment and one in `etalii.adp.ide.standalone` to refresh its copy of the definition.
+- The work lands in `etalii.adp.ide.vscode` in several pull requests.

@@ -10,7 +10,7 @@ The VS Code table surface becomes the table `knowledge.md` section *Layout and b
 
 Three things are added below the webview, all generic to a DESL table: a request of several steps written as one edit (research R2), gestures named by the table surface that a tool type's plugin maps to its operations (R1), and the view carrying its findings by element (R6). The Knowledge designer's plugin, which already says what a view shows, gains the gesture table, the calculations per type (R8), nested rows to any depth and the facts the group editor shows. The webview is rewritten in parts, one file per part, as the standalone table library is.
 
-One finding goes to Peter: FR-017's amendment of `addRow` is not needed, because the definition already gives the host the step of setting a group's value (R3).
+FR-017's amendment of `addRow` was not needed, because the definition already gives the host the step of setting a group's value (R3); Peter dropped it on 2026-11-22.
 
 ## Technical Context
 
@@ -22,7 +22,7 @@ One finding goes to Peter: FR-017's amendment of `addRow` is not needed, because
   - `src/core/desl/operations.ts`: only if a step needs the element a step before it created (`created` is already in an outcome).
   - `src/webview/table/`: `table.ts` split into `tabs.ts`, `viewBar.ts`, `editors/filter.ts`, `editors/sort.ts`, `editors/group.ts`, `editors/visibility.ts`, `header.ts`, `columnMenu.ts`, `options.ts`, `rows.ts`, `windowing.ts`, `selection.ts`, `calculations.ts`, `drag.ts`, `cellList.ts`; `table.css`.
   - `docs/disl-support.md`, `docs/parity.md`, `docs/screenshots/knowledge.png`, `README.md` where it describes the designer.
-- **What changes in etalii.adp**: this plan, its research and tasks; the ticks. Nothing in `definitions/` unless Peter keeps FR-017's amendment (R3).
+- **What changes in etalii.adp**: this plan, its research and tasks; the ticks. Nothing in `definitions/`: Peter dropped FR-017's amendment (R3).
 - **Tests**: vitest for the core (`test/core/tool/`, `test/core/plugins/`) and for the webview in jsdom (`test/webview/table/`), written first and seen failing; the real-IDE suite (`test/vscode/knowledge.test.ts`) for one undo step per gesture and the native dialogs; `test/core/tool/words.test.ts` and `supportRecord.test.ts` as they are.
 - **Checks**: `npm run check` (types and lint), `npm run test:unit`, `npm run test:vscode` (the packaged plug-in in a real Visual Studio Code) and `npm run sync-definitions -- --check`; the Build workflow runs them.
 - **Performance**: SC-003, 10,000 rows scrolled with no frame over 100 ms, measured in the webview harness and once in a real window.
