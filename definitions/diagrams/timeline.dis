@@ -836,10 +836,11 @@
     "format": "fbl",
     "binding": "https://raw.githubusercontent.com/etalii-adp/etalii.adp.ide.standalone/develop/src/diagrams/timeline/backend/EtAlii.Adp.Diagram.Timeline/timeline.fbl#timeline",
     "ids": {
-      "strategy": "uuid-v4",
-      "encoding": "base36",
+      "strategy": "nanoid",
+      "alphabet": "base36",
+      "length": 8,
       "stable": true,
-      "doc": "New elements and relations get a ShortGuid: a version 4 GUID written as 25 characters of base 36. Hand-written ids such as `discovery` are kept as written. Ids are unique across elements and relations together."
+      "doc": "New elements and relations get 8 random characters of `0-9a-z` (spec 089, FR-003); ids written before, ShortGuids of 25 characters and hand-written ids such as `discovery`, are kept as written. Ids are unique across elements and relations together."
     },
     "documentId": { "strategy": "nanoid", "alphabet": "base36", "length": 8, "doc": "The top-level key `id` beside `timeline: 1` (FBL 17.2, spec 089), written by the load-time step when a timeline has none." },
     "references": "id",

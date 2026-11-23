@@ -53,6 +53,17 @@ Many tools do not store their model in a definition file of their own: the model
 - **Folder subject**: a body that is a folder rather than a file, such as a Helm chart, recognised by the files in it and watched for changes.
 - **Persistence plugin**: code that reads and writes a body in a format FBL cannot declare, under the plugin contract FBL defines.
 
+## Links between documents
+
+An element of one document can point at an element of another, of any tool type that holds links (spec 089: the knowledge designer, the mind map, the timeline and the dependency graph). FBL section 17 defines the link once for all of them.
+
+- **Link**: a reference from an element of one document to an element of another document, or of the same one, written `$<document id>@<file name>#<element id>.<name property>=<name>` (FBL 17.1). It is stored only in the document that holds it, the **consuming document**; the name at its end is a cache, checked and rewritten when that document is loaded.
+- **Document id**: the short id, 8 characters of `0-9a-z`, that a document keeps inside itself (a knowledge file's envelope, a mind map's central topic, a timeline's or a graph's top-level `id`), so that a link to it survives a move or a rename of its file (FBL 17.2).
+- **Workspace**: the folder, among those a host has open, within which a link is resolved: the root folder that holds the consuming document (FBL 17.3). A link never resolves to a file outside it.
+- **Linked element**: an element of a diagram that stands for the target of its link, such as a mind map's linked node or a timeline's linked period. It is placed and connected as the diagram's own, and its label is the target's current name (DISL 4.12).
+- **Backlink**: a link seen from its target: one of the links, in any document of the workspace, that resolve to an element. Backlinks are computed and never stored; a host lists them as *Linked from* (FBL 17.5). A knowledge relation's backlink column is the part of them its relation names.
+- **Lookup**: the host's search over the elements of the workspace that can be linked to, by name as the person types, which creates a link to the one picked (DISL 9.4, DESL 7.5.1).
+
 ## One language for every tool type
 
 A tool type is also described in one language, beside the files above. In phase 1 of the move to it (spec 035), hosts keep running tools from the specification and binding files; a tool description is written, checked, validated and debugged, and no host loads a tool from it.

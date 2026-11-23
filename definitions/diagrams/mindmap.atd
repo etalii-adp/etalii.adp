@@ -383,11 +383,12 @@ diagram freeplane/mindmap version "0.4.0" {
     format: fbl
     documentId: { strategy: nanoid, alphabet: base36, length: 8, doc: "Kept in the Freeplane attribute `adp-id` of the central topic (FBL §17.2), written by the load-time step when a map has none (mindmap.md §3.8)." }
     ids: {
-      strategy: uuid-v4
+      strategy: nanoid
       prefix: "ID_"
-      encoding: base36
+      alphabet: base36
+      length: 8
       stable: true
-      doc: "A node ADP creates gets `ID_` and a ShortGuid (a version 4 GUID as 25 characters of base 36). Freeplane's own ids (`ID_` and digits) are kept as written. A node read without an `ID` is given one in memory and written on the next save."
+      doc: "A node ADP creates gets `ID_` and 8 random characters of `0-9a-z` (spec 089, FR-003; `ID_` is Freeplane's own form of a node id, which its arrow links name). Ids written before, Freeplane's own (`ID_` and digits) and ADP's ShortGuids, are kept as written. A node read without an `ID` is given one in memory and written on the next save."
     }
     view: {
       store: []
