@@ -586,10 +586,11 @@
     "format": "fbl",
     "binding": "https://raw.githubusercontent.com/etalii-adp/etalii.adp.ide.standalone/develop/src/diagrams/dependency-graph/backend/EtAlii.Adp.Diagram.DependencyGraph/dependency-graph.fbl#dgr",
     "ids": {
-      "strategy": "uuid-v4",
-      "encoding": "base36",
+      "strategy": "nanoid",
+      "alphabet": "base36",
+      "length": 8,
       "stable": true,
-      "doc": "New ids are ShortGuids: a version 4 GUID written as 25 characters of base 36. Hand-written ids such as `api-gateway` are kept as they are."
+      "doc": "New ids are 8 random characters of `0-9a-z` (spec 089, FR-003); ids written before, ShortGuids of 25 characters and hand-written ids such as `api-gateway`, are kept as they are."
     },
     "documentId": { "strategy": "nanoid", "alphabet": "base36", "length": 8, "doc": "The top-level key `id` beside `dependencies: 1` (FBL 17.2, spec 089), written by the load-time step when a graph has none." },
     "writtenId": "storedId",

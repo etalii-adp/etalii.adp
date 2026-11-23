@@ -150,11 +150,11 @@
 
 ## Phase 11: Polish and the standalone bindings
 
-- [ ] **T059** Add the four types' link support to the tool catalogue rows and to `docs/terminology.md` (link, linked element, backlink, workspace) · etalii.adp/definitions/*/README.md, docs/terminology.md
+- [x] **T059** Add the four types' link support to the tool catalogue rows and to `docs/terminology.md` (link, linked element, backlink, workspace) · etalii.adp/definitions/*/README.md, docs/terminology.md
 - [ ] **T060** [P] Apply T044's binding change to the served mind map binding · etalii.adp.ide.standalone/src/diagrams/mindmap/backend/EtAlii.Adp.Diagram.Mindmap/mindmap.fbl
 - [ ] **T061** [P] Apply T049's binding changes to the served timeline and dependency graph bindings · etalii.adp.ide.standalone/src/diagrams/timeline/backend/EtAlii.Adp.Diagram.Timeline/timeline.fbl, src/diagrams/dependency-graph/backend/EtAlii.Adp.Diagram.DependencyGraph/dependency-graph.fbl
 - [ ] **T062** Run standalone's four gates, open its pull request naming this feature's folder and the etalii.adp commit, turn on auto-merge · etalii.adp.ide.standalone
-- [ ] **T063** Trace every FR and SC to the files and strings that satisfy it, read two traces back to their artefacts, and record the result in this file · etalii.adp/specs/089-cross-tool-links/tasks.md
+- [x] **T063** Trace every FR and SC to the files and strings that satisfy it, read two traces back to their artefacts, and record the result in this file · etalii.adp/specs/089-cross-tool-links/tasks.md
 
 ---
 
@@ -165,6 +165,48 @@ Every functional requirement is claimed: FR-001 (T007, T014, T018, T025, T035, T
 T057, read on 2026-11-23: the pull requests of this feature changed the definitions of the knowledge designer (with its examples `cities.*` and `provinces.yaml`), the mind map, the timeline and the dependency graph, and no other tool type's; every construct the four use is in a language document (DISL 4.12 and 9.4, DESL 4.2 and 7.5.1, FBL 17, ATD 7.5, 7.13 and 12.3), and what a host does beyond them, drawing a link mark, the lookup, Linked from, is stated as a host's duty in DISL 4.12 and FBL 17.5, not left to one host.
 
 Success criteria: SC-002 to SC-004 by T010 and T053; SC-007 by T057; SC-001, SC-005 and SC-006 need a host and are carried to each host's specification (plan, *What the checks cannot see*).
+
+## Trace after implementing (T063, 2026-11-23)
+
+Each requirement traced to the file and the string that satisfy it, on `develop` after #807 to #819 and this pull request:
+
+| Requirement | Where it holds |
+|---|---|
+| FR-001 | `persistence.documentId` `{ strategy: nanoid, alphabet: base36, length: 8 }` in `knowledge.des`, `mindmap.dis`, `timeline.dis`, `dependency-graph.dis`; the slot in `knowledge.fbl` (`"document": { "id": …}`), `timeline.fbl`, `dependency-graph.fbl` (key `id`) and `mindmap.md` 3.8 (`adp-id` on the central topic); DED 0.3 envelope `id` |
+| FR-002 | FBL 17.4 step 1, "give the body a document id … in one edit that is one step of the history" |
+| FR-003 | `persistence.ids` `nanoid`, `base36`, `8` in the four definitions (the mind map with Freeplane's prefix `ID_`), "kept as written" in each `ids.doc` |
+| FR-004 | each type's existing duplicate-id finding; `link.ambiguous-document` for a link to such an id (FBL 17.3 step 4), fixture rows `plan/release.tml` l7 and `knowledge/towns.yaml` hn/p3 |
+| FR-005 | FBL 17.1 grammar; `LINK_PATTERN` in `validate-examples.py` |
+| FR-006 | FBL 17.1 `text-char` and the reserved characters per part (`LINK_RESERVED`); the narrower escaping awaits Peter's card on link escaping |
+| FR-007 | FBL 17 "stored only in the document that holds it"; each binding's link slot (`link` key, `adp-link`, cell `row`, relation `target`) |
+| FR-008 | FBL 17.3 workspace, "MUST NOT resolve to a file outside the workspace" |
+| FR-009 | FBL 17.3 steps 2 and 3; fixture rows ID_5 (by name) and l1 (by id under another name) |
+| FR-010 | FBL 17.6 `link.ambiguous-document` fix "Choose one of the candidates … every other candidate is given a new document id"; fixture `candidates` |
+| FR-011 | FBL 17.6 `link.broken-document`, `link.broken-element` with their fixes; the broken mark in the four companions (T055) |
+| FR-012 | FBL 17.6 `link.malformed`, "The value is kept as written"; fixture rows on each type |
+| FR-013 | FBL 17.4; `after` in every fixture row, compared by `validate-examples.py` |
+| FR-014 | DISL 4.12 *Linked* (label is the target's current name, `shows` live); DESL 7.5.1 |
+| FR-015 | FBL 17.5 "Activating a link opens the target document … with the target element selected"; DISL 4.12 link mark |
+| FR-016 | DISL 4.12 `linked.shows`; ATD 7.5 |
+| FR-017 | FBL 17.5 backlinks; *Linked from* in `knowledge.md`, `mindmap.md` 3.8, `timeline.md`, `dependency-graph.md` |
+| FR-018 | FBL 17.5 "Before deleting an element that has backlinks, a host MUST say how many links the delete breaks"; the four companions |
+| FR-019 | DISL 9.4 action `lookup`; ATD `lookup` statement; `addLinked`, `addLinkedHere` in the three diagrams |
+| FR-020 | `mindmap.dis` `lookup … "as": "child"`; `timeline.dis` and `dependency-graph.dis` `lookup … "as": "at"` |
+| FR-021 | DESL 7.5.1 relation picker; `knowledge.md` *The relation picker* |
+| FR-022 | T057's reading above |
+| FR-023 | `LinkedNode extends Node` in the mind map and in the dependency graph, `LinkedPeriod extends Period` and `LinkedMoment extends Moment` in the timeline; DISL 4.12 "Deleting it deletes the link and nothing of the target" |
+| FR-024 | `mindmap.md` 3.8 "Its `TEXT` is the name the link caches"; `check_mindmap_linked_text` |
+| FR-025 | `knowledge.des` relation `valueType` `link { target, limit, backlinkName }`; `knowledge.schema.json` `Link` |
+| FR-026 | `knowledge.md` five conversion steps; `knowledge_convert` and the fixture `cities.yaml` → `cities.converted` |
+| FR-027 | `linkable`, `linked`, `documentId` in the four definitions and their `.atd` descriptions; no type shows target attributes (`shows` is empty) |
+| FR-028 | FBL 17, referred to by DISL 4.12, DESL 4.2, ATD 7.5 |
+| FR-029 | FBL 17.6 table, four codes |
+| SC-002, SC-003 | `fixtures/links-workspace/conformance.json`: renamed and moved targets resolve; every copy with one id and name gives `link.ambiguous-document` |
+| SC-004 | `check_knowledge_conversions`, seen to fail on a dropped row |
+| SC-007 | T057; no host code was written |
+| SC-001, SC-005, SC-006 | need a host; carried to each host's specification |
+
+Two traces read back to their artefacts: FR-024 leads to `definitions/diagrams/mindmap.md` line 111, "Its `TEXT` is the name the link caches, so Freeplane shows the name ADP shows", and to `check_mindmap_linked_text` in `validate-examples.py`, which found `ID_3` of the fixture with another text; that is FR-024's own evidence. FR-029 leads to FBL 17.6's table, whose four rows are the codes `link.malformed`, `link.broken-document`, `link.broken-element` and `link.ambiguous-document`, the same four that `conformance.json` names; that is FR-029's own evidence, not another requirement's.
 
 ## Dependencies
 

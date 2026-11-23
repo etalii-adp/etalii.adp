@@ -82,7 +82,7 @@ Everything else is preserved and neither shown nor edited: `hook`, `MapStyle`, `
 
 - Every node has an `ID` once loaded. A node without one is given `ID_` followed by a ShortGuid in memory, and the id is written on the next save - never on open, and never by the read-only validator (`MindmapDocument.AssignMissingIds`, `NewId`; Req 3.4).
 - Freeplane's own ids are `ID_` plus digits; a genuine Freeplane save never contains an id-less node (Fixtures readme, item 3).
-- `mindmap.dis` declares `uuid-v4` with prefix `ID_` and `base36` encoding, the ShortGuid above.
+- `mindmap.dis` declares `nanoid` with prefix `ID_`, `alphabet: base36` and `length: 8` (spec 089, FR-003): a new node's id is `ID_` and 8 characters of `0-9a-z`. The standalone tool writes the ShortGuid above until it builds spec 089, and ids written before are kept.
 - The map's document id, by which other documents link to it, is 8 characters of `0-9a-z` (`persistence.documentId`, FBL 17.2); see 3.8.
 
 ### 3.6 Byte-exact round trip
