@@ -347,7 +347,7 @@ diagram etalii/agent-activity-diagram version "0.1.0" {
   /// A change to a task or a pull request - its title, its status, its link - sets its updated moment, unless the
   /// change is to that moment itself (standalone Requirement 9.3; agent-activity-diagram.md, "`updated` on every edit").
   hook touchUpdated on change for Task, PullRequest {
-    when attribute != 'updated'
+    when event.attribute != 'updated'
     phase: after
     set updated = env.now
   }
