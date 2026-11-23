@@ -14,7 +14,7 @@ atd 0.1
 /// (dependency-graph.dgr.atd), the self-dependency an edit may not write as the constraint `noSelfDependency`, and the
 /// written ends the findings judge as the function `writtenEnd`. `dependency-graph.trace.json` says where each came
 /// from, and what stays with the host.
-diagram generic/dependencies version "1.1.6" {
+diagram generic/dependencies version "1.1.7" {
   label "Dependency graph"
   id: "net.etalii.adp.generic.dependencies"
   authors: [{ name: "Peter Vrenken" }]
