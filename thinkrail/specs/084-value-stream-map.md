@@ -16,7 +16,7 @@ tags:
 
 **Created**: 2026-11-23
 
-**Status**: Approved on 2026-11-23 (decision card "Approve all three"); plan and tasks written, implementation not started
+**Status**: Approved on 2026-11-23 (decision card "Approve all three"); definition merged; listed in the tool catalogue (standalone #819) and in the Notion Tools database as Specified; T030, the run of an agent given only the companion, still open
 
 **Input**: The maintainer, 2026-11-23: "All of them.", answering which of the three leading candidates of the desk research *Service management tools: a ranked shortlist* (23 November 2026) should be specified first. This is candidate 1, the value stream map; candidates 2 and 3 are specs [085](../../specs/085-openslo-slo-map/openslo-slo-map.spec.md) and [086](../../specs/086-post-incident-review-designer/post-incident-review-designer.spec.md).
 

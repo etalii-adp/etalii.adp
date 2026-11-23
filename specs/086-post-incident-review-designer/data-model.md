@@ -6,7 +6,7 @@ The metamodel of `etalii/post-incident-review`, as the DESL specification will s
 
 | Attribute | Type | Notes |
 |---|---|---|
-| `title` | string | The `#` heading. |
+| `title` | string | The `#` heading. Not bound: the bullets family binds no heading, so it is kept as text (amended at T009). |
 | `lastEntry`, `lastFactor`, `lastAction` | string | The counters' marks on line 2 (research R2). |
 | `timeZone` | string (IANA name) | From `- Time zone:` under `## Summary`. |
 
@@ -47,7 +47,7 @@ The metamodel of `etalii/post-incident-review`, as the DESL specification will s
 
 | Operation | Effect |
 |---|---|
-| `addEntry`, `addFactor`, `addAction` | A new item at its section's end, numbered. |
+| `addEntry`, `addFactor`, `addAction` | A new item at its section's end, numbered. `addActionFor` adds one from a factor, addressing it; `addCategory` adds a category. |
 | `acceptFactor`, `rejectFactor` | Set `state`; a rejected factor is kept (User Story 2). |
 | `completeAction` | Set `done`. |
 
@@ -60,7 +60,7 @@ The metamodel of `etalii/post-incident-review`, as the DESL specification will s
 | `pir.second-milestone` | warning | A second entry of one milestone kind. |
 | `pir.no-author` | info | An entry or factor without `by:`. |
 | `pir.unknown-category` | info | A category not in `## Categories`; kept. |
-| `pir.unknown-entry`, `pir.unknown-factor` | warning | A mention that names no element. |
+| `pir.unknown-entry`, `pir.unknown-factor` | warning | A mention that names no element. Reported by DESL's built-in `std.mentions` (amended at T028). |
 | `pir.action-incomplete` | warning | An action without `owner:` or `due:`. |
 | `pir.unaddressed` | info | An accepted factor no action addresses. |
-| `pir.unread` | warning | A line the binding cannot follow; kept as written. |
+| `pir.unread` | warning | A line the binding cannot follow; kept as written. Reported by DESL's built-in `std.unreadableEntry` (amended at T028). |

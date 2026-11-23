@@ -15,7 +15,7 @@ Knowledge designer), which takes its expressions from the designer type's bindin
 `bullets` family (FBL 0.7, section 4.8): into the JSON form `hierarchical-requirement.schema.json` describes, which is
 validated, and into what reading it would report, each a failure at its line: a bullet in no known form, a number an
 earlier entry carries, a mention or an assessment that names nothing, and a requirement out of place (at the top level,
-or anything nested in a requirement). An entry written `ITEM-NEW` or `REQ-NEW` is not a failure. A designer type's
+or anything nested in a requirement). An entry written `ITEM-NEW` or `REQ-NEW` is not a failure. A Markdown definition whose envelope names the post-incident review designer (`etalii/post-incident-review`) is read by `reviews_from_markdown`, through that designer type's binding with the `BulletsModel` below, into the JSON form `post-incident-review.schema.json` describes, an item in no known form, a number given twice and a mention that names nothing each a failure at its line (spec 086). A designer type's
 registration (`*.adp` under `definitions/designers/examples/`) is parsed as the registrations under `specifications/fbl/`
 are. A `$schema` the example names must agree with that; its part before `#`
 is matched against the `$id` of a `*.schema.json` in this repository, so the schemas in the same commit are used,
@@ -150,10 +150,12 @@ FBL_FIXTURE = "https://etalii.net/adp/fbl/schema/0.1/fbl.schema.json#/$defs/Fixt
 DED = "https://etalii.net/adp/ded/schema/0.1/ded.schema.json#/$defs/Definition"
 KNOWLEDGE = "https://etalii.net/adp/definitions/designers/knowledge.schema.json"
 HIERARCHICAL_REQUIREMENT = "https://etalii.net/adp/definitions/designers/hierarchical-requirement.schema.json"
+POST_INCIDENT_REVIEW = "https://etalii.net/adp/definitions/designers/post-incident-review.schema.json"
 CURRENT_EXTENSIONS = {".dis": DISL, ".did": DID, ".fbl": FBL, ".des": DESL, ".ded": DED}
 CURRENT_VERSION_KEYS = {"disl": DISL, "did": DID, "fbl": FBL, "desl": DESL, "ded": DED}
 # The file schema of each designer type whose DED definitions have one, by the origin in their `designer` key.
-DESIGNERS = {"etalii/knowledge": KNOWLEDGE, "etalii/hierarchical-requirement": HIERARCHICAL_REQUIREMENT}
+DESIGNERS = {"etalii/knowledge": KNOWLEDGE, "etalii/hierarchical-requirement": HIERARCHICAL_REQUIREMENT,
+             "etalii/post-incident-review": POST_INCIDENT_REVIEW}
 # A designer's examples are documents in the formats its bindings read (definitions/designers/examples/).
 designer_examples = repository / "definitions" / "designers" / "examples"
 
@@ -573,6 +575,250 @@ def requirements_from_markdown(text: str):
             without_marks(entry.get("items", []))
 
     without_marks(document["items"])
+    problems.sort(key=lambda problem: int(problem.split(":", 1)[0].removeprefix("line ")))
+    return document, problems
+
+
+class DesignerTypes:
+    """The designer type specifications by origin (`language.origin`), for the reading of a bullets fixture: the
+    typeMap and the attribute types of DESL sections 4.2 to 4.4 and 5.2."""
+
+    specifications = None
+
+    @classmethod
+    def of(cls, origin):
+        if cls.specifications is None:
+            cls.specifications = {}
+            for path in sorted(repository.glob("definitions/**/*.des")) + sorted(root.glob("**/*.des")):
+                if "refused" in path.parts or "legacy" in path.parts:
+                    continue
+                try:
+                    document = json.loads(path.read_text(encoding="utf-8"))
+                except ValueError:
+                    continue
+                cls.specifications.setdefault(document.get("language", {}).get("origin"), document)
+        return cls.specifications.get(origin)
+
+
+def bullets_reading_of_fixture(path: Path, fixture, binding):
+    """What a fixture's input reads as through a binding of the bullets family: a body, or a registration that names
+    one (FBL section 8), read with the specification of the registration's origin, or of the first origin the binding
+    claims. A body that is no UTF-8, or whose required header is missing (FBL section 5.6), is unreadable."""
+    input_path = path.parent / fixture["input"]
+    origin = (binding.get("claims", {}).get("origins") or [None])[0]
+    if input_path.suffix == ".adp":
+        registration, problem = parse_registration(input_path.read_bytes())
+        if problem:
+            raise ReadingProblem(f"the registration does not parse: {problem}")
+        origin = registration["origin"]
+        input_path = input_path.parent / registration["body"] if "body" in registration else next(
+            (input_path.with_suffix(e) for e in binding.get("claims", {}).get("extensions", []) if input_path.with_suffix(e).is_file()), input_path)
+    try:
+        text = input_path.read_bytes().decode("utf-8").removeprefix("\ufeff")
+    except UnicodeDecodeError as error:
+        raise ReadingProblem(f"the body is unreadable: it is no UTF-8 ({error.reason} at byte {error.start})")
+    header = binding.get("header", {})
+    if header.get("required") and not common_regex(header["line"]).search(re.split(r"\r\n|\n|\r", text, maxsplit=1)[0]):
+        raise ReadingProblem("the body is unreadable: line 1 is not the header the binding requires")
+    return BulletsModel(binding, text, DesignerTypes.of(origin) or ToolTypes.of(origin))
+
+
+class BulletsModel:
+    """What reading a Markdown body through a binding of the bullets family gives (FBL section 4.8), for the reading
+    check: the statements matched by the rules without `within`, and the list items under the binding's sections, each
+    matched by the first rule in the binding's order that names its section and whose line matches (section 5.1), with
+    its id (section 5.3), its parent (section 5.5) and its attributes: a group's text, a word slot's values (4.6), the
+    continuation (4.8), through a map and a default (5.2), and as the specification's attribute types read them (DESL
+    4.2 to 4.4). A rule whose type the specification maps as the document gives the document's attributes, the first
+    value read of each; one mapped as unreadable gives no element, and the items nested in it are not looked into."""
+
+    def __init__(self, binding, text, specification):
+        self.binding, self.specification = binding, specification or {}
+        self.desl = "desl" in self.specification
+        self.elements, self.document, self.findings, self.stored_ids, self.unreadable = [], {}, [], set(), []
+        self.read(text)
+
+    def mapped(self, type_name):
+        if not self.desl:  # a diagram type's specification (DISL section 11.2)
+            return self.specification.get("persistence", {}).get("typeMap", {}).get(type_name, {}).get("as")
+        return self.specification.get("persistence", {}).get("typeMap", {}).get(type_name, {}).get("as")
+
+    def typed(self, type_name, attribute, value):
+        """A value read, as the specification's attribute type reads it: a bool, a number, an enumeration's key."""
+        metamodel = self.specification.get("metamodel", {})
+        declared = (metamodel.get("document", {}).get("attributes", {}) if self.mapped(type_name) == "document"
+                    else metamodel.get("types", {}).get(type_name, {}).get("attributes", {})).get(attribute, {})
+        kind = declared.get("type")
+        if isinstance(value, list):
+            return [self.typed_one(kind, v) for v in value]
+        return self.typed_one(kind, value)
+
+    def typed_one(self, kind, value):
+        if not isinstance(value, str):
+            return value
+        if kind == "bool":
+            return {"true": True, "false": False}.get(value.lower(), value)
+        if kind == "int" and re.fullmatch(r"[-+]?\d+", value):
+            return int(value)
+        enum = self.specification.get("metamodel", {}).get("enums", {}).get(kind)
+        if enum:
+            for key, entry in enum.get("values", {}).items():
+                if entry.get("value", key).lower() == value.lower():
+                    return key
+        return value
+
+    def read(self, text):
+        items, headings, statements, line_count = bullets_of(text)
+        sections = {}
+        for section in self.binding.get("sections", []):
+            heading_regex = common_regex(section["heading"], section.get("caseInsensitive", False))
+            first = next((h for h in headings if heading_regex.search(h[2])), None)
+            if first:
+                end = next((number for number, level, _ in headings if number > first[0] and level <= first[1]), line_count + 1)
+                sections[section["name"]] = (first[0], end)
+        rules = self.binding.get("elements", [])
+        statement_rules = [rule for rule in rules if not rule.get("within")]
+        for number, line in statements:
+            for rule in statement_rules:
+                match = common_regex(rule["line"], rule.get("caseInsensitive", False)).search(line)
+                if match:
+                    self.take(rule, match, None, number, None)
+                    break
+        not_looked_into, by_item = set(), {}
+        for item in items:
+            if item.parent in not_looked_into:
+                not_looked_into.add(item)
+                continue
+            names = [name for name, (start, end) in sections.items() if start < item.number < end]
+            for rule in rules:
+                if not set(rule.get("within", [])) & set(names):
+                    continue
+                match = common_regex(rule["line"], rule.get("caseInsensitive", False)).search(item.text)
+                if not match:
+                    continue
+                if self.mapped(rule["type"]) == "unreadable":
+                    not_looked_into.add(item)
+                    self.unreadable.append((item.number, item.text))
+                else:
+                    element = self.take(rule, match, item, item.number, by_item)
+                    if element is not None:
+                        by_item[item] = element
+                break
+            else:  # an item no rule matches is kept as written, and the items nested in it are not read (FBL 4.8)
+                not_looked_into.add(item)
+
+    def take(self, rule, match, item, number, by_item):
+        attributes = {}
+        for name, attribute in rule.get("attributes", {}).items():
+            if attribute.get("continuation"):
+                value = "\n".join(line for _, line in item.text_of_continuation()) if item is not None else ""
+            elif "word" in attribute:
+                word = common_regex(attribute["word"], rule.get("caseInsensitive", False))
+                found = [m.group("value") for m in (word.match(w) for w in re.findall(r'"[^"]*"|\S+', match.group(attribute["group"]) or "")) if m]
+                many = self.many(rule["type"], name)
+                value = found if many else (found[0] if found else None)
+            elif "group" in attribute:
+                value = match.group(attribute["group"])
+            elif "value" in attribute:  # a constant the rule gives every element it reads (FBL section 5.2)
+                value = attribute["value"]
+            else:
+                continue
+            if isinstance(value, str) and "map" in attribute:
+                folded = {k.lower(): v for k, v in attribute["map"].items()} if rule.get("caseInsensitive") else attribute["map"]
+                value = folded.get(value.lower() if rule.get("caseInsensitive") else value, value)
+            if value is None and "default" in attribute:
+                value = attribute["default"]
+            if value is not None:
+                attributes[name] = self.typed(rule["type"], name, value) if self.desl else (
+                    Values(value) if isinstance(value, list) else Values([value]) if isinstance(value, str) else value)
+        for name, default in self.defaults(rule["type"]).items():
+            attributes.setdefault(name, default)
+        if self.mapped(rule["type"]) == "document":
+            for name, value in attributes.items():
+                self.document.setdefault(name, value)
+            return None
+        element_id = match.group(rule["id"]["from"]["group"]) if "from" in rule.get("id", {}) else None
+        counter = self.specification.get("persistence", {}).get("ids", {}).get("types", {}).get(rule["type"], {})
+        if element_id is not None and counter.get("strategy") == "counter" and element_id == counter.get("prefix", "") + counter.get("placeholder", "\0"):
+            element_id = None  # a placeholder is no id: the element is numbered with the next write (DESL section 5.3.5)
+        if element_id is not None:
+            self.stored_ids.add(element_id)
+        parent_rules = rule.get("parent", {}).get("rules", [])
+        parent, ancestor = None, item.parent if item is not None else None
+        while ancestor is not None and parent_rules:
+            candidate = by_item.get(ancestor)
+            if candidate is not None and candidate["rule"]["name"] in parent_rules:
+                parent = candidate
+                break
+            ancestor = ancestor.parent
+        element = {"kind": "element", "rule": rule, "id": element_id, "parent": parent, "attributes": attributes, "line": number}
+        self.elements.append(element)
+        return element
+
+    def defaults(self, type_name):
+        """The defaults the specification declares for the type's attributes: an attribute without a stored value
+        reads as its default (DESL section 4.3, DISL section 4.5)."""
+        if self.desl:
+            declared = self.specification.get("metamodel", {}).get("types", {}).get(type_name, {}).get("attributes", {})
+        else:
+            tool = ToolType(self.specification)
+            kind, _, target = tool.mapped(type_name)
+            declared = tool.metamodel.get("relations" if kind == "relation" else "types", {}).get(target, {}).get("attributes", {}) if target else {}
+        return {name: entry["default"] for name, entry in declared.items() if isinstance(entry, dict) and "default" in entry}
+
+    def many(self, type_name, attribute):
+        declared = self.specification.get("metamodel", {}).get("types", {}).get(type_name, {}).get("attributes", {}).get(attribute)
+        if not self.desl:
+            return True  # without a designer type's specification, a word slot's values are compared as Values
+        return bool(declared and declared.get("many"))
+
+
+# The post-incident review designer's definition: the review reader reads through these two files.
+REVIEW_DESIGNER = repository / "definitions" / "designers" / "post-incident-review"
+REVIEW_LISTS = {"Entry": "entries", "Factor": "factors", "Action": "actions"}
+
+
+def reviews_from_markdown(text: str):
+    """Reads a post-incident review (post-incident-review.md, The file) through its binding,
+    post-incident-review.fbl#markdown, with the BulletsModel the reading check uses, into the JSON form
+    post-incident-review.schema.json describes, and returns it with what reading it reports, each a problem at its
+    line: an item in no known form (std.unreadableEntry), a number given twice (std.duplicateId) and a mention that
+    names nothing (std.mentions). The specification's own constraints (pir.*) are a host's to evaluate and are not
+    reported here. Raises when line 1 is no envelope."""
+    document = dict(definition_from_markdown(text))
+    binding = json.loads(REVIEW_DESIGNER.with_suffix(".fbl").read_text(encoding="utf-8"))["bindings"]["markdown"]
+    specification = json.loads(REVIEW_DESIGNER.with_suffix(".des").read_text(encoding="utf-8"))
+    types = specification["metamodel"]["types"]
+    model = BulletsModel(binding, text, specification)
+    document.update(model.document)
+    for name in REVIEW_LISTS.values():
+        document[name] = []
+    document["categories"] = []
+    problems = [f"line {number}: an item in no known form (std.unreadableEntry): {item!r}" for number, item in model.unreadable]
+    ids, mentions = {}, []
+    for element in model.elements:
+        type_name, attributes = element["rule"]["type"], element["attributes"]
+        if type_name == "Category":
+            document["categories"].append(attributes["name"])
+            continue
+        entry = {"id": element["id"] or f"line/{element['line']}"}
+        for name, value in attributes.items():
+            if value in ("", []) and name != "text":
+                continue
+            entry[name] = value
+            mentions_of = types[type_name]["attributes"].get(name, {}).get("mentions")
+            for one in (value if isinstance(value, list) else [value]) if mentions_of else []:
+                mentions.append((common_regex(mentions_of["pattern"]), one, element["line"]))
+        document[REVIEW_LISTS[type_name]].append(entry)
+        if element["id"] is not None:
+            if element["id"] in ids:
+                problems.append(f"line {element['line']}: {element['id']} is the number of the item on line {ids[element['id']]} too (std.duplicateId)")
+            else:
+                ids[element["id"]] = element["line"]
+    for pattern, value, line in mentions:  # once every item is read, so that a mention may name one after it
+        for match in pattern.finditer(value):
+            if match.group("id") is not None and match.group("id") not in ids:
+                problems.append(f"line {line}: {match.group('id')} names no entry, factor or action (std.mentions)")
     problems.sort(key=lambda problem: int(problem.split(":", 1)[0].removeprefix("line ")))
     return document, problems
 
@@ -2549,18 +2795,26 @@ def check_yaml_reading(path: Path, fixture, binding) -> str | None:
 
 
 def check_reading(path: Path, fixture) -> str | None:
-    """The reading check (FBL 0.11, research R20): for a fixture whose binding is of the grammar family, what reading
-    its input gives against the fixture's `read`. Returns the first difference, if any."""
+    """The reading check (FBL 0.11, research R20): for a fixture whose binding is of the grammar family, (FBL 0.22) whose
+    yaml binding reads a stream's documents or a folder of yaml files, or (spec 086) whose binding is of the bullets
+    family and whose input is a body rather than a registration, what reading its input gives against the fixture's
+    `read`. Returns the first difference, if any."""
     expected = fixture.get("read")
     binding, folder = grammar_fixture_binding(path, fixture)
     if expected is not None and binding is not None and (binding.get("body", {}).get("stream") == "documents" or (
             binding.get("body", {}).get("kind") == "folder"
             and {f.get("family") for f in binding["body"].get("files", [])} == {"yaml"})):
         return check_yaml_reading(path, fixture, binding)
-    if expected is None or binding is None or binding.get("body", {}).get("family") != "grammar":
+    family = (binding or {}).get("body", {}).get("family")
+    if expected is None or binding is None or family not in ("grammar", "bullets"):
         return None
     try:
-        model = reading_of_fixture(path, fixture, binding, folder)
+        if family == "bullets" and fixture["input"].endswith(".adp"):
+            return None  # the elements a registration's blocks hold (DESL section 5.5) are not read by this check
+        if family == "bullets":  # the bullets family (FBL section 4.8), read with its tool type's specification
+            model = bullets_reading_of_fixture(path, fixture, binding)
+        else:
+            model = reading_of_fixture(path, fixture, binding, folder)
     except ReadingProblem as problem:
         if expected.get("unreadable") and "unreadable" in str(problem):
             return None
@@ -3218,6 +3472,8 @@ for path in examples:
                 document = definition_from_markdown(path.read_text(encoding="utf-8"))
                 if document["designer"] == "etalii/hierarchical-requirement":  # read whole, by its designer type's reader
                     document, reading[path] = requirements_from_markdown(path.read_text(encoding="utf-8"))
+                elif document["designer"] == "etalii/post-incident-review":
+                    document, reading[path] = reviews_from_markdown(path.read_text(encoding="utf-8"))
             else:
                 import yaml  # only the designers' examples need it
 
@@ -3262,7 +3518,7 @@ for path in examples:
         print(f"FAIL {name}: {len(problems)} finding(s) on reading")
         for problem in problems[:10]:
             print(f"  {problem}")
-    elif reference == HIERARCHICAL_REQUIREMENT and (problems := reading.get(path)):
+    elif reference in (HIERARCHICAL_REQUIREMENT, POST_INCIDENT_REVIEW) and (problems := reading.get(path)):
         failures += 1
         print(f"FAIL {name}: {len(problems)} finding(s) on reading")
         for problem in problems[:10]:
