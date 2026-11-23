@@ -71,7 +71,7 @@
 
 **Goal**: the summary and the marked waits (FR-004, FR-005). **Independent test**: spec User Story 2 against the worked examples.
 
-- [ ] **T016** [US2] Add the functions `visits`, `leadTime`, `processTotal`, `flowEfficiency` and `handoffs` with bounded recursion and the budget of 200 steps (R4, R10) · etalii.adp/definitions/diagrams/value-stream-map.dis
+- [ ] **T016** [US2] Add the functions `visits`, `leadTime`, `processTotal`, `flowEfficiency` and `handoffs` with bounded recursion and the budget of 64 steps (R4, R10) · etalii.adp/definitions/diagrams/value-stream-map.dis
 - [ ] **T017** [US2] Add the derived `Summary` node and the long-wait mark (R9), in the diagram's `unit` · etalii.adp/definitions/diagrams/value-stream-map.dis
 - [ ] **T018** [US2] Add the findings `vsm.empty-stream`, `vsm.missing-trigger`, `vsm.missing-outcome`, `vsm.second-trigger`, `vsm.second-outcome`, `vsm.unconnected-step`, `vsm.missing-wait`, `vsm.missing-process-time`, `vsm.unmarked-cycle` and `vsm.too-many-steps` with their sentences (data-model.md) · etalii.adp/definitions/diagrams/value-stream-map.dis
 - [ ] **T019** [P] [US2] Write `restore-service.vsm` (R13) and, in the companion, its totals worked by hand, matching spec User Story 2's scenarios · etalii.adp/definitions/diagrams/examples/restore-service.vsm, value-stream-map.md

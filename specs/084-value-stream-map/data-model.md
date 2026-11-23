@@ -56,7 +56,7 @@ Relations never cross states (a refusal at the connect gesture).
 | `vsm.unmarked-cycle` | error | A cycle of forward flows; totals are not computed. |
 | `vsm.rework-forward` | warning | A rework flow whose target does not precede its source. |
 | `vsm.unknown-activity`, `vsm.unknown-practice` | info | A name not in the vocabulary; kept as written. |
-| `vsm.too-many-steps` | warning | More than the budget of 200 steps in a state (research R10). |
+| `vsm.too-many-steps` | warning | More than the budget of 64 steps in a state (research R10). |
 
 ## Operations
 
