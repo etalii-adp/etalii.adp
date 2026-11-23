@@ -7,8 +7,8 @@ part of generic/value-stream-map
 /// agents and ADP. The stream's name, unit and vocabularies at the root; under current and an optional future, each
 /// state's trigger, steps, outcome and flows. Every element of a state is read by a rule of its own state, which
 /// writes the attribute state (research R2). A flow with share is an alternative and one with rework is rework; one
-/// with both is read by no rule, kept as written and reported as unbound. The user's part is view.state, the shown
-/// state.
+/// with both is read by no rule and kept as written, and the file schema refuses it. The user's part is view.state,
+/// the shown state.
 binding vsm family yaml {
   label "Value stream map"
   claims { extensions: [".vsm"], origins: ["generic/value-stream-map"] }
