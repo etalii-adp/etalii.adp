@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-23
 
-**Status**: Approved 2026-11-23 (Peter, decision card "Approve, then build")
+**Status**: Implemented on 2026-11-23, in etalii.adp.ide.vscode #82, #83 and #85, with the definition's changes in etalii.adp (#787 to #813) and standalone's re-bundles (approved 2026-11-23, Peter, decision card "Approve, then build")
 
 **Input**: Peter, 2026-11-23, asked for a thread that brings a tool of the standalone host ("the standard host") to the VS Code host, functionally identical to it; his words named the tool by a phrase that is no tool type's name, so on a decision card the same day he chose the dependency graph. The work follows the causal loop diagram's ([spec 081](../081-vscode-causal-loop-diagram/vscode-causal-loop-diagram.spec.md)): an inventory of the differences, each traced to a requirement, confirmed before anything is built.
 
