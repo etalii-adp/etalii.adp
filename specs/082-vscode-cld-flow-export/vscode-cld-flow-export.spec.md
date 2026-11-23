@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-22
 
-**Status**: Approved on 2026-11-22 (decision card "Approve, then build")
+**Status**: Implemented on 2026-11-23 (etalii.adp.ide.vscode #75 and #78, etalii.adp.site #380); approved on 2026-11-22 (decision card "Approve, then build")
 
 **Input**: Peter, 2026-11-22: "is the CLD export also available in the VS Code host?", and, told that it is not, "Yes, but do it from an ADP (context) menu item." "The CLD export" is the flow page of [spec 074](../074-desktop-cld-flow-export/desktop-cld-flow-export.spec.md): one self-contained, animated web page of a causal loop diagram, which until now only the desktop host writes, from its ribbon.
 
