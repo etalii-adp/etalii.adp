@@ -3822,6 +3822,21 @@ def check_links_workspace(folder):
             elif links_rewrite(parts, target, attributes, index) != case["after"]:
                 problems.append(f"{where}: after load the link is {links_rewrite(parts, target, attributes, index)!r}, conformance.json says {case['after']!r}")
     problems.extend(check_knowledge_conversions(folder, conformance))
+    problems.extend(check_mindmap_linked_text(folder))
+    return problems
+
+
+def check_mindmap_linked_text(folder):
+    """Spec 089, research R7: a linked node's TEXT is the name its link caches, so Freeplane shows what ADP shows."""
+    problems = []
+    for path in sorted(folder.rglob("*.mm")):
+        for node in ElementTree.parse(path).getroot().iter("node"):
+            for attribute in node.findall("attribute"):
+                if attribute.get("NAME") != "adp-link":
+                    continue
+                parts = link_parse(attribute.get("VALUE", ""))
+                if parts is not None and parts.get("name") is not None and node.get("TEXT") != parts["name"]:
+                    problems.append(f"{path.relative_to(folder).as_posix()} at {node.get('ID')}: TEXT is {node.get('TEXT')!r}, the link caches {parts['name']!r}")
     return problems
 
 

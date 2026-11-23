@@ -114,11 +114,11 @@
 
 **Independent Test**: the definition declares the linked node and the `lookup` action on a node; a fixture map with a linked node round-trips its `adp-id` and `adp-link`.
 
-- [ ] **T042** [US1] Declare `documentId`, nodes `linkable` by `text`, a linked node (`linked` with its `link` attribute), and the `lookup` action with `as: child` in the node's context menu [FR-020, FR-022, FR-024, FR-027] · etalii.adp/definitions/diagrams/mindmap.dis
-- [ ] **T043** [US1] Companion: the root node's `adp-id`, a linked node as an ordinary Freeplane node with `TEXT` the cached name and attribute `adp-link`, and the plugin contract's two new operations (research R7, R8) [FR-001, FR-024] · etalii.adp/definitions/diagrams/mindmap.md
-- [ ] **T044** [P] [US1] Example binding: `document.id`, the plugin version `^0.2.0` and the contract in its `doc` · etalii.adp/specifications/fbl/mindmap.fbl
-- [ ] **T045** [P] [US1] Tool descriptions and trace · etalii.adp/definitions/diagrams/mindmap*.atd, mindmap.trace.json
-- [ ] **T046** [US1] Mind map rows in `conformance.json`; run the checks, open the pull request, turn on auto-merge · etalii.adp
+- [x] **T042** [US1] Declare `documentId`, nodes `linkable` by `text`, a linked node (`linked` with its `link` attribute), and the `lookup` action with `as: child` in the node's context menu [FR-020, FR-022, FR-024, FR-027] · etalii.adp/definitions/diagrams/mindmap.dis
+- [x] **T043** [US1] Companion: the root node's `adp-id`, a linked node as an ordinary Freeplane node with `TEXT` the cached name and attribute `adp-link`, and the plugin contract's two new operations (research R7, R8) [FR-001, FR-024] · etalii.adp/definitions/diagrams/mindmap.md
+- [x] **T044** [P] [US1] Example binding: its `doc` names the plugin contract (mindmap.md 3.8) that holds `adp-id` and `adp-link`; the example is declared and FBL 17.2 gives an `xml` binding only a root attribute as its slot, so the document id stays the plugin's (as research R8 says), and the plugin version `^0.2.0` is in mindmap.dis · etalii.adp/specifications/fbl/mindmap.fbl
+- [x] **T045** [P] [US1] Tool descriptions and trace · etalii.adp/definitions/diagrams/mindmap*.atd, mindmap.trace.json
+- [x] **T046** [US1] Mind map rows in `conformance.json`; run the checks, open the pull request, turn on auto-merge · etalii.adp
 
 ---
 
