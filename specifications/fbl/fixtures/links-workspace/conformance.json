@@ -1,5 +1,5 @@
 {
-  "doc": "Resolution and load-time validation of links (FBL section 17) over this folder as one workspace. Each entry of `links` is a link as written in a consuming document, and what resolving it yields: the target's path and element, or the finding; `after` is the link's text after the consuming document's load-time validation (17.4). `withoutId` lists the documents that load-time validation gives a document id.",
+  "doc": "Resolution and load-time validation of links (FBL section 17) over this folder as one workspace. Each entry of `links` is a link as written in a consuming document, and what resolving it yields: the target's path and element, or the finding; `after` is the link's text after the consuming document's load-time validation (17.4). `withoutId` lists the documents that load-time validation gives a document id. Each entry of `conversions` is a knowledge file made before links, the id its load gives it, and the file its conversion yields (knowledge.md, section 5; spec 089, SC-004).",
   "nameProperties": { ".tml": "label", ".dgr": "label", ".mm": "text", ".yaml": "title" },
   "links": [
     { "in": "plan/release.tml", "at": "l1", "link": "$k3f9x2ma@regions.yaml#nh.Name=N-Holland", "target": "knowledge/provinces.yaml", "element": "nh", "after": "$k3f9x2ma@provinces.yaml#nh.Name=Noord-Holland", "case": "the file was renamed, another file now has its old name, and the row's name changed: resolved by id, never by the name, and name and cached name rewritten" },
@@ -13,7 +13,14 @@
     { "in": "ideas/ideas.mm", "at": "ID_3", "link": "$r0a6m3xy@roadmap.tml#q1=First quarter", "finding": "link.ambiguous-document", "candidates": ["archive/roadmap.tml", "plan/roadmap.tml"], "case": "a copy with the same id and name in another folder" },
     { "in": "ideas/ideas.mm", "at": "ID_4", "link": "$qqqqqqqq@nowhere.tml#x1=Lost", "finding": "link.broken-document", "case": "neither the id nor the name is in the workspace" },
     { "in": "ideas/ideas.mm", "at": "ID_5", "link": "$zzzzzzzz@services-variant.dgr#auth.label=Identity service", "target": "teams/services-variant.dgr", "element": "auth", "after": "$d7n2k4qp@services-variant.dgr#auth.label=Identity service", "case": "the id is unknown and the name unique: resolved by name, the id rewritten" },
-    { "in": "ideas/ideas.mm", "at": "ID_6", "link": "$k3f9x2ma@provinces.yaml#ut.Name=Utrecht", "target": "knowledge/provinces.yaml", "element": "ut", "after": "$k3f9x2ma@provinces.yaml#ut.Name=Utrecht", "case": "a mind map node linking a knowledge row: nothing to rewrite" }
+    { "in": "ideas/ideas.mm", "at": "ID_6", "link": "$k3f9x2ma@provinces.yaml#ut.Name=Utrecht", "target": "knowledge/provinces.yaml", "element": "ut", "after": "$k3f9x2ma@provinces.yaml#ut.Name=Utrecht", "case": "a mind map node linking a knowledge row: nothing to rewrite" },
+    { "in": "knowledge/towns.yaml", "at": "p2", "link": "$k3f9x2ma@provinces.yaml", "target": "knowledge/provinces.yaml", "after": "$k3f9x2ma@provinces.yaml", "case": "a knowledge relation's target: a link to a document, without an element" },
+    { "in": "knowledge/towns.yaml", "at": "zd/p2", "link": "$k3f9x2ma@provinces.yaml#nh.Name=N-Holland", "target": "knowledge/provinces.yaml", "element": "nh", "after": "$k3f9x2ma@provinces.yaml#nh.Name=Noord-Holland", "case": "a relation cell whose cached name is stale: rewritten" },
+    { "in": "knowledge/towns.yaml", "at": "af/p2", "link": "$k3f9x2ma@provinces.yaml#ut", "target": "knowledge/provinces.yaml", "element": "ut", "after": "$k3f9x2ma@provinces.yaml#ut=Utrecht", "case": "a relation cell without a cached name: filled in" }
   ],
-  "withoutId": ["notes/no-id.tml"]
+  "withoutId": ["knowledge/cities.yaml", "notes/no-id.tml"],
+  "conversions": [
+    { "in": "knowledge/cities.yaml", "id": "c1t9e5sx", "after": "knowledge/cities.converted", "case": "a knowledge file made before links, converted once on load (knowledge.md, section 5): its id first; the relation to provinces.yaml with its counterpart's name as backlinkName, the relation to itself, every related row kept as a link, a row that is gone by id alone, and the relation whose target is not in the workspace left as it was" },
+    { "in": "knowledge/provinces.yaml", "after": "knowledge/provinces.yaml", "case": "the counterpart Cities is kept while cities.yaml, whose relation names it, is not converted" }
+  ]
 }

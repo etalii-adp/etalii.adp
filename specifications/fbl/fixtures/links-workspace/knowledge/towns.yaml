@@ -1,0 +1,33 @@
+ded: "0.3"
+designer: etalii/knowledge
+id: w4n8b2kd
+name: Towns
+properties:
+  - id: p1
+    name: Name
+    type: text
+    title: true
+  - id: p2
+    name: Province
+    type: relation
+    target: $k3f9x2ma@provinces.yaml
+    limit: one
+    backlinkName: Towns
+views:
+  - id: v1
+    name: Table
+rows:
+  - id: zd
+    cells:
+      - property: p1
+        text: Zaandam
+      - property: p2
+        rows:
+          - row: $k3f9x2ma@provinces.yaml#nh.Name=N-Holland
+  - id: af
+    cells:
+      - property: p1
+        text: Amersfoort
+      - property: p2
+        rows:
+          - row: $k3f9x2ma@provinces.yaml#ut

@@ -98,13 +98,13 @@
 
 **Independent Test**: the relations example (cities and provinces) converts with no related row lost; the picker is stated in the definition.
 
-- [ ] **T035** [US3] Declare `documentId` (nanoid, base36, 8), rows `linkable` by the title property, relation properties with `target`, `limit`, `backlinkName` and link cells, replacing `targetFile` and `counterpart` [FR-001, FR-022, FR-025, FR-027] · etalii.adp/definitions/designers/knowledge.des
-- [ ] **T036** [US3] Binding: the envelope's `id` as `document.id`; read both relation forms, write only the new one [FR-007, FR-026] · etalii.adp/definitions/designers/knowledge.fbl
-- [ ] **T037** [US3] Companion: rewrite *Relations and the steps that write two files* as links, the picker (FR-021), and the one-time conversion of research R9 with its order and what happens to a target without an id [FR-021, FR-026] · etalii.adp/definitions/designers/knowledge.md
-- [ ] **T038** [P] [US3] Schema: `id` in the envelope, link cells, the relation's new keys · etalii.adp/definitions/designers/knowledge.schema.json
-- [ ] **T039** [P] [US3] Tool descriptions and trace with the new members · etalii.adp/definitions/designers/knowledge*.atd, knowledge.trace.json
+- [x] **T035** [US3] Declare `documentId` (nanoid, base36, 8), rows `linkable` by the title property, relation properties with `target`, `limit`, `backlinkName` and link cells, replacing `targetFile` and `counterpart` [FR-001, FR-022, FR-025, FR-027] · etalii.adp/definitions/designers/knowledge.des
+- [x] **T036** [US3] Binding: the envelope's `id` as `document.id`; read both relation forms, write only the new one [FR-007, FR-026] · etalii.adp/definitions/designers/knowledge.fbl
+- [x] **T037** [US3] Companion: rewrite *Relations and the steps that write two files* as links, the picker (FR-021), and the one-time conversion of research R9 with its order and what happens to a target without an id [FR-021, FR-026] · etalii.adp/definitions/designers/knowledge.md
+- [x] **T038** [P] [US3] Schema: `id` in the envelope, link cells, the relation's new keys · etalii.adp/definitions/designers/knowledge.schema.json
+- [x] **T039** [P] [US3] Tool descriptions and trace with the new members · etalii.adp/definitions/designers/knowledge*.atd, knowledge.trace.json
 - [ ] **T040** [P] [US3] Convert the examples `cities.*` to the new form and keep one old-form copy in the fixture (T009) · etalii.adp/definitions/designers/examples/
-- [ ] **T041** [US3] Add the knowledge rows to `conformance.json`, plant a conversion that drops a cell's second row, see SC-004's comparison fail, restore; run the checks, open the pull request, turn on auto-merge · etalii.adp
+- [x] **T041** [US3] Add the knowledge rows to `conformance.json`, plant a conversion that drops a cell's second row, see SC-004's comparison fail, restore; run the checks, open the pull request, turn on auto-merge · etalii.adp
 
 ---
 
