@@ -3479,6 +3479,7 @@ Every property of DISL 0.6, DESL 0.2 and FBL 0.8, by the JSON pointer of its sch
 | `fbl.schema.json#/$defs/Body/properties/files` | the setting `files` of `body` | §11.2 |
 | `fbl.schema.json#/$defs/Body/properties/ignore` | the setting `ignore` of `body` | §11.2 |
 | `fbl.schema.json#/$defs/Body/properties/settle` | the setting `settle` of `body` | §11.2 |
+| `fbl.schema.json#/$defs/Body/properties/stream` | *(FBL 0.22)* the setting `stream` of `body` | §11.2 |
 | `fbl.schema.json#/$defs/FileRule/properties/name` | the key `name` in a value of FileRule (a settings map, §6.4) | §6.4 |
 | `fbl.schema.json#/$defs/FileRule/properties/glob` | the key `glob` in a value of FileRule (a settings map, §6.4) | §6.4 |
 | `fbl.schema.json#/$defs/FileRule/properties/family` | the key `family` in a value of FileRule (a settings map, §6.4) | §6.4 |

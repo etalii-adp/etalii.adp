@@ -28,7 +28,7 @@
 
 ## Phase 1: Setup
 
-- [ ] **T001** After the pull request carrying this file merges, cut the branch again from `origin/develop`, run the checks and note the validator's count of `ok` lines as the baseline · etalii.adp
+- [x] **T001** After the pull request carrying this file merges, cut the branch again from `origin/develop`, run the checks and note the validator's count of `ok` lines as the baseline · etalii.adp
 
 ---
 
@@ -36,12 +36,12 @@
 
 **Purpose**: every document of a YAML stream can be bound (research R1).
 
-- [ ] **T002** [P] Make FBL 0.22: the status paragraph (what 0.22 adds, that every 0.21 document keeps its meaning), `body.stream` in section 3.2's table, the stream reading in section 4.3, the root insert and document removal in section 6.2, the marker on the first document in section 12.2, and the load-time refusal of `stream` outside the `yaml` family in section 14.1, as [contracts/fbl-yaml-stream.md](contracts/fbl-yaml-stream.md) states · etalii.adp/specifications/fbl/FBL-specification.md
-- [ ] **T003** [P] Add `stream` to `$defs/Body`, an enum of `first` and `documents`, allowed only with `family: "yaml"`, at the schema's current address · etalii.adp/specifications/fbl/fbl.schema.json
-- [ ] **T004** [P] Write the fixtures `yaml-stream-read` and `yaml-stream-edits` of the contract, with a binding of their own · etalii.adp/specifications/fbl/fixtures/yaml-stream-read/, yaml-stream-edits/
-- [ ] **T005** Teach the validator's fixture replay the stream reading, if T004's cases do not already replay · etalii.adp/.github/scripts/validate-examples.py
-- [ ] **T006** Plant `stream: "documents"` on a `json` binding; see the validator refuse it at load; restore · etalii.adp
-- [ ] **T007** Plant a removal of the last document that keeps its `---` line in the expected bytes; see the replay fail; restore · etalii.adp/specifications/fbl/fixtures/yaml-stream-edits/
+- [x] **T002** [P] Make FBL 0.22: the status paragraph (what 0.22 adds, that every 0.21 document keeps its meaning), `body.stream` in section 3.2's table, the stream reading in section 4.3, the root insert and document removal in section 6.2, the marker on the first document in section 12.2, and the load-time refusal of `stream` outside the `yaml` family in section 14.1, as [contracts/fbl-yaml-stream.md](contracts/fbl-yaml-stream.md) states · etalii.adp/specifications/fbl/FBL-specification.md
+- [x] **T003** [P] Add `stream` to `$defs/Body`, an enum of `first` and `documents`, allowed only with `family: "yaml"`, at the schema's current address · etalii.adp/specifications/fbl/fbl.schema.json
+- [x] **T004** [P] Write the fixtures `yaml-stream-read` and `yaml-stream-edits` of the contract, with a binding of their own · etalii.adp/specifications/fbl/fixtures/yaml-stream-read/, yaml-stream-edits/
+- [x] **T005** Teach the validator's fixture replay the stream reading, if T004's cases do not already replay · etalii.adp/.github/scripts/validate-examples.py
+- [x] **T006** Plant `stream: "documents"` on a `json` binding; see the validator refuse it at load; restore · etalii.adp
+- [x] **T007** Plant a removal of the last document that keeps its `---` line in the expected bytes; see the replay fail; restore · etalii.adp/specifications/fbl/fixtures/yaml-stream-edits/
 - [ ] **T008** Deliver pull request 2: run the checks, see the baseline keep its results, open it naming this folder, turn on auto-merge · etalii.adp
 
 **Checkpoint**: FBL 0.22 on `develop`.
