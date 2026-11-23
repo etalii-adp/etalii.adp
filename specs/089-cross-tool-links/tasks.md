@@ -85,10 +85,10 @@
 
 ## Phase 6: ATD (pull request 5)
 
-- [ ] **T031** Add the members `link`, `linkable { … }`, `linked { … }`, the action `lookup` and `document id { … }` to the grammar [FR-027] · etalii.adp/specifications/atd/grammar/
-- [ ] **T032** Map each new member to its JSON construct in ATD's tables (sections 7.6, 7.10, 7.13 and the canvas section) · etalii.adp/specifications/atd/ATD-specification.md
-- [ ] **T033** Regenerate the tables and highlighting with `atd-grammar.py`, and see `--check` pass and the keyword probe hold · etalii.adp/specifications/atd/
-- [ ] **T034** Run the checks, open the pull request, turn on auto-merge · etalii.adp
+- [x] **T031** Add the action `lookup` to the grammar; `link`, `linkable`, `linked` and `documentId` are settings of the constructs that carry their neighbours, with no new construct [FR-027] · etalii.adp/specifications/atd/grammar/
+- [x] **T032** Map each new member to its JSON construct in ATD's tables (sections 7.6, 7.10, 7.13 and the canvas section) · etalii.adp/specifications/atd/ATD-specification.md
+- [x] **T033** Regenerate the tables and highlighting with `atd-grammar.py`, and see `--check` pass and the keyword probe hold · etalii.adp/specifications/atd/
+- [x] **T034** Run the checks, open the pull request, turn on auto-merge · etalii.adp
 
 ---
 
