@@ -30,3 +30,6 @@ definitions/designers/conformance/knowledge/cities-json/after-*.json -text
 
 # Spec 074: the prototype flow page is the exported page's exact reference, so Git never converts it.
 specs/074-desktop-cld-flow-export/reference/*.html -text
+
+# Spec 085: OpenSLO files vendored byte for byte with their licence, read by the openslo-slo-read fixtures.
+definitions/diagrams/vendored/** -text
