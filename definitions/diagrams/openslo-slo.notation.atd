@@ -301,7 +301,7 @@ toolbox {
 }
 
 /// A service's name and description.
-form service for Service {
+form service for Budget {
   field name
   field displayName
   field description
