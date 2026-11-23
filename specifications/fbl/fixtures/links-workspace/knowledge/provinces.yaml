@@ -1,0 +1,18 @@
+ded: "0.1"
+designer: etalii/knowledge
+id: k3f9x2ma
+name: Provinces
+properties:
+  - id: p1
+    name: Name
+    type: text
+    title: true
+rows:
+  - id: nh
+    cells:
+      - property: p1
+        text: Noord-Holland
+  - id: ut
+    cells:
+      - property: p1
+        text: Utrecht

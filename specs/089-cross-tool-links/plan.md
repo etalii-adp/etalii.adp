@@ -10,7 +10,7 @@ The link is stated once, in FBL, because FBL already serves every kind of tool a
 
 ## Technical Context
 
-- **What changes in this repository**: `specifications/fbl/` (FBL 0.23: section 13 *Links between documents*, schema, the example bindings `mindmap.fbl`, `timeline.fbl`, `dependency-graph.fbl`, and a fixture folder `fixtures/links-*`), `specifications/disl/` (DISL 0.12: document and schema), `specifications/desl/` (DESL 0.5), `specifications/ded/` (DED 0.3: the envelope's `id`), `specifications/atd/` (grammar, the ATD document's mapping of the new constructs, regenerated tables and highlighting), `definitions/designers/knowledge.*` and `definitions/diagrams/{mindmap,timeline,dependency-graph}.*` (specification, binding, companion, tool description, trace), `definitions/examples/links/` (a worked workspace), and `.github/scripts/validate-examples.py` (the link grammar and the resolution fixture). DISL's appendix D.2 question 1 and DESL section 3 point at FBL section 13.
+- **What changes in this repository**: `specifications/fbl/` (FBL 0.23: section 17 *Links between documents*, schema, the example bindings `mindmap.fbl`, `timeline.fbl`, `dependency-graph.fbl`, and a fixture folder `fixtures/links-*`), `specifications/disl/` (DISL 0.12: document and schema), `specifications/desl/` (DESL 0.5), `specifications/ded/` (DED 0.3: the envelope's `id`), `specifications/atd/` (grammar, the ATD document's mapping of the new constructs, regenerated tables and highlighting), `definitions/designers/knowledge.*` and `definitions/diagrams/{mindmap,timeline,dependency-graph}.*` (specification, binding, companion, tool description, trace), `definitions/examples/links/` (a worked workspace), and `.github/scripts/validate-examples.py` (the link grammar and the resolution fixture). DISL's appendix D.2 question 1 and DESL section 3 point at FBL section 17.
 - **What changes in another repository**: the diagram types' bindings are served from `etalii.adp.ide.standalone` (`src/diagrams/{mindmap,timeline,dependency-graph}/backend/*/…fbl`, the URL in each `persistence.binding`). They get the same change as the copies here, in a pull request of their own on a branch named as this feature; nothing else in that repository changes in this feature. The mind map's persistence plugin `net.etalii.adp.freeplane.mm` gains two operations in its contract (FBL 11.2), stated here; its code is a host's (R8).
 - **What checks it**: `validate-examples.py` (schemas, examples, fixture replay, and the new link fixture), `atd-grammar.py --check`, the Build's `descriptions` job, `terminology-check.py`, `licence-check.py`.
 - **What the checks cannot see**: the lookup's search, the picker's chips, a linked node's badge, navigation and "Linked from", which a host draws. SC-001, SC-005 and SC-006 are carried to each host's specification; SC-002 to SC-004 are checked here by the resolution fixture (R11); SC-007 holds by construction, since nothing here is host code.
@@ -22,8 +22,8 @@ Checked against `.specify/memory/constitution.md` as it stands on `develop` at `
 
 | Principle | Assessment |
 |---|---|
-| I. One source of truth | PASS. The link is defined once, in FBL section 13; DISL, DESL, DED and ATD refer to it and define only their own constructs. |
-| II. Implementable from the document alone | PASS. Each changed language comes with its schema and an example; FBL section 13 with its grammar, a fixture and a worked workspace. |
+| I. One source of truth | PASS. The link is defined once, in FBL section 17; DISL, DESL, DED and ATD refer to it and define only their own constructs. |
+| II. Implementable from the document alone | PASS. Each changed language comes with its schema and an example; FBL section 17 with its grammar, a fixture and a worked workspace. |
 | III. Precise normative language | PASS. RFC 2119 key words; the link's grammar in ABNF; `shows` and name properties as CEL where computed. |
 | IV. Versioned specifications | PASS. FBL 0.23, DISL 0.12, DESL 0.5, DED 0.3 are supersets of their predecessors; the knowledge file's conversion is a change of one designer type's documents, stated in its companion. |
 | V. Simplicity | PASS. Every construct serves one of the four tool types; editors, transclusion and links outside the workspace are left out as the specification says. The `lookup` action is one standard action for three diagrams rather than one per type. |
@@ -49,7 +49,7 @@ specs/089-cross-tool-links/
 └── checklists/requirements.md
 
 specifications/fbl/
-├── FBL-specification.md            (0.23: section 13, Links between documents)
+├── FBL-specification.md            (0.23: section 17, Links between documents)
 ├── fbl.schema.json                 (document.id, link slots)
 ├── mindmap.fbl, timeline.fbl, dependency-graph.fbl
 └── fixtures/links-workspace/       (new: documents, conformance.json of links and expected results)

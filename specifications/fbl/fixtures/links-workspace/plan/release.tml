@@ -1,0 +1,44 @@
+timeline: 1
+id: t5h8w1rz
+elements:
+  - id: discovery
+    label: Discovery
+    begin: 2026-04-27
+    end: 2026-06-05
+    row: 1
+  - id: launch
+    label: Launch
+    begin: 2026-12-04
+    row: 2
+  - id: l1
+    link: $k3f9x2ma@regions.yaml#nh.Name=N-Holland
+    begin: 2026-05-01
+    row: 3
+  - id: l2
+    link: $d7n2k4qp@services.dgr#api.label=API gateway
+    begin: 2026-07-01
+    row: 4
+  - id: l3
+    link: $k3f9x2ma@provinces.yaml#gr.Name=Groningen
+    begin: 2026-08-01
+    row: 5
+  - id: l4
+    link: k3f9x2ma@provinces.yaml#ut
+    begin: 2026-09-01
+    row: 6
+  - id: l5
+    link: $k3f9x2ma@provinces.yaml#ut
+    begin: 2026-10-01
+    row: 7
+  - id: l6
+    link: $t5h8w1rz@release.tml#discovery=Discovery
+    begin: 2026-11-01
+    row: 8
+  - id: l7
+    link: $d7n2k4qp@services.dgr#db
+    begin: 2026-11-15
+    row: 9
+connections:
+  - id: c1
+    from: discovery
+    to: launch

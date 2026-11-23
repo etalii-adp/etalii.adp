@@ -1,4 +1,4 @@
-# Contract: Resolution, Load-Time Validation, Backlinks and Findings (FBL 0.23, sections 13.2 to 13.6)
+# Contract: Resolution, Load-Time Validation, Backlinks and Findings (FBL 0.23, sections 17.2 to 17.6)
 
 ## Workspace and index
 

@@ -1,0 +1,23 @@
+dependencies: 1
+id: d7n2k4qp
+elements:
+  - id: api
+    label: API gateway
+    x: 270
+    row: 4
+  - id: auth
+    label: Identity service
+    x: 800
+    row: 4
+  - id: db
+    label: Orders database
+    x: 1300
+    row: 4
+  - id: db
+    label: Orders database (second holder)
+    x: 1300
+    row: 6
+relations:
+  - id: r1
+    from: api
+    to: auth

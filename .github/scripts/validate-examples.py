@@ -53,6 +53,9 @@ origin a rule's `origins` lists, and every origin `registration.resource.byOrigi
 round: each must be valid against the schema and refused by one of these checks, and the run fails when one is
 accepted.
 The fixtures under a folder named `*-equivalence` read one model in different formats: their `read` must be identical.
+(FBL 0.23) A folder `specifications/fbl/fixtures/links-*` is one workspace of links (FBL section 17): its documents are
+read for their document ids, elements and links, every link is resolved and rewritten as sections 17.3 and 17.4 say,
+and the result must be what its `conformance.json` lists, link by link.
 A fixture whose binding is of the `grammar` family is also **read** (FBL 0.11, the reading check of spec 066's
 research R20): its input, or the body its registration names, is parsed with Python Lark under the binding's grammar,
 lexed by ATD section 3.6's rule, which is Lark's contextual lexer's (a keyword a pattern terminal of its priority
@@ -3574,6 +3577,164 @@ def yaml_without_timestamps(text: str):
     }
     return yaml.load(text, Loader=Loader)  # noqa: S506 - a SafeLoader subclass
 
+
+# (FBL 0.23, section 17) Links between documents. The folder specifications/fbl/fixtures/links-workspace/ is one
+# workspace: its documents are read for their document ids, their elements and the links they hold, every link is
+# resolved as section 17.3 says and rewritten as section 17.4 says, and the result is compared with its conformance.json.
+LINK_ID = r"(?:[^#$%.=@\x00-\x1f\x7f]|%[0-9A-Fa-f]{2})"
+LINK_FILE = r"(?:[^#%\x00-\x1f\x7f]|%[0-9A-Fa-f]{2})"
+LINK_TEXT = r"(?:[^%\x00-\x1f\x7f]|%[0-9A-Fa-f]{2})"
+LINK_PATTERN = re.compile(
+    rf"^\$(?P<document_id>{LINK_ID}+)@(?P<document_name>{LINK_FILE}+)"
+    rf"(?:#(?P<element_id>{LINK_ID}+)(?:\.(?P<name_prop>{LINK_ID}+))?(?:=(?P<name>{LINK_TEXT}*))?)?$"
+)
+LINK_RESERVED = {"document_id": "$@#.=%", "document_name": "#%", "element_id": "$@#.=%", "name_prop": "$@#.=%", "name": "%"}
+
+
+def link_unescape(part):
+    if part is None:
+        return None
+    return re.sub(rb"%([0-9A-Fa-f]{2})", lambda m: bytes([int(m.group(1), 16)]), part.encode("utf-8")).decode("utf-8")
+
+
+def link_escape(part, reserved):
+    return "".join("".join(f"%{b:02X}" for b in c.encode("utf-8")) if c in reserved else c for c in part)
+
+
+def link_parse(text):
+    match = LINK_PATTERN.match(text) if isinstance(text, str) else None
+    if not match:
+        return None
+    return {key: link_unescape(value) for key, value in match.groupdict().items()}
+
+
+def link_format(parts):
+    text = f"${link_escape(parts['document_id'], LINK_RESERVED['document_id'])}@{link_escape(parts['document_name'], LINK_RESERVED['document_name'])}"
+    if parts.get("element_id") is not None:
+        text += f"#{link_escape(parts['element_id'], LINK_RESERVED['element_id'])}"
+        if parts.get("name_prop") is not None:
+            text += f".{link_escape(parts['name_prop'], LINK_RESERVED['name_prop'])}"
+        if parts.get("name") is not None:
+            text += f"={link_escape(parts['name'], LINK_RESERVED['name'])}"
+    return text
+
+
+def links_read_document(path, name_properties):
+    """A document of the workspace as the index sees it: its id, its elements ({id: [attributes]}), its name property
+    and the links it holds ([(holder, text)])."""
+    elements, links, document_id = {}, [], None
+    if path.suffix == ".mm":
+        tree = ElementTree.parse(path)
+        root_node = tree.getroot().find("node")
+        for attribute in root_node.findall("attribute") if root_node is not None else []:
+            if attribute.get("NAME") == "adp-id":
+                document_id = attribute.get("VALUE")
+        for node in tree.getroot().iter("node"):
+            elements.setdefault(node.get("ID"), []).append({"text": node.get("TEXT", "")})
+            for attribute in node.findall("attribute"):
+                if attribute.get("NAME") == "adp-link":
+                    links.append((node.get("ID"), attribute.get("VALUE")))
+        return document_id, elements, "text", links
+    data = yaml_without_timestamps(path.read_text(encoding="utf-8"))
+    document_id = data.get("id")
+    if "designer" in data:  # a knowledge file: rows named by the title property
+        title = next((p for p in data.get("properties", []) if p.get("title")), None)
+        for row in data.get("rows", []):
+            attributes = {}
+            for cell in row.get("cells", []):
+                prop = next((p for p in data.get("properties", []) if p.get("id") == cell.get("property")), None)
+                if prop is not None and "text" in cell:
+                    attributes[prop["name"]] = cell["text"]
+            elements.setdefault(row.get("id"), []).append(attributes)
+        return document_id, elements, title["name"] if title else None, links
+    for entry in data.get("elements", []):
+        elements.setdefault(entry.get("id"), []).append({k: v for k, v in entry.items() if isinstance(v, str)})
+        if "link" in entry:
+            links.append((entry.get("id"), entry["link"]))
+    return document_id, elements, name_properties.get(path.suffix), links
+
+
+def links_resolve(text, index):
+    """Section 17.3: (finding, None, None) or (None, path, element attributes)."""
+    parts = link_parse(text)
+    if parts is None:
+        return "link.malformed", None, None, None
+    candidates = [p for p, d in index.items() if d["id"] == parts["document_id"]]
+    if len(candidates) != 1:
+        pool = candidates if candidates else list(index)
+        candidates = [p for p in pool if p.name == parts["document_name"]]
+        if len(candidates) > 1:
+            return "link.ambiguous-document", sorted(candidates), None, parts
+        if not candidates:
+            return "link.broken-document", None, None, parts
+    target = candidates[0]
+    if parts["element_id"] is None:
+        return None, target, None, parts
+    holders = index[target]["elements"].get(parts["element_id"], [])
+    if not holders:
+        return "link.broken-element", None, None, parts
+    if len(holders) > 1:
+        return "link.ambiguous-document", [target], None, parts
+    return None, target, holders[0], parts
+
+
+def links_rewrite(parts, target, attributes, index):
+    """Section 17.4, step 4: the link's text after load-time validation."""
+    document = index[target]
+    rewritten = dict(parts, document_id=document["id"], document_name=target.name)
+    if rewritten["element_id"] is not None:
+        if rewritten["name_prop"] is not None and rewritten["name_prop"] not in attributes:
+            rewritten["name_prop"] = document["nameProperty"]
+        rewritten["name"] = attributes.get(rewritten["name_prop"] or document["nameProperty"], "")
+    return link_format(rewritten)
+
+
+def check_links_workspace(folder):
+    problems = []
+    conformance = json.loads((folder / "conformance.json").read_text(encoding="utf-8"))
+    documents = {}
+    for path in sorted(p for p in folder.rglob("*") if p.is_file() and p.suffix in (".tml", ".dgr", ".mm", ".yaml")):
+        document_id, elements, name_property, links = links_read_document(path, conformance["nameProperties"])
+        documents[path] = {"id": document_id, "elements": elements, "nameProperty": name_property, "links": links}
+    without_id = sorted(p.relative_to(folder).as_posix() for p, d in documents.items() if d["id"] is None)
+    if without_id != sorted(conformance.get("withoutId", [])):
+        problems.append(f"documents without an id are {without_id}, conformance.json says {sorted(conformance.get('withoutId', []))}")
+    index = {p: d for p, d in documents.items() if d["id"] is not None}
+    held = {(p.relative_to(folder).as_posix(), holder, text) for p, d in documents.items() for holder, text in d["links"]}
+    expected = {(case["in"], case["at"], case["link"]) for case in conformance["links"]}
+    for missing in sorted(held - expected):
+        problems.append(f"{missing[0]} holds {missing[2]!r} at {missing[1]}, which conformance.json does not list")
+    for extra in sorted(expected - held):
+        problems.append(f"conformance.json lists {extra[2]!r} at {extra[1]} in {extra[0]}, which the document does not hold")
+    for case in conformance["links"]:
+        finding, target, attributes, parts = links_resolve(case["link"], index)
+        where = f"{case['in']} at {case['at']} ({case.get('case', case['link'])})"
+        if finding != case.get("finding"):
+            problems.append(f"{where}: resolving gives {finding or 'a target'}, conformance.json says {case.get('finding') or 'a target'}")
+            continue
+        if finding == "link.ambiguous-document" and "candidates" in case:
+            got = sorted(p.relative_to(folder).as_posix() for p in target)
+            if got != case["candidates"]:
+                problems.append(f"{where}: the candidates are {got}, conformance.json says {case['candidates']}")
+        if finding is None:
+            got = target.relative_to(folder).as_posix()
+            if got != case["target"] or parts["element_id"] != case.get("element"):
+                problems.append(f"{where}: resolves to {got}#{parts['element_id']}, conformance.json says {case['target']}#{case.get('element')}")
+            elif links_rewrite(parts, target, attributes, index) != case["after"]:
+                problems.append(f"{where}: after load the link is {links_rewrite(parts, target, attributes, index)!r}, conformance.json says {case['after']!r}")
+    return problems
+
+
+for links_folder in sorted((root / "fbl" / "fixtures").glob("links-*")):
+    links_problems = check_links_workspace(links_folder)
+    links_name = links_folder.relative_to(repository).as_posix()
+    if links_problems:
+        failures += 1
+        print(f"FAIL {links_name}: {len(links_problems)} link problem(s)")
+        for problem in links_problems[:10]:
+            print(f"  {problem}")
+    else:
+        print(f"ok   {links_name}: links resolve and rewrite as conformance.json says")
 
 for schema_path in sorted((repository / "definitions" / "diagrams").glob("*.schema.json")):
     companion = schema_path.with_name(schema_path.name.removesuffix(".schema.json") + ".md")

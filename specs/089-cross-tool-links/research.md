@@ -4,7 +4,7 @@ Each item: decision, rationale, alternatives considered.
 
 ## R1. Where the link is defined once (FR-028)
 
-- **Decision**: FBL, as a new section 13 *Links between documents* in FBL 0.23.
+- **Decision**: FBL, as a new section 17 *Links between documents* in FBL 0.23.
 - **Rationale**: FBL already serves diagrams and designers alike (FBL 1.3), and already owns ids as stored (5.3), references and their rewrite (5.7), the registration (8), several readings of one body (9), folders (10) and routing (12): everything a link needs that is not one language's metamodel. DISL and DESL each define their own constructs and neither takes from the other (FBL 1.3), so a definition shared by both cannot live in either. Every one of the four tool types is read through FBL.
 - **Alternatives**: a new small specification ("ADP links"): a ninth document for one section, and it would still have to refer to FBL for ids and routing. ATD: ATD describes tool types, while a link is a property of documents and their files.
 
@@ -22,7 +22,7 @@ Each item: decision, rationale, alternatives considered.
 
 ## R4. The link in a diagram: linked elements (FR-016, FR-019, FR-020, FR-023)
 
-- **Decision**: DISL 0.12 adds an attribute type `link` (a string in the form of FBL 13.1) and lets an element type declare `linked: { attribute, shows }`: the element stands for the target of its `link` attribute, draws the target's current name in place of its label, and `shows` lists target attributes (by the target type's names) drawn with their current values. `linkable: { nameProperty }` on an element type says its elements can be linked to and which attribute names them. A standard action `{ "lookup": { "create": TypeRef, "as": "child" | "at" } }` opens the host's lookup and creates an element of `create` with the picked link, as a child of the context element or at the pointer.
+- **Decision**: DISL 0.12 adds an attribute type `link` (a string in the form of FBL 17.1) and lets an element type declare `linked: { attribute, shows }`: the element stands for the target of its `link` attribute, draws the target's current name in place of its label, and `shows` lists target attributes (by the target type's names) drawn with their current values. `linkable: { nameProperty }` on an element type says its elements can be linked to and which attribute names them. A standard action `{ "lookup": { "create": TypeRef, "as": "child" | "at" } }` opens the host's lookup and creates an element of `create` with the picked link, as a child of the context element or at the pointer.
 - **Rationale**: a linked element is an element of the diagram (the maintainer's card), so it is placed, connected and deleted by the type's own gestures (FR-023); only its label and badge come from the link. One standard action serves three diagram types (FR-019, the maintainer's "reusable concept, probably a context menu action").
 - **Alternatives**: a link as a decoration on any element (the card's option B, not chosen); a per-type gesture (three copies of one thing).
 
@@ -59,7 +59,7 @@ Each item: decision, rationale, alternatives considered.
 
 ## R11. A check the Build can run
 
-- **Decision**: `specifications/fbl/fixtures/links-workspace/` holds a small workspace (two knowledge files, a mind map, a timeline, a dependency graph, a copy, a moved file and an old-form knowledge file) and `conformance.json`: per link, the expected target path and element id or finding, and per document the expected rewritten link texts after load. `validate-examples.py` parses every link against FBL 13.1's grammar and replays resolution (contracts/resolution.md) over the fixture, the same way it replays other FBL fixtures.
+- **Decision**: `specifications/fbl/fixtures/links-workspace/` holds a small workspace (two knowledge files, a mind map, a timeline, a dependency graph, a copy, a moved file and an old-form knowledge file) and `conformance.json`: per link, the expected target path and element id or finding, and per document the expected rewritten link texts after load. `validate-examples.py` parses every link against FBL 17.1's grammar and replays resolution (contracts/resolution.md) over the fixture, the same way it replays other FBL fixtures.
 - **Rationale**: SC-002, SC-003 and SC-004 become checks; resolution is pure over files, so it can be stated and checked without a host.
 
 ## R12. Delivery order

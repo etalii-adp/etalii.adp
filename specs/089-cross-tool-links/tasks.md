@@ -28,7 +28,7 @@
 
 ## Phase 1: Setup
 
-- [ ] **T001** After the pull request carrying this file merges, cut the branch again from `origin/develop`, run the checks and record the validator's count of `ok` lines as the baseline · etalii.adp
+- [x] **T001** After the pull request carrying this file merges, cut the branch again from `origin/develop`, run the checks and record the validator's count of `ok` lines as the baseline (done: 2725 before Phase 2) · etalii.adp
 
 ---
 
@@ -36,25 +36,25 @@
 
 **Purpose**: the one definition of a link (research R1, R3, R11). Blocks every later phase.
 
-- [ ] **T002** Make FBL 0.23: the status paragraph (what 0.23 adds; every 0.22 binding keeps its meaning) and the table of contents · etalii.adp/specifications/fbl/FBL-specification.md
-- [ ] **T003** Add section 13.1 *The link*: the ABNF, escaping and examples of [contracts/link-form.md](contracts/link-form.md) [FR-005, FR-006] · etalii.adp/specifications/fbl/FBL-specification.md
-- [ ] **T004** Add sections 13.2 *Workspace and index* and 13.3 *Resolution*, as [contracts/resolution.md](contracts/resolution.md): the root that holds the consuming document, several roots, steps 1 to 4, ids compared by the target type's `compare` [FR-008, FR-009, FR-010, FR-011, FR-012] · etalii.adp/specifications/fbl/FBL-specification.md
-- [ ] **T005** Add section 13.4 *Load-time validation*: steps 0 to 4 as one undoable step, read-only documents unchanged, nothing written when nothing differs, following target changes while open [FR-002, FR-013, FR-014] · etalii.adp/specifications/fbl/FBL-specification.md
-- [ ] **T006** Add section 13.5 *Backlinks* (computed, never stored; the count before a delete) and 13.6 *Findings* with the four codes, severities, messages and fixes, the ambiguous fix re-identifying the other candidates [FR-010, FR-017, FR-018, FR-029] · etalii.adp/specifications/fbl/FBL-specification.md
-- [ ] **T007** Add `document.id` to a binding in section 3.1 and 5.3 (where the body keeps its document id; written with the template and by step 0), and state in 1.3's table that links are FBL's for both kinds [FR-001, FR-007, FR-028] · etalii.adp/specifications/fbl/FBL-specification.md
-- [ ] **T008** [P] Add `document` with `id` to `$defs/Binding` · etalii.adp/specifications/fbl/fbl.schema.json
-- [ ] **T009** [P] Write the fixture workspace: two knowledge files (one in today's form), a mind map, a timeline, a dependency graph, a renamed and moved target, a copy with a new name, a copy with the same name in another folder, a document without an id, a link to a deleted element, a malformed link and a stale cached name, with a `README.md` saying what it does not demonstrate · etalii.adp/specifications/fbl/fixtures/links-workspace/
-- [ ] **T010** Write `conformance.json`: per link its expected target path and element id or finding, per document its link texts after load, and the (row, related row) pairs of the converted knowledge file before and after (SC-002, SC-003, SC-004) · etalii.adp/specifications/fbl/fixtures/links-workspace/conformance.json
-- [ ] **T011** Extend the validator: parse every link under `definitions/examples/links/` and the fixture against 13.1, replay 13.3 and 13.4 over the fixture and compare with `conformance.json` · etalii.adp/.github/scripts/validate-examples.py
-- [ ] **T012** Plant three defects by hand, one at a time (a link without `$`; a resolution that tries the name before the id; a copy resolved silently), see each fail with its own message, restore · etalii.adp
-- [ ] **T013** Run the checks, open the pull request, turn on auto-merge · etalii.adp
+- [x] **T002** Make FBL 0.23: the status paragraph (what 0.23 adds; every 0.22 binding keeps its meaning) and the table of contents · etalii.adp/specifications/fbl/FBL-specification.md
+- [x] **T003** Add section 17.1 *The link*: the ABNF, escaping and examples of [contracts/link-form.md](contracts/link-form.md) [FR-005, FR-006] · etalii.adp/specifications/fbl/FBL-specification.md
+- [x] **T004** Add sections 17.2 *Workspace and index* and 17.3 *Resolution*, as [contracts/resolution.md](contracts/resolution.md): the root that holds the consuming document, several roots, steps 1 to 4, ids compared by the target type's `compare` [FR-008, FR-009, FR-010, FR-011, FR-012] · etalii.adp/specifications/fbl/FBL-specification.md
+- [x] **T005** Add section 17.4 *Load-time validation*: steps 0 to 4 as one undoable step, read-only documents unchanged, nothing written when nothing differs, following target changes while open [FR-002, FR-013, FR-014] · etalii.adp/specifications/fbl/FBL-specification.md
+- [x] **T006** Add section 17.5 *Backlinks* (computed, never stored; the count before a delete) and 17.6 *Findings* with the four codes, severities, messages and fixes, the ambiguous fix re-identifying the other candidates [FR-010, FR-017, FR-018, FR-029] · etalii.adp/specifications/fbl/FBL-specification.md
+- [x] **T007** Add `document.id` to a binding in section 3.1 and 5.3 (where the body keeps its document id; written with the template and by step 0), and state in 1.3's table that links are FBL's for both kinds [FR-001, FR-007, FR-028] · etalii.adp/specifications/fbl/FBL-specification.md
+- [x] **T008** [P] Add `document` with `id` to `$defs/Binding` · etalii.adp/specifications/fbl/fbl.schema.json
+- [x] **T009** [P] Write the fixture workspace: two knowledge files (one under the name the other had), a mind map, a timeline, a dependency graph, a renamed and moved target, a copy with a new name, a copy with the same name in another folder, a document without an id, a link to a deleted element, a malformed link, a stale cached name and a duplicate element id; the knowledge file in today's form joins in Phase 7 (T041), with a `README.md` saying what it does not demonstrate · etalii.adp/specifications/fbl/fixtures/links-workspace/
+- [x] **T010** Write `conformance.json`: per link its expected target path and element id or finding, and per link its text after load (SC-002, SC-003); the (row, related row) pairs of the converted knowledge file are added in Phase 7 (SC-004) · etalii.adp/specifications/fbl/fixtures/links-workspace/conformance.json
+- [x] **T011** Extend the validator: parse every link under `definitions/examples/links/` and the fixture against 17.1, replay 17.3 and 17.4 over the fixture and compare with `conformance.json` · etalii.adp/.github/scripts/validate-examples.py
+- [x] **T012** Plant three defects by hand, one at a time (a link without `$`; a resolution that tries the name before the id; a copy resolved silently), see each fail with its own message, restore (done: the name-first defect passed at first, because no case told the two orders apart; `knowledge/regions.yaml`, a second file under the first one's old name, was added, after which all three fail) · etalii.adp
+- [x] **T013** Run the checks, open the pull request, turn on auto-merge · etalii.adp
 
 ---
 
 ## Phase 3: DED 0.3 (pull request 2)
 
-- [ ] **T014** Make DED 0.3: the envelope gains `id` (YAML and JSON key, XML root attribute), the document id of FBL 13 [FR-001] · etalii.adp/specifications/ded/DED-specification.md
-- [ ] **T015** [P] Add `id` to the envelope in the schema, optional, with FBL 13's pattern · etalii.adp/specifications/ded/ded.schema.json
+- [ ] **T014** Make DED 0.3: the envelope gains `id` (YAML and JSON key, XML root attribute), the document id of FBL 17 [FR-001] · etalii.adp/specifications/ded/DED-specification.md
+- [ ] **T015** [P] Add `id` to the envelope in the schema, optional, with FBL 17's pattern · etalii.adp/specifications/ded/ded.schema.json
 - [ ] **T016** Run the checks, open the pull request, turn on auto-merge · etalii.adp
 
 ---
@@ -63,9 +63,9 @@
 
 - [ ] **T017** Make DISL 0.12: status paragraph, *Changes from 0.11* · etalii.adp/specifications/disl/DISL-specification.md
 - [ ] **T018** In 11.5, give `nanoid` the properties `alphabet` (`base36` among them) and `length`, and add `persistence.documentId` with the same rule [FR-001, FR-003] · etalii.adp/specifications/disl/DISL-specification.md
-- [ ] **T019** Add the attribute type `link` (a string of FBL 13.1), `linkable: { nameProperty }` and `linked: { attribute, shows }` to element types, with how a linked element is drawn (the target's current name, a link badge, `shows` values, a broken mark) and that its own gestures move, connect and delete it [FR-016, FR-023] · etalii.adp/specifications/disl/DISL-specification.md
+- [ ] **T019** Add the attribute type `link` (a string of FBL 17.1), `linkable: { nameProperty }` and `linked: { attribute, shows }` to element types, with how a linked element is drawn (the target's current name, a link badge, `shows` values, a broken mark) and that its own gestures move, connect and delete it [FR-016, FR-023] · etalii.adp/specifications/disl/DISL-specification.md
 - [ ] **T020** Add the standard action `lookup` (`create`, `as: child | at`, `types`), and activation of a linked element's badge as navigation to the target with it selected [FR-015, FR-019, FR-020] · etalii.adp/specifications/disl/DISL-specification.md
-- [ ] **T021** Mark appendix D.2 question 1 answered, pointing at FBL 13 [FR-028] · etalii.adp/specifications/disl/DISL-specification.md
+- [ ] **T021** Mark appendix D.2 question 1 answered, pointing at FBL 17 [FR-028] · etalii.adp/specifications/disl/DISL-specification.md
 - [ ] **T022** [P] Schema: `nanoid`'s `alphabet` and `length`, `documentId`, the `link` type, `linkable`, `linked`, the `lookup` action · etalii.adp/specifications/disl/disl.schema.json
 - [ ] **T023** [P] A minimal example that declares a linkable type, a linked type and the `lookup` action, and validates · etalii.adp/specifications/disl/minimal-links.dis
 - [ ] **T024** Plant a `lookup` without `create`, see the schema refuse it, restore; run the checks, open the pull request, turn on auto-merge · etalii.adp
@@ -77,7 +77,7 @@
 - [ ] **T025** Make DESL 0.5: status paragraph; `nanoid` with `alphabet` and `length` in 5.3, and `persistence.documentId` [FR-001, FR-003] · etalii.adp/specifications/desl/DESL-specification.md
 - [ ] **T026** Add the value type `link`, `linkable: { nameProperty }`, and a relation property's `target` (a document link), `limit` and `backlinkName` [FR-025] · etalii.adp/specifications/desl/DESL-specification.md
 - [ ] **T027** Add the standard relation picker: type-ahead over the target's linkable rows by name property, chips, "create new row" as one step over two documents (5.4), `limit: one` replacing; and backlinks shown as a column named by `backlinkName` [FR-017, FR-021] · etalii.adp/specifications/desl/DESL-specification.md
-- [ ] **T028** Point section 3's cross-document reference at FBL 13 [FR-028] · etalii.adp/specifications/desl/DESL-specification.md
+- [ ] **T028** Point section 3's cross-document reference at FBL 17 [FR-028] · etalii.adp/specifications/desl/DESL-specification.md
 - [ ] **T029** [P] Schema for T025 to T027 · etalii.adp/specifications/desl/desl.schema.json
 - [ ] **T030** Run the checks, open the pull request, turn on auto-merge · etalii.adp
 
