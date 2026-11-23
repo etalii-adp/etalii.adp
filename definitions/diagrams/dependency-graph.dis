@@ -3,7 +3,7 @@
   "disl": "0.10",
   "language": {
     "id": "net.etalii.adp.generic.dependencies",
-    "version": "1.1.3",
+    "version": "1.1.4",
     "origin": "generic/dependencies",
     "label": "Dependency graph",
     "doc": {
@@ -436,6 +436,15 @@
         "rule": "writtenEnd(self, 'source') != writtenEnd(self, 'target')",
         "message": { "cel": "'\\'' + writtenEnd(self, 'source') + '\\' is declared to depend on itself, which says nothing about what needs what.'" },
         "doc": "From `allowSelfLoops: false`: a dependency whose two ends name the same id, on the dependency, whether or not a node holds that id."
+      },
+      {
+        "id": "noSelfDependency",
+        "kind": "connect",
+        "enforcement": "prevent",
+        "when": "relationType == 'DependsOn'",
+        "rule": "source.id != target.id",
+        "message": "A node cannot depend on itself.",
+        "doc": "No gesture or operation writes a dependency from a node to itself; the edit is refused as a whole, as the standalone connect command refuses it."
       }
     ]
   },
