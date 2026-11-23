@@ -28,7 +28,7 @@
 
 ## ATD
 
-The same constructs in ATD's syntax (`link` type, `linkable { name … }`, `linked { attribute … shows … }`, action `lookup`, `document id { … }`), with their rows in ATD's mapping tables.
+The statement `lookup <Type> child | at [from ["<origin>", …]] [as <name>]` for DISL's action `lookup`, with the keywords `lookup` and `child`; the `link` type, `linkable`, `linked` and `documentId` are settings of `attribute`, `element` and `persistence`, which already carry their neighbours, so they need no new construct. Each has its row in Appendix C and the amendment entry in ATD's Changes (implementation, 2026-11-23).
 
 ## The four tool types
 
