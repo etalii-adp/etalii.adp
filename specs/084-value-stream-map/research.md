@@ -30,7 +30,7 @@ Decisions taken while planning [value-stream-map.spec.md](value-stream-map.spec.
 
 - **Decision**: a hand-off is not stored as its own relation: it is a `Flow` whose source and target are steps with different `performer` values. The notation draws such a flow with the hand-off marker, and the hand-off count reads the same expression. The metamodel keeps the relation types `Flow`, `Alternative` (a subtype of `Flow` with `share`) and `Rework` (with `rate`).
 - **Rationale**: User Story 1, scenario 3 already says a connection is drawn as a hand-off *because* its performers differ. A stored hand-off kind could contradict the performers, and an agent would have to keep both in step.
-- **Amendment**: FR-001 names "a hand-off" among the relation types. This plan reads it as a kind of flow the definition derives, which is the specification's own scenario; the maintainer is asked to confirm the wording as a small amendment (CLAUDE.md, *Specifications*), and until then FR-001 is traced to the derived flow.
+- **Amendment**: FR-001 named "a hand-off" among the relation types. The maintainer chose to amend it on 2026-11-23 ("Apply both"), and FR-001 now says a hand-off is derived from the performers.
 - **Alternatives**: a stored `Handoff` relation type with a finding when it disagrees with the performers (two sources of one fact).
 
 ## R6. Times are ISO 8601 durations, shown as written

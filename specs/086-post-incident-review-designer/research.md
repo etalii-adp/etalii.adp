@@ -34,7 +34,7 @@ Decisions taken while planning [post-incident-review-designer.spec.md](post-inci
 
 - **Decision**: `- [ ] A-0001 Add a canary stage for configuration changes. owner:@platform due:2026-12-01 addresses:[F-0002]`, with `[x]` for done. A factor that no action with a state other than rejected addresses is marked (FR-005).
 - **Rationale**: the `bullets` family reads list items; a Markdown table would need a second family in one binding, which FBL does not allow. A task list is what Markdown review templates commonly use for actions, and it reads as one without a tool.
-- **Amendment**: User Story 1, scenario 4 says the plain-text review shows "a table of actions". This plan reads it as a list of actions, and the maintainer is asked to confirm the wording as a small amendment (CLAUDE.md, *Specifications*).
+- **Amendment**: User Story 1, scenario 4 said the plain-text review shows "a table of actions". The maintainer chose to amend it to a task list on 2026-11-23 ("Apply both").
 
 ## R7. DESL needs a page of sections
 

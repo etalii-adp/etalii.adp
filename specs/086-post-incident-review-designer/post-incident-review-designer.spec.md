@@ -39,7 +39,7 @@ An incident manager opens a review an agent drafted. They see the summary and im
 1. **Given** a review whose milestones are detection at 10:12 and mitigated at 11:02, **When** it is opened, **Then** the timeline shows both and states a time to mitigate of 50 minutes from detection.
 2. **Given** a review with entries out of time order in the file, **When** it is shown, **Then** the timeline shows them in time order and the file is not reordered.
 3. **Given** a factor linked to two timeline entries and one action, **When** it is selected, **Then** the entries and the action are highlighted.
-4. **Given** a review, **When** it is opened as plain text, **Then** it reads as an ordinary Markdown review with headings, lists and a table of actions.
+4. **Given** a review, **When** it is opened as plain text, **Then** it reads as an ordinary Markdown review with headings and lists, the actions a task list (amended 2026-11-23, by the maintainer's choice "Apply both" on a decision card).
 
 ---
 

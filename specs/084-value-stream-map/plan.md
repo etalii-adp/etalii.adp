@@ -29,7 +29,7 @@ Checked against `.specify/memory/constitution.md` as it stands on `develop` at `
 | V. Simplicity | PASS. One file, one binding, no plugin; hand-offs are derived rather than stored (R5); the future state is a declared operation (R3). |
 | VI. No JetBrains Rider warnings in C# | PASS. No C#. |
 
-After the design: PASS on every row. The one open point is a wording, not a principle: FR-001's "hand-off" relation type is read as a derived flow (R5), put to the maintainer as a small amendment.
+After the design: PASS on every row. FR-001 was amended on 2026-11-23 so that a hand-off is a derived flow (R5).
 
 ## Project Structure
 
