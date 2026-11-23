@@ -14,7 +14,7 @@ atd 0.1
 /// (dependency-graph.dgr.atd), the self-dependency an edit may not write as the constraint `noSelfDependency`, and the
 /// written ends the findings judge as the function `writtenEnd`. `dependency-graph.trace.json` says where each came
 /// from, and what stays with the host.
-diagram generic/dependencies version "1.1.1" {
+diagram generic/dependencies version "1.1.2" {
   label "Dependency graph"
   id: "net.etalii.adp.generic.dependencies"
   authors: [{ name: "Peter Vrenken" }]
@@ -122,6 +122,10 @@ diagram generic/dependencies version "1.1.1" {
       code: "dependencies.duplicate-id"
       message: ('The id \'' + detail.id + '\' is declared more than once, which makes every reference to it ambiguous.')
       doc: "Nodes and dependencies share one id space. Each second and later declaration is reported, at its first line; nodes are read before dependencies."
+    }
+    builtin std.missingId {
+      enabled: false
+      doc: "Reported by missingId instead, which names a node by its label and reads `self.id` as the file writes it (persistence.writtenId)."
     }
     builtin std.references {
       enabled: false
