@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "Links Between Tools",
   "branch": "claude/project-thread-hu5ioe",
-  "currentStep": "plan",
-  "status": "planned",
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
   "history": [
     {
       "step": "specify",
@@ -18,7 +18,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-11-23T16:50:00.000Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-23T17:10:00.000Z"
     }
   ],
-  "last_action": "Approved by the maintainer 2026-11-23 (Approve as written); plan, research, data model, contracts and quickstart written; tasks await approval"
+  "last_action": "Plan approved by the maintainer 2026-11-23 (Approve, write the tasks); 63 tasks written, all 29 requirements claimed"
 }
