@@ -4,7 +4,7 @@
   "branch": "082-vscode-cld-flow-export",
   "selectedAt": "2026-11-22T23:40:00.000Z",
   "currentStep": "implement",
-  "status": "implementing",
+  "status": "completed",
   "history": [
     {
       "step": "specify",
@@ -26,7 +26,14 @@
       "kind": "complete",
       "by": "ai",
       "at": "2026-11-23T00:05:00.000Z"
+    },
+    {
+      "step": "implement",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-23T00:28:00.000Z"
     }
   ],
-  "last_action": "Approved by Peter 2026-11-22 (Approve, then build); placement amended; plan and 14 tasks written"
+  "last_action": "Implemented: etalii.adp.ide.vscode #75 (export) and #78 (registration read race), etalii.adp.site #380; T001-T014 ticked"
 }
