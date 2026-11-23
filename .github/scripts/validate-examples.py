@@ -124,6 +124,7 @@ without turning moments into timestamps.
 
 Prints one line per example and exits 1 when any example is invalid or names an unknown schema.
 """
+import copy
 import json
 import operator
 import re
@@ -3663,6 +3664,13 @@ def links_read_document(path, name_properties):
                 if prop is not None and "text" in cell:
                     attributes[prop["name"]] = cell["text"]
             elements.setdefault(row.get("id"), []).append(attributes)
+            for cell in row.get("cells", []):  # spec 089: a relation cell holds links
+                for item in cell.get("rows", []):
+                    if str(item.get("row", "")).startswith("$"):
+                        links.append((f"{row.get('id')}/{cell.get('property')}", item["row"]))
+        for prop in data.get("properties", []):  # spec 089: a relation's target is a link without an element
+            if str(prop.get("target", "")).startswith("$"):
+                links.append((prop.get("id"), prop["target"]))
         return document_id, elements, title["name"] if title else None, links
     for entry in data.get("elements", []):
         elements.setdefault(entry.get("id"), []).append({k: v for k, v in entry.items() if isinstance(v, str)})
@@ -3706,6 +3714,80 @@ def links_rewrite(parts, target, attributes, index):
     return link_format(rewritten)
 
 
+def knowledge_link_to(path, data, row_id):
+    """The link a converted relation cell holds to a row of the knowledge file at `path` (knowledge.md, section 5):
+    named by its title property's name and value, or by id alone when the file has no such row."""
+    title = next((p for p in data.get("properties", []) if p.get("title")), None)
+    for row in data.get("rows", []):
+        if row.get("id") == row_id:
+            for cell in row.get("cells", []):
+                if title is not None and cell.get("property") == title.get("id") and "text" in cell:
+                    return link_format({"document_id": data["id"], "document_name": path.name, "element_id": row_id, "name_prop": title["name"], "name": cell["text"]})
+    return link_format({"document_id": data["id"], "document_name": path.name, "element_id": row_id})
+
+
+def knowledge_old_relations(files):
+    """The relations of the workspace still in the form before links: (target path, counterpart id) of each."""
+    named = set()
+    for path, data in files.items():
+        for prop in data.get("properties", []):
+            if prop.get("type") == "relation" and "target" in prop and not str(prop["target"]).startswith("$") and "counterpart" in prop:
+                named.add(((path.parent / prop["target"]).resolve() if prop["target"] != "." else path.resolve(), prop["counterpart"]))
+    return named
+
+
+def knowledge_convert(path, files, new_id):
+    """The conversion on load of a knowledge file made before links (knowledge.md, section 5; spec 089, FR-026, R9):
+    the file's own id first; then each relation whose target has an id, its target and its cells, as links, and its
+    counterpart's name as backlinkName; a counterpart that no unconverted relation names any more is removed. `files`
+    holds every knowledge file of the workspace, read only, by path; the converted file is returned and none is written."""
+    data = copy.deepcopy(files[path])
+    if "id" not in data:
+        data = {**{k: v for k, v in data.items() if k in ("ded", "designer")}, "id": new_id, **{k: v for k, v in data.items() if k not in ("ded", "designer")}}
+        data["ded"] = "0.3"
+    converted = {**files, path: data}
+    names_left = knowledge_old_relations({p: d for p, d in files.items() if p != path})
+    properties = []
+    for prop in data.get("properties", []):
+        if prop.get("computed") and (path.resolve(), prop.get("id")) not in names_left:
+            continue  # its relation is converted: the target now computes the column from backlinks
+        if prop.get("type") == "relation" and "target" in prop and not str(prop["target"]).startswith("$"):
+            target_path = path if prop["target"] == "." else next((p for p in files if p.resolve() == (path.parent / prop["target"]).resolve()), None)
+            target = converted.get(target_path) if target_path is not None else None
+            if target is not None and "id" in target:
+                counterpart = next((q for q in target.get("properties", []) if q.get("id") == prop.get("counterpart")), None)
+                prop = {k: v for k, v in prop.items() if k != "counterpart"}
+                prop["target"] = link_format({"document_id": target["id"], "document_name": target_path.name})
+                if counterpart is not None:
+                    order = list(prop)
+                    at = order.index("limit") + 1 if "limit" in order else order.index("target") + 1
+                    prop = dict([*list(prop.items())[:at], ("backlinkName", counterpart["name"]), *list(prop.items())[at:]])
+                for row in data.get("rows", []):
+                    for cell in row.get("cells", []):
+                        if cell.get("property") == prop.get("id"):
+                            cell["rows"] = [{"row": knowledge_link_to(target_path, target, item["row"])} for item in cell.get("rows", [])]
+        properties.append(prop)
+    data["properties"] = properties
+    return data
+
+
+def check_knowledge_conversions(folder, conformance):
+    """Each conversion conformance.json lists: the file converted with the id its load gives it equals the file it
+    names, every related row kept (spec 089, SC-004)."""
+    problems = []
+    files = {}
+    for path in sorted(folder.rglob("*.yaml")):
+        data = yaml_without_timestamps(path.read_text(encoding="utf-8"))
+        if isinstance(data, dict) and data.get("designer") == "etalii/knowledge":
+            files[path] = data
+    for case in conformance.get("conversions", []):
+        got = knowledge_convert(folder / case["in"], files, case.get("id"))
+        expected = yaml_without_timestamps((folder / case["after"]).read_text(encoding="utf-8"))
+        if json.dumps(got) != json.dumps(expected):
+            problems.append(f"converting {case['in']} ({case.get('case', '')}) does not give {case['after']}: {json.dumps(got)[:300]}")
+    return problems
+
+
 def check_links_workspace(folder):
     problems = []
     conformance = json.loads((folder / "conformance.json").read_text(encoding="utf-8"))
@@ -3739,6 +3821,7 @@ def check_links_workspace(folder):
                 problems.append(f"{where}: resolves to {got}#{parts['element_id']}, conformance.json says {case['target']}#{case.get('element')}")
             elif links_rewrite(parts, target, attributes, index) != case["after"]:
                 problems.append(f"{where}: after load the link is {links_rewrite(parts, target, attributes, index)!r}, conformance.json says {case['after']!r}")
+    problems.extend(check_knowledge_conversions(folder, conformance))
     return problems
 
 
@@ -3751,7 +3834,7 @@ for links_folder in sorted((root / "fbl" / "fixtures").glob("links-*")):
         for problem in links_problems[:10]:
             print(f"  {problem}")
     else:
-        print(f"ok   {links_name}: links resolve and rewrite as conformance.json says")
+        print(f"ok   {links_name}: links resolve and rewrite, and knowledge files convert, as conformance.json says")
 
 for schema_path in sorted((repository / "definitions" / "diagrams").glob("*.schema.json")):
     companion = schema_path.with_name(schema_path.name.removesuffix(".schema.json") + ".md")
