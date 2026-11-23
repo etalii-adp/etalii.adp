@@ -2121,6 +2121,80 @@ def written(expected, actual):
     return actual
 
 
+YAML_DOCUMENT_START = re.compile(rb"---(?:[ \t].*)?\r?\n?\Z")
+
+
+def yaml_stream_spans(body: bytes) -> list[tuple[int, int]]:
+    """FBL 0.22, section 4.3: the own span of each document of a YAML stream read with `stream: "documents"`. A
+    document starts at its `---` line, or at the body's first byte for a first document without one, and at a run of
+    directive lines right above its `---` line; it ends before the next document starts, or at the end of the body.
+    Lines with no content before the first `---` line belong to the first document."""
+    lines = body.splitlines(keepends=True)
+    offsets, position = [], 0
+    for line in lines:
+        offsets.append(position)
+        position += len(line)
+    starts = []
+    for index, line in enumerate(lines):
+        if not YAML_DOCUMENT_START.match(line):
+            continue
+        first = index
+        while first > 0 and lines[first - 1].startswith(b"%"):
+            first -= 1
+        starts.append(offsets[first])
+    if not starts:
+        return [(0, len(body))] if body.strip() else []
+    leading = body[:starts[0]]
+    if any(line.strip() and not line.lstrip().startswith(b"#") for line in leading.splitlines()):
+        starts.insert(0, 0)  # a first document without a --- line
+    else:
+        starts[0] = 0  # only comments and blank lines stand before the first --- line
+    return [(start, end) for start, end in zip(starts, [*starts[1:], len(body)])]
+
+
+def check_yaml_stream(path: Path, fixture) -> str | None:
+    """FBL 0.22, sections 4.3 and 6.2: in a fixture whose binding reads every document of a YAML stream, the input and
+    every step's bytes are a YAML stream of as many documents as section 4.3 gives spans; a removal of an element read
+    at the root removes one document's span exactly, and an add at the root is written at the end of the body as a
+    document of its own, after a `---` line."""
+    binding = fixture_binding(path.parent, fixture["binding"])
+    body = binding.get("body", {}) if binding else {}
+    if body.get("family") != "yaml" or body.get("stream") != "documents":
+        return None
+    import yaml
+    root_types = {rule["type"] for rule in binding.get("elements", []) if rule.get("at") == "/*"}
+    document = (path.parent / fixture["input"]).read_bytes()
+    for index, step in enumerate([None, *fixture["steps"]]):
+        where = "the input" if step is None else f"step {index}"
+        if step is not None:
+            edit = step.get("edit", {})
+            splices = [splice for splice in step["splices"] if "file" not in splice]
+            spans = yaml_stream_spans(document)
+            if "remove" in edit and len(splices) == 1 and splices[0]["operation"] == "remove-entry":
+                span = (splices[0]["start"], splices[0]["end"])
+                if span not in spans:
+                    return f"{where}: the removal removes {span[0]}..{span[1]}, which is not the span of a document of the stream ({spans}; FBL 0.22, section 6.2)"
+            if edit.get("add", {}).get("type") in root_types:
+                for splice in splices:
+                    if splice["operation"] != "insert-entry":
+                        continue
+                    lead = "" if not document or document.endswith(b"\n") else "\n"
+                    if splice["start"] != len(document):
+                        return f"{where}: a document added at the root is written at {splice['start']}, not at the end of the body ({len(document)}; FBL 0.22, section 6.2)"
+                    if document and not splice["text"].startswith(lead + "---"):
+                        return f"{where}: a document added at the root does not start with its --- line (FBL 0.22, section 6.2)"
+            document, _, _ = apply_splices(document, step["splices"])
+            if "expect" in step:
+                document = step["expect"].encode("utf-8")
+        try:
+            documents = list(yaml.safe_load_all(document.decode("utf-8")))
+        except yaml.YAMLError as error:
+            return f"{where} is not a YAML stream: {str(error).splitlines()[0]}"
+        if len(documents) != len(yaml_stream_spans(document)):
+            return f"{where} holds {len(documents)} YAML document(s), and section 4.3 gives {len(yaml_stream_spans(document))} span(s)"
+    return None
+
+
 def check_reading(path: Path, fixture) -> str | None:
     """The reading check (FBL 0.11, research R20): for a fixture whose binding is of the grammar family, what reading
     its input gives against the fixture's `read`. Returns the first difference, if any."""
@@ -2797,7 +2871,7 @@ for path in examples:
         for error in errors[:10]:
             location = "/".join(str(part) for part in error.absolute_path) or "(root)"
             print(f"  at {location}: {error.message}")
-    elif reference == FBL_FIXTURE and (problem := replay_fixture(path, document) or check_reading(path, document)):
+    elif reference == FBL_FIXTURE and (problem := replay_fixture(path, document) or check_yaml_stream(path, document) or check_reading(path, document)):
         failures += 1
         print(f"FAIL {name}: {problem}")
     elif reference == KNOWLEDGE and (problems := check_knowledge(document)):
