@@ -12,3 +12,7 @@ rows:
     cells:
       - property: p1
         text: Northern region
+  - id: nh
+    cells:
+      - property: p1
+        text: Northern region (second holder)

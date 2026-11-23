@@ -38,6 +38,14 @@ elements:
     link: $d7n2k4qp@services.dgr#db
     begin: 2026-11-15
     row: 9
+  - id: l8
+    link: $m8c1u4wa@ideas.mm#ID_6.text=Utrecht
+    begin: 2026-12-01
+    row: 10
+  - id: l9
+    link: $aaaaaaaa@missing.yaml#x1=Gone
+    begin: 2026-12-10
+    row: 11
 connections:
   - id: c1
     from: discovery

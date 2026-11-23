@@ -13,6 +13,10 @@ properties:
     target: $k3f9x2ma@provinces.yaml
     limit: one
     backlinkName: Towns
+  - id: p3
+    name: Region
+    type: relation
+    target: $g2w9c6tb@regions.yaml
 views:
   - id: v1
     name: Table
@@ -31,3 +35,15 @@ rows:
       - property: p2
         rows:
           - row: $k3f9x2ma@provinces.yaml#ut
+  - id: hn
+    cells:
+      - property: p1
+        text: Hoorn
+      - property: p2
+        rows:
+          - row: $k3f9x2ma
+          - row: $k3f9x2ma@provinces.yaml#zl=Zeeland
+          - row: $pppppppp@lost.yaml#x1=Lost
+      - property: p3
+        rows:
+          - row: $g2w9c6tb@regions.yaml#nh=Northern region

@@ -1286,6 +1286,8 @@ A finding of a link stands at the element or value that holds it, in the consumi
 
 A link whose finding stands is shown by its cached `name`, marked as broken or ambiguous.
 
+*(informative)* `links-example/` beside this document is a workspace with one document of each tool type that holds links, the knowledge designer, the mind map, the timeline and the dependency graph, each linking the others; `fixtures/links-workspace/` is the conformance fixture of this section, with every finding on each of the four types, copies, moves, stale names and the knowledge file's conversion, and `conformance.json` saying what each link resolves to. `validate-examples.py` checks both.
+
 ## 18. Today's diagram definitions *(informative)*
 
 The 25 diagram definitions in `definitions/diagrams/` were written before FBL; 24 of them name a persistence plugin as their format and the timeline names DISL's `yaml`. Under FBL:

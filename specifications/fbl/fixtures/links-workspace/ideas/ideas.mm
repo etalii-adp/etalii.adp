@@ -19,5 +19,11 @@
 <node TEXT="Start" ID="ID_7">
 <attribute NAME="adp-link" VALUE="$m8c1u4wa@ideas.mm#ID_2.text=Start"/>
 </node>
+<node TEXT="Gone" ID="ID_8">
+<attribute NAME="adp-link" VALUE="$t5h8w1rz@release.tml#gone=Gone"/>
+</node>
+<node TEXT="Bad" ID="ID_9">
+<attribute NAME="adp-link" VALUE="release.tml#launch"/>
+</node>
 </node>
 </map>

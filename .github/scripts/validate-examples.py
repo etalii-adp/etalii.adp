@@ -3840,6 +3840,56 @@ def check_mindmap_linked_text(folder):
     return problems
 
 
+def check_links_example(folder):
+    """Spec 089, T056: the worked workspace for readers. Every link resolves and is current, so loading any of its
+    documents rewrites nothing; the knowledge file is valid against its schema; each linked node's TEXT is its name."""
+    problems = []
+    name_properties = {".tml": "label", ".dgr": "label", ".mm": "text", ".yaml": "title"}
+    documents = {}
+    for path in sorted(p for p in folder.rglob("*") if p.is_file() and p.suffix in name_properties):
+        document_id, elements, name_property, links = links_read_document(path, name_properties)
+        documents[path] = {"id": document_id, "elements": elements, "nameProperty": name_property, "links": links}
+        if document_id is None:
+            problems.append(f"{path.relative_to(folder).as_posix()} has no document id")
+    kinds = sorted({p.suffix for p in documents})
+    if kinds != sorted(name_properties):
+        problems.append(f"the workspace holds the kinds {kinds}, not one document of each of the four tool types")
+    for path, document in documents.items():
+        targets = set()
+        for holder, text in document["links"]:
+            finding, target, attributes, parts = links_resolve(text, documents)
+            where = f"{path.relative_to(folder).as_posix()} at {holder}"
+            if finding is not None:
+                problems.append(f"{where}: {text!r} gives {finding}")
+                continue
+            targets.add(target.suffix)
+            rewritten = links_rewrite(parts, target, attributes, documents)
+            if rewritten != text:
+                problems.append(f"{where}: {text!r} would be rewritten to {rewritten!r} on load")
+        others = sorted(set(name_properties) - {path.suffix} - targets)
+        if path.suffix != ".yaml" and others:
+            problems.append(f"{path.relative_to(folder).as_posix()} links no document of the kinds {others}")
+    for path in documents:
+        if path.suffix == ".yaml":
+            schema = json.loads((repository / "definitions" / "designers" / "knowledge.schema.json").read_text(encoding="utf-8"))
+            for error in Draft202012Validator(schema, registry=registry).iter_errors(yaml_without_timestamps(path.read_text(encoding="utf-8"))):
+                problems.append(f"{path.relative_to(folder).as_posix()} at {'/'.join(str(part) for part in error.absolute_path) or '(root)'}: {error.message}")
+    problems.extend(check_mindmap_linked_text(folder))
+    return problems
+
+
+links_example = root / "fbl" / "links-example"
+if links_example.is_dir():
+    example_problems = check_links_example(links_example)
+    example_name = links_example.relative_to(repository).as_posix()
+    if example_problems:
+        failures += 1
+        print(f"FAIL {example_name}: {len(example_problems)} link problem(s)")
+        for problem in example_problems[:10]:
+            print(f"  {problem}")
+    else:
+        print(f"ok   {example_name}: every document links the other kinds, and every link resolves and is current")
+
 for links_folder in sorted((root / "fbl" / "fixtures").glob("links-*")):
     links_problems = check_links_workspace(links_folder)
     links_name = links_folder.relative_to(repository).as_posix()

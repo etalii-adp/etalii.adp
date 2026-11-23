@@ -139,12 +139,12 @@
 
 **Goal**: moves, copies, backlinks, broken links and the tool engineer's view, checked across all four.
 
-- [ ] **T053** [US2] [US6] Complete `conformance.json` with the cross-type cases (a mind map linking a knowledge row, a timeline linking a graph node, each of the four as a target of each other) and the four findings on each type [FR-009, FR-010, FR-011, FR-012] · etalii.adp/specifications/fbl/fixtures/links-workspace/
-- [ ] **T054** [US5] State in each of the four companions what "Linked from" lists and where, and that a delete says how many links break [FR-017, FR-018] · etalii.adp/definitions/designers/knowledge.md, definitions/diagrams/{mindmap,timeline,dependency-graph}.md
-- [ ] **T055** [US6] State in each companion how a broken linked element is drawn (cached name, broken mark) [FR-011] · the same four files
-- [ ] **T056** [US7] Write the worked workspace for readers: one document of each type linking the others, with a `README.md` · etalii.adp/definitions/examples/links/
-- [ ] **T057** [US7] Confirm by reading that no other tool type's definition changed, and that every construct the four use is in a language document, not a host [FR-022, SC-007] · etalii.adp
-- [ ] **T058** Run the checks, open the pull request, turn on auto-merge · etalii.adp
+- [x] **T053** [US2] [US6] Complete `conformance.json` with the cross-type cases (a mind map linking a knowledge row, a timeline linking a graph node, each of the four as a target of each other) and the four findings on each type [FR-009, FR-010, FR-011, FR-012] · etalii.adp/specifications/fbl/fixtures/links-workspace/
+- [x] **T054** [US5] State in each of the four companions what "Linked from" lists and where, and that a delete says how many links break [FR-017, FR-018] · etalii.adp/definitions/designers/knowledge.md, definitions/diagrams/{mindmap,timeline,dependency-graph}.md
+- [x] **T055** [US6] State in each companion how a broken linked element is drawn (cached name, broken mark) [FR-011] · the same four files
+- [x] **T056** [US7] Write the worked workspace for readers: one document of each type linking the others, with a `README.md`; placed beside FBL rather than under `definitions/`, whose `SPEC.md` keeps that folder to shipped tool types and a language's worked examples beside the language, and checked by `validate-examples.py` (every link resolves and is current) · etalii.adp/specifications/fbl/links-example/
+- [x] **T057** [US7] Confirm by reading that no other tool type's definition changed, and that every construct the four use is in a language document, not a host [FR-022, SC-007] · etalii.adp
+- [x] **T058** Run the checks, open the pull request, turn on auto-merge · etalii.adp
 
 ---
 
@@ -161,6 +161,8 @@
 ## Requirement coverage
 
 Every functional requirement is claimed: FR-001 (T007, T014, T018, T025, T035, T043, T049), FR-002 (T005), FR-003 (T018, T025), FR-004 (no task can claim it: each tool type's existing duplicate-id finding already says it; T053 checks a link to such an id), FR-005 (T003), FR-006 (T003), FR-007 (T007, T036, T049), FR-008 (T004), FR-009 (T004, T053), FR-010 (T004, T006, T053), FR-011 (T004, T053, T055), FR-012 (T004, T053), FR-013 (T005), FR-014 (T005), FR-015 (T020), FR-016 (T019), FR-017 (T006, T027, T054), FR-018 (T006, T054), FR-019 (T020), FR-020 (T020, T042, T047, T048), FR-021 (T027, T037), FR-022 (T035, T042, T047, T048, T057), FR-023 (T019, T047, T048), FR-024 (T042, T043), FR-025 (T026, T035), FR-026 (T036, T037), FR-027 (T031, T035, T042, T047, T048), FR-028 (T007, T021, T028), FR-029 (T006).
+
+T057, read on 2026-11-23: the pull requests of this feature changed the definitions of the knowledge designer (with its examples `cities.*` and `provinces.yaml`), the mind map, the timeline and the dependency graph, and no other tool type's; every construct the four use is in a language document (DISL 4.12 and 9.4, DESL 4.2 and 7.5.1, FBL 17, ATD 7.5, 7.13 and 12.3), and what a host does beyond them, drawing a link mark, the lookup, Linked from, is stated as a host's duty in DISL 4.12 and FBL 17.5, not left to one host.
 
 Success criteria: SC-002 to SC-004 by T010 and T053; SC-007 by T057; SC-001, SC-005 and SC-006 need a host and are carried to each host's specification (plan, *What the checks cannot see*).
 
