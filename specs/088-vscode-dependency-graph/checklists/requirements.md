@@ -33,4 +33,4 @@
 
 - The requirements name the dependency graph's definition, its findings and sentences, and VS Code's own records of where it differs, since those are what the feature is about; they name no code.
 - Every inventory row that differs (22) is traced to a requirement in the Context table, and each requirement names its row; the transcript's requests that no gesture of VS Code can make are held by SC-002 through the parity record.
-- Awaiting Peter's approval; plan and tasks follow only after it.
+- Peter approved the specification on 2026-11-23; plan and tasks followed.
