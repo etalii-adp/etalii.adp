@@ -1,9 +1,9 @@
 {
   "$schema": "https://etalii.net/adp/disl/schema/0.2/disl.schema.json#/$defs/Specification",
-  "disl": "0.3",
+  "disl": "0.10",
   "language": {
     "id": "net.etalii.adp.generic.dependencies",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "origin": "generic/dependencies",
     "label": "Dependency graph",
     "doc": {
@@ -384,6 +384,10 @@
         "message": { "cel": "'The id \\'' + detail.id + '\\' is declared more than once, which makes every reference to it ambiguous.'" },
         "doc": "Nodes and dependencies share one id space. Each second and later declaration is reported, at its first line; nodes are read before dependencies."
       },
+      "std.missingId": {
+        "enabled": false,
+        "doc": "Reported by missingId instead, which names a node by its label and reads `self.id` as the file writes it (persistence.writtenId)."
+      },
       "std.references": {
         "enabled": false,
         "doc": "Reported by danglingSource and danglingTarget instead, which leave an end written empty or not written at all unreported, as the tool does, and which read the id an end is written with."
@@ -502,6 +506,7 @@
       "stable": true,
       "doc": "New ids are ShortGuids: a version 4 GUID written as 25 characters of base 36. Hand-written ids such as `api-gateway` are kept as they are."
     },
+    "writtenId": "storedId",
     "view": { "store": [] },
     "collaboration": { "mode": "none" },
     "typeMap": {

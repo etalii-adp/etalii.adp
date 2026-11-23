@@ -1,6 +1,6 @@
 # Dependency graph
 
-[`dependency-graph.dis`](dependency-graph.dis) specifies ADP's dependency graph in DISL 0.3: its node and relation types, its two authored axes, its notation, toolbox, context menus, forms, findings, operations and persistence settings, and, in its `x-dependencies` block, the ids the standalone tool gives each palette entry, menu entry and property row. This document holds everything about the diagram type that DISL cannot express, and records where the `.dis` had to approximate. Each statement is tied to the code or document that shows it.
+[`dependency-graph.dis`](dependency-graph.dis) specifies ADP's dependency graph in DISL 0.10 (written for 0.3; it uses 0.10 only for `persistence.writtenId`): its node and relation types, its two authored axes, its notation, toolbox, context menus, forms, findings, operations and persistence settings, and, in its `x-dependencies` block, the ids the standalone tool gives each palette entry, menu entry and property row. This document holds everything about the diagram type that DISL cannot express, and records where the `.dis` had to approximate. Each statement is tied to the code or document that shows it.
 
 | | |
 |---|---|
@@ -187,7 +187,7 @@ Found while tracing the code for this document; each is a candidate for its own 
 
 Where DISL had more than one reasonable reading, these were chosen:
 
-- **Language id `net.etalii.adp.generic.dependencies`**, version `1.1.0` since the DISL 0.3 rewrite and `1.1.1` since its colours took standalone's and its stale `persist.yaml` requirement went (spec 088): it is persisted through an FBL binding, never as DID in YAML: the reverse-DNS form of etalii.net followed by the origin tag, which `language.origin` now carries.
+- **Language id `net.etalii.adp.generic.dependencies`**, version `1.1.0` since the DISL 0.3 rewrite `1.1.1` since its colours took standalone's and its stale `persist.yaml` requirement went, and `1.1.2` since it reads ids as written through DISL 0.10's `persistence.writtenId` and leaves a missing id to its own rule, `std.missingId` off (spec 088): it is persisted through an FBL binding, never as DID in YAML: the reverse-DNS form of etalii.net followed by the origin tag, which `language.origin` now carries.
 - **Node label shown with a fallback.** The label is a CEL text (`label`, or the id when empty) with a `parse` write-back, so it stays editable inline even though its text is computed.
 - **`DependsOn` label defaults to `""`**, and an empty relation label has no key while a node always keeps its `label`; with persistence through an FBL binding, the binding says so (`empty` of each label), not `omitDefaults`.
 - **`std.unreadableEntry` is switched off.** An entry of `elements` or `relations` that is not a mapping is kept as it is and not drawn, silently, as the tool has always skipped it; the binding reads it as an `Unreadable` element so that it is kept.
