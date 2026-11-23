@@ -53,9 +53,9 @@
 
 ## Phase 3: DED 0.3 (pull request 2)
 
-- [ ] **T014** Make DED 0.3: the envelope gains `id` (YAML and JSON key, XML root attribute), the document id of FBL 17 [FR-001] · etalii.adp/specifications/ded/DED-specification.md
-- [ ] **T015** [P] Add `id` to the envelope in the schema, optional, with FBL 17's pattern · etalii.adp/specifications/ded/ded.schema.json
-- [ ] **T016** Run the checks, open the pull request, turn on auto-merge · etalii.adp
+- [x] **T014** Make DED 0.3: the envelope gains `id` (YAML and JSON key, XML root attribute), the document id of FBL 17 [FR-001] · etalii.adp/specifications/ded/DED-specification.md
+- [x] **T015** [P] Add `id` to the envelope in the schema, optional, with FBL 17's pattern · etalii.adp/specifications/ded/ded.schema.json
+- [x] **T016** Run the checks, open the pull request, turn on auto-merge · etalii.adp
 
 ---
 
