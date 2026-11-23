@@ -93,14 +93,14 @@
 
 - [x] **T026** [US3] Add the findings of data-model.md with their codes and sentences (FR-005), and the read-only state for another `apiVersion` (R7) · etalii.adp/definitions/diagrams/openslo-slo.dis
 - [x] **T027** [P] [US3] Add one input per finding to the read fixture, each stating the finding and where it stands, and one with a `v2alpha` document · etalii.adp/specifications/fbl/fixtures/openslo-slo-read/
-- [ ] **T028** [US3] Plant a finding expected at the wrong element; see it fail; restore; update description and trace · etalii.adp
+- [ ] **T028** [US3] *(Cannot fail in etalii.adp: a definition's findings are replayed only by a host's conformance run, the desktop host's, outside this repository's checks; open until a host replays the `findings-*` fixtures.)* Plant a finding expected at the wrong element; see it fail; restore; update description and trace · etalii.adp
 
 ---
 
 ## Phase 8: User Story 4, a person and an agent work on the same file (P2)
 
 - [x] **T029** [US4] Complete the companion for agents: every object's keys, references versus inline, the duration shorthand, the budgeting methods, and `oslo validate` as the check of a written file (R10) · etalii.adp/definitions/diagrams/openslo-slo.md
-- [ ] **T030** [US4] Give an agent only the companion, have it write a Service with one SLO and one SLI, run the validator's reading and `oslo validate`; record the outcome in the companion's notes · etalii.adp/definitions/diagrams/openslo-slo.md
+- [x] **T030** [US4] *(Run 2026-11-23 by the implementing session, a fresh agent being refused; outcome in the companion's Notes.)* Give an agent only the companion, have it write a Service with one SLO and one SLI, run the validator's reading and `oslo validate`; record the outcome in the companion's notes · etalii.adp/definitions/diagrams/openslo-slo.md
 
 ---
 
