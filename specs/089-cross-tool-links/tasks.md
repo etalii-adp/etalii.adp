@@ -61,14 +61,14 @@
 
 ## Phase 4: DISL 0.12 (pull request 3)
 
-- [ ] **T017** Make DISL 0.12: status paragraph, *Changes from 0.11* · etalii.adp/specifications/disl/DISL-specification.md
-- [ ] **T018** In 11.5, give `nanoid` the properties `alphabet` (`base36` among them) and `length`, and add `persistence.documentId` with the same rule [FR-001, FR-003] · etalii.adp/specifications/disl/DISL-specification.md
-- [ ] **T019** Add the attribute type `link` (a string of FBL 17.1), `linkable: { nameProperty }` and `linked: { attribute, shows }` to element types, with how a linked element is drawn (the target's current name, a link badge, `shows` values, a broken mark) and that its own gestures move, connect and delete it [FR-016, FR-023] · etalii.adp/specifications/disl/DISL-specification.md
-- [ ] **T020** Add the standard action `lookup` (`create`, `as: child | at`, `types`), and activation of a linked element's badge as navigation to the target with it selected [FR-015, FR-019, FR-020] · etalii.adp/specifications/disl/DISL-specification.md
-- [ ] **T021** Mark appendix D.2 question 1 answered, pointing at FBL 17 [FR-028] · etalii.adp/specifications/disl/DISL-specification.md
-- [ ] **T022** [P] Schema: `nanoid`'s `alphabet` and `length`, `documentId`, the `link` type, `linkable`, `linked`, the `lookup` action · etalii.adp/specifications/disl/disl.schema.json
-- [ ] **T023** [P] A minimal example that declares a linkable type, a linked type and the `lookup` action, and validates · etalii.adp/specifications/disl/minimal-links.dis
-- [ ] **T024** Plant a `lookup` without `create`, see the schema refuse it, restore; run the checks, open the pull request, turn on auto-merge · etalii.adp
+- [x] **T017** Make DISL 0.12: status paragraph, *Changes from 0.11* · etalii.adp/specifications/disl/DISL-specification.md
+- [x] **T018** In 11.5, give `nanoid` the properties `alphabet` (`base36` among them) and `length`, and add `persistence.documentId` with the same rule [FR-001, FR-003] · etalii.adp/specifications/disl/DISL-specification.md
+- [x] **T019** Add the attribute type `link` (a string of FBL 17.1), `linkable: { nameProperty }` and `linked: { attribute, shows }` to element types, with how a linked element is drawn (the target's current name, a link badge, `shows` values, a broken mark) and that its own gestures move, connect and delete it [FR-016, FR-023] · etalii.adp/specifications/disl/DISL-specification.md
+- [x] **T020** Add the standard action `lookup` (`create`, `as: child | at`, `origins`), and activation of a linked element's badge as navigation to the target with it selected [FR-015, FR-019, FR-020] · etalii.adp/specifications/disl/DISL-specification.md
+- [x] **T021** Mark appendix D.2 question 1 answered, pointing at FBL 17 [FR-028] · etalii.adp/specifications/disl/DISL-specification.md
+- [x] **T022** [P] Schema: `nanoid`'s `alphabet` and `length`, `documentId`, the `link` type, `linkable`, `linked`, the `lookup` action · etalii.adp/specifications/disl/disl.schema.json
+- [x] **T023** [P] A minimal example that declares a linkable type, a linked type and the `lookup` action, and validates · etalii.adp/specifications/disl/minimal-links.dis
+- [x] **T024** Plant a `lookup` without `create`, see the schema refuse it, restore; run the checks, open the pull request, turn on auto-merge · etalii.adp
 
 ---
 

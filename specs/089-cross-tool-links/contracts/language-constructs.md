@@ -15,7 +15,7 @@
 - Attribute type `link`.
 - Element type `linkable: { nameProperty: AttrRef }`.
 - Element type `linked: { attribute: AttrRef, shows: [ { label, attribute } ] }`.
-- Action `{ "lookup": { "create": TypeRef, "as": "child" | "at", "types": [origin…]? } }`: opens the host's lookup over the workspace's linkable elements (of the listed origins, else all), and creates the element with its `link` set, in one transaction.
+- Action `{ "lookup": { "create": TypeRef, "as": "child" | "at", "origins": [origin…]? } }`: opens the host's lookup over the workspace's linkable elements (of the listed origins, else all), and creates the element with its `link` set, in one transaction.
 - Appendix D.2, question 1: answered, pointing at FBL 17.
 
 ## DESL 0.5
