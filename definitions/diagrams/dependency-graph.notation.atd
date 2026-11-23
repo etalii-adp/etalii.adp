@@ -203,6 +203,17 @@ form node for Node {
   }
 }
 
+/// The label a node added with no point is asked for; left empty, the node is called "New node".
+form addNode "Add node" {
+  icon: mdi-plus
+  usage: [popover]
+  submitLabel: "Add"
+  field label "Label" {
+    widget: text
+    initial: ('New node')
+  }
+}
+
 form dependency for DependsOn {
   usage: [inspector]
   section {
