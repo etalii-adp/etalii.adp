@@ -71,8 +71,8 @@
 
 ## Phase 5: User Story 6, a host builds the designer from its definition (P1)
 
-- [ ] **T018** [US6] *(Handed to the ADP tool language's thread, Peter's choice of 2026-11-23: ATD has no `sections` surface yet.)* Write the tool description `post-incident-review.atd` with `post-incident-review.markdown.atd`, and its trace (R11) · etalii.adp/definitions/designers/
-- [ ] **T019** [US6] *(With T018.)* Run `atd check`; plant a description that names a part the specification lacks, see it fail, restore · etalii.adp
+- [x] **T018** [US6] *(Handed to the ADP tool language's thread, Peter's choice of 2026-11-23: ATD has no `sections` surface yet.)* Write the tool description `post-incident-review.atd` with `post-incident-review.markdown.atd`, and its trace (R11) · etalii.adp/definitions/designers/
+- [x] **T019** [US6] *(With T018.)* Run `atd check`; plant a description that names a part the specification lacks, see it fail, restore · etalii.adp
 
 ---
 
@@ -83,7 +83,7 @@
 - [x] **T020** [US2] Add the operations `addEntry`, `addFactor`, `acceptFactor` and `rejectFactor`, and the numbering of `E-NEW` and `F-NEW` lines on the next write · etalii.adp/definitions/designers/post-incident-review.des, post-incident-review.fbl
 - [x] **T021** [P] [US2] Write `checkout-latency.md`, the agent-drafted review of R12, and its intervals in the companion · etalii.adp/definitions/designers/examples/checkout-latency.md, post-incident-review.md
 - [x] **T022** [P] [US2] Write the edits fixture: append three entries as text, accept one factor, reject one, reword one; each with the bytes it writes, the rejected factor kept · etalii.adp/specifications/fbl/fixtures/post-incident-review-edits/
-- [ ] **T023** [US2] *(The plant was seen to fail; the description and trace wait on T018.)* Plant an expected output in which rejecting removes the line; see it fail; restore; update description and trace · etalii.adp
+- [x] **T023** [US2] *(The plant was seen to fail; the description and trace wait on T018.)* Plant an expected output in which rejecting removes the line; see it fail; restore; update description and trace · etalii.adp
 
 ---
 
@@ -91,7 +91,7 @@
 
 - [x] **T024** [US3] Add `addAction` and `completeAction`, the `unaddressed` mark and `pir.action-incomplete` (FR-005) · etalii.adp/definitions/designers/post-incident-review.des
 - [x] **T025** [P] [US3] Add to the edits fixture: an action added for a factor, one completed, one without an owner · etalii.adp/specifications/fbl/fixtures/post-incident-review-edits/
-- [ ] **T026** [US3] *(The plant was seen to fail; the description and trace wait on T018.)* Plant a completed action whose expected bytes keep `[ ]`; see it fail; restore; update description and trace · etalii.adp
+- [x] **T026** [US3] *(The plant was seen to fail; the description and trace wait on T018.)* Plant a completed action whose expected bytes keep `[ ]`; see it fail; restore; update description and trace · etalii.adp
 
 ---
 
