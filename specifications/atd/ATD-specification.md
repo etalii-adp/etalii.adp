@@ -78,7 +78,7 @@ Today a tool engineer specifies a tool type in up to three JSON files, each in a
 
 ### 1.3 Relation to the other specifications
 
-DISL, DID, DESL, DED, EDSL, EDD and FBL remain specifications of this repository. ATD carries every construct of DISL 0.10, DESL 0.3 and FBL 0.19 (Appendix C maps each of their properties to the ATD construct that carries it), and the constructs an editor needs, which EDSL, a placeholder, does not yet have (section 10). ATD reuses their schemas: a setting of an ATD construct is checked against the `$defs` entry of DISL, DESL or FBL for the same thing (section 14.6), and a binding in ATD is an FBL binding written as text. Tools keep storing their documents in DID, DED or a body a binding reads; a tool description replaces none of them.
+DISL, DID, DESL, DED, EDSL, EDD and FBL remain specifications of this repository. ATD carries every construct of DISL 0.10, DESL 0.4 and FBL 0.19 (Appendix C maps each of their properties to the ATD construct that carries it), and the constructs an editor needs, which EDSL, a placeholder, does not yet have (section 10). ATD reuses their schemas: a setting of an ATD construct is checked against the `$defs` entry of DISL, DESL or FBL for the same thing (section 14.6), and a binding in ATD is an FBL binding written as text. Tools keep storing their documents in DID, DED or a body a binding reads; a tool description replaces none of them.
 
 ### 1.4 How to read this document
 
@@ -578,6 +578,21 @@ The surface of a designer (`grammar/form.lark`): which element types and attribu
 ### 9.3 The hierarchy
 
 `surface hierarchy { … }` (DESL §7.7) holds `levels <Type> { … }`, `entries <Type> { … }`, `notes <Type> { … }`, `filters <Type> { … }`, `widths <Type> { … }` and `labels <attribute> { … }`, each with the attributes that play its parts as settings (DESL's `HierarchyMembers`, `Notes`, `Filters`, `Widths` and `Labels`), and settings of DESL's `Hierarchy` (`collapsed`, `ids`). `widths` names the element type that keeps the widths of the columns of levels, which the user changes by dragging (DESL §7.7.1): its settings `level` and `width` name the attributes of a column's depth and of its width in pixels.
+
+### 9.4 The sections
+
+`surface sections { … }` (DESL §7.8) holds its parts, in display order: `record <id> ["<title>"] <Type> { … }` is a record part, the fields of the one element of its type, and `list <id> ["<title>"] <Type> { … }` a list part, the elements of its type as rows. Each takes the settings of DESL's `SectionPart` apart from `id`, `title`, `kind` and `type`, which it states: `fields` always, and on a list `order`, `group`, `add`, `timeStrip` and `marks`; `figures` on either. A part's title is its `title`, else its id. The surface takes DESL's `Sections` settings apart from `parts`.
+
+```atd
+surface sections {
+  record trip "Trip" Trip { fields: [{ attribute: title, label: "Title" }] }
+  list stops "Stops" Stop {
+    fields: [{ attribute: at, label: "Time" }, { attribute: place, label: "Place" }]
+    order: (has(self.at) ? string(self.at) : '~')
+    add: addStop
+  }
+}
+```
 
 ---
 
@@ -1368,6 +1383,7 @@ An agent writing a description is given `grammar/atd.flat.lark`, with which a mo
 - **0.1, amendment of 2026-11-23, DISL 0.10** (spec 035, T132, by Peter's choice of 2026-11-23): ATD carries DISL 0.10 (§1.3), whose `persistence.writtenId` names the host attribute that holds the id an element is written with, which findings and `self.id` then read (DISL §11.5.4).
 - **0.1, amendment of 2026-11-23, a finding's place** (spec 035, T132, by Peter's choice of 2026-11-23): in a case recorded from a module, §2.3 counts a finding at an element and one at the line that element is written on as the same place, as the agent activity diagram's module says every finding at its line. Every case that passed before still passes.
 - **0.1, amendment of 2026-11-23, chrome a module sends as an element** (spec 035, T132, by Peter's choice of 2026-11-23): in a case recorded from a module, §2.3 lets an element whose id the description's wire-id block names for a piece of chrome stand for that chrome, as the SPARQL module sends its header band as `header:query`: it is not compared in the reading or the drawing, and a gesture on it the case refuses counts as refused. Every case that passed before still passes.
+- **0.1, amendment of 2026-11-23, the sections surface** (spec 086, T018): ATD carries DESL 0.4 (§1.3), whose `sections` surface a designer states as `surface sections { … }` with `record` and `list` parts (§9.4, `grammar/form.lark`). Every description that checked before still checks, with the same meaning.
 
 
 ---
@@ -1612,9 +1628,12 @@ Every keyword of ATD 0.1, by the module that defines it, with the documentation 
 | `hierarchy` | `surface hierarchy { … }`: a designer's surface of boxes that contain boxes (§9.3, DESL §7.7). |
 | `labels` | In `surface hierarchy`: `labels <attribute> { … }`, an attribute whose values name members of a list (DESL §7.7). |
 | `levels` | In `surface hierarchy`: `levels <Type> { … }`, the levels' element type (DESL §7.7). |
+| `list` | In `surface sections`: `list <id> ["<title>"] <Type> { … }`, a part that shows the elements of its type as rows (§9.4, DESL §7.8). |
 | `notes` | In `surface hierarchy`: `notes <Type> { … }`, the notes' element type (DESL §7.7). |
+| `record` | In `surface sections`: `record <id> ["<title>"] <Type> { … }`, a part that shows the fields of the one element of its type (§9.4, DESL §7.8). |
 | `rows` | In `surface table`: `rows <Type> { … }`, the rows' element type (DESL §7.2). |
-| `surface` | `surface table|hierarchy|text { … }`: a designer's or editor's surface (§9, §10). |
+| `sections` | `surface sections { … }`: a designer's page of titled parts, each a record or a list (§9.4, DESL §7.8). |
+| `surface` | `surface table|hierarchy|sections|text { … }`: a designer's or editor's surface (§9, §10). |
 | `table` | `surface table { … }`: a designer's surface of rows and columns (§9.1, DESL §7.2). |
 | `valueType` | In `surface table`: `valueType <key> ["<label>"] { … }`, a value type (DESL §7.5). |
 | `views` | In `surface table`: `views <Type> { … }`, the views' element type (DESL §7.4). |
@@ -3194,9 +3213,9 @@ Every property of DISL 0.6, DESL 0.2 and FBL 0.8, by the JSON pointer of its sch
 | `disl.schema.json#/$defs/ViewBind/properties/values` | the key `values` in a value of ViewBind (a settings map, §6.4) | §6.4 |
 | `disl.schema.json#/$defs/ViewBind/properties/doc` | the key `doc` in a value of ViewBind (a settings map, §6.4) | §6.4 |
 
-### C.2 DESL 0.3
+### C.2 DESL 0.4
 
-223 properties.
+242 properties.
 
 | JSON pointer | ATD | Section |
 |---|---|---|
@@ -3364,6 +3383,25 @@ Every property of DISL 0.6, DESL 0.2 and FBL 0.8, by the JSON pointer of its sch
 | `desl.schema.json#/$defs/HierarchyMembers/properties/title` | the key `title` in a value of HierarchyMembers (a settings map, §6.4) | §6.4 |
 | `desl.schema.json#/$defs/HierarchyMembers/properties/description` | the key `description` in a value of HierarchyMembers (a settings map, §6.4) | §6.4 |
 | `desl.schema.json#/$defs/HierarchyMembers/properties/doc` | the key `doc` in a value of HierarchyMembers (a settings map, §6.4) | §6.4 |
+| `desl.schema.json#/$defs/Sections/properties/kind` | `surface sections` | §9.4 |
+| `desl.schema.json#/$defs/Sections/properties/parts` | `record <id> Type { … }` and `list <id> Type { … }` | §9.4 |
+| `desl.schema.json#/$defs/Sections/properties/doc` | `///` comments | §9.4 |
+| `desl.schema.json#/$defs/SectionPart/properties/id` | the part's name | §9.4 |
+| `desl.schema.json#/$defs/SectionPart/properties/title` | the part's title | §9.4 |
+| `desl.schema.json#/$defs/SectionPart/properties/kind` | `record` or `list` | §9.4 |
+| `desl.schema.json#/$defs/SectionPart/properties/type` | the part's Type | §9.4 |
+| `desl.schema.json#/$defs/SectionPart/properties/fields` | setting `fields` | §9.4 |
+| `desl.schema.json#/$defs/SectionPart/properties/order` | setting `order` | §9.4 |
+| `desl.schema.json#/$defs/SectionPart/properties/group` | setting `group` | §9.4 |
+| `desl.schema.json#/$defs/SectionPart/properties/add` | setting `add` | §9.4 |
+| `desl.schema.json#/$defs/SectionPart/properties/timeStrip` | setting `timeStrip` | §9.4 |
+| `desl.schema.json#/$defs/SectionPart/properties/figures` | setting `figures` | §9.4 |
+| `desl.schema.json#/$defs/SectionPart/properties/marks` | setting `marks` | §9.4 |
+| `desl.schema.json#/$defs/SectionPart/properties/doc` | `///` comments | §9.4 |
+| `desl.schema.json#/$defs/SectionField/properties/attribute` | a key of a `fields` entry | §9.4 |
+| `desl.schema.json#/$defs/SectionField/properties/label` | a key of a `fields` entry | §9.4 |
+| `desl.schema.json#/$defs/SectionField/properties/widget` | a key of a `fields` entry | §9.4 |
+| `desl.schema.json#/$defs/SectionField/properties/doc` | a key of a `fields` entry | §9.4 |
 | `desl.schema.json#/$defs/Labels/properties/on` | the key `on` in a value of Labels (a settings map, §6.4) | §6.4 |
 | `desl.schema.json#/$defs/Labels/properties/options` | the key `options` in a value of Labels (a settings map, §6.4) | §6.4 |
 | `desl.schema.json#/$defs/Labels/properties/prefix` | the key `prefix` in a value of Labels (a settings map, §6.4) | §6.4 |
