@@ -148,7 +148,7 @@ A developer of a host finds the Value stream map defined in this repository and 
 
 ### Functional Requirements
 
-- **FR-001** The definition MUST specify element types for a trigger, a step and an outcome, and relation types for a flow, a hand-off, an alternative with a share and rework with a rate.
+- **FR-001** The definition MUST specify element types for a trigger, a step and an outcome, and relation types for a flow, an alternative with a share and rework with a rate. A hand-off is a flow between two steps whose performers differ: the definition derives it from the performers and does not store it (amended 2026-11-23, by the maintainer's choice "Apply both" on a decision card).
 - **FR-002** A step MUST carry a name, an activity, zero or more practices, a performer, a process time, a wait time and an optional note.
 - **FR-003** The document MUST hold its own activity vocabulary and practice list. A new document MUST offer two starting vocabularies, the six service value chain activities and the eight lifecycle activities, and the user MUST be able to change either.
 - **FR-004** The definition MUST state how lead time, total process time, flow efficiency and hand-off count are computed, including weighting by alternative shares and rework rates, as expressions a host evaluates rather than code each host writes.
