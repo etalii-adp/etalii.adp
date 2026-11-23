@@ -18,7 +18,7 @@ tags:
 
 **Status**: Draft, awaiting Peter's approval
 
-**Input**: Peter, 2026-11-23: "create a thread that duplicates the diagram designer in the VS Code host. Make sure it is functionally identical to the one in the standard host." No tool type of the standalone host is called the diagram designer; on a decision card the same day Peter chose the dependency graph. "The standard host" is the standalone host. The work follows the causal loop diagram's ([spec 081](../../specs/081-vscode-causal-loop-diagram/vscode-causal-loop-diagram.spec.md)): an inventory of the differences, each traced to a requirement, confirmed before anything is built.
+**Input**: Peter, 2026-11-23, asked for a thread that brings a tool of the standalone host ("the standard host") to the VS Code host, functionally identical to it; his words named the tool by a phrase that is no tool type's name, so on a decision card the same day he chose the dependency graph. The work follows the causal loop diagram's ([spec 081](../../specs/081-vscode-causal-loop-diagram/vscode-causal-loop-diagram.spec.md)): an inventory of the differences, each traced to a requirement, confirmed before anything is built.
 
 ## Context
 
