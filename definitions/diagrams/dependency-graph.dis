@@ -3,7 +3,7 @@
   "disl": "0.3",
   "language": {
     "id": "net.etalii.adp.generic.dependencies",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "origin": "generic/dependencies",
     "label": "Dependency graph",
     "doc": {
@@ -20,7 +20,7 @@
     "homepage": "https://etalii.net/adp",
     "icon": "mdi-graph-outline",
     "fileExtension": "dgr",
-    "requires": { "conformance": "standard", "features": ["placement.bound", "edge.bezier", "label.parse", "persist.yaml"] }
+    "requires": { "conformance": "standard", "features": ["placement.bound", "edge.bezier", "label.parse"] }
   },
 
   "metamodel": {
@@ -143,9 +143,17 @@
     "theme": {
       "tokens": {
         "color.surface": "#FFFFFF",
-        "color.border": "#8892A6",
-        "color.text": "#1C2333",
-        "color.text.muted": "#5A6376"
+        "color.border": "#E2E8F0",
+        "color.text": "#0F172A",
+        "color.text.muted": "#64748B"
+      },
+      "modes": {
+        "dark": {
+          "color.surface": "#1E293B",
+          "color.border": "#334155",
+          "color.text": "#F1F5F9",
+          "color.text.muted": "#94A3B8"
+        }
       },
       "followSystem": true
     },
