@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-23
 
-**Status**: Draft, awaiting the maintainer's approval before plan and tasks
+**Status**: Approved on 2026-11-23 (decision card "Approve all three"); plan and tasks written, implementation not started
 
 **Input**: The maintainer, 2026-11-23: "All of them.", answering which of the three leading candidates of the desk research *Service management tools: a ranked shortlist* (23 November 2026) should be specified first. This is candidate 3; candidates 1 and 2 are specs [084](../084-value-stream-map/value-stream-map.spec.md) and [085](../085-openslo-slo-map/openslo-slo-map.spec.md).
 
