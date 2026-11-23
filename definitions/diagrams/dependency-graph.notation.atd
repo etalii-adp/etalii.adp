@@ -222,13 +222,13 @@ form dependency for DependsOn {
     /// The dependent, by the id the file names, whether or not a node holds it.
     item from "Depends on (from)" {
       kind: computed
-      value: (self.source.id)
+      value: (writtenEnd(self, 'source'))
       readOnlyReasons: ["Reconnecting is done on the canvas, by dragging the dependency's end to another node."]
     }
     /// The dependency, by the id the file names, whether or not a node holds it.
     item to "Depended on (to)" {
       kind: computed
-      value: (self.target.id)
+      value: (writtenEnd(self, 'target'))
       readOnlyReasons: ["Reconnecting is done on the canvas, by dragging the dependency's end to another node."]
     }
   }

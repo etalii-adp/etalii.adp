@@ -3,7 +3,7 @@
   "disl": "0.10",
   "language": {
     "id": "net.etalii.adp.generic.dependencies",
-    "version": "1.1.5",
+    "version": "1.1.6",
     "origin": "generic/dependencies",
     "label": "Dependency graph",
     "doc": {
@@ -366,10 +366,10 @@
       "items": [
         { "kind": "section", "label": "Identity", "items": [
           { "attribute": "label", "label": "Label" },
-          { "kind": "computed", "id": "from", "label": "Depends on (from)", "value": { "cel": "self.source.id" },
+          { "kind": "computed", "id": "from", "label": "Depends on (from)", "value": { "cel": "writtenEnd(self, 'source')" },
             "readOnlyReasons": [ "Reconnecting is done on the canvas, by dragging the dependency's end to another node." ],
             "doc": "The dependent, by the id the file names, whether or not a node holds it." },
-          { "kind": "computed", "id": "to", "label": "Depended on (to)", "value": { "cel": "self.target.id" },
+          { "kind": "computed", "id": "to", "label": "Depended on (to)", "value": { "cel": "writtenEnd(self, 'target')" },
             "readOnlyReasons": [ "Reconnecting is done on the canvas, by dragging the dependency's end to another node." ],
             "doc": "The dependency, by the id the file names, whether or not a node holds it." }
         ] }
