@@ -154,6 +154,8 @@
 - [ ] **T060** [P] Apply T044's binding change to the served mind map binding · etalii.adp.ide.standalone/src/diagrams/mindmap/backend/EtAlii.Adp.Diagram.Mindmap/mindmap.fbl
 - [ ] **T061** [P] Apply T049's binding changes to the served timeline and dependency graph bindings · etalii.adp.ide.standalone/src/diagrams/timeline/backend/EtAlii.Adp.Diagram.Timeline/timeline.fbl, src/diagrams/dependency-graph/backend/EtAlii.Adp.Diagram.DependencyGraph/dependency-graph.fbl
 - [ ] **T062** Run standalone's four gates, open its pull request naming this feature's folder and the etalii.adp commit, turn on auto-merge · etalii.adp.ide.standalone
+
+> **Moved out (Peter's choice of 2026-11-23 on the decision card on the standalone bindings)**: T060 to T062 are not done in this feature. The standalone host's own FBL library reads neither `document.id` nor `{newid:document}`, and its bundled specifications have no linked types, so changing its three served bindings alone would break it. They go to a standalone links specification of their own, written when Peter asks for it; they stay unticked here and this feature is otherwise complete.
 - [x] **T063** Trace every FR and SC to the files and strings that satisfy it, read two traces back to their artefacts, and record the result in this file · etalii.adp/specs/089-cross-tool-links/tasks.md
 
 ---
@@ -177,7 +179,7 @@ Each requirement traced to the file and the string that satisfy it, on `develop`
 | FR-003 | `persistence.ids` `nanoid`, `base36`, `8` in the four definitions (the mind map with Freeplane's prefix `ID_`), "kept as written" in each `ids.doc` |
 | FR-004 | each type's existing duplicate-id finding; `link.ambiguous-document` for a link to such an id (FBL 17.3 step 4), fixture rows `plan/release.tml` l7 and `knowledge/towns.yaml` hn/p3 |
 | FR-005 | FBL 17.1 grammar; `LINK_PATTERN` in `validate-examples.py` |
-| FR-006 | FBL 17.1 `text-char` and the reserved characters per part (`LINK_RESERVED`); the narrower escaping awaits Peter's card on link escaping |
+| FR-006 | FBL 17.1 `text-char` and the reserved characters per part (`LINK_RESERVED`), as FR-006 reads since Peter's choice of 2026-11-23 on link escaping |
 | FR-007 | FBL 17 "stored only in the document that holds it"; each binding's link slot (`link` key, `adp-link`, cell `row`, relation `target`) |
 | FR-008 | FBL 17.3 workspace, "MUST NOT resolve to a file outside the workspace" |
 | FR-009 | FBL 17.3 steps 2 and 3; fixture rows ID_5 (by name) and l1 (by id under another name) |
