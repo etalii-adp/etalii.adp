@@ -126,12 +126,12 @@
 
 **Goal**: linked elements placed on the canvas.
 
-- [ ] **T047** [P] [US4] Timeline: `documentId`, events `linkable` by `label`, `LinkedEvent` with its own `begin`, `end`, `row` and a `link`, the canvas `lookup` with `as: at` [FR-020, FR-022, FR-023, FR-027] · etalii.adp/definitions/diagrams/timeline.dis
-- [ ] **T048** [P] [US4] Dependency graph: `documentId`, nodes `linkable` by `label`, `LinkedNode` with its own `x`, `row` and a `link`, dependencies allowed to and from it, the canvas `lookup` [FR-020, FR-022, FR-023, FR-027] · etalii.adp/definitions/diagrams/dependency-graph.dis
-- [ ] **T049** [P] [US4] Example bindings: the top-level `id` as `document.id`, and the rule that reads an `elements` entry with a `link` key as the linked type [FR-001, FR-007] · etalii.adp/specifications/fbl/timeline.fbl, dependency-graph.fbl
-- [ ] **T050** [P] [US4] Companions: the file shape with `id` and linked entries · etalii.adp/definitions/diagrams/timeline.md, dependency-graph.md
-- [ ] **T051** [P] [US4] Tool descriptions and traces · etalii.adp/definitions/diagrams/timeline*.atd, dependency-graph*.atd, *.trace.json
-- [ ] **T052** [US4] Timeline and graph rows in `conformance.json`; run the checks, open the pull request, turn on auto-merge · etalii.adp
+- [x] **T047** [P] [US4] Timeline: `documentId`, events `linkable` by `label`, `LinkedEvent` with its own `begin`, `end`, `row` and a `link`, the canvas `lookup` with `as: at` [FR-020, FR-022, FR-023, FR-027] · etalii.adp/definitions/diagrams/timeline.dis
+- [x] **T048** [P] [US4] Dependency graph: `documentId`, nodes `linkable` by `label`, `LinkedNode` with its own `x`, `row` and a `link`, dependencies allowed to and from it, the canvas `lookup` [FR-020, FR-022, FR-023, FR-027] · etalii.adp/definitions/diagrams/dependency-graph.dis
+- [x] **T049** [P] [US4] Example bindings: the top-level `id` as `document.id`, and the rule that reads an `elements` entry with a `link` key as the linked type [FR-001, FR-007] · etalii.adp/specifications/fbl/timeline.fbl, dependency-graph.fbl
+- [x] **T050** [P] [US4] Companions: the file shape with `id` and linked entries · etalii.adp/definitions/diagrams/timeline.md, dependency-graph.md
+- [x] **T051** [P] [US4] Tool descriptions and traces · etalii.adp/definitions/diagrams/timeline*.atd, dependency-graph*.atd, *.trace.json
+- [x] **T052** [US4] Timeline and graph rows in `conformance.json`; run the checks, open the pull request, turn on auto-merge · etalii.adp
 
 ---
 
