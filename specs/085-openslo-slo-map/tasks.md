@@ -114,9 +114,9 @@
 
 ## Phase 10: The catalogue (pull request 4 and the Notion page)
 
-- [ ] **T034** [P] Add the row *Specified*, Diagram, *SLO map*, `openslo/slo` to the catalogue with its links to openslo.com, and open its pull request with auto-merge (FR-010) · etalii.adp.ide.standalone/docs/tools.md
-- [ ] **T035** [P] Add the diagram's page to the Notion "Tools" database through an agent's own Notion connection · Notion "Tools"
-- [ ] **T036** Tick the tasks as their pull requests merge, and set the specification's status line · etalii.adp/specs/085-openslo-slo-map/
+- [x] **T034** [P] Add the row *Specified*, Diagram, *SLO map*, `openslo/slo` to the catalogue with its links to openslo.com, and open its pull request with auto-merge (FR-010) · etalii.adp.ide.standalone/docs/tools.md
+- [x] **T035** [P] Add the diagram's page to the Notion "Tools" database through an agent's own Notion connection · Notion "Tools"
+- [x] **T036** Tick the tasks as their pull requests merge, and set the specification's status line · etalii.adp/specs/085-openslo-slo-map/
 
 ---
 
