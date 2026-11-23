@@ -17,7 +17,14 @@ elements:
     label: Orders database (second holder)
     x: 1300
     row: 6
+  - id: l1
+    link: $t5h8w1rz@release.tml#launch.label=Go live
+    x: 1700
+    row: 4
 relations:
   - id: r1
     from: api
     to: auth
+  - id: r2
+    from: db
+    to: l1
