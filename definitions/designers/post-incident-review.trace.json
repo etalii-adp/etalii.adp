@@ -12,17 +12,17 @@
   "items": [
     {
       "id": "gaps/1",
-      "text": "The title is a # heading the bullets family does not bind, kept as text and not in the model; a host shows the file name.",
+      "text": "**The title** is a `#` heading, which the bullets family does not bind (FBL section 4.8), so it is kept as text and is not in the model. A host shows the file name.",
       "statedBy": "binding markdown"
     },
     {
       "id": "gaps/2",
-      "text": "A many attribute in an emit: the action's emit writes the one factor the designer's add gives; a second is added by a set.",
+      "text": "**A many attribute in an emit.** FBL 6.2 does not say how the placeholder of a `many` attribute is written. The action's emit writes `addresses:[{addresses}]` for the one factor the designer's add gives; a second factor is added by a set, which writes a word for each item (FBL 6.3).",
       "statedBy": "binding markdown element action"
     },
     {
       "id": "gaps/3",
-      "text": "The tool description states the page through ATD's sections surface.",
+      "text": "**The tool description** (`post-incident-review.atd` with `post-incident-review.markdown.atd`) states the page through ATD's `sections` surface (ATD §9.4), added for it by the ADP tool language's own work (Peter's choice of 2026-11-23); its trace is `post-incident-review.trace.json`.",
       "statedBy": "record summary"
     },
     {
@@ -42,5 +42,6 @@
       "hostConcern": "rendering",
       "reason": "How a part, a mark and a figure are drawn, in the host's theme, is rendering; the description names the parts, the marks with their styles and the figures."
     }
-  ]
+  ],
+  "hostCode": []
 }
