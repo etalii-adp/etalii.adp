@@ -1,0 +1,117 @@
+# Feature Specification: Validating the Editors' Descriptions
+
+**Feature Branch**: `features/083-atd-editors-validation`
+
+**Created**: 2026-11-23
+
+**Status**: Draft
+
+**Input**: Peter's choice of 2026-11-22 on a decision card of spec 035, T132 ("type by type, with a spec of its own for the editors' runtime and DISL 0.9"): the five editors' descriptions are validated against their cases, as the diagrams' are, so that T132 can hold every one of the 36 descriptions to its cases. The second half of that card, the diagram descriptions the desktop runtime cannot lower, turned out to need no specification of its own: the Sankey diagram's `layout.value` is spec 077's item T10, and the agent activity diagram's hooks read `attribute` where DISL §9.2 names it `event.attribute`, a correction of the description that spec 035's T132 makes.
+
+## Context
+
+Spec 035 gave every tool type of ADP a description in the ADP tool language, and every description conformance cases recorded from the host that has the tool (ATD §2.3). `atd validate` replays a description's cases through the desktop host's runtime and reports every difference. It does so for diagrams and designers. For an editor it stops at the first line: "A editor's description has no runtime yet; diagrams' have." (`etalii.adp.ide.desktop`, `crates/adp-atd-validate/src/cases.rs`). The five editors (JSON, Markdown, plain text, XML and YAML) have 25 cases between them, recorded from the desktop host's editors at `fe5feec`, and none of them is checked.
+
+An editor's description is small. ATD §10 gives it a text surface: the files it opens, how it opens and saves them, its tokens, the checks whose findings it shows (`check with <source> { … }`), its completion, an outline read through a binding, a preview rendered by a capability, and its buffer. ATD §1.2 says no host loads an editor from its description: each host opens these files with its own editor. A case of an editor records only what reading its document gives: the elements of its outline, and its findings, each with its severity, line, column and message. No case of an editor has a step.
+
+So validating an editor is not running an editor. It is reading one document the way the description says and comparing the outline and the findings with the case's.
+
+### What this feature is not
+
+- **Not a host that loads an editor from its description.** ATD §1.2 stays: hosts keep their own editors.
+- **Not a change to a case.** A case that differs is either a description to correct or a difference to list, as for the diagrams.
+- **Not the buffer, the tokens, completion or the preview.** No case records them; they are not validated here.
+- **Not the diagram descriptions that do not lower**, which spec 077 (T10) and spec 035 (T132) take on.
+
+## User Scenarios & Testing *(mandatory)*
+
+### User Story 1 - An editor's description is validated against its cases (Priority: P1)
+
+A tool engineer runs `atd validate` on an editor's description, as on a diagram's, and gets each case's result: passed, or each difference at its part with what was expected and what was read.
+
+**Why this priority**: it is the whole of the feature; without it 5 of the 36 descriptions cannot be held to their cases.
+
+**Independent Test**: `atd validate definitions/editors/plain-text.atd`, whose two cases have no outline and no finding, reports both cases passed.
+
+**Acceptance Scenarios**:
+
+1. **Given** an editor's description with cases, **When** `atd validate` runs on it, **Then** every case is replayed and reported as a diagram's case is, in the same output, `--json` included.
+2. **Given** a case whose document opens, **When** it is validated, **Then** its outline elements and its findings are compared with the case's: the elements exactly, the findings by severity, line, column and message, in order.
+3. **Given** a case whose document the description's `open` refuses (too large, binary, not UTF-8), **When** it is validated, **Then** the refusal is compared with the case's.
+4. **Given** a description whose root is an editor, **When** a message names its kind, **Then** it reads "An editor's" (spec 077, T8), not "A editor's".
+
+---
+
+### User Story 2 - The editors' checks are the host's named sources (Priority: P1)
+
+An editor names its checks by source: `check with "json"`, `"schema"`, `"xml"`, `"encoding"`, `"xsd"`, `"dtd"` and `"yaml"`. Validation runs each named source the desktop host has, with the settings the description gives it, and reports what the source finds as the case states it.
+
+**Why this priority**: the findings are what the cases record; without the sources there is nothing to compare.
+
+**Independent Test**: the JSON editor's `service-broken-json` case: its seven schema findings are found with their lines, columns and messages.
+
+**Acceptance Scenarios**:
+
+1. **Given** a `check with` source the host provides, **When** a document is read, **Then** the source's findings are reported with the severity the description's settings give them (`breaks: error`, `duplicateKey: warning`, `refused: information`), in the description's order of checks.
+2. **Given** a `check with` source the host does not provide, **When** the description is validated, **Then** every case reports that source as missing, once, as a missing capability is reported (ATD §13.4), rather than as differing findings.
+3. **Given** a schema the source reads from the project (`read: project`), **When** the case is validated, **Then** the schema is read from the case's own files only, never from the network or above the case's folder.
+4. **Given** a document above a source's limit (`largestCheckedCharacters`), **When** it is validated, **Then** the source finds nothing and the status the description gives is the one reported.
+
+---
+
+### User Story 3 - The outline is read through the editor's binding (Priority: P2)
+
+An editor with an outline (the Markdown editor's headings) reads it through its binding, here `family capability reader.markdown`, and its elements are compared with the case's.
+
+**Why this priority**: one editor has an outline; the others' cases have none.
+
+**Independent Test**: the Markdown editor's `guide-md` case: its five headings are read with their levels, titles and lines.
+
+**Acceptance Scenarios**:
+
+1. **Given** an editor whose outline binding names a reader capability the host provides, **When** a case is validated, **Then** the outline is that reader's elements, compared with the case's.
+2. **Given** an editor with no outline, **When** a case is validated, **Then** the outline is empty, as the case's is.
+
+### Edge Cases
+
+- A case whose document has a byte-order mark or CRLF line endings: the outline's lines and the findings' columns are counted as the description's `findings` setting says (`line: 1, column: 1, columns: characters`).
+- A schema that cannot be read or compiled, or of a dialect the editor does not carry: one information finding on the reference, saying why (the JSON editor's `refused: information`).
+- An XML document with both an XSD and a DOCTYPE: the DTD check runs only `when: noXsd`.
+- A YAML file with several documents: each document is checked, the findings in document order.
+- An editor description that fails `atd check`: it is not validated, as a diagram's is not.
+
+## Requirements *(mandatory)*
+
+### Functional Requirements
+
+- **FR-001**: `atd validate`, the validation view and the debugger of the desktop host MUST validate an editor's description against its cases, with the same results and the same `--json` output as for a diagram's.
+- **FR-002**: Validating an editor's case MUST open its document with the description's `open` settings and compare the outcome with the case's: the refusal when it is refused, otherwise the outline and the findings.
+- **FR-003**: The outline MUST be read through the editor's outline binding; an editor without one has an empty outline.
+- **FR-004**: Each `check with <source>` MUST run the host's source of that name with the description's settings, its findings reported with the severities the settings give and located as the description's `findings` setting counts lines and columns.
+- **FR-005**: A source the host does not provide MUST be reported once per case as missing (ATD §13.4), not as differences of findings.
+- **FR-006**: A source that reads from the project MUST read only the case's own files.
+- **FR-007**: Validation of an editor MUST open no file outside the case and write none, as for a diagram (spec 035, FR-041, FR-042).
+- **FR-008**: The WebAssembly build of `atd/validate` MUST give the same result for an editor's description as `atd validate`, as spec 035's T162 requires for the diagrams.
+- **FR-009**: A message that names a description's kind MUST use the article the word takes ("an editor's").
+- **FR-010**: The desktop host MUST record the editors' cases again only where a requirement above changes what a case records, and never edit one.
+
+### Key Entities
+
+- **Editor description**: an `editor` root with one `surface text` (ATD §10): files, `open`, tokens, checks, completion, outline binding, preview, buffer and the `findings` setting.
+- **Check source**: a named checker of the host (`json`, `schema`, `xml`, `encoding`, `xsd`, `dtd`, `yaml`) that a description's `check with` runs with its settings.
+- **Editor case**: a conformance case of an editor: its inputs and what reading them gives, the outline elements and the findings, with no steps.
+
+## Success Criteria *(mandatory)*
+
+### Measurable Outcomes
+
+- **SC-001**: `atd validate` runs on all five editors' descriptions, and each of their 25 cases is reported passed or with its differences listed by part, none stopping at "no runtime".
+- **SC-002**: Every editor case that the desktop host's editors read the same way today passes; any that does not is either corrected in its description or listed, with its reason, in spec 035's T132.
+- **SC-003**: `atd/validate` through WebAssembly and `atd validate` give the same result for every editor description.
+- **SC-004**: Validating an editor case opens no file and writes none, shown as for the diagrams.
+
+## Assumptions
+
+- The checks the desktop host's editors run today (its JSON reader, JSON Schema validator, XML well-formedness, encoding, XSD and DTD checks, YAML reader) are the named sources; this feature hands them to the runtime and adds none.
+- Only reading is validated, because no case of an editor records a step; the buffer, tokens, completion and preview stay unvalidated until a case records them.
+- `reader.markdown` is already in the desktop host's capability registry (spec 035, T125), so the Markdown outline needs no new capability.
