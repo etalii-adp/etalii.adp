@@ -74,7 +74,7 @@
 ## Phase 5: User Story 5, a host builds the diagram from its definition (P1)
 
 - [x] **T020** [US5] Write the tool description `openslo-slo.atd`, `openslo-slo.notation.atd` and `openslo-slo.openslo.atd`, and its trace (R12) · etalii.adp/definitions/diagrams/
-- [ ] **T021** [US5] Run `atd check`; plant a description that names a kind the specification lacks, see it fail, restore · etalii.adp
+- [x] **T021** [US5] Run `atd check`; plant a description that names a kind the specification lacks, see it fail, restore · etalii.adp
 
 ---
 
@@ -146,4 +146,4 @@ Traced on 2026-11-23 to the file and string that carries each, read back from th
 | SC-003 | companion *Worked budgets*, worked by hand for every objective of the fixtures |
 | SC-004, SC-005 | carried to the first host's specification; SC-005's agent run is T030 |
 
-Not done here: T021's plant of an unknown kind is seen in the Build's `descriptions` job, which runs the desktop host's `atd`. T028 cannot fail mechanically: the repository's validator replays what a fixture reads and writes, not a definition's findings, which only a host evaluates; the findings each `findings-*` fixture states are for that host. `validate-examples.py` was changed after Phase 2, contrary to *Shared files*: the reading check of a YAML stream and of a folder of YAML files (T017, T018, T019) and the check of a shared extension (T013) needed it.
+T021's plant, a form for the kind Budget, was seen to fail in the Build's `descriptions` job (ATD2002, No element type `Budget`) and nothing else did; it was reverted. Not done here: T028 cannot fail mechanically: the repository's validator replays what a fixture reads and writes, not a definition's findings, which only a host evaluates; the findings each `findings-*` fixture states are for that host. `validate-examples.py` was changed after Phase 2, contrary to *Shared files*: the reading check of a YAML stream and of a folder of YAML files (T017, T018, T019) and the check of a shared extension (T013) needed it.
