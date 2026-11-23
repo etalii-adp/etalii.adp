@@ -1,26 +1,15 @@
-# Contract: The Link's Text Form (FBL 0.23, section 13.1)
+# Contract: The Link's Text Form (FBL 0.23, section 17.1)
 
 The maintainer's form: `$[DOCUMENT-ID]@[DOCUMENT-NAME]#[ELEMENT-ID].[ELEMENT-NAME-PROP]=[ELEMENT-NAME]`.
 
-## Grammar (ABNF, RFC 5234)
+## Grammar
 
-```abnf
-link          = "$" document-id "@" document-name [ "#" element-id [ "." name-prop ] [ "=" name ] ]
-document-id   = 1*part-char
-document-name = 1*part-char          ; the target file's name with extension, no folder
-element-id    = 1*part-char
-name-prop     = 1*part-char          ; an attribute, property or column of the target element
-name          = *part-char           ; the cached name; may be empty
-part-char     = unreserved / escaped
-unreserved    = %x21-23 / %x26-2D / %x2F-3C / %x3E-3F / %x41-7E / %x80-10FFFF / %x20
-                ; any character except "$" "%" "." "=" "@" "#" and controls
-escaped       = "%" 2HEXDIG          ; UTF-8 bytes of a reserved character
-```
+The ABNF and the escaping rule are FBL section 17.1's; in short:
 
-- The reserved characters `$ @ # . = %` inside a part **MUST** be written percent-escaped (`%24 %40 %23 %2E %3D %25`); a reader unescapes after splitting. Hex digits are written in upper case and read in either case.
-- A link without `#…` names a document only (a knowledge relation's `target`).
-- `name-prop` absent: the target type's `linkable.nameProperty`, else its first text attribute (FR edge case).
-- `name` absent: filled in at the next load (contracts/resolution.md, step 4).
+- `%` is escaped in every part; `#` in the document name; `$ @ # . =` in the document id, the element id and the name property. Every other character is written as it is, so a file name keeps its dots and a cached name its dots and equals signs.
+- A reader splits at the first `@`, then the first `#`, then the first `.` or `=`, then the first `=`, and unescapes each part after.
+- `name-prop` absent, or naming no attribute of the target: the target type's name property; load-time validation writes it.
+- `name` absent: filled in at the next load (contracts/resolution.md).
 
 ## Examples
 
@@ -28,6 +17,6 @@ escaped       = "%" 2HEXDIG          ; UTF-8 bytes of a reserved character
 |---|---|
 | `$k3f9x2ma@provinces.yaml#nh.name=Noord-Holland` | Row `nh` of the knowledge file `provinces.yaml`, named by property `name` |
 | `$p0q7e2zd@release.tml#launch=Launch` | Element `launch` of a timeline, name property taken from the type |
-| `$m8c1u4wa@ideas.mm#ID_1723.text=v1%2E2 scope` | A mind map node whose text is `v1.2 scope` |
+| `$m8c1u4wa@ideas.mm#ID_1723.text=v1.2 scope` | A mind map node whose text is `v1.2 scope` |
 | `$k3f9x2ma@provinces.yaml` | The document only |
 | `k3f9x2ma@provinces.yaml` | Malformed: no leading `$` |

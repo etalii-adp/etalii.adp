@@ -1,0 +1,19 @@
+{
+  "doc": "Resolution and load-time validation of links (FBL section 17) over this folder as one workspace. Each entry of `links` is a link as written in a consuming document, and what resolving it yields: the target's path and element, or the finding; `after` is the link's text after the consuming document's load-time validation (17.4). `withoutId` lists the documents that load-time validation gives a document id.",
+  "nameProperties": { ".tml": "label", ".dgr": "label", ".mm": "text", ".yaml": "title" },
+  "links": [
+    { "in": "plan/release.tml", "at": "l1", "link": "$k3f9x2ma@regions.yaml#nh.Name=N-Holland", "target": "knowledge/provinces.yaml", "element": "nh", "after": "$k3f9x2ma@provinces.yaml#nh.Name=Noord-Holland", "case": "the file was renamed, another file now has its old name, and the row's name changed: resolved by id, never by the name, and name and cached name rewritten" },
+    { "in": "plan/release.tml", "at": "l2", "link": "$d7n2k4qp@services.dgr#api.label=API gateway", "target": "teams/services.dgr", "element": "api", "after": "$d7n2k4qp@services.dgr#api.label=API gateway", "case": "a copy holds the same id under another name: resolved by name among the two" },
+    { "in": "plan/release.tml", "at": "l3", "link": "$k3f9x2ma@provinces.yaml#gr.Name=Groningen", "finding": "link.broken-element", "case": "the row was deleted" },
+    { "in": "plan/release.tml", "at": "l4", "link": "k3f9x2ma@provinces.yaml#ut", "finding": "link.malformed", "case": "no leading $" },
+    { "in": "plan/release.tml", "at": "l5", "link": "$k3f9x2ma@provinces.yaml#ut", "target": "knowledge/provinces.yaml", "element": "ut", "after": "$k3f9x2ma@provinces.yaml#ut=Utrecht", "case": "no cached name: filled in" },
+    { "in": "plan/release.tml", "at": "l6", "link": "$t5h8w1rz@release.tml#discovery=Discovery", "target": "plan/release.tml", "element": "discovery", "after": "$t5h8w1rz@release.tml#discovery=Discovery", "case": "a link to the consuming document itself" },
+    { "in": "plan/release.tml", "at": "l7", "link": "$d7n2k4qp@services.dgr#db", "finding": "link.ambiguous-document", "case": "the target holds two elements with the id" },
+    { "in": "ideas/ideas.mm", "at": "ID_2", "link": "$t5h8w1rz@release.tml#launch.text=Launch", "target": "plan/release.tml", "element": "launch", "after": "$t5h8w1rz@release.tml#launch.label=Launch", "case": "the name property names no attribute of the target: its type's name property is used and written" },
+    { "in": "ideas/ideas.mm", "at": "ID_3", "link": "$r0a6m3xy@roadmap.tml#q1=First quarter", "finding": "link.ambiguous-document", "candidates": ["archive/roadmap.tml", "plan/roadmap.tml"], "case": "a copy with the same id and name in another folder" },
+    { "in": "ideas/ideas.mm", "at": "ID_4", "link": "$qqqqqqqq@nowhere.tml#x1=Lost", "finding": "link.broken-document", "case": "neither the id nor the name is in the workspace" },
+    { "in": "ideas/ideas.mm", "at": "ID_5", "link": "$zzzzzzzz@services-variant.dgr#auth.label=Identity service", "target": "teams/services-variant.dgr", "element": "auth", "after": "$d7n2k4qp@services-variant.dgr#auth.label=Identity service", "case": "the id is unknown and the name unique: resolved by name, the id rewritten" },
+    { "in": "ideas/ideas.mm", "at": "ID_6", "link": "$k3f9x2ma@provinces.yaml#ut.Name=Utrecht", "target": "knowledge/provinces.yaml", "element": "ut", "after": "$k3f9x2ma@provinces.yaml#ut.Name=Utrecht", "case": "a mind map node linking a knowledge row: nothing to rewrite" }
+  ],
+  "withoutId": ["notes/no-id.tml"]
+}
