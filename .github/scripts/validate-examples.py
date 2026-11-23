@@ -2656,7 +2656,7 @@ def type_list(names) -> list:
 
 def resolve_desl(path: Path, document) -> list[str]:
     """Checks the names a DESL specification's surface and persistence refer to (DESL section 10.1, step 4), for a
-    table or (DESL 0.2) a hierarchy surface, with the types of each mentions facet, the mark of each counter rule and the
+    table, (DESL 0.2) a hierarchy or (DESL 0.4) a sections surface, with the types of each mentions facet, the mark of each counter rule and the
     blocks persistence.settings keeps, and returns a problem per unresolved name, each with the JSON Pointer of where it
     is used."""
     problems = []
@@ -2712,6 +2712,32 @@ def resolve_desl(path: Path, document) -> list[str]:
             for members in (levels, entries):
                 if members.get("type") in types:
                     attribute(members["type"], surface["collapsed"], "/surface/collapsed")
+    elif surface.get("kind") == "sections":  # DESL 0.4, section 7.8
+        document_types = {name for name, entry in type_map.items() if entry.get("as") == "document"}
+        document_attributes = document.get("metamodel", {}).get("document", {}).get("attributes", {})
+        operations = document.get("operations", {})
+        seen = set()
+        for index, part in enumerate(surface.get("parts", [])):
+            pointer = f"/surface/parts/{index}"
+            if part.get("id") in seen:
+                problems.append(f"at {pointer}/id: a second part has the id {part['id']!r}")
+            seen.add(part.get("id"))
+            owner = part.get("type")
+            if owner in document_types:
+                declared = document_attributes
+            elif element_type(owner, f"{pointer}/type"):
+                declared = attributes_of(owner)
+            else:
+                continue
+            for number, field in enumerate(part.get("fields", [])):
+                attribute(owner, field.get("attribute"), f"{pointer}/fields/{number}/attribute", declared)
+            if "add" in part and part["add"] not in operations:
+                problems.append(f"at {pointer}/add: names the operation {part['add']!r}, which the specification does not declare")
+            if "timeStrip" in part:
+                at = part["timeStrip"].get("at")
+                attribute(owner, at, f"{pointer}/timeStrip/at", declared)
+                if at in declared and declared[at].get("type") != "datetime":
+                    problems.append(f"at {pointer}/timeStrip/at: {at!r} is a {declared[at].get('type')!r} attribute, and a time strip places its rows at a datetime")
     else:
         columns, cells, views = surface.get("columns", {}), surface.get("cells", {}), surface.get("views", {})
         if element_type(columns.get("type"), "/surface/columns/type"):

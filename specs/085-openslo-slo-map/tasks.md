@@ -42,7 +42,7 @@
 - [x] **T005** Teach the validator's fixture replay the stream reading, if T004's cases do not already replay · etalii.adp/.github/scripts/validate-examples.py
 - [x] **T006** Plant `stream: "documents"` on a `json` binding; see the validator refuse it at load; restore · etalii.adp
 - [x] **T007** Plant a removal of the last document that keeps its `---` line in the expected bytes; see the replay fail; restore · etalii.adp/specifications/fbl/fixtures/yaml-stream-edits/
-- [ ] **T008** Deliver pull request 2: run the checks, see the baseline keep its results, open it naming this folder, turn on auto-merge · etalii.adp
+- [x] **T008** Deliver pull request 2: run the checks, see the baseline keep its results, open it naming this folder, turn on auto-merge · etalii.adp
 
 **Checkpoint**: FBL 0.22 on `develop`.
 
