@@ -216,7 +216,7 @@ A tool engineer specifies in a tool type's definition that it holds links, which
 **The link**
 
 - **FR-005**: A link **MUST** be written as `$<document-id>@<document-name>#<element-id>.<element-name-prop>=<element-name>`, where `<document-name>` is the target file's name with its extension and without its folder, `.<element-name-prop>` may be absent, and `=<element-name>` may be absent.
-- **FR-006**: `$`, `@`, `#`, `.`, `=` and `%` inside a part **MUST** be written percent-escaped and read unescaped.
+- **FR-006**: A character that would end its part **MUST** be written percent-escaped and read unescaped: `%` in every part, `#` in the document name, and `$`, `@`, `#`, `.` and `=` in the document id, the element id and the name property; every other character, such as a file name's dots or a name's dots and equals signs, is written as it is (amended by Peter's choice of 2026-11-23 on the decision card on link escaping).
 - **FR-007**: A link **MUST** be stored only in the consuming document, through the tool type's own format and binding.
 
 **Resolution**
@@ -288,5 +288,5 @@ A tool engineer specifies in a tool type's definition that it holds links, which
 - **The document name** is the file's name with its extension; a document's title is not used, because titles are not unique and change more often.
 - **The knowledge counterpart.** Under one-way links a two-way relation's counterpart is not written to the target; the counterpart's name, today a property in the target file, moves to the relation in the consuming document during conversion. This keeps the maintainer's "one-way" answer and Notion's two-way relation together; it is the part of this specification most open to amendment.
 - **"Create new row"** writes a row into the target document. It creates a target element; it does not store a link there, so it does not break the one-way rule.
-- **Percent-escaping** (FR-006) is chosen so that names may contain the link's separators.
+- **Percent-escaping** (FR-006) is chosen so that names may contain the link's separators; only what would end a part is escaped, so a file name and a cached name stay readable.
 - **The workspace** is the folder a host has open: a VS Code workspace folder, an IntelliJ project's root, the standalone host's hierarchy root.

@@ -177,7 +177,7 @@ Each requirement traced to the file and the string that satisfy it, on `develop`
 | FR-003 | `persistence.ids` `nanoid`, `base36`, `8` in the four definitions (the mind map with Freeplane's prefix `ID_`), "kept as written" in each `ids.doc` |
 | FR-004 | each type's existing duplicate-id finding; `link.ambiguous-document` for a link to such an id (FBL 17.3 step 4), fixture rows `plan/release.tml` l7 and `knowledge/towns.yaml` hn/p3 |
 | FR-005 | FBL 17.1 grammar; `LINK_PATTERN` in `validate-examples.py` |
-| FR-006 | FBL 17.1 `text-char` and the reserved characters per part (`LINK_RESERVED`); the narrower escaping awaits Peter's card on link escaping |
+| FR-006 | FBL 17.1 `text-char` and the reserved characters per part (`LINK_RESERVED`), as FR-006 reads since Peter's choice of 2026-11-23 on link escaping |
 | FR-007 | FBL 17 "stored only in the document that holds it"; each binding's link slot (`link` key, `adp-link`, cell `row`, relation `target`) |
 | FR-008 | FBL 17.3 workspace, "MUST NOT resolve to a file outside the workspace" |
 | FR-009 | FBL 17.3 steps 2 and 3; fixture rows ID_5 (by name) and l1 (by id under another name) |
