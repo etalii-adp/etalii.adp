@@ -74,12 +74,12 @@
 
 ## Phase 5: DESL 0.5 (pull request 4)
 
-- [ ] **T025** Make DESL 0.5: status paragraph; `nanoid` with `alphabet` and `length` in 5.3, and `persistence.documentId` [FR-001, FR-003] · etalii.adp/specifications/desl/DESL-specification.md
-- [ ] **T026** Add the value type `link`, `linkable: { nameProperty }`, and a relation property's `target` (a document link), `limit` and `backlinkName` [FR-025] · etalii.adp/specifications/desl/DESL-specification.md
-- [ ] **T027** Add the standard relation picker: type-ahead over the target's linkable rows by name property, chips, "create new row" as one step over two documents (5.4), `limit: one` replacing; and backlinks shown as a column named by `backlinkName` [FR-017, FR-021] · etalii.adp/specifications/desl/DESL-specification.md
-- [ ] **T028** Point section 3's cross-document reference at FBL 17 [FR-028] · etalii.adp/specifications/desl/DESL-specification.md
-- [ ] **T029** [P] Schema for T025 to T027 · etalii.adp/specifications/desl/desl.schema.json
-- [ ] **T030** Run the checks, open the pull request, turn on auto-merge · etalii.adp
+- [x] **T025** Make DESL 0.5: status paragraph; `nanoid` with `alphabet` and `length` in 5.3, and `persistence.documentId` [FR-001, FR-003] · etalii.adp/specifications/desl/DESL-specification.md
+- [x] **T026** Add the value type `link`, `linkable: { nameProperty }`, and a relation property's `target` (a document link), `limit` and `backlinkName` [FR-025] · etalii.adp/specifications/desl/DESL-specification.md
+- [x] **T027** Add the standard relation picker: type-ahead over the target's linkable rows by name property, chips, "create new row" as one step over two documents (5.4), `limit: one` replacing; and backlinks shown as a column named by `backlinkName` [FR-017, FR-021] · etalii.adp/specifications/desl/DESL-specification.md
+- [x] **T028** Point section 4.7's cross-document reference at FBL 17 [FR-028] · etalii.adp/specifications/desl/DESL-specification.md
+- [x] **T029** [P] Schema for T025 to T027 · etalii.adp/specifications/desl/desl.schema.json
+- [x] **T030** Run the checks, open the pull request, turn on auto-merge · etalii.adp
 
 ---
 

@@ -3271,7 +3271,8 @@ def type_list(names) -> list:
 def resolve_desl(path: Path, document) -> list[str]:
     """Checks the names a DESL specification's surface and persistence refer to (DESL section 10.1, step 4), for a
     table, (DESL 0.2) a hierarchy or (DESL 0.4) a sections surface, with the types of each mentions facet, the mark of each counter rule and the
-    blocks persistence.settings keeps, and returns a problem per unresolved name, each with the JSON Pointer of where it
+    blocks persistence.settings keeps, (DESL 0.5) the attributes a value type's link names, each linkable type's name property and the
+    document.id of every binding when persistence.documentId is given, and returns a problem per unresolved name, each with the JSON Pointer of where it
     is used."""
     problems = []
     types = document.get("metamodel", {}).get("types", {})
@@ -3380,10 +3381,24 @@ def resolve_desl(path: Path, document) -> list[str]:
             for target in value_type.get("converts", {}):
                 if target not in surface.get("valueTypes", {}):
                     problems.append(f"at /surface/valueTypes/{name}/converts: names the value type {target!r}, which the surface does not declare")
+            link = value_type.get("link")
+            if link is not None and columns.get("type") in types:  # DESL 0.5, section 7.5.1
+                for role in ("target", "limit", "backlinkName"):
+                    attribute(columns["type"], link.get(role), f"/surface/valueTypes/{name}/link/{role}")
+                target_attribute = attributes_of(columns["type"]).get(link.get("target"), {})
+                if target_attribute and target_attribute.get("type") != "link":
+                    problems.append(f"at /surface/valueTypes/{name}/link/target: {link['target']!r} is a {target_attribute.get('type')!r} attribute, and a relation's target is a link")
+                key_attribute = attributes_of(holder).get(value_type.get("key"), {}) if holder in types else {}
+                if key_attribute and key_attribute.get("type") != "link":
+                    problems.append(f"at /surface/valueTypes/{name}/key: {value_type['key']!r} is a {key_attribute.get('type')!r} attribute, and the cells of a value type with link hold links")
     for type_name, declaration in types.items():  # DESL 0.2: what a mentions facet may name (section 4.3)
         for name, declared in declaration.get("attributes", {}).items():
             for index, target in enumerate(type_list(declared.get("mentions", {}).get("types", []))):
                 element_type(target, f"/metamodel/types/{type_name}/attributes/{name}/mentions/types/{index}")
+    for type_name, declaration in types.items():  # DESL 0.5: the name property of a linkable type (section 4.5)
+        linkable = declaration.get("linkable")
+        if isinstance(linkable, dict):
+            attribute(type_name, linkable.get("nameProperty"), f"/metamodel/types/{type_name}/linkable/nameProperty")
     document_attributes = document.get("metamodel", {}).get("document", {}).get("attributes", {})
     for type_name, rule in document.get("persistence", {}).get("ids", {}).get("types", {}).items():
         if rule.get("strategy") == "counter" and rule.get("mark") not in document_attributes:
@@ -3412,6 +3427,8 @@ def resolve_desl(path: Path, document) -> list[str]:
             for rule in binding.get(kind, []):
                 if rule["type"] not in types and rule["type"] not in type_map:
                     problems.append(f"at {pointer}: the rule {rule['name']!r} produces the type {rule['type']!r}, which neither the metamodel nor the type map declares")
+        if "documentId" in document.get("persistence", {}) and "id" not in binding.get("document", {}):  # DESL 0.5, section 5.3.6
+            problems.append(f"at {pointer}: persistence.documentId is given, and the binding {reference!r} declares no document.id (FBL section 17.2)")
         declared_blocks = binding.get("registration", {}).get("blocks", {})
         for name in settings:
             if name not in declared_blocks:
