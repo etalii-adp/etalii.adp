@@ -2,8 +2,8 @@
   "workflow": "speckit",
   "specName": "The Value Stream Map",
   "branch": "claude/project-thread-cj29ch",
-  "currentStep": "specify",
-  "status": "specified",
+  "currentStep": "tasks",
+  "status": "ready-to-implement",
   "history": [
     {
       "step": "specify",
@@ -11,6 +11,21 @@
       "kind": "complete",
       "by": "extension",
       "at": "2026-11-23T12:30:00.000Z"
+    },
+    {
+      "step": "plan",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-23T13:00:00.000Z"
+    },
+    {
+      "step": "tasks",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-23T13:00:00.000Z"
     }
-  ]
+  ],
+  "last_action": "Approved by Peter 2026-11-23 (Approve all three); plan and 36 tasks written"
 }
