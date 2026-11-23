@@ -34,3 +34,4 @@
 - The requirements name the definitions, their fixtures, the languages' versions and VS Code's own records, since those are what the feature is about; they name no code.
 - Every inventory row (8) is traced to a requirement in the Context table, and each requirement names its rows.
 - There is no standalone module for these tools, so the reference is each definition's fixtures rather than a standalone transcript.
+- Peter approved the specification on 2026-11-23; plan and tasks followed.

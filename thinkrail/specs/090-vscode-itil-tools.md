@@ -15,7 +15,7 @@ tags:
 
 **Created**: 2026-11-23
 
-**Status**: Draft, for Peter's approval
+**Status**: Approved 2026-11-23 (Peter, decision card "Approve, then build"); plan and tasks written
 
 **Input**: Peter, 2026-11-23, in the thread that built specs 084, 085 and 086: "proceed with the implementation", then "VS Code please". The three service management tools that those specs defined, the value stream map, the SLO map and the post-incident review designer, are to work in the VS Code host.
 
