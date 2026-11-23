@@ -28,7 +28,7 @@
 
 ## Phase 1: Setup
 
-- [ ] **T001** After the pull request carrying this file merges, cut the branch again from `origin/develop`, run the checks and note the validator's count of `ok` lines as the baseline · etalii.adp
+- [x] **T001** After the pull request carrying this file merges, cut the branch again from `origin/develop`, run the checks and note the validator's count of `ok` lines as the baseline · etalii.adp
 
 ---
 
@@ -36,11 +36,11 @@
 
 **Purpose**: the `sections` surface (research R7).
 
-- [ ] **T002** [P] Make DESL 0.4: the status paragraph (what 0.4 adds, that every 0.3 specification keeps its meaning), `sections` in 7.1's table, and section 7.8 with parts, records, lists, `order`, `group`, `add`, `figures`, `marks`, `timeStrip` and mentions across parts, as [contracts/desl-sections-surface.md](contracts/desl-sections-surface.md) states · etalii.adp/specifications/desl/DESL-specification.md
-- [ ] **T003** [P] Add the `sections` kind and its properties to `$defs/Surface`, at the schema's current address · etalii.adp/specifications/desl/desl.schema.json
-- [ ] **T004** [P] Write the worked example: `minimal-sections.des` (a record part and a list part with a time strip, a figure and a mark), its binding and its Markdown document · etalii.adp/specifications/desl/minimal-sections.des, minimal-sections.fbl, minimal-sections.md
-- [ ] **T005** Teach the validator to read a `sections` surface: every part's `type` and `fields` exist in the metamodel, a `timeStrip.at` is a `datetime`, a record part's type is single · etalii.adp/.github/scripts/validate-examples.py
-- [ ] **T006** Plant a `timeStrip.at` naming a string attribute and a list part whose `type` does not exist; see each fail; restore · etalii.adp/specifications/desl/minimal-sections.des
+- [x] **T002** [P] Make DESL 0.4: the status paragraph (what 0.4 adds, that every 0.3 specification keeps its meaning), `sections` in 7.1's table, and section 7.8 with parts, records, lists, `order`, `group`, `add`, `figures`, `marks`, `timeStrip` and mentions across parts, as [contracts/desl-sections-surface.md](contracts/desl-sections-surface.md) states · etalii.adp/specifications/desl/DESL-specification.md
+- [x] **T003** [P] Add the `sections` kind and its properties to `$defs/Surface`, at the schema's current address · etalii.adp/specifications/desl/desl.schema.json
+- [x] **T004** [P] Write the worked example: `minimal-sections.des` (a record part and a list part with a time strip, a figure and a mark), its binding and its Markdown document · etalii.adp/specifications/desl/minimal-sections.des, minimal-sections.fbl, minimal-sections.md
+- [x] **T005** Teach the validator to read a `sections` surface: every part's `type` and `fields` exist in the metamodel, a `timeStrip.at` is a `datetime`, a record part's type is single · etalii.adp/.github/scripts/validate-examples.py
+- [x] **T006** Plant a `timeStrip.at` naming a string attribute and a list part whose `type` does not exist; see each fail; restore · etalii.adp/specifications/desl/minimal-sections.des
 - [ ] **T007** Deliver pull request 2: run the checks, see the baseline keep its results, open it naming this folder, turn on auto-merge · etalii.adp
 
 **Checkpoint**: DESL 0.4 on `develop`.
