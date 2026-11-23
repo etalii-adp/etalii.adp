@@ -1,0 +1,17 @@
+{
+  "workflow": "companion",
+  "specName": "088-vscode-dependency-graph",
+  "branch": "088-vscode-dependency-graph",
+  "selectedAt": "2026-11-23T15:06:00.000Z",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-23T15:30:00.000Z"
+    }
+  ]
+}
