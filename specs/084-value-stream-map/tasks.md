@@ -26,7 +26,7 @@
 
 ## Phase 1: Setup
 
-- [ ] **T001** After the pull request carrying this file merges, cut the branch again from `origin/develop`, run the checks and note the validator's count of `ok` lines as the baseline · etalii.adp
+- [x] **T001** After the pull request carrying this file merges, cut the branch again from `origin/develop`, run the checks and note the validator's count of `ok` lines as the baseline · etalii.adp
 
 ---
 
@@ -34,12 +34,12 @@
 
 **Purpose**: the files every story adds to. Nothing here draws or computes yet.
 
-- [ ] **T002** [P] Start `value-stream-map.dis`: `language` (origin `generic/value-stream-map`, id `net.etalii.adp.generic.value-stream-map`, extension `vsm`), the diagram attributes, the node types `Trigger`, `Step`, `Outcome` and the relation types `Flow`, `Alternative`, `Rework` of data-model.md, and `persistence.binding` naming the binding (R1, R11) · etalii.adp/definitions/diagrams/value-stream-map.dis
-- [ ] **T003** [P] Start the binding `vsm` in the `yaml` family: `claims.extensions` `[".vsm"]`, the rules for `/current/trigger`, `/current/steps/*`, `/current/outcome`, `/current/flows/*` and the same under `/future/`, each writing `state` (R2), and the vocabularies at the root · etalii.adp/definitions/diagrams/value-stream-map.fbl
-- [ ] **T004** [P] Write the file schema from contracts/value-stream-document.md: required keys, the flow's `share` and `rework` exclusive, durations without months or years · etalii.adp/definitions/diagrams/value-stream-map.schema.json
-- [ ] **T005** [P] Start the companion: what the diagram is for, the file in full, and *What this diagram does not do* (FR-009) · etalii.adp/definitions/diagrams/value-stream-map.md
-- [ ] **T006** Add the row to the README's table of diagram types · etalii.adp/definitions/diagrams/README.md
-- [ ] **T007** Run the checks; plant `origin: generic/value-stream` in the specification and a `.vsm` claimed twice in the binding, see each fail, restore · etalii.adp
+- [x] **T002** [P] Start `value-stream-map.dis`: `language` (origin `generic/value-stream-map`, id `net.etalii.adp.generic.value-stream-map`, extension `vsm`), the diagram attributes, the node types `Trigger`, `Step`, `Outcome` and the relation types `Flow`, `Alternative`, `Rework` of data-model.md, and `persistence.binding` naming the binding (R1, R11) · etalii.adp/definitions/diagrams/value-stream-map.dis
+- [x] **T003** [P] Start the binding `vsm` in the `yaml` family: `claims.extensions` `[".vsm"]`, the rules for `/current/trigger`, `/current/steps/*`, `/current/outcome`, `/current/flows/*` and the same under `/future/`, each writing `state` (R2), and the vocabularies at the root · etalii.adp/definitions/diagrams/value-stream-map.fbl
+- [x] **T004** [P] Write the file schema from contracts/value-stream-document.md: required keys, the flow's `share` and `rework` exclusive, durations without months or years · etalii.adp/definitions/diagrams/value-stream-map.schema.json
+- [x] **T005** [P] Start the companion: what the diagram is for, the file in full, and *What this diagram does not do* (FR-009) · etalii.adp/definitions/diagrams/value-stream-map.md
+- [x] **T006** Add the row to the README's table of diagram types · etalii.adp/definitions/diagrams/README.md
+- [x] **T007** Run the checks; plant `origin: generic/value-stream` in the specification and a `.vsm` claimed twice in the binding, see each fail, restore · etalii.adp
 
 **Checkpoint**: the definition loads and validates, empty of behaviour.
 
@@ -49,9 +49,9 @@
 
 **Goal**: the definition is complete enough to build from (FR-008). **Independent test**: quickstart steps 1 to 3 pass and fail on each planted defect.
 
-- [ ] **T008** [US6] Write the tool description from the specification and binding: `value-stream-map.atd` with `value-stream-map.notation.atd` and `value-stream-map.vsm.atd`, and its `value-stream-map.trace.json` (R12) · etalii.adp/definitions/diagrams/
-- [ ] **T009** [US6] Write the read fixture over a file with every key, stating the elements and attribute values a reading yields · etalii.adp/specifications/fbl/fixtures/value-stream-map-read/
-- [ ] **T010** [US6] Plant a description that names an attribute the specification lacks, and a fixture whose expected `state` is wrong; see `atd check` and the validator fail; restore · etalii.adp
+- [x] **T008** [US6] Write the tool description from the specification and binding: `value-stream-map.atd` with `value-stream-map.notation.atd` and `value-stream-map.vsm.atd`, and its `value-stream-map.trace.json` (R12) · etalii.adp/definitions/diagrams/
+- [x] **T009** [US6] Write the read fixture over a file with every key, stating the elements and attribute values a reading yields · etalii.adp/specifications/fbl/fixtures/value-stream-map-read/
+- [x] **T010** [US6] Plant a description that names an attribute the specification lacks, and a fixture whose expected `state` is wrong; see `atd check` and the validator fail; restore · etalii.adp
 
 ---
 
@@ -59,11 +59,11 @@
 
 **Goal**: trigger, steps and outcome in flow order with times, practices and hand-offs. **Independent test**: spec User Story 1.
 
-- [ ] **T011** [US1] Add the notation: the step box with name, activity colour and practice labels, the wait band below it (R8), the trigger and outcome shapes, the flow, alternative and rework edges, and the hand-off marker on a flow whose steps' performers differ (R5) · etalii.adp/definitions/diagrams/value-stream-map.dis
-- [ ] **T012** [US1] Add the placement binding by flow depth and lane (R8), as functions beside the others · etalii.adp/definitions/diagrams/value-stream-map.dis
-- [ ] **T013** [US1] Add the toolbox, the step form (FR-002) and the context menus, and the binding's inserts and removals for steps and flows, with the next free id (contract, *Rules*) · etalii.adp/definitions/diagrams/value-stream-map.dis, value-stream-map.fbl
-- [ ] **T014** [P] [US1] Write the edits fixture: add a step, connect it, set a wait time in hours, remove a flow; each with the bytes it writes (SC-005) · etalii.adp/specifications/fbl/fixtures/value-stream-map-edits/
-- [ ] **T015** [US1] Update the description and trace for T011 to T013, run the checks, plant a wrong byte in one edit's expected output, see it fail, restore · etalii.adp
+- [x] **T011** [US1] Add the notation: the step box with name, activity colour and practice labels, the wait band below it (R8), the trigger and outcome shapes, the flow, alternative and rework edges, and the hand-off marker on a flow whose steps' performers differ (R5) · etalii.adp/definitions/diagrams/value-stream-map.dis
+- [x] **T012** [US1] Add the placement binding by flow depth and lane (R8), as functions beside the others · etalii.adp/definitions/diagrams/value-stream-map.dis
+- [x] **T013** [US1] Add the toolbox, the step form (FR-002) and the context menus, and the binding's inserts and removals for steps and flows, with the next free id (contract, *Rules*) · etalii.adp/definitions/diagrams/value-stream-map.dis, value-stream-map.fbl
+- [x] **T014** [P] [US1] Write the edits fixture: add a step, connect it, set a wait time in hours, remove a flow; each with the bytes it writes (SC-005) · etalii.adp/specifications/fbl/fixtures/value-stream-map-edits/
+- [x] **T015** [US1] Update the description and trace for T011 to T013, run the checks, plant a wrong byte in one edit's expected output, see it fail, restore · etalii.adp
 
 ---
 
@@ -71,11 +71,11 @@
 
 **Goal**: the summary and the marked waits (FR-004, FR-005). **Independent test**: spec User Story 2 against the worked examples.
 
-- [ ] **T016** [US2] Add the functions `visits`, `leadTime`, `processTotal`, `flowEfficiency` and `handoffs` with bounded recursion and the budget of 200 steps (R4, R10) · etalii.adp/definitions/diagrams/value-stream-map.dis
-- [ ] **T017** [US2] Add the derived `Summary` node and the long-wait mark (R9), in the diagram's `unit` · etalii.adp/definitions/diagrams/value-stream-map.dis
-- [ ] **T018** [US2] Add the findings `vsm.empty-stream`, `vsm.missing-trigger`, `vsm.missing-outcome`, `vsm.second-trigger`, `vsm.second-outcome`, `vsm.unconnected-step`, `vsm.missing-wait`, `vsm.missing-process-time`, `vsm.unmarked-cycle` and `vsm.too-many-steps` with their sentences (data-model.md) · etalii.adp/definitions/diagrams/value-stream-map.dis
-- [ ] **T019** [P] [US2] Write `restore-service.vsm` (R13) and, in the companion, its totals worked by hand, matching spec User Story 2's scenarios · etalii.adp/definitions/diagrams/examples/restore-service.vsm, value-stream-map.md
-- [ ] **T020** [US2] Check the functions by hand against T019's table (quickstart step 4); plant a step outside the flow and see `vsm.unconnected-step` stated for it in the companion's walk-through; update description and trace · etalii.adp
+- [x] **T016** [US2] Add the functions `visits`, `leadTime`, `processTotal`, `flowEfficiency` and `handoffs` with bounded recursion and the budget of 64 steps (R4, R10) · etalii.adp/definitions/diagrams/value-stream-map.dis
+- [x] **T017** [US2] Add the derived `Summary` node and the long-wait mark (R9), in the diagram's `unit` · etalii.adp/definitions/diagrams/value-stream-map.dis
+- [x] **T018** [US2] Add the findings `vsm.empty-stream`, `vsm.missing-trigger`, `vsm.missing-outcome`, `vsm.second-trigger`, `vsm.second-outcome`, `vsm.unconnected-step`, `vsm.missing-wait`, `vsm.missing-process-time`, `vsm.unmarked-cycle` and `vsm.too-many-steps` with their sentences (data-model.md) · etalii.adp/definitions/diagrams/value-stream-map.dis
+- [x] **T019** [P] [US2] Write `restore-service.vsm` (R13) and, in the companion, its totals worked by hand, matching spec User Story 2's scenarios · etalii.adp/definitions/diagrams/examples/restore-service.vsm, value-stream-map.md
+- [x] **T020** [US2] Check the functions by hand against T019's table (quickstart step 4); plant a step outside the flow and see `vsm.unconnected-step` stated for it in the companion's walk-through; update description and trace · etalii.adp
 
 ---
 
@@ -83,10 +83,10 @@
 
 **Goal**: two states in one file (FR-006). **Independent test**: spec User Story 3.
 
-- [ ] **T021** [US3] Add the kept filter `state` with `persist` and `persistence.view.bind` on `view:`, and the operations `createFutureState` (R3), `showState` and `removeFutureState` with its confirmation · etalii.adp/definitions/diagrams/value-stream-map.dis, value-stream-map.fbl
-- [ ] **T022** [US3] Add the derived `Comparison` node with each figure, both states and the difference · etalii.adp/definitions/diagrams/value-stream-map.dis
-- [ ] **T023** [P] [US3] Add the future state to `restore-service.vsm` and its comparison to the companion's table · etalii.adp/definitions/diagrams/examples/restore-service.vsm, value-stream-map.md
-- [ ] **T024** [US3] Add to the edits fixture the bytes `createFutureState` writes for a two-step stream; plant a missing `basedOn`, see it fail, restore; update description and trace · etalii.adp/specifications/fbl/fixtures/value-stream-map-edits/
+- [x] **T021** [US3] Add the kept filter `state` with `persist` and `persistence.view.bind` on `view:`, and the operations `createFutureState` (R3), `showState` and `removeFutureState` with its confirmation · etalii.adp/definitions/diagrams/value-stream-map.dis, value-stream-map.fbl
+- [x] **T022** [US3] Add the derived `Comparison` node with each figure, both states and the difference · etalii.adp/definitions/diagrams/value-stream-map.dis
+- [x] **T023** [P] [US3] Add the future state to `restore-service.vsm` and its comparison to the companion's table · etalii.adp/definitions/diagrams/examples/restore-service.vsm, value-stream-map.md
+- [x] **T024** [US3] Add to the edits fixture the bytes `createFutureState` writes for a two-step stream; plant a missing `basedOn`, see it fail, restore; update description and trace · etalii.adp/specifications/fbl/fixtures/value-stream-map-edits/
 
 ---
 
@@ -94,9 +94,9 @@
 
 **Goal**: weighted totals (FR-004). **Independent test**: spec User Story 4.
 
-- [ ] **T025** [US4] Add the share and rate forms and the findings `vsm.shares` and `vsm.rework-forward`; refuse a flow with both a share and a rate · etalii.adp/definitions/diagrams/value-stream-map.dis
-- [ ] **T026** [P] [US4] Write `request-fulfilment.vsm` with an 80/20 alternative and a 10 % rework loop, and its weighted totals by hand in the companion · etalii.adp/definitions/diagrams/examples/request-fulfilment.vsm, value-stream-map.md
-- [ ] **T027** [US4] Check T016's functions against T026's table by hand; plant shares of 80/30 and see the schema accept and the companion's walk-through name `vsm.shares`; update description and trace · etalii.adp
+- [x] **T025** [US4] Add the share and rate forms and the findings `vsm.shares` and `vsm.rework-forward`; refuse a flow with both a share and a rate · etalii.adp/definitions/diagrams/value-stream-map.dis
+- [x] **T026** [P] [US4] Write `request-fulfilment.vsm` with an 80/20 alternative and a 10 % rework loop, and its weighted totals by hand in the companion · etalii.adp/definitions/diagrams/examples/request-fulfilment.vsm, value-stream-map.md
+- [x] **T027** [US4] Check T016's functions against T026's table by hand; plant shares of 80/30 and see the schema accept and the companion's walk-through name `vsm.shares`; update description and trace · etalii.adp
 
 ---
 
@@ -104,16 +104,16 @@
 
 **Goal**: an agent writes a valid map from the companion alone (FR-009). **Independent test**: quickstart step 6.
 
-- [ ] **T028** [US5] Complete the companion for agents: a legend of every key, the id rule, the duration form, what an agent must not write (`view:`), and the vocabulary findings · etalii.adp/definitions/diagrams/value-stream-map.md
-- [ ] **T029** [US5] Add the vocabulary constraints `vsm.unknown-activity` and `vsm.unknown-practice` (R7) and the two templates *Six-activity value chain* and *Eight-activity lifecycle* (R7, FR-011) · etalii.adp/definitions/diagrams/value-stream-map.dis
+- [x] **T028** [US5] Complete the companion for agents: a legend of every key, the id rule, the duration form, what an agent must not write (`view:`), and the vocabulary findings · etalii.adp/definitions/diagrams/value-stream-map.md
+- [x] **T029** [US5] Add the vocabulary constraints `vsm.unknown-activity` and `vsm.unknown-practice` (R7) and the two templates *Six-activity value chain* and *Eight-activity lifecycle* (R7, FR-011) · etalii.adp/definitions/diagrams/value-stream-map.dis
 - [ ] **T030** [US5] Give an agent only the companion, have it write a five-step stream, and run the validator on it; record the outcome in the companion's notes · etalii.adp/definitions/diagrams/value-stream-map.md
 
 ---
 
 ## Phase 9: Polish, and pull request 2
 
-- [ ] **T031** Read every file of the definition for text taken from the framework's publications and remove any (FR-011) · etalii.adp/definitions/diagrams/
-- [ ] **T032** Trace every FR and SC of the specification to the file and string that carries it, or to the host's specification for SC-003 and SC-004, and record the trace at the end of this file · etalii.adp/specs/084-value-stream-map/tasks.md
+- [x] **T031** Read every file of the definition for text taken from the framework's publications and remove any (FR-011) · etalii.adp/definitions/diagrams/
+- [x] **T032** Trace every FR and SC of the specification to the file and string that carries it, or to the host's specification for SC-003 and SC-004, and record the trace at the end of this file · etalii.adp/specs/084-value-stream-map/tasks.md
 - [ ] **T033** Deliver pull request 2: run the checks, see the baseline's examples keep their result, open the pull request naming this folder, turn on auto-merge · etalii.adp
 
 ---
@@ -134,3 +134,27 @@
 ## What can be cut
 
 User Story 4's weighting (Phase 7) is the first to cut if the review of pull request 2 finds the functions too costly: the totals then ignore shares and rates, and the companion says so.
+
+## Trace of requirements and criteria (T032)
+
+Traced on 2026-11-23 to the file and string that carries each, read back from the artefacts rather than from the tasks above.
+
+| Requirement | Carried by |
+|---|---|
+| FR-001 | `value-stream-map.dis`: node types `Trigger`, `Step`, `Outcome`; relation types `Flow`, `Alternative` (`share`), `Rework` (`rate`); function `isHandoff` and the edge condition `isHandoff(self)` (a hand-off is derived, not stored) |
+| FR-002 | `value-stream-map.dis`: `Step` attributes `name`, `activity`, `practices` (many), `performer`, `processTime`, `waitTime`, `note`; form `step` |
+| FR-003 | `value-stream-map.dis`: node types `Activity`, `Practice`; `toolbox.templates` `sixActivities` and `eightActivities`, both `starters`; `value-stream-map.fbl` rules `activity` and `practice` |
+| FR-004 | `value-stream-map.dis` functions `visits`, `baseVisits`, `loopFactor`, `leadTime`, `processTotal`, `flowEfficiency`, `handoffs`, `flowTraversals`; derived `Summary`; companion *How the totals are computed* |
+| FR-005 | `value-stream-map.dis` function `longWait` and badge `longWait` of `Step` |
+| FR-006 | `value-stream-map.dis` enum `State`, kept filter `state`, operations `createFutureState`, `showCurrent`, `showFuture`, `removeFutureState`, derived `Comparison`; binding rules `future*` |
+| FR-007 | `value-stream-map.fbl` (`family: yaml`, `unknownKeys` host attributes); fixtures `value-stream-map-read` (save writes the bytes read), `value-stream-map-edits`; companion *Findings* (never a refusal) |
+| FR-008 | `definitions/diagrams/value-stream-map.{dis,fbl,schema.json,md,atd,notation.atd,vsm.atd,trace.json}`, `examples/`; language id `net.etalii.adp.generic.value-stream-map`, checked against the origin by `validate-examples.py` |
+| FR-009 | companion *Instructions for agents* and *What this diagram does not do* |
+| FR-010 | `examples/restore-service.vsm`, `examples/request-fulfilment.vsm`, each with `current` and `future`; companion *Worked examples* |
+| FR-011 | T031: no text of the framework's publications in any file; activity and practice names only in `toolbox.templates` and the examples, as editable values |
+| FR-012 | T034, T035 (pull request 3 and the Notion page) |
+| SC-001 | `validate-examples.py` and the Build's `descriptions` job pass; planted defects seen to fail: the origin (language id check), `.vsm` claimed twice, a fixture's wrong byte, a missing `basedOn` in the future-state fixture, a flow with share and rework in an example, a form field naming no attribute (`atd check`) |
+| SC-002 | companion *Worked examples*, worked by hand and recomputed independently of the functions |
+| SC-003, SC-004 | carried to the first host's specification (plan, *What is not done here*) |
+| SC-005 | fixture `value-stream-map-edits`: each edit's splices touch only the edited value or entry |
+

@@ -41,7 +41,7 @@
 - [x] **T004** [P] Write the worked example: `minimal-sections.des` (a record part and a list part with a time strip, a figure and a mark), its binding and its Markdown document · etalii.adp/specifications/desl/minimal-sections.des, minimal-sections.fbl, minimal-sections.md
 - [x] **T005** Teach the validator to read a `sections` surface: every part's `type` and `fields` exist in the metamodel, a `timeStrip.at` is a `datetime`, a record part's type is single · etalii.adp/.github/scripts/validate-examples.py
 - [x] **T006** Plant a `timeStrip.at` naming a string attribute and a list part whose `type` does not exist; see each fail; restore · etalii.adp/specifications/desl/minimal-sections.des
-- [ ] **T007** Deliver pull request 2: run the checks, see the baseline keep its results, open it naming this folder, turn on auto-merge · etalii.adp
+- [x] **T007** Deliver pull request 2: run the checks, see the baseline keep its results, open it naming this folder, turn on auto-merge · etalii.adp
 
 **Checkpoint**: DESL 0.4 on `develop`.
 

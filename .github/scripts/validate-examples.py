@@ -2982,6 +2982,47 @@ for schema_path in sorted((repository / "definitions" / "diagrams").glob("*.sche
     else:
         print(f"ok   {name}: its example is valid against {schema_path.name}")
 
+# A diagram type's worked examples (definitions/diagrams/examples/) are files of the extension its specification names
+# (language.fileExtension); each is valid against the type's file schema, where the type has one beside it.
+diagram_folder = repository / "definitions" / "diagrams"
+file_schemas = {}
+for specification in sorted(diagram_folder.glob("*.dis")):
+    extension = json.loads(specification.read_text(encoding="utf-8")).get("language", {}).get("fileExtension")
+    schema_path = specification.with_suffix(".schema.json")
+    if extension and schema_path.is_file():
+        file_schemas["." + extension] = schema_path
+# A diagram type is named from its origin (definitions/diagrams/README.md, Naming): its language id is the origin with
+# the slash a dot, behind net.etalii.adp. And none of its bindings claims one extension twice.
+for specification in sorted(diagram_folder.glob("*.dis")):
+    name = specification.relative_to(repository).as_posix()
+    language = json.loads(specification.read_text(encoding="utf-8")).get("language", {})
+    origin, language_id = language.get("origin"), language.get("id")
+    if origin and language_id != "net.etalii.adp." + origin.replace("/", "."):
+        failures += 1
+        print(f"FAIL {name}: its language id {language_id!r} is not named from its origin {origin!r} (net.etalii.adp.{origin.replace('/', '.')})")
+    binding = specification.with_suffix(".fbl")
+    if binding.is_file():
+        for binding_name, declared in json.loads(binding.read_text(encoding="utf-8")).get("bindings", {}).items():
+            extensions = declared.get("claims", {}).get("extensions", [])
+            for extension in sorted({e for e in extensions if extensions.count(e) > 1}):
+                failures += 1
+                print(f"FAIL {binding.relative_to(repository).as_posix()}: the binding {binding_name} claims {extension} {extensions.count(extension)} times")
+for example in sorted((diagram_folder / "examples").glob("*")):
+    name = example.relative_to(repository).as_posix()
+    schema_path = file_schemas.get(example.suffix)
+    if schema_path is None:
+        failures += 1
+        print(f"FAIL {name}: no diagram type here names {example.suffix!r} and has a file schema to check it against")
+        continue
+    errors = sorted(Draft202012Validator(json.loads(schema_path.read_text(encoding="utf-8")), registry=registry).iter_errors(yaml_without_timestamps(example.read_text(encoding="utf-8"))), key=lambda e: list(e.absolute_path))
+    if errors:
+        failures += 1
+        print(f"FAIL {name}: {len(errors)} error(s) against {schema_path.name}")
+        for error in errors[:10]:
+            print(f"  at {'/'.join(str(part) for part in error.absolute_path) or '(root)'}: {error.message}")
+    else:
+        print(f"ok   {name}: valid against {schema_path.name}")
+
 # ATD, the ADP tool language (spec 035): what a schema alone cannot say about its JSON files. Every findings file,
 # trace, conformance fixture, drawing, capability contract and the walk names `atd.schema.json` in `$schema` and is
 # validated above; here the refused corpus is checked to be complete, a trace to cover its companion, a fixture's

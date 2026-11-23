@@ -22,7 +22,7 @@ Decisions taken while planning [value-stream-map.spec.md](value-stream-map.spec.
 
 ## R4. Totals by expected visits, as DISL functions
 
-- **Decision**: the figures of FR-004 are computed with the *expected number of visits* of each step. The trigger is visited once. A step's visits are the sum, over its incoming flows, of the source's visits times the flow's share (1 for an ordinary flow, the stated share for an alternative). A rework flow from step *b* back to step *a* with rate *r* multiplies the visits of every step on the forward path from *a* to *b* by 1 / (1 − *r*). Then lead time = Σ visits × (process time + wait time), process time = Σ visits × process time, flow efficiency = process time / lead time, and hand-offs = Σ over hand-off flows of the source's visits. These are DISL functions (3.4): `visits` with bounded recursion (`recursion.maxDepth` 200, the step budget of R10, `atMaxDepth` a value that makes the total fail with a finding), and the loop membership with the graph traversal functions of 12.4 (`reachable`).
+- **Decision**: the figures of FR-004 are computed with the *expected number of visits* of each step. The trigger is visited once. A step's visits are the sum, over its incoming flows, of the source's visits times the flow's share (1 for an ordinary flow, the stated share for an alternative). A rework flow from step *b* back to step *a* with rate *r* multiplies the visits of every step on the forward path from *a* to *b* by 1 / (1 − *r*). Then lead time = Σ visits × (process time + wait time), process time = Σ visits × process time, flow efficiency = process time / lead time, and hand-offs = Σ over hand-off flows of the source's visits. These are DISL functions (3.4): `visits` with bounded recursion (`recursion.maxDepth` 64, the step budget of R10, `atMaxDepth` a value that makes the total fail with a finding), and the loop membership with the graph traversal functions of 12.4 (`reachable`).
 - **Rationale**: FR-004 asks for expressions a host evaluates rather than code each host writes, and DISL 0.9 has everything needed: `duration` arithmetic and `sum()` (12.4), bounded recursion (3.4) and traversals. The expected-visits model is the textbook reading of a value stream with branches and rework and gives the numbers of the specification's worked scenarios: with no branches it is the plain sum (User Story 2, scenario 1: 240 minutes, 60 minutes, 25 %).
 - **Alternatives**: a simulation (DISL 9.6), which is heavier and not deterministic in the sense the totals need; a plugin function (principle I); the plain sum ignoring shares (wrong for User Story 4).
 
@@ -59,7 +59,7 @@ Decisions taken while planning [value-stream-map.spec.md](value-stream-map.spec.
 
 ## R10. Budgets
 
-- **Decision**: a budget of 200 steps per state (DISL 3.2.1). Beyond it the totals are not computed and one finding says so.
+- **Decision**: a budget of 64 steps per state (DISL 3.2.1), the deepest recursion an ATD tool description may state (ATD7004); lowered from 200 on 2026-11-23. Beyond it the totals are not computed and one finding says so.
 - **Rationale**: the bounded recursion of R4 needs a bound; value streams mapped by hand rarely exceed a few dozen steps.
 
 ## R11. Name and origin
