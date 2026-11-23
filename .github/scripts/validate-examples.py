@@ -1370,6 +1370,8 @@ class Cel:
         except (TypeError, AttributeError) as error:
             raise CelError(kind) from error
 
+    MACROS = ("filter", "map", "exists", "all")
+
     def call(self, name, arguments, variables):
         if name == "has":
             try:
@@ -1377,8 +1379,18 @@ class Cel:
             except CelError:
                 return False
             return True
+        if name in self.MACROS and len(arguments) == 3 and arguments[1][0] == "name":
+            return self.macro(name, arguments, variables)
         values = [self.value(argument, variables) for argument in arguments]
         try:
+            if name == "type":
+                return cel_type_of(values[0])
+            if name == "distinct":
+                return [v for i, v in enumerate(values[0]) if v not in values[0][:i]]
+            if name == "flatten":
+                return [v for part in values[0] for v in part]
+            if name == "join":
+                return (values[1] if len(values) > 1 else "").join(values[0])
             if name == "size":
                 return len(values[0])
             if name == "string":
@@ -1398,6 +1410,46 @@ class Cel:
         except (TypeError, ValueError, IndexError, AttributeError) as error:
             raise CelError(name) from error
         raise ReadingProblem(f"the reading check does not evaluate CEL's `{name}`")
+
+    def macro(self, name, arguments, variables):
+        """CEL's comprehension macros over a list, or over a map's keys: `l.filter(x, p)`, `l.map(x, e)`,
+        `l.exists(x, p)` and `l.all(x, p)`, for the yaml and json reading check (FBL 0.22)."""
+        target = self.value(arguments[0], variables)
+        if not isinstance(target, (list, dict)):
+            raise CelError(name)
+        bound = arguments[1][1]
+        results = []
+        for item in list(target):
+            value = self.value(arguments[2], {**variables, bound: item})
+            results.append((item, value))
+        if name == "filter":
+            return [item for item, value in results if value is True]
+        if name == "map":
+            return [value for _, value in results]
+        if name == "exists":
+            return any(value is True for _, value in results)
+        return all(value is True for _, value in results)
+
+
+CEL_TYPES = {"map": "\x00type:map", "list": "\x00type:list", "string": "\x00type:string", "int": "\x00type:int",
+             "double": "\x00type:double", "bool": "\x00type:bool", "null_type": "\x00type:null"}
+
+
+def cel_type_of(value):
+    """What CEL's type() gives for a value read from a yaml or json body, compared with the names in CEL_TYPES."""
+    if isinstance(value, bool):
+        return CEL_TYPES["bool"]
+    if isinstance(value, dict):
+        return CEL_TYPES["map"]
+    if isinstance(value, list):
+        return CEL_TYPES["list"]
+    if isinstance(value, str):
+        return CEL_TYPES["string"]
+    if isinstance(value, int):
+        return CEL_TYPES["int"]
+    if isinstance(value, float):
+        return CEL_TYPES["double"]
+    return CEL_TYPES["null_type"]
 
 
 SELECTOR_SEGMENT = re.compile(r"^(?P<name>[^\[\]]+)(?:\[(?P<path>[^=\]]+)=(?P<quote>['\"])(?P<value>.*)(?P=quote)\])?$")
@@ -2195,11 +2247,316 @@ def check_yaml_stream(path: Path, fixture) -> str | None:
     return None
 
 
+class YamlEntry:
+    """A node of a yaml body's lossless reading, as the reading check walks it: its typed value (CEL's view, section
+    4.1.4), its written text when it is a scalar (section 4.1.5), its parent, its key or index, the line it starts on
+    and its place in document order."""
+
+    def __init__(self, typed, text, node, parent, key, line, order):
+        self.typed, self.text, self.node, self.parent, self.key, self.line, self.order = typed, text, node, parent, key, line, order
+        self.members = {}
+
+
+class YamlTree:
+    """The lossless reading of a yaml body for the reading check (FBL 0.5 sections 4.1, 4.2, 4.3; FBL 0.22 for
+    `stream: "documents"`): a tree of entries over the composed YAML nodes, typed by the core schema with timestamps
+    read as text, as a binding reads them."""
+
+    def __init__(self, text, stream):
+        import yaml
+
+        class Loader(yaml.SafeLoader):
+            pass
+
+        Loader.yaml_implicit_resolvers = {
+            first: [(tag, pattern) for tag, pattern in resolvers if tag != "tag:yaml.org,2002:timestamp"]
+            for first, resolvers in yaml.SafeLoader.yaml_implicit_resolvers.items()}
+        self.loader = Loader("")
+        self.order = 0
+        try:
+            documents = list(yaml.compose_all(text, Loader=Loader))  # noqa: S506 - a SafeLoader subclass
+        except yaml.YAMLError as error:
+            raise ReadingProblem(f"the body is unreadable: {str(error).splitlines()[0]}") from error
+        if stream:
+            spans = yaml_stream_spans(text.encode("utf-8"))
+            lines = Lines(text)
+            self.root = YamlEntry(None, None, None, None, None, 1, self.next())
+            starts = [lines.line(len(text.encode("utf-8")[:start].decode("utf-8"))) for start, _ in spans]
+            items = []
+            for index, document in enumerate(documents):
+                line = starts[index] if index < len(starts) else 1
+                items.append(self.entry(document, self.root, index, line))
+            self.root.members = dict(enumerate(items))
+            self.root.typed = [item.typed for item in items]
+        else:
+            self.root = self.entry(documents[0] if documents else None, None, None, 1)
+
+    def next(self):
+        self.order += 1
+        return self.order
+
+    def entry(self, node, parent, key, line=None):
+        import yaml
+        line = line if line is not None else (node.start_mark.line + 1 if node is not None else parent.line)
+        made = YamlEntry(None, None, node, parent, key, line, self.next())
+        if isinstance(node, yaml.MappingNode):
+            for key_node, value_node in node.value:
+                made.members[self.loader.construct_object(key_node, deep=True)] = self.entry(value_node, made, key_node.value)
+            made.typed = {k: m.typed for k, m in made.members.items()}
+        elif isinstance(node, yaml.SequenceNode):
+            made.members = {i: self.entry(n, made, i) for i, n in enumerate(node.value)}
+            made.typed = [m.typed for m in made.members.values()]
+        elif node is not None:
+            made.typed = self.loader.construct_object(node, deep=True)
+            made.text = node.value
+        return made
+
+    def ancestors(self, entry):
+        entry = entry.parent
+        while entry is not None:
+            yield entry
+            entry = entry.parent
+
+    def descendants(self, entry):
+        for member in entry.members.values():
+            yield member
+            yield from self.descendants(member)
+
+    def select(self, context, selector):
+        """The entries a selector reaches from the root (absolute) or from the context (relative), in document order,
+        with the values of its {capture} segments (section 4.2)."""
+        start = self.root if selector.startswith("/") else context
+        segments = [s for s in selector.strip("/").split("/") if s] if selector.strip("/") else []
+        reached = [(start, {})]
+        for segment in segments:
+            following = []
+            for entry, path in reached:
+                if segment == "**":
+                    following.append((entry, path))
+                    following.extend((d, path) for d in self.descendants(entry))
+                elif segment == "*":
+                    following.extend((m, path) for m in entry.members.values())
+                elif segment.startswith("{") and segment.endswith("}"):
+                    if isinstance(entry.typed, dict):
+                        following.extend((m, {**path, segment[1:-1]: k}) for k, m in entry.members.items())
+                else:
+                    key = int(segment) if segment.isdigit() and isinstance(entry.typed, list) else segment
+                    if key in entry.members:
+                        following.append((entry.members[key], path))
+            seen, reached = set(), []
+            for entry, path in following:
+                if id(entry) not in seen:
+                    seen.add(id(entry))
+                    reached.append((entry, path))
+        return sorted(reached, key=lambda r: r[0].order)
+
+
+class YamlModel:
+    """What reading a yaml body through a binding gives, for the reading check: the elements and relations of the
+    rules in document order, each claimed by the first rule in the binding's order whose `when` holds (section 5.1),
+    with its parent (section 5.5), its id when the binding stores one (section 5.3) and its attributes (section 5.2);
+    the attributes of the rules the tool type maps as the diagram are the document's (DISL section 11.2)."""
+
+    def __init__(self, binding, text, origin):
+        self.binding = binding
+        self.tree = YamlTree(text, binding["body"].get("stream") == "documents")
+        specification = ToolTypes.of(origin) if origin else None
+        self.tool = ToolType(specification or {})
+        self.alone = specification is None
+        self.elements, self.document, self.findings, self.stored_ids = [], {}, [], set()
+        self.read()
+
+    def variables(self, entry, matched, path):
+        parent = next((a for a in self.tree.ancestors(entry) if id(a) in matched), None)
+        return {"entry": entry.typed, "parent": parent.typed if parent is not None else None, "path": path,
+                "line": entry.line, "registration": {}, **CEL_TYPES}
+
+    def read(self):
+        rules = [("element", r) for r in self.binding.get("elements", [])] + [("relation", r) for r in self.binding.get("relations", [])]
+        candidates = [(kind, rule, entry, path) for kind, rule in rules for entry, path in self.tree.select(self.tree.root, rule["at"])]
+        matched = {id(entry) for _, _, entry, _ in candidates}
+        claimed = {}
+        for kind, rule, entry, path in candidates:
+            if id(entry) in claimed:
+                continue
+            if "when" in rule:
+                try:
+                    if Cel(rule["when"]).evaluate(self.variables(entry, matched, path)) is not True:
+                        continue
+                except CelError:
+                    continue
+            claimed[id(entry)] = (kind, rule, entry, path)
+        selected = {}
+        for kind, rule, entry, path in sorted(claimed.values(), key=lambda c: c[2].order):
+            element = {"kind": kind, "rule": rule, "entry": entry, "attributes": {}, "id": None, "parent": None}
+            selected[id(entry)] = element
+            parent_rules = rule.get("parent", {}).get("rules", [])
+            element["parent"] = next((selected[id(a)] for a in self.tree.ancestors(entry)
+                                      if id(a) in selected and selected[id(a)]["rule"]["name"] in parent_rules), None)
+            variables = self.variables(entry, matched, path)
+            identifier = rule.get("id", {}).get("from")
+            if identifier:
+                found = self.slot(entry, identifier, variables, {"type": "string"})
+                element["id"] = None if found is None else str(found)
+            for attribute, attribute_binding in rule.get("attributes", {}).items():
+                declared = self.tool.attribute_type(rule["type"], attribute)
+                value = self.slot(entry, attribute_binding, variables, declared)
+                if value is None and "default" in attribute_binding:
+                    value = attribute_binding["default"]
+                if value is not None:
+                    wire = attribute_binding.get("map")
+                    element["attributes"][attribute] = wire.get(value, value) if wire and isinstance(value, str) else value
+            mapped_kind = self.tool.mapped(rule["type"])[0]
+            if mapped_kind == "diagram":
+                for attribute, value in element["attributes"].items():
+                    self.document.setdefault(attribute, value)
+            elif mapped_kind not in ("header", "unreadable"):
+                self.elements.append(element)
+
+    def slot(self, entry, slot, variables, declared):
+        """The value a slot reads from an entry, or None when it is absent: a key's written text for a string
+        attribute and with read text, its typed value otherwise (section 5.2, Reading a scalar)."""
+        if "value" in slot:
+            try:
+                return Cel(slot["value"]).evaluate(variables)
+            except CelError:
+                return None
+        if "capture" in slot:
+            return variables["path"].get(slot["capture"])
+        if "key" not in slot:
+            return None
+        holder = entry
+        if "child" in slot:
+            reached = self.tree.select(entry, slot["child"].lstrip("/") if not slot["child"].startswith("/") else slot["child"])
+            if not reached:
+                return None
+            holder = reached[0][0]
+        member = holder.members.get(slot["key"]) if isinstance(holder.typed, dict) else None
+        if member is None:
+            return None
+        if member.text is None:
+            return member.typed
+        as_text = slot.get("read") == "text" or (slot.get("read") != "typed" and not self.alone and declared.get("type") in (None, "string", "text"))
+        if member.typed is None and member.text == "":
+            return None if declared.get("type") not in (None, "string", "text") else ""
+        if as_text:
+            return member.text
+        value = member.typed
+        if declared.get("type") == "number" and isinstance(value, int) and not isinstance(value, bool):
+            return float(value)
+        return value
+
+
+def folder_glob(glob: str) -> re.Pattern:
+    """A folder subject's glob as a pattern over `/`-separated relative paths (FBL section 10.1): `*` within one
+    segment, `**` any number of segments, `?` one character."""
+    pattern, index = "", 0
+    while index < len(glob):
+        if glob.startswith("**/", index):
+            pattern, index = pattern + "(?:[^/]+/)*", index + 3
+        elif glob.startswith("**", index):
+            pattern, index = pattern + ".*", index + 2
+        elif glob[index] == "*":
+            pattern, index = pattern + "[^/]*", index + 1
+        elif glob[index] == "?":
+            pattern, index = pattern + "[^/]", index + 1
+        else:
+            pattern, index = pattern + re.escape(glob[index]), index + 1
+    return re.compile(pattern + r"\Z")
+
+
+class YamlFolderModel:
+    """What reading a folder subject of yaml files gives, for the reading check (FBL section 10.3): the folder the
+    registration is in, or the one its `body` names, read file by file in the ordinal order of the relative paths,
+    each file through the rules whose `files` name its file rule, as if it were a body of its own."""
+
+    def __init__(self, binding, registration_path: Path):
+        registration, problem = parse_registration(registration_path.read_bytes())
+        if problem:
+            raise ReadingProblem(f"the registration does not parse: {problem}")
+        folder = registration_path.parent / registration["body"] if "body" in registration else registration_path.parent
+        body = binding["body"]
+        ignore = [folder_glob(g) for g in body.get("ignore", [])]
+        relative = sorted(p.relative_to(folder).as_posix() for p in folder.rglob("*") if p.is_file())
+        recognise = body.get("recognise", {})
+        if not all(any(folder_glob(g).match(r) for r in relative) for g in recognise.get("all", [])) or \
+                ("any" in recognise and not any(folder_glob(g).match(r) for g in recognise["any"] for r in relative)) or \
+                any(folder_glob(g).match(r) for g in recognise.get("none", []) for r in relative):
+            raise ReadingProblem("the body is unreadable: the folder is not recognised")
+        self.elements, self.document, self.findings, self.stored_ids = [], {}, [], set()
+        for name in relative:
+            if any(i.match(name) for i in ignore):
+                continue
+            rule = next((f for f in body.get("files", []) if folder_glob(f["glob"]).match(name)), None)
+            if rule is None:
+                continue
+            part = {**binding, "body": {"kind": "file", "family": rule["family"]},
+                    "elements": [r for r in binding.get("elements", []) if rule["name"] in r.get("files", [])],
+                    "relations": [r for r in binding.get("relations", []) if rule["name"] in r.get("files", [])]}
+            model = YamlModel(part, (folder / name).read_bytes().decode("utf-8").removeprefix("\ufeff"),
+                              registration["origin"])
+            self.elements.extend(model.elements)
+            for attribute, value in model.document.items():
+                self.document.setdefault(attribute, value)
+
+
+def check_yaml_reading(path: Path, fixture, binding) -> str | None:
+    """The reading check for a fixture whose binding reads every document of a YAML stream (FBL 0.22, section 4.3),
+    which is where yaml bindings are read by this check: what reading its input gives
+    against the fixture's `read`, element by element in document order, with their types, parents, stored ids and the
+    attributes the fixture names, and the document's attributes."""
+    expected = fixture.get("read")
+    input_path = path.parent / fixture["input"]
+    origin = (binding.get("claims", {}).get("origins") or [None])[0]
+    try:
+        if binding.get("body", {}).get("kind") == "folder" and input_path.suffix == ".adp":
+            model = YamlFolderModel(binding, input_path)
+        elif input_path.suffix == ".adp" or binding.get("body", {}).get("kind") != "file":
+            return None
+        else:
+            model = YamlModel(binding, input_path.read_bytes().decode("utf-8").removeprefix("﻿"), origin)
+    except ReadingProblem as problem:
+        return None if expected.get("unreadable") else f"reading: {problem}"
+    if expected.get("unreadable"):
+        return "reading: the fixture says the body is unreadable, and it reads"
+    if "elements" in expected:
+        read = model.elements
+        if len(read) != len(expected["elements"]):
+            listed = ", ".join(f"{e['rule']['type']} {e['id'] or e['rule']['name']}" for e in read)
+            return f"reading: {len(read)} element(s) read ({listed}), and the fixture lists {len(expected['elements'])}"
+        position = {id(element): index for index, element in enumerate(read)}
+        for index, (want, got) in enumerate(zip(expected["elements"], read), start=1):
+            where = f"reading: element {index} ({want['id']})"
+            if want["type"] != got["rule"]["type"]:
+                return f"{where} is read as a {got['rule']['type']}, and the fixture says {want['type']}"
+            if got["id"] is not None and want["id"] != got["id"]:
+                return f"{where} is read with the id {got['id']}"
+            if "parent" in want:
+                parent = got["parent"]
+                parent_id = None if parent is None else expected["elements"][position[id(parent)]]["id"]
+                if want["parent"] != parent_id:
+                    return f"{where} is read inside {parent_id}, and the fixture says {want['parent']}"
+            for attribute, value in want.get("attributes", {}).items():
+                actual = got["attributes"].get(attribute)
+                if not same_value(value, actual) and not (value is None and attribute not in got["attributes"]):
+                    return f"{where}: {attribute} reads {json.dumps(actual)}, and the fixture says {json.dumps(value)}"
+    if "document" in expected:
+        for attribute, value in expected["document"].get("attributes", {}).items():
+            actual = model.document.get(attribute)
+            if not same_value(value, actual) and not (value is None and attribute not in model.document):
+                return f"reading: the document's {attribute} reads {json.dumps(actual)}, and the fixture says {json.dumps(value)}"
+    return None
+
+
 def check_reading(path: Path, fixture) -> str | None:
     """The reading check (FBL 0.11, research R20): for a fixture whose binding is of the grammar family, what reading
     its input gives against the fixture's `read`. Returns the first difference, if any."""
     expected = fixture.get("read")
     binding, folder = grammar_fixture_binding(path, fixture)
+    if expected is not None and binding is not None and (binding.get("body", {}).get("stream") == "documents" or (
+            binding.get("body", {}).get("kind") == "folder"
+            and {f.get("family") for f in binding["body"].get("files", [])} == {"yaml"})):
+        return check_yaml_reading(path, fixture, binding)
     if expected is None or binding is None or binding.get("body", {}).get("family") != "grammar":
         return None
     try:
@@ -2991,6 +3348,7 @@ for specification in sorted(diagram_folder.glob("*.dis")):
     schema_path = specification.with_suffix(".schema.json")
     if extension and schema_path.is_file():
         file_schemas["." + extension] = schema_path
+SHARED_EXTENSIONS = {".yaml", ".yml", ".json", ".xml", ".md", ".txt"}
 # A diagram type is named from its origin (definitions/diagrams/README.md, Naming): its language id is the origin with
 # the slash a dot, behind net.etalii.adp. And none of its bindings claims one extension twice.
 for specification in sorted(diagram_folder.glob("*.dis")):
@@ -3007,6 +3365,12 @@ for specification in sorted(diagram_folder.glob("*.dis")):
             for extension in sorted({e for e in extensions if extensions.count(e) > 1}):
                 failures += 1
                 print(f"FAIL {binding.relative_to(repository).as_posix()}: the binding {binding_name} claims {extension} {extensions.count(extension)} times")
+            # A file of a format many tools write is claimed only by its marker (FBL 12.2, 12.3), so that a diagram type
+            # never takes every YAML or JSON file of a project (spec 085, FR-003).
+            for extension in sorted(set(extensions) & SHARED_EXTENSIONS):
+                if not declared.get("claims", {}).get("shared"):
+                    failures += 1
+                    print(f"FAIL {binding.relative_to(repository).as_posix()}: the binding {binding_name} claims {extension}, which many tools write, without shared and a marker")
 for example in sorted((diagram_folder / "examples").glob("*")):
     name = example.relative_to(repository).as_posix()
     schema_path = file_schemas.get(example.suffix)
