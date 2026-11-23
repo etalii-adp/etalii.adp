@@ -16,7 +16,7 @@ tags:
 
 **Created**: 2026-11-23
 
-**Status**: Approved on 2026-11-23 (decision card "Approve all three"); FBL 0.22 merged; definition, binding, fixtures, companion and tool description in pull request 3; the catalogue to follow
+**Status**: Approved on 2026-11-23 (decision card "Approve all three"); FBL 0.22 merged; definition, binding, fixtures, companion and tool description merged (#783); the catalogue to follow
 
 **Input**: The maintainer, 2026-11-23: "All of them.", answering which of the three leading candidates of the desk research *Service management tools: a ranked shortlist* (23 November 2026) should be specified first. This is candidate 2; candidates 1 and 3 are specs [084](../../specs/084-value-stream-map/value-stream-map.spec.md) and [086](../../specs/086-post-incident-review-designer/post-incident-review-designer.spec.md).
 

@@ -114,15 +114,15 @@
 
 - [x] **T031** Read every file of the definition for text taken from the framework's publications and remove any (FR-011) · etalii.adp/definitions/diagrams/
 - [x] **T032** Trace every FR and SC of the specification to the file and string that carries it, or to the host's specification for SC-003 and SC-004, and record the trace at the end of this file · etalii.adp/specs/084-value-stream-map/tasks.md
-- [ ] **T033** Deliver pull request 2: run the checks, see the baseline's examples keep their result, open the pull request naming this folder, turn on auto-merge · etalii.adp
+- [x] **T033** Deliver pull request 2: run the checks, see the baseline's examples keep their result, open the pull request naming this folder, turn on auto-merge · etalii.adp
 
 ---
 
 ## Phase 10: The catalogue (pull request 3 and the Notion page)
 
-- [ ] **T034** [P] Add the row *Specified*, Diagram, *Value stream map*, `generic/value-stream-map` to the catalogue, and open its pull request with auto-merge (FR-012) · etalii.adp.ide.standalone/docs/tools.md
-- [ ] **T035** [P] Add the diagram's page to the Notion "Tools" database through an agent's own Notion connection: kind Diagram, state Specified, focus areas *Service management* and *Technology assessment* · Notion "Tools"
-- [ ] **T036** Tick T001 to T035 as their pull requests merge, and set the specification's status line · etalii.adp/specs/084-value-stream-map/
+- [x] **T034** [P] Add the row *Specified*, Diagram, *Value stream map*, `generic/value-stream-map` to the catalogue, and open its pull request with auto-merge (FR-012) · etalii.adp.ide.standalone/docs/tools.md
+- [x] **T035** [P] Add the diagram's page to the Notion "Tools" database through an agent's own Notion connection: kind Diagram, state Specified, focus areas *Service management* and *Technology assessment* · Notion "Tools"
+- [x] **T036** Tick T001 to T035 as their pull requests merge, and set the specification's status line · etalii.adp/specs/084-value-stream-map/
 
 ---
 
