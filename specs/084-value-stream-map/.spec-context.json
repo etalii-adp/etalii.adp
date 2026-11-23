@@ -1,0 +1,16 @@
+{
+  "workflow": "speckit",
+  "specName": "The Value Stream Map",
+  "branch": "claude/project-thread-cj29ch",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "extension",
+      "at": "2026-11-23T12:30:00.000Z"
+    }
+  ]
+}
