@@ -134,7 +134,7 @@ Each requirement names the inventory rows it closes. "As the fixture states" mea
 
 **The post-incident review designer**
 
-- **FR-009** (P1): VS Code **MUST** read DESL 0.4 and lay out the `sections` surface for every designer that declares it. That covers a page of record parts and list parts in the definition's order, a list's order, grouping, figures, marks and time strip, and the operations a part offers.
+- **FR-009** (P1): VS Code **MUST** read DESL 0.4 and lay out the `sections` surface wherever a definition declares it. That covers a page of record parts and list parts in the definition's order, a list's order, grouping, figures, marks and time strip, and the operations a part offers.
 - **FR-010** (P1): A review **MUST** be editable on that page: accepting and rejecting a factor, adding an entry, a factor, an action or an action for a factor, completing an action, and editing any field. Each **MUST** be one edit of the text document and one step of VS Code's undo.
 - **FR-011** (P2, P3): Every attribute **MUST** be read as the binding states: a `many` attribute as all its values, a mention as the elements it names, and a mapped value such as a milestone kind as its mapped value.
 
@@ -164,5 +164,5 @@ Each requirement names the inventory rows it closes. "As the fixture states" mea
 
 - The definitions are read as they are in etalii.adp at `c031e08`. A newer copy taken during the work is followed if it changes nothing this feature relies on.
 - Where VS Code meets something a definition or a fixture does not state, it follows the companion. Where the companion is silent, it raises an issue in etalii.adp and adds it to "Differences raised and not settled here". It does not settle it in VS Code.
-- The work lands in `etalii.adp.ide.vscode` in several pull requests, one tool at a time: the value stream map first (least new), the post-incident review designer next (DESL 0.4 `sections`, for every designer), the SLO map last (FBL up to 0.22, YAML streams, folders). Any correction to a definition lands in etalii.adp first.
+- The work lands in `etalii.adp.ide.vscode` in several pull requests, one tool at a time: the value stream map first (least new), the post-incident review designer next (DESL 0.4 `sections`, wherever a definition declares it), the SLO map last (FBL up to 0.22, YAML streams, folders). Any correction to a definition lands in etalii.adp first.
 - The host test, the new-user check and the screenshots are taken on the Mac mini, where VS Code runs.
