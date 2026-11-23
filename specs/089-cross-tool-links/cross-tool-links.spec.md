@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-23
 
-**Status**: Approved on 2026-11-23 (decision card "Approve as written"); plan written, tasks await approval
+**Status**: Approved on 2026-11-23 (decision card "Approve as written"); plan approved on 2026-11-23; tasks written, implementation not started
 
 **Input**: The maintainer, 2026-11-23: "specify a new way to link information between diagrams/designers and editors", shaped in the project thread on decision cards and in the maintainer's own words the same day. The rules for identifying documents and elements, the form of a link, and the four tool types that get links are the maintainer's, quoted under *The maintainer's rules*; the remaining choices were made on cards and are listed under *Decisions*.
 
