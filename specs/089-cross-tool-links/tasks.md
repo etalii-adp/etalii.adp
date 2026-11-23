@@ -154,6 +154,8 @@
 - [ ] **T060** [P] Apply T044's binding change to the served mind map binding · etalii.adp.ide.standalone/src/diagrams/mindmap/backend/EtAlii.Adp.Diagram.Mindmap/mindmap.fbl
 - [ ] **T061** [P] Apply T049's binding changes to the served timeline and dependency graph bindings · etalii.adp.ide.standalone/src/diagrams/timeline/backend/EtAlii.Adp.Diagram.Timeline/timeline.fbl, src/diagrams/dependency-graph/backend/EtAlii.Adp.Diagram.DependencyGraph/dependency-graph.fbl
 - [ ] **T062** Run standalone's four gates, open its pull request naming this feature's folder and the etalii.adp commit, turn on auto-merge · etalii.adp.ide.standalone
+
+> **Moved out (Peter's choice of 2026-11-23 on the decision card on the standalone bindings)**: T060 to T062 are not done in this feature. The standalone host's own FBL library reads neither `document.id` nor `{newid:document}`, and its bundled specifications have no linked types, so changing its three served bindings alone would break it. They go to a standalone links specification of their own, written when Peter asks for it; they stay unticked here and this feature is otherwise complete.
 - [x] **T063** Trace every FR and SC to the files and strings that satisfy it, read two traces back to their artefacts, and record the result in this file · etalii.adp/specs/089-cross-tool-links/tasks.md
 
 ---
