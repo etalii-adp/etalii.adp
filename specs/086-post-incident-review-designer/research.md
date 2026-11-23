@@ -20,6 +20,8 @@ Decisions taken while planning [post-incident-review-designer.spec.md](post-inci
 - **Rationale**: FR-002 in one line an agent can append; word slots and patterns of the `bullets` family read it (FBL 4.6, 4.8).
 - **Alternatives**: one sub-bullet per field (heavier to write and read).
 
+- **Amendment**: the maintainer chose on 2026-11-23 to write the time as RFC 3339 with its offset (`2026-11-03T10:12+01:00`), since DESL's `datetime` is RFC 3339 and a time strip places its rows at one (DESL 7.8.3); the review's zone then only says how times are shown.
+
 ## R4. Intervals are DESL expressions
 
 - **Decision**: time to detect (start → detection), to engage (detection → engagement), to mitigate (detection → mitigated) and to resolve (start → resolved) are computed by DESL functions (3.3) over the entries whose kind is the milestone, using `datetime` arithmetic in CEL. An interval whose milestone is missing is absent, with a finding naming the milestone; a second entry claiming a milestone has a finding and is ignored by the intervals.

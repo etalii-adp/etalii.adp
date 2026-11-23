@@ -24,13 +24,13 @@ The Markdown file a person, an agent and every host read and write. The binding 
 
 ## Timeline
 
-- E-0001 2026-11-03 09:58 trigger: Connection pool size lowered in a configuration change. by:agent [change](https://example.org/changes/481)
-- E-0002 2026-11-03 10:05 start: p95 latency of checkout passes 2 s. by:agent
-- E-0003 2026-11-03 10:12 detection: Latency alert fired. by:agent
-- E-0004 2026-11-03 10:20 engagement: On-call engineer acknowledged. by:person
-- E-0005 2026-11-03 10:41 mitigation start: Configuration change rolled back. by:person
-- E-0006 2026-11-03 11:02 mitigated: Latency back under 1 s. by:agent
-- E-0007 2026-11-03 11:30 resolved: Incident closed. by:person
+- E-0001 2026-11-03T09:58+01:00 trigger: Connection pool size lowered in a configuration change. by:agent [change](https://example.org/changes/481)
+- E-0002 2026-11-03T10:05+01:00 start: p95 latency of checkout passes 2 s. by:agent
+- E-0003 2026-11-03T10:12+01:00 detection: Latency alert fired. by:agent
+- E-0004 2026-11-03T10:20+01:00 engagement: On-call engineer acknowledged. by:person
+- E-0005 2026-11-03T10:41+01:00 mitigation start: Configuration change rolled back. by:person
+- E-0006 2026-11-03T11:02+01:00 mitigated: Latency back under 1 s. by:agent
+- E-0007 2026-11-03T11:30+01:00 resolved: Incident closed. by:person
 
 ## Contributing factors
 
@@ -56,6 +56,7 @@ The Markdown file a person, an agent and every host read and write. The binding 
 
 - Line 1 is the envelope and line 2 the last numbers; both are written by the designer and left alone by agents.
 - An agent writes a new entry, factor or action with `E-NEW`, `F-NEW` or `A-NEW`; the designer numbers it with its next write. A number is never reused.
+- A time is RFC 3339 with its offset or `Z`, the seconds optional (`2026-11-03T10:12+01:00`), kept as written; the review's time zone only says how it is shown (Peter's choice of 2026-11-23 on a decision card).
 - The milestone kinds are `trigger`, `start`, `detection`, `engagement`, `mitigation start`, `mitigated` and `resolved`. A line without a kind before the colon is an ordinary entry.
 - `by:agent` or `by:person` is required on entries and factors; a missing author is a finding.
 - A factor's `category:` names an item of `## Categories`; the list is the user's.
