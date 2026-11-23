@@ -108,7 +108,7 @@
 
 - [x] **T031** Check that no element type has an attribute for a person's fault (FR-009) and that the plain-text example reads as a review (quickstart step 5) · etalii.adp/definitions/designers/
 - [x] **T032** Trace every FR and SC to the file and string that carries it, or to the host's specification for SC-003 and SC-005; record the trace at the end of this file · etalii.adp/specs/086-post-incident-review-designer/tasks.md
-- [ ] **T033** Deliver pull request 3: run the checks, open it naming this folder, turn on auto-merge · etalii.adp
+- [x] **T033** Deliver pull request 3: run the checks, open it naming this folder, turn on auto-merge · etalii.adp
 
 ---
 
@@ -116,20 +116,22 @@
 
 **Goal**: counts per category across a folder (FR-010). **Independent test**: spec User Story 5. **First to cut** (R8).
 
-- [ ] **T034** [US5] Write `post-incident-review-overview.des`: origin `etalii/post-incident-review-overview`, one `sections` page with a list part of factors grouped by category, each row naming its review · etalii.adp/definitions/designers/post-incident-review-overview.des
-- [ ] **T035** [US5] Add the folder reading to the binding: `kind: "folder"`, a file rule `*.md` with the envelope marker, the rules' `origins` (FBL 5.1) · etalii.adp/definitions/designers/post-incident-review.fbl
-- [ ] **T036** [P] [US5] Write the folder fixture: five reviews, with the counts per category stated · etalii.adp/specifications/fbl/fixtures/post-incident-review-folder/
-- [ ] **T037** [US5] Write its tool description and trace, and its README row · etalii.adp/definitions/designers/
-- [ ] **T038** [US5] Plant a review without the envelope in the folder and an expected count that includes it; see the replay fail; restore · etalii.adp
-- [ ] **T039** Deliver pull request 4 with auto-merge · etalii.adp
+**Cut** by Peter's choice of 2026-11-23 on a decision card: FBL cannot read it today, since a folder's file rule has no marker and no `bullets` sections, and no slot gives a factor the file of its review. T034 to T039 are not built, and FR-010 and User Story 5 are not delivered.
+
+- [ ] **T034** *(cut)* [US5] Write `post-incident-review-overview.des`: origin `etalii/post-incident-review-overview`, one `sections` page with a list part of factors grouped by category, each row naming its review · etalii.adp/definitions/designers/post-incident-review-overview.des
+- [ ] **T035** *(cut)* [US5] Add the folder reading to the binding: `kind: "folder"`, a file rule `*.md` with the envelope marker, the rules' `origins` (FBL 5.1) · etalii.adp/definitions/designers/post-incident-review.fbl
+- [ ] **T036** *(cut)* [P] [US5] Write the folder fixture: five reviews, with the counts per category stated · etalii.adp/specifications/fbl/fixtures/post-incident-review-folder/
+- [ ] **T037** *(cut)* [US5] Write its tool description and trace, and its README row · etalii.adp/definitions/designers/
+- [ ] **T038** *(cut)* [US5] Plant a review without the envelope in the folder and an expected count that includes it; see the replay fail; restore · etalii.adp
+- [ ] **T039** *(cut)* Deliver pull request 4 with auto-merge · etalii.adp
 
 ---
 
 ## Phase 11: The catalogue (pull request 5 and the Notion page)
 
-- [ ] **T040** [P] Add the row *Specified*, Designer, *Post-incident review designer*, `etalii/post-incident-review` to the catalogue, and open its pull request with auto-merge (FR-013) · etalii.adp.ide.standalone/docs/tools.md
-- [ ] **T041** [P] Add the designer's page to the Notion "Tools" database through an agent's own Notion connection · Notion "Tools"
-- [ ] **T042** Tick the tasks as their pull requests merge, and set the specification's status line · etalii.adp/specs/086-post-incident-review-designer/
+- [x] **T040** [P] Add the row *Specified*, Designer, *Post-incident review designer*, `etalii/post-incident-review` to the catalogue, and open its pull request with auto-merge (FR-013) · etalii.adp.ide.standalone/docs/tools.md
+- [x] **T041** [P] Add the designer's page to the Notion "Tools" database through an agent's own Notion connection · Notion "Tools"
+- [x] **T042** Tick the tasks as their pull requests merge, and set the specification's status line · etalii.adp/specs/086-post-incident-review-designer/
 
 ---
 
