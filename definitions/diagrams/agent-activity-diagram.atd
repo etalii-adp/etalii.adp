@@ -253,6 +253,17 @@ diagram etalii/agent-activity-diagram version "0.1.0" {
     return own + ' cannot be joined to ' + words[to] + '. ' + own + ' is joined to ' + partners[from].map(p, words[p]).join(' or ') + '.'
   }
 
+  /// The tasks of a specification with the status `status`.
+  fn tasksIn(specification: Specification, status: string) -> int {
+    return size(specification.children.filter(t, t.isA('Task') && t.status == status))
+  }
+
+  /// The height a group of `rows` rows adds to its card: none without rows, else its heading of 22 and, unfolded, 18 per
+  /// row, as the module draws it.
+  fn groupHeight(rows: int, folded: bool) -> int {
+    return rows == 0 ? 0 : 22 + (folded ? 0 : 18 * rows)
+  }
+
   // ---------------------------------------------------------------- Constraints
 
   /// A file an agent wrote that breaks a rule still opens and draws; each breach is a finding where it is, and nothing
@@ -368,6 +379,9 @@ diagram etalii/agent-activity-diagram version "0.1.0" {
     phase: after
     set updated = env.now
   }
+
+  /// A status, kind or other choice given a value it does not have is refused in the module's words (DISL 0.11, 7.5).
+  message std.notAValue ('\'' + value + '\' is not one of the values this can have.')
 
   // ---------------------------------------------------------------- Operations
 
@@ -500,6 +514,10 @@ diagram etalii/agent-activity-diagram version "0.1.0" {
   }
 
   x-aad: {
+    /// The module's view element, its gestures on group headings and the archive switch (ATD §2.3, spec 087).
+    elements: { diagram: "diagram view" }
+    headings: { collapse: collapse-group, expand: expand-group }
+    filters: { show-archived: { archived: true }, hide-archived: { archived: false } }
     tools: {
       project: { drop: add-project }
       specification: { drop: add-specification }
