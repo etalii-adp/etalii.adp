@@ -1,0 +1,40 @@
+# Contract: What Each Language and Tool Type Declares
+
+## FBL 0.23
+
+- Binding: `document: { id: Slot }`: where the body keeps its document id (yaml/json: a root key; xml: a root attribute or, through a plugin, what its contract says).
+- Section 13: the link (13.1), the workspace and index (13.2), resolution (13.3), load-time validation (13.4), backlinks (13.5), findings (13.6).
+
+## DED 0.3
+
+- The envelope gains `id` (YAML/JSON key, XML root attribute), the document id of FBL 13.
+
+## DISL 0.12
+
+- `persistence.ids`: `nanoid` with `alphabet` and `length`; `persistence.documentId`: the same rule for the document id.
+- Attribute type `link`.
+- Element type `linkable: { nameProperty: AttrRef }`.
+- Element type `linked: { attribute: AttrRef, shows: [ { label, attribute } ] }`.
+- Action `{ "lookup": { "create": TypeRef, "as": "child" | "at", "types": [origin…]? } }`: opens the host's lookup over the workspace's linkable elements (of the listed origins, else all), and creates the element with its `link` set, in one transaction.
+- Appendix D.2, question 1: answered, pointing at FBL 13.
+
+## DESL 0.5
+
+- `persistence.ids`: `nanoid` with `alphabet` and `length`; `persistence.documentId`.
+- Value type `link`; a property of value type `relation` holds links, with `target` (a document link), `limit` and `backlinkName`.
+- The relation picker (standard): type-ahead over the target's linkable rows by their name property, chips, "create new row" (one step over two documents, DESL 5.4), `limit: one` replaces.
+- Element type `linkable: { nameProperty }`.
+- Section 3's cross-document reference: points at FBL 13.
+
+## ATD
+
+The same constructs in ATD's syntax (`link` type, `linkable { name … }`, `linked { attribute … shows … }`, action `lookup`, `document id { … }`), with their rows in ATD's mapping tables.
+
+## The four tool types
+
+| Tool type | Document id | Linkable (name property) | Holds links as |
+|---|---|---|---|
+| Knowledge designer | DED envelope `id` | Row (the title property) | Relation cells; relation `target` |
+| Mind map | root node attribute `adp-id` | Node (`text`) | Linked node: attribute `adp-link`, `TEXT` the cached name; `lookup` as child |
+| Timeline | top-level `id` | Event (`label`) | `LinkedEvent` in `elements` with `link`; `lookup` at the pointer |
+| Dependency graph | top-level `id` | Node (`label`) | `LinkedNode` in `elements` with `link`; `lookup` at the pointer |
