@@ -253,7 +253,7 @@ form step for Step {
   field name
   field activity { options: (diagram.nodesOfType('Activity').map(a, a.name)) }
   field practices { options: (diagram.nodesOfType('Practice').map(p, p.name)) }
-  field performer
+  field performers
   field processTime
   field waitTime
   field note
