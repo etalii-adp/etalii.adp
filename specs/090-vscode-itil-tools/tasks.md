@@ -50,11 +50,11 @@
 
 ## Phase 6: Documents and the catalogue (pull requests F and G)
 
-- [ ] T028 [P] `etalii.adp.ide.vscode/docs/tools.md`, `README.md`, `docs/disl-support.md` and `docs/parity.md` describe the three tools as built [FR-013]
-- [ ] T029 Host test on the Mac mini: each example in both themes, and a new user's attempt with each tool recorded (SC-004); a screenshot of each in `docs/screenshots/` [FR-013, SC-004]
-- [ ] T030 Open pull request F; turn auto-merge on
-- [ ] T031 [P] The VS Code state of the three tools in `etalii.adp.ide.standalone/docs/tools.md` (pull request G) and in the "VS Code" column of their Notion "Tools" pages [FR-014]
-- [ ] T032 Tick the merged tasks here, and set the specification's status, in pull request H
+- [x] T028 [P] `etalii.adp.ide.vscode/docs/tools.md`, `README.md`, `docs/disl-support.md` and `docs/parity.md` describe the three tools as built [FR-013]
+- [x] T029 Host test on the Mac mini: each example in both themes, and a new user's attempt with each tool recorded (SC-004); a screenshot of each in `docs/screenshots/` [FR-013, SC-004]
+- [x] T030 Open pull request F; turn auto-merge on
+- [x] T031 [P] The VS Code state of the three tools in `etalii.adp.ide.standalone/docs/tools.md` (pull request G) and in the "VS Code" column of their Notion "Tools" pages [FR-014]
+- [x] T032 Tick the merged tasks here, and set the specification's status, in pull request H
 
 ## Coverage
 

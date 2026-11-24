@@ -15,7 +15,7 @@ tags:
 
 **Created**: 2026-11-23
 
-**Status**: Approved 2026-11-23 (Peter, decision card "Approve, then build"); plan and tasks written
+**Status**: Implemented on 2026-11-24: all 32 tasks merged (etalii.adp.ide.vscode #85 to #98, etalii.adp.ide.standalone #826), host-tested in Visual Studio Code on the Mac mini ([record](https://github.com/etalii-adp/etalii.adp.ide.vscode/blob/develop/docs/host-tests/itil-tools.md)). Approved 2026-11-23 (Peter, decision card "Approve, then build")
 
 **Input**: Peter, 2026-11-23, in the thread that built specs 084, 085 and 086: "proceed with the implementation", then "VS Code please". The three service management tools that those specs defined, the value stream map, the SLO map and the post-incident review designer, are to work in the VS Code host.
 
