@@ -44,7 +44,7 @@ FlowPageData
 ├── source: string                     # the file name, for the footer
 ├── settings: { strength, delayLength, inertia, speed, density, heatmap }
 ├── variables: [ { id, label, x, y, start, push, external } ]   # model order
-├── links: [ { from, to, sign: 1|-1, delayed: bool, weight, note } ]   # model order; links naming no variable left out
+├── links: [ { from, to, sign: 1|-1, delayed: bool, weight, note, flipped: bool } ]   # model order; links naming no variable left out
 ├── loops: [ { id, name, kind: "R"|"B", members: [variable id] } ]       # declared, else found cycles
 └── omitted: int                        # statements left out of the page
 ```
@@ -53,6 +53,7 @@ FlowPageData
 - `external`: true when no link of the page points to the variable.
 - `sign`: `1` for positive; `-1` for negative; a link of unstated polarity is `1` and listed in `omitted`.
 - `weight`: the link's weight limited to 0 to 3, or 1 when it has none.
+- `flipped`: true when the link's curve is flipped; the page bows each link to the side the canvas does, left of its direction of travel, or right when flipped (FR-035 (h)).
 
 ## The page's run-time state (not persisted)
 
