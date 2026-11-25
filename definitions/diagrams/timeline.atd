@@ -13,7 +13,7 @@ atd 0.1
 /// counting days are this description's own functions over the text a time is written with (`readTime` and those it
 /// calls), where the DISL specification needed the `net.etalii.adp.generic.timelineTimes` plugin; the wire ids are
 /// declared under `x-timeline`, and the rest is in timeline.md beside this file.
-diagram generic/timeline version "1.2.1" {
+diagram generic/timeline version "1.2.2" {
   label "Timeline diagram"
   id: "net.etalii.adp.generic.timeline"
   authors: [{ name: "Peter Vrenken" }]
