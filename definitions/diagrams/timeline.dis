@@ -3,7 +3,7 @@
   "disl": "0.12",
   "language": {
     "id": "net.etalii.adp.generic.timeline",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "origin": "generic/timeline",
     "label": "Timeline diagram",
     "doc": {
@@ -23,7 +23,7 @@
     "fileExtension": "tml",
     "requires": {
       "conformance": "standard",
-      "features": ["axis.time", "placement.bound", "snap.calendar", "edge.bezier"]
+      "features": ["axis.time", "placement.bound", "snap.calendar", "edge.bezier", "label.editText"]
     }
   },
 
@@ -321,6 +321,7 @@
           {
             "id": "label",
             "text": { "cel": "shownLabel(self)" },
+            "editText": { "attribute": "label" },
             "position": "center",
             "editable": "inline",
             "overflow": "ellipsis",
@@ -363,6 +364,7 @@
           {
             "id": "label",
             "text": { "cel": "shownLabel(self)" },
+            "editText": { "attribute": "label" },
             "position": "outside-right",
             "editable": "inline",
             "wrap": "none"
