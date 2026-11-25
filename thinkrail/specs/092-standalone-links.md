@@ -2,7 +2,7 @@
 id: feature-092-standalone-links
 type: task-spec
 title: "092 Links Between Tools in the Standalone Host"
-status: draft
+status: active
 parent: specs-archive
 tags:
   - spec-kit
@@ -16,7 +16,7 @@ tags:
 
 **Created**: 2026-11-25
 
-**Status**: Draft, waiting for Peter's approval; plan and tasks are written only after it
+**Status**: Approved by Peter on 2026-11-25 (decision card "Approve as written"); plan and tasks written, implementation not started
 
 **Input**: Peter, 2026-11-25: "start that work please", on the coordinator's proposal to start the standalone links work that spec 089 moved out, so that the timeline and the dependency graph can link in VS Code and in the standalone host too. Spec 089 ([cross-tool-links.spec.md](../../specs/089-cross-tool-links/cross-tool-links.spec.md)) defines the link and the four tool types that hold it; its tasks T060 to T062, the standalone host's three served bindings, were moved to "a standalone links specification of their own" by Peter's choice of 2026-11-23 on the decision card on the standalone bindings (etalii.adp #822). This is that specification.
 
