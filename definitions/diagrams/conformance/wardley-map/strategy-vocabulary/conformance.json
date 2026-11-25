@@ -308,8 +308,8 @@
     {
       "move": {
         "element": "5mohg9hrrnhjw5t5bvksobqlo",
-        "x": 310.0,
-        "y": 400.0
+        "x": 301.0,
+        "y": 391.0
       },
       "doc": "The parity script's gesture: {\"refs\":[\"5mohg9hrrnhjw5t5bvksobqlo\"],\"to\":{\"x\":0.31,\"y\":0.4}}",
       "expectFile": "after-2.owm",
