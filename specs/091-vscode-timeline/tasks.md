@@ -52,8 +52,9 @@
 - [x] T028 [US3] What the replay shows of the `findings` fixture's codes, sentences and order, made to answer as it does, by the same rule (R8) [FR-014]
 - [x] T029 [P] `docs/tools.md`, `README.md` (a Timeline section and its commands), `CHANGELOG.md` (Unreleased), `docs/disl-support.md` and `docs/parity.md` describe the timeline as built [FR-018]
 - [x] T030 Open pull request G; turn auto-merge on
-- [ ] T031 Host test on the Mac mini: the four examples side by side with the standalone host in both themes (SC-001), `marvel-universe.tml` opened and timed, panned and zoomed (SC-004), and a new user's attempt from **New Timeline diagram** to three periods, a moment and a connection recorded (SC-005); the screenshot `docs/screenshots/timeline.png` in a last small VS Code pull request [FR-018, SC-001, SC-004, SC-005]
-- [ ] T032 Tick the merged tasks in this file, and set the specification's status to implemented, in pull request H
+- [x] T031 Host test on the Mac mini: the four examples side by side with the standalone host in both themes (SC-001), `marvel-universe.tml` opened and timed, panned and zoomed (SC-004), and a new user's attempt from **New Timeline diagram** to three periods, a moment and a connection recorded (SC-005); the screenshot `docs/screenshots/timeline.png` in a last small VS Code pull request [FR-018, SC-001, SC-004, SC-005]
+- [x] T032 Tick the merged tasks in this file, and set the specification's status to implemented, in pull request H
+  - Done: the host test ran three times on the Mac mini (vscode #121, #126, #132, #134). The fixes between the runs were vscode #122, #123, #125, #127 and #133, and etalii.adp #854 and #855. The third run passed and moved the timeline to Prototype in `docs/tools.md`. T003 stays open, as noted under it.
 
 ## Coverage
 
