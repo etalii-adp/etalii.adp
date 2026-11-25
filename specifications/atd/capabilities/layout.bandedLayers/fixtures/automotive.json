@@ -222,37 +222,58 @@
       {
         "id": "south-america",
         "width": 232.0,
-        "height": 156.0
+        "height": 156.0,
+        "attributes": {
+          "band": "south-america"
+        }
       },
       {
         "id": "central-africa",
         "width": 232.0,
-        "height": 156.0
+        "height": 156.0,
+        "attributes": {
+          "band": "central-africa"
+        }
       },
       {
         "id": "australia",
         "width": 232.0,
-        "height": 156.0
+        "height": 156.0,
+        "attributes": {
+          "band": "australia"
+        }
       },
       {
         "id": "southeast-asia",
         "width": 232.0,
-        "height": 156.0
+        "height": 156.0,
+        "attributes": {
+          "band": "southeast-asia"
+        }
       },
       {
         "id": "china",
         "width": 232.0,
-        "height": 156.0
+        "height": 156.0,
+        "attributes": {
+          "band": "china"
+        }
       },
       {
         "id": "east-asia",
         "width": 232.0,
-        "height": 156.0
+        "height": 156.0,
+        "attributes": {
+          "band": "east-asia"
+        }
       },
       {
         "id": "europe",
         "width": 232.0,
-        "height": 156.0
+        "height": 156.0,
+        "attributes": {
+          "band": "europe"
+        }
       }
     ],
     "edges": [
