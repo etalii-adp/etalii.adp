@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-24
 
-**Status**: Draft, awaiting Peter's approval before plan and tasks
+**Status**: Approved by Peter on 2026-11-25; planned, see [plan.md](plan.md) and [tasks.md](tasks.md)
 
 **Input**: Peter, 2026-11-24, asked for spec 089's links in the VS Code host ("implement this also in the VS Code host") and, on a decision card the same day, chose "Bring the timeline too" when told that VS Code has no timeline. The coordinator added that the Marvel examples of the standalone host (#827) come with it. The work follows the causal loop diagram's ([spec 081](../081-vscode-causal-loop-diagram/vscode-causal-loop-diagram.spec.md)) and the dependency graph's ([spec 088](../088-vscode-dependency-graph/vscode-dependency-graph.spec.md)): an inventory of the differences, each traced to a requirement, confirmed before anything is built.
 
