@@ -3,7 +3,7 @@
   "disl": "0.12",
   "language": {
     "id": "net.etalii.adp.generic.timeline",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "origin": "generic/timeline",
     "label": "Timeline diagram",
     "doc": {
@@ -23,7 +23,7 @@
     "fileExtension": "tml",
     "requires": {
       "conformance": "standard",
-      "features": ["axis.time", "placement.bound", "snap.calendar", "edge.bezier", "persist.yaml"]
+      "features": ["axis.time", "placement.bound", "snap.calendar", "edge.bezier"]
     }
   },
 

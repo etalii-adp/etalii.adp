@@ -13,7 +13,7 @@ atd 0.1
 /// counting days are this description's own functions over the text a time is written with (`readTime` and those it
 /// calls), where the DISL specification needed the `net.etalii.adp.generic.timelineTimes` plugin; the wire ids are
 /// declared under `x-timeline`, and the rest is in timeline.md beside this file.
-diagram generic/timeline version "1.2.0" {
+diagram generic/timeline version "1.2.1" {
   label "Timeline diagram"
   id: "net.etalii.adp.generic.timeline"
   authors: [{ name: "Peter Vrenken" }]
@@ -21,7 +21,7 @@ diagram generic/timeline version "1.2.0" {
   homepage: "https://github.com/etalii-adp/etalii.adp.ide.standalone/tree/develop/src/diagrams/timeline"
   icon: mdi-chart-timeline
   fileExtension: tml
-  requires: { conformance: standard, features: ["axis.time", "placement.bound", "snap.calendar", "edge.bezier", "persist.yaml"] }
+  requires: { conformance: standard, features: ["axis.time", "placement.bound", "snap.calendar", "edge.bezier"] }
   doc {
     rationale: "Distinct from a Gantt chart: placement is authored on both axes rather than computed, and connections are arbitrary rather than scheduling dependencies."
     tags: [timeline, roadmap, planning, periods, moments]
