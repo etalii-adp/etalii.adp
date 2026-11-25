@@ -1,0 +1,226 @@
+# Feature Specification: Links Between Tools in the Standalone Host
+
+**Feature Branch**: `claude/project-thread-2y63ay` (a cloud session's branch, in place of `features/092-standalone-links`)
+
+**Created**: 2026-11-25
+
+**Status**: Draft, waiting for Peter's approval; plan and tasks are written only after it
+
+**Input**: Peter, 2026-11-25: "start that work please", on the coordinator's proposal to start the standalone links work that spec 089 moved out, so that the timeline and the dependency graph can link in VS Code and in the standalone host too. Spec 089 ([cross-tool-links.spec.md](../089-cross-tool-links/cross-tool-links.spec.md)) defines the link and the four tool types that hold it; its tasks T060 to T062, the standalone host's three served bindings, were moved to "a standalone links specification of their own" by Peter's choice of 2026-11-23 on the decision card on the standalone bindings (etalii.adp #822). This is that specification.
+
+## Context
+
+**What exists.** Spec 089 states the link once, in FBL 0.23 section 17, with DISL 0.12, DESL 0.5 and DED 0.3 each adding their side, and gives four tool types links in their definitions: the Knowledge designer, the Mind map, the Timeline and the Dependency graph. Two hosts build it:
+
+- **The desktop host** (`etalii.adp.ide.desktop`) has links in all four tool types (desktop #187 to #192). Its timeline and dependency graph do not read the bindings their definitions name: they carry their own copies of the standalone bindings with spec 089's changes added, to be removed once the served bindings carry them.
+- **The VS Code host** has links in the Knowledge designer and the Mind map (vscode #104, #107, #111, #112, #113). Its timeline (spec 091) and dependency graph (spec 088) have none: VS Code copies each tool type's binding from the repository its definition names, and for those two that is the standalone host, whose bindings keep no document id and read no linked element (spec 091, row G1).
+
+**Why the standalone host is the blocker.** The definitions of three of the four tool types name a binding served from `etalii.adp.ide.standalone` (`persistence.binding` of `timeline.dis`, `dependency-graph.dis` and `mindmap.dis`). Spec 089 did not change those served files, because the standalone host itself would then break (spec 089, note under T062): its FBL library reads neither a binding's `document.id` nor `{newid:document}`, and its bundled definitions have no linked element types. Standalone #830, which re-bundled the timeline's definition for spec 091 (T003), was closed on 2026-11-25 for the same reason: the bundle brought spec 089's link expressions, which the standalone client cannot compile yet.
+
+**A first inventory** (2026-11-25; standalone `develop` at `dcd22bdf`, etalii.adp `develop` at `2f150406`, VS Code `develop` as fetched that day), from reading the standalone tree against spec 089's requirements:
+
+| Rows | What the standalone host has today | This feature |
+| --- | --- | --- |
+| A1 | The served bindings `timeline.fbl` and `dependency-graph.fbl` are FBL 0.5 and have no `document.id` and no rule for an `elements` entry with a `link` key; the served `mindmap.fbl` names the persistence plugin `net.etalii.adp.freeplane.mm` at `^0.1.0`, which reads neither `adp-id` nor `adp-link` | FR-001, FR-002 |
+| A2 | The host's FBL library reads no binding's `document.id` and offers no `{newid:document}` | FR-003 |
+| A3 | The bundled definitions are older than etalii.adp's: the timeline 1.1.0 (DISL 0.3) against 1.2.6 (DISL 0.12), the dependency graph 1.1.2 (DISL 0.10) against 1.2.0, the mind map 0.3.0 (DISL 0.3) against 0.4.0, the knowledge designer 0.1.0 (DESL 0.1) against 0.2.0 (DESL 0.5), so none of them declares a document id, a linkable type or a linked element type | FR-004, FR-005 |
+| A4 | The host's DISL and DESL readers and the client's expression compiler do not read DISL 0.12's `link` attribute type, `linkable`, `linked`, `persistence.documentId`, the `lookup` action and widget, nor `nanoid` with `alphabet` and `length` | FR-005, FR-006 |
+| B1 | No index of the workspace's documents and their linkable elements, so no link is resolved, no cached name refreshed and no finding of FBL 17.6 given | FR-007 to FR-011 |
+| B2 | No lookup: no context menu action that searches the workspace's elements and adds a linked element | FR-012, FR-013 |
+| B3 | No navigation from a linked element to its target in another document, and no "Linked from" | FR-014, FR-015 |
+| B4 | A delete says nothing of links that will break | FR-016 |
+| C1 | The Knowledge designer names a relation's target by a relative path (`target`) and holds row ids per cell; a two-way relation writes a counterpart property into the target file | FR-017 to FR-019 |
+| C2 | The relation cell's editor is not Notion's relation picker | FR-020 |
+| D1 | The VS Code host's timeline and dependency graph have no links, waiting on A1 | FR-021 |
+| D2 | The desktop host's timeline and dependency graph read their own copies of the bindings, waiting on A1 | FR-022 |
+| D3 | Standalone #830, spec 091's T003, waits on A3 and A4 | FR-004 |
+
+The plan completes the inventory by opening spec 089's worked workspace (`specifications/fbl/links-example/`) and replaying its conformance fixture (`specifications/fbl/fixtures/links-workspace/`) in the standalone host; any row it adds is traced to a requirement the same way.
+
+**Words.** As in spec 089: the **workspace**, the **consuming document**, the **target document** and **target element**, the **document id** and **element id**, the **linked element**, the **backlink** and the **lookup**. In the standalone host the workspace is the hierarchy root that holds the document (spec 089, *Assumptions*).
+
+### What this feature is not
+
+- **Not a change to the link.** The link, its escaping, its resolution, its findings and what each tool type declares are spec 089's and FBL 17's. Where the standalone host finds that a definition cannot state what it needs, that goes to etalii.adp as an issue, not into host code for one tool type.
+- **Not links for more tool types.** Exactly spec 089's four.
+- **Not other hosts.** IntelliJ, Eclipse, Notion, Claude and ThinkRail build links in specifications of their own. VS Code and desktop change here only as far as the served bindings make them (FR-021, FR-022).
+- **Not a new file format.** What a gesture writes is what spec 089's definitions and bindings say; a document written by the desktop host, VS Code or the standalone host is the same document.
+
+## User Scenarios & Testing *(mandatory)*
+
+### User Story 1 - The served bindings carry links without breaking anything (Priority: P1)
+
+A person who has used the standalone host's timelines, dependency graphs and mind maps for months updates it. Every file they have opens and edits as before. Files written by the desktop host or VS Code, with a document id and linked elements, open too.
+
+**Why this priority**: it unblocks VS Code's timeline and dependency graph links and the desktop host's clean-up, and it is the step spec 089 could not take alone.
+
+**Independent Test**: open every example and fixture of the four tool types that the standalone host carries, before and after, and compare what is drawn, the findings and the bytes an unchanged save writes; then open spec 089's worked workspace.
+
+**Acceptance Scenarios**:
+
+1. **Given** a timeline, dependency graph or mind map made before this feature, **When** it is opened, drawn and saved unchanged, **Then** it is drawn as before and written back byte for byte.
+2. **Given** a `.tml` or `.dgr` with a top-level `id` and an entry of `elements` with a `link` key, **When** it is opened, **Then** the linked entry is drawn as a linked element with its cached name and link mark, and no finding says that the binding or the definition is unsupported.
+3. **Given** a `.mm` whose central topic has an `adp-id` attribute and a node with `adp-link`, **When** it is opened, edited and saved, **Then** both attributes are kept and the node is drawn as a linked node.
+4. **Given** the served bindings after this feature, **When** VS Code copies them (`npm run sync-definitions`), **Then** they are the bindings spec 089 states for the timeline, the dependency graph and the mind map.
+
+---
+
+### User Story 2 - Add an element of another document (Priority: P1)
+
+In the standalone host, on a mind map node, or on an empty spot of a timeline or a dependency graph, a person chooses "Add from another document…", types part of a name, picks a knowledge row or a node of another graph, and gets a linked element there, which they can move, connect and delete as any other.
+
+**Why this priority**: it is spec 089's User Stories 1 and 4 in this host, and the reason links exist.
+
+**Independent Test**: in spec 089's worked workspace opened in the standalone host, add one linked element to each of the three diagrams through the context menu, save, reopen, and check each file against what the desktop host writes for the same steps.
+
+**Acceptance Scenarios**:
+
+1. **Given** a node of a mind map, **When** the person chooses the lookup action and picks an element, **Then** a linked child node is added in one undo step, and the file holds the link as FBL 17.1 writes it.
+2. **Given** an empty spot of a timeline or a dependency graph, **When** the person chooses the lookup action there, **Then** the picked element is added at that place as a linked element, in one undo step.
+3. **Given** the lookup, **When** the person types, **Then** it lists the linkable elements of the workspace's documents of the four tool types by name, each with its document's name and folder, the open document's own elements included.
+4. **Given** a linked element in a dependency graph, **When** it is connected to a node, **Then** the dependency is drawn and stored as any other.
+
+---
+
+### User Story 3 - Follow a link and see what links here (Priority: P1)
+
+A person activates a linked element's link and lands on the target, selected, in its own tool. On a knowledge row they open "Linked from" and see the mind maps, timelines and graphs that refer to it.
+
+**Why this priority**: navigation and backlinks are what make a link worth more than a copied name.
+
+**Independent Test**: link one knowledge row from a mind map, a timeline and a dependency graph; follow each link; open "Linked from" on the row and follow each entry back.
+
+**Acceptance Scenarios**:
+
+1. **Given** a linked element whose link resolves, **When** its link is activated, **Then** the target document opens in its tool, or comes to the front when it is open already, with the target element selected.
+2. **Given** an element that links of the workspace point at, **When** the person opens "Linked from", **Then** each consuming document and linked element is listed, and choosing one opens it with that element selected.
+3. **Given** such an element, **When** the person deletes it, **Then** the host says how many links will break before deleting.
+
+---
+
+### User Story 4 - Links survive moves, renames, copies and deletes (Priority: P2)
+
+A person renames and moves a knowledge file in the hierarchy, copies a dependency graph, deletes a row, and edits a link by hand into nonsense. The standalone host keeps the links that can be kept and says what is wrong with the rest.
+
+**Independent Test**: the cases of spec 089's resolution fixture, made in the standalone host's hierarchy.
+
+**Acceptance Scenarios**:
+
+1. **Given** a link whose target was renamed or moved within the workspace, **When** the consuming document is opened and edited, **Then** the link resolves by its document id and its document-name part and cached name are updated, in the same undo step as that first edit.
+2. **Given** two documents with the link's document id and name, **When** the consuming document is opened, **Then** `link.ambiguous-document` lists both by path, and choosing one gives the other a new document id.
+3. **Given** a link to a deleted element or document, or a link that does not follow the link form, **When** the consuming document is opened, **Then** the linked element shows its cached name with a broken mark, and the finding of FBL 17.6 is given at it with its fixes.
+
+---
+
+### User Story 5 - Knowledge relations become links, picked as in Notion (Priority: P2)
+
+A person opens a knowledge file from before links. It is converted once, and its relation cells are edited with a picker as Notion's: search as you type, chips, "create new row".
+
+**Independent Test**: open the standalone host's knowledge examples with relations, compare the (row, related row) pairs before and after, then add, remove and create a related row through the picker.
+
+**Acceptance Scenarios**:
+
+1. **Given** a knowledge file with relations by path, **When** it is opened for editing, **Then** it is converted to links as `knowledge.md` says under *Relations and the steps that write two files*, losing no related row, in one undo step with its first edit.
+2. **Given** a relation cell, **When** it is edited, **Then** the picker searches the target's rows by title, shows the cell's rows as removable chips, replaces the one row of a relation limited to one, and offers "create new row" when nothing matches, as one undo step over both files.
+3. **Given** a two-way relation, **When** its target is shown, **Then** the counterpart column is computed from the links that point at each row and is stored in no file.
+
+---
+
+### User Story 6 - A new user starts linking without a hurdle (Priority: P2)
+
+Someone who has never used links opens the standalone host on a fresh workspace with a knowledge file and a mind map and adds a link between them.
+
+**Independent Test**: a host test of the standalone host by a session that follows only what the host shows, timed, with every message and finding recorded.
+
+**Acceptance Scenarios**:
+
+1. **Given** a fresh workspace, **When** the person right-clicks a mind map node, **Then** "Add from another document…" is in the menu without any setting, and the lookup finds the knowledge file's rows.
+2. **Given** a document made before links, **When** it is merely opened, **Then** it is not marked as changed and no message asks the person to do anything.
+
+### Edge Cases
+
+- A document opened read-only: its links are resolved and shown, nothing is written, and the lookup and every edit are not offered.
+- A workspace of several hierarchy roots: a link resolves within the root that holds the consuming document.
+- A target that the host cannot read (a broken file, a file over the size the index reads): the link shows its cached name and the finding says why.
+- A target document open with unsaved changes: the link resolves against what the open document holds, not what is on disk.
+- A target changed in another program while the consuming document is open: the cached name and shown attributes follow once the change is read.
+- A mind map edited in Freeplane after linking: its `adp-id` and `adp-link` are kept, and its links still resolve.
+- A file written by the desktop host or VS Code: read and written by the standalone host with the same bytes for the same gestures.
+
+## Requirements *(mandatory)*
+
+### Functional Requirements
+
+Each requirement names the inventory rows it closes. "As spec 089 says" means as spec 089's requirements, FBL 0.23 section 17, DISL 0.12 section 4.12 and 9.4, DESL 0.5 and the four tool types' companions say.
+
+**The served bindings and the host's readers**
+
+- **FR-001** (A1): The standalone host's served `timeline.fbl` and `dependency-graph.fbl` **MUST** carry spec 089's change to the example bindings (T049): the top-level `id` as `document.id`, and the rule that reads an `elements` entry with a `link` key as the tool type's linked element type, with what else of the served binding differs from the example kept.
+- **FR-002** (A1): The served `mindmap.fbl` **MUST** name the persistence plugin `net.etalii.adp.freeplane.mm` at the version from which it reads and writes the central topic's `adp-id` and a node's `adp-link` (`mindmap.md` section 3.8), and the host's plugin **MUST** do so.
+- **FR-003** (A2): The host's FBL library **MUST** read a binding's `document.id` (FBL 17.2) and offer `{newid:document}`, and a document of a tool type that declares a document id and holds none **MUST** be given one with its first edit.
+- **FR-004** (A3, D3): The bundled definitions of the four tool types **MUST** be etalii.adp's at a recorded commit, as spec 089 left them or later, so that standalone #830's re-bundle of the timeline (spec 091, T003) is done by this feature.
+- **FR-005** (A3, A4): The host **MUST** read DISL 0.12's `link` attribute type, `linkable` with its `nameProperty`, `linked`, `persistence.documentId`, the `lookup` action and the `lookup` widget, and DESL 0.5's `link` value type and relation picker, for every tool type, not for the four alone.
+- **FR-006** (A4): New ids **MUST** be made as DISL 11.5 says for `nanoid` with `alphabet` and `length`; existing ids **MUST** be kept as written.
+
+**Resolution and load-time validation**
+
+- **FR-007** (B1): The host **MUST** keep an index of the documents under each hierarchy root whose tool type declares a document id: their ids, names, linkable elements by their name property, and the links they hold. It **MUST** follow files created, changed, renamed, moved and deleted in the hierarchy, and an open document's unsaved state.
+- **FR-008** (B1): Every link **MUST** be resolved as FBL 17.3 says, only within the hierarchy root that holds its consuming document.
+- **FR-009** (B1): The findings `link.malformed`, `link.broken-document`, `link.broken-element` and `link.ambiguous-document` **MUST** be given at the element that holds the link, in the host's problems list, with the fixes FBL 17.6 names.
+- **FR-010** (B1): What load-time validation (FBL 17.4) finds, a document id where there is none and each link part that differs from what resolution found, **MUST** be written with the document's first edit, in the same undo step, so that opening a document never marks it changed, as the desktop and VS Code hosts do.
+- **FR-011** (B1): While a consuming document is open, a linked element **MUST** show its target's current name and the attributes its type `shows`, following changes to the target; a link that does not resolve **MUST** show its cached name with the broken mark its definition draws.
+
+**The lookup, navigation and backlinks**
+
+- **FR-012** (B2): Where a definition offers the `lookup` action, the host **MUST** open one lookup shared by every tool type: a search by name as the person types over the linkable elements of the workspace's documents, each with its document's name and folder, narrowed to the action's `origins` when it names them.
+- **FR-013** (B2): Picking an element **MUST** run the action as DISL 9.4 says (`as: "child"` or `as: "at"`), in one undo step; dismissing the lookup **MUST** change nothing.
+- **FR-014** (B3): Activating a resolved link, from its link mark on the canvas and from the element's context menu, **MUST** open the target document in its tool, or bring it to the front, with the target element selected.
+- **FR-015** (B3): For a selected element that links of the workspace point at, the host **MUST** offer "Linked from" with their count, listing each consuming document and linked element, each navigable as FR-014; backlinks are computed, never stored.
+- **FR-016** (B4): Deleting an element that links point at **MUST** say how many links will break before it is done.
+
+**The Knowledge designer**
+
+- **FR-017** (C1): A knowledge relation **MUST** name its target document by a link without an element and hold a link per related row, as `knowledge.md` says under *Relations and the steps that write two files*.
+- **FR-018** (C1): A knowledge file with relations by path **MUST** be converted once, as `knowledge.md` says under *Relations and the steps that write two files*, with its first edit in a workspace and in the same undo step, losing no related row; a relation whose target has no document id **MUST** stay a path until it has one, and nothing **MUST** be written to another file by the conversion.
+- **FR-019** (C1): A two-way relation's counterpart **MUST** be computed from backlinks and stored in no target file.
+- **FR-020** (C2): A relation cell **MUST** be edited with a picker as Notion's relation picker (spec 089, FR-021): search of the target's rows by title as typed, chosen rows as removable chips, one row replacing another where the relation is limited to one, and "create new row" when nothing matches, written as one undo step over both files.
+
+**The other hosts**
+
+- **FR-021** (D1): The VS Code host **MUST** take the served timeline and dependency graph bindings of FR-001, and its timeline and dependency graph **MUST** then hold, show, resolve, add and follow links as its knowledge designer and mind map do, with what `docs/disl-support.md` records for them updated.
+- **FR-022** (D2): The desktop host's timeline and dependency graph **MUST** read the bindings their definitions name, its copies of the standalone bindings **MUST** be removed, and its conformance recordings **MUST** pass unchanged.
+
+**Checks**
+
+- **FR-023**: The standalone host **MUST** read spec 089's worked workspace and pass the cases of its resolution fixture, and every new finding or behaviour **MUST** have a guard seen to fail against the defect it guards (standalone `CLAUDE.md`, *Bugs found during implementation or verification*).
+- **FR-024**: The standalone host's `docs/tools.md` rows of the four tool types, and the documents `creating-a-diagram-module.md` and `creating-a-designer-module.md` where a touch point moves, **MUST** say what links they support.
+
+### Key Entities
+
+- **The served binding**: a tool type's binding file in `etalii.adp.ide.standalone`, named by `persistence.binding` in etalii.adp's definition and copied by other hosts.
+- **The bundled definition**: the copy of an etalii.adp definition inside a standalone module, recorded with its commit.
+- **The index**: per hierarchy root, the documents of tool types with a document id, their linkable elements and the links they hold; computed, never stored.
+- **Link, linked element, backlink, lookup**: as spec 089.
+
+## Success Criteria *(mandatory)*
+
+### Measurable Outcomes
+
+- **SC-001**: Every example and fixture of the four tool types that the standalone host carried before this feature opens with the same drawing and findings after it, and an unchanged save writes the same bytes: 100%.
+- **SC-002**: For every pair of the four tool types, an element of one can be linked from the other in the standalone host, saved, reopened and navigated by link and by backlink: 16 pairs, all passing (spec 089, SC-001, carried to this host).
+- **SC-003**: A document written by the desktop host for a sequence of link gestures, and the same gestures made in the standalone host, give the same bytes.
+- **SC-004**: After a target file is renamed and moved in the hierarchy, 100% of links to it resolve on the next opening of their consuming documents, with no action by the person.
+- **SC-005**: Converting the standalone host's knowledge examples loses no related row: the set of (row, related row) pairs before and after is equal.
+- **SC-006**: A person adds a linked element through the lookup in under 30 seconds in a workspace of 200 documents (spec 089, SC-005).
+- **SC-007**: A mind map with linked nodes opened and saved in Freeplane keeps every link and its document id (spec 089, SC-006).
+- **SC-008**: In VS Code, a timeline and a dependency graph each link to and from the knowledge designer and the mind map, in both directions, passing a host test that includes a new user's first link without an error or a hurdle.
+- **SC-009**: The desktop host has no copy of a standalone binding left, and its recordings of the timeline and dependency graph pass.
+- **SC-010**: No standalone host code names one of the four tool types for links: what is per tool type comes from its definition.
+
+## Assumptions
+
+- **Order of delivery.** The served bindings can change only once the standalone host reads them (A2 to A4), so the host's readers and bundled definitions come first and the served bindings with them; VS Code (FR-021) and desktop (FR-022) follow once those have merged. The lookup, navigation, backlinks and the knowledge designer's links then follow in any order. The plan sets the pull requests.
+- **Load-time writes with the first edit.** FBL 17.4 asks for stale link parts to be updated on load; like the desktop and VS Code hosts, the standalone host writes them with the first edit so that opening a file never makes it dirty (FR-010). A read-only document is never written.
+- **Where the work runs.** Standalone work runs as the project's memory says: in the Mac mini's standalone clone, one worktree per task, and in this cloud session where the four gates can run here.
+- **The desktop host is the reference for bytes.** Where spec 089 leaves a choice to a host, such as where in the menu the lookup stands, the standalone host follows the desktop host, which was built from it; a difference is recorded as an inventory row.
+- **The mind map plugin.** The standalone host's `net.etalii.adp.freeplane.mm` is the plugin spec 089 names; its new operations are those of `mindmap.md` section 3.8.
