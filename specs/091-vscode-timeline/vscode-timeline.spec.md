@@ -1,0 +1,156 @@
+# Feature Specification: The Timeline in VS Code, as the Standalone One
+
+**Feature Branch**: `features/091-vscode-timeline`
+
+**Created**: 2026-11-24
+
+**Status**: Draft, awaiting Peter's approval before plan and tasks
+
+**Input**: Peter, 2026-11-24, asked for spec 089's links in the VS Code host ("implement this also in the VS Code host") and, on a decision card the same day, chose "Bring the timeline too" when told that VS Code has no timeline. The coordinator added that the Marvel examples of the standalone host (#827) come with it. The work follows the causal loop diagram's ([spec 081](../081-vscode-causal-loop-diagram/vscode-causal-loop-diagram.spec.md)) and the dependency graph's ([spec 088](../088-vscode-dependency-graph/vscode-dependency-graph.spec.md)): an inventory of the differences, each traced to a requirement, confirmed before anything is built.
+
+## Context
+
+The timeline (`generic/timeline`, extension `.tml`) is defined in `definitions/diagrams/timeline.dis` and its companion `timeline.md`, with the binding `timeline.fbl` in `etalii.adp.ide.standalone`. The standalone host draws it from that definition with the code the companion lists, and the desktop host's recordings are kept as ATD conformance fixtures under `definitions/diagrams/conformance/timeline/`: `roadmap` (24 steps of gestures, properties, undo and redo), `add` (13 additions, two of them refused) and `findings`. The VS Code host (`etalii.adp.ide.vscode`) builds every tool type from its definition and has no timeline: none of its `definitions/` folders is this tool type.
+
+A first inventory (2026-11-24; standalone `develop` at `ce1dff51`, VS Code `develop` at `9dc206c` with spec 089's PR #113, etalii.adp `develop` at `aa2b6a7e`) copied the definition into VS Code on a scratch branch and opened `example-1/roadmap.tml`, `marvel-universe-overview.tml` and `marvel-universe.tml` through VS Code's own interpreter. The definition reads and the documents open, with the differences below. The plan completes the inventory by replaying the conformance fixtures, as spec 088 replayed its transcript.
+
+| Rows | Difference, standalone first | This feature |
+| --- | --- | --- |
+| A1 | A `.tml` opens with no warning that a part of the definition is unsupported. VS Code reports three features it does not support: `axis.time`, `snap.calendar` and `persist.yaml` | FR-001 |
+| A2 | A date such as `2025-04-27` is read as the text the file writes. VS Code reads it as a timestamp, so the definition's expressions that read a time fail and every element is reported with "could not be evaluated" (25 findings on `roadmap.tml`, 1,074 on `marvel-universe.tml`) | FR-003 |
+| A3 | The timeline's time functions (`readableTime`, `compareTimes`, `dateAfter`, `today`, `writtenEnd`) answer as the standalone module's `TimelineTimes` does | FR-004 |
+| B1 | Time runs left to right on a time axis of days, with a ruler that adapts its levels to the zoom; VS Code draws only an axis of years and months | FR-005, FR-006 |
+| B2 | A moment is drawn as a diamond; VS Code does not draw that shape | FR-007 |
+| B3 | A period is a bar from its begin to its end on its row, with its label, and a connection between any two elements with its label | FR-008 |
+| C1 | Dropping an element or a moment from the toolbox places it at the time and row of the drop, snapped to the calendar | FR-009, FR-010 |
+| C2 | Dragging an element moves it in time and between rows, snapped to the calendar; dragging a period's end changes its length | FR-010, FR-011 |
+| C3 | Arrange diagram assigns rows by the standalone module's row arrangement, in one undo step | FR-012 |
+| D1 | ADP Properties shows and accepts label, begin, end and row as the standalone host does, refusing what it refuses with its sentence | FR-013 |
+| E1 | The findings of the definition (an unreadable time, an end before its begin, a missing or duplicate id) are given as the standalone host gives them, in its order | FR-014 |
+| F1 | The examples: `example-1`, `example-2`, `marvel-universe` and `marvel-universe-overview` | FR-002 |
+| G1 | Linked elements (`LinkedPeriod`, `LinkedMoment`) and the lookup of spec 089 need the binding to keep a document id, which the standalone binding does not yet do (spec 089, T060 to T062, moved to a later spec by Peter on 2026-11-23) | Out of scope, see below |
+
+### What this feature is not
+
+- **Not a change to the standalone host.** It is the reference; nothing there changes, apart from taking a newer copy of the definition or the binding if a requirement changes it.
+- **Not a change to what a `.tml` file holds.** Every gesture writes what the standalone host writes for it, byte for byte.
+- **Not a host for one tool type.** What VS Code lacks of DISL here (a time axis of days, calendar snapping, a diamond, reading a YAML date as text) is built for every diagram it reads. What only this tool type needs is a plugin its definition names (`net.etalii.adp.generic.timelineTimes`, `net.etalii.adp.generic.timelineRowArrange`) or a row under "Code for one tool type" in VS Code's `docs/disl-support.md`, with its reason.
+- **Not links.** A timeline's linked elements and its lookup arrive with the later standalone links spec that updates the binding; until then a `.tml` that holds a linked element opens in VS Code as the standalone host opens it today.
+
+## User Scenarios & Testing *(mandatory)*
+
+### User Story 1 - Open a timeline and read it (Priority: P1)
+
+A person opens `roadmap.tml` or the Marvel universe in VS Code and sees what the standalone host shows: periods as bars and moments as diamonds on their rows along a time axis, connections between them with their labels, and a ruler that shows years, months or days as the zoom allows.
+
+**Why this priority**: Nothing else is of use until a file opens and draws.
+
+**Independent Test**: The four examples opened in both hosts, in the light and the dark theme, and the screenshots compared part by part against rows A1 to B3.
+
+**Acceptance Scenarios**:
+
+1. **Given** `example-1/roadmap.tml`, **When** it opens in VS Code, **Then** every element stands at its time and on its row, every connection is drawn, and the Problems panel shows no finding.
+2. **Given** `marvel-universe.tml` (over a thousand elements across nearly two thousand years), **When** it opens, **Then** it is drawn, fits to the window, and can be zoomed from centuries down to days.
+3. **Given** a moment, **When** it is drawn, **Then** it is a diamond at its time, with its label beside it.
+
+---
+
+### User Story 2 - Build a timeline with the toolbox and the mouse (Priority: P1)
+
+A person drops an Element and a Moment on the canvas and gets "New element", two weeks long, and "New moment" at the day and row of the drop; drags them in time and between rows; drags a period's end to lengthen it; connects two elements; and presses Arrange diagram to have the rows sorted out.
+
+**Why this priority**: It is how a timeline is made; a viewer alone is not the tool Peter has in the standalone host.
+
+**Independent Test**: The conformance fixtures' steps made in VS Code on the same files write the same bytes and are one step of VS Code's undo each.
+
+**Acceptance Scenarios**:
+
+1. **Given** the toolbox, **When** Element is dropped, **Then** the file gains a period labelled "New element" whose begin is the day of the drop and whose end is 14 days later, on the row of the drop.
+2. **Given** a period, **When** it is dragged three days later and one row down, **Then** its begin and end move by three days and its row by one, in one undo step.
+3. **Given** overlapping elements on one row, **When** Arrange diagram is run, **Then** only rows change, as the standalone host changes them, in one undo step.
+
+---
+
+### User Story 3 - Correct times and see what is wrong (Priority: P2)
+
+A person selects an element and types a new begin, end or row in ADP Properties, and editing a `.tml` by hand sees in the Problems panel the findings the standalone host gives: a time it cannot read, an end before its begin, an id missing or held twice.
+
+**Why this priority**: The property rows are the precise way to set a time, and the findings keep a hand-written file honest.
+
+**Independent Test**: The `findings` fixture and the property steps of the `roadmap` fixture, compared with what VS Code gives.
+
+**Acceptance Scenarios**:
+
+1. **Given** an element, **When** its begin is set to a time the timeline cannot read, **Then** it is refused with the standalone host's sentence and nothing changes.
+2. **Given** the `findings` fixture, **When** it opens, **Then** the Problems panel lists the fixture's findings, in its order.
+
+### Edge Cases
+
+- A time written with a time of day (`2025-04-27T09:30`), or a date before the year 1000 (`0079-08-24`, as the Marvel universe has): read and drawn at that time.
+- An element without an end is a moment; one whose end equals its begin is drawn as the standalone host draws it.
+- An empty file, or one whose root is not a mapping: it opens as an empty timeline, and adding is refused with the binding's sentence.
+- A file that is not YAML: it opens, the canvas says it is unavailable, the Problems panel has one error, and every edit is refused.
+- A file opened read-only: no toolbox, no handles and no menu entries that edit.
+
+## Requirements *(mandatory)*
+
+### Functional Requirements
+
+Each requirement names the inventory rows it closes. "As the standalone host does" means as the standalone module `src/diagrams/timeline/` on `develop` at `ce1dff51` does, which the conformance fixtures under `definitions/diagrams/conformance/timeline/` record.
+
+**Opening and reading**
+
+- **FR-001** (A1): A `.tml` file **MUST** open in the timeline in VS Code with no finding that a feature of the definition is unsupported, and **New Timeline diagram** **MUST** create the binding's template.
+- **FR-002** (F1): VS Code's examples **MUST** include the standalone host's `example-1`, `example-2`, `marvel-universe` and `marvel-universe-overview`, copied byte for byte with their readmes and registrations, and VS Code's example tests **MUST** open each of them.
+- **FR-003** (A2): A time **MUST** be read as the text the file writes, whatever YAML would make of it, so that every expression of the definition that reads a time evaluates.
+- **FR-004** (A3): The timeline's time functions **MUST** answer as the standalone module's do, for every time the conformance fixtures and the examples hold.
+
+**The drawing**
+
+- **FR-005** (B1): Time **MUST** run left to right on an axis of days, at the definition's scale, with no time zone, calendar or working days.
+- **FR-006** (B1): The ruler **MUST** show the levels the standalone host shows at each zoom, never finer than a day.
+- **FR-007** (B2): A moment **MUST** be drawn as a diamond at its time, in the standalone host's size and colours, in both themes.
+- **FR-008** (B3): A period **MUST** be drawn as a bar from its begin to its end on its row, and a connection between any two elements with its label, as the standalone host draws them, in both themes.
+
+**Gestures**
+
+- **FR-009** (C1): Dropping an Element or a Moment **MUST** create it as the toolbox states, at the day and row of the drop, as one undo step.
+- **FR-010** (C1, C2): A drop and a drag **MUST** snap to the calendar as the definition's snapping states.
+- **FR-011** (C2): Dragging an element **MUST** move its begin, its end where it has one, and its row, and dragging a period's end **MUST** change its end alone, each as one undo step writing what the standalone host writes.
+- **FR-012** (C3): Arrange diagram **MUST** write the rows the standalone module's row arrangement writes, and nothing else, as one undo step.
+
+**ADP Properties and findings**
+
+- **FR-013** (D1): Label, begin, end and row **MUST** be shown, accepted and refused in ADP Properties as the standalone host does, with its sentences.
+- **FR-014** (E1): The definition's findings **MUST** be given with its codes and sentences, in the standalone host's order.
+
+**Throughout**
+
+- **FR-015**: Every gesture **MUST** be one edit of the text document and one step of VS Code's undo, leaving every byte it does not concern as it was; a refused gesture **MUST** change nothing and show its reason.
+- **FR-016**: What VS Code builds here of DISL **MUST** serve every diagram it reads and name no tool type; what only this tool type needs **MUST** be a plugin its definition names or a row under "Code for one tool type" in VS Code's `docs/disl-support.md`.
+- **FR-017**: VS Code **MUST** hold its timeline to the conformance fixtures `roadmap`, `add` and `findings`, in a test that runs in its build, apart from what its parity record lists with its reason.
+- **FR-018**: VS Code's `docs/tools.md`, `README.md`, `CHANGELOG.md`, `docs/disl-support.md` and `docs/parity.md` **MUST** describe the timeline as built, in the change that builds it, and a screenshot of it **MUST** be added.
+
+### Key Entities
+
+- **Period**: something with a begin and an end, on a row, with a label.
+- **Moment**: a single point in time, on a row, with a label.
+- **Connection**: a relation between any two elements, meaning what its label says.
+- **Conformance fixture**: a recorded run of the timeline over a document: what reading it gives, what it draws, and the bytes each step writes.
+
+## Success Criteria *(mandatory)*
+
+### Measurable Outcomes
+
+- **SC-001**: Of the inventory rows A1 to F1, all are closed: a side-by-side check of the four examples in both hosts, in both themes, finds none of them again.
+- **SC-002**: Every step of the `roadmap` and `add` fixtures made in VS Code writes the fixture's bytes, and the `findings` fixture gives its findings, apart from what VS Code's parity record lists with its reason.
+- **SC-003**: The definition reads in VS Code with no finding that a part of it is unsupported, and every expression in it evaluates for every element of the four examples.
+- **SC-004**: `marvel-universe.tml` opens and is drawn in VS Code in under three seconds on the Mac mini, and panning and zooming it stay smooth.
+- **SC-005**: A person new to the tool can go from **New Timeline diagram** to three periods, a moment and a connection in under two minutes with no error, no dead end and no step that needs the documentation; the host test records the attempt.
+- **SC-006**: No part of VS Code's shared DISL support built for this feature names a tool type, an element type or an attribute of the timeline, as VS Code's existing word check holds.
+
+## Assumptions
+
+- The standalone host on `develop` at `ce1dff51` and the conformance fixtures in etalii.adp are the reference. Where the standalone host and the definition disagree, the standalone host's behaviour is followed and the difference is raised as an issue in etalii.adp, as for specs 081 and 088.
+- The binding is taken from the standalone host as it is; when the later standalone links spec gives it a document id, VS Code takes the newer copy and the timeline's links follow in that work, not in this one.
+- The work lands in `etalii.adp.ide.vscode` in a few pull requests: reading and the time functions, the drawing, gestures and Arrange diagram, properties and findings, and the conformance test with the examples. The side-by-side check and the screenshot are taken on the Mac mini.

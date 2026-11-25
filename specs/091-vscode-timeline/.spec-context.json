@@ -1,0 +1,17 @@
+{
+  "workflow": "companion",
+  "specName": "091-vscode-timeline",
+  "branch": "091-vscode-timeline",
+  "selectedAt": "2026-11-24T23:20:00.000Z",
+  "currentStep": "specify",
+  "status": "specified",
+  "history": [
+    {
+      "step": "specify",
+      "substep": null,
+      "kind": "complete",
+      "by": "ai",
+      "at": "2026-11-24T23:20:00.000Z"
+    }
+  ]
+}
