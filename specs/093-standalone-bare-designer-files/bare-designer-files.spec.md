@@ -59,7 +59,7 @@ The copied file is a table of the project like any other: other knowledge files 
 
 ### User Story 3 - Any designer whose binding has a marker (Priority: P3)
 
-What holds for the knowledge designer holds for every designer type whose binding declares a marker, now and when one is added, without a change to the host for that type.
+What holds for the knowledge designer holds for any designer type whose binding declares a marker, now and when such a type is added, without a change to the host for that type.
 
 **Why this priority**: the next designer type with a shared extension would otherwise meet the same hurdle.
 
@@ -84,7 +84,7 @@ What holds for the knowledge designer holds for every designer type whose bindin
 
 ### Functional Requirements
 
-- **FR-001** (A1): When a file that is not a registration is opened, the standalone host **MUST** route it as FBL 12.3 says, with every installed designer type's bindings among the candidates: a binding whose `extensions` or `names` take the file and, for a `shared` claim, whose `marker` matches (FBL 12.2).
+- **FR-001** (A1): When a file that is not a registration is opened, the standalone host **MUST** route it as FBL 12.3 says, with the bindings of each installed designer type among the candidates: a binding whose `extensions` or `names` take the file and, for a `shared` claim, whose `marker` matches (FBL 12.2).
 - **FR-002** (A1): A file with a single candidate **MUST** open in that designer type, with what it shows, its edits, its undo and its findings the same as for the same file opened through a registration. Opening it **MUST NOT** write a registration or any other file; a registration is written only as the binding's `registration` says (FBL 8.4).
 - **FR-003** (A2): Which designer types claim a file **MUST** come from their bindings' `claims` as the bundled definitions declare them; the host **MUST NOT** hold a claim, an extension, a marker or a tool type's name in code for one designer type. The hierarchical requirement designer's present claim is read the same way, and keeps opening the same files.
 - **FR-004** (A3): A file so routed **MUST** be the designer type's document everywhere the host knows documents: the hierarchy shows it with its tool type, the workspace's index of links holds it (spec 092, FR-007), a knowledge relation's targets and a lookup offer it, and a change to it on disk is followed as for a file with a registration.
