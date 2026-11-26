@@ -10,7 +10,7 @@
 
 - [x] T001 [US1] In `etalii.adp/definitions/diagrams/timeline.dis`, drop `persist.yaml` from `language.requires.features` and raise `language.version` to 1.2.1 (R1); `python .github/scripts/validate-examples.py` passes [FR-001]
 - [x] T002 [US1] Open pull request B, saying that the timeline's conformance fixtures may need re-recording by the ATD thread; turn auto-merge on. Note on issue #788 that the timeline's part is closed by it
-- [ ] T003 [US1] Once B has merged, re-bundle `etalii.adp.ide.standalone/src/diagrams/timeline/definition/` with `bash src/diagrams/tools/bundle-disl.sh timeline <etalii.adp at develop>`, run the module's tests, and open pull request C with auto-merge on [FR-001]
+- [x] T003 [US1] Once B has merged, re-bundle `etalii.adp.ide.standalone/src/diagrams/timeline/definition/` with `bash src/diagrams/tools/bundle-disl.sh timeline <etalii.adp at develop>`, run the module's tests, and open pull request C with auto-merge on [FR-001]
   - Not done: standalone #830 re-bundled the definition, and the bundle also brought spec 089's link expressions, which the standalone client cannot compile yet. It was closed on 2026-11-25 and waits for the standalone links spec (spec 089, T060 to T062).
 
 ## Phase 2: Open and read (pull request D, User Story 1)
@@ -54,7 +54,7 @@
 - [x] T030 Open pull request G; turn auto-merge on
 - [x] T031 Host test on the Mac mini: the four examples side by side with the standalone host in both themes (SC-001), `marvel-universe.tml` opened and timed, panned and zoomed (SC-004), and a new user's attempt from **New Timeline diagram** to three periods, a moment and a connection recorded (SC-005); the screenshot `docs/screenshots/timeline.png` in a last small VS Code pull request [FR-018, SC-001, SC-004, SC-005]
 - [x] T032 Tick the merged tasks in this file, and set the specification's status to implemented, in pull request H
-  - Done: the host test ran three times on the Mac mini (vscode #121, #126, #132, #134). The fixes between the runs were vscode #122, #123, #125, #127 and #133, and etalii.adp #854 and #855. The third run passed and moved the timeline to Prototype in `docs/tools.md`. T003 stays open, as noted under it.
+  - Done: the host test ran three times on the Mac mini (vscode #121, #126, #132, #134). The fixes between the runs were vscode #122, #123, #125, #127 and #133, and etalii.adp #854 and #855. The third run passed and moved the timeline to Prototype in `docs/tools.md`. T003 was done by spec 092's re-bundle (its T007, etalii.adp.ide.standalone #831) and is ticked with it.
 
 ## Coverage
 
