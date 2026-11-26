@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-25
 
-**Status**: Approved by Peter on 2026-11-25 (decision card "Approve as written"); plan and tasks written, implementation not started
+**Status**: Approved by Peter on 2026-11-25 (decision card "Approve as written"); plan and tasks written, implementation not started. Amended for FR-025 (a knowledge relation whose target is a diagram), on Peter's choice "Extend knowledge relations" of 2026-11-26 on the decision card "Should a knowledge row be able to link to a diagram element?"; revised on his choice "Also allow Create in diagrams" of 2026-11-26 18:56 UTC, so that "Create" adds an element to a target diagram too; the revised amendment awaits his approval
 
 **Input**: Peter, 2026-11-25: "start that work please", on the coordinator's proposal to start the standalone links work that spec 089 moved out, so that the timeline and the dependency graph can link in VS Code and in the standalone host too. Spec 089 ([cross-tool-links.spec.md](../089-cross-tool-links/cross-tool-links.spec.md)) defines the link and the four tool types that hold it; its tasks T060 to T062, the standalone host's three served bindings, were moved to "a standalone links specification of their own" by Peter's choice of 2026-11-23 on the decision card on the standalone bindings (etalii.adp #822). This is that specification.
 
@@ -31,6 +31,7 @@
 | B4 | A delete says nothing of links that will break | FR-016 |
 | C1 | The Knowledge designer names a relation's target by a relative path (`target`) and holds row ids per cell; a two-way relation writes a counterpart property into the target file | FR-017 to FR-019 |
 | C2 | The relation cell's editor is not Notion's relation picker | FR-020 |
+| C3 | A knowledge relation's target can only be another knowledge file, so a knowledge row cannot link to an element of a timeline, a dependency graph or a mind map, and SC-002's pairs from the knowledge designer to those three cannot pass (found by T034 and T035, 2026-11-26) | FR-025 |
 | D1 | The VS Code host's timeline and dependency graph have no links, waiting on A1 | FR-021 |
 | D2 | The desktop host's timeline and dependency graph read their own copies of the bindings, waiting on A1 | FR-022 |
 | D3 | Standalone #830, spec 091's T003, waits on A3 and A4 | FR-004 |
@@ -123,6 +124,7 @@ A person opens a knowledge file from before links. It is converted once, and its
 1. **Given** a knowledge file with relations by path, **When** it is opened for editing, **Then** it is converted to links as `knowledge.md` says under *Relations and the steps that write two files*, losing no related row, in one undo step with its first edit.
 2. **Given** a relation cell, **When** it is edited, **Then** the picker searches the target's rows by title, shows the cell's rows as removable chips, replaces the one row of a relation limited to one, and offers "create new row" when nothing matches, as one undo step over both files.
 3. **Given** a two-way relation, **When** its target is shown, **Then** the counterpart column is computed from the links that point at each row and is stored in no file.
+4. **Given** a timeline, a dependency graph or a mind map with a document id, **When** a relation is created with that document as its target and a cell of it is edited, **Then** the picker searches that document's linkable elements by name, the chosen elements are links in the cell, "Create" adds a new element of that name to the diagram and links it in one undo step over both files, and activating one opens the diagram with that element selected; the element's "Linked from" lists the row.
 
 ---
 
@@ -184,6 +186,7 @@ Each requirement names the inventory rows it closes. "As spec 089 says" means as
 - **FR-018** (C1): A knowledge file with relations by path **MUST** be converted once, as `knowledge.md` says under *Relations and the steps that write two files*, with its first edit in a workspace and in the same undo step, losing no related row; a relation whose target has no document id **MUST** stay a path until it has one, and nothing **MUST** be written to another file by the conversion.
 - **FR-019** (C1): A two-way relation's counterpart **MUST** be computed from backlinks and stored in no target file.
 - **FR-020** (C2): A relation cell **MUST** be edited with a picker as Notion's relation picker (spec 089, FR-021): search of the target's rows by title as typed, chosen rows as removable chips, one row replacing another where the relation is limited to one, and "create new row" when nothing matches, written as one undo step over both files.
+- **FR-025** (C3): A knowledge relation's target **MUST** be able to be a document of any tool type whose definition declares a linkable element type, not only a knowledge file, as `knowledge.md` says under *Relations and the steps that write two files*: its cells hold links to that document's elements, named by their name property, the picker searches those elements by name, and the links resolve, show their target's current name, navigate and count as backlinks as every other link does. When nothing matches, "Create" adds an element with the typed name to the target diagram, of its linkable element type (the person picks the type where the definition declares several), placed where the tool type places an element added without a position, and the link to it to the cell, as one undo step over both files (Peter's choice "Also allow Create in diagrams", 2026-11-26). `backlinkName` applies only to a knowledge target, since a diagram has no column to show it in. Every host of the knowledge designer (standalone, desktop and VS Code) **MUST** do so.
 
 **The other hosts**
 
@@ -207,7 +210,7 @@ Each requirement names the inventory rows it closes. "As spec 089 says" means as
 ### Measurable Outcomes
 
 - **SC-001**: Every example and fixture of the four tool types that the standalone host carried before this feature opens with the same drawing and findings after it, and an unchanged save writes the same bytes: 100%.
-- **SC-002**: For every pair of the four tool types, an element of one can be linked from the other in the standalone host, saved, reopened and navigated by link and by backlink: 16 pairs, all passing (spec 089, SC-001, carried to this host).
+- **SC-002**: For every pair of the four tool types, an element of one can be linked from the other in the standalone host, saved, reopened and navigated by link and by backlink: 16 pairs, all passing (spec 089, SC-001, carried to this host); the three pairs from the knowledge designer to a diagram pass through FR-025.
 - **SC-003**: A document written by the desktop host for a sequence of link gestures, and the same gestures made in the standalone host, give the same bytes.
 - **SC-004**: After a target file is renamed and moved in the hierarchy, 100% of links to it resolve on the next opening of their consuming documents, with no action by the person.
 - **SC-005**: Converting the standalone host's knowledge examples loses no related row: the set of (row, related row) pairs before and after is equal.
