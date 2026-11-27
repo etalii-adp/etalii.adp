@@ -12,7 +12,7 @@ const MENUS={
  Help:[{l:'Getting Started'},{l:'Keyboard Shortcuts'},{l:'About ADP 2026.3'}]};
 function resetLayout(){const[d,a]=JSON.parse(DOCK0);S.dock=d;S.act=a;['left','right','bottom'].forEach(k=>{$('#dock-'+k).style.width='';$('#dock-'+k).style.height=''});layout()}
 function flip(){const x=S.doc;if(x.pseudo)return;S.dm[x.id]=dmode(x)==='canvas'?'editor':'canvas';S.insp=null;renderEditor();renderProps()}
-function pull(){if(!S.behind)return toast('develop is up to date with origin/develop');COMMITS.forEach(cm=>cm.p=cm.p.map(i=>i+1));for(const k in HEADS)HEADS[k]++;COMMITS.unshift({h:'m'+id36(String(Date.now())),l:0,p:[1,HEADS['origin/develop']],m:"Merge remote-tracking branch 'origin/develop' into develop",a:'Sam Rivera',w:'Just now',d:0});HEADS.develop=0;const nb=S.behind;S.behind=0;S.ahead++;renderGit();renderTitle();renderStatus();toast(`Merged ${nb} incoming commits into develop`)}
+function pull(){if(!S.behind)return toast('develop is up to date with origin/develop');COMMITS.forEach(cm=>cm.p=cm.p.map(i=>i+1));for(const k in HEADS)HEADS[k]++;COMMITS.unshift({h:gitHash(),l:0,p:[1,HEADS['origin/develop']],m:"Merge remote-tracking branch 'origin/develop' into develop",a:'Sam Rivera',w:'Just now',d:0});HEADS.develop=0;const nb=S.behind;S.behind=0;S.ahead++;renderGit();renderTitle();renderStatus();toast(`Merged ${nb} incoming commits into develop`)}
 function push(){if(!S.ahead)return toast('Nothing to push');const na=S.ahead;if(S.behind)return toast('Update the project first: origin/develop has '+S.behind+' commits you do not have.','Update',pull);HEADS['origin/develop']=HEADS.develop;S.ahead=0;renderGit();renderTitle();renderStatus();toast(`Pushed ${na} commits to origin/develop`)}
 function renderTitle(){
   $('#w-branch').innerHTML=`${ico('branch','c-muted')}<span>develop</span>`;
@@ -39,5 +39,5 @@ function renderStatus(){const x=S.sel,er=PROBLEMS.filter(p=>p.s==='error').lengt
    <span class="st hide-s">${ico('link')}${find('Components').children.filter(k=>k.link).length} linked repositories</span>
    <span class="st hide-s"><span class="led"></span>Staging healthy</span>
    <button class="st" data-tw="git" title="Open Git">${ico('branch')}develop ${S.behind?'↓'+S.behind:''} ${S.ahead?'↑'+S.ahead:''}</button>
-   <span class="st hide-s">Fetched 4 min ago</span><span class="st hide-s">Example data</span>`}
+   <span class="st hide-s">Fetched 4 min ago</span>`}
 addEventListener('keydown',e=>{if(e.altKey&&e.key.toLowerCase()==='c'){e.preventDefault();flip()}});

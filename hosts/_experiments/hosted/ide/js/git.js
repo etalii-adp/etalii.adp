@@ -1,6 +1,10 @@
 /* The Git tool window: branch tree, commit graph with filters, commit details. */
 'use strict';
 
+/* a commit hash as git abbreviates it, seven hex digits: one made from a text, and a new one */
+const gitHashOf=s=>{let h=2166136261;for(const ch of s)h=Math.imul(h^ch.codePointAt(0),16777619);return(h>>>0).toString(16).padStart(8,'0').slice(0,7)};
+const gitHash=()=>gitHashOf(Math.random()+'/'+Date.now());
+
 const reach=i=>{const s=new Set();(function go(j){if(s.has(j)||!COMMITS[j])return;s.add(j);COMMITS[j].p.forEach(go)})(i);return s};
 const LC=['blue','green','orange'];
 function renderGit(){

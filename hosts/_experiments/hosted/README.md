@@ -19,6 +19,7 @@ The pages follow one another as they would in use: the start page leads to the l
 
 - The layout follows the JetBrains New UI: a title bar with menus and the update and push widgets, tool-window stripes, three docks whose panels can be moved, and a status bar.
 - Everything in a solution is one hierarchy, shown in the Explorer. The root is a git repository, and repositories from outside the project can be linked in at any level, each following a branch or a tag.
+- Every item has an id that stays the same when the item is renamed or moved: a ShortGuid as the other ADP hosts make one, a UUID written as its 128-bit value in lowercase base 36, 25 characters long. It is in the Properties, the status bar and the item's `.adp` file.
 - Every level has two views, Logical Structure and File System, set per level and kept in that level's `.adp` file, with personal overrides in `.user.adp`.
 - The document area opens an item in its tool (a diagram, a designer or an editor) and switches to Canvas, an infinite plane with a card per child item that can be walked level by level, in step with the Explorer.
 - The context menu adds, renames and deletes items, with what is offered depending on the item.
