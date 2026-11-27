@@ -1,7 +1,6 @@
 /* The login page. */
 
-.lg-wrap{flex:1;display:grid;place-items:center;overflow:auto;padding:24px 16px;background-color:var(--editor);background-image:radial-gradient(var(--grid) 1px,transparent 1px);background-size:24px 24px}
-.lg{width:min(360px,100%);background:var(--bg);border:1px solid var(--popb);border-radius:10px;box-shadow:var(--shadow);padding:28px 28px 20px;display:flex;flex-direction:column;gap:6px}
+.lg{width:min(360px,100%);padding:28px 28px 20px;display:flex;flex-direction:column;gap:6px}
 .lg-home{align-self:flex-start;display:inline-flex;border-radius:8px}
 .lg h1{margin:10px 0 0;font-size:20px;font-weight:600;letter-spacing:.01em}
 .lg .sub{margin:0 0 12px;color:var(--muted)}

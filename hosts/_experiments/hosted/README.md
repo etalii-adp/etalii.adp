@@ -10,7 +10,7 @@ Open `index.html` in a browser. There is no build step and no server is needed.
 |---|---|---|
 | Start | `index.html`, `splash/` | The splash screen, with the way in to the login page |
 | Login | `login/` | Signing in to a workspace. Any input signs in |
-| Projects | `projects/` | The projects and reusable repositories on this computer. Only Atlas Platform opens |
+| Projects | `projects/` | The projects and assets (repositories that are linked into other projects) on this computer. Only Atlas Platform opens |
 | IDE | `ide/` | The solution IDE: Explorer, document area with tools and a canvas, Properties, Problems, Commit and Git |
 
 The pages follow one another as they would in use: the start page leads to the login page, signing in leads to the projects, and opening Atlas Platform leads to the IDE. Signing out, the ADP mark on the login page, and the project and account menus of the IDE lead back.
