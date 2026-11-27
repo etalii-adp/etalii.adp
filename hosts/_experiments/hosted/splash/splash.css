@@ -25,7 +25,6 @@
 .sp-copy p{margin:14px auto 0;max-width:54ch;color:var(--muted);font-size:15px;line-height:1.55;text-wrap:pretty}
 .sp-acts{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:22px}
 .sp-acts .btn{height:36px;padding:0 20px;font-size:14px;border-radius:6px}
-.sp-foot{flex:none;padding:10px 20px 14px;text-align:center;color:var(--dim);font-size:12px}
 
 @media (max-height:620px){.sp-stage{flex-basis:200px;min-height:170px}.sp-copy p{display:none}}
 @media (prefers-reduced-motion:reduce){#sp-line{transition:none}}

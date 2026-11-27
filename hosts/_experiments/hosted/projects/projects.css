@@ -9,6 +9,7 @@
 .pj-nav span{margin-left:auto;color:var(--muted);font-size:12px}
 .pj-nav .avatar{color:#fff;font-size:10px}
 .pj-main{flex:1;min-width:0;overflow:auto;padding:20px 28px}
+.pj-note{margin:0 0 14px;color:var(--muted);font-size:12px}
 .pj-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .pj-bar .in{flex:1 1 220px;height:30px}.pj-bar .btn{height:30px}
 .pj-row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:9px 10px;border-radius:6px}
