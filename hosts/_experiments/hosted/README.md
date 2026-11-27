@@ -30,7 +30,8 @@ Whatever more than one page uses is in `common/`. Whatever one page uses is in t
 | Folder | Holds |
 |---|---|
 | `common/css/` | `tokens.css` (colours, fonts and sizes, dark and light), `base.css` (page frame, buttons, inputs, icons), `popups.css` (menus, toasts, dialogs), `transitions.css` (moving between the pages) |
-| `common/js/` | `boot.js` (theme and direction, before the first paint), `dom.js`, `icons.js` (the icon set and the ADP mark), `popups.js`, `nav.js` (going to another page), `mockup.js` (the buttons that go to another page and the "not built yet" notes) |
+| `common/img/` | `adp-icon.svg`, the ADP mark: a copy, byte for byte, of the icon of the ADP site (`src/assets/brand/adp-icon.svg` in etalii.adp.site, commit `6266fbf`). It is not redrawn; a newer icon arrives as a newer copy |
+| `common/js/` | `boot.js` (theme and direction, before the first paint), `dom.js`, `icons.js` (the icon set, and the ADP mark placed on a page), `popups.js`, `nav.js` (going to another page), `mockup.js` (the buttons that go to another page and the "not built yet" notes) |
 | `splash/` | `shapes.js` (the four pictures), `cloud.js` (the point cloud), `splash.js`, `splash.css` |
 | `login/` | `login.js`, `login.css` |
 | `projects/` | `projects.js`, `projects.css`, and the example projects in `data/` |
@@ -47,7 +48,7 @@ Data is kept apart from the code that draws it: a file under `data/` only declar
 
 ## Moving between the pages
 
-Every page shares one background, so nothing flashes, and a page turns a few degrees as it leaves or arrives. Going on (start, login, projects, IDE) turns one way and going back turns the other. The ADP mark is on every page and travels from its old place to its new one.
+Every page shares one background, so nothing flashes, and a page turns a few degrees as it leaves or arrives. Going on (start, login, projects, IDE) turns one way and going back turns the other.
 
 Where the browser runs a view transition between two documents, `transitions.css` asks for one and a link simply navigates. Elsewhere `nav.js` turns the page out before it leaves, and the next page turns in once it is drawn. Scripts are marked `blocking="render"`, so a page is first painted complete. With reduced motion set, pages change without the turn.
 
