@@ -11,7 +11,7 @@
 - [ ] T001 [US1] Test first, then a root key evaluated over a head that may be cut off, in `standalone/src/backend/EtAlii.Adp.Specification.Fbl/Routing/MarkerEvaluator.cs`: a key before the cut is found in cut-off YAML and JSON, a key after it is not, and a whole document gives the answer it gave before (R2) [FR-001, SC-005]
 - [ ] T002 [US1] Test first, then `FirstLineCache` made a head cache of the first 64 KiB cut at a line end, kept until the file's length or write time changes, in `standalone/src/backend/EtAlii.Adp.Hierarchy/` (R2) [FR-001]
 
-## Phase 2: One claim for every designer type (pull request B)
+## Phase 2: One claim for any designer type (pull request B)
 
 - [ ] T003 [US3] Test first, then a designer claim made from a designer type's bundled bindings: extensions and names from their `claims`, the match by `Router.Candidates`, the refusal sentence from the matching marker, and `createOnFirstPlacement`, in `standalone/src/backend/EtAlii.Adp.Designer/_Model/` and `EtAlii.Adp.Specification.Fbl/Routing/BodyClaim.cs` (R1) [FR-003, SC-004]
 - [ ] T004 [US3] The hierarchical requirement designer's `Designer.cs` names its binding for its claim in place of its extension and envelope; its routing tests stay green unchanged (R1) [FR-003, SC-005]

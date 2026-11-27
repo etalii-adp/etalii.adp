@@ -6,7 +6,7 @@
 
 ## Summary
 
-The standalone host already routes a body by its content, but only for one designer type, by a claim written for it. This feature makes that claim generic: each designer type names its bundled bindings, and the host routes by their `claims` and `marker` through the FBL library's own routing (FBL 12.3). Which files are read and how much of them is the second change. The router reads a file's first 64 KiB, cut at a line end, instead of its first line, so a root-key marker such as the knowledge designer's `designer: etalii/knowledge` is seen. It also evaluates a root key over a document that may be cut off. With that, a knowledge file with no registration opens as a table, appears in the hierarchy, and takes part in links and relations. The hierarchical requirement designer moves onto the same rule unchanged.
+The standalone host already routes a body by its content, but only for one designer type, by a claim written for it. This feature makes that claim generic: any designer type names its bundled bindings, and the host routes by their `claims` and `marker` through the FBL library's own routing (FBL 12.3). Which files are read and how much of them is the second change. The router reads a file's first 64 KiB, cut at a line end, instead of its first line, so a root-key marker such as the knowledge designer's `designer: etalii/knowledge` is seen. It also evaluates a root key over a document that may be cut off. With that, a knowledge file with no registration opens as a table, appears in the hierarchy, and takes part in links and relations. The hierarchical requirement designer moves onto the same rule unchanged.
 
 ## Technical Context
 
@@ -36,12 +36,12 @@ The standalone host already routes a body by its content, but only for one desig
 | II. Implementable from the document alone | FBL 12.1 to 12.3 and DED's envelope say all of it. |
 | III. Precise normative language | No normative text changes. |
 | IV. Versioned specifications | No definition changes. |
-| V. Simplicity | One claim rule for every designer type, replacing one written for a single type. |
+| V. Simplicity | One claim rule for any designer type, replacing one written for a single type. |
 | VI. No Rider warnings in C# | `inspect.sh` before the push and on CI; no local functions. |
 
 | Standalone principle | How |
 |---|---|
-| I. Specified, not coded | Each designer type's routing comes from its binding; the requirement designer's hand-written claim goes. |
+| I. Specified, not coded | A designer type's routing comes from its binding; the requirement designer's hand-written claim goes. |
 | II. The file is the source of truth | Opening writes nothing; a registration is written only as the binding says (FBL 8.4). |
 | III. Four gates and a pull request | One pull request, the four gates, each guard seen to fail first. |
 | IV. The documentation stays true | `creating-a-designer-module.md` says what a binding's marker does; `tests.md` holds the host test. |
