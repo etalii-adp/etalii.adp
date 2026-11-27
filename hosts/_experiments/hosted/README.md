@@ -19,6 +19,7 @@ The pages follow one another as they would in use: the start page leads to the l
 
 - The layout follows the JetBrains New UI: a title bar with menus and the update and push widgets, tool-window stripes, three docks whose panels can be moved, and a status bar.
 - Everything in a solution is one hierarchy, shown in the Explorer. The root is a git repository, and repositories from outside the project can be linked in at any level, each following a branch or a tag.
+- Every item has an id that stays the same when the item is renamed or moved: a ShortGuid as the other ADP hosts make one, a UUID written as its 128-bit value in lowercase base 36, 25 characters long. It is in the Properties, the status bar and the item's `.adp` file.
 - Every level has two views, Logical Structure and File System, set per level and kept in that level's `.adp` file, with personal overrides in `.user.adp`.
 - The document area opens an item in its tool (a diagram, a designer or an editor) and switches to Canvas, an infinite plane with a card per child item that can be walked level by level, in step with the Explorer.
 - The context menu adds, renames and deletes items, with what is offered depending on the item.
@@ -30,7 +31,8 @@ Whatever more than one page uses is in `common/`. Whatever one page uses is in t
 | Folder | Holds |
 |---|---|
 | `common/css/` | `tokens.css` (colours, fonts and sizes, dark and light), `base.css` (page frame, buttons, inputs, icons), `popups.css` (menus, toasts, dialogs), `transitions.css` (moving between the pages) |
-| `common/js/` | `boot.js` (theme and direction, before the first paint), `dom.js`, `icons.js` (the icon set and the ADP mark), `popups.js`, `nav.js` (going to another page), `mockup.js` (the buttons that go to another page and the "not built yet" notes) |
+| `common/img/` | `adp-icon.svg`, the ADP mark: a copy, byte for byte, of the icon of the ADP site (`src/assets/brand/adp-icon.svg` in etalii.adp.site, commit `6266fbf`). It is not redrawn; a newer icon arrives as a newer copy |
+| `common/js/` | `boot.js` (theme and direction, before the first paint), `dom.js`, `icons.js` (the icon set, and the ADP mark placed on a page), `popups.js`, `nav.js` (going to another page), `mockup.js` (the buttons that go to another page and the "not built yet" notes) |
 | `splash/` | `shapes.js` (the four pictures), `cloud.js` (the point cloud), `splash.js`, `splash.css` |
 | `login/` | `login.js`, `login.css` |
 | `projects/` | `projects.js`, `projects.css`, and the example projects in `data/` |
@@ -47,7 +49,7 @@ Data is kept apart from the code that draws it: a file under `data/` only declar
 
 ## Moving between the pages
 
-Every page shares one background, so nothing flashes, and a page turns a few degrees as it leaves or arrives. Going on (start, login, projects, IDE) turns one way and going back turns the other. The ADP mark is on every page and travels from its old place to its new one.
+Every page shares one background, so nothing flashes, and a page turns a few degrees as it leaves or arrives. Going on (start, login, projects, IDE) turns one way and going back turns the other.
 
 Where the browser runs a view transition between two documents, `transitions.css` asks for one and a link simply navigates. Elsewhere `nav.js` turns the page out before it leaves, and the next page turns in once it is drawn. Scripts are marked `blocking="render"`, so a page is first painted complete. With reduced motion set, pages change without the turn.
 

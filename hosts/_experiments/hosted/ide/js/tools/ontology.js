@@ -2,7 +2,7 @@
 'use strict';
 
 Object.values(BY).filter(x=>x.kind==='ontology').forEach(x=>{const O=ONTO[x.name]||{e:[],r:[]};x.accepts=['entity'];
-  x.children=O.e.map(e=>({name:e[0],kind:'entity',parent:x,ex:e[1],ey:e[2],attrs:[...e[3]],ext:e[4],id:id36('entity/'+x.id+'/'+e[0]),...(e[4]?{icon:'link'}:{})}));
+  x.children=O.e.map(e=>({name:e[0],kind:'entity',parent:x,ex:e[1],ey:e[2],attrs:[...e[3]],ext:e[4],id:shortGuidOf('entity/'+x.id+'/'+e[0]),...(e[4]?{icon:'link'}:{})}));
   x.children.forEach(k=>BY[k.id]=k);x.rels=O.r.map(([a,b,l])=>[x.children[a],x.children[b],l])});
 function rOnto(d,x){
   const E=x.children||[],W=170,M=24,hh=e=>38+e.attrs.length*19;

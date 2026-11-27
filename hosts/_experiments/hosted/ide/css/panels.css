@@ -10,6 +10,8 @@
 .pr>span:first-child{color:var(--muted);border-right:1px solid var(--line)}
 .pr .v{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;line-height:26px}
 .pr .in{width:100%;height:22px;border-color:transparent;background:transparent;padding:0 4px;margin-left:-4px}.pr .in:hover{border-color:var(--ctl)}.pr select.in{padding:0}
+/* an item id is 25 characters, so it may take a second line */
+.pr .v.wrap{white-space:normal;overflow-wrap:anywhere;line-height:16px;padding:5px 0}
 .pr .red{color:var(--red)}
 
 /* problems */

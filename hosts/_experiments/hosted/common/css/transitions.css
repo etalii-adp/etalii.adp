@@ -8,9 +8,6 @@ html{background:var(--editor)}
 ::view-transition-new(root){animation:.36s cubic-bezier(.2,.7,.2,1) both adp-turn-in}
 html.back::view-transition-old(root){animation-name:adp-turn-out-back}
 html.back::view-transition-new(root){animation-name:adp-turn-in-back}
-/* the ADP mark is on every page, so it travels from its old place to its new one */
-.logo-slot{view-transition-name:adp-mark;display:inline-flex;flex:none;width:fit-content}
-::view-transition-group(adp-mark){animation-duration:.4s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
 
 /* Every other browser: the page itself turns in once it is drawn, and turns out before it leaves (nav.js). */
 html:not(.ready) body{opacity:0}

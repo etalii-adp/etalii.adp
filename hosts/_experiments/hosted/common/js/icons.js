@@ -53,13 +53,12 @@ user:c(8,5.5,2.8)+'<path d="M2.500 14c.5-3 2.500-4.500 5.500-4.500s5 1.500 5.500
 
 const ico=(n,cls='')=>`<svg class="i ${cls}" viewBox="0 0 16 16" aria-hidden="true">${I[n]||I.file}</svg>`;
 
-/* The ADP mark, "two perspectives", as drawn in media/icons/ of this repository: a model as text below, in green, and the same model as a diagram above it, white on a dark page and dark grey on a light one (--logo). A page can hold more than one copy, so each gets mask ids of its own. In the browser tab no page colour reaches it, so there it follows the colour scheme of the browser. */
-let logoCount=0;
-const LOGO=(s,tab)=>{const u='adp-mark-'+(logoCount++),at=y=>`transform="matrix(.866 .5 -.866 .5 250 ${y})"`,plate='x="-85" y="-85" width="170" height="170" rx="14"',all='maskUnits="userSpaceOnUse" x="0" y="0" width="500" height="500"><rect width="500" height="500" fill="#fff"/>';
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${s}" height="${s}" viewBox="74 71 352 352" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="ADP"${tab?'':' style="color:var(--logo)"'}>${tab?'<style>svg{color:#24292f}@media (prefers-color-scheme:dark){svg{color:#fff}}</style>':''}<defs><mask id="${u}-under" ${all}<rect ${at(168)} ${plate} fill="#000" stroke="#000" stroke-width="30"/></mask><mask id="${u}-text" ${all}<g ${at(332)} stroke="#000" stroke-width="12"><path d="M-58 -52h90M-58 -22h116M-38 8h70M-38 38h96M-58 62h50"/></g></mask></defs><g mask="url(#${u}-under)"><g mask="url(#${u}-text)"><rect ${at(332)} ${plate} fill="#008200" stroke="#008200" stroke-width="8"/></g><path d="M186 196v96M314 196v96" stroke="#008200" stroke-width="5" stroke-dasharray="4 14"/></g><g ${at(168)} stroke="currentColor"><rect ${plate} stroke-width="12"/><path d="M-45 -45 40 -40M-45 -45 -40 40M40 -40 45 45M-40 40 45 45" stroke-width="9"/><g fill="currentColor" stroke="none"><circle cx="-45" cy="-45" r="18"/><circle cx="40" cy="-40" r="14"/><circle cx="-40" cy="40" r="14"/><circle cx="45" cy="45" r="18"/></g></g></svg>`};
+/* The ADP mark: the icon of the ADP site, common/img/adp-icon.svg, shown as it is. */
+const LOGO_SRC=navBase+'common/img/adp-icon.svg';
+const LOGO=s=>`<img src="${LOGO_SRC}" width="${s}" height="${s}" alt="ADP" decoding="sync" draggable="false">`;
 
 /* every .logo-slot on the page gets the mark at its data-size */
 $$('.logo-slot').forEach(e=>e.innerHTML=LOGO(e.dataset.size));
 
 /* and the browser tab gets it too */
-document.head.append(el(`<link rel="icon" href="data:image/svg+xml,${encodeURIComponent(LOGO(64,true))}">`));
+document.head.append(el(`<link rel="icon" type="image/svg+xml" href="${LOGO_SRC}">`));

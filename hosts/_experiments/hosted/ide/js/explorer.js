@@ -43,7 +43,7 @@ function endRename(apply,blur){const x=S.edit,r=$('#rn');if(!x||!r)return;const 
     if(v!==x.name){x.name=v;if(!x.vcs)x.vcs='M'}}
   S.edit=null;renderAll();tree.focus()}
 function add(p,kind){let base='New '+K[kind][0].toLowerCase(),nm=base,i=2;while(p.children.some(s=>s.name===nm))nm=base+' '+i++;
-  const x={name:nm,kind,parent:p,vcs:'A',fresh:true,id:id36(nm+Math.random())};if(kind==='group'){x.children=[];x.accepts=p.accepts}if(kind==='ontology'){x.children=[];x.accepts=['entity'];x.rels=[]}if(kind==='entity')x.attrs=[];BY[x.id]=x;p.children.push(x);S.open.add(p.id);openDoc(x);rename(x)}
+  const x={name:nm,kind,parent:p,vcs:'A',fresh:true,id:newShortGuid()};if(kind==='group'){x.children=[];x.accepts=p.accepts}if(kind==='ontology'){x.children=[];x.accepts=['entity'];x.rels=[]}if(kind==='entity')x.attrs=[];BY[x.id]=x;p.children.push(x);S.open.add(p.id);openDoc(x);rename(x)}
 function del(x){const p=x.parent,i=p.children.indexOf(x);p.children.splice(i,1);S.tabs=S.tabs.filter(t=>!inside(t,x));if(inside(S.doc,x)||inside(S.sel,x))openDoc(p);else renderAll();
   toast(`Deleted ${x.name}${x.children?' and its '+x.children.length+' items':''}`,'Undo',()=>{p.children.splice(i,0,x);openDoc(x)})}
 function iconPick(x,ax,ay){closePop();const cur=x.icon||K[x.kind][1],all=ICONSET.flatMap(g2=>g2[1]),nameOf=i=>(all.find(o=>o.nm===i)||{label:i}).label;
@@ -57,7 +57,7 @@ function iconPick(x,ax,ay){closePop();const cur=x.icon||K[x.kind][1],all=ICONSET
   m.onclick=e=>{const b2=e.target.closest('[data-ic]');b2&&choose(b2.dataset.ic)};draw();place(m,ax,ay);q.focus()}
 function linkRepo(p){dialog('Link Repository into '+p.name,`<label for="lr-u">Repository</label><input class="in mono" id="lr-u" value="git@git.example.com:shared/notification-service.git"><label for="lr-n">Show as</label><input class="in" id="lr-n" value="Notification service"><label for="lr-r">Branch or tag</label><select class="in" id="lr-r"><option>v1.4.0</option><option>v1.3.2</option><option>main</option></select>`,'Link',v=>{
   const x=n($('#lr-n',v).value.trim()||'Linked repository','group',[n('Email template','component'),n('Delivery pipeline','pipeline'),n('Delivery monitor','dashboard')],{icon:'chat',vcs:'A',link:{repo:$('#lr-u',v).value,ref:$('#lr-r',v).value,refs:['v1.4.0','v1.3.2','main']}});
-  (function w(y,pp){y.parent=pp;y.id=id36(y.name+Math.random());BY[y.id]=y;(y.children||[]).forEach(k=>w(k,y))})(x,p);p.children.push(x);S.open.add(p.id);S.open.add(x.id);openDoc(x);toast(`${x.name} is linked. Its items continue the hierarchy here.`)})}
+  (function w(y,pp){y.parent=pp;y.id=newShortGuid();BY[y.id]=y;(y.children||[]).forEach(k=>w(k,y))})(x,p);p.children.push(x);S.open.add(p.id);S.open.add(x.id);openDoc(x);toast(`${x.name} is linked. Its items continue the hierarchy here.`)})}
 const changed=x=>!!x.vcs||(x.children||[]).some(changed);
 function ctx(x){
   if(x.pseudo)return[{l:'Open',k:'Enter',on:()=>openDoc(x)},'-',{l:'Git',i:'branch',sub:[{l:'Show History',on:()=>show('git')},{l:x.ignored?'Remove from .gitignore':'Add to .gitignore',d:x.name==='.adp'?'.adp files are always committed':null,on:()=>{x.ignored=!x.ignored;renderExplorer()}}]},{l:'Copy Path',on:()=>copy(path(x))}];

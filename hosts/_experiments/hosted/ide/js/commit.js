@@ -8,6 +8,6 @@ function renderCommit(){const b=body('commit'),tot=CH.reduce((a,g2)=>a+g2.files.
   b.onclick=e=>{const o=e.target.closest('[data-open]');if(o){e.preventDefault();openDoc(BY[o.dataset.open])}};
   const go=push=>{const msg=$('#cm-msg').value.trim();if(!msg){toast('Write a commit message first.');$('#cm-msg').focus();return}
     CH.forEach(g2=>{g2.files=g2.files.filter(f=>!f.on);if(!g2.files.length&&g2.node.vcs)delete g2.node.vcs});
-    COMMITS.forEach(cm=>cm.p=cm.p.map(i=>i+1));for(const k in HEADS)HEADS[k]++;COMMITS.unshift({h:id36(msg+Date.now())+'a',l:0,p:[1],m:msg,a:'Sam Rivera',w:'Just now',d:0});HEADS.develop=0;S.ahead++;S.cmsg='';
+    COMMITS.forEach(cm=>cm.p=cm.p.map(i=>i+1));for(const k in HEADS)HEADS[k]++;COMMITS.unshift({h:gitHash(),l:0,p:[1],m:msg,a:'Sam Rivera',w:'Just now',d:0});HEADS.develop=0;S.ahead++;S.cmsg='';
     if(push){HEADS['origin/develop']=0;S.ahead=0}renderCommit();renderGit();renderAll();renderTitle();toast(`Committed ${on} files to develop${push?' and pushed to origin':''}`)};
   $('#cm-go').onclick=()=>go(false);$('#cm-push').onclick=()=>go(true)}

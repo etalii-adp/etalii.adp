@@ -29,9 +29,10 @@ textarea.in{height:auto;padding:6px 8px;resize:vertical}
 .pill{display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 7px;border-radius:9px;font-size:11px;font-weight:500;border:1px solid currentColor;white-space:nowrap}
 
 /* pieces more than one page uses */
-/* a panel on the dotted plane: the login form and the project overview */
+/* a panel on the dotted plane: the login form and the project overview. Named sheet, because the tool windows of the IDE are .panel */
 .stage{flex:1;min-height:0;display:grid;place-items:center;overflow:auto;padding:24px 16px;background-color:var(--editor);background-image:radial-gradient(var(--grid) 1px,transparent 1px);background-size:24px 24px}
-.panel{background:var(--bg);border:1px solid var(--popb);border-radius:10px;box-shadow:var(--shadow)}
+.sheet{background:var(--bg);border:1px solid var(--popb);border-radius:10px;box-shadow:var(--shadow)}
+.logo-slot{display:inline-flex;flex:none;width:fit-content}.logo-slot img{display:block}
 .avatar{width:24px;height:24px;border-radius:50%;background:var(--purple);color:#fff;font-size:10px;font-weight:600;display:grid;place-items:center}
 .hint{margin:auto;color:var(--dim);text-align:center;padding:24px;max-width:340px}
 
