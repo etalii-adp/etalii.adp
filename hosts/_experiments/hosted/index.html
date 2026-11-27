@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" data-page="start" data-root="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ADP · A Different Perspective</title>
+<!-- before the first paint: theme, and which way the page turns in -->
+<script src="common/js/boot.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="common/css/tokens.css">
+<link rel="stylesheet" href="common/css/base.css">
+<link rel="stylesheet" href="common/css/transitions.css">
+<link rel="stylesheet" href="splash/splash.css">
+<!-- plain scripts, loaded in this order; the page is painted once they have drawn it -->
+<script defer blocking="render" src="common/js/dom.js"></script>
+<script defer blocking="render" src="common/js/icons.js"></script>
+<script defer blocking="render" src="common/js/nav.js"></script>
+<script defer blocking="render" src="common/js/mockup.js"></script>
+<script defer blocking="render" src="splash/shapes.js"></script>
+<script defer blocking="render" src="splash/cloud.js"></script>
+<script defer blocking="render" src="splash/splash.js"></script>
+<noscript><style>html body{opacity:1}</style></noscript>
+</head>
+<body>
+<div id="app">
+  <section class="view splash" id="v-start">
+    <header class="sp-top">
+      <span class="logo-slot" data-size="30"></span><b>ADP</b><span>2026.3</span>
+      <span class="sp"></span>
+      <span class="pager-slot"></span>
+    </header>
+    <main class="sp-main">
+      <div class="sp-stage"><canvas id="cloud" role="img" aria-label="A cloud of points that turns, and reads in turn as lines of text, a diagram, a hierarchy and a knowledge graph"></canvas></div>
+      <div class="sp-seen">
+        <div class="seg" id="sp-pick" role="group" aria-label="The same points, seen as"></div>
+        <p id="sp-line" aria-live="polite"></p>
+      </div>
+      <div class="sp-copy">
+        <h1>A <em>Different</em> Perspective</h1>
+        <p>Nothing here is redrawn. The same points are text from one side, a diagram from the next, then a hierarchy, then knowledge. ADP treats a solution the same way: one model, and the view that fits the question.</p>
+        <div class="sp-acts"><a class="btn pri" data-nav href="login/index.html" id="sp-in">Sign In</a><button class="btn" id="sp-turn" type="button">Turn It</button></div>
+      </div>
+    </main>
+    <footer class="sp-foot">Mockup with example data.</footer>
+  </section>
+</div>
+<noscript><p style="padding:24px">This mockup is drawn by its scripts. Turn JavaScript on to see it.</p></noscript>
+</body>
+</html>

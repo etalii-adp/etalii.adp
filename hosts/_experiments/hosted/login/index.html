@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" data-page="login" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sign in · ADP</title>
+<!-- before the first paint: theme, and which way the page turns in -->
+<script src="../common/js/boot.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../common/css/tokens.css">
+<link rel="stylesheet" href="../common/css/base.css">
+<link rel="stylesheet" href="../common/css/transitions.css">
+<link rel="stylesheet" href="login.css">
+<!-- plain scripts, loaded in this order; the page is painted once they have drawn it -->
+<script defer blocking="render" src="../common/js/dom.js"></script>
+<script defer blocking="render" src="../common/js/icons.js"></script>
+<script defer blocking="render" src="../common/js/nav.js"></script>
+<script defer blocking="render" src="../common/js/mockup.js"></script>
+<script defer blocking="render" src="login.js"></script>
+<noscript><style>html body{opacity:1}</style></noscript>
+</head>
+<body>
+<div id="app">
+  <section class="view" id="v-login">
+    <div class="topline"><span>ADP 2026.3</span><span class="pager-slot"></span></div>
+    <div class="lg-wrap">
+      <form class="lg" id="loginForm">
+        <span class="logo-slot" data-size="40"></span>
+        <h1>Sign in to ADP</h1>
+        <p class="sub">A Different Perspective</p>
+        <label for="lg-ws">Workspace</label><input class="in" id="lg-ws" value="atlas.example.com" autocomplete="off">
+        <label for="lg-email">Email</label><input class="in" id="lg-email" type="email" value="sam.rivera@example.com" autocomplete="off">
+        <label for="lg-pw">Password</label><input class="in" id="lg-pw" type="password" placeholder="Password" autocomplete="off">
+        <label class="ckl" for="lg-keep"><input type="checkbox" id="lg-keep" checked> Keep me signed in on this computer</label>
+        <button class="btn pri" type="submit">Sign In</button>
+        <div class="or">or</div>
+        <button class="btn" type="button" data-go="projects">Sign In with Single Sign-On</button>
+        <button class="btn" type="button" data-go="projects">Sign In with Your Git Provider</button>
+        <p class="fine">Mockup with example data. Any input signs you in.</p>
+      </form>
+    </div>
+  </section>
+</div>
+<noscript><p style="padding:24px">This mockup is drawn by its scripts. Turn JavaScript on to see it.</p></noscript>
+</body>
+</html>

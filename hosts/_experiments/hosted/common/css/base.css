@@ -1,0 +1,41 @@
+/* What every page is built from: the page frame, buttons, inputs, segmented controls, icons and the small shared pieces. */
+
+html,body{height:100%}
+body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{background:var(--editor);color:var(--fg);font:var(--fs)/1.4 var(--ui);overflow:hidden;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box;scrollbar-width:thin;scrollbar-color:var(--ctl) transparent}
+#app{height:100%;padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.view{height:100%;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:-1px}
+a{color:var(--link)}
+.i{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round}
+.c-blue{color:var(--blue)}.c-green{color:var(--green)}.c-red{color:var(--red)}.c-yellow{color:var(--yellow)}.c-purple{color:var(--purple)}.c-orange{color:var(--orange)}.c-teal{color:var(--teal)}.c-muted{color:var(--muted)}
+.mono{font-family:var(--mono);font-size:.94em}
+.sp{flex:1}
+.ib{width:26px;height:26px;border-radius:5px;display:inline-grid;place-items:center;color:var(--muted);flex:none}
+.ib:hover{background:var(--hover);color:var(--fg)}.ib.on{background:var(--sel);color:var(--fg)}.ib:disabled{opacity:.4;cursor:default}
+.btn{height:28px;padding:0 14px;border:1px solid var(--ctl);border-radius:4px;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.btn:hover{background:var(--hover)}.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}.btn.pri:hover{filter:brightness(1.08)}
+.in{height:28px;border:1px solid var(--ctl);border-radius:4px;background:var(--editor);color:var(--fg);padding:0 8px;font:inherit;min-width:0}
+textarea.in{height:auto;padding:6px 8px;resize:vertical}
+.in:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:var(--accent)}
+.seg{display:inline-flex;border:1px solid var(--ctl);border-radius:5px;overflow:hidden;flex:none}
+.seg button{height:24px;padding:0 9px;display:inline-flex;align-items:center;gap:5px;color:var(--muted)}
+.seg button+button{border-left:1px solid var(--ctl)}
+.seg button.on{background:var(--sel);color:var(--fg)}.seg button:not(.on):hover{background:var(--hover)}
+.pill{display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 7px;border-radius:9px;font-size:11px;font-weight:500;border:1px solid currentColor;white-space:nowrap}
+
+/* pieces more than one page uses */
+.topline{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 12px;background:var(--bg);border-bottom:1px solid var(--border);color:var(--muted);font-size:12px}
+.avatar{width:24px;height:24px;border-radius:50%;background:var(--purple);color:#fff;font-size:10px;font-weight:600;display:grid;place-items:center}
+.hint{margin:auto;color:var(--dim);text-align:center;padding:24px;max-width:340px}
+
+/* pager between the pages of the mockup */
+.pager{display:inline-flex;align-items:center;gap:2px;padding:2px;border-radius:6px;background:var(--editor);border:1px solid var(--line);font-size:12px}
+.pager a{padding:2px 9px;border-radius:4px;color:var(--muted);text-decoration:none}
+.pager a.on{background:var(--sel);color:var(--fg)}.pager a:not(.on):hover{background:var(--hover)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}

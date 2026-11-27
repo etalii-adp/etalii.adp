@@ -1,0 +1,25 @@
+/* The Explorer: the hierarchy tree, its bar and the icon picker. */
+
+.ex-bar{display:flex;align-items:center;gap:6px;padding:0 8px 6px 12px;flex:none}
+.ex-bar small{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.ex-q{padding:0 8px 6px 12px;flex:none;display:flex}.ex-q .in{flex:1;height:26px}
+.tree{flex:1;overflow:auto;padding-bottom:12px;outline:0}
+.tree:focus-visible,.cv:focus-visible,.code:focus-visible{outline:0}
+.row{height:var(--row);display:flex;align-items:center;gap:4px;padding:0 8px 0 calc(6px + var(--d)*16px);white-space:nowrap;cursor:default;user-select:none}
+.row:hover{background:var(--hover)}.row.sel{background:var(--sel)}
+.row.ign{opacity:.55}
+.tw{width:16px;height:16px;flex:none;display:grid;place-items:center;color:var(--muted)}
+.tw .i{width:12px;height:12px;transition:transform .1s}.tw.open .i{transform:rotate(90deg)}
+.nm{overflow:hidden;text-overflow:ellipsis}.nm.vM{color:var(--blue)}.nm.vA{color:var(--green)}
+.ref{display:inline-flex;align-items:center;gap:3px;height:17px;padding:0 5px;border-radius:4px;background:var(--hover);color:var(--muted);font:11px var(--mono);flex:none}
+.ref .i{width:11px;height:11px}
+.tag{font-size:10.5px;color:var(--dim);border:1px solid var(--line);border-radius:3px;padding:0 4px;line-height:14px;flex:none}
+.dot{width:6px;height:6px;border-radius:50%;flex:none;margin-left:2px}.dot.error{background:var(--red)}.dot.warning{background:var(--yellow)}
+.row .rn{height:20px;flex:1;padding:0 4px}.row .rn.bad{border-color:var(--red);outline-color:var(--red)}
+.rnerr{margin:2px 8px 4px calc(42px + var(--d)*16px);color:var(--red);font-size:12px;white-space:normal}
+
+/* icon picker */
+.icongrid{display:grid;grid-template-columns:repeat(9,28px);gap:2px}
+.ipick{width:296px;max-width:calc(100vw - 12px)}.ipick .in{width:100%;margin:2px 0 4px}
+.ip-list{height:252px;overflow:auto}.ip-list h6{margin:8px 4px 3px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.ip-list .ib{color:var(--fg)}.ip-foot{height:22px;padding:4px 6px 0;color:var(--muted);font-size:12px}
