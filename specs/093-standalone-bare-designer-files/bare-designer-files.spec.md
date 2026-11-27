@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-26
 
-**Status**: Draft, awaiting Peter's approval; no plan or tasks until then
+**Status**: Approved by Peter on 2026-11-27 (decision card "Approve as written")
 
 **Input**: Peter, 2026-11-26: "Write the spec", on the decision card about the one new-user hurdle that spec 092's host test left open (etalii.adp `specs/092-standalone-links/tasks.md`, *Trace*; etalii.adp.ide.standalone `tests.md`, the third run of T035): "a knowledge file copied in without a registration opens as text; it needs a feature of its own."
 
