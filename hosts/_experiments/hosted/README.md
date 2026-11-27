@@ -15,8 +15,8 @@ Then open `dist/index.html` in a browser. No server is needed: a built page open
 
 | Page | Folder | Shows |
 |---|---|---|
-| Start | `src/index.html`, `src/splash/` | The splash screen, with the way in to the login page |
-| Login | `src/login/` | Signing in to a workspace. Any input signs in |
+| Start | `src/index.html`, `src/splash/` | The splash screen, with the way in to the login page and a link to the About page of the ADP site |
+| Login | `src/login/` | Signing in to a workspace. An email with the password `42!` signs in. Single sign-on and a git provider can be tried as well: each asks, and answers that the workspace has not set it up, so neither leads further |
 | Projects | `src/projects/` | The projects and assets (repositories that are linked into other projects) on this computer. Only Atlas Platform opens |
 | IDE | `src/ide/` | The solution IDE: Explorer, document area with tools and a canvas, Properties, Problems, Commit and Git |
 
