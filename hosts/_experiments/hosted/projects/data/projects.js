@@ -1,4 +1,0 @@
-/* Example data: the projects and assets on this computer. */
-'use strict';
-
-const PROJ=[['Atlas Platform','AP','blue','~/git/atlas-platform','develop','Platform · 9 areas, 96 items · 3 linked repositories','2 minutes ago',0],['Field Service App','FS','teal','~/git/field-service-app','main','Application · 14 items · 2 linked repositories','Yesterday',0],['Tariff Calculator','TC','orange','~/git/tariff-calculator','features/time-of-use','Application · 6 items','3 days ago',0],['Design system','DS','purple','~/git/shared/design-system','main','Asset · linked into 3 projects','Last week',1],['Identity and access','IA','red','~/git/shared/identity-access','release/2.x','Asset · linked into 2 projects','Last week',1],['Audit logging','AL','green','~/git/shared/audit-logging','main','Asset · linked into 2 projects','12 Nov',1]];

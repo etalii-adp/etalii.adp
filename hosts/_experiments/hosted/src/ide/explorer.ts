@@ -1,0 +1,234 @@
+/* The Explorer: the tree, its two views, rename, add, delete, the icon picker and the context menu. */
+import { $, $$, $maybe, clamp, el, esc, hit } from '../common/dom';
+import { ico } from '../common/icons';
+import { closePop, copy, dialog, menu, place, toast, type MenuEntry } from '../common/popups';
+import { n } from './data/solution';
+import { body, pel, show } from './docks';
+import { ICONSET } from './icon-library';
+import { K } from './kinds';
+import { adopt, asFile, BY, disk, inside, isBox, kids, modeOf, multi, newShortGuid, path, ro, ROOT, showAll } from './model';
+import { openDoc, pick, reveal } from './open';
+import { repaintAll } from './repaint';
+import { sev } from './severity';
+import { S } from './state';
+import type { Item, KindName, ViewMode } from './types';
+
+/* the level the view switch at the top of the Explorer works on: the selected item, or the level it is in */
+export const modeTarget = (): Item => {
+  let x = S.sel;
+  if (x.pseudo) x = x.parent!;
+  return x.children ? x : x.parent!;
+};
+const match = (x: Item): boolean => x.name.toLowerCase().includes(S.q) || kids(x).some(match);
+const expanded = (x: Item): boolean => S.open.has(x.id);
+const expand = (x: Item, on = !expanded(x)): void => { if (on) S.open.add(x.id); else S.open.delete(x.id); };
+const itemOf = (row: HTMLElement): Item => BY[row.dataset.id!];
+const tree = (): HTMLElement => $('#tree');
+
+function rowHTML(x: Item, d: number, has: boolean, open: boolean): string {
+  const f = !x.pseudo && asFile(x), box = x.children || (!x.pseudo && multi(x));
+  const icon = x.pseudo ? 'file' : f ? (box ? 'folder' : 'file') : (x.icon || K[x.kind].icon), sv = x.pseudo ? null : sev(x);
+  return `<div class="row${S.sel === x ? ' sel' : ''}${x.ignored ? ' ign' : ''}" data-id="${x.id}" style="--d:${d}" role="treeitem"><span class="tw${open ? ' open' : ''}">${has ? ico('chev') : ''}</span>${ico(icon, 'c-' + (x.pseudo ? 'muted' : K[x.kind].colour))}` +
+    (S.edit === x ? `<input class="in rn" id="rn" value="${esc(x.name)}" aria-label="Name">` : `<span class="nm${x.vcs ? ' v' + x.vcs : ''}${f || x.pseudo ? ' mono' : ''}">${esc(x.pseudo ? x.name : f ? disk(x) : x.name)}</span>`) +
+    (x.link ? `<span class="ref" title="Linked repository ${esc(x.link.repo)}">${ico('link')}${esc(x.link.ref)}</span>` : '') + (x.mode ? `<span class="tag" title="This level has its own view setting">${x.mode}</span>` : '') + (sv ? `<span class="dot ${sv}" title="Has ${sv}s"></span>` : '') + `</div>`;
+}
+
+export function renderExplorer(): void {
+  const out: string[] = [];
+  const rows = (x: Item, d: number): void => {
+    const ks = kids(x), vis = S.q ? ks.filter(match) : ks, open = S.q ? true : expanded(x);
+    out.push(rowHTML(x, d, ks.length > 0, open));
+    if (open) vis.forEach(k => rows(k, d + 1));
+  };
+  rows(ROOT, 0);
+  tree().innerHTML = out.join('');
+  const t = modeTarget(), m = modeOf(t), eye = $<HTMLButtonElement>('#ex-eye');
+  $$('#ex-mode button').forEach(b => b.classList.toggle('on', b.dataset.mode === m));
+  eye.disabled = m !== 'files';
+  eye.classList.toggle('on', m === 'files' && showAll(t));
+  $('#ex-for').textContent = 'for ' + t.name;
+  const r = $maybe<HTMLInputElement>('#rn');
+  if (r) {
+    r.focus(); r.select();
+    r.onkeydown = e => { e.stopPropagation(); if (e.key === 'Enter') endRename(true); if (e.key === 'Escape') endRename(false); };
+    r.onblur = () => { if (S.edit) endRename(true, true); };
+    r.oninput = () => { r.classList.remove('bad'); $maybe('.rnerr')?.remove(); };
+  }
+}
+
+/* sets how a level and everything under it is shown; a level that shows as its parent does keeps no setting of its own */
+export function setMode(t: Item, m: ViewMode): void {
+  if (t.parent && modeOf(t.parent) === m) delete t.mode; else t.mode = m;
+  if (!t.parent && m === 'logical') delete t.mode;
+  S.open.add(t.id);
+  repaintAll();
+  toast(`${t.name} now shows as ${m === 'files' ? 'File System' : 'Logical Structure'}. Saved in its .user.adp`);
+}
+
+/* why a name cannot be given to an item, or null when it can */
+export function nameError(x: Item, v: string): string | null {
+  if (!v) return 'A name is required.';
+  if (/[\\/:*?"<>|]/.test(v)) return 'A name cannot contain \\ / : * ? " < > |';
+  if (x.parent?.children?.some(s => s !== x && s.name.toLowerCase() === v.toLowerCase())) return `"${v}" already exists in ${x.parent.name}.`;
+  return null;
+}
+export function rename(x: Item): void { S.edit = x; reveal(x); renderExplorer(); }
+function endRename(apply: boolean, blur = false): void {
+  const x = S.edit, r = $maybe<HTMLInputElement>('#rn');
+  if (!x || !r) return;
+  const v = r.value.trim();
+  if (apply) {
+    const err = nameError(x, v);
+    if (err) {
+      if (blur) { S.edit = null; renderExplorer(); return; }
+      const row = r.closest<HTMLElement>('.row')!;
+      r.classList.add('bad');
+      $maybe('.rnerr')?.remove();
+      row.after(el(`<div class="rnerr" style="--d:${row.style.getPropertyValue('--d')}">${esc(err)}</div>`));
+      return;
+    }
+    if (v !== x.name) { x.name = v; if (!x.vcs) x.vcs = 'M'; }
+  }
+  S.edit = null;
+  repaintAll();
+  tree().focus();
+}
+
+function add(p: Item, kind: KindName): void {
+  const siblings = p.children ?? (p.children = []), base = 'New ' + K[kind].label.toLowerCase();
+  let nm = base, i = 2;
+  while (siblings.some(s => s.name === nm)) nm = base + ' ' + i++;
+  const x: Item = { name: nm, kind, parent: p, vcs: 'A', fresh: true, id: newShortGuid() };
+  if (kind === 'group') { x.children = []; x.accepts = p.accepts; }
+  if (kind === 'ontology') { x.children = []; x.accepts = ['entity']; x.rels = []; }
+  if (kind === 'entity') x.attrs = [];
+  BY[x.id] = x;
+  siblings.push(x);
+  S.open.add(p.id);
+  openDoc(x);
+  rename(x);
+}
+function del(x: Item): void {
+  const p = x.parent;
+  if (!p?.children) return;
+  const siblings = p.children, i = siblings.indexOf(x);
+  siblings.splice(i, 1);
+  S.tabs = S.tabs.filter(t => !inside(t, x));
+  if (inside(S.doc, x) || inside(S.sel, x)) openDoc(p); else repaintAll();
+  toast(`Deleted ${x.name}${x.children ? ' and its ' + x.children.length + ' items' : ''}`, 'Undo', () => { siblings.splice(i, 0, x); openDoc(x); });
+}
+
+/* the icon picker, at a point: every icon of the library by category, with search */
+export function iconPick(x: Item, ax: number, ay: number): void {
+  closePop();
+  const cur = x.icon || K[x.kind].icon, all = ICONSET.flatMap(group => group[1]), nameOf = (i: string) => (all.find(o => o.nm === i) || { label: i }).label;
+  const m = el(`<div class="menu ipick"><div class="mhead">Icon for ${esc(x.name)}</div><input class="in" id="ip-q" placeholder="Search ${all.length} icons" aria-label="Search icons" autocomplete="off"><div class="ip-list" id="ip-list"></div><div class="ip-foot" id="ip-name"></div><div class="msep"></div><button class="mi" data-ic=""><span class="lead"></span>Use the default for ${esc(K[x.kind].label.toLowerCase())}</button></div>`);
+  const list = $('#ip-list', m), foot = $('#ip-name', m), q = $<HTMLInputElement>('#ip-q', m), rest = () => { foot.textContent = 'Current: ' + nameOf(cur); };
+  const draw = () => {
+    const words = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    list.innerHTML = ICONSET.map(([cat, items]) => {
+      const found = items.filter(o => words.every(w => o.kw.includes(w)));
+      return found.length ? `<h6>${cat}</h6><div class="icongrid">${found.map(o => `<button class="ib${o.nm === cur ? ' on' : ''}" data-ic="${o.nm}" title="${o.label}" aria-label="${o.label}">${ico(o.nm)}</button>`).join('')}</div>` : '';
+    }).join('') || `<div class="hint">No icon matches "${esc(q.value.trim())}".</div>`;
+    rest();
+  };
+  const choose = (i: string | undefined) => {
+    if (i) x.icon = i; else delete x.icon;
+    closePop();
+    repaintAll();
+    toast('Icon saved in ' + path(x.children ? x : x.parent!) + '/.adp');
+  };
+  q.oninput = draw;
+  q.onkeydown = e => { if (e.key === 'Enter') { const first = $maybe('[data-ic]', list); if (first) choose(first.dataset.ic); } };
+  list.onmouseover = e => { const b = hit(e, '[data-ic]'); if (b) foot.textContent = b.title; else rest(); };
+  list.onmouseleave = rest;
+  m.onclick = e => { const b = hit(e, '[data-ic]'); if (b) choose(b.dataset.ic); };
+  draw();
+  place(m, ax, ay);
+  q.focus();
+}
+
+/* links a repository from outside the project into a level; its items continue the hierarchy there */
+export function linkRepo(p: Item): void {
+  dialog('Link Repository into ' + p.name, `<label for="lr-u">Repository</label><input class="in mono" id="lr-u" value="git@git.example.com:shared/notification-service.git"><label for="lr-n">Show as</label><input class="in" id="lr-n" value="Notification service"><label for="lr-r">Branch or tag</label><select class="in" id="lr-r"><option>v1.4.0</option><option>v1.3.2</option><option>main</option></select>`, 'Link', v => {
+    const value = (id: string) => $<HTMLInputElement | HTMLSelectElement>(id, v).value;
+    const draft = n(value('#lr-n').trim() || 'Linked repository', 'group', [n('Email template', 'component'), n('Delivery pipeline', 'pipeline'), n('Delivery monitor', 'dashboard')], { icon: 'chat', vcs: 'A', link: { repo: value('#lr-u'), ref: value('#lr-r'), refs: ['v1.4.0', 'v1.3.2', 'main'] } });
+    const x = adopt(draft, p, '', newShortGuid);
+    (p.children ?? (p.children = [])).push(x);
+    S.open.add(p.id); S.open.add(x.id);
+    openDoc(x);
+    toast(`${x.name} is linked. Its items continue the hierarchy here.`);
+  });
+}
+
+const changed = (x: Item): boolean => !!x.vcs || (x.children || []).some(changed);
+const rollback = (x: Item): void => { delete x.vcs; (x.children || []).forEach(rollback); };
+
+/* the context menu of an item: what it offers depends on the item */
+export function ctx(x: Item): MenuEntry[] {
+  if (x.pseudo) return [{ l: 'Open', k: 'Enter', on: () => openDoc(x) }, '-', { l: 'Git', i: 'branch', sub: [{ l: 'Show History', on: () => show('git') }, { l: x.ignored ? 'Remove from .gitignore' : 'Add to .gitignore', d: x.name === '.adp' ? '.adp files are always committed' : null, on: () => { x.ignored = !x.ignored; renderExplorer(); } }] }, { l: 'Copy Path', on: () => copy(path(x)) }];
+  const box = !!x.children, pure = isBox(x), R = ro(x), why = R ? `Read-only, from ${R.name} @ ${R.link!.ref}` : null, m = box ? modeOf(x) : null, link = x.link;
+  return [
+    box && { l: 'New', i: 'plus', d: why, sub: (x.accepts || ['group', 'doc'] as KindName[]).map(k => ({ l: K[k].label, i: K[k].icon, on: () => add(x, k) })) },
+    { l: 'Open', k: 'Enter', i: pure ? 'canvas' : 'edit', on: () => openDoc(x) },
+    { l: pure ? 'Open as Contents List' : 'Show in Canvas', k: 'Alt+C', i: pure ? 'list' : 'canvas', on: () => openDoc(x, pure ? 'editor' : 'canvas') }, '-',
+    { l: 'Rename…', k: 'F2', d: why, on: () => rename(x) },
+    { l: 'Change Icon…', d: why, on: () => { const r = $maybe(`.row[data-id="${x.id}"]`)?.getBoundingClientRect(); iconPick(x, r ? r.left + 40 : 200, r ? r.bottom : 200); } },
+    { l: 'Delete', k: 'Del', d: x === ROOT ? 'The project root stays' : why, on: () => del(x) }, '-',
+    box && { l: 'View As', i: 'eye', sub: [{ l: 'Logical Structure', chk: m === 'logical', on: () => setMode(x, 'logical') }, { l: 'File System', chk: m === 'files', on: () => setMode(x, 'files') }, '-', { l: 'Show All Files', chk: m === 'files' && showAll(x), d: m !== 'files' ? 'File System view only' : null, on: () => { x.showAll = !showAll(x); repaintAll(); } }] },
+    link && { l: 'Switch Branch or Tag', i: 'branch', sub: link.refs.map(r => ({ l: r, chk: r === link.ref, on: () => { link.ref = r; repaintAll(); toast(`${x.name} now follows ${r}`); } })) },
+    link && { l: 'Update from Remote', i: 'fetch', on: () => toast(`${x.name} is up to date with ${link.ref}`) },
+    link && { l: 'Unlink Repository', on: () => del(x) },
+    pure && !link && { l: 'Link Repository…', i: 'link', d: why, on: () => linkRepo(x) }, '-',
+    { l: 'Git', i: 'branch', sub: [{ l: 'Commit…', k: 'Ctrl+K', d: changed(x) ? null : 'No local changes', on: () => show('commit') }, { l: 'Show History', on: () => show('git') }, { l: 'Compare with Branch…', on: () => toast('Comparing ' + x.name + ' with origin/develop') }, { l: 'Rollback…', d: changed(x) ? null : 'No local changes', on: () => { rollback(x); repaintAll(); toast('Rolled back local changes in ' + x.name); } }] },
+    box && { l: `Find in ${x.name}…`, k: 'Ctrl+Shift+F', i: 'search', on: () => { show('explorer'); const q = $<HTMLInputElement>('#ex-q'); q.placeholder = 'Search in ' + x.name; q.focus(); } },
+    { l: 'Copy', sub: [{ l: 'Name', on: () => copy(x.name) }, { l: 'Path on Disk', on: () => copy(path(x)) }, { l: 'ID', on: () => copy(x.id) }] }, '-',
+    { l: 'Properties', k: 'Alt+Enter', i: 'props', on: () => { pick(x); show('properties'); } }];
+}
+
+/* the menu File > New Item offers: what the level of the selection takes */
+export function newItemMenu(): MenuEntry[] {
+  const t = modeTarget();
+  return (t.accepts || ['group', 'doc'] as KindName[]).map(k => ({ l: K[k].label, i: K[k].icon, on: () => add(t, k) }));
+}
+
+/* draws the Explorer's frame into its tool window and wires the tree */
+export function mountExplorer(): void {
+  body('explorer').innerHTML = `<div class="ex-bar"><div class="seg" id="ex-mode" title="How this level and everything under it is shown"><button data-mode="logical">Logical</button><button data-mode="files">Files</button></div><button class="ib" id="ex-eye" title="Show all files, including the ones git ignores">${ico('eye')}</button><small id="ex-for"></small></div><div class="ex-q"><input class="in" id="ex-q" placeholder="Search items" aria-label="Search items"></div><div class="tree" id="tree" tabindex="0" role="tree" aria-label="Explorer"></div>`;
+  $('[data-pa]', pel.explorer).innerHTML = `<button class="ib" id="ex-loc" title="Select the open document">${ico('target')}</button><button class="ib" id="ex-col" title="Collapse all">${ico('collapse')}</button>`;
+  const t = tree(), search = $<HTMLInputElement>('#ex-q');
+  $('#ex-mode').onclick = e => { const b = hit(e, 'button'); if (b) setMode(modeTarget(), b.dataset.mode as ViewMode); };
+  $('#ex-eye').onclick = () => { const level = modeTarget(); level.showAll = !showAll(level); repaintAll(); };
+  search.oninput = () => { S.q = search.value.trim().toLowerCase(); renderExplorer(); };
+  $('#ex-loc').onclick = () => { pick(S.doc); $maybe('#tree .sel')?.scrollIntoView({ block: 'nearest' }); };
+  $('#ex-col').onclick = () => { S.open = new Set([ROOT.id]); renderExplorer(); };
+
+  t.addEventListener('click', e => {
+    const r = hit(e, '.row');
+    if (!r || hit(e, '.rn')) return;
+    const x = itemOf(r);
+    if (hit(e, '.tw') && kids(x).length) { expand(x); renderExplorer(); return; }
+    if (S.sel === x && kids(x).length) expand(x);
+    openDoc(x);
+  });
+  t.addEventListener('contextmenu', e => {
+    const r = hit(e, '.row');
+    if (!r) return;
+    e.preventDefault();
+    const x = itemOf(r);
+    if (S.sel !== x) pick(x);
+    menu(ctx(x), e.clientX, e.clientY);
+  });
+  t.addEventListener('keydown', e => {
+    if ((e.target as Element).id === 'rn') return;
+    const rows = $$('.row', t), i = rows.findIndex(r => r.classList.contains('sel')), x = S.sel;
+    const go = (j: number) => { const r = rows[clamp(j, 0, rows.length - 1)]; if (r) openDoc(itemOf(r)); $maybe('#tree .sel')?.scrollIntoView({ block: 'nearest' }); t.focus(); };
+    if (e.key === 'ArrowDown') { e.preventDefault(); go(i + 1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); go(i - 1); }
+    else if (e.key === 'ArrowRight' && kids(x).length) { expand(x, true); renderExplorer(); }
+    else if (e.key === 'ArrowLeft') { if (expanded(x) && kids(x).length) { expand(x, false); renderExplorer(); } else if (x.parent) openDoc(x.parent); }
+    else if (e.key === 'F2' && !x.pseudo && !ro(x)) { e.preventDefault(); rename(x); }
+    else if (e.key === 'Delete' && !x.pseudo && !ro(x) && x !== ROOT) del(x);
+    else if (e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10')) { e.preventDefault(); const r = rows[i].getBoundingClientRect(); menu(ctx(x), r.left + 60, r.bottom); }
+  });
+}
