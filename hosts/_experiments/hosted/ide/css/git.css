@@ -1,0 +1,21 @@
+/* The Git tool window: branch tree, commit graph and commit details. */
+
+.git{flex:1;min-height:0;display:flex;border-top:1px solid var(--line)}
+.g-br{width:230px;flex:none;border-right:1px solid var(--line);overflow:auto;padding:4px 0}
+.g-br .row{--d:0}.g-br h5{margin:6px 10px 2px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.g-log{flex:1;min-width:0;display:flex;flex-direction:column}
+.g-bar{display:flex;align-items:center;gap:6px;padding:5px 8px;flex:none;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.g-bar .in{height:24px;width:170px}.g-bar .tbtn{height:24px;color:var(--muted)}.g-bar .tbtn b{color:var(--fg);font-weight:500}
+.g-rows{flex:1;overflow:auto;position:relative}
+.g-rows svg{position:absolute;left:0;top:0;pointer-events:none}
+.g-row{height:26px;display:flex;align-items:center;gap:8px;padding:0 10px 0 64px;white-space:nowrap;width:100%;text-align:left}
+.g-row:hover{background:var(--hover)}.g-row.on{background:var(--sel)}
+.g-row .msg{overflow:hidden;text-overflow:ellipsis;min-width:60px;flex:0 1 auto}
+.g-row .who,.g-row .when{color:var(--muted);font-size:12px;flex:none}.g-row .who{margin-left:auto;padding-left:12px}
+.g-row .when{width:92px;text-align:right}
+.lbl{display:inline-flex;align-items:center;height:17px;padding:0 6px;border-radius:4px;font:11px var(--mono);border:1px solid currentColor;flex:none}
+.g-det{width:270px;flex:none;border-left:1px solid var(--line);overflow:auto;padding:10px 12px;font-size:12.5px}
+.g-det h6{margin:0 0 6px;font-size:13px;font-weight:600;text-wrap:balance}.g-det p{margin:0 0 10px;color:var(--muted)}
+.g-det div{display:flex;gap:6px;align-items:center;height:22px;white-space:nowrap;overflow:hidden}
+@container (max-width:900px){.g-det{display:none}}
+@container (max-width:560px){.git{flex-direction:column}.g-br{width:auto;max-height:38%;border-right:0;border-bottom:1px solid var(--line)}.g-row .when{display:none}}

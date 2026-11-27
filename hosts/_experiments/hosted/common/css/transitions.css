@@ -1,0 +1,30 @@
+/* Moving between the pages. Every page shares one background, so nothing flashes, and a page turns a few degrees as it leaves or arrives: the next page is the same place, seen from another side. */
+
+html{background:var(--editor)}
+
+/* Browsers that can: a view transition between the two documents. */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:.22s cubic-bezier(.4,0,1,1) both adp-turn-out}
+::view-transition-new(root){animation:.36s cubic-bezier(.2,.7,.2,1) both adp-turn-in}
+html.back::view-transition-old(root){animation-name:adp-turn-out-back}
+html.back::view-transition-new(root){animation-name:adp-turn-in-back}
+/* the ADP mark is on every page, so it travels from its old place to its new one */
+.logo-slot{view-transition-name:adp-mark;display:inline-flex;flex:none;width:fit-content}
+::view-transition-group(adp-mark){animation-duration:.4s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
+
+/* Every other browser: the page itself turns in once it is drawn, and turns out before it leaves (nav.js). */
+html:not(.ready) body{opacity:0}
+html.ready body{animation:.36s cubic-bezier(.2,.7,.2,1) backwards adp-turn-in}
+html.ready.back body{animation-name:adp-turn-in-back}
+html.ready.vt body{animation:none}
+html.leaving body{animation:.2s cubic-bezier(.4,0,1,1) forwards adp-turn-out}
+html.leaving.back body{animation-name:adp-turn-out-back}
+
+@keyframes adp-turn-out{to{opacity:0;transform:perspective(1600px) translateX(-14px) rotateY(5deg) scale(.985)}}
+@keyframes adp-turn-in{from{opacity:0;transform:perspective(1600px) translateX(14px) rotateY(-5deg) scale(.985)}}
+@keyframes adp-turn-out-back{to{opacity:0;transform:perspective(1600px) translateX(14px) rotateY(-5deg) scale(.985)}}
+@keyframes adp-turn-in-back{from{opacity:0;transform:perspective(1600px) translateX(-14px) rotateY(5deg) scale(.985)}}
+
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}
+  html.ready body,html.leaving body{animation:none}}

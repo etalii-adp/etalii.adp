@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" data-page="ide" data-root="../">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Atlas Platform · ADP</title>
+<!-- before the first paint: theme, and which way the page turns in -->
+<script src="../common/js/boot.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../common/css/tokens.css">
+<link rel="stylesheet" href="../common/css/base.css">
+<link rel="stylesheet" href="../common/css/transitions.css">
+<link rel="stylesheet" href="../common/css/popups.css">
+<link rel="stylesheet" href="css/shell.css">
+<link rel="stylesheet" href="css/explorer.css">
+<link rel="stylesheet" href="css/document.css">
+<link rel="stylesheet" href="css/tools.css">
+<link rel="stylesheet" href="css/canvas.css">
+<link rel="stylesheet" href="css/panels.css">
+<link rel="stylesheet" href="css/git.css">
+<!-- plain scripts, loaded in this order; the page is painted once they have drawn it -->
+<script defer blocking="render" src="../common/js/dom.js"></script>
+<script defer blocking="render" src="../common/js/icons.js"></script>
+<script defer blocking="render" src="../common/js/popups.js"></script>
+<script defer blocking="render" src="../common/js/nav.js"></script>
+<script defer blocking="render" src="../common/js/mockup.js"></script>
+<script defer blocking="render" src="js/icon-library.js"></script>
+<script defer blocking="render" src="js/kinds.js"></script>
+<script defer blocking="render" src="data/solution.js"></script>
+<script defer blocking="render" src="js/model.js"></script>
+<script defer blocking="render" src="data/problems.js"></script>
+<script defer blocking="render" src="data/flows.js"></script>
+<script defer blocking="render" src="data/ontology.js"></script>
+<script defer blocking="render" src="data/pages.js"></script>
+<script defer blocking="render" src="data/dashboards.js"></script>
+<script defer blocking="render" src="data/forms.js"></script>
+<script defer blocking="render" src="data/schemas.js"></script>
+<script defer blocking="render" src="data/checks.js"></script>
+<script defer blocking="render" src="data/documents.js"></script>
+<script defer blocking="render" src="data/code.js"></script>
+<script defer blocking="render" src="data/changes.js"></script>
+<script defer blocking="render" src="data/commits.js"></script>
+<script defer blocking="render" src="js/state.js"></script>
+<script defer blocking="render" src="js/docks.js"></script>
+<script defer blocking="render" src="js/documents.js"></script>
+<script defer blocking="render" src="js/explorer.js"></script>
+<script defer blocking="render" src="js/tools/flow.js"></script>
+<script defer blocking="render" src="js/tools/ontology.js"></script>
+<script defer blocking="render" src="js/tools/page.js"></script>
+<script defer blocking="render" src="js/tools/dashboard.js"></script>
+<script defer blocking="render" src="js/tools/form.js"></script>
+<script defer blocking="render" src="js/tools/entity.js"></script>
+<script defer blocking="render" src="js/tools/schema.js"></script>
+<script defer blocking="render" src="js/tools/check.js"></script>
+<script defer blocking="render" src="js/tools/document.js"></script>
+<script defer blocking="render" src="js/tools/code.js"></script>
+<script defer blocking="render" src="js/tools/contents.js"></script>
+<script defer blocking="render" src="js/canvas.js"></script>
+<script defer blocking="render" src="js/properties.js"></script>
+<script defer blocking="render" src="js/problems.js"></script>
+<script defer blocking="render" src="js/commit.js"></script>
+<script defer blocking="render" src="js/git.js"></script>
+<script defer blocking="render" src="js/titlebar.js"></script>
+<script defer blocking="render" src="js/main.js"></script>
+<noscript><style>html body{opacity:1}</style></noscript>
+</head>
+<body>
+<div id="app">
+  <section class="view" id="v-ide">
+    <header class="titlebar">
+      <button class="ib" id="burger" title="Main menu"></button>
+      <span class="logo-slot" data-size="22" style="margin:0 4px"></span>
+      <nav class="menus" id="menus"></nav>
+      <button class="tbtn" id="w-proj"><span class="pbadge">AP</span><span>Atlas Platform</span></button>
+      <button class="tbtn" id="w-branch"></button>
+      <button class="sync" id="w-pull" title="Update project (fetch and merge origin/develop)"></button>
+      <button class="sync" id="w-push" title="Push commits to origin"></button>
+      <button class="ib hide-s" id="w-fetch" title="Fetch all remotes"></button>
+      <span class="sp"></span><span class="pager-slot pager-ide"></span><span class="sp"></span>
+      <span class="runw"><button class="tbtn" id="w-run" style="height:24px"></button><button class="ib c-green" id="w-go" title="Run"></button></span>
+      <button class="ib" id="w-search" title="Search everywhere"></button>
+      <button class="ib" id="w-gear" title="IDE settings"></button>
+      <button class="tbtn" id="w-user" title="Sam Rivera" style="padding:0 4px"><span class="avatar">SR</span></button>
+    </header>
+    <div class="ws">
+      <nav class="stripe" id="stripe-l" aria-label="Tool windows, left and bottom"></nav>
+      <div class="mid">
+        <div class="up">
+          <div class="dock" id="dock-left"></div><div class="split" data-split="left"></div>
+          <main class="ed">
+            <div class="tabbar"><div class="tabs" id="tabs"></div><div class="seg" id="dm"></div></div>
+            <div class="crumbs" id="crumbs"></div>
+            <div class="doc" id="doc"></div>
+          </main>
+          <div class="split" data-split="right"></div><div class="dock" id="dock-right"></div>
+        </div>
+        <div class="split" data-split="bottom"></div>
+        <div class="dock" id="dock-bottom"></div>
+      </div>
+      <nav class="stripe" id="stripe-r" aria-label="Tool windows, right"></nav>
+    </div>
+    <footer class="statusbar" id="status"></footer>
+  </section>
+</div>
+<noscript><p style="padding:24px">This mockup is drawn by its scripts. Turn JavaScript on to see it.</p></noscript>
+</body>
+</html>
