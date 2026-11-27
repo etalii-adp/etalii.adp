@@ -2,16 +2,23 @@
 
 An experiment, not a host. It is a clickable mockup of a hosted ADP in which a whole solution, from a small application to a platform, is designed and developed as one hierarchy. Nothing here is specified yet, nothing is connected to a server, and every name and number is example data ("Atlas Platform", a platform for an energy utility).
 
-Open `index.html` in a browser. There is no build step and no server is needed.
+The pages are written in TypeScript and built into `dist/`. With Node.js 22 or newer:
+
+```
+npm install
+npm run build
+```
+
+Then open `dist/index.html` in a browser. No server is needed: a built page opens straight from disk. `npm run typecheck` checks the types without building, and `npm run check` does both.
 
 ## The pages
 
 | Page | Folder | Shows |
 |---|---|---|
-| Start | `index.html`, `splash/` | The splash screen, with the way in to the login page |
-| Login | `login/` | Signing in to a workspace. Any input signs in |
-| Projects | `projects/` | The projects and assets (repositories that are linked into other projects) on this computer. Only Atlas Platform opens |
-| IDE | `ide/` | The solution IDE: Explorer, document area with tools and a canvas, Properties, Problems, Commit and Git |
+| Start | `src/index.html`, `src/splash/` | The splash screen, with the way in to the login page |
+| Login | `src/login/` | Signing in to a workspace. Any input signs in |
+| Projects | `src/projects/` | The projects and assets (repositories that are linked into other projects) on this computer. Only Atlas Platform opens |
+| IDE | `src/ide/` | The solution IDE: Explorer, document area with tools and a canvas, Properties, Problems, Commit and Git |
 
 The pages follow one another as they would in use: the start page leads to the login page, signing in leads to the projects, and opening Atlas Platform leads to the IDE. Signing out, the ADP mark on the login page, and the project and account menus of the IDE lead back.
 
@@ -26,32 +33,40 @@ The pages follow one another as they would in use: the start page leads to the l
 
 ## Where things are
 
-Whatever more than one page uses is in `common/`. Whatever one page uses is in that page's folder.
+The sources are under `src/`, and `dist/` is what `npm run build` makes of them; `dist/` is not in the repository. Whatever more than one page uses is in `src/common/`. Whatever one page uses is in that page's folder.
 
-| Folder | Holds |
+| Under `src/` | Holds |
 |---|---|
 | `common/css/` | `tokens.css` (colours, fonts and sizes, dark and light), `base.css` (page frame, buttons, inputs, icons), `popups.css` (menus, toasts, dialogs), `transitions.css` (moving between the pages) |
 | `common/img/` | `adp-icon.svg`, the ADP mark: a copy, byte for byte, of the icon of the ADP site (`src/assets/brand/adp-icon.svg` in etalii.adp.site, commit `6266fbf`). It is not redrawn; a newer icon arrives as a newer copy |
-| `common/js/` | `boot.js` (theme and direction, before the first paint), `dom.js`, `icons.js` (the icon set, and the ADP mark placed on a page), `popups.js`, `nav.js` (going to another page), `mockup.js` (the buttons that go to another page and the "not built yet" notes) |
-| `splash/` | `shapes.js` (the four pictures), `cloud.js` (the point cloud), `splash.js`, `splash.css` |
-| `login/` | `login.js`, `login.css` |
-| `projects/` | `projects.js`, `projects.css`, and the example projects in `data/` |
+| `common/` | `boot.ts` (theme and direction, before the first paint), `pages.ts` (the pages and which one this is), `prefs.ts` (the theme, font size and density that were chosen), `dom.ts`, `icons.ts` (the icon set, and the ADP mark placed on a page), `popups.ts`, `nav.ts` (going to another page), `page.ts` (what every page does when it starts) |
+| `splash/` | `shapes.ts` (the four pictures), `cloud.ts` (the point cloud), `splash.ts`, `splash.css` |
+| `login/` | `login.ts`, `login.css` |
+| `projects/` | `projects.ts`, `projects.css`, and the example projects in `data/` |
 | `ide/css/` | One style sheet per part: shell, explorer, document, tools, canvas, panels, git |
-| `ide/js/` | One script per part: kinds, model, state, docks, documents, explorer, canvas, properties, problems, commit, git, titlebar, and `main.js`, which starts the page |
-| `ide/js/tools/` | One script per tool shown in the document area: flow, ontology, entity, schema, page, dashboard, form, check, document, code, contents |
+| `ide/` | One module per part: `types.ts`, `kinds.ts`, `model.ts`, `state.ts`, `repaint.ts`, `docks.ts`, `open.ts`, `explorer.ts`, `document-area.ts`, `canvas.ts`, `properties.ts`, `problems.ts`, `commit.ts`, `git.ts`, `titlebar.ts`, `severity.ts`, `icon-library.ts`, and `main.ts`, which starts the page |
+| `ide/tools/` | One module per tool shown in the document area: flow, ontology, entity, schema, page, dashboard, form, check, document, code, contents, and what they share in `shared.ts` |
 | `ide/data/` | The example data, one file per subject: the solution, problems, flows, ontology, schemas, pages, dashboards, forms, checks, documents, code, changes, commits |
+
+Beside `src/` are `build.mjs` (the build), `tsconfig.json` (how the types are checked) and `package.json` with its lock file (the two tools the build needs: TypeScript and esbuild).
 
 ## How the scripts fit together
 
-The scripts are plain scripts, not modules, so a page also opens straight from disk. Each page's `index.html` lists its scripts in the order they load, and a script uses what the scripts before it declared. The names a script declares at its top level are therefore shared by the scripts after it; `ide/js/main.js` comes last and draws the page.
+Every file is a TypeScript module that imports what it uses and exports what others use, so nothing is shared by being declared first. `build.mjs` has esbuild bundle one script per page (`splash/splash.js`, `login/login.js`, `projects/projects.js`, `ide/main.js`) and `common/boot.js`, which every page runs in its head before the first paint. It copies every other file under `src/` to `dist/` as it is. TypeScript only checks the types (`strict`, with unused names refused); esbuild writes the scripts.
 
-Data is kept apart from the code that draws it: a file under `data/` only declares example data, and the script that shows it is the one of the same subject under `js/`.
+Data is kept apart from the code that draws it: a file under `data/` only holds example data and its types, and the module that shows it is the one of the same subject beside it.
+
+Three rules keep the modules of the IDE page apart:
+
+- **No module imports in a circle.** A module in a circle can run before a module it reads from. The build reads the imports esbuild found and fails when there is a circle, naming it.
+- **A part that changes the state asks for a repaint; it does not call the part that draws.** `ide/repaint.ts` knows the parts by name (`explorer`, `editor`, `properties`, `status`, `title`, `problems`, `commit`, `git`), and `ide/main.ts` says which function draws which. That is how the Explorer can change what the document area shows, and the document area what the Explorer shows, without importing each other.
+- **Only `ide/main.ts` touches the page when it is loaded.** What wires another part to the page is in a function (`mountExplorer`, `mountDocks`, `mountTitlebar` and so on) that `main.ts` calls, in an order that can be read there.
 
 ## Moving between the pages
 
 Every page shares one background, so nothing flashes, and a page turns a few degrees as it leaves or arrives. Going on (start, login, projects, IDE) turns one way and going back turns the other.
 
-Where the browser runs a view transition between two documents, `transitions.css` asks for one and a link simply navigates. Elsewhere `nav.js` turns the page out before it leaves, and the next page turns in once it is drawn. Scripts are marked `blocking="render"`, so a page is first painted complete. With reduced motion set, pages change without the turn.
+Where the browser runs a view transition between two documents, `transitions.css` asks for one and a link simply navigates. Elsewhere `nav.ts` turns the page out before it leaves, and the next page turns in once it is drawn. A page's script is marked `blocking="render"`, so a page is first painted complete. With reduced motion set, pages change without the turn.
 
 The theme, font size and density chosen in the IDE's settings are kept in the browser's local storage and applied on every page before the first paint.
 

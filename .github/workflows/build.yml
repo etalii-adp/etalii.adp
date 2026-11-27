@@ -8,6 +8,8 @@
 # The grammar job builds ATD's grammar in strict LALR(1) mode, lints it, runs the keyword probe and compares the files it
 # generates; the descriptions job checks every tool description with the desktop host's `atd` (spec 035, FR-100).
 # The file-names job refuses a tracked path that Windows cannot check out.
+# The hosted-experiment job checks the types of the hosted experiment (hosts/_experiments/hosted) and builds its pages, as
+# the deploy workflow of etalii.adp.site does before it publishes them.
 name: Build
 
 on:
@@ -147,3 +149,21 @@ jobs:
           python-version: '3.13'
       - name: Check that every tracked path can be checked out on Windows
         run: python .github/scripts/file-names-check.py
+
+  # The hosted experiment is published by etalii.adp.site's deploy workflow, which runs this same check and build; a
+  # type error or a circle of imports is refused here, before develop has it.
+  hosted-experiment:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: hosts/_experiments/hosted
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+      - run: npm ci
+      - name: Check the types and build the pages
+        run: npm run check
+      - name: Check every page and its script are there
+        run: for f in index.html login/index.html projects/index.html ide/index.html common/boot.js splash/splash.js login/login.js projects/projects.js ide/main.js; do test -s "dist/$f" || { echo "dist/$f is missing"; exit 1; }; done
