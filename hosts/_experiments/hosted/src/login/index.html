@@ -19,19 +19,36 @@
 <div id="app">
   <section class="view" id="v-login">
     <div class="stage">
-      <form class="sheet lg" id="loginForm">
-        <a class="lg-home" data-nav href="../index.html" title="Back to the start page" aria-label="Back to the start page"><span class="logo-slot" data-size="40"></span></a>
-        <h1>Sign in to ADP</h1>
-        <p class="sub">A Different Perspective</p>
-        <label for="lg-ws">Workspace</label><input class="in" id="lg-ws" value="atlas.example.com" autocomplete="off">
-        <label for="lg-email">Email</label><input class="in" id="lg-email" type="email" value="sam.rivera@example.com" autocomplete="off">
-        <label for="lg-pw">Password</label><input class="in" id="lg-pw" type="password" placeholder="Password" autocomplete="off">
-        <label class="ckl" for="lg-keep"><input type="checkbox" id="lg-keep" checked> Keep me signed in on this computer</label>
-        <button class="btn pri" type="submit">Sign In</button>
-        <div class="or">or</div>
-        <button class="btn" type="button" data-go="projects">Sign In with Single Sign-On</button>
-        <button class="btn" type="button" data-go="projects">Sign In with Your Git Provider</button>
-      </form>
+      <div class="sheet lg">
+        <header class="lg-head">
+          <div><h1>Sign in to ADP</h1><p class="sub">A Different Perspective</p></div>
+          <a class="lg-home" data-nav href="../index.html" title="Back to the start page" aria-label="Back to the start page"><span class="logo-slot" data-size="40"></span></a>
+        </header>
+        <form class="lg-step" id="loginForm" novalidate>
+          <label for="lg-ws">Workspace</label><input class="in" id="lg-ws" value="atlas.example.com" autocomplete="off">
+          <label for="lg-email">Email</label><input class="in" id="lg-email" type="email" value="sam.rivera@example.com" autocomplete="off">
+          <label for="lg-pw">Password</label><input class="in" id="lg-pw" type="password" placeholder="Password" autocomplete="off" aria-describedby="lg-err">
+          <p class="lg-msg" id="lg-err" role="alert" hidden></p>
+          <label class="ckl" for="lg-keep"><input type="checkbox" id="lg-keep" checked> Keep me signed in on this computer</label>
+          <button class="btn pri" type="submit">Sign In</button>
+          <div class="or">or</div>
+          <button class="btn" type="button" data-step="ssoForm">Sign In with Single Sign-On</button>
+          <button class="btn" type="button" data-step="gitStep">Sign In with Your Git Provider</button>
+        </form>
+        <form class="lg-step" id="ssoForm" novalidate hidden>
+          <h2>Single sign-on</h2>
+          <label for="sso-ws">Workspace</label><input class="in" id="sso-ws" autocomplete="off">
+          <p class="lg-msg" id="sso-msg" role="status" hidden></p>
+          <button class="btn pri" type="submit">Continue</button>
+          <button class="btn" type="button" data-step="loginForm">Back to Sign In</button>
+        </form>
+        <div class="lg-step" id="gitStep" hidden>
+          <h2>Your git provider</h2>
+          <div class="lg-providers" id="git-providers"></div>
+          <p class="lg-msg" id="git-msg" role="status" hidden></p>
+          <button class="btn" type="button" data-step="loginForm">Back to Sign In</button>
+        </div>
+      </div>
     </div>
   </section>
 </div>

@@ -35,11 +35,14 @@ function cloudPoints(strokes: Stroke[], n: number): Float32Array {
   return out;
 }
 
-/* draws pictures[0] on the canvas and keeps it moving; colours() is asked again whenever the theme changes */
+/* colours that were read from a style sheet that has arrived: three numbers each */
+const known = (c: CloudColours): boolean => [...c.views, c.accent].every(rgb => rgb.length === 3 && rgb.every(Number.isFinite));
+
+/* draws pictures[0] on the canvas and keeps it moving. colours() is asked again whenever the theme changes, and once a second besides: a browser may run this before the style sheets are in, on a first visit, and then the colours are not there yet and the canvas has no place. Nothing is drawn or sized until they are. */
 export function makeCloud(canvas: HTMLCanvasElement, pictures: Stroke[][], colours: () => CloudColours): Cloud {
   const N = innerWidth < 700 ? 1500 : 2600, P = pictures.map(s => cloudPoints(s, N)), g = canvas.getContext('2d')!, still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const depth = new Float32Array(N), tone = new Uint8Array(N);
-  let at = 0, to = 0, p = 1, z0 = depth, W = 0, H = 0, U = 1, yaw = 0, pitch = 0, yawTo = 0, pitchTo = 0, held = 0, last = 0, auto = !still, col = colours();
+  let at = 0, to = 0, p = 1, z0 = depth, W = 0, H = 0, U = 1, yaw = 0, pitch = 0, yawTo = 0, pitchTo = 0, held = 0, last = 0, auto = !still, col = colours(), styled = known(col), asked = 0;
   for (let i = 0; i < N; i++) { depth[i] = P[1][i * 2]; tone[i] = i % 9 === 0 ? 1 : 0; }
   const api: Cloud = {
     index: 0,
@@ -55,11 +58,21 @@ export function makeCloud(canvas: HTMLCanvasElement, pictures: Stroke[][], colou
   const ease = (t: number) => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   function land(): void { for (let i = 0; i < N; i++) depth[i] = -P[at][i * 2]; at = to; held = 0; }
   function size(): void {
-    const r = canvas.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2);
-    W = r.width; H = r.height;
+    /* without its style sheet the canvas is as large as its own width and height say, and following that would grow it without end */
+    if (!styled) return;
+    /* its size on the page, whatever the page is turned or scaled by while it comes in */
+    const d = Math.min(devicePixelRatio || 1, 2);
+    W = canvas.clientWidth; H = canvas.clientHeight;
     canvas.width = Math.round(W * d); canvas.height = Math.round(H * d);
     g.setTransform(d, 0, 0, d, 0, 0);
     U = Math.min(W / 3.7, H / 2.25);
+  }
+  /* asks for the colours again, and takes them when the style sheet gave them */
+  function look(): void {
+    const c = colours();
+    if (!known(c)) return;
+    col = c;
+    if (!styled) { styled = true; size(); }
   }
   const mix = (a: Rgb, b: Rgb, t: number) => `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * t)).join(',')})`;
   function frame(now: number): void {
@@ -76,6 +89,8 @@ export function makeCloud(canvas: HTMLCanvasElement, pictures: Stroke[][], colou
     yawTo *= Math.pow(.9, dt / 16); pitchTo *= Math.pow(.9, dt / 16);
     yaw += (yawTo - yaw) * .12; pitch += (pitchTo - pitch) * .12;
     const e = p < 1 ? ease(p) : 0, A = P[at], B = P[to], th = e * Math.PI / 2, cs = Math.cos(th), sn = Math.sin(th), sway = still ? 0 : .012 * Math.sin(now / 1700), cy = Math.cos(yaw + sway), sy = Math.sin(yaw + sway), cp = Math.cos(pitch), sp = Math.sin(pitch), lens = Math.sin(Math.PI * e) * .11;
+    if (!styled || now - asked > 1000) { look(); asked = now; }
+    if (!styled) { requestAnimationFrame(frame); return; }
     g.clearRect(0, 0, W, H);
     /* most points take the picture's colour, one in nine the accent */
     const paint = [mix(col.views[at], col.views[to], e), mix(col.accent, col.accent, 0)];
@@ -97,13 +112,15 @@ export function makeCloud(canvas: HTMLCanvasElement, pictures: Stroke[][], colou
     requestAnimationFrame(frame);
   }
   addEventListener('resize', size);
+  /* the canvas takes its size from the style sheet, which may arrive after this has started */
+  new ResizeObserver(size).observe(canvas);
   addEventListener('pointermove', e => {
     if (still) return;
     yawTo = Math.max(-.5, Math.min(.5, yawTo + (e.movementX || 0) * .0016));
     pitchTo = Math.max(-.3, Math.min(.3, pitchTo + (e.movementY || 0) * .0012));
   });
-  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { col = colours(); });
-  new MutationObserver(() => { col = colours(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', look);
+  new MutationObserver(look).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   size();
   requestAnimationFrame(frame);
   return api;
