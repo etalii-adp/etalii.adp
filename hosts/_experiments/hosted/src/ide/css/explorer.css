@@ -1,7 +1,5 @@
-/* The Explorer: the hierarchy tree, its bar and the icon picker. */
+/* The Explorer: the search box, the hierarchy tree and the icon picker. */
 
-.ex-bar{display:flex;align-items:center;gap:6px;padding:0 8px 6px 12px;flex:none}
-.ex-bar small{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .ex-q{padding:0 8px 6px 12px;flex:none;display:flex}.ex-q .in{flex:1;height:26px}
 .tree{flex:1;overflow:auto;padding-bottom:12px;outline:0}
 .tree:focus-visible,.cv:focus-visible,.code:focus-visible{outline:0}

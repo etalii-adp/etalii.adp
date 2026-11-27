@@ -22,6 +22,10 @@ export const K: Record<KindName, KindInfo> = {
   page: kind('Web page', 'window', 'teal', ['page.ded', 'page.html', 'page.css'], 'page'),
   theme: kind('Theme', 'palette', 'teal', '.theme.json', 'form'),
   component: kind('Component', 'puzzle', 'purple', ['component.ded', 'component.tsx', 'component.css'], 'form'),
+  csapp: kind('C# console application', 'terminal', 'purple'),
+  csharp: kind('C# file', 'filecode', 'purple', '.cs', 'code'),
+  pyproject: kind('Python project', 'package', 'blue'),
+  python: kind('Python file', 'filecode', 'blue', '.py', 'code'),
   release: kind('Release pipeline', 'rocket', 'red', ['pipeline.did', 'stages.yaml'], 'flow'),
   environment: kind('Environment', 'server', 'red', '.env.yaml', 'form'),
   testsuite: kind('Test suite', 'check', 'green', ['suite.yaml', 'cases.jsonl'], 'check'),
@@ -30,6 +34,11 @@ export const K: Record<KindName, KindInfo> = {
   code: kind('Query', 'code', 'yellow', '.sql', 'code'),
   file: kind('File', 'file', 'muted'),
 };
+
+/* the kinds an item of a kind takes, where the kind decides it */
+export const TAKES: Partial<Record<KindName, KindName[]>> = { ontology: ['entity'], csapp: ['csharp', 'group'], pyproject: ['python', 'group'] };
+/* a kind's label as it reads inside a sentence: without its capital, unless it starts with a name */
+export const inSentence = (k: KindName): string => { const l = K[k].label; return /^(AI|C#|Python) /.test(l) ? l : l[0].toLowerCase() + l.slice(1); };
 
 export const WORD: Record<ToolName, 'Diagram' | 'Designer' | 'Editor'> = {
   flow: 'Diagram', onto: 'Diagram', entity: 'Designer', schema: 'Designer', form: 'Designer', check: 'Designer', dash: 'Designer', page: 'Designer', code: 'Editor', doc: 'Editor',

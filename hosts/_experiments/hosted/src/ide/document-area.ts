@@ -23,13 +23,13 @@ import type { DocMode, Item, ToolName } from './types';
 
 const tools: Record<ToolName, Tool> = { flow: rFlow, onto: rOnto, entity: rEntity, schema: rSchema, page: rPage, dash: rDash, form: rForm, check: rCheck, doc: rDoc, code: rCode };
 
-const tabIcon = (x: Item): string => x.pseudo ? 'file' : x.icon || K[x.kind].icon;
+const tabIcon = (x: Item): string => x.pseudo ? (x.entries ? 'folder' : 'file') : x.icon || K[x.kind].icon;
 const tabColour = (x: Item): string => 'c-' + (x.pseudo ? 'muted' : K[x.kind].colour);
 
 export function renderEditor(): void {
-  const x = S.doc, m = dmode(x), kindTool = K[x.kind].tool, word = x.pseudo ? 'Editor' : isBox(x) ? 'Contents' : kindTool ? WORD[kindTool] : '';
+  const x = S.doc, m = dmode(x), kindTool = K[x.kind].tool, word = x.entries ? 'Contents' : x.pseudo ? 'Editor' : isBox(x) ? 'Contents' : kindTool ? WORD[kindTool] : '';
   $('#tabs').innerHTML = S.tabs.map(t => `<button class="tab${t === x ? ' on' : ''}" data-id="${t.id}">${ico(tabIcon(t), tabColour(t))}<span class="${t.vcs ? 'nm v' + t.vcs : ''}">${esc(t.name)}</span><span class="x" title="Close">${ico('x')}</span></button>`).join('');
-  $('#dm').innerHTML = `<button data-dm="editor" class="${m === 'editor' ? 'on' : ''}" title="Alt+C switches between the two">${ico(isBox(x) ? 'list' : 'edit')}${word}</button><button data-dm="canvas" class="${m === 'canvas' ? 'on' : ''}" title="Alt+C switches between the two">${ico('canvas')}Canvas</button>`;
+  $('#dm').innerHTML = `<button data-dm="editor" class="${m === 'editor' ? 'on' : ''}" title="Alt+C switches between the two">${ico(isBox(x) || x.entries ? 'list' : 'edit')}${word}</button><button data-dm="canvas" class="${m === 'canvas' ? 'on' : ''}" title="Alt+C switches between the two">${ico('canvas')}Canvas</button>`;
   $maybe('#tabs .on')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   const cr = crumbsOf(m === 'canvas' ? levelOf(x) : x);
   $('#crumbs').innerHTML = cr.map((p, i) => `${i ? ico('chev') : ''}<button data-id="${p.id}" class="${i === cr.length - 1 ? 'cur' : ''}">${ico(tabIcon(p), tabColour(p))}${esc(p.name)}</button>`).join('');
@@ -40,6 +40,7 @@ export function renderEditor(): void {
   S.cvFit = null;
   S.cvL = V;
   if (L) renderCanvas(d, L);
+  else if (x.entries) rContents(d, x);
   else if (x.pseudo) rCode(d, x);
   else if (isBox(x)) rContents(d, x);
   else if (kindTool) tools[kindTool](d, x);

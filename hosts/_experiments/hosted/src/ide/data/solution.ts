@@ -7,6 +7,10 @@ type Extras = Omit<Draft, 'name' | 'kind' | 'children'>;
 export const n=(name:string,kind:KindName,a?:Draft[]|Extras,b?:Extras):Draft=>{const ch=Array.isArray(a)?a:undefined,o=(ch?b:a as Extras|undefined)??{};return{name,kind,...(ch?{children:ch}:{}),...o}};
 /* a group of items of one kind, by their names; a name with a letter is modified (M) or added (A) */
 const g=(name:string,kind:KindName,names:(string|[string,Vcs])[],o?:Extras):Draft=>n(name,'group',names.map(x=>Array.isArray(x)?n(x[0],kind,{vcs:x[1]}):n(x,kind)),{accepts:[kind,'group'],...o});
+/* a source file of an application, and a folder of them: the name in the hierarchy, and the name on disk */
+const src=(kind:KindName)=>(name:string,file:string):Draft=>n(name,kind,{file});
+const cs=src('csharp'),py=src('python');
+const dir=(name:string,file:string,kind:KindName,children:Draft[],o?:Extras):Draft=>n(name,'group',children,{file,accepts:[kind,'group'],...o});
 export const solution:Draft=n('Atlas Platform','solution',[
  n('Ingestion','area',[
   g('Sources','source',[['Smart meter readings','M'],'SCADA telemetry','Weather feed','CRM export'],{mode:'files'}),
@@ -22,6 +26,15 @@ export const solution:Draft=n('Atlas Platform','solution',[
  n('Data analysis','area',[g('Views','dashboard',['Load forecast overview','Outage heatmap','Data quality monitor']),
   g('Queries','code',['Peak load by feeder','Meters without readings']),g('Notebooks','notebook',['Forecast error analysis'])],{icon:'chart',accepts:['group']}),
  n('Portal','area',[g('Pages','page',['Home',['Outage map','A'],'My usage','Report an outage','Admin console']),n('Portal theme','theme')],{icon:'globe',accepts:['group','theme']}),
+ n('Applications','area',[
+  n('Console client','csapp',[cs('Program','Program.cs'),
+   dir('Commands','Commands','csharp',[cs('Command','ICommand.cs'),cs('Outages command','OutagesCommand.cs'),cs('Usage command','UsageCommand.cs'),cs('Forecast command','ForecastCommand.cs')]),
+   dir('Client','Client','csharp',[cs('Atlas client','AtlasClient.cs'),cs('Outage report record','OutageReport.cs'),cs('Usage summary record','UsageSummary.cs'),cs('Forecast point record','ForecastPoint.cs')])],
+   {file:'Atlas.ConsoleClient',accepts:['csharp','group'],flows:[[0,1],[1,2]],files:['Atlas.ConsoleClient.csproj','appsettings.json','packages.lock.json'],ignoredFiles:['bin/Debug/net10.0/atlas.dll','bin/Debug/net10.0/atlas.pdb','obj/project.assets.json']}),
+  n('Reading collector','pyproject',[
+   dir('Collector','reading_collector','python',[py('Entry point','__main__.py'),py('Settings','settings.py'),py('Head-end client','head_end.py'),py('Reading validation','validation.py'),py('Landing zone','landing_zone.py')],{files:['__init__.py']}),
+   dir('Tests','tests','python',[py('Validation tests','test_validation.py'),py('Landing zone tests','test_landing_zone.py')],{files:['conftest.py']})],
+   {accepts:['python','group'],flows:[[1,0]],files:['pyproject.toml','uv.lock','.python-version'],ignoredFiles:['.env','.venv/pyvenv.cfg','.pytest_cache/CACHEDIR.TAG']})],{icon:'monitor',accepts:['csapp','pyproject','group']}),
  n('Components','area',[
   n('Design system','group',[n('Header','component'),n('Card grid','component'),n('Map','component'),n('Chart','component'),n('Form','component'),n('Theme tokens','theme')],{icon:'puzzle',link:{repo:'git@git.example.com:shared/design-system.git',ref:'v3.2.0',refs:['v3.2.0','v3.1.4','main','next']}}),
   n('Identity and access','group',[n('Sign-in page','page'),n('Roles and permissions','ontology'),n('Access review','procedure')],{icon:'lock',link:{repo:'git@git.example.com:shared/identity-access.git',ref:'release/2.x',refs:['v2.4.1','v2.4.0','release/2.x','main']}}),
@@ -30,5 +43,5 @@ export const solution:Draft=n('Atlas Platform','solution',[
  n('Quality','area',[g('Test suites','testsuite',['Pipeline regression','Portal end-to-end','Agent behaviour']),
   g('Validation procedures','procedure',['Data quality rules',['Ontology conformance','A'],'Load test','Release readiness'])],{icon:'shield',accepts:['group']}),
  n('Documentation','area',[n('Architecture overview','doc'),n('Onboarding guide','doc'),g('Runbooks','doc',['Pipeline failure','Portal outage']),g('Decisions','doc',['001 Ontology first','002 Linked repositories for reuse'])],{icon:'book',accepts:['doc','group']})
-],{accepts:['group'],flows:[[1,0],[0,2],[2,3],[2,4],[3,4],[4,5],[6,5],[8,7]],
-   layout0:[[0,95],[0,-75],[255,20],[510,-75],[510,110],[765,110],[510,300],[255,275],[0,275],[765,-75]]});
+],{accepts:['group'],flows:[[1,0],[0,2],[2,3],[2,4],[3,4],[4,5],[4,6],[7,5],[9,8]],
+   layout0:[[0,95],[0,-75],[255,20],[510,-75],[510,110],[765,110],[510,300],[765,300],[255,275],[0,275],[765,-75]]});

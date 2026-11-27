@@ -27,7 +27,8 @@ The pages follow one another as they would in use: the start page leads to the l
 - The layout follows the JetBrains New UI: a title bar with menus and the update and push widgets, tool-window stripes, three docks whose panels can be moved, and a status bar.
 - Everything in a solution is one hierarchy, shown in the Explorer. The root is a git repository, and repositories from outside the project can be linked in at any level, each following a branch or a tag.
 - Every item has an id that stays the same when the item is renamed or moved: a ShortGuid as the other ADP hosts make one, a UUID written as its 128-bit value in lowercase base 36, 25 characters long. It is in the Properties, the status bar and the item's `.adp` file.
-- Every level has two views, Logical Structure and File System, set per level and kept in that level's `.adp` file, with personal overrides in `.user.adp`.
+- Every level has two views, Logical Structure and File System, set per level from its context menu (View As) or in the Properties, and kept in that level's `.adp` file, with personal overrides in `.user.adp`.
+- A solution holds applications as well. The example has two under Applications, a C# console client and a Python project of the ingestion. The Logical Structure view shows their parts by name; the File System view shows the source files under the names they have on disk, with the project and language files beside them (`.csproj`, `pyproject.toml`, lock files), and with Show All Files what git ignores (`bin`, `obj`, `.venv`).
 - The document area opens an item in its tool (a diagram, a designer or an editor) and switches to Canvas, an infinite plane with a card per child item that can be walked level by level, in step with the Explorer.
 - The context menu adds, renames and deletes items, with what is offered depending on the item.
 
@@ -46,7 +47,7 @@ The sources are under `src/`, and `dist/` is what `npm run build` makes of them;
 | `ide/css/` | One style sheet per part: shell, explorer, document, tools, canvas, panels, git |
 | `ide/` | One module per part: `types.ts`, `kinds.ts`, `model.ts`, `state.ts`, `repaint.ts`, `docks.ts`, `open.ts`, `explorer.ts`, `document-area.ts`, `canvas.ts`, `properties.ts`, `problems.ts`, `commit.ts`, `git.ts`, `titlebar.ts`, `severity.ts`, `icon-library.ts`, and `main.ts`, which starts the page |
 | `ide/tools/` | One module per tool shown in the document area: flow, ontology, entity, schema, page, dashboard, form, check, document, code, contents, and what they share in `shared.ts` |
-| `ide/data/` | The example data, one file per subject: the solution, problems, flows, ontology, schemas, pages, dashboards, forms, checks, documents, code, changes, commits |
+| `ide/data/` | The example data, one file per subject: the solution, problems, flows, ontology, schemas, pages, dashboards, forms, checks, documents, code, applications, changes, commits |
 
 Beside `src/` are `build.mjs` (the build), `tsconfig.json` (how the types are checked) and `package.json` with its lock file (the two tools the build needs: TypeScript and esbuild).
 
