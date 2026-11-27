@@ -2,7 +2,7 @@
 
 export type KindName =
   | 'solution' | 'area' | 'group' | 'source' | 'pipeline' | 'schema' | 'entity' | 'ontology' | 'vocabulary' | 'model' | 'prompt' | 'agent' | 'evalset'
-  | 'dashboard' | 'notebook' | 'page' | 'theme' | 'component' | 'release' | 'environment' | 'testsuite' | 'procedure' | 'doc' | 'code' | 'file';
+  | 'dashboard' | 'notebook' | 'page' | 'theme' | 'component' | 'csapp' | 'csharp' | 'pyproject' | 'python' | 'release' | 'environment' | 'testsuite' | 'procedure' | 'doc' | 'code' | 'file';
 
 /* the tools the document area has; every kind of item that opens in a tool names one */
 export type ToolName = 'flow' | 'onto' | 'entity' | 'schema' | 'form' | 'check' | 'dash' | 'page' | 'code' | 'doc';
@@ -69,13 +69,19 @@ export interface Item {
   sf?: SchemaSettings;
   sview?: 'designer' | 'json';
 
-  /* a file of the File System view that is not an item of its own, such as .adp */
+  /* an application's source: the name it has on disk where that is not made from the item's name, the files its folder holds beside its items, and the ones git ignores */
+  file?: string;
+  files?: string[];
+  ignoredFiles?: string[];
+
+  /* a file of the File System view that is not an item of its own, such as .adp; a folder of such files has entries */
   pseudo?: true;
   ignored?: boolean;
+  entries?: Item[];
 }
 
 /* what an item starts as in the example data, before it has an id and a parent */
-export interface Draft extends Pick<Item, 'name' | 'kind' | 'icon' | 'vcs' | 'accepts' | 'mode' | 'link' | 'flows' | 'layout0'> {
+export interface Draft extends Pick<Item, 'name' | 'kind' | 'icon' | 'vcs' | 'accepts' | 'mode' | 'link' | 'flows' | 'layout0' | 'file' | 'files' | 'ignoredFiles'> {
   children?: Draft[];
 }
 

@@ -11,7 +11,7 @@ import { PAN, panelIds, resetLayout, show, toggle } from './docks';
 import { linkRepo, newItemMenu, rename } from './explorer';
 import { gitHash } from './git';
 import { K } from './kinds';
-import { crumbsOf, find, linkedRepos, modeOf, path, ro, ROOT } from './model';
+import { binary, crumbsOf, find, linkedRepos, modeOf, path, ro, ROOT } from './model';
 import { flip, levelOf, openDoc, pick } from './open';
 import { repaint } from './repaint';
 import { S } from './state';
@@ -60,11 +60,11 @@ export function renderTitle(): void {
 }
 
 export function renderStatus(): void {
-  const x = S.sel, count = (s: string) => PROBLEMS.filter(p => p.s === s).length, code = x.pseudo || K[x.kind].tool === 'code';
+  const x = S.sel, count = (s: string) => PROBLEMS.filter(p => p.s === s).length, code = x.pseudo ? !x.entries && !binary(x) : K[x.kind].tool === 'code';
   $('#status').innerHTML = `<span class="st path" title="${esc(path(x))}">${crumbsOf(x).map(p => esc(p.name)).join(' › ')}</span>
    <button class="st" data-tw="problems" title="Open Problems">${ico('error', 'c-red')}${count('error')}${ico('warning', 'c-yellow')}${count('warning')}</button>
    <span class="st mono hide-s" title="Hidden item ID">ID ${x.id}</span>
-   <span class="st hide-s">${x.pseudo ? 'File' : modeOf(levelOf(x)) === 'files' ? 'File System' : 'Logical Structure'}</span>
+   <span class="st hide-s">${x.entries ? 'Folder' : x.pseudo ? 'File' : modeOf(levelOf(x)) === 'files' ? 'File System' : 'Logical Structure'}</span>
    ${code ? '<span class="st hide-s">Ln 1, Col 1 · LF · UTF-8</span>' : ''}
    <span class="st hide-s">${ico('link')}${linkedRepos().length} linked repositories</span>
    <span class="st hide-s"><span class="led"></span>Staging healthy</span>

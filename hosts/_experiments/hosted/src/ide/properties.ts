@@ -2,13 +2,14 @@
 import { $maybe, esc } from '../common/dom';
 import { ico } from '../common/icons';
 import { toast } from '../common/popups';
+import { HOLDS } from './data/applications';
 import { WHO } from './data/commits';
 import { PROBLEMS } from './data/problems';
 import { body } from './docks';
 import { iconPick, nameError, setMode } from './explorer';
 import { gitHashOf } from './git';
 import { K } from './kinds';
-import { emb, filesOf, linkOf, modeOf, multi, path, ro, showAll } from './model';
+import { emb, filesOf, linkOf, modeOf, multi, ownerOf, path, ro, showAll } from './model';
 import { repaintAll } from './repaint';
 import { S } from './state';
 import type { Falsy, Item, PropControl, PropGroup, PropRow, PropSheet, ViewMode } from './types';
@@ -18,8 +19,8 @@ const present = <T>(list: (T | Falsy)[]): T[] => list.filter(Boolean) as T[];
 /* the sheet of an item: what it is, how it is stored, where it comes from, and what git and validation say of it */
 function nodeProps(x: Item): PropSheet {
   if (x.pseudo) {
-    const owner = x.parent!;
-    return { icon: 'file', col: 'muted', title: x.name, sub: 'File', g: [['File', [['Name', x.name], ['Path on disk', path(x)], ['Ignored by git', x.ignored ? 'Yes' : 'No'], ['Belongs to', owner.name]]], ['Purpose', [['Holds', x.name === '.adp' ? 'Shared settings and canvas layout' : x.name === '.user.adp' ? 'Your personal overrides' : 'Part of the stored form of ' + owner.name]]]] };
+    const owner = ownerOf(x), what = x.entries ? 'Folder' : 'File';
+    return { icon: x.entries ? 'folder' : 'file', col: 'muted', title: x.name, sub: what, g: [[what, [['Name', x.name], ['Path on disk', path(x)], ['Ignored by git', x.ignored ? 'Yes' : 'No'], ['Belongs to', owner.name]]], ['Purpose', [['Holds', x.name === '.adp' ? 'Shared settings and canvas layout' : x.name === '.user.adp' ? 'Your personal overrides' : HOLDS[x.name] ?? 'Part of the stored form of ' + owner.name]]]] };
   }
   const L = linkOf(x), box = !!x.children, hsh = parseInt(x.id.slice(-6), 36), R = ro(x), mine = PROBLEMS.filter(p => p.node === x);
   const general: PropGroup = ['General', [['Name', { name: 1, lock: !!R }], ['Kind', K[x.kind].label], ['ID', x.id], ['Icon', { icon: 1, lock: !!R }]]];
