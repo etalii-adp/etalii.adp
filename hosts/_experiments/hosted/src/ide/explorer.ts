@@ -4,7 +4,7 @@ import { ico } from '../common/icons';
 import { closePop, copy, dialog, menu, place, toast, type MenuEntry } from '../common/popups';
 import { n } from './data/solution';
 import { body, pel, show } from './docks';
-import { ICONSET } from './icon-library';
+import { BY_DOMAIN, GENERAL, ICON_COUNT, ICONSET } from './icon-library';
 import { inSentence, K, TAKES } from './kinds';
 import { adopt, asFile, BY, disk, inside, isBox, kids, modeOf, multi, newShortGuid, path, ro, ROOT, showAll } from './model';
 import { levelOf, openDoc, pick, reveal } from './open';
@@ -108,18 +108,20 @@ function del(x: Item): void {
   toast(`Deleted ${x.name}${x.children ? ' and its ' + x.children.length + ' items' : ''}`, 'Undo', () => { siblings.splice(i, 0, x); openDoc(x); });
 }
 
-/* the icon picker, at a point: every icon of the library by category, with search */
+/* the icon picker, at a point: every icon of the library by category, with search and a choice of one category or domain */
 export function iconPick(x: Item, ax: number, ay: number): void {
   closePop();
   const cur = x.icon || K[x.kind].icon, all = ICONSET.flatMap(group => group[1]), nameOf = (i: string) => (all.find(o => o.nm === i) || { label: i }).label;
-  const m = el(`<div class="menu ipick"><div class="mhead">Icon for ${esc(x.name)}</div><input class="in" id="ip-q" placeholder="Search ${all.length} icons" aria-label="Search icons" autocomplete="off"><div class="ip-list" id="ip-list"></div><div class="ip-foot" id="ip-name"></div><div class="msep"></div><button class="mi" data-ic=""><span class="lead"></span>Use the default for ${esc(inSentence(x.kind))}</button></div>`);
-  const list = $('#ip-list', m), foot = $('#ip-name', m), q = $<HTMLInputElement>('#ip-q', m), rest = () => { foot.textContent = 'Current: ' + nameOf(cur); };
+  const options = (groups: typeof ICONSET) => groups.map(([cat]) => `<option>${esc(cat)}</option>`).join('');
+  const m = el(`<div class="menu ipick"><div class="mhead">Icon for ${esc(x.name)}</div><div class="ip-top"><input class="in" id="ip-q" placeholder="Search ${ICON_COUNT} icons" aria-label="Search icons" autocomplete="off"><select class="in" id="ip-cat" aria-label="Category or domain"><option value="">All categories</option><optgroup label="General">${options(GENERAL)}</optgroup><optgroup label="Domains">${options(BY_DOMAIN)}</optgroup></select></div><div class="ip-list" id="ip-list"></div><div class="ip-foot" id="ip-name"></div><div class="msep"></div><button class="mi" data-ic=""><span class="lead"></span>Use the default for ${esc(inSentence(x.kind))}</button></div>`);
+  const list = $('#ip-list', m), foot = $('#ip-name', m), q = $<HTMLInputElement>('#ip-q', m), only = $<HTMLSelectElement>('#ip-cat', m), rest = () => { foot.textContent = 'Current: ' + nameOf(cur); };
   const draw = () => {
     const words = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    list.innerHTML = ICONSET.map(([cat, items]) => {
+    list.innerHTML = ICONSET.filter(([cat]) => !only.value || cat === only.value).map(([cat, items]) => {
       const found = items.filter(o => words.every(w => o.kw.includes(w)));
-      return found.length ? `<h6>${cat}</h6><div class="icongrid">${found.map(o => `<button class="ib${o.nm === cur ? ' on' : ''}" data-ic="${o.nm}" title="${o.label}" aria-label="${o.label}">${ico(o.nm)}</button>`).join('')}</div>` : '';
-    }).join('') || `<div class="hint">No icon matches "${esc(q.value.trim())}".</div>`;
+      return found.length ? `<h6>${esc(cat)}</h6><div class="icongrid">${found.map(o => `<button class="ib${o.nm === cur ? ' on' : ''}" data-ic="${o.nm}" title="${esc(o.label)}" aria-label="${esc(o.label)}">${ico(o.nm)}</button>`).join('')}</div>` : '';
+    }).join('') || `<div class="hint">No icon matches "${esc(q.value.trim())}"${only.value ? ' in ' + esc(only.value) : ''}.</div>`;
+    list.scrollTop = 0;
     rest();
   };
   const choose = (i: string | undefined) => {
@@ -129,6 +131,7 @@ export function iconPick(x: Item, ax: number, ay: number): void {
     toast('Icon saved in ' + path(x.children ? x : x.parent!) + '/.adp');
   };
   q.oninput = draw;
+  only.onchange = draw;
   q.onkeydown = e => { if (e.key === 'Enter') { const first = $maybe('[data-ic]', list); if (first) choose(first.dataset.ic); } };
   list.onmouseover = e => { const b = hit(e, '[data-ic]'); if (b) foot.textContent = b.title; else rest(); };
   list.onmouseleave = rest;

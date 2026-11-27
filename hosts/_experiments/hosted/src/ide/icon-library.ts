@@ -1,5 +1,6 @@
-/* More icons in the same 16px stroke style, and the portfolio the icon picker searches: category, then name:Label;search words. */
+/* More icons in the same 16px stroke style, and the portfolio the icon picker searches: category, then name:Label;search words. The icons of the domains are in icon-domains.ts. */
 import { c } from '../common/icons';
+import { DOMAINS } from './icon-domains';
 
 /* one icon the picker offers: its name in the icon set, its label, and the words it is found by */
 export interface IconChoice { nm: string; label: string; kw: string }
@@ -135,6 +136,14 @@ const portfolio:[category:string,icons:string][]=[
 ['Web and interface','globe:Globe;portal web site internet|window:Web page;browser screen window|monitor:Monitor;desktop display screen|phone:Phone;mobile app device|sidebar:Sidebar;navigation panel|canvas:Layout;sections blocks canvas|button:Button;action click|input:Input;field form textbox|toggle:Toggle;switch setting option|cursor:Cursor;pointer interaction|image:Image;picture photo media|video:Video;player film media|palette:Palette;theme colours|brush:Brush;style paint design|ruler:Ruler;measure spacing size|shapes:Shapes;elements geometry|text:Text;typography heading font|external:External link;open outbound|cart:Cart;shop order basket commerce|card:Card;payment credit billing|coin:Coin;money price cost tariff|receipt:Receipt;invoice bill'],
 ['Quality and security','check:Check;test passed done|approve:Approved;accepted valid ok|reject:Rejected;denied failed invalid|checklist:Checklist;procedure steps todo|clipboard:Clipboard;procedure audit task|shield:Shield check;security compliance protected|shieldo:Shield;guard safe security|lock:Lock;access private secure|unlock:Unlock;open public|certificate:Certificate;award compliance badge|bug:Bug;defect issue|warning:Warning;caution risk|error:Error;problem failure|info:Information;note about|question:Question;help unknown faq|wrench:Wrench;tool maintenance fix|gear:Gear;settings configuration|props:Sliders;parameters tune options'],
 ['Documents and people','book:Book;documentation manual guide|doc:Document;page text|file:File;blank|note:Note;sticky memo remark|quote:Quote;citation reference|clip:Attachment;paperclip|edit:Pencil;write draft edit|mail:Mail;email letter|megaphone:Megaphone;announce communication campaign|user:Person;user account profile|users:Team;people group users|badge:Identity badge;id role|briefcase:Briefcase;business work portfolio|building:Building;company office|factory:Factory;industry plant production'],
-['Domain and actions','pylon:Pylon;grid transmission tower power line energy|meter:Meter;dial measurement reading|sun:Sun;solar weather light|drop:Drop;water fluid|leaf:Leaf;sustainable green nature|flame:Flame;gas heat fire|heart:Heart;health care|cross:Medical cross;health care|camera:Camera;photo capture|copy:Copy;duplicate clone|save:Save;store disk|share:Share;distribute|trash:Trash;delete remove bin']
+['Actions','camera:Camera;photo capture|copy:Copy;duplicate clone|save:Save;store disk|share:Share;distribute|trash:Trash;delete remove bin']
 ];
-export const ICONSET:IconGroup[]=portfolio.map(([cat,str])=>[cat,str.split('|').map(e=>{const[nm,rest]=e.split(':') as [string,string],[label,kw]=rest.split(';') as [string,string];return{nm,label,kw:(nm+' '+label+' '+kw+' '+cat).toLowerCase()}})]);
+const choice=(nm:string,label:string,words:string,cat:string):IconChoice=>({nm,label,kw:(nm+' '+label+' '+words+' '+cat).toLowerCase()});
+/* the general categories, which every kind of solution uses */
+export const GENERAL:IconGroup[]=portfolio.map(([cat,str])=>[cat,str.split('|').map(e=>{const[nm,rest]=e.split(':') as [string,string],[label,kw]=rest.split(';') as [string,string];return choice(nm,label,kw,cat)})]);
+/* one category per domain, by name */
+export const BY_DOMAIN:IconGroup[]=DOMAINS.map(([domain,words,icons])=>[domain,icons.map(([nm,label,kw])=>choice(nm,label,kw,domain+' '+words))]);
+export const ICONSET:IconGroup[]=[...GENERAL,...BY_DOMAIN];
+/* how many different icons there are: a domain also offers icons of other categories */
+export const ICON_COUNT=new Set(ICONSET.flatMap(group=>group[1].map(o=>o.nm))).size;
+for(const[,,icons] of DOMAINS)for(const[nm,,,drawing] of icons)if(drawing)libraryIcons[nm]=drawing;
