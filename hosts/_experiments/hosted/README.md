@@ -13,7 +13,7 @@ Open `index.html` in a browser. There is no build step and no server is needed.
 | Projects | `projects/` | The projects and reusable repositories on this computer. Only Atlas Platform opens |
 | IDE | `ide/` | The solution IDE: Explorer, document area with tools and a canvas, Properties, Problems, Commit and Git |
 
-The pager at the top of every page jumps between them.
+The pages follow one another as they would in use: the start page leads to the login page, signing in leads to the projects, and opening Atlas Platform leads to the IDE. Signing out, the ADP mark on the login page, and the project and account menus of the IDE lead back.
 
 ## What the IDE page shows
 
@@ -30,7 +30,7 @@ Whatever more than one page uses is in `common/`. Whatever one page uses is in t
 | Folder | Holds |
 |---|---|
 | `common/css/` | `tokens.css` (colours, fonts and sizes, dark and light), `base.css` (page frame, buttons, inputs, icons), `popups.css` (menus, toasts, dialogs), `transitions.css` (moving between the pages) |
-| `common/js/` | `boot.js` (theme and direction, before the first paint), `dom.js`, `icons.js` (the icon set and the ADP mark), `popups.js`, `nav.js` (going to another page), `mockup.js` (the pager and the "not built yet" notes) |
+| `common/js/` | `boot.js` (theme and direction, before the first paint), `dom.js`, `icons.js` (the icon set and the ADP mark), `popups.js`, `nav.js` (going to another page), `mockup.js` (the buttons that go to another page and the "not built yet" notes) |
 | `splash/` | `shapes.js` (the four pictures), `cloud.js` (the point cloud), `splash.js`, `splash.css` |
 | `login/` | `login.js`, `login.css` |
 | `projects/` | `projects.js`, `projects.css`, and the example projects in `data/` |

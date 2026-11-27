@@ -19,7 +19,7 @@ cloud.onturn=named;
 $('#sp-line').textContent=SEEN[0][1];
 $('#sp-pick').onclick=e=>{const b=e.target.closest('button');b&&cloud.show(+b.dataset.i,true)};
 const turn=()=>cloud.show((cloud.index+1)%SEEN.length,true);
-$('#cloud').onclick=turn;$('#sp-turn').onclick=turn;
+$('#cloud').onclick=turn;
 addEventListener('keydown',e=>{if(e.key==='ArrowRight')turn();if(e.key==='ArrowLeft')cloud.show((cloud.index+SEEN.length-1)%SEEN.length,true)});
 
 pageReady();

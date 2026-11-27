@@ -39,7 +39,7 @@ button.st:hover{background:var(--hover);color:var(--fg)}
 
 /* narrow windows */
 @media (max-width:1180px){.menus{display:none}#burger{display:inline-grid}}
-@media (max-width:900px){.titlebar .pager,.runw,.hide-s{display:none}}
+@media (max-width:900px){.runw,.hide-s{display:none}}
 @media (max-width:700px){
   #dock-left,#dock-right{position:absolute;top:0;bottom:0;z-index:5;width:min(300px,calc(100% - 16px))!important;box-shadow:var(--shadow)}
   #dock-left{left:0}#dock-right{right:0}.split[data-split="left"],.split[data-split="right"]{display:none}
