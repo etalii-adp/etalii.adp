@@ -5,6 +5,7 @@ import { go } from '../common/nav';
 import { only } from '../common/page';
 import { menu, menuAt, toast, type MenuEntry } from '../common/popups';
 import { setTheme, setVar } from '../common/prefs';
+import { fullScreen, isFullScreen } from './browser';
 import { COMMITS, HEADS, WHO } from './data/commits';
 import { PROBLEMS } from './data/problems';
 import { PAN, panelIds, resetLayout, show, toggle } from './docks';
@@ -45,7 +46,7 @@ function push(): void {
 const MENUS: Record<string, MenuEntry[]> = {
   File: [{ l: 'New Item…', k: 'Ctrl+N', on: () => menu(newItemMenu(), 220, 60) }, { l: 'Open Project…' }, { l: 'Link Repository…', on: () => linkRepo(find('Components') ?? ROOT) }, '-', { l: 'Settings…', k: 'Ctrl+Alt+S' }, '-', { l: 'Close Project', on: () => go('projects') }, { l: 'Sign Out', on: () => go('login') }],
   Edit: [{ l: 'Undo', k: 'Ctrl+Z' }, { l: 'Redo', k: 'Ctrl+Y' }, '-', { l: 'Rename…', k: 'F2', on: () => { if (!S.sel.pseudo && !ro(S.sel)) rename(S.sel); } }, { l: 'Find in Items…', k: 'Ctrl+Shift+F', on: search }],
-  View: [{ h: 'Tool windows' }, ...panelIds.map(id => ({ l: PAN[id][0], get chk() { return S.act[S.dock[id]] === id; }, on: () => toggle(id) })), '-', { l: 'Switch Document and Canvas', k: 'Alt+C', on: flip }, { l: 'Restore Default Layout', on: resetLayout }],
+  View: [{ h: 'Tool windows' }, ...panelIds.map(id => ({ l: PAN[id][0], get chk() { return S.act[S.dock[id]] === id; }, on: () => toggle(id) })), '-', { l: 'Switch Document and Canvas', k: 'Alt+C', on: flip }, { l: 'Restore Default Layout', on: resetLayout }, '-', { l: 'Full Screen', k: 'F11', get chk() { return isFullScreen(); }, on: fullScreen }],
   Navigate: [{ l: 'Search Everywhere', k: 'Shift Shift', on: search }, { l: 'Go to Item by ID…' }, { l: 'Select Open Document in Explorer', on: () => pick(S.doc) }, { l: 'Up One Level', on: () => { if (S.doc.parent) openDoc(S.doc.parent); } }],
   Tools: [{ l: 'Validate Solution', on: () => { show('problems'); toast('Validated 96 items: 2 errors, 3 warnings, 3 notes'); } }, { l: 'Run Test Suites', on: () => toast('3 test suites queued on Staging') }, { l: 'Generate Documentation' }],
   Git: [{ l: 'Commit…', k: 'Ctrl+K', on: () => show('commit') }, { l: 'Push…', k: 'Ctrl+Shift+K', on: push }, { l: 'Update Project…', k: 'Ctrl+T', on: pull }, { l: 'Fetch', on: fetched }, '-', { l: 'New Branch…' }, { l: 'Show Git Log', on: () => show('git') }],

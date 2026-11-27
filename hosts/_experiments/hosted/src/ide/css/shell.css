@@ -1,5 +1,8 @@
 /* The IDE shell: title bar, tool-window stripes, three docks (left, right, bottom) around a document area, status bar. */
 
+/* a swipe to the side does not take the browser back or forward (see browser.ts) */
+html{overscroll-behavior:none}
+
 .titlebar{height:40px;flex:none;overflow:hidden;display:flex;align-items:center;gap:4px;padding:0 8px;background:var(--bg);border-bottom:1px solid var(--border);white-space:nowrap}
 .tbtn{height:28px;padding:0 8px;border-radius:5px;display:inline-flex;align-items:center;gap:6px}
 .tbtn:hover,.tbtn.open{background:var(--hover)}
