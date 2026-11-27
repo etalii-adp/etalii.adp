@@ -31,6 +31,7 @@ The pages follow one another as they would in use: the start page leads to the l
 - A solution holds applications as well. The example has two under Applications, a C# console client and a Python project of the ingestion. The Logical Structure view shows their parts by name; the File System view shows the source files under the names they have on disk, with the project and language files beside them (`.csproj`, `pyproject.toml`, lock files), and with Show All Files what git ignores (`bin`, `obj`, `.venv`).
 - The document area opens an item in its tool (a diagram, a designer or an editor) and switches to Canvas, an infinite plane with a card per child item that can be walked level by level, in step with the Explorer.
 - The context menu adds, renames and deletes items, with what is offered depending on the item.
+- The IDE owns the keyboard and the mouse (`ide/browser.ts`): the browser's keyboard shortcuts, the back and forward buttons of a mouse and the browser's context menu do nothing on the IDE page, so each can be given a task of the IDE's own, on Windows and on a Mac. A text field keeps the clipboard, select all, undo, redo and moving by word. A browser keeps a few shortcuts to itself (a new tab or window, closing one, switching tabs, quitting); Chromium hands those over as well in full screen, which View, Full Screen and F11 enter.
 
 ## Where things are
 
@@ -45,7 +46,7 @@ The sources are under `src/`, and `dist/` is what `npm run build` makes of them;
 | `login/` | `login.ts`, `login.css` |
 | `projects/` | `projects.ts`, `projects.css`, and the example projects in `data/` |
 | `ide/css/` | One style sheet per part: shell, explorer, document, tools, canvas, panels, git |
-| `ide/` | One module per part: `types.ts`, `kinds.ts`, `model.ts`, `state.ts`, `repaint.ts`, `docks.ts`, `open.ts`, `explorer.ts`, `document-area.ts`, `canvas.ts`, `properties.ts`, `problems.ts`, `commit.ts`, `git.ts`, `titlebar.ts`, `severity.ts`, `icon-library.ts`, and `main.ts`, which starts the page |
+| `ide/` | One module per part: `types.ts`, `kinds.ts`, `model.ts`, `state.ts`, `repaint.ts`, `docks.ts`, `open.ts`, `explorer.ts`, `document-area.ts`, `canvas.ts`, `properties.ts`, `problems.ts`, `commit.ts`, `git.ts`, `titlebar.ts`, `severity.ts`, `icon-library.ts`, `browser.ts`, and `main.ts`, which starts the page |
 | `ide/tools/` | One module per tool shown in the document area: flow, ontology, entity, schema, page, dashboard, form, check, document, code, contents, and what they share in `shared.ts` |
 | `ide/data/` | The example data, one file per subject: the solution, problems, flows, ontology, schemas, pages, dashboards, forms, checks, documents, code, applications, changes, commits |
 

@@ -2,6 +2,7 @@
 import { addIcons } from '../common/icons';
 import { pageReady } from '../common/nav';
 import { startPage } from '../common/page';
+import { ownTheBrowser } from './browser';
 import { renderCommit } from './commit';
 import { layout, mountDocks } from './docks';
 import { mountDocumentArea, renderEditor } from './document-area';
@@ -16,6 +17,7 @@ import { S } from './state';
 import { mountTitlebar, renderStatus, renderTitle } from './titlebar';
 
 startPage();
+ownTheBrowser();
 addIcons(libraryIcons);
 mountDocks();
 mountDocumentArea();
