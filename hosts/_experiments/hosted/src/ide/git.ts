@@ -29,19 +29,22 @@ export function renderGit(): void {
   const of = (kind: string, icon = 'branch'): RefRow[] => git.refs.filter(r => r.kind === kind).sort((x, y) => Number(y.name === git.branch) - Number(x.name === git.branch))
     .map(r => ({ name: r.name, label: r.label, icon, current: r.name === git.branch, selected: G.branch === r.name, note: kind === 'local' && r.name === git.branch ? sync : undefined }));
   const head = (name: string): number | undefined => at.get(git.refs.find(r => r.name === name)?.hash ?? '');
-  const set = G.branch ? reach(head(G.branch)) : null, filtered = !!(G.q || G.user || G.days || G.branch);
+  /* whole says that every commit of what the log is kept to shows: all of them, or all a branch has behind it */
+  const set = G.branch ? reach(head(G.branch)) : null, whole = !(G.q || G.user || G.days);
   const vis = COMMITS.map((_, i) => i).filter(i => { const cm = COMMITS[i]; return (!set || set.has(i)) && (!G.user || cm.a === G.user) && (!G.days || cm.d < G.days) && (!G.q || cm.m.toLowerCase().includes(G.q) || cm.h.includes(G.q)); });
   const RH = 26, X = (l: number) => 14 + l * 14, Y = (r: number) => r * RH + 13;
-  const graph: Graph = { lines: [], dots: vis.map((i, r) => ({ x: X(filtered ? 0 : COMMITS[i].l), y: Y(r), colour: `var(--${LC[filtered ? 0 : COMMITS[i].l]})` })), height: vis.length * RH };
+  /* the row each commit that shows has in the log */
+  const row = new Map(vis.map((i, r) => [i, r]));
+  const graph: Graph = { lines: [], dots: vis.map((i, r) => ({ x: X(whole ? COMMITS[i].l : 0), y: Y(r), colour: `var(--${LC[whole ? COMMITS[i].l : 0]})` })), height: vis.length * RH };
   const lines: Graph['lines'][number][] = [];
-  /* the lines of the graph are drawn only when every commit shows */
-  if (!filtered) vis.forEach(i => {
+  /* A line goes from a commit to each of its parents, in the lanes they have in the whole log, between the rows they have now. They are drawn while the log is whole: kept to a user, a time or a text, a commit shows without its parents, and there is nothing to connect. */
+  if (whole) vis.forEach((i, r) => {
     const cm = COMMITS[i];
     cm.p.forEach(p => {
-      const j = at.get(p);
-      if (j === undefined) return;
+      const j = at.get(p), q = j === undefined ? undefined : row.get(j);
+      if (j === undefined || q === undefined) return;
       const a = cm.l, b = COMMITS[j].l;
-      lines.push({ colour: `var(--${LC[Math.max(a, b)]})`, d: a === b ? `M${X(a)} ${Y(i)}L${X(a)} ${Y(j)}` : a < b ? `M${X(a)} ${Y(i)}C${X(a)} ${Y(i) + 13} ${X(b)} ${Y(i) + 13} ${X(b)} ${Y(i) + RH}L${X(b)} ${Y(j)}` : `M${X(a)} ${Y(i)}L${X(a)} ${Y(j) - RH}C${X(a)} ${Y(j) - 13} ${X(b)} ${Y(j) - 13} ${X(b)} ${Y(j)}` });
+      lines.push({ colour: `var(--${LC[Math.max(a, b)]})`, d: a === b ? `M${X(a)} ${Y(r)}L${X(a)} ${Y(q)}` : a < b ? `M${X(a)} ${Y(r)}C${X(a)} ${Y(r) + 13} ${X(b)} ${Y(r) + 13} ${X(b)} ${Y(r) + RH}L${X(b)} ${Y(q)}` : `M${X(a)} ${Y(r)}L${X(a)} ${Y(q) - RH}C${X(a)} ${Y(q) - 13} ${X(b)} ${Y(q) - 13} ${X(b)} ${Y(q)}` });
     });
   });
   draw(body('git'), h(Git, {

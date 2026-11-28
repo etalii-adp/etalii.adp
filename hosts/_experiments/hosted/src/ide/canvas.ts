@@ -13,27 +13,46 @@ import { project, refused } from './storage';
 import { curve, curveL } from './tools/shared';
 import type { Item, Point, View } from './types';
 
-/* Tweens between what the document area shows. Going into an item zooms in completely: what showed stays as a picture that grows until the item's card is all there is to see, while what the item shows, a canvas or a tool, grows out of that card. Between levels there is also a short zoom out when going higher, a short move in the direction the two levels have on their shared ancestor's canvas, and both when the target sits in another branch. */
+/* Tweens between what the document area shows. Going into an item zooms in completely: what showed stays as a picture that grows until the item's card is all there is to see, while what the item shows, a canvas or a tool, grows out of that card. Going higher zooms out completely, which is the same played backwards: the level above starts so large that the card of what showed is all there is to see, and shrinks into place with what showed in that card. Between levels beside each other there is a short move in the direction the two have on their shared ancestor's canvas, with a zoom when the target sits deeper or higher in another branch. */
 interface Box { x: number; y: number; w: number; h: number }
-/* card is where the card of the item is in the document area; was is the picture of what showed, and scroll how far its diagram was scrolled */
-export type Tween = { k: 'in'; card: Box; was: HTMLElement; scroll: [left: number, top: number] } | { k: 'out'; id: string } | { k: 'move'; dx: number; dy: number; s: number };
+type Scroll = [left: number, top: number];
+/* card is where the card of the item is in the document area, and id the item whose card it is on the level that comes; was is the picture of what showed, and scroll how far its diagram was scrolled */
+export type Tween = { k: 'in'; card: Box; was: HTMLElement; scroll: Scroll } | { k: 'out'; id: string; was: HTMLElement | null; scroll: Scroll } | { k: 'move'; dx: number; dy: number; s: number };
 
 const cardOf = (id: string, d: HTMLElement): HTMLElement | null => $maybe(`.card[data-id="${id}"],.en[data-id="${id}"]`, d);
 /* the transform of something that is where it belongs, written as every other one is, so a tween between the two moves and zooms evenly */
 const STILL = 'translate(0px,0px) scale(1)';
 
-/* What the document area shows now, as a picture that can stay while something else is drawn: a copy that takes no part in the page. Only an arrowhead keeps its id, which the arrows of the copy point at. */
-function picture(d: HTMLElement): HTMLElement | null {
+/* What the document area shows now, as a picture that can stay while something else is drawn: a copy that takes no part in the page. Only an arrowhead keeps its id, which the arrows of the copy point at. A picture that shrinks shows what is under it around the copy. */
+function picture(d: HTMLElement, shrinks = false): HTMLElement | null {
   const shown = d.firstElementChild;
   if (!(shown instanceof HTMLElement)) return null;
-  const frame = el(h(Picture, null)), copy = shown.cloneNode(true) as HTMLElement;
+  const frame = el(h(Picture, { shrinks })), copy = shown.cloneNode(true) as HTMLElement;
   for (const e of [copy, ...$$('[id]:not(marker)', copy)]) e.removeAttribute('id');
   frame.append(copy);
   return frame;
 }
 
-/* Works out the tween from the level that shows to what is shown next: a level, or with level false an item in its tool, which is only zoomed into. Asked before the document area is drawn again, so it can still measure, and copy, what is left. Null when there is nothing to play. */
-export function tween(from: Item, to: Item, d: HTMLElement, level = true): Tween | null {
+/* how far the diagram the document area shows is scrolled */
+const scrolled = (d: HTMLElement): Scroll => { const surf = $maybe('.surf', d); return [surf?.scrollLeft ?? 0, surf?.scrollTop ?? 0]; };
+/* puts a picture over the document area, as what it showed was */
+function lay(was: HTMLElement, scroll: Scroll, o: DOMRect): void {
+  Object.assign(was.style, { left: `${o.left}px`, top: `${o.top}px`, width: `${o.width}px`, height: `${o.height}px` });
+  document.body.append(was);
+  const surf = $maybe('.surf', was);
+  if (surf) { surf.scrollLeft = scroll[0]; surf.scrollTop = scroll[1]; }
+}
+/* a tween of a picture that takes the picture away when it is over, however it ends */
+function fade(was: HTMLElement, frames: Keyframe[], duration: KeyframeAnimationOptions['duration']): void {
+  const over = (): void => { was.parentNode?.removeChild(was); };
+  was.animate(frames, { duration }).finished.then(over, over);
+}
+/* the move and zoom, from its own corner, of something that is at a place in the document area, which takes a point of the area to another one at a scale */
+const about = (at: Point, from: Point, to: Point, k: number): Keyframe => ({ transformOrigin: '0 0', transform: `translate(${to.x - k * from.x - at.x * (1 - k)}px,${to.y - k * from.y - at.y * (1 - k)}px) scale(${k})` });
+const TIMING: KeyframeAnimationOptions = { duration: 340, easing: 'cubic-bezier(.3,0,.2,1)' };
+
+/* Works out the tween from what shows to what is shown next. What shows is a level, or with fromLevel false an item in its tool, which is only zoomed out of; what is shown next is a level, or with level false an item in its tool, which is only zoomed into. Asked before the document area is drawn again, so it can still measure, and copy, what is left. Null when there is nothing to play. */
+export function tween(from: Item, to: Item, d: HTMLElement, level = true, fromLevel = true): Tween | null {
   const pa = crumbsOf(from), pb = crumbsOf(to);
   let i = 0;
   while (pa[i] && pa[i] === pb[i]) i++;
@@ -42,11 +61,13 @@ export function tween(from: Item, to: Item, d: HTMLElement, level = true): Tween
     /* deeper: into the card of the item, or of the item on the way to it */
     const card = b ? cardOf(b.id, d) : null, was = card && picture(d);
     if (!card || !was) return null;
-    const r = card.getBoundingClientRect(), o = d.getBoundingClientRect(), surf = $maybe('.surf', d);
-    return { k: 'in', card: { x: r.left - o.left, y: r.top - o.top, w: r.width, h: r.height }, was, scroll: [surf?.scrollLeft ?? 0, surf?.scrollTop ?? 0] };
+    const r = card.getBoundingClientRect(), o = d.getBoundingClientRect();
+    return { k: 'in', card: { x: r.left - o.left, y: r.top - o.top, w: r.width, h: r.height }, was, scroll: scrolled(d) };
   }
   if (!level) return null;
-  if (!b) return { k: 'out', id: a.id };
+  /* higher: out of the card of what showed, or of the item on the way to it */
+  if (!b) return { k: 'out', id: a.id, was: picture(d, true), scroll: scrolled(d) };
+  if (!fromLevel) return null;
   const levels = A.children || [], P = layoutOf(A), va = P[levels.indexOf(a)], vb = P[levels.indexOf(b)], dx = vb.x - va.x, dy = vb.y - va.y, len = Math.hypot(dx, dy) || 1;
   const dd = pb.length - pa.length;
   return { k: 'move', dx: dx / len, dy: dy / len, s: dd < 0 ? 1.6 : dd > 0 ? .55 : a !== from ? .8 : 1 };
@@ -56,22 +77,29 @@ export function tween(from: Item, to: Item, d: HTMLElement, level = true): Tween
 function zoomIn(t: Tween & { k: 'in' }, d: HTMLElement): void {
   const shown = d.firstElementChild, copy = t.was.firstElementChild;
   if (!(shown instanceof HTMLElement) || !(copy instanceof HTMLElement)) return;
-  const o = d.getBoundingClientRect(), W = o.width, H = o.height, K = Math.max(W / t.card.w, H / t.card.h), cx = t.card.x + t.card.w / 2, cy = t.card.y + t.card.h / 2;
-  const timing: KeyframeAnimationOptions = { duration: 340, easing: 'cubic-bezier(.3,0,.2,1)' };
-  Object.assign(t.was.style, { left: `${o.left}px`, top: `${o.top}px`, width: `${W}px`, height: `${H}px` });
-  document.body.append(t.was);
-  const surf = $maybe('.surf', t.was);
-  if (surf) { surf.scrollLeft = t.scroll[0]; surf.scrollTop = t.scroll[1]; }
-  copy.animate([{ transformOrigin: '0 0', transform: STILL }, { transformOrigin: '0 0', transform: `translate(${W / 2 - K * cx}px,${H / 2 - K * cy}px) scale(${K})` }], timing);
-  const over = (): void => { t.was.parentNode?.removeChild(t.was); };
-  t.was.animate([{ opacity: 1 }, { opacity: 1, offset: .45 }, { opacity: 0 }], { duration: timing.duration }).finished.then(over, over);
-  const e = shown.getBoundingClientRect(), k = 1 / K;
-  shown.animate([{ transformOrigin: '0 0', transform: `translate(${cx - k * W / 2 - (e.left - o.left) * (1 - k)}px,${cy - k * H / 2 - (e.top - o.top) * (1 - k)}px) scale(${k})` }, { transformOrigin: '0 0', transform: STILL }], timing);
+  const o = d.getBoundingClientRect(), W = o.width, H = o.height, K = Math.max(W / t.card.w, H / t.card.h), card = { x: t.card.x + t.card.w / 2, y: t.card.y + t.card.h / 2 }, middle = { x: W / 2, y: H / 2 }, e = shown.getBoundingClientRect();
+  lay(t.was, t.scroll, o);
+  copy.animate([{ transformOrigin: '0 0', transform: STILL }, about({ x: 0, y: 0 }, card, middle, K)], TIMING);
+  fade(t.was, [{ opacity: 1 }, { opacity: 1, offset: .45 }, { opacity: 0 }], TIMING.duration);
+  shown.animate([about({ x: e.left - o.left, y: e.top - o.top }, middle, card, 1 / K), { transformOrigin: '0 0', transform: STILL }], TIMING);
+}
+
+/* Zooms out completely, which is zooming in played backwards. What shows now, the level above, starts so large that the card of what showed covers the document area, and shrinks into place; over it the picture of what showed shrinks with that card, at every moment where the card is and as large, and fades as it gets there. False when there is no card to zoom out of, or no picture of what showed. */
+function zoomOut(t: Tween & { k: 'out' }, d: HTMLElement): boolean {
+  const shown = d.firstElementChild, copy = t.was?.firstElementChild, at = cardOf(t.id, d);
+  if (!t.was || !at || !(shown instanceof HTMLElement) || !(copy instanceof HTMLElement)) return false;
+  const o = d.getBoundingClientRect(), r = at.getBoundingClientRect(), W = o.width, H = o.height, K = Math.max(W / r.width, H / r.height), card = { x: r.left - o.left + r.width / 2, y: r.top - o.top + r.height / 2 }, middle = { x: W / 2, y: H / 2 }, e = shown.getBoundingClientRect();
+  lay(t.was, t.scroll, o);
+  shown.animate([about({ x: e.left - o.left, y: e.top - o.top }, card, middle, K), { transformOrigin: '0 0', transform: STILL }], TIMING);
+  copy.animate([{ transformOrigin: '0 0', transform: STILL }, about({ x: 0, y: 0 }, middle, card, 1 / K)], TIMING);
+  fade(t.was, [{ opacity: 1 }, { opacity: 1, offset: .15 }, { opacity: 0, offset: .7 }, { opacity: 0 }], TIMING.duration);
+  return true;
 }
 
 /* plays a tween on what the document area shows now */
 export function play(t: Tween, d: HTMLElement): void {
   if (t.k === 'in') { zoomIn(t, d); return; }
+  if (t.k === 'out' && zoomOut(t, d)) return;
   const cv = $maybe('.cv', d) || $maybe('.surf', d);
   if (!cv) return;
   const o = cv.getBoundingClientRect();
