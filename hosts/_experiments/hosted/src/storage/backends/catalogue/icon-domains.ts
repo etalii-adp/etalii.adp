@@ -1,5 +1,5 @@
 /* Icons per domain, in the 16px stroke style of the icon set. A domain is its name, the words it is found by, and its icons: name, label, search words and the drawing. An icon without a drawing is one the icon set already has, offered under this domain as well. */
-import { c } from '../common/icons';
+const c = (x: number, y: number, r: number): string => `<circle cx="${x}" cy="${y}" r="${r}"/>`;
 
 export type DomainIcon = [name: string, label: string, words: string, drawing?: string];
 export type Domain = [name: string, words: string, icons: DomainIcon[]];

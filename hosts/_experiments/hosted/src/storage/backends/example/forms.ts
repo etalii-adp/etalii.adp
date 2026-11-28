@@ -1,8 +1,9 @@
 /* Example data: the settings each form-based designer shows, per kind of item. */
-import { slug } from '../model';
-import type { Item, KindName } from '../types';
+import type { Item } from '../../gen/adp/storage/v1/solution_pb';
+import { slug } from '../server/project';
+import type { KindName } from './draft';
 
-/* one setting: its label, the control it gets, and its value */
+/* one setting: its label, the control it gets, and its value; a reference names an item, and gets that item's id when the form is read */
 export type FormField =
   | [label: string, type: 'sel' | 'text' | 'mono' | 'num' | 'area' | 'secret' | 'ref', value: string]
   | [label: string, type: 'tog', value: boolean]

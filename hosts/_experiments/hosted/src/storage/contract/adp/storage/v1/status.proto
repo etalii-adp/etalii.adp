@@ -64,6 +64,8 @@ enum RunScope {
   RUN_SCOPE_ITEM = 1;
   // Every test suite of the project.
   RUN_SCOPE_TEST_SUITES = 2;
+  // The item, as what the run button of the title bar starts.
+  RUN_SCOPE_TARGET = 3;
 }
 
 message RunRequest {

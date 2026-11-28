@@ -1,6 +1,7 @@
 /* More icons in the same 16px stroke style, and the portfolio the icon picker searches: category, then name:Label;search words. The icons of the domains are in icon-domains.ts. */
-import { c } from '../common/icons';
 import { DOMAINS } from './icon-domains';
+
+const c=(x:number,y:number,r:number):string=>`<circle cx="${x}" cy="${y}" r="${r}"/>`;
 
 /* one icon the picker offers: its name in the icon set, its label, and the words it is found by */
 export interface IconChoice { nm: string; label: string; kw: string }

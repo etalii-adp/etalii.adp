@@ -1,13 +1,6 @@
 /* Example data: the steps of the data pipelines and release pipelines. */
-import type { KindName } from '../types';
-
-export type StepType = 'Source' | 'Validate' | 'Transform' | 'Map' | 'Sink' | 'Stage' | 'Gate' | 'Deploy' | 'Test';
-/* a step that is new and not committed, or one with an error */
-export type StepFlag = 'new' | 'err';
-export interface Flow {
-  nodes: { n: string; t: StepType; x: number; y: number; f?: StepFlag }[];
-  edges: [from: number, to: number][];
-}
+import type { FlowDocument as Flow, StepFlag, StepType } from '../../documents';
+import type { KindName } from './draft';
 
 /* steps in one line, each feeding the next */
 

@@ -62,6 +62,11 @@ message SolutionSnapshot {
   repeated Item items = 3;
   // The folder the project is in.
   string path = 4;
+  // A repository to offer when one is linked in, and the name to show it by.
+  Link suggested_link = 5;
+  string suggested_link_name = 6;
+  // The level File > Link Repository links into.
+  string suggested_link_parent_id = 7;
 }
 
 message SolutionChanges {

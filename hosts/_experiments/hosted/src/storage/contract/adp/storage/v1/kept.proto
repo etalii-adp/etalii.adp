@@ -6,7 +6,6 @@ package adp.storage.v1;
 
 import "adp/storage/v1/content.proto";
 import "adp/storage/v1/git.proto";
-import "adp/storage/v1/history.proto";
 import "adp/storage/v1/levels.proto";
 import "adp/storage/v1/solution.proto";
 import "adp/storage/v1/status.proto";
@@ -21,7 +20,7 @@ message KeptProject {
   repeated Document documents = 4;
   GitSnapshot git = 5;
   StatusSnapshot status = 6;
-  HistorySnapshot history = 7;
+  reserved 7;
   WorkbenchSnapshot workbench = 8;
   // The revision the content store is at.
   uint32 content_revision = 9;

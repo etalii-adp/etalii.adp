@@ -1,5 +1,5 @@
 /* Example data: the fields of each data schema and where each schema is used. */
-import type { SchemaField } from '../types';
+import type { SchemaField } from '../../documents';
 
 export const SCHEMA:Record<string,SchemaField[]>={
  'Meter reading':[['meterId','string',true,'pattern ^M[0-9]{8}$','Meter.serialNumber'],['readAt','datetime',true,'not in the future',''],['value','decimal',true,'minimum 0',''],['unit','enum',true,'kWh | kW | V',''],['intervalMinutes','int',false,'15, 30 or 60','Meter.intervalMinutes'],['quality','enum',false,'ok | estimated | missing',''],['tariffClass','string',false,'','Meter.tariffClass']],

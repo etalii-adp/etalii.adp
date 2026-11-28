@@ -1,7 +1,6 @@
 /* Example data: test suites and validation procedures. */
-import type { KindName } from '../types';
-
-export type CheckRow = [what: string, result: 'Passed' | 'Failed' | 'Not run', owner: string];
+import type { CheckRow } from '../../documents';
+import type { KindName } from './draft';
 
 /* by the name of the item, and for the others by their kind */
 export const CHECK:Record<string,CheckRow[]>={

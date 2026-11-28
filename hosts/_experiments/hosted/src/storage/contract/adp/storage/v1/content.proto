@@ -45,6 +45,9 @@ message WriteContentRequest {
   // The revision the writer read. A write on an older revision is refused with code "conflict".
   uint32 base_revision = 3;
   string text = 4;
+  // The item inside this document the change is about, when that is not the document's own item:
+  // an entity type in the document of its model.
+  string touched_id = 5;
 }
 
 message ContentChanges {

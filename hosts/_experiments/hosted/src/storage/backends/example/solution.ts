@@ -1,5 +1,5 @@
 /* Example data: the Atlas Platform solution, one hierarchy from the project root down. */
-import type { Draft, KindName, Vcs } from '../types';
+import type { Draft, KindName, Vcs } from './draft';
 
 type Extras = Omit<Draft, 'name' | 'kind' | 'children'>;
 
