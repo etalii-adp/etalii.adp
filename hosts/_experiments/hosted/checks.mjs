@@ -1,0 +1,53 @@
+/* What the build refuses before it builds: a page that reaches past the storage boundary, and a name of the example data anywhere but in the example backend. */
+import { build } from 'esbuild';
+import { readdir, readFile } from 'node:fs/promises';
+
+const src = 'src', storage = 'src/storage/', example = 'src/storage/backends/example/';
+
+async function files(dir) {
+  const found = [];
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    const path = dir + '/' + entry.name;
+    if (entry.isDirectory()) found.push(...await files(path));
+    else if (/\.(ts|html|css)$/.test(entry.name)) found.push(path);
+  }
+  return found;
+}
+/* a source without its comments, with every line still on its own line number */
+const bare = text => text.replace(/\/\*[\s\S]*?\*\//g, c => c.replace(/[^\n]/g, ' ')).replace(/<!--[\s\S]*?-->/g, c => c.replace(/[^\n]/g, ' '));
+const lineOf = (text, at) => text.slice(0, at).split('\n').length;
+
+/* What only the storage may use: what a browser keeps, and every way of reaching a network or another tab. */
+const KEPT = /\b(localStorage|sessionStorage|indexedDB|WebSocket|BroadcastChannel|EventSource|XMLHttpRequest)\b|(?<![.\w])fetch\(|navigator\.(locks|storage|sendBeacon)/g;
+/* The modules of the storage a page may import: the stores, what is kept in this browser, and the making of ids. */
+const OPEN = new Set(['storage', 'storage/index', 'storage/local', 'storage/ids']);
+
+/* the names the example data gives its projects and its items, read from the example backend itself */
+async function exampleNames() {
+  const bundle = await build({ stdin: { contents: `export { solution } from './solution'; export { projects } from './projects'; export { WHO } from './commits';`, resolveDir: example, loader: 'ts' }, bundle: true, write: false, format: 'esm', logLevel: 'silent' });
+  const made = await import('data:text/javascript;base64,' + Buffer.from(bundle.outputFiles[0].text).toString('base64'));
+  const names = new Set([...made.projects.map(p => p.name), ...made.WHO]);
+  const walk = x => { names.add(x.name); x.children?.forEach(walk); };
+  walk(made.solution);
+  /* a name of one common word says nothing about where it came from */
+  return [...names].filter(n => /\s/.test(n));
+}
+
+const pattern = names => new RegExp('(?<![\\w-])(' + names.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).sort((a, b) => b.length - a.length).join('|') + ')(?![\\w-])', 'g');
+
+/* what is wrong with one file, by its path from here and its text; names are the names of the example data */
+export function findingsIn(file, source, names) {
+  const found = [], text = bare(source);
+  if (!file.startsWith(storage)) {
+    for (const m of text.matchAll(KEPT)) found.push(`${file}:${lineOf(text, m.index)}: ${m[0].replace('(', '')} is used outside ${storage}`);
+    for (const m of text.matchAll(/from\s+'([^']*\/)?(storage(?:\/[\w./-]+)?)'/g)) if (!OPEN.has(m[2])) found.push(`${file}:${lineOf(text, m.index)}: a page imports ${m[2]}; pages read through storage/index`);
+  }
+  if (names.length && !file.startsWith(example) && !file.startsWith(storage + 'gen/')) for (const m of text.matchAll(pattern(names))) found.push(`${file}:${lineOf(text, m.index)}: "${m[0]}" is a name of the example data, outside ${example}`);
+  return found;
+}
+
+export async function checkBoundary() {
+  const found = [], names = await exampleNames();
+  for (const file of await files(src)) found.push(...findingsIn(file, await readFile(file, 'utf8'), names));
+  return found;
+}
