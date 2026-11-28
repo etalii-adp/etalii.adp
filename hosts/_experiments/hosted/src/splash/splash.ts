@@ -1,9 +1,11 @@
 /* The start page: the point cloud, the names of its four pictures, and the way in. */
-import { $, $$, hit } from '../common/dom';
+import { h } from 'preact';
+import { $, draw } from '../common/dom';
 import { pageReady } from '../common/nav';
 import { startPage } from '../common/page';
 import { makeCloud, type Rgb } from './cloud';
 import { shapeDiagram, shapeHierarchy, shapeKnowledge, shapeText, type Stroke } from './shapes';
+import { Ways } from './splash.template';
 
 startPage();
 
@@ -21,14 +23,14 @@ const rgbOf = (name: string): Rgb => {
 const cloud = makeCloud($<HTMLCanvasElement>('#cloud'), SEEN.map(s => s[2]), () => ({ views: ['--fg', '--blue', '--green', '--purple'].map(rgbOf), accent: rgbOf('--mark') }));
 
 const pick = $('#sp-pick'), line = $('#sp-line');
-pick.innerHTML = SEEN.map((s, i) => `<button data-i="${i}" aria-pressed="${!i}" class="${i ? '' : 'on'}">${s[0]}</button>`).join('');
+const ways = (shown: number): void => draw(pick, h(Ways, { names: SEEN.map(s => s[0]), shown, choose: i => cloud.show(i, true) }));
+ways(0);
 cloud.onturn = i => {
-  $$('button', pick).forEach((b, k) => { b.classList.toggle('on', k === i); b.setAttribute('aria-pressed', String(k === i)); });
+  ways(i);
   line.classList.add('out');
   setTimeout(() => { line.textContent = SEEN[i][1]; line.classList.remove('out'); }, 260);
 };
 line.textContent = SEEN[0][1];
-pick.onclick = e => { const b = hit(e, 'button'); if (b) cloud.show(Number(b.dataset.i), true); };
 const turn = () => cloud.show((cloud.index + 1) % SEEN.length, true);
 $('#cloud').onclick = turn;
 addEventListener('keydown', e => {

@@ -1,10 +1,7 @@
-/* The icon set, 16px strokes, and the ADP mark. */
-import { $$, el } from './dom';
-import { base } from './pages';
-
+/* The icon set, 16px strokes. The shapes of an icon are kept as the text an SVG has, which is how the icon library of the storage delivers its icons too; icons.template.tsx draws an icon from that text. */
 export const c=(x:number,y:number,r:number):string=>`<circle cx="${x}" cy="${y}" r="${r}"/>`;
 
-/* a page that needs more icons adds them with addIcons (see ide/icon-library.ts) */
+/* a page that needs more icons adds them with addIcons */
 export const I:Record<string,string>={
 folder:'<path d="M1.5 3.5h4.5l1.5 2h7v7.5h-13z"/>',file:'<path d="M4 1.5h5l3 3v10H4zM9 1.5v3h3"/>',
 cube:'<path d="M8 1.5l5.5 3v7L8 14.5l-5.5-3v-7zM2.5 4.5L8 7.5l5.5-3M8 7.5v7"/>',
@@ -55,14 +52,3 @@ user:c(8,5.5,2.8)+'<path d="M2.500 14c.5-3 2.500-4.500 5.500-4.500s5 1.500 5.500
 };
 
 export const addIcons = (more: Record<string, string>): void => { Object.assign(I, more); };
-export const ico = (name: string, cls = ''): string => `<svg class="i ${cls}" viewBox="0 0 16 16" aria-hidden="true">${I[name] || I.file}</svg>`;
-
-/* The ADP mark: the icon of the ADP site, common/img/adp-icon.svg, shown as it is. */
-const markSrc = base + 'common/img/adp-icon.svg';
-const mark = (size: string): string => `<img src="${markSrc}" width="${size}" height="${size}" alt="ADP" decoding="sync" draggable="false">`;
-
-/* every .logo-slot on the page gets the mark at its data-size, and the browser tab gets it too */
-export function mountMark(): void {
-  $$('.logo-slot').forEach(slot => { slot.innerHTML = mark(slot.dataset.size ?? '24'); });
-  document.head.append(el(`<link rel="icon" type="image/svg+xml" href="${markSrc}">`));
-}

@@ -1,7 +1,8 @@
 /* Docks and tool windows: every panel can be shown, hidden and moved to another dock. */
-import { $, $$, clamp, el, hit } from '../common/dom';
-import { ico } from '../common/icons';
+import { h } from 'preact';
+import { $, $$, clamp, draw, el } from '../common/dom';
 import { menu } from '../common/popups';
+import { Panel, Stripe, type StripeButton } from './docks.template';
 import { defaultLayout, keep, S } from './state';
 import type { DockId, PanelId } from './types';
 
@@ -10,19 +11,23 @@ export const PAN: Record<PanelId, [title: string, icon: string]> = { explorer: [
 export const panelIds = Object.keys(PAN) as PanelId[];
 const docks: readonly DockId[] = ['left', 'right', 'bottom'];
 
-const panel = (id: PanelId): HTMLElement => el(`<section class="panel" data-panel="${id}"><header class="ph"><b>${PAN[id][0]}</b><span data-pa style="display:flex;gap:2px"></span><button class="ib" data-pm title="Move or hide this tool window">${ico('more')}</button><button class="ib" data-hide title="Hide">${ico('minus')}</button></header><div class="pb"></div></section>`);
-/* the element of each tool window */
-export const pel = Object.fromEntries(panelIds.map(id => [id, panel(id)])) as Record<PanelId, HTMLElement>;
+/* the menu of a tool window, under its button: the dock it goes to, or out of sight */
+const whereTo = (id: PanelId, button: HTMLElement): void => {
+  const r = button.getBoundingClientRect();
+  menu([{ h: 'Move ' + PAN[id][0] + ' to' }, ...docks.map(d => ({ l: d[0].toUpperCase() + d.slice(1), chk: S.dock[id] === d, on: () => move(id, d) })), '-', { l: 'Hide', on: () => toggle(id) }], r.left - 120, r.bottom + 3);
+};
+/* the element of each tool window; it is made once, and moves from dock to dock with what was drawn in it */
+export const pel = Object.fromEntries(panelIds.map(id => [id, el(h(Panel, { id, title: PAN[id][0], hide: () => toggle(id), more: button => whereTo(id, button) }))])) as Record<PanelId, HTMLElement>;
 /* where a tool window draws its content */
 export const body = (id: PanelId): HTMLElement => $('.pb', pel[id]);
 
 export function layout(): void {
   for (const d of docks) { $('#dock-' + d).hidden = !S.act[d]; $(`[data-split="${d}"]`).hidden = !S.act[d]; }
   for (const id of panelIds) { const d = S.dock[id]; $('#dock-' + d).append(pel[id]); pel[id].hidden = S.act[d] !== id; }
-  const sb = (id: PanelId) => `<button class="sb${S.act[S.dock[id]] === id ? ' on' : ''}" data-tw="${id}" title="${PAN[id][0]}" aria-label="${PAN[id][0]}">${ico(PAN[id][1])}</button>`;
-  const ids = (d: DockId) => panelIds.filter(i => S.dock[i] === d).map(sb).join('');
-  $('#stripe-l').innerHTML = `<div>${ids('left')}</div><div>${ids('bottom')}</div>`;
-  $('#stripe-r').innerHTML = `<div>${ids('right')}</div>`;
+  const buttons = (d: DockId): StripeButton[] => panelIds.filter(i => S.dock[i] === d).map(id => ({ id, title: PAN[id][0], icon: PAN[id][1], on: S.act[d] === id }));
+  const toggled = (id: string): void => toggle(id as PanelId);
+  draw($('#stripe-l'), h(Stripe, { docks: [buttons('left'), buttons('bottom')], toggle: toggled }));
+  draw($('#stripe-r'), h(Stripe, { docks: [buttons('right')], toggle: toggled }));
   requestAnimationFrame(() => S.cvFit?.(true));
   keep();
 }
@@ -43,17 +48,9 @@ export function resetLayout(): void {
   layout();
 }
 
-/* puts the tool windows in their docks, and wires their buttons, the stripes and the splitters */
+/* puts the tool windows in their docks, and wires the splitters */
 export function mountDocks(): void {
-  for (const id of panelIds) {
-    $('[data-hide]', pel[id]).onclick = () => toggle(id);
-    $('[data-pm]', pel[id]).onclick = e => {
-      const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
-      menu([{ h: 'Move ' + PAN[id][0] + ' to' }, ...docks.map(d => ({ l: d[0].toUpperCase() + d.slice(1), chk: S.dock[id] === d, on: () => move(id, d) })), '-', { l: 'Hide', on: () => toggle(id) }], r.left - 120, r.bottom + 3);
-    };
-    $('#dock-' + S.dock[id]).append(pel[id]);
-  }
-  document.addEventListener('click', e => { const b = hit(e, '[data-tw]'); if (b) toggle(b.dataset.tw as PanelId); });
+  for (const id of panelIds) $('#dock-' + S.dock[id]).append(pel[id]);
   $$('.split').forEach(s => s.addEventListener('pointerdown', e => {
     const d = s.dataset.split as DockId, box = $('#dock-' + d), w = box.offsetWidth, hh = box.offsetHeight, sx = e.clientX, sy = e.clientY;
     s.setPointerCapture(e.pointerId);

@@ -1,9 +1,11 @@
 /* Editor: plain text with light highlighting. It shows the stored form of an item, and the files of the File System view. */
-import { esc } from '../../common/dom';
+import { h } from 'preact';
+import { draw, esc } from '../../common/dom';
 import { K } from '../kinds';
 import { binary, disk, fileOf, ownerOf, suffixOf } from '../model';
 import { project } from '../storage';
 import type { Item } from '../types';
+import { Code } from './code.template';
 import type { Tool } from './shared';
 
 /* what a text is highlighted as: a query, C#, Python, or a file of settings such as a project file; without one, strings, numbers, keys and comments are marked as the .adp files need them */
@@ -42,5 +44,5 @@ export const rCode: Tool = (d, x) => {
   const ext = x.pseudo ? x.name.split('.').pop() || 'adp' : suffixOf(x).replace(/^\./, ''), lang = LANGUAGE[ext.toLowerCase()] ?? ext.toUpperCase(), bin = binary(x);
   /* a binary file has no text to ask for; of anything else the text may still be on its way */
   const file = x.pseudo && !bin ? project.content.file(ownerOf(x), fileOf(x)) : undefined, text = bin ? '' : x.pseudo ? file?.text : project.content.text(x);
-  d.innerHTML = `<div class="tool"><div class="tb"><span class="tk">Editor · ${x.pseudo ? 'File' : K[x.kind].label}</span><span>${esc(bin ? 'Binary' : lang)}</span>${x.ignored ? '<span class="chip">Ignored by git</span>' : ''}</div>${bin ? `<div class="hint">${esc(x.name)} is a binary file, so there is no text to show.</div>` : text === undefined ? '' : `<div class="code" tabindex="0">${hl(text || ' ', syntaxOf(x, file?.syntax))}</div>`}</div>`;
+  draw(d, h(Code, { key: x.id, what: x.pseudo ? 'File' : K[x.kind].label, language: bin ? 'Binary' : lang, ignored: !!x.ignored, binary: bin ? x.name : null, lines: bin || text === undefined ? undefined : hl(text || ' ', syntaxOf(x, file?.syntax)) }));
 };

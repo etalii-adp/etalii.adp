@@ -12,9 +12,10 @@ if (refused.length) { console.error(refused.join('\n')); process.exit(1); }
 
 await rm(out, { recursive: true, force: true });
 /* the storage has nothing a page loads as a file: its contract and its modules are built into the scripts */
-await cp(src, out, { recursive: true, filter: file => !file.endsWith('.ts') && !file.replaceAll('\\', '/').startsWith(src + '/storage') });
+await cp(src, out, { recursive: true, filter: file => !/\.tsx?$/.test(file) &&!file.replaceAll('\\', '/').startsWith(src + '/storage') });
 
-const shared = { outbase: src, outdir: out, bundle: true, target: 'es2022', minify: true, sourcemap: true, metafile: true, logLevel: 'info' };
+/* a template file (.tsx) is written in JSX, which becomes calls of Preact */
+const shared = { outbase: src, outdir: out, bundle: true, target: 'es2022', jsx: 'automatic', jsxImportSource: 'preact', minify: true, sourcemap: true, metafile: true, logLevel: 'info' };
 /* boot runs in the head of every page, before the first paint, so it is a script of its own that waits for nothing */
 const boot = await build({ ...shared, entryPoints: [`${src}/common/boot.ts`], format: 'iife' });
 /* The pages are modules that share what they have in common as chunks, so a browser loads the storage once for all of them and the start page, which needs none of it, loads none of it. */

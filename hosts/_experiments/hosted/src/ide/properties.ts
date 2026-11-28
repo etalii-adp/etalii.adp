@@ -1,14 +1,15 @@
 /* The Properties tool window: a property grid for the selected item or the selected part of a tool. */
-import { $maybe, esc } from '../common/dom';
-import { ico } from '../common/icons';
+import { h } from 'preact';
+import { draw } from '../common/dom';
 import { body } from './docks';
 import { iconPick, setMode } from './explorer';
 import { K } from './kinds';
-import { emb, fileOf, filesOf, linkOf, modeOf, multi, ownerOf, path, ro, showAll } from './model';
+import { emb, fileOf, filesOf, linkOf, multi, ownerOf, path, ro } from './model';
+import { Properties } from './properties.template';
 import { repaint, repaintAll } from './repaint';
 import { S } from './state';
 import { act, project, refused } from './storage';
-import type { Falsy, Item, PropControl, PropGroup, PropRow, PropSheet, ViewMode } from './types';
+import type { Falsy, Item, PropGroup, PropRow, PropSheet } from './types';
 
 const present = <T>(list: (T | Falsy)[]): T[] => list.filter(Boolean) as T[];
 
@@ -42,25 +43,22 @@ export function mountProps(): void {
   b.addEventListener('focusout', e => { if (waiting && !b.contains(e.relatedTarget as Node | null) && !b.contains(document.activeElement)) repaint('properties'); });
 }
 
+/* how often the sheet was drawn */
+let draws = 0;
+
+/* Draws the sheet of the selected item, or of the part of a tool that was picked. Every draw is of new elements (its key): a field that showed is taken away, which commits what was typed in it, and that is what showArrivedInProps waits with. */
 export function renderProps(): void {
-  const x = S.sel, P = S.insp || nodeProps(x), b = body('properties');
+  const x = S.sel;
   waiting = false;
-  /* a control in place of a text, for the rows that can be changed */
-  const control = (v: PropControl): string => {
-    if ('name' in v) return `<span><input class="in" id="p-name" value="${esc(x.name)}" aria-label="Name"${v.lock ? ' disabled' : ''}></span>`;
-    if ('icon' in v) return `<span><button class="tbtn" id="p-icon" style="height:22px;margin-left:-8px"${v.lock ? ' disabled' : ''}>${ico(x.icon || K[x.kind].icon, 'c-' + K[x.kind].colour)}${x.icon ? 'Custom' : 'Default'}</button></span>`;
-    if ('mode' in v) return `<span><select class="in" id="p-mode" aria-label="View as"><option value="logical"${modeOf(x) === 'logical' ? ' selected' : ''}>Logical Structure</option><option value="files"${modeOf(x) === 'files' ? ' selected' : ''}>File System</option></select></span>`;
-    if ('all' in v) return `<span><input type="checkbox" id="p-all" aria-label="Show all files"${showAll(x) ? ' checked' : ''}${modeOf(x) === 'files' ? '' : ' disabled'}></span>`;
-    return `<span><select class="in mono" id="p-ref" aria-label="Branch or tag">${(x.link?.refs ?? []).map(r => `<option${r === x.link?.ref ? ' selected' : ''}>${esc(r)}</option>`).join('')}</select></span>`;
-  };
-  /* an id wraps, and a path or a commit hash is set in the monospaced font */
-  const text = (v: string, red?: boolean | number): string => `<span><span class="v${red ? ' red' : ''}${/^[0-9a-z]{25}$/.test(v) ? ' mono wrap' : /[\/@]|^[a-f0-9]{7}$/.test(v) ? ' mono' : ''}" title="${esc(v)}">${esc(v)}</span></span>`;
-  b.innerHTML = `<div class="pg-head">${ico(P.icon, 'c-' + (P.col || 'muted'))}<b>${esc(P.title)}</b><small>${esc(P.sub)}</small></div><div class="pgrid">${present(P.g).map(([h, rows]) => `<div class="pc">${h}</div>${rows.map(([k, v, red]) => `<div class="pr"><span><span class="v">${esc(k)}</span></span>${typeof v === 'string' ? text(v, red) : control(v)}</div>`).join('')}`).join('')}</div>`;
-  const nm = $maybe<HTMLInputElement>('#p-name', b), ic = $maybe('#p-icon', b), md = $maybe<HTMLSelectElement>('#p-mode', b), al = $maybe<HTMLInputElement>('#p-all', b), rf = $maybe<HTMLSelectElement>('#p-ref', b);
-  /* a name the storage does not take is put back, with the reason */
-  if (nm) nm.onchange = () => { project.solution.rename(x, nm.value.trim()).then(repaintAll, (e: unknown) => { refused(e); nm.value = x.name; }); };
-  if (ic) ic.onclick = () => { const r = ic.getBoundingClientRect(); iconPick(x, r.left - 120, r.bottom + 3); };
-  if (md) md.onchange = () => void setMode(x, md.value as ViewMode);
-  if (al) al.onchange = () => { project.levels.setShowAll(x, al.checked).then(repaintAll, refused); };
-  if (rf) rf.onchange = () => { void act(project.solution.setRef(x, rf.value)).then(repaintAll); };
+  draw(body('properties'), h(Properties, {
+    key: ++draws, sheet: S.insp || nodeProps(x), item: x,
+    on: {
+      /* a name the storage does not take is put back, with the reason */
+      rename: field => { project.solution.rename(x, field.value.trim()).then(repaintAll, (e: unknown) => { refused(e); field.value = x.name; }); },
+      icon: button => { const r = button.getBoundingClientRect(); iconPick(x, r.left - 120, r.bottom + 3); },
+      mode: mode => void setMode(x, mode),
+      all: on => { project.levels.setShowAll(x, on).then(repaintAll, refused); },
+      ref: ref => { void act(project.solution.setRef(x, ref)).then(repaintAll); },
+    },
+  }));
 }

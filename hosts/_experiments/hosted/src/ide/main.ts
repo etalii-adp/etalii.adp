@@ -7,9 +7,9 @@ import { agentFollowsSelection, mountAgent, renderAgent } from './agent';
 import { ownTheBrowser } from './browser';
 import { renderCommit } from './commit';
 import { layout, mountDocks } from './docks';
-import { mountDocumentArea, renderEditor } from './document-area';
+import { markSelected, renderEditor } from './document-area';
 import { mountExplorer, renderExplorer } from './explorer';
-import { mountGit, renderGit } from './git';
+import { renderGit } from './git';
 import { bindModel, ROOT } from './model';
 import { renderProblems } from './problems';
 import { mountProps, renderProps, showArrivedInProps } from './properties';
@@ -27,13 +27,11 @@ async function start(): Promise<void> {
   bindModel();
   bindState();
   mountDocks();
-  mountDocumentArea();
   mountExplorer();
-  mountGit();
   mountProps();
   mountAgent();
   mountTitlebar();
-  paints({ explorer: renderExplorer, editor: renderEditor, properties: renderProps, status: renderStatus, title: renderTitle, problems: renderProblems, commit: renderCommit, git: renderGit, agent: renderAgent }, () => { keep(); agentFollowsSelection(); });
+  paints({ explorer: renderExplorer, editor: renderEditor, properties: renderProps, status: renderStatus, title: renderTitle, problems: renderProblems, commit: renderCommit, git: renderGit, agent: renderAgent, marks: markSelected }, () => { keep(); agentFollowsSelection(); });
 
   addEventListener('resize', () => S.cvFit?.(true));
   /* the window's state is kept at once when the page is left */

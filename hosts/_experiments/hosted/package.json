@@ -20,6 +20,7 @@
     "@types/ws": "8.18.2",
     "esbuild": "0.28.2",
     "playwright": "1.63.0",
+    "preact": "11.2.0",
     "typescript": "7.0.2",
     "ws": "8.23.1",
     "yaml": "2.9.1"

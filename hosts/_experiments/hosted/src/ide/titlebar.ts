@@ -1,6 +1,7 @@
 /* The title bar (menus, project and branch widgets, update and push, run, settings) and the status bar. */
-import { $, esc, hit } from '../common/dom';
-import { ico } from '../common/icons';
+import { h } from 'preact';
+import { $, draw } from '../common/dom';
+import { ico } from '../common/icons.template';
 import { go } from '../common/nav';
 import { menu, menuAt, type MenuEntry } from '../common/popups';
 import { setTheme, setVar } from '../common/prefs';
@@ -12,6 +13,7 @@ import { K } from './kinds';
 import { binary, crumbsOf, linkedRepos, modeOf, ofKind, path, ro, ROOT } from './model';
 import { flip, levelOf, openDoc, pick } from './open';
 import { repaint, repaintEverything } from './repaint';
+import { Avatar, BranchLabel, CommitCount, Menus, ProjectLabel, RunLabel, Status } from './titlebar.template';
 import type { Item } from './types';
 import { keep, settle, S } from './state';
 import { act, project, refused, storage } from './storage';
@@ -42,9 +44,9 @@ const MENU_NAMES = ['File', 'Edit', 'View', 'Navigate', 'Tools', 'Git', 'Window'
 
 export function renderTitle(): void {
   const { branch, behind, ahead } = project.git;
-  $('#w-branch').innerHTML = `${ico('branch', 'c-muted')}<span>${esc(branch)}</span>`;
-  $('#w-pull').innerHTML = `${ico('down', behind ? 'c-blue' : '')}<b>${behind || ''}</b>`;
-  $('#w-push').innerHTML = `${ico('up', ahead ? 'c-green' : '')}<b>${ahead || ''}</b>`;
+  draw($('#w-branch'), h(BranchLabel, { branch }));
+  draw($('#w-pull'), h(CommitCount, { icon: 'down', colour: 'c-blue', count: behind }));
+  draw($('#w-push'), h(CommitCount, { icon: 'up', colour: 'c-green', count: ahead }));
 }
 
 /* true while an answer of the storage takes long enough to say so */
@@ -54,15 +56,12 @@ const storageNote = (): string => storage.state === 'offline' ? 'Storage offline
 
 export function renderStatus(): void {
   const x = S.sel, count = (s: string) => project.status.problems.filter(p => p.s === s).length, { branch, behind, ahead, fetched: when } = project.git, note = storageNote(), code = x.pseudo ? !x.entries && !binary(x) : K[x.kind].tool === 'code';
-  $('#status').innerHTML = `<span class="st path" title="${esc(path(x))}">${crumbsOf(x).map(p => esc(p.name)).join(' › ')}</span>
-   <button class="st" data-tw="problems" title="Open Problems">${ico('error', 'c-red')}${count('error')}${ico('warning', 'c-yellow')}${count('warning')}</button>
-   <span class="st mono hide-s" title="Hidden item ID">ID ${x.id}</span>
-   <span class="st hide-s">${x.entries ? 'Folder' : x.pseudo ? 'File' : modeOf(levelOf(x)) === 'files' ? 'File System' : 'Logical Structure'}</span>
-   ${code ? '<span class="st hide-s">Ln 1, Col 1 · LF · UTF-8</span>' : ''}
-   <span class="st hide-s">${ico('link')}${linkedRepos().length} linked repositories</span>
-   ${project.status.environments.map(e => `<span class="st hide-s"><span class="led"></span>${esc(e.note)}</span>`).join('')}
-   <button class="st" data-tw="git" title="Open Git">${ico('branch')}${esc(branch)} ${behind ? '↓' + behind : ''} ${ahead ? '↑' + ahead : ''}</button>
-   <span class="st hide-s">${esc(when)}</span>${note ? `<span class="st" id="st-storage" role="status">${ico(storage.state === 'offline' ? 'warning' : 'fetch', storage.state === 'offline' ? 'c-yellow' : 'c-muted')}${note}</span>` : ''}`;
+  draw($('#status'), h(Status, {
+    trail: crumbsOf(x).map(p => p.name).join(' › '), path: path(x), id: x.id, errors: count('error'), warnings: count('warning'),
+    view: x.entries ? 'Folder' : x.pseudo ? 'File' : modeOf(levelOf(x)) === 'files' ? 'File System' : 'Logical Structure', code,
+    linked: linkedRepos().length, environments: project.status.environments.map(e => e.note), branch, behind, ahead, fetched: when,
+    storage: note ? { text: note, offline: storage.state === 'offline' } : null, toggle,
+  }));
 }
 
 /* what the run button starts: what a person picked, or what the project starts by itself */
@@ -73,39 +72,38 @@ export function mountTitlebar(): void {
   const root = document.documentElement, at = (e: MouseEvent): HTMLElement => e.currentTarget as HTMLElement;
   const { info } = project, { user } = storage.identity;
   document.title = `${info.name} · ADP`;
-  $('#menus').innerHTML = MENU_NAMES.map(m => `<button class="tbtn" data-m="${m}">${m}</button>`).join('');
-  $('#menus').onclick = e => { const b = hit(e, '[data-m]'); if (b) menuAt(b, menus()[b.dataset.m!]); };
-  $('#burger').innerHTML = ico('menu');
+  draw($('#menus'), h(Menus, { names: MENU_NAMES, open: (name, button) => menuAt(button, menus()[name]) }));
+  draw($('#burger'), ico('menu'));
   $('#burger').onclick = e => { const all = menus(); menuAt(at(e), [...MENU_NAMES.map(m => ({ l: m, sub: all[m] })), '-', { h: 'Go to' }, { l: 'Start', on: () => go('start') }, { l: 'Login', on: () => go('login') }, { l: 'Projects', on: () => go('projects') }]); };
   /* another project opens in this window, when it can be opened here */
   const open = (id: string): void => { storage.projects.open(id).then(() => { project.workbench.keepNow(); visit.set('project', id); location.reload(); }, refused); };
-  $('#w-proj').innerHTML = `<span class="pbadge">${esc(info.initials)}</span><span>${esc(info.name)}</span>`;
+  draw($('#w-proj'), h(ProjectLabel, { initials: info.initials, name: info.name }));
   $('#w-proj').onclick = e => menuAt(at(e), [{ h: 'Open project' }, { l: info.name, chk: true }, { h: 'Recent' }, ...storage.projects.list.filter(p => p.id !== info.id && !p.asset).slice(0, 2).map(p => ({ l: p.name, on: () => open(p.id) })), '-', { l: 'All Projects…', on: () => go('projects') }, { l: 'Close Project', on: () => go('projects') }]);
   const refs = (kind: string): MenuEntry[] => project.git.refs.filter(r => r.kind === kind).map(r => ({ l: r.name, chk: r.name === project.git.branch }));
   $('#w-branch').onclick = e => menuAt(at(e), [{ l: 'Update Project…', k: 'Ctrl+T', i: 'down', on: pull }, { l: 'Commit…', k: 'Ctrl+K', i: 'commit', on: () => show('commit') }, { l: 'Push…', k: 'Ctrl+Shift+K', i: 'up', on: push }, { l: 'Fetch', i: 'fetch', on: fetched }, '-', { l: 'New Branch…', i: 'plus' }, { l: 'Checkout Tag or Revision…' }, '-', { h: 'Local' }, ...refs('local'), { h: 'Remote' }, ...refs('remote')]);
   $('#w-pull').onclick = pull;
   $('#w-push').onclick = push;
-  $('#w-fetch').innerHTML = ico('fetch');
+  draw($('#w-fetch'), ico('fetch'));
   $('#w-fetch').onclick = fetched;
 
-  const runButton = (): void => { $('#w-run').innerHTML = `${ico('rocket', 'c-red')}<span>${esc(running()?.name ?? 'Nothing to run')}</span>`; };
+  const runButton = (): void => draw($('#w-run'), h(RunLabel, { name: running()?.name ?? 'Nothing to run' }));
   /* what can be started: the items of a kind, under the name of that kind */
   const runs = (kind: string): MenuEntry[] => { const items = ofKind(kind); return items.length ? [{ h: K[kind].label + 's' }, ...items.map(k => ({ l: k.name, chk: running() === k, on: () => { S.run = k; runButton(); keep(); } }))] : []; };
   runButton();
   $('#w-run').onclick = e => menuAt(at(e), [...runs('release'), ...runs('testsuite')]);
-  $('#w-go').innerHTML = ico('play');
+  draw($('#w-go'), ico('play'));
   $('#w-go').onclick = () => { const x = running(); if (x) void act(project.status.run(x, true)); };
-  $('#w-search').innerHTML = ico('search');
+  draw($('#w-search'), ico('search'));
   $('#w-search').onclick = search;
 
-  $('#w-gear').innerHTML = ico('gear');
+  draw($('#w-gear'), ico('gear'));
   $('#w-gear').onclick = e => {
     const r = at(e).getBoundingClientRect(), theme = root.dataset.theme, style = getComputedStyle(root), fs = style.getPropertyValue('--fs').trim(), row = style.getPropertyValue('--row').trim();
     const sizes: [string, string][] = [['12px', 'Small'], ['13px', 'Default'], ['14px', 'Large']], densities: [string, string][] = [['22px', 'Compact'], ['24px', 'Default'], ['28px', 'Comfortable']];
     menu([{ h: 'Theme' }, { l: 'Dark', chk: theme === 'dark', on: () => setTheme('dark') }, { l: 'Light', chk: theme === 'light', on: () => setTheme('light') }, { l: 'Follow the system', chk: !theme, on: () => setTheme(null) }, { h: 'Font size' }, ...sizes.map(([v, l]) => ({ l, chk: fs === v, on: () => setVar('--fs', v) })), { h: 'Density' }, ...densities.map(([v, l]) => ({ l, chk: row === v, on: () => setVar('--row', v) })), '-', { l: 'Restore Default Layout', on: resetLayout }, { l: 'All Settings…', k: 'Ctrl+Alt+S' }], r.right - 210, r.bottom + 3);
   };
   $('#w-user').title = user.name;
-  $('#w-user').innerHTML = `<span class="avatar">${esc(user.initials)}</span>`;
+  draw($('#w-user'), h(Avatar, { initials: user.initials }));
   $('#w-user').onclick = e => {
     const r = at(e).getBoundingClientRect();
     menu([{ h: `${user.name} · ${user.email}` }, { l: 'Account Settings…', i: 'user' }, { l: 'Switch Project…', on: () => go('projects') }, '-', { l: 'Sign Out', on: signOut }], r.right - 230, r.bottom + 3);

@@ -1,12 +1,13 @@
 /* The project overview: search, the two lists, and opening a project. */
-import { $, $$, esc, hit } from '../common/dom';
-import { ico } from '../common/icons';
+import { h } from 'preact';
+import { $, $$, draw, hit } from '../common/dom';
 import { go, pageReady } from '../common/nav';
 import { startStored } from '../common/away';
 import { startPage } from '../common/page';
 import { reason } from '../common/reason';
 import { toast } from '../common/popups';
 import { connect, visit } from '../storage';
+import { ProjectRows, SignedIn } from './projects.template';
 import { openWizard } from './wizard';
 
 async function start(): Promise<void> {
@@ -18,24 +19,20 @@ async function start(): Promise<void> {
   let list: 'all' | 'reuse' = 'all';
   const search = $<HTMLInputElement>('#pj-q');
   $('#pj-ver').textContent = catalogue.product;
-  $('#pj-me').innerHTML = `<span class="avatar" style="margin:0">${esc(identity.user.initials)}</span> ${esc(identity.user.name)} <span>Sign out</span>`;
+  draw($('#pj-me'), h(SignedIn, { user: identity.user }));
   $('#pj-me').onclick = () => { void identity.signOut().catch(() => undefined); };
 
+  /* the IDE page opens the project the visit remembers */
+  const open = (id: string): void => { projects.open(id).then(() => { visit.set('project', id); go('ide'); }, (err: unknown) => toast(reason(err))); };
   function renderProjects(): void {
     const q = search.value.trim().toLowerCase(), rows = projects.list.filter(p => (list === 'all' || p.asset) && (!q || p.name.toLowerCase().includes(q)));
     $('#pj-n1').textContent = String(projects.list.length);
     $('#pj-n2').textContent = String(projects.list.filter(p => p.asset).length);
     $$('[data-pf]').forEach(b => b.classList.toggle('on', b.dataset.pf === list));
-    $('#pj-list').innerHTML = rows.map(p => `<button class="pj-row" data-p="${p.id}"><span class="av" style="background:var(--${esc(p.colour)})">${esc(p.initials)}</span><span class="pj-t"><b>${esc(p.name)}</b><small>${esc(p.about)}</small><small class="mono">${esc(p.path)}</small></span><span class="pj-m">${p.errors ? `<span class="chip">${ico('error', 'c-red')}${p.errors}</span>` : ''}<span class="chip">${ico('branch')}${esc(p.branch)}</span><span class="when">${esc(p.opened)}</span></span></button>`).join('') || `<div class="hint">${projects.list.length ? 'No project matches that search.' : 'There are no projects yet.'}</div>`;
+    draw($('#pj-list'), h(ProjectRows, { rows, any: projects.list.length > 0, open }));
   }
 
   search.oninput = renderProjects;
-  $('#pj-list').onclick = e => {
-    const id = hit(e, '[data-p]')?.dataset.p;
-    if (!id) return;
-    /* the IDE page opens the project the visit remembers */
-    projects.open(id).then(() => { visit.set('project', id); go('ide'); }, (err: unknown) => toast(reason(err)));
-  };
   /* a new project starts with the wizard; what it asks comes from the storage, so the button waits for it, as it waited for the page */
   const add = $<HTMLButtonElement>('#pj-new');
   add.disabled = false;
