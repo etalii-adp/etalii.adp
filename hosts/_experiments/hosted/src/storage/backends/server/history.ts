@@ -4,7 +4,7 @@ import { create } from '@bufbuild/protobuf';
 import { ContentChangesSchema, DocumentSchema } from '../../gen/adp/storage/v1/content_pb';
 import { History } from '../../gen/adp/storage/v1/history_pb';
 import type { Call, ProjectState, World } from './core';
-import { historyOf, picture, tellGit, tellHistory, tellLevels, tellSolution, tellStatus } from './project';
+import { historyOf, picture, startText, tellGit, tellHistory, tellLevels, tellSolution, tellStatus } from './project';
 
 /* puts a project back as a step holds it, and tells every store */
 export function putBack(world: World, state: ProjectState, bytes: Uint8Array, call: Call): ProjectState {
@@ -13,7 +13,7 @@ export function putBack(world: World, state: ProjectState, bytes: Uint8Array, ca
   tellLevels(world, next, call);
   next.kept.contentRevision++;
   /* a document that was written and is not any more reads as before it was written; it is told with the others, so nobody shows the text that was taken back while asking for the old one */
-  const unwritten = written.filter(id => !next.documents.has(id) && next.items.has(id)).map(id => create(DocumentSchema, { itemId: id, text: world.seed.document(next, next.items.get(id)!, world) }));
+  const unwritten = written.filter(id => !next.documents.has(id) && next.items.has(id)).map(id => create(DocumentSchema, { itemId: id, text: startText(world, next, next.items.get(id)!) }));
   world.server.emit('Content', next.id, next.kept.contentRevision, call, ContentChangesSchema, { written: [...next.kept.documents, ...unwritten], allStale: true });
   tellGit(world, next, call);
   tellStatus(world, next, call);

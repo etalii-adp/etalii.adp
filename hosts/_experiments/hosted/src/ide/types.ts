@@ -16,7 +16,7 @@ export interface PropSheet {
   g: (PropGroup | Falsy)[];
 }
 
-export type PanelId = 'explorer' | 'commit' | 'properties' | 'problems' | 'git';
+export type PanelId = 'explorer' | 'commit' | 'properties' | 'problems' | 'agent' | 'git';
 export type DockId = 'left' | 'right' | 'bottom';
 /* a file of the File System view, as the page makes it for an item */
 export type FileItem = Item & { readonly pseudo: true };

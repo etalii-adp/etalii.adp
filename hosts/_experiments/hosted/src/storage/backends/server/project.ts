@@ -1,8 +1,8 @@
 /* What the calls on a project share: finding items, the names things have on disk, what git says of an item, telling what changed, and the steps that can be taken back. */
-import { create, toBinary } from '@bufbuild/protobuf';
+import { create, toBinary, type MessageInitShape } from '@bufbuild/protobuf';
 import { Refused } from '../../backend';
 import type { Kind } from '../../gen/adp/storage/v1/catalogue_pb';
-import { ContentChangesSchema, type Document } from '../../gen/adp/storage/v1/content_pb';
+import { ContentChangesSchema, type Document, type FileTextSchema } from '../../gen/adp/storage/v1/content_pb';
 import { ChangedFileSchema, ChangeGroupSchema, ChangeState, GitSnapshotSchema, ItemGitSchema, type ItemGit } from '../../gen/adp/storage/v1/git_pb';
 import { HistoryEntrySchema, HistorySnapshotSchema, type HistorySnapshot } from '../../gen/adp/storage/v1/history_pb';
 import { KeptProjectSchema } from '../../gen/adp/storage/v1/kept_pb';
@@ -78,7 +78,8 @@ export const gitOf = (state: ProjectState, x: Item): ItemGit => {
   if (!g) {
     /* who last changed it is not kept: it follows from the id, as a stand-in for the log of a real repository */
     const h = parseInt(x.id.slice(-6), 36);
-    g = create(ItemGitSchema, { itemId: x.id, lastAuthor: git.people[h % Math.min(4, git.people.length || 1)] ?? '', lastDays: h % 9 + 2 });
+    /* a project that was made here has one commit, of today, by who made it */
+    g = state.kept.made ? create(ItemGitSchema, { itemId: x.id, lastAuthor: git.people[0] ?? '' }) : create(ItemGitSchema, { itemId: x.id, lastAuthor: git.people[h % Math.min(4, git.people.length || 1)] ?? '', lastDays: h % 9 + 2 });
     git.items.push(g);
   }
   return g;
@@ -144,8 +145,13 @@ export function tellHistory(world: World, state: ProjectState, call: Call): void
   world.server.emit('History', state.id, state.historyRevision, call, HistorySnapshotSchema, historyOf(state));
 }
 
-/* the project as it is now, without the window's own state: what a step puts back */
-export const picture = (state: ProjectState): Uint8Array => toBinary(KeptProjectSchema, create(KeptProjectSchema, { ...state.kept, workbench: undefined }));
+/* The text of an item's stored form before anything was written of it, and of a file beside the items: what the seed gives for the projects it brought, and nothing for a project that was made here. */
+export const startText = (world: World, state: ProjectState, x: Item): string => state.kept.made ? '' : world.seed.document(state, x, world);
+export const startFile = (world: World, state: ProjectState, owner: Item, path: string): MessageInitShape<typeof FileTextSchema> =>
+  state.kept.made ? { text: `# ${path}\nitem: ${owner.id}\nname: "${owner.name}"\nkind: ${owner.kind}`, holds: '' } : world.seed.file(state, owner, path, world);
+
+/* the project as it is now, without the window's own state and the conversations with the agent: what a step puts back */
+export const picture = (state: ProjectState): Uint8Array => toBinary(KeptProjectSchema, create(KeptProjectSchema, { ...state.kept, workbench: undefined, agent: undefined }));
 
 /* carries out a command that can be taken back: the project as it was is kept with a few words on what the command did */
 export function step<T>(world: World, state: ProjectState, call: Call, label: string, run: () => T): T {

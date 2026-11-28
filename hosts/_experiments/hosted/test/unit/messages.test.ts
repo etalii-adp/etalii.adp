@@ -6,6 +6,7 @@ import { methodName, Refused } from '../../src/storage/backend';
 import { empty } from '../../src/storage/backends/empty';
 import { example } from '../../src/storage/backends/example';
 import { makeWorld } from '../../src/storage/backends/server';
+import * as agent from '../../src/storage/gen/adp/storage/v1/agent_pb';
 import * as catalogue from '../../src/storage/gen/adp/storage/v1/catalogue_pb';
 import * as common from '../../src/storage/gen/adp/storage/v1/common_pb';
 import * as content from '../../src/storage/gen/adp/storage/v1/content_pb';
@@ -20,7 +21,7 @@ import * as solution from '../../src/storage/gen/adp/storage/v1/solution_pb';
 import * as status from '../../src/storage/gen/adp/storage/v1/status_pb';
 import * as workbench from '../../src/storage/gen/adp/storage/v1/workbench_pb';
 
-const files = [catalogue, common, content, envelope, git, history, identity, kept, levels, projects, solution, status, workbench];
+const files = [agent, catalogue, common, content, envelope, git, history, identity, kept, levels, projects, solution, status, workbench];
 const all = files.flatMap(f => Object.values(f) as unknown[]);
 const messages = all.filter((d): d is DescMessage => !!d && typeof d === 'object' && (d as { kind?: string }).kind === 'message');
 const services = all.filter((d): d is DescService => !!d && typeof d === 'object' && (d as { kind?: string }).kind === 'service');
@@ -32,8 +33,8 @@ function trips(schema: DescMessage, bytes: Uint8Array): void {
   assert.ok(equals(schema, message, fromJson(schema, JSON.parse(JSON.stringify(toJson(schema, message))))), schema.typeName + ' as JSON');
 }
 
-test('the contract has its ten stores and their messages', () => {
-  assert.deepEqual(services.map(s => s.name).sort(), ['Catalogue', 'Content', 'Git', 'History', 'Identity', 'Levels', 'Projects', 'Solution', 'Status', 'Workbench']);
+test('the contract has its eleven stores and their messages', () => {
+  assert.deepEqual(services.map(s => s.name).sort(), ['Agent', 'Catalogue', 'Content', 'Git', 'History', 'Identity', 'Levels', 'Projects', 'Solution', 'Status', 'Workbench']);
   assert.ok(messages.length > 50);
 });
 

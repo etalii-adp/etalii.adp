@@ -45,6 +45,8 @@ message WorkbenchSnapshot {
   string run_target_id = 12;
   // The commit message being written; unset before anything was typed.
   optional string commit_message = 13;
+  // The conversation the Agent tool window shows; empty for one that was not started yet.
+  string agent_conversation_id = 14;
 }
 
 message WriteWorkbenchRequest {

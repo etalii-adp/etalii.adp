@@ -1,0 +1,54 @@
+/* The Agent tool window: a conversation, the list of conversations, and the field a question is typed in. */
+
+.ag{flex:1;min-height:0;display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.ag-head{flex:none;display:flex;align-items:center;height:28px;padding:0 12px;border-bottom:1px solid var(--line);background:var(--editor)}
+.ag-head b{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* a conversation */
+.ag-log{flex:1;min-height:0;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:14px;outline:none}
+.ag-log[hidden],.ag-list[hidden],.ag-ask[hidden]{display:none}
+.ag-msg{display:flex;flex-direction:column;gap:5px;min-width:0}
+.ag-msg>small{color:var(--dim);font-size:11px}
+.ag-text{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5;user-select:text}
+.ag-msg.mine{align-items:flex-end}
+.ag-msg.mine .ag-text{background:var(--sel);border-radius:10px 10px 2px 10px;padding:7px 10px;max-width:92%}
+.ag-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;color:var(--muted);font-size:12px}
+.ag-steps li{display:flex;align-items:center;gap:6px}.ag-steps .i{width:12px;height:12px;color:var(--green);flex:none}
+.ag-items{display:flex;flex-wrap:wrap;gap:5px}
+.ag-item{display:inline-flex;align-items:center;gap:5px;height:22px;max-width:100%;padding:0 7px;border:1px solid var(--line);border-radius:11px;color:var(--fg);font-size:12px}
+.ag-item:hover{background:var(--hover)}.ag-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ag-item .i{width:13px;height:13px;flex:none}
+.ag-dots{display:flex;gap:4px;height:18px;align-items:center}
+.ag-dots i{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:ag-dot 1.2s infinite ease-in-out}
+.ag-dots i:nth-child(2){animation-delay:.15s}.ag-dots i:nth-child(3){animation-delay:.3s}
+@keyframes ag-dot{0%,60%,100%{opacity:.25;transform:none}30%{opacity:1;transform:translateY(-2px)}}
+@media (prefers-reduced-motion: reduce){.ag-dots i{animation:none;opacity:.6}}
+
+/* before anything was asked */
+.ag-hello{margin:auto 0;display:flex;flex-direction:column;align-items:flex-start;gap:8px;color:var(--muted)}
+.ag-hello>.i{width:22px;height:22px;color:var(--orange)}
+.ag-hello b{color:var(--fg);font-weight:600}.ag-hello p{margin:0 0 4px;line-height:1.5}
+.ag-start{text-align:left;padding:6px 10px;border:1px solid var(--line);border-radius:6px;color:var(--fg);width:100%}
+.ag-start:hover{background:var(--hover)}
+
+/* the field a question is typed in, and the item it is asked of */
+.ag-ask{flex:none;border-top:1px solid var(--line);padding:8px 10px 10px;display:flex;flex-direction:column;gap:6px}
+.ag-about{display:flex;min-width:0}
+.ag-on{display:inline-flex;align-items:center;gap:5px;max-width:100%;height:20px;padding:0 7px;border-radius:10px;background:var(--hover);color:var(--muted);font-size:12px}
+.ag-on span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ag-on .i{width:12px;height:12px;flex:none}
+button.ag-on:hover{color:var(--fg)}.ag-on.off{background:none;border:1px dashed var(--ctl)}
+.ag-box{display:flex;gap:6px;align-items:flex-end}
+.ag-box textarea{flex:1;min-height:44px;max-height:180px;resize:none;line-height:1.4}
+.ag-box .ib{background:var(--accent);color:var(--on-accent)}.ag-box .ib:disabled{background:var(--hover);color:var(--dim);opacity:1}
+
+/* the conversations that are over */
+.ag-list{flex:1;min-height:0;display:flex;flex-direction:column}
+.ag-list>.in{margin:8px 10px;flex:none}
+.ag-rows{flex:1;overflow:auto;border-top:1px solid var(--line);display:flex;flex-direction:column}
+.ag-day{padding:10px 12px 4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.ag-row{display:flex;align-items:flex-start;gap:2px;padding:0 6px 0 0}
+.ag-row:hover,.ag-row.on{background:var(--hover)}
+.ag-open{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;text-align:left;padding:7px 4px 8px 12px}
+.ag-open b{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ag-open small{color:var(--dim);font-size:11px}
+.ag-open span{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ag-row .ib{margin-top:5px;visibility:hidden}.ag-row:hover .ib,.ag-row:focus-within .ib{visibility:visible}

@@ -7,7 +7,7 @@ import { ItemSchema, Solution, type Item } from '../../gen/adp/storage/v1/soluti
 import type { EntityContent, OntologyDocument } from '../../documents';
 import { gitHashOf, newShortGuid } from '../../ids';
 import type { ProjectState, World } from './core';
-import { childrenOf, inSentence, itemOf, kindOf, mark, parentOf, pathOf, step, subtree, tellContent, tellGit, tellSolution, tellStatus, unmark, writable } from './project';
+import { childrenOf, inSentence, itemOf, kindOf, mark, parentOf, pathOf, startText, step, subtree, tellContent, tellGit, tellSolution, tellStatus, unmark, writable } from './project';
 
 /* why a name cannot be given to an item; nothing is thrown when it can */
 function nameable(state: ProjectState, x: Item, name: string): void {
@@ -19,7 +19,7 @@ function nameable(state: ProjectState, x: Item, name: string): void {
 
 /* the document of a model, as it is kept or as it starts */
 export const ontologyOf = (world: World, state: ProjectState, model: Item): OntologyDocument =>
-  JSON.parse(state.documents.get(model.id)?.text ?? world.seed.document(state, model, world)) as OntologyDocument;
+  JSON.parse(state.documents.get(model.id)?.text ?? startText(world, state, model)) as OntologyDocument;
 /* keeps a document, as a write does, and gives it back to be told about */
 export function keepDocument(state: ProjectState, itemId: string, text: string) {
   const was = state.documents.get(itemId), doc = create(DocumentSchema, { itemId, revision: (was?.revision ?? 0) + 1, text });

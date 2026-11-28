@@ -1,6 +1,7 @@
 /* The example data as a seed: the Atlas Platform of an energy utility, with its user, its projects, its git log and the text of everything in it. Every example name and number is in this folder and nowhere else. */
 import type { MessageInitShape } from '@bufbuild/protobuf';
 import type { CheckDocument, DashboardDocument, FormDocument, FormField, OntologyDocument, PageDocument, PageSection, SchemaDocument, SectionType, TextDocument } from '../../documents';
+import { Author } from '../../gen/adp/storage/v1/agent_pb';
 import { ChangeState, RefKind } from '../../gen/adp/storage/v1/git_pb';
 import type { KeptProjectSchema } from '../../gen/adp/storage/v1/kept_pb';
 import { ViewMode, type LevelSchema } from '../../gen/adp/storage/v1/levels_pb';
@@ -16,6 +17,7 @@ import { changed } from './changes';
 import { CHECK, CHECKK } from './checks';
 import { CODE } from './code';
 import { COMMITS, HEADS, WHO } from './commits';
+import { talks } from './conversations';
 import { DASH } from './dashboards';
 import { DOC } from './documents';
 import type { Draft, Severity, Vcs } from './draft';
@@ -102,8 +104,17 @@ function atlas(): MessageInitShape<typeof KeptProjectSchema> {
       expandedIds: ['Atlas Platform', 'Ingestion', 'Sources', 'Pipelines', 'Ontology', 'Asset model', 'Components'].map(id),
     },
     contentRevision: 1,
+    agent: {
+      revision: 1,
+      conversations: talks.map((t, at) => {
+        const messages = t.said.map((m, i) => ({ id: shortGuidOf(`agent/${at}/${i}`), author: m.mine ? Author.USER : Author.AGENT, text: m.text, time: m.time, itemIds: (m.items ?? []).map(id).filter(Boolean), steps: m.steps ?? [] }));
+        return { about: { id: shortGuidOf(`agent/${at}`), title: t.title, day: t.day, time: t.time, messages: messages.length, last: cutLine(t.said.at(-1)!.text) }, messages };
+      }),
+    },
   };
 }
+/* the start of a text, as a list of conversations shows what was said last */
+const cutLine = (text: string): string => { const line = text.replace(/\s+/g, ' '); return line.length > 90 ? line.slice(0, line.lastIndexOf(' ', 90)) + '…' : line; };
 
 /* the text of a level's .adp file, or of its .user.adp file */
 function adpText(state: ProjectState, o: Item, world: World, user: boolean): string {
@@ -173,7 +184,7 @@ function textDocument(state: ProjectState, x: Item): TextDocument {
 }
 
 export const example: Seed = {
-  version: 'atlas-1',
+  version: 'atlas-2',
   workspace: 'atlas.example.com',
   user: { id: shortGuidOf('user/sam.rivera'), name: WHO[0], email: 'sam.rivera@example.com', initials: 'SR' },
   password: '42!',

@@ -6,11 +6,15 @@ package adp.storage.v1;
 service Catalogue {
   rpc Read(ReadCatalogueRequest) returns (CatalogueSnapshot);
   rpc ReadIcons(ReadIconsRequest) returns (IconsSnapshot);
+  // What the New Project wizard asks, and the recipes it makes a project of.
+  rpc ReadProjectWizard(ReadProjectWizardRequest) returns (ProjectWizard);
 }
 
 message ReadCatalogueRequest {}
 
 message ReadIconsRequest {}
+
+message ReadProjectWizardRequest {}
 
 // One kind of item a solution holds.
 message Kind {
@@ -68,4 +72,80 @@ message IconsSnapshot {
   repeated IconGroup groups = 3;
   // How many different icons the groups hold.
   uint32 count = 4;
+}
+
+// How large a solution is, from a console application to a solution on a platform as a service.
+message SolutionSize {
+  string id = 1;
+  string label = 2;
+  string about = 3;
+  string icon = 4;
+  // Its place from small to large, 1 for the smallest.
+  uint32 scale = 5;
+  // What a solution of this size usually has, a few words each.
+  repeated string parts = 6;
+  // The options that are chosen for it until a person chooses others.
+  repeated string suggests = 7;
+}
+
+message WizardOption {
+  string id = 1;
+  string label = 2;
+  string about = 3;
+}
+
+// One question of the wizard: a technology stack, or what the project needs beside its code.
+message WizardQuestion {
+  string id = 1;
+  string title = 2;
+  string about = 3;
+  // "technology" or "delivery": the step of the wizard that asks it.
+  string step = 4;
+  repeated WizardOption options = 5;
+  // The sizes it is asked for; none means every size.
+  repeated string sizes = 6;
+}
+
+// One thing a recipe puts in the hierarchy, with what is under it.
+message RecipeElement {
+  string name = 1;
+  string kind = 2;
+  // Its name on disk, where that is not made from its name.
+  string file = 3;
+  string icon = 4;
+  // The kinds it takes, when it is a level.
+  repeated string accepts = 5;
+  repeated RecipeElement children = 6;
+}
+
+// A recipe: elements that belong together, and the answers it is offered for.
+message Recipe {
+  string id = 1;
+  string name = 2;
+  string about = 3;
+  // The area of the hierarchy its elements go in, by name.
+  string area = 4;
+  // The sizes it is for; none means every size.
+  repeated string sizes = 5;
+  // The options that all have to be chosen for it to be offered.
+  repeated string needs = 6;
+  repeated RecipeElement elements = 7;
+}
+
+// An area recipes put their elements in: the first level of a project.
+message RecipeArea {
+  string name = 1;
+  string icon = 2;
+  repeated string accepts = 3;
+}
+
+message ProjectWizard {
+  string version = 1;
+  repeated SolutionSize sizes = 2;
+  repeated WizardQuestion questions = 3;
+  repeated Recipe recipes = 4;
+  // In the order a project shows them.
+  repeated RecipeArea areas = 5;
+  // The name of the document a new project starts with, which says what the wizard was told.
+  string brief = 6;
 }

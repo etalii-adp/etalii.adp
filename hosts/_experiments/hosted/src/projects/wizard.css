@@ -1,0 +1,93 @@
+/* The New Project wizard: its steps on the left, the step that is open on the right. */
+
+.wz{width:min(940px,100%);height:min(640px,calc(100dvh - 32px));display:flex;background:var(--bg);border:1px solid var(--popb);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
+.wz-steps{width:210px;flex:none;border-right:1px solid var(--border);padding:16px 10px;background:var(--editor)}
+.wz-steps h2{margin:0 8px 14px;font-size:14px;font-weight:600}
+.wz-steps ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.wz-step{width:100%;height:30px;border-radius:5px;padding:0 8px;display:flex;align-items:center;gap:8px;text-align:left;color:var(--muted)}
+.wz-step:not(:disabled):not(.on):hover{background:var(--hover)}
+.wz-step.on{background:var(--sel);color:var(--fg)}.wz-step.done{color:var(--fg)}
+.wz-step:disabled{color:var(--dim);cursor:default}
+.wz-n{width:18px;height:18px;border-radius:50%;border:1px solid currentColor;display:grid;place-items:center;font-size:11px;flex:none}
+.wz-n .i{width:12px;height:12px}
+.wz-step.done .wz-n{color:var(--green)}
+.wz-main{flex:1;min-width:0;display:flex;flex-direction:column}
+.wz-main header{padding:18px 22px 12px}
+.wz-main h3{margin:0;font-size:16px;font-weight:600}
+.wz-main header p{margin:4px 0 0;color:var(--muted);font-size:12.5px}
+.wz-body{flex:1;min-height:0;overflow:auto;padding:2px 22px 16px}
+.wz-body[data-at="recipes"]{overflow:hidden;display:flex;flex-direction:column}
+.wz-main footer{display:flex;align-items:center;gap:8px;padding:12px 22px;border-top:1px solid var(--border)}
+.wz-note{flex:1;min-width:0;color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wz-main footer .btn:disabled{opacity:.5;cursor:default}
+
+/* the kinds of solution, from small to large */
+.wz-sizes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.wz-size{border:1px solid var(--ctl);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:5px;text-align:left;min-height:158px}
+.wz-size:hover{background:var(--hover)}
+.wz-size.on{border-color:var(--accent);background:var(--sel);box-shadow:0 0 0 1px var(--accent)}
+.wz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.wz-top .i{width:22px;height:22px;color:var(--link)}
+.wz-scale{display:inline-flex;gap:3px}
+.wz-scale i{width:6px;height:6px;border-radius:50%;background:var(--ctl)}.wz-scale i.on{background:var(--link)}
+.wz-size b{font-weight:600}.wz-size small{color:var(--muted);font-size:12px;line-height:1.35}
+.wz-parts{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:6px}
+.wz .chip{display:inline-flex;align-items:center;height:19px;padding:0 6px;border-radius:4px;background:var(--hover);color:var(--muted);font-size:11px;white-space:nowrap}
+.wz-size.on .chip{background:rgba(127,127,127,.22);color:var(--fg)}
+
+/* a question and what there is to choose */
+.wz-q{border:0;margin:0 0 14px;padding:0;min-width:0}
+.wz-q legend{padding:0;margin-bottom:6px;display:flex;align-items:baseline;gap:8px}
+.wz-q legend b{font-weight:600}.wz-q legend small{color:var(--muted);font-size:12px}
+.wz-opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:6px}
+.wz-opt,.wz-rec{border:1px solid var(--ctl);border-radius:6px;padding:7px 9px;display:flex;align-items:flex-start;gap:9px;text-align:left;min-width:0}
+.wz-opt:hover,.wz-rec:hover{background:var(--hover)}
+.wz-opt.on,.wz-rec.on{border-color:var(--accent);background:var(--sel)}
+.wz-opt>span:last-child,.wz-rec>span:nth-child(2){min-width:0;flex:1}
+.wz-opt b,.wz-rec b{display:block;font-weight:500}
+.wz-opt small,.wz-rec small{display:block;color:var(--muted);font-size:11.5px;line-height:1.35}
+.wz-box{width:15px;height:15px;border:1px solid var(--ctl);border-radius:3px;flex:none;margin-top:1px;display:grid;place-items:center;background:var(--editor)}
+.on>.wz-box{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.wz-box .i{width:11px;height:11px;stroke-width:2}
+
+/* the recipes, and the hierarchy they make */
+.wz-two{flex:1;min-height:0;display:flex;gap:14px}
+.wz-recs{flex:1.25;min-width:0;overflow:auto;display:flex;flex-direction:column;gap:5px;padding-right:4px}
+.wz-all{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px}
+.wz-all span{flex:1}.wz-all button{color:var(--link)}.wz-all button:hover{text-decoration:underline}
+.wz-recs h4,.wz-tree h4,.wz-sum h4{margin:8px 0 2px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
+.wz-recs h4 .i{color:var(--muted)}
+.wz-rec{flex:none}
+.wz-count{flex:none;color:var(--muted);font-size:11.5px;margin-top:1px}
+.wz-tree{flex:1;min-width:0;overflow:auto;border:1px solid var(--line);border-radius:6px;background:var(--editor);padding:4px 0 8px}
+.wz-tree h4{margin:6px 10px;color:var(--muted)}
+.wz-row{height:var(--row);display:flex;align-items:center;gap:6px;padding-left:calc(10px + var(--d)*16px);padding-right:8px;white-space:nowrap}
+.wz-row span{overflow:hidden;text-overflow:ellipsis}
+.wz-row.root{font-weight:500}
+
+/* the name, and what was chosen */
+.wz-form{display:grid;grid-template-columns:90px 1fr;gap:8px 12px;align-items:center;max-width:560px}
+.wz-form label{color:var(--muted);font-size:12px}
+.wz-form .in{height:30px}
+.wz-form .in[aria-invalid]{border-color:var(--red)}
+.wz-err{grid-column:2;margin:-2px 0 2px;color:var(--red);font-size:12px}
+.wz-sum{margin-top:18px;border:1px solid var(--line);border-radius:6px;padding:4px 12px 10px;max-width:560px}
+.wz-sum h4 .i{color:var(--link)}
+.wz-ans{display:flex;gap:10px;margin-top:6px;font-size:12px}
+.wz-ans>span:first-child{width:150px;flex:none;color:var(--muted)}
+.wz-ans>span:last-child{display:flex;flex-wrap:wrap;gap:4px}
+
+@media (max-width:820px){
+  .wz{flex-direction:column;height:calc(100dvh - 32px)}
+  .wz-steps{width:auto;border-right:0;border-bottom:1px solid var(--border);padding:10px}
+  .wz-steps h2{margin:0 4px 8px}
+  .wz-steps ol{flex-direction:row;overflow:auto}
+  .wz-step{width:auto;white-space:nowrap}
+  .wz-step:not(.on){font-size:0;gap:0}
+  .wz-sizes{grid-template-columns:repeat(2,1fr)}
+  .wz-body[data-at="recipes"]{overflow:auto;display:block}
+  .wz-two{flex-direction:column}.wz-recs,.wz-tree{overflow:visible;flex:none}
+  .wz-main header{padding:14px 16px 10px}.wz-body{padding:2px 16px 14px}.wz-main footer{padding:10px 16px}
+  .wz-form{grid-template-columns:1fr}.wz-err{grid-column:1}
+}
+@media (max-width:480px){.wz-sizes{grid-template-columns:1fr}.wz-size{min-height:0}}

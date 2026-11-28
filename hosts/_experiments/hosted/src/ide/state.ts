@@ -41,10 +41,13 @@ export interface State {
   git: { branch: string | null; user: string | null; days: number | null; q: string; sel: number };
   /* what the run button starts */
   run: Item | null;
+  /* the conversation the Agent tool window shows, by its id and empty for a new one; and whether it shows the list of conversations in its place */
+  chat: string;
+  chats: boolean;
 }
 
 /* the layout a new window starts with, to go back to */
-const DOCKS: Record<PanelId, DockId> = { explorer: 'left', commit: 'left', properties: 'right', problems: 'right', git: 'bottom' };
+const DOCKS: Record<PanelId, DockId> = { explorer: 'left', commit: 'left', properties: 'right', problems: 'right', agent: 'right', git: 'bottom' };
 const ACTIVE: Record<DockId, PanelId | null> = { left: 'explorer', right: 'properties', bottom: 'git' };
 export const defaultLayout = (): [State['dock'], State['act']] => [{ ...DOCKS }, { ...ACTIVE }];
 
@@ -63,7 +66,7 @@ export function bindState(): void {
     dm: { ...w.documentModes } as Record<string, DocMode>, q: '', insp: null, edit: null, view: { ...w.views }, viewOwn: new Set(w.ownViews), cvL: null, cvFit: null, lastC: null, lastT: 0,
     anim: personal.get().anim ?? !matchMedia('(prefers-reduced-motion: reduce)').matches, cmsg: w.commitMessage,
     pf: Object.fromEntries(severities.map(s => [s, !w.hiddenSeverities.includes(s)])) as Record<Severity, boolean>, dock, act,
-    git: { branch: w.git.branch || null, user: w.git.user || null, days: w.git.days || null, q: '', sel: 0 }, run: item(w.runTargetId) ?? null,
+    git: { branch: w.git.branch || null, user: w.git.user || null, days: w.git.days || null, q: '', sel: 0 }, run: item(w.runTargetId) ?? null, chat: w.agentConversationId, chats: false,
   } satisfies State);
 }
 
@@ -73,7 +76,7 @@ export function windowState(): WindowState {
   return {
     selectedId: kept(S.sel), documentId: kept(S.doc), tabIds: S.tabs.filter(t => !t.pseudo && alive(t)).map(t => t.id), expandedIds: [...S.open].filter(id => !!project.solution.byId(id)),
     documentModes: { ...S.dm }, views: { ...S.view }, ownViews: [...S.viewOwn], docks: { ...S.dock }, active: Object.fromEntries(docks.map(d => [d, S.act[d] ?? ''])),
-    hiddenSeverities: severities.filter(s => !S.pf[s]), git: { branch: S.git.branch ?? '', user: S.git.user ?? '', days: S.git.days ?? 0 }, runTargetId: S.run?.id ?? '', commitMessage: S.cmsg,
+    hiddenSeverities: severities.filter(s => !S.pf[s]), git: { branch: S.git.branch ?? '', user: S.git.user ?? '', days: S.git.days ?? 0 }, runTargetId: S.run?.id ?? '', commitMessage: S.cmsg, agentConversationId: S.chat,
   };
 }
 /* hands the state to the workbench store, which keeps it a moment later */

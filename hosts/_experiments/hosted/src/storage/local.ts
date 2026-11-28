@@ -1,4 +1,4 @@
-/* What is kept in this browser and nowhere else, and can be read before the first paint: the visit (which page was left, which backend the visit uses, which project is open) and a person's own settings (theme, sizes, animation). Both answer at once, so the script in the head of every page can use them; everything else of the storage is asked from a backend. */
+/* What is kept in this browser and nowhere else, and can be read before the first paint: the visit (which page was left, which backend the visit uses, which project is open, which projects were made in it) and a person's own settings (theme, sizes, animation). Both answer at once, so the script in the head of every page can use them; everything else of the storage is asked from a backend. */
 
 export type Theme = 'dark' | 'light';
 export type SizeVar = '--fs' | '--row';
@@ -6,7 +6,7 @@ export type SizeVar = '--fs' | '--row';
 export interface Personal { theme?: Theme | null; '--fs'?: string; '--row'?: string; anim?: boolean }
 
 /* what a visit remembers from one page to the next */
-export type VisitKey = 'from' | 'transition' | 'backend' | 'service' | 'project';
+export type VisitKey = 'from' | 'transition' | 'backend' | 'service' | 'project' | 'made';
 
 const VISIT = 'adp-hosted-';
 const PERSONAL = 'adp-hosted-prefs';

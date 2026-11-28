@@ -5,7 +5,7 @@ import type { CatalogueSnapshot, IconsSnapshot, Kind } from '../../gen/adp/stora
 import { EventSchema, type Event } from '../../gen/adp/storage/v1/envelope_pb';
 import type { HistoryEntry } from '../../gen/adp/storage/v1/history_pb';
 import { KeptProjectSchema, type KeptProject } from '../../gen/adp/storage/v1/kept_pb';
-import { ProjectsSnapshotSchema, type ProjectsSnapshot } from '../../gen/adp/storage/v1/projects_pb';
+import { ProjectsSnapshotSchema, type Project, type ProjectsSnapshot } from '../../gen/adp/storage/v1/projects_pb';
 import type { Document } from '../../gen/adp/storage/v1/content_pb';
 import type { Item } from '../../gen/adp/storage/v1/solution_pb';
 import type { Seed } from './seed';
@@ -22,10 +22,12 @@ export class Server {
   private readonly handlers = new Map<string, Handler>();
   private readonly listeners = new Set<(event: Event) => void>();
   private readonly answered = new Map<string, Uint8Array | Refused>();
-  /* told after a call changed something that is kept: the ids of the projects it changed, and of those where only a window's own state changed, which nobody else needs to hear of */
-  applied: (projectIds: string[], quietIds: string[]) => void = () => { /* nothing keeps it */ };
+  /* told after a call changed something that is kept: the ids of the projects it changed, of those where only a window's own state changed, which nobody else needs to hear of, and of those where the conversations with the agent changed */
+  applied: (projectIds: string[], quietIds: string[], talkedIds: string[]) => void = () => { /* nothing keeps it */ };
   readonly changed = new Set<string>();
   readonly quiet = new Set<string>();
+  /* the conversations with the agent are the user's own: another window takes them in, and the project is as it was */
+  readonly talked = new Set<string>();
   user = '';
 
   on<I extends DescMessage, O extends DescMessage>(method: DescMethodUnary<I, O>, run: (request: MessageShape<I>, call: Call) => MessageInitShape<O> | Promise<MessageInitShape<O>>): void {
@@ -46,10 +48,17 @@ export class Server {
     } catch (e) {
       if (e instanceof Refused) this.remember(id, e);
       throw e;
-    } finally {
-      if (this.changed.size || this.quiet.size) { const ids = [...this.changed], quiet = [...this.quiet].filter(q => !this.changed.has(q)); this.changed.clear(); this.quiet.clear(); this.applied(ids, quiet); }
-    }
+    } finally { this.settle(); }
   }
+  /* says which projects changed since it was last said */
+  settle(): void {
+    if (!this.changed.size && !this.quiet.size && !this.talked.size) return;
+    const ids = [...this.changed], talked = [...this.talked], quiet = [...this.quiet].filter(q => !this.changed.has(q) && !this.talked.has(q));
+    this.changed.clear(); this.quiet.clear(); this.talked.clear();
+    this.applied(ids, quiet, talked);
+  }
+  /* Carries out something nobody called for at that moment, such as an answer that is ready later. A backend that keeps its state puts its own way of doing that here, so the change is kept as a call's would be. */
+  later: (run: () => void) => void = run => { run(); this.settle(); };
   private remember(id: string, answer: Uint8Array | Refused): void {
     this.answered.set(id, answer);
     if (this.answered.size > REMEMBERED) this.answered.delete(this.answered.keys().next().value!);
@@ -106,8 +115,24 @@ export class World {
     let kept: KeptProject;
     try { kept = fromBinary(KeptProjectSchema, bytes); } catch { return false; }
     if (kept.seed !== this.seed.version || !kept.solution) return false;
+    if (kept.made) this.list(kept.made, id);
     this.index(id, kept);
     return true;
+  }
+  /* takes a project that was just made here: it is listed first, and open */
+  adoptMade(kept: KeptProject): ProjectState {
+    const about = kept.made!;
+    this.list(about, about.id);
+    const state = this.index(about.id, kept);
+    this.made(about.id, this.keep(about.id));
+    return state;
+  }
+  /* told when a project was made here, with what is kept of it; a backend that keeps nothing else can still carry it to the next page */
+  made: (id: string, bytes: Uint8Array) => void = () => { /* nothing carries it */ };
+  /* a project that was made here is in the list of projects, before the ones the seed brought */
+  private list(about: Project, id: string): void {
+    if (about.id !== id || this.projects.projects.some(p => p.id === id)) return;
+    this.projects.projects.unshift(about);
   }
   /* the projects that are open here */
   opened(): string[] { return [...this.open.keys()]; }
@@ -120,10 +145,11 @@ export class World {
     this.open.set(id, state);
     return state;
   }
-  /* puts back what a step holds, keeping the window's own state and the revisions of the stores */
+  /* puts back what a step holds, keeping the window's own state, the conversations with the agent and the revisions of the stores */
   restore(state: ProjectState, bytes: Uint8Array): ProjectState {
     const kept = fromBinary(KeptProjectSchema, bytes);
     kept.workbench = state.kept.workbench;
+    kept.agent = state.kept.agent;
     /* the revisions only ever go up: a store that already heard of a later one would take what is put back for old news */
     kept.solution!.revision = state.kept.solution!.revision;
     kept.levels!.revision = state.kept.levels!.revision;

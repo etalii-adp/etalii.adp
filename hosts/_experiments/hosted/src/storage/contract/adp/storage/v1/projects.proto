@@ -6,6 +6,8 @@ package adp.storage.v1;
 service Projects {
   rpc Read(ReadProjectsRequest) returns (ProjectsSnapshot);
   rpc Open(OpenProjectRequest) returns (ProjectOpened);
+  // Makes a project from the answers of the New Project wizard: the recipes that were chosen become its hierarchy.
+  rpc Create(CreateProjectRequest) returns (ProjectOpened);
 }
 
 message ReadProjectsRequest {}
@@ -40,4 +42,16 @@ message OpenProjectRequest {
 
 message ProjectOpened {
   Project project = 1;
+}
+
+message CreateProjectRequest {
+  string name = 1;
+  // Where its repository is, and the branch it starts on; empty for what the backend makes of the name.
+  string path = 2;
+  string branch = 3;
+  // The answers: the size of the solution, and the options that were chosen.
+  string size_id = 4;
+  repeated string option_ids = 5;
+  // The recipes to make it of, by id.
+  repeated string recipe_ids = 6;
 }
