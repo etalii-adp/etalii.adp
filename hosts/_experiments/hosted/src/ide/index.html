@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="css/panels.css">
 <link rel="stylesheet" href="css/git.css">
 <!-- the page's script, bundled from TypeScript by npm run build; the page is painted once the script has drawn it -->
-<script defer blocking="render" src="main.js"></script>
+<script type="module" blocking="render" src="main.js"></script>
 <noscript><style>html body{opacity:1}</style></noscript>
 </head>
 <body>
@@ -38,7 +38,7 @@
       <span class="runw"><button class="tbtn" id="w-run" style="height:24px"></button><button class="ib c-green" id="w-go" title="Run"></button></span>
       <button class="ib" id="w-search" title="Search everywhere"></button>
       <button class="ib" id="w-gear" title="IDE settings"></button>
-      <button class="tbtn" id="w-user" style="padding:0 4px"></button>
+      <button class="tbtn" id="w-user" title="" style="padding:0 4px"></button>
     </header>
     <div class="ws">
       <nav class="stripe" id="stripe-l" aria-label="Tool windows, left and bottom"></nav>

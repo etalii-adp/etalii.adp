@@ -124,6 +124,9 @@ function codeText(x: Item, world: World): string {
   return `-- ${x.name}\nselect 1`;
 }
 
+/* what each section of a page is called */
+const SECTION_NAMES: Record<SectionType, string> = { nav: 'Header', hero: 'Hero', cards: 'Card grid', map: 'Map', chart: 'Chart', form: 'Form', table: 'Table', footer: 'Footer', title: 'Heading', drop: 'Empty section' };
+
 /* one section of a portal page, as it will look */
 function section(t: SectionType, x: Item): string {
   const was = first(x);
@@ -144,7 +147,7 @@ function pageDocument(state: ProjectState, x: Item): PageDocument {
   const empty: SectionType[] = ['nav', 'drop'], types = x.fresh ? empty : PAGE[first(x)] || empty, ds = state.items.get(idOf(state, 'Design system'));
   const sections = types.map((type): PageSection => {
     const unbound = type === 'map' && first(x) === 'Outage map';
-    return { type, html: section(type, x), unbound, binding: unbound ? 'None' : type === 'table' || type === 'map' || type === 'chart' || type === 'cards' ? 'Data analysis / Outage heatmap' : 'Static', refresh: type === 'table' || type === 'map' ? 'Every 60 s' : 'On load' };
+    return { type, name: SECTION_NAMES[type], html: section(type, x), unbound, binding: unbound ? 'None' : type === 'table' || type === 'map' || type === 'chart' || type === 'cards' ? 'Data analysis / Outage heatmap' : 'Static', refresh: type === 'table' || type === 'map' ? 'Every 60 s' : 'On load' };
   });
   return { sections, components: [...(ds ? childrenOf(state, ds).filter(k => k.kind === 'component').map(k => k.name) : []), 'Table', 'Footer'], from: 'Design system @ ' + (ds?.link?.ref ?? '') };
 }

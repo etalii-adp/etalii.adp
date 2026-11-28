@@ -2,7 +2,9 @@
 import { $, $$, esc, hit } from '../common/dom';
 import { ico } from '../common/icons';
 import { go, pageReady } from '../common/nav';
-import { reason, startPage } from '../common/page';
+import { startStored } from '../common/away';
+import { startPage } from '../common/page';
+import { reason } from '../common/reason';
 import { toast } from '../common/popups';
 import { connect, visit } from '../storage';
 
@@ -42,4 +44,4 @@ async function start(): Promise<void> {
   pageReady();
 }
 
-void start();
+startStored(start);

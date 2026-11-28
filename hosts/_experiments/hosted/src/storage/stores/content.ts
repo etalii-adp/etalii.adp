@@ -62,7 +62,8 @@ export class ContentStore {
     try {
       return await this.link.call(Content.method.write, { projectId: this.projectId, itemId: x.id, baseRevision: this.docs.get(x.id)?.revision ?? 0, text: typeof doc === 'string' ? doc : JSON.stringify(doc), touchedId: touched?.id ?? '' });
     } catch (e) {
-      if (e instanceof Refused && e.code === 'conflict') { this.docs.delete(x.id); this.refresh(); }
+      /* what was written on is no longer what is there: it is read again, and the page is told when it is */
+      if (e instanceof Refused && e.code === 'conflict') { this.docs.delete(x.id); this.refresh(); this.fetch(x.id, () => this.read(x.id).then(d => { this.keep(d); this.show(); })); }
       throw e;
     }
   }

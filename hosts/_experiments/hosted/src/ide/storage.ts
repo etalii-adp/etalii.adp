@@ -1,5 +1,5 @@
 /* The stores the IDE page reads, once they are open: storage for what every page shares, project for the project the page shows. With them, the one way the page carries out a command and says what came of it. */
-import { reason } from '../common/page';
+import { reason } from '../common/reason';
 import { toast } from '../common/popups';
 import { connect, Refused, visit, type Done, type ProjectStorage, type Storage } from '../storage';
 import { repaintEverything } from './repaint';

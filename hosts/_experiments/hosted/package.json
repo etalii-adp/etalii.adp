@@ -3,9 +3,13 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "generate": "buf lint src/storage/contract && buf generate",
     "typecheck": "tsc --noEmit",
     "build": "node build.mjs",
-    "check": "npm run typecheck && npm run build"
+    "check": "npm run generate && npm run typecheck && npm run build",
+    "test:unit": "node test/unit/run.mjs",
+    "test:e2e": "node test/e2e/run.mjs",
+    "test": "npm run test:unit && npm run test:e2e"
   },
   "devDependencies": {
     "@bufbuild/buf": "1.75.0",
@@ -13,6 +17,7 @@
     "@bufbuild/protoc-gen-es": "2.17.0",
     "esbuild": "0.28.2",
     "playwright": "1.63.0",
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "ws": "8.23.1"
   }
 }

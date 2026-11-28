@@ -9,7 +9,7 @@ import { repaint, repaintAll } from './repaint';
 import { keep, S } from './state';
 import { act, project } from './storage';
 
-/* the files a person took out of the next commit, by item and file; every other changed file is in it */
+/* the files a person took out of a commit, by item and file; every other changed file is in the next one, and these stay out until they are ticked again */
 const left = new Set<string>();
 const key = (itemId: string, file: string): string => itemId + '/' + file;
 
@@ -34,7 +34,6 @@ export function renderCommit(): void {
     if (!message.value.trim()) message.focus();
     if (!await act(project.git.commit(message.value, picked, push))) return;
     S.cmsg = '';
-    left.clear();
     renderCommit();
     repaint('git');
     repaintAll();

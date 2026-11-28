@@ -19,7 +19,16 @@ export async function walk(page, base, { backend } = {}) {
   page.on('console', m => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) problems.push('console error: ' + m.text()); });
   await page.route(u => !u.href.startsWith(base), r => r.abort());
 
-  const settle = () => page.evaluate(() => new Promise(done => setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(done, 0))), 0)));
+  /* a step is over when the page has drawn and nothing in it has changed for a moment: an answer of the storage may come a little later than the click that asked for it */
+  const settle = () => page.evaluate(() => new Promise(done => {
+    let timer;
+    const quiet = () => { clearTimeout(timer); timer = setTimeout(() => { watch.disconnect(); done(); }, 40); };
+    const watch = new MutationObserver(quiet);
+    watch.observe(document.documentElement, { subtree: true, childList: true, attributes: true, characterData: true });
+    setTimeout(() => requestAnimationFrame(() => requestAnimationFrame(quiet)), 0);
+  }));
+  /* types into the field that has the focus, once there is one: a field for a name comes up when the storage has answered */
+  const typed = async text => { await page.waitForFunction(() => document.activeElement?.matches('input:not([type=checkbox]), textarea')); await page.keyboard.type(text); };
   const step = async (label, fn) => {
     try { await fn(); await settle(); trace.push({ label, ...(await page.evaluate(read)) }); }
     catch (e) { problems.push(`step "${label}" failed: ${e.message.split('\n')[0]}`); trace.push({ label, failed: true }); if (process.env.WALK_VERBOSE) console.log('FAILED ' + label); }
@@ -74,7 +83,7 @@ export async function walk(page, base, { backend } = {}) {
   await step('entity: change a type', () => page.locator('#doc select[data-f="t"]').nth(1).selectOption('datetime'));
   await step('entity: required', () => page.locator('#doc input[data-f="r"]').nth(2).click());
   await step('entity: add an attribute', () => page.locator('#e-add').click());
-  await step('entity: name the new attribute', async () => { await page.keyboard.type('firmware'); await page.keyboard.press('Tab'); });
+  await step('entity: name the new attribute', async () => { await typed('firmware'); await page.keyboard.press('Tab'); });
   await step('entity: remove an attribute', () => page.locator('#doc [data-del]').nth(1).click());
   await step('entity: a relation', () => page.locator('#doc [data-ent]').first().click());
   await step('entity: a reference', () => open('Customer'));
@@ -138,14 +147,14 @@ export async function walk(page, base, { backend } = {}) {
   /* adding, renaming, deleting */
   await step('menu: of a group', () => row('Pipelines').click({ button: 'right' }));
   await step('add: a pipeline', async () => { await page.keyboard.press('Escape'); await context('Pipelines', 'New', 'Data pipeline'); });
-  await step('add: name it', async () => { await page.keyboard.type('Billing export'); await page.keyboard.press('Enter'); });
-  await step('rename: to a name that is taken', async () => { await row('Billing export').click(); await page.keyboard.press('F2'); await page.keyboard.type('Customer sync'); await page.keyboard.press('Enter'); });
+  await step('add: name it', async () => { await typed('Billing export'); await page.keyboard.press('Enter'); });
+  await step('rename: to a name that is taken', async () => { await row('Billing export').click(); await page.keyboard.press('F2'); await typed('Customer sync'); await page.keyboard.press('Enter'); });
   await step('rename: leave it', () => page.keyboard.press('Escape'));
-  await step('rename: an existing item', async () => { await row('Telemetry stream').click(); await page.keyboard.press('F2'); await page.keyboard.type('Telemetry feed'); await page.keyboard.press('Enter'); });
-  await step('add: an entity type', async () => { await context('Customer model', 'New', 'Entity type'); await page.keyboard.type('Invoice'); await page.keyboard.press('Enter'); });
+  await step('rename: an existing item', async () => { await row('Telemetry stream').click(); await page.keyboard.press('F2'); await typed('Telemetry feed'); await page.keyboard.press('Enter'); });
+  await step('add: an entity type', async () => { await context('Customer model', 'New', 'Entity type'); await typed('Invoice'); await page.keyboard.press('Enter'); });
   await step('add: its model', () => open('Customer model'));
-  await step('add: a group in an area', async () => { await context('Documentation', 'New', 'Group'); await page.keyboard.type('Guides'); await page.keyboard.press('Enter'); });
-  await step('add: a document in it', async () => { await context('Guides', 'New', 'Document'); await page.keyboard.type('Style guide'); await page.keyboard.press('Enter'); });
+  await step('add: a group in an area', async () => { await context('Documentation', 'New', 'Group'); await typed('Guides'); await page.keyboard.press('Enter'); });
+  await step('add: a document in it', async () => { await context('Guides', 'New', 'Document'); await typed('Style guide'); await page.keyboard.press('Enter'); });
   await step('delete: an item', async () => { await row('Weather enrichment').click(); await page.locator('#tree').press('Delete'); });
   await step('delete: undo', () => page.locator('.toast button').click());
   await step('delete: a group', async () => { await row('Guides').click(); await page.locator('#tree').press('Delete'); });
@@ -235,10 +244,14 @@ export async function walk(page, base, { backend } = {}) {
 
 /* Ids and commit hashes that are made anew on every visit are replaced by the order in which they first show, so two visits can be compared. */
 export function normalise(trace) {
+  /* a message that says what was done stays for a few seconds, so it shows in the steps that happen to follow; it counts in the step it came up in */
+  trace = trace.map((step, i) => step.popups ? { ...step, popups: step.popups.filter(p => !(p.startsWith('<div class="toast"') && trace[i - 1]?.popups?.includes(p))) } : step);
   const seen = new Map(), name = (kind, v) => { if (!seen.has(v)) seen.set(v, `${kind}${seen.size}`); return seen.get(v); };
   /* who last changed an item is worked out from its id, so for a new item it differs per visit */
   const last = /(Last change<\/span><\/span><span><span class=\\"v\\" title=\\")[^"\\]*(\\">)[^<]*(<)/g;
-  return JSON.parse(JSON.stringify(trace).replace(last, '$1$2$3').replace(/(?<![0-9a-z])[0-9a-z]{25}(?![0-9a-z])/g, v => name('ID', v)).replace(/(<span class=\\"mono\\">)([0-9a-f]{7})(<\/span>)/g, (_a, a, v, b) => a + name('HASH', v) + b));
+  /* a project is found by its id, where it once was by its name; neither says anything about how the page behaves */
+  const project = /data-p=\\"[^"\\]*\\"/g;
+  return JSON.parse(JSON.stringify(trace).replace(last, '$1$2$3').replace(project, 'data-p').replace(/ id=\\"pj-(ver|me)\\"/g, '').replace(/(?<![0-9a-z])[0-9a-z]{25}(?![0-9a-z])/g, v => name('ID', v)).replace(/(<span class=\\"mono\\">)([0-9a-f]{7})(<\/span>)/g, (_a, a, v, b) => a + name('HASH', v) + b));
 }
 
 /* the differences between two traces, step by step and region by region */

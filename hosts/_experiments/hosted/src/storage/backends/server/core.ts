@@ -120,10 +120,16 @@ export class World {
     this.open.set(id, state);
     return state;
   }
-  /* puts back what a step holds, keeping the window's own state */
+  /* puts back what a step holds, keeping the window's own state and the revisions of the stores */
   restore(state: ProjectState, bytes: Uint8Array): ProjectState {
     const kept = fromBinary(KeptProjectSchema, bytes);
     kept.workbench = state.kept.workbench;
+    /* the revisions only ever go up: a store that already heard of a later one would take what is put back for old news */
+    kept.solution!.revision = state.kept.solution!.revision;
+    kept.levels!.revision = state.kept.levels!.revision;
+    kept.git!.revision = state.kept.git!.revision;
+    kept.status!.revision = state.kept.status!.revision;
+    kept.contentRevision = state.kept.contentRevision;
     return this.index(state.id, kept);
   }
 }

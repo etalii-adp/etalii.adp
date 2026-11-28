@@ -1,6 +1,7 @@
 /* Starts the IDE page: opens the storage, wires every part, says which function draws which part, and draws them all once. */
 import { addIcons } from '../common/icons';
 import { go, pageReady } from '../common/nav';
+import { startStored } from '../common/away';
 import { startPage } from '../common/page';
 import { ownTheBrowser } from './browser';
 import { renderCommit } from './commit';
@@ -56,4 +57,4 @@ async function start(): Promise<void> {
   pageReady();
 }
 
-void start();
+startStored(start);

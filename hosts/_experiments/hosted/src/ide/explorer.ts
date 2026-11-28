@@ -1,7 +1,7 @@
 /* The Explorer: the tree, its two views, rename, add, delete, the icon picker and the context menu. A level's view is set from its context menu (View As) or in the Properties. */
 import { $, $$, $maybe, clamp, el, esc, hit } from '../common/dom';
 import { ico } from '../common/icons';
-import { reason } from '../common/page';
+import { reason } from '../common/reason';
 import { closePop, copy, dialog, menu, place, toast, type MenuEntry } from '../common/popups';
 import { body, pel, show } from './docks';
 import { acceptsOf, inSentence, K } from './kinds';

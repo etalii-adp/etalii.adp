@@ -2,7 +2,9 @@
 import { $, $$, esc, hit } from '../common/dom';
 import { ico } from '../common/icons';
 import { go, pageReady } from '../common/nav';
-import { reason, startPage } from '../common/page';
+import { startStored } from '../common/away';
+import { startPage } from '../common/page';
+import { reason } from '../common/reason';
 import { connect } from '../storage';
 
 const field = (selector: string): HTMLInputElement => $<HTMLInputElement>(selector);
@@ -19,8 +21,9 @@ async function start(): Promise<void> {
   startPage();
   const { identity } = await connect();
   await identity.load();
-  field('#lg-ws').value = identity.workspace;
-  field('#lg-email').value = identity.user.email;
+  /* as what the form starts with, so a reset of the form brings them back */
+  field('#lg-ws').defaultValue = identity.workspace;
+  field('#lg-email').defaultValue = identity.user.email;
   const workspace = (): string => field('#lg-ws').value.trim();
 
   /* the question that is out; an answer to an earlier one, or to a step that was left, is dropped */
@@ -74,4 +77,4 @@ async function start(): Promise<void> {
   pageReady();
 }
 
-void start();
+startStored(start);

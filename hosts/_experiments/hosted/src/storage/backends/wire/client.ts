@@ -83,7 +83,10 @@ export class Wire implements Backend {
     clearInterval(this.ping); clearTimeout(this.pong);
     const waits = this.options.retryMs, wait = waits[Math.min(this.failures, waits.length - 1)] ?? 1000;
     this.failures++;
-    this.signal.set(this.failures >= waits.length ? 'offline' : 'connecting');
+    const offline = this.failures >= waits.length;
+    this.signal.set(offline ? 'offline' : 'connecting');
+    /* once the storage counts as offline, what waits for an answer is told so at once; it is asked again by whoever still wants it when the storage is back */
+    if (offline) { for (const [, w] of this.waiting) { clearTimeout(w.timer); w.fail(new Unreachable()); } this.waiting.clear(); }
     this.retry = setTimeout(() => this.open(), wait);
   }
 

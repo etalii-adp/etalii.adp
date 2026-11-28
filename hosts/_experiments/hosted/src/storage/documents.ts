@@ -39,6 +39,8 @@ export interface SchemaDocument {
 export type SectionType = 'nav' | 'hero' | 'cards' | 'map' | 'chart' | 'form' | 'table' | 'footer' | 'title' | 'drop';
 export interface PageSection {
   type: SectionType;
+  /* what the section is called */
+  name: string;
   html: string;
   /* what its data comes from, and how often; unbound marks a section that needs a binding and has none */
   binding: string;
