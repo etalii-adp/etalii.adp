@@ -4,9 +4,10 @@ import { mountMark } from './icons';
 import { go, wireNav } from './nav';
 import type { PageName } from './pages';
 import { toast, wirePopups } from './popups';
+import { Refused, Unreachable } from '../storage';
 
-/* what a project other than Atlas Platform answers */
-export const only = (): void => toast('Only Atlas Platform is available on this computer.');
+/* the reason the storage gave for not doing something, in words for the user; anything else is a fault of the page and is thrown on */
+export const reason = (e: unknown): string => { if (e instanceof Refused || e instanceof Unreachable) return e.message; throw e; };
 
 export function startPage(): void {
   mountMark();

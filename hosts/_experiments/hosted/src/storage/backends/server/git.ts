@@ -4,7 +4,7 @@ import { Refused, methodName } from '../../backend';
 import { ChangeState, Git, GitCommitSchema, IgnoredFileSchema, type GitSnapshot } from '../../gen/adp/storage/v1/git_pb';
 import { newGitHash } from '../../ids';
 import type { World } from './core';
-import { itemOf, sealHistory, subtree, tellGit, unmark } from './project';
+import { gitOf, itemOf, sealHistory, subtree, tellGit, unmark } from './project';
 
 const refOf = (git: GitSnapshot, name: string) => git.refs.find(r => r.name === name);
 /* a new commit on top of the log, with the branch moved to it */
@@ -20,6 +20,8 @@ export function serveGit(world: World): void {
 
   server.on(Git.method.read, r => {
     const state = world.project(r.projectId);
+    /* every item has a last change, made the first time it is asked for */
+    for (const x of state.items.values()) gitOf(state, x);
     return state.kept.git!;
   });
 

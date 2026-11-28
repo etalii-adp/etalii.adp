@@ -4,6 +4,7 @@ import { ico } from '../../common/icons';
 import { K, WORD } from '../kinds';
 import { linkOf, ro } from '../model';
 import { repaint } from '../repaint';
+import { act, project } from '../storage';
 import type { Item } from '../types';
 
 /* a tool draws an item into the document area */
@@ -20,8 +21,17 @@ export const curve = (x1: number, y1: number, x2: number, y2: number): string =>
 export const curveL = (x1: number, y1: number, x2: number, y2: number): string => { const dx = Math.max(30, Math.abs(x2 - x1) / 2); return `M${x1} ${y1}C${x1 - dx} ${y1} ${x2 + dx} ${y2} ${x2} ${y2}`; };
 export const ARROW = `<defs><marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" style="fill:var(--muted);stroke:none"/></marker></defs>`;
 
-/* a tool that changed an item marks it modified, and the Explorer and the Properties show it */
-export function touch(x: Item): void {
-  if (!x.vcs) x.vcs = 'M';
-  repaint('explorer', 'properties');
+/* what a tool shows while the document of its item is on its way: its bar, and nothing under it */
+export const waiting = (d: HTMLElement, x: Item): void => { d.innerHTML = `<div class="tool">${tbar(x)}</div>`; };
+
+/* The edits of the tools, one after the other, so that each starts from what the one before it left. */
+let edits: Promise<unknown> = Promise.resolve();
+/* A tool changes the document of an item: change gets a copy of the document as it is now and changes it, and the copy is written. holder is the item that holds the document when that is not the item itself, as a model holds what its entity types are. The Explorer and the Properties show the item as changed afterwards. */
+export function edit<T>(x: Item, empty: T, change: (doc: T) => void, holder: Item = x): Promise<unknown> {
+  return edits = edits.then(async () => {
+    const doc = structuredClone(project.content.doc<T>(holder) ?? empty) as T;
+    change(doc);
+    await act(project.content.write(holder, doc, holder === x ? undefined : x));
+    repaint('explorer', 'properties');
+  });
 }

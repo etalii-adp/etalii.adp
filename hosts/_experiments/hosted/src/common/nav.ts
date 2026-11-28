@@ -1,15 +1,16 @@
 /* Going from one page to another without a hard cut. Where the browser runs a view transition between two documents (transitions.css asks for it), a link simply navigates. Elsewhere the page turns out before it leaves and the next one turns in. */
 import { hit } from './dom';
-import { base, fromKey, here, pageOf, pages, seenKey, type PageName } from './pages';
+import { visit } from '../storage/local';
+import { base, here, pageOf, pages, type PageName } from './pages';
 import { closePop } from './popups';
 
 const pageUrl = (page: PageName): string => base + (page === 'start' ? '' : page + '/') + 'index.html';
 /* the browser knows view transitions between documents, and the last arrival did not show otherwise (boot.ts) */
-const smooth = 'CSSViewTransitionRule' in window && (() => { try { return sessionStorage.getItem(seenKey) !== 'no'; } catch { return true; } })();
+const smooth = 'CSSViewTransitionRule' in window && visit.get('transition') !== 'no';
 const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function leave(url: string): void {
-  try { sessionStorage.setItem(fromKey, here); } catch { /* the next page turns in the forward way */ }
+  visit.set('from', here);
   if (smooth || still) { location.href = url; return; }
   const r = document.documentElement;
   r.classList.toggle('back', pages.indexOf(pageOf(url)) < pages.indexOf(here));

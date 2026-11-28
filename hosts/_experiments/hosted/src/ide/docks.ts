@@ -2,7 +2,7 @@
 import { $, $$, clamp, el, hit } from '../common/dom';
 import { ico } from '../common/icons';
 import { menu } from '../common/popups';
-import { DOCK0, S } from './state';
+import { defaultLayout, keep, S } from './state';
 import type { DockId, PanelId } from './types';
 
 /* the tool windows: title and icon */
@@ -24,6 +24,7 @@ export function layout(): void {
   $('#stripe-l').innerHTML = `<div>${ids('left')}</div><div>${ids('bottom')}</div>`;
   $('#stripe-r').innerHTML = `<div>${ids('right')}</div>`;
   requestAnimationFrame(() => S.cvFit?.(true));
+  keep();
 }
 export function toggle(id: PanelId): void { const d = S.dock[id]; S.act[d] = S.act[d] === id ? null : id; layout(); }
 export function show(id: PanelId): void { S.act[S.dock[id]] = id; layout(); }
@@ -36,7 +37,7 @@ function move(id: PanelId, d: DockId): void {
   layout();
 }
 export function resetLayout(): void {
-  const [dock, act] = JSON.parse(DOCK0) as [typeof S.dock, typeof S.act];
+  const [dock, act] = defaultLayout();
   S.dock = dock; S.act = act;
   for (const d of docks) { $('#dock-' + d).style.width = ''; $('#dock-' + d).style.height = ''; }
   layout();

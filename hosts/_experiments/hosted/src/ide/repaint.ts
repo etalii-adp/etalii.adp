@@ -3,8 +3,12 @@
 export type Part = 'explorer' | 'editor' | 'properties' | 'status' | 'title' | 'problems' | 'commit' | 'git';
 
 const painters: Partial<Record<Part, () => void>> = {};
+/* run after parts were drawn: the window's state may have changed with them */
+let after: (() => void) | null = null;
 
-export function paints(by: Record<Part, () => void>): void { Object.assign(painters, by); }
-export function repaint(...parts: Part[]): void { for (const part of parts) painters[part]?.(); }
+export function paints(by: Record<Part, () => void>, then: () => void): void { Object.assign(painters, by); after = then; }
+export function repaint(...parts: Part[]): void { for (const part of parts) painters[part]?.(); after?.(); }
 /* everything that shows the hierarchy, the selection or the open document; the Git tool window is among them for the linked repositories it lists */
 export function repaintAll(): void { repaint('explorer', 'editor', 'properties', 'status', 'git'); }
+/* every part, as after a change the page did not make itself */
+export function repaintEverything(): void { repaint('title', 'problems', 'commit', 'git', 'explorer', 'properties', 'status', 'editor'); }
