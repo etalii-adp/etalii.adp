@@ -19,3 +19,10 @@ export function serve(root, port = 0) {
   });
   return new Promise(resolve => server.listen(port, '127.0.0.1', () => resolve({ url: `http://localhost:${server.address().port}/`, close: () => new Promise(done => server.close(done)) })));
 }
+
+/* run by itself it serves a folder until it is stopped: node test/e2e/serve.mjs dist 8080 */
+if (process.argv[1] && import.meta.url === (await import('node:url')).pathToFileURL(process.argv[1]).href) {
+  const { resolve } = await import('node:path');
+  const site = await serve(resolve(process.argv[2] ?? 'dist'), Number(process.argv[3] ?? 8080));
+  console.log('Serving at ' + site.url);
+}

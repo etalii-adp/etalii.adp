@@ -10,7 +10,8 @@ const kind = (name: string, label: string, icon: string, colour: string, stored?
 
 export const KINDS: KindInit[] = [
   kind('solution', 'Solution', 'cube', 'blue'),
-  kind('area', 'Area', 'folder', 'muted'),
+  /* an area that is added takes whatever a solution is made of; the areas of a seed say themselves what they take */
+  kind('area', 'Area', 'folder', 'muted', undefined, '', ['group', 'source', 'pipeline', 'schema', 'ontology', 'vocabulary', 'model', 'prompt', 'agent', 'evalset', 'dashboard', 'code', 'notebook', 'page', 'theme', 'component', 'csapp', 'pyproject', 'release', 'environment', 'testsuite', 'procedure', 'doc']),
   kind('group', 'Group', 'folder', 'muted'),
   kind('source', 'Data source', 'plug', 'teal', '.source.yaml', 'form'),
   kind('pipeline', 'Data pipeline', 'flow', 'green', ['pipeline.did', 'mapping.yaml', 'transform.sql'], 'flow'),

@@ -25,7 +25,7 @@ export function makeWorld(seed: Seed, kept: Iterable<[string, Uint8Array]> = [])
 
   server.on(Identity.method.read, () => ({ workspace: seed.workspace, user: seed.user, signedIn: world.signedIn, providers: seed.providers }));
   server.on(Identity.method.signIn, r => {
-    if (r.password !== seed.password) throw new Refused('denied', 'The email or the password is not right.');
+    if (seed.password && r.password !== seed.password) throw new Refused('denied', 'The email or the password is not right.');
     world.signedIn = true;
     return { user: seed.user };
   });

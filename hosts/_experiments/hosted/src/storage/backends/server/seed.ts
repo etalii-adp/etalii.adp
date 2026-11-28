@@ -15,7 +15,7 @@ export interface Seed {
   version: string;
   workspace: string;
   user: MessageInitShape<typeof UserSchema>;
-  /* the password every user of the workspace has, and how long an identity provider takes to answer */
+  /* the password every user of the workspace has, where empty lets any password in; and how long an identity provider takes to answer */
   password: string;
   answerMs: number;
   providers: string[];

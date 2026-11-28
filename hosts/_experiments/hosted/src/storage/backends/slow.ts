@@ -13,8 +13,8 @@ export interface Slowness {
 }
 
 const wait = (ms: number): Promise<void> => new Promise(done => setTimeout(done, ms));
-/* a call that only reads, by the name the contract gives its method */
-const reads = (method: { name: string }): boolean => method.name.startsWith('Read');
+/* a call that changes nothing a person made, by the name the contract gives its method: one that reads, and opening a project */
+const reads = (method: { name: string }): boolean => method.name.startsWith('Read') || method.name === 'Open';
 
 export class Slow implements Backend {
   readonly name: string;

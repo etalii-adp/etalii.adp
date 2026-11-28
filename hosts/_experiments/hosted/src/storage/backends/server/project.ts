@@ -78,7 +78,7 @@ export const gitOf = (state: ProjectState, x: Item): ItemGit => {
   if (!g) {
     /* who last changed it is not kept: it follows from the id, as a stand-in for the log of a real repository */
     const h = parseInt(x.id.slice(-6), 36);
-    g = create(ItemGitSchema, { itemId: x.id, lastAuthor: git.people[h % 4] ?? '', lastDays: h % 9 + 2 });
+    g = create(ItemGitSchema, { itemId: x.id, lastAuthor: git.people[h % Math.min(4, git.people.length || 1)] ?? '', lastDays: h % 9 + 2 });
     git.items.push(g);
   }
   return g;
