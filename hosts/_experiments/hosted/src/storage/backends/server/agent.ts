@@ -37,7 +37,7 @@ function say(c: Conversation, author: Author, text: string, itemIds: string[], s
 export function tellAgent(world: World, state: ProjectState, call: Call, spoken?: Conversation, deletedId = ''): void {
   const agent = agentOf(state);
   agent.revision++;
-  world.server.changed.add(state.id);
+  world.server.talked.add(state.id);
   world.server.emit('Agent', state.id, agent.revision, call, AgentChangesSchema, { conversations: agent.conversations.map(c => c.about!), spoken, deletedId });
 }
 

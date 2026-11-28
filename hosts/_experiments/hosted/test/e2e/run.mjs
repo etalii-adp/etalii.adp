@@ -331,6 +331,29 @@ await test('agent: an empty project is answered as well, and a slow storage show
   assert(await closed.locator('.ag-ask textarea').inputValue() === 'What changed?' && await closed.locator('.ag-hello').count() === 1, 'a question that was refused is lost');
 });
 
+await test("browser storage: what another tab keeps of its own, its window's state and a conversation with the agent, leaves what can be undone here as it is", async (context, errors) => {
+  const one = await newPage(context, errors), two = await newPage(context, errors);
+  for (const page of [one, two]) { await page.goto(site.url + 'ide/index.html?backend=browser'); await ready(page); await expand(page, 'Ingestion'); await expand(page, 'Pipelines'); }
+  await two.locator('[data-tw="agent"]').click(); await two.locator('#ag-all').click();
+  const before = await two.locator('.ag-row').count();
+  await row(two, 'Weather enrichment').click(); await two.locator('#tree').press('Delete');
+  await row(one, 'Weather enrichment').waitFor({ state: 'detached' });
+  /* the other tab selects something else, and its window's state is kept a moment later */
+  await row(one, 'Customer sync').click();
+  await one.waitForTimeout(600);
+  /* and it asks the agent: the conversation is kept as well, and shows here */
+  await one.locator('[data-tw="agent"]').click();
+  await one.locator('.ag-ask textarea').fill('Who changed what lately?'); await one.keyboard.press('Enter');
+  await answered(one, 1);
+  await two.waitForFunction(n => document.querySelectorAll('.ag-row').length === n, before + 1);
+  /* the delete can still be taken back here, and that shows there */
+  await two.locator('#menus [data-m="Edit"]').click();
+  assert(await two.locator('body > .menu > .mi.dis', { hasText: 'Undo' }).count() === 0, 'what another tab kept of its own took away what could be undone here');
+  await menuItem(two, 'Undo').click();
+  await row(one, 'Weather enrichment').waitFor();
+  await row(two, 'Weather enrichment').waitFor();
+});
+
 /* the New Project wizard: opening it, going on, and the lines of a hierarchy as "depth name" */
 const wizard = async page => { await page.locator('#pj-new').click(); await page.locator('.wz').waitFor(); };
 const next = page => page.locator('.wz [data-next]').click();

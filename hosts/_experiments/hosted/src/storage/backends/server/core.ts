@@ -22,10 +22,12 @@ export class Server {
   private readonly handlers = new Map<string, Handler>();
   private readonly listeners = new Set<(event: Event) => void>();
   private readonly answered = new Map<string, Uint8Array | Refused>();
-  /* told after a call changed something that is kept: the ids of the projects it changed, and of those where only a window's own state changed, which nobody else needs to hear of */
-  applied: (projectIds: string[], quietIds: string[]) => void = () => { /* nothing keeps it */ };
+  /* told after a call changed something that is kept: the ids of the projects it changed, of those where only a window's own state changed, which nobody else needs to hear of, and of those where the conversations with the agent changed */
+  applied: (projectIds: string[], quietIds: string[], talkedIds: string[]) => void = () => { /* nothing keeps it */ };
   readonly changed = new Set<string>();
   readonly quiet = new Set<string>();
+  /* the conversations with the agent are the user's own: another window takes them in, and the project is as it was */
+  readonly talked = new Set<string>();
   user = '';
 
   on<I extends DescMessage, O extends DescMessage>(method: DescMethodUnary<I, O>, run: (request: MessageShape<I>, call: Call) => MessageInitShape<O> | Promise<MessageInitShape<O>>): void {
@@ -50,10 +52,10 @@ export class Server {
   }
   /* says which projects changed since it was last said */
   settle(): void {
-    if (!this.changed.size && !this.quiet.size) return;
-    const ids = [...this.changed], quiet = [...this.quiet].filter(q => !this.changed.has(q));
-    this.changed.clear(); this.quiet.clear();
-    this.applied(ids, quiet);
+    if (!this.changed.size && !this.quiet.size && !this.talked.size) return;
+    const ids = [...this.changed], talked = [...this.talked], quiet = [...this.quiet].filter(q => !this.changed.has(q) && !this.talked.has(q));
+    this.changed.clear(); this.quiet.clear(); this.talked.clear();
+    this.applied(ids, quiet, talked);
   }
   /* Carries out something nobody called for at that moment, such as an answer that is ready later. A backend that keeps its state puts its own way of doing that here, so the change is kept as a call's would be. */
   later: (run: () => void) => void = run => { run(); this.settle(); };

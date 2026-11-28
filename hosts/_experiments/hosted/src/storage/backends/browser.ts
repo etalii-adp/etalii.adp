@@ -12,8 +12,14 @@ import type { Seed } from './server/seed';
 
 const DATABASE = 'adp-hosted', TABLE = 'projects', LOCK = 'adp-hosted-write', CHANNEL = 'adp-hosted';
 
-/* a project as it is kept: its encoded state, and a stamp that changes with every write */
-interface Kept { bytes: Uint8Array; stamp: string }
+/* A project as it is kept: its encoded state, a stamp that changes when the project changed, and one that changes when the conversations with the agent did. A window's own state is written under the stamps that are there, so no other tab takes it for a change. */
+interface Kept { bytes: Uint8Array; stamp: string; talk?: string }
+/* the stamps of a project as this tab last wrote or took it in */
+interface Marks { stamp: string; talk: string }
+/* what a call changed of a project */
+interface Change { id: string; project: boolean; talk: boolean }
+const fresh = (): string => `${Date.now()}-${Math.random()}`;
+const marksOf = (kept: Kept): Marks => ({ stamp: kept.stamp, talk: kept.talk ?? '' });
 
 const asked = <T>(request: IDBRequest<T>): Promise<T> => new Promise((done, fail) => { request.onsuccess = () => done(request.result); request.onerror = () => fail(request.error); });
 function openDatabase(): Promise<IDBDatabase> {
@@ -26,16 +32,16 @@ const table = (db: IDBDatabase, mode: IDBTransactionMode): IDBObjectStore => db.
 const reads = (method: { name: string }): boolean => method.name.startsWith('Read');
 
 class Browser extends InPage {
-  private readonly stamps = new Map<string, string>();
-  private readonly waiting: { id: string; tell: boolean }[] = [];
+  private readonly marks = new Map<string, Marks>();
+  private readonly waiting: Change[] = [];
   private readonly channel = typeof BroadcastChannel === 'undefined' ? null : new BroadcastChannel(CHANNEL);
   /* the writes of this tab, one after the other, where the browser has no lock over the tabs */
   private queue: Promise<unknown> = Promise.resolve();
 
-  constructor(world: World, private readonly db: IDBDatabase, private readonly prefix: string, stamps: Iterable<[string, string]>) {
+  constructor(world: World, private readonly db: IDBDatabase, private readonly prefix: string, marks: Iterable<[string, Marks]>) {
     super('browser', world);
-    for (const [id, stamp] of stamps) this.stamps.set(id, stamp);
-    world.server.applied = (ids, quiet) => { this.waiting.push(...ids.map(id => ({ id, tell: true })), ...quiet.map(id => ({ id, tell: false }))); };
+    for (const [id, m] of marks) this.marks.set(id, m);
+    world.server.applied = (ids, quiet, talked) => { this.waiting.push(...ids.map(id => ({ id, project: true, talk: false })), ...talked.map(id => ({ id, project: false, talk: true })), ...quiet.map(id => ({ id, project: false, talk: false }))); };
     /* what happens outside a call is kept as a call's changes are: alone, and after what another tab wrote was taken in */
     world.server.later = run => { void this.alone(async () => { await this.catchUp(); try { run(); } finally { world.server.settle(); await this.keep(); } }); };
     if (this.channel) this.channel.onmessage = () => { void this.catchUp(); };
@@ -64,16 +70,17 @@ class Browser extends InPage {
     try {
       const store = table(this.db, 'readwrite');
       for (const id of new Set(changed.map(c => c.id))) {
-        const stamp = `${Date.now()}-${Math.random()}`;
-        this.stamps.set(id, stamp);
-        store.put({ bytes: this.world.keep(id), stamp } satisfies Kept, this.prefix + id);
+        const was = this.marks.get(id), mine = changed.filter(c => c.id === id);
+        const m: Marks = { stamp: mine.some(c => c.project) ? fresh() : was?.stamp ?? '', talk: mine.some(c => c.talk) ? fresh() : was?.talk ?? '' };
+        this.marks.set(id, m);
+        store.put({ bytes: this.world.keep(id), ...m } satisfies Kept, this.prefix + id);
       }
       await new Promise<void>((done, fail) => { store.transaction.oncomplete = () => done(); store.transaction.onerror = () => fail(store.transaction.error); });
     } catch { /* the browser keeps nothing: the project lasts as long as the page */ }
-    if (changed.some(c => c.tell)) this.channel?.postMessage('changed');
+    if (changed.some(c => c.project || c.talk)) this.channel?.postMessage('changed');
   }
 
-  /* takes in what another tab wrote to a project that is open here, and the projects it made, and tells this tab's stores */
+  /* Takes in what another tab wrote to a project that is open here, and the projects it made, and tells this tab's stores. What another tab kept of its own window is no change here, and a conversation with the agent is taken in while the project, and what can be taken back in it, stay as they are. */
   private async catchUp(): Promise<void> {
     /* a project another tab made is taken in whole, and listed */
     let keys: string[];
@@ -85,19 +92,22 @@ class Browser extends InPage {
       if (!key.startsWith(this.prefix) || open.has(id)) continue;
       let made: Kept | undefined;
       try { made = await asked<Kept | undefined>(table(this.db, 'readonly').get(key)); } catch { return; }
-      if (made && this.world.adopt(id, made.bytes)) { this.stamps.set(id, made.stamp); listed = true; }
+      if (made && this.world.adopt(id, made.bytes)) { this.marks.set(id, marksOf(made)); listed = true; }
     }
-    if (listed) { tellProjects(this.world, from); this.world.server.changed.clear(); }
+    if (listed) { tellProjects(this.world, from); this.world.server.changed.clear(); this.world.server.talked.clear(); }
     for (const id of this.world.opened()) {
       let kept: Kept | undefined;
       try { kept = await asked<Kept | undefined>(table(this.db, 'readonly').get(this.prefix + id)); } catch { return; }
-      if (!kept || kept.stamp === this.stamps.get(id)) continue;
-      this.stamps.set(id, kept.stamp);
+      if (!kept) continue;
+      const theirs = marksOf(kept), mine = this.marks.get(id), project = theirs.stamp !== (mine?.stamp ?? ''), talk = theirs.talk !== (mine?.talk ?? '');
+      if (!project && !talk) continue;
+      this.marks.set(id, theirs);
+      let state = this.world.project(id);
       /* nobody caused it here, and what could be taken back here no longer fits */
-      const next = putBack(this.world, this.world.project(id), kept.bytes, from);
-      sealHistory(this.world, next, from);
-      adoptAgent(this.world, next, kept.bytes, from);
-      this.world.server.changed.clear();
+      if (project) { state = putBack(this.world, state, kept.bytes, from); sealHistory(this.world, state, from); }
+      if (talk) adoptAgent(this.world, state, kept.bytes, from);
+      /* what was taken in is kept already */
+      this.world.server.changed.clear(); this.world.server.talked.clear();
     }
   }
 }
@@ -107,14 +117,14 @@ export async function browserBackend(seed: Seed): Promise<InPage> {
   const prefix = seed.version + '/';
   try {
     const db = await openDatabase(), store = table(db, 'readwrite'), keys = await asked(store.getAllKeys()) as string[];
-    const kept: [string, Uint8Array][] = [], stamps: [string, string][] = [];
+    const kept: [string, Uint8Array][] = [], marks: [string, Marks][] = [];
     for (const key of keys) {
       /* what an older seed left behind is cleared away */
       if (!key.startsWith(prefix)) { store.delete(key); continue; }
       const found = await asked<Kept | undefined>(table(db, 'readonly').get(key));
-      if (found) { kept.push([key.slice(prefix.length), found.bytes]); stamps.push([key.slice(prefix.length), found.stamp]); }
+      if (found) { kept.push([key.slice(prefix.length), found.bytes]); marks.push([key.slice(prefix.length), marksOf(found)]); }
     }
-    return new Browser(makeWorld(seed, kept), db, prefix, stamps);
+    return new Browser(makeWorld(seed, kept), db, prefix, marks);
   } catch {
     return new InPage('browser', makeWorld(seed));
   }
