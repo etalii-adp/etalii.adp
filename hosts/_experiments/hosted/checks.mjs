@@ -1,8 +1,8 @@
-/* What the build refuses before it builds: a page that reaches past the storage boundary, and a name of the example data anywhere but in the YAML files of the example backend. */
+/* What the build refuses before it builds: a page that reaches past the storage boundary, and a name of the example data anywhere but in its YAML files. */
 import { readdir, readFile } from 'node:fs/promises';
 import { exampleData } from './example.mjs';
 
-const src = 'src', storage = 'src/storage/', example = 'src/storage/backends/example/';
+const src = 'src', storage = 'src/storage/', example = 'src/storage/backends/_example/';
 /* what the build writes: the code of the contract, and the example data as its YAML files have it */
 const written = [storage + 'gen/', example + 'gen/'];
 

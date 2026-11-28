@@ -2,11 +2,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { Refused, Storage, type Item, type OntologyDocument, type ProjectStorage, type SchemaDocument } from '../../src/storage';
-import { empty } from '../../src/storage/backends/empty';
-import { example } from '../../src/storage/backends/example';
-import { InPage } from '../../src/storage/backends/in-page';
-import { makeWorld } from '../../src/storage/backends/server';
-import type { World } from '../../src/storage/backends/server/core';
+import { empty } from '../../src/storage/backends/empty/seed';
+import { example } from '../../src/storage/backends/_example';
+import { InPage } from '../../src/storage/backends/common/in-page';
+import { makeWorld } from '../../src/storage/backends/common/server';
+import type { World } from '../../src/storage/backends/common/server/core';
 
 /* a page on a world: its storage, the project that opens, and how often it was told of a change it did not make */
 async function page(world: World = makeWorld(example)): Promise<{ storage: Storage; project: ProjectStorage; told: () => number; world: World }> {

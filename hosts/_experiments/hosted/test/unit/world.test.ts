@@ -2,9 +2,9 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { Refused, type Backend } from '../../src/storage/backend';
-import { example } from '../../src/storage/backends/example';
-import { InPage } from '../../src/storage/backends/in-page';
-import { makeWorld } from '../../src/storage/backends/server';
+import { example } from '../../src/storage/backends/_example';
+import { InPage } from '../../src/storage/backends/common/in-page';
+import { makeWorld } from '../../src/storage/backends/common/server';
 import { Catalogue } from '../../src/storage/gen/adp/storage/v1/catalogue_pb';
 import { Content } from '../../src/storage/gen/adp/storage/v1/content_pb';
 import type { Event } from '../../src/storage/gen/adp/storage/v1/envelope_pb';

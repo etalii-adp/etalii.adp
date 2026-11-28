@@ -3,6 +3,6 @@ dist/
 # written by the build from src/storage/contract
 src/storage/gen/
 # written by the build from the YAML files of the example data
-src/storage/backends/example/gen/
+src/storage/backends/_example/gen/
 # what the tests write
 test/out/

@@ -6,7 +6,7 @@ import { WebSocket, WebSocketServer } from 'ws';
 
 export async function startService() {
   const out = 'test/out/e2e/service.mjs';
-  await build({ stdin: { contents: `export { makeWorld } from './src/storage/backends/server'; export { example } from './src/storage/backends/example'; export { serve } from './src/storage/backends/wire/service';`, resolveDir: '.', loader: 'ts' }, outfile: out, bundle: true, packages: 'external', platform: 'node', format: 'esm', target: 'node22', logLevel: 'warning' });
+  await build({ stdin: { contents: `export { makeWorld } from './src/storage/backends/common/server'; export { example } from './src/storage/backends/_example'; export { serve } from './src/storage/backends/common/wire/service';`, resolveDir: '.', loader: 'ts' }, outfile: out, bundle: true, packages: 'external', platform: 'node', format: 'esm', target: 'node22', logLevel: 'warning' });
   const { makeWorld, example, serve } = await import(pathToFileURL(resolve(out)).href);
   const world = makeWorld(example), service = { world, connections: 0, url: '', port: 0, stop: async () => {}, start: async () => {} };
   let server = null;

@@ -2,12 +2,12 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { Refused, Storage, type Item, type ProjectStorage } from '../../src/storage';
-import { empty } from '../../src/storage/backends/empty';
-import { example } from '../../src/storage/backends/example';
-import { InPage } from '../../src/storage/backends/in-page';
-import { makeWorld } from '../../src/storage/backends/server';
-import type { World } from '../../src/storage/backends/server/core';
-import type { Seed } from '../../src/storage/backends/server/seed';
+import { empty } from '../../src/storage/backends/empty/seed';
+import { example } from '../../src/storage/backends/_example';
+import { InPage } from '../../src/storage/backends/common/in-page';
+import { makeWorld } from '../../src/storage/backends/common/server';
+import type { World } from '../../src/storage/backends/common/server/core';
+import type { Seed } from '../../src/storage/backends/common/server/seed';
 
 /* the agent answers at once in these tests, unless a test wants to catch it at work */
 const quick = (seed: Seed, answerMs = 0): Seed => ({ ...seed, answerMs });
