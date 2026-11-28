@@ -7,10 +7,11 @@ import { startPage } from '../common/page';
 import { reason } from '../common/reason';
 import { toast } from '../common/popups';
 import { connect, visit } from '../storage';
+import { openWizard } from './wizard';
 
 async function start(): Promise<void> {
   startPage();
-  const { catalogue, identity, projects } = await connect();
+  const storage = await connect(), { catalogue, identity, projects } = storage;
   await Promise.all([catalogue.load(), identity.load(), projects.load()]);
 
   /* the list that shows: every project, or the assets among them */
@@ -35,6 +36,15 @@ async function start(): Promise<void> {
     /* the IDE page opens the project the visit remembers */
     projects.open(id).then(() => { visit.set('project', id); go('ide'); }, (err: unknown) => toast(reason(err)));
   };
+  /* a new project starts with the wizard; what it asks comes from the storage, so the button waits for it, as it waited for the page */
+  const add = $<HTMLButtonElement>('#pj-new');
+  add.disabled = false;
+  add.onclick = () => {
+    add.disabled = true;
+    openWizard(storage).catch((err: unknown) => toast(reason(err))).finally(() => { add.disabled = false; });
+  };
+  /* a project that was made in another window is listed here as well */
+  projects.onChange(renderProjects);
   document.addEventListener('click', e => {
     const f = hit(e, '[data-pf]');
     if (f) { list = f.dataset.pf as typeof list; renderProjects(); }

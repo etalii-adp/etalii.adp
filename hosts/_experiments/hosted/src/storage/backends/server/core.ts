@@ -5,7 +5,7 @@ import type { CatalogueSnapshot, IconsSnapshot, Kind } from '../../gen/adp/stora
 import { EventSchema, type Event } from '../../gen/adp/storage/v1/envelope_pb';
 import type { HistoryEntry } from '../../gen/adp/storage/v1/history_pb';
 import { KeptProjectSchema, type KeptProject } from '../../gen/adp/storage/v1/kept_pb';
-import { ProjectsSnapshotSchema, type ProjectsSnapshot } from '../../gen/adp/storage/v1/projects_pb';
+import { ProjectsSnapshotSchema, type Project, type ProjectsSnapshot } from '../../gen/adp/storage/v1/projects_pb';
 import type { Document } from '../../gen/adp/storage/v1/content_pb';
 import type { Item } from '../../gen/adp/storage/v1/solution_pb';
 import type { Seed } from './seed';
@@ -113,8 +113,24 @@ export class World {
     let kept: KeptProject;
     try { kept = fromBinary(KeptProjectSchema, bytes); } catch { return false; }
     if (kept.seed !== this.seed.version || !kept.solution) return false;
+    if (kept.made) this.list(kept.made, id);
     this.index(id, kept);
     return true;
+  }
+  /* takes a project that was just made here: it is listed first, and open */
+  adoptMade(kept: KeptProject): ProjectState {
+    const about = kept.made!;
+    this.list(about, about.id);
+    const state = this.index(about.id, kept);
+    this.made(about.id, this.keep(about.id));
+    return state;
+  }
+  /* told when a project was made here, with what is kept of it; a backend that keeps nothing else can still carry it to the next page */
+  made: (id: string, bytes: Uint8Array) => void = () => { /* nothing carries it */ };
+  /* a project that was made here is in the list of projects, before the ones the seed brought */
+  private list(about: Project, id: string): void {
+    if (about.id !== id || this.projects.projects.some(p => p.id === id)) return;
+    this.projects.projects.unshift(about);
   }
   /* the projects that are open here */
   opened(): string[] { return [...this.open.keys()]; }

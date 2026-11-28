@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="../common/css/transitions.css">
 <link rel="stylesheet" href="../common/css/popups.css">
 <link rel="stylesheet" href="projects.css">
+<link rel="stylesheet" href="wizard.css">
 <!-- the page's script, bundled from TypeScript by npm run build; the page is painted once the script has drawn it -->
 <script type="module" blocking="render" src="projects.js"></script>
 <noscript><style>html body{opacity:1}</style></noscript>
@@ -32,7 +33,7 @@
           <p class="pj-note">Every project is a git repository. Assets are repositories that are linked into other projects.</p>
           <div class="pj-bar">
             <input class="in" id="pj-q" placeholder="Search projects" aria-label="Search projects">
-            <button class="btn pri" data-nyi="New Project">New Project</button>
+            <button class="btn pri" id="pj-new" disabled>New Project</button>
             <button class="btn" data-nyi="Open">Open</button>
             <button class="btn" data-nyi="Clone Repository">Clone Repository</button>
           </div>

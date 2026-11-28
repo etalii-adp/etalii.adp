@@ -39,6 +39,15 @@ export const KINDS: KindInit[] = [
   kind('doc', 'Document', 'doc', 'muted', '.md', 'doc'),
   kind('code', 'Query', 'code', 'yellow', '.sql', 'code'),
   kind('file', 'File', 'file', 'muted'),
+  /* What the recipes of the New Project wizard bring beside the kinds above. No kind above takes one of these: a level takes them where a recipe says so. */
+  kind('webapp', 'Web application', 'window', 'teal', undefined, '', ['group', 'page', 'component', 'theme']),
+  kind('mobileapp', 'Mobile app', 'phone', 'teal', undefined, '', ['group', 'page', 'component', 'theme']),
+  kind('service', 'Service', 'server', 'blue', undefined, '', ['group', 'srcproject', 'schema']),
+  kind('srcproject', 'Source project', 'package', 'blue', undefined, '', ['srcfile', 'group']),
+  kind('srcfile', 'Source file', 'filecode', 'blue', '', 'code'),
+  kind('datastore', 'Data store', 'database', 'yellow', '.store.yaml', 'form'),
+  kind('channel', 'Message channel', 'queue', 'green', '.channel.yaml', 'form'),
+  kind('platformservice', 'Platform service', 'cloud', 'red', '.service.yaml', 'form'),
 ];
 
 /* what each tool is called */

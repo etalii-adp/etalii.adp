@@ -3,7 +3,7 @@ import { create } from '@bufbuild/protobuf';
 import { Refused } from '../../backend';
 import { Content, DocumentSchema } from '../../gen/adp/storage/v1/content_pb';
 import type { World } from './core';
-import { itemOf, mark, step, tellContent, tellGit, writable } from './project';
+import { itemOf, mark, startFile, startText, step, tellContent, tellGit, writable } from './project';
 import { keepDocument } from './solution';
 
 export function serveContent(world: World): void {
@@ -11,12 +11,12 @@ export function serveContent(world: World): void {
 
   server.on(Content.method.read, r => {
     const state = world.project(r.projectId), x = itemOf(state, r.itemId);
-    return state.documents.get(x.id) ?? create(DocumentSchema, { itemId: x.id, text: world.seed.document(state, x, world) });
+    return state.documents.get(x.id) ?? create(DocumentSchema, { itemId: x.id, text: startText(world, state, x) });
   });
 
   server.on(Content.method.readFile, r => {
     const state = world.project(r.projectId);
-    return world.seed.file(state, itemOf(state, r.ownerId), r.path, world);
+    return startFile(world, state, itemOf(state, r.ownerId), r.path);
   });
 
   server.on(Content.method.write, (r, call) => {

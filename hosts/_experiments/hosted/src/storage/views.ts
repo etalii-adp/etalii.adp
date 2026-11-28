@@ -96,6 +96,16 @@ export interface Change { readonly node: Item; readonly files: readonly { readon
 /* a file beside the items: its text, what it holds in a few words, and how to colour it where its name does not say */
 export interface FileText { readonly text: string; readonly holds: string; readonly syntax: string }
 
+/* What the New Project wizard asks, and the recipes it makes a project of. A size says how large the solution is; a question offers options; a recipe is a set of elements that go in one area of the hierarchy. */
+export interface SolutionSizeInfo { readonly id: string; readonly label: string; readonly about: string; readonly icon: string; readonly scale: number; readonly parts: readonly string[]; readonly suggests: readonly string[] }
+export interface WizardOptionInfo { readonly id: string; readonly label: string; readonly about: string }
+export interface WizardQuestionInfo { readonly id: string; readonly title: string; readonly about: string; readonly step: 'technology' | 'delivery'; readonly options: readonly WizardOptionInfo[] }
+export interface RecipeElementInfo { readonly name: string; readonly kind: KindName; readonly icon: string; readonly children: readonly RecipeElementInfo[] }
+export interface RecipeInfo { readonly id: string; readonly name: string; readonly about: string; readonly area: string; readonly elements: readonly RecipeElementInfo[]; readonly count: number }
+export interface RecipeAreaInfo { readonly name: string; readonly icon: string }
+/* the answers of the wizard, as a project is made of them */
+export interface ProjectAnswers { readonly name: string; readonly path?: string; readonly branch?: string; readonly sizeId: string; readonly optionIds: readonly string[]; readonly recipeIds: readonly string[] }
+
 /* one thing said in a conversation with the agent: by the user or by the agent, about which items, and for the agent what it did to get there */
 export interface AgentMessage { readonly id: string; readonly mine: boolean; readonly text: string; readonly time: string; readonly items: readonly Item[]; readonly steps: readonly string[] }
 /* a conversation as a list shows it: the day it was last spoken in, how much was said, and whether the agent is still answering */

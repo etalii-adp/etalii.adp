@@ -147,7 +147,7 @@ function compose(world: World, state: ProjectState, asked: string, aboutId: stri
     if (about.link) parts.push(`It comes from ${about.link.repository} at ${about.link.ref}, and what is in it is read-only here.`);
     if (children.length) parts.push(`It holds ${plural(children.length, 'item')}: ${listed(children.map(k => k.name))}.`);
     else if (word) parts.push(`It opens in ${/^[aeiou]/i.test(word) ? 'an' : 'a'} ${word.toLowerCase()}.`);
-    if (g.lastAuthor) parts.push(`${g.lastAuthor} changed it last, ${plural(g.lastDays, 'day')} ago.`);
+    if (g.lastAuthor) parts.push(g.lastDays ? `${g.lastAuthor} changed it last, ${plural(g.lastDays, 'day')} ago.` : `${g.lastAuthor} changed it last, today.`);
     if (g.state !== ChangeState.UNSPECIFIED) parts.push(g.state === ChangeState.ADDED ? 'It is new and not committed yet.' : 'It has changes that are not committed.');
     parts.push(on.length ? `Validation finds ${plural(on.length, 'problem')} on it: ${on.map(p => p.message).join('; ')}.` : 'Validation finds nothing wrong with it.');
     return { text: parts.join(' '), itemIds: [about.id, ...children.slice(0, NAMED - 1).map(k => k.id)], steps };

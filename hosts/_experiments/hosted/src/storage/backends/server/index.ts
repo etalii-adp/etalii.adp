@@ -9,6 +9,7 @@ import { catalogue, icons } from '../catalogue';
 import { serveAgent, settleAgent } from './agent';
 import { serveContent } from './content';
 import { World } from './core';
+import { serveCreate } from './create';
 import { serveGit } from './git';
 import { serveHistory } from './history';
 import { serveLevels } from './levels';
@@ -66,6 +67,7 @@ export function makeWorld(seed: Seed, kept: Iterable<[string, Uint8Array]> = [])
   serveStatus(world);
   serveHistory(world);
   serveAgent(world);
+  serveCreate(world);
   /* what was kept while the agent was still answering */
   for (const id of world.opened()) settleAgent(world, world.project(id));
   return world;

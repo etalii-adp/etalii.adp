@@ -61,7 +61,7 @@ export class GitStore {
       const x = item(o.itemId) as Writable<Item> | undefined;
       if (!x) continue;
       x.vcs = vcs(o.state);
-      x.lastChange = `${o.lastAuthor}, ${o.lastDays} days ago`;
+      x.lastChange = o.lastDays ? `${o.lastAuthor}, ${o.lastDays} days ago` : `${o.lastAuthor}, today`;
     }
   }
 }

@@ -4,6 +4,7 @@ import type { CallOptions } from '../backend';
 import { InPage } from './in-page';
 import { adoptAgent } from './server/agent';
 import type { World } from './server/core';
+import { tellProjects } from './server/create';
 import { putBack } from './server/history';
 import { makeWorld } from './server';
 import { sealHistory } from './server/project';
@@ -72,15 +73,28 @@ class Browser extends InPage {
     if (changed.some(c => c.tell)) this.channel?.postMessage('changed');
   }
 
-  /* takes in what another tab wrote to a project that is open here, and tells this tab's stores */
+  /* takes in what another tab wrote to a project that is open here, and the projects it made, and tells this tab's stores */
   private async catchUp(): Promise<void> {
+    /* a project another tab made is taken in whole, and listed */
+    let keys: string[];
+    try { keys = await asked(table(this.db, 'readonly').getAllKeys()) as string[]; } catch { return; }
+    const open = new Set(this.world.opened()), from = { id: '', user: '' };
+    let listed = false;
+    for (const key of keys) {
+      const id = key.slice(this.prefix.length);
+      if (!key.startsWith(this.prefix) || open.has(id)) continue;
+      let made: Kept | undefined;
+      try { made = await asked<Kept | undefined>(table(this.db, 'readonly').get(key)); } catch { return; }
+      if (made && this.world.adopt(id, made.bytes)) { this.stamps.set(id, made.stamp); listed = true; }
+    }
+    if (listed) { tellProjects(this.world, from); this.world.server.changed.clear(); }
     for (const id of this.world.opened()) {
       let kept: Kept | undefined;
       try { kept = await asked<Kept | undefined>(table(this.db, 'readonly').get(this.prefix + id)); } catch { return; }
       if (!kept || kept.stamp === this.stamps.get(id)) continue;
       this.stamps.set(id, kept.stamp);
       /* nobody caused it here, and what could be taken back here no longer fits */
-      const from = { id: '', user: '' }, next = putBack(this.world, this.world.project(id), kept.bytes, from);
+      const next = putBack(this.world, this.world.project(id), kept.bytes, from);
       sealHistory(this.world, next, from);
       adoptAgent(this.world, next, kept.bytes, from);
       this.world.server.changed.clear();

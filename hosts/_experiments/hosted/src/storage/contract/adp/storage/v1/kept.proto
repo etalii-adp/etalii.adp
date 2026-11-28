@@ -8,6 +8,7 @@ import "adp/storage/v1/agent.proto";
 import "adp/storage/v1/content.proto";
 import "adp/storage/v1/git.proto";
 import "adp/storage/v1/levels.proto";
+import "adp/storage/v1/projects.proto";
 import "adp/storage/v1/solution.proto";
 import "adp/storage/v1/status.proto";
 import "adp/storage/v1/workbench.proto";
@@ -27,4 +28,6 @@ message KeptProject {
   uint32 content_revision = 9;
   // The conversations with the agent. Like the window's state they are the user's own, and no step that is taken back changes them.
   KeptAgent agent = 10;
+  // For a project that was made here and is not one the backend started from: how the list of projects shows it. Nothing in such a project has a text it was not given here.
+  Project made = 11;
 }
