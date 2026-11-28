@@ -6,6 +6,7 @@ import { Projects } from '../../gen/adp/storage/v1/projects_pb';
 import { Severity } from '../../gen/adp/storage/v1/status_pb';
 import { Workbench } from '../../gen/adp/storage/v1/workbench_pb';
 import { catalogue, icons } from '../catalogue';
+import { serveAgent, settleAgent } from './agent';
 import { serveContent } from './content';
 import { World } from './core';
 import { serveGit } from './git';
@@ -64,5 +65,8 @@ export function makeWorld(seed: Seed, kept: Iterable<[string, Uint8Array]> = [])
   serveGit(world);
   serveStatus(world);
   serveHistory(world);
+  serveAgent(world);
+  /* what was kept while the agent was still answering */
+  for (const id of world.opened()) settleAgent(world, world.project(id));
   return world;
 }

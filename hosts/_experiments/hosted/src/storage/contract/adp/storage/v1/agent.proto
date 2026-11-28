@@ -1,0 +1,96 @@
+// Agent: the conversations a user has with the agent about a project, the ones that are over included.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+import "adp/storage/v1/common.proto";
+
+service Agent {
+  rpc Read(ProjectRef) returns (AgentSnapshot);
+  rpc ReadConversation(ConversationRef) returns (Conversation);
+  // Says something to the agent. The agent's answer is not in the response: it is told as a change when it is there.
+  rpc Ask(AskRequest) returns (Asked);
+  rpc Rename(RenameConversationRequest) returns (Done);
+  rpc Delete(ConversationRef) returns (Done);
+}
+
+enum Author {
+  AUTHOR_UNSPECIFIED = 0;
+  AUTHOR_USER = 1;
+  AUTHOR_AGENT = 2;
+}
+
+message AgentMessage {
+  string id = 1;
+  Author author = 2;
+  string text = 3;
+  // When it was said, as a text.
+  string time = 4;
+  // The items it is about: the one a question was asked of, the ones an answer names.
+  repeated string item_ids = 5;
+  // What the agent did to get to its answer, a few words each.
+  repeated string steps = 6;
+}
+
+// A conversation without its messages, as a list shows it.
+message ConversationSummary {
+  string id = 1;
+  string title = 2;
+  // The day it was last spoken in, as a list groups by it: "Today", "Yesterday", "Last week".
+  string day = 3;
+  string time = 4;
+  uint32 messages = 5;
+  // The start of what was said last.
+  string last = 6;
+  // The agent is still working on its answer.
+  bool answering = 7;
+}
+
+message Conversation {
+  ConversationSummary about = 1;
+  repeated AgentMessage messages = 2;
+}
+
+message AgentSnapshot {
+  uint32 revision = 1;
+  // Newest first.
+  repeated ConversationSummary conversations = 2;
+}
+
+// What changed: the list as it is now, and the conversation that was spoken in or the one that was deleted.
+message AgentChanges {
+  repeated ConversationSummary conversations = 1;
+  Conversation spoken = 2;
+  string deleted_id = 3;
+}
+
+message ConversationRef {
+  string project_id = 1;
+  string conversation_id = 2;
+}
+
+message AskRequest {
+  string project_id = 1;
+  // Empty starts a conversation.
+  string conversation_id = 2;
+  string text = 3;
+  // The item the question is asked of, when there is one.
+  string about_item_id = 4;
+}
+
+message Asked {
+  string conversation_id = 1;
+}
+
+message RenameConversationRequest {
+  string project_id = 1;
+  string conversation_id = 2;
+  string title = 3;
+}
+
+// The conversations of a project as a backend keeps them.
+message KeptAgent {
+  uint32 revision = 1;
+  // Newest first.
+  repeated Conversation conversations = 2;
+}

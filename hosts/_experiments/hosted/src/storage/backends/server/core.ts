@@ -46,10 +46,17 @@ export class Server {
     } catch (e) {
       if (e instanceof Refused) this.remember(id, e);
       throw e;
-    } finally {
-      if (this.changed.size || this.quiet.size) { const ids = [...this.changed], quiet = [...this.quiet].filter(q => !this.changed.has(q)); this.changed.clear(); this.quiet.clear(); this.applied(ids, quiet); }
-    }
+    } finally { this.settle(); }
   }
+  /* says which projects changed since it was last said */
+  settle(): void {
+    if (!this.changed.size && !this.quiet.size) return;
+    const ids = [...this.changed], quiet = [...this.quiet].filter(q => !this.changed.has(q));
+    this.changed.clear(); this.quiet.clear();
+    this.applied(ids, quiet);
+  }
+  /* Carries out something nobody called for at that moment, such as an answer that is ready later. A backend that keeps its state puts its own way of doing that here, so the change is kept as a call's would be. */
+  later: (run: () => void) => void = run => { run(); this.settle(); };
   private remember(id: string, answer: Uint8Array | Refused): void {
     this.answered.set(id, answer);
     if (this.answered.size > REMEMBERED) this.answered.delete(this.answered.keys().next().value!);
@@ -120,10 +127,11 @@ export class World {
     this.open.set(id, state);
     return state;
   }
-  /* puts back what a step holds, keeping the window's own state and the revisions of the stores */
+  /* puts back what a step holds, keeping the window's own state, the conversations with the agent and the revisions of the stores */
   restore(state: ProjectState, bytes: Uint8Array): ProjectState {
     const kept = fromBinary(KeptProjectSchema, bytes);
     kept.workbench = state.kept.workbench;
+    kept.agent = state.kept.agent;
     /* the revisions only ever go up: a store that already heard of a later one would take what is put back for old news */
     kept.solution!.revision = state.kept.solution!.revision;
     kept.levels!.revision = state.kept.levels!.revision;

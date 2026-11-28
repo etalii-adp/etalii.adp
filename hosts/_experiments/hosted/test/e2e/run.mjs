@@ -208,6 +208,99 @@ await test('hosted storage: two pages hear of each other, and a page lives throu
   } finally { await service.stop(); }
 });
 
+/* the answers of the agent that a page shows, and waiting for one more */
+const answers = page => page.locator('.ag-msg:not(.mine):not(.ag-wait)');
+const answered = (page, count) => page.waitForFunction(n => document.querySelectorAll('.ag-msg:not(.mine):not(.ag-wait)').length === n, count);
+
+await test('agent: conversations that are over open, a question is answered from the project, and it is all there after a reload', async (context, errors) => {
+  const page = await newPage(context, errors);
+  await page.goto(site.url + 'ide/index.html?backend=browser'); await ready(page);
+  await page.locator('[data-tw="agent"]').click();
+  assert(await page.locator('.ag-hello .ag-start').count() === 4, 'a new conversation does not offer something to start with');
+  /* the conversations that are over, by day, and searched */
+  await page.locator('#ag-all').click();
+  const before = await page.locator('.ag-row').count();
+  assert(before >= 5 && await page.locator('.ag-day').count() >= 4, 'the conversations that are over are not listed by day');
+  await page.locator('#ag-q').fill('linked repositories');
+  assert(await page.locator('.ag-row').count() === 1, 'the search does not narrow the conversations down');
+  await page.locator('#ag-q').fill('nothing is called this');
+  assert(await page.locator('.ag-rows .hint').count() === 1, 'a search that finds nothing does not say so');
+  await page.locator('#ag-q').fill('');
+  /* one of them opens with everything that was said, and an item it names opens in the document area */
+  await page.locator('.ag-row .ag-open').nth(1).click();
+  await page.locator('.ag-msg .ag-text').first().waitFor();
+  assert(await page.locator('.ag-msg').count() === 4 && await page.locator('.ag-msg.mine').count() === 2 && await page.locator('.ag-steps li').count() >= 3, 'an earlier conversation does not show what was said');
+  await page.locator('.ag-item', { hasText: 'Release readiness' }).first().click();
+  assert(await page.locator('.tab.on', { hasText: 'Release readiness' }).count() === 1, 'an item a message names does not open');
+  /* a new conversation is about the selected item, unless that is switched off */
+  await page.locator('#ag-new').click();
+  await row(page, 'Ingestion').click();
+  assert((await page.locator('.ag-on').innerText()).trim() === 'About Ingestion', 'the question is not asked of the selected item');
+  assert(await page.locator('#ag-send').isDisabled(), 'nothing can be sent before anything was typed');
+  await page.locator('.ag-ask textarea').fill('Any problems');
+  await page.keyboard.press('Shift+Enter');
+  assert(await answers(page).count() === 0 && (await page.locator('.ag-ask textarea').inputValue()).includes('\n'), 'Shift with Enter sent the question');
+  await page.keyboard.type('here?');
+  await page.keyboard.press('Enter');
+  await answered(page, 1);
+  assert(/^Validation finds 1 problem under Ingestion:/.test(await answers(page).first().locator('.ag-text').innerText()), 'the agent does not answer from the project');
+  assert(await page.locator('.ag-ask textarea').inputValue() === '' && (await page.locator('#ag-title').innerText()).startsWith('Any problems'), 'the conversation did not take the question as its title');
+  await page.locator('.ag-on').click();
+  await page.locator('.ag-ask textarea').fill('What changed?');
+  await page.keyboard.press('Enter');
+  await answered(page, 2);
+  assert(/^7 items have changes that are not committed/.test(await answers(page).nth(1).locator('.ag-text').innerText()), 'a follow-up is not answered');
+  /* the conversation, and that the window shows it, are kept */
+  await page.waitForTimeout(500);
+  await page.reload(); await ready(page);
+  await answered(page, 2);
+  assert((await page.locator('#ag-title').innerText()).startsWith('Any problems') && await page.locator('.ag-msg').count() === 4, 'the conversation is not there after a reload');
+  /* it is the first of the list, and can be renamed and deleted */
+  await page.locator('#ag-all').click();
+  assert(await page.locator('.ag-row').count() === before + 1 && await page.locator('.ag-row').first().evaluate(r => r.classList.contains('on')), 'the new conversation is not the first of the list');
+  await page.locator('.ag-row').first().hover();
+  await page.locator('.ag-row').first().locator('[data-cm]').click();
+  await menuItem(page, 'Rename…').click();
+  await page.locator('.dlg input').fill('Ingestion and what changed');
+  await page.keyboard.press('Enter');
+  await page.locator('.ag-row b', { hasText: 'Ingestion and what changed' }).waitFor();
+  await page.locator('.ag-row').first().click({ button: 'right' });
+  await menuItem(page, 'Delete').click();
+  await page.locator('.toast', { hasText: 'Deleted the conversation "Ingestion and what changed"' }).waitFor();
+  assert(await page.locator('.ag-row').count() === before, 'a deleted conversation is still listed');
+  await page.locator('#ag-all').click();
+  assert(await page.locator('.ag-hello').count() === 1, 'the window still shows the conversation that was deleted');
+});
+
+await test('agent: an empty project is answered as well, and a slow storage shows the question while it is on its way', async (context, errors) => {
+  const page = await newPage(context, errors);
+  await page.goto(site.url + 'ide/index.html?backend=empty'); await ready(page);
+  await page.locator('[data-tw="agent"]').click();
+  await page.locator('#ag-all').click();
+  assert(await page.locator('.ag-rows .hint').count() === 1, 'an empty list of conversations does not say so');
+  await page.locator('#ag-all').click();
+  await page.locator('.ag-start').first().click();
+  await answered(page, 1);
+  assert(/^Validation finds no problems in /.test(await answers(page).first().locator('.ag-text').innerText()), 'the agent does not answer on an empty project');
+  const slow = await newPage(context, errors);
+  await slow.goto(site.url + 'ide/index.html?backend=slow:600'); await ready(slow);
+  await slow.locator('[data-tw="agent"]').click();
+  await slow.locator('.ag-ask textarea').fill('Who changed what lately?');
+  await slow.keyboard.press('Enter');
+  await slow.locator('.ag-msg.mine .ag-text', { hasText: 'Who changed what lately?' }).waitFor({ timeout: 400 });
+  assert(await slow.locator('.ag-dots').count() === 1, 'nothing shows that the agent is asked');
+  await answered(slow, 1);
+  assert(await slow.locator('.ag-msg.mine').count() === 1 && await slow.locator('.ag-dots').count() === 0, 'the question shows twice, or the agent still seems to answer');
+  /* a storage that takes no changes refuses the question in words, and the question is still in the field */
+  const closed = await newPage(context, errors);
+  await closed.goto(site.url + 'ide/index.html?backend=slow:read-only'); await ready(closed);
+  await closed.locator('[data-tw="agent"]').click();
+  await closed.locator('.ag-ask textarea').fill('What changed?');
+  await closed.keyboard.press('Enter');
+  await closed.locator('.toast', { hasText: 'The storage does not answer.' }).waitFor();
+  assert(await closed.locator('.ag-ask textarea').inputValue() === 'What changed?' && await closed.locator('.ag-hello').count() === 1, 'a question that was refused is lost');
+});
+
 await browser.close();
 await site.close();
 console.log(`${ran - failed} of ${ran} passed`);

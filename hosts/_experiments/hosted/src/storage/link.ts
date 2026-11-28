@@ -13,6 +13,7 @@ export class Link {
   private readonly foreign = new Set<() => void>();
   private readonly waits = new Set<(waiting: boolean) => void>();
   private readonly resyncs = new Set<() => Promise<void>>();
+  private readonly quiet = new Set<string>();
   private pending = 0;
   private waiting = false;
   private timer: ReturnType<typeof setTimeout> | undefined;
@@ -36,10 +37,11 @@ export class Link {
     try { return await this.backend.call(method, request, { id }); } finally { this.own.delete(id); this.count(-1); }
   }
 
-  /* a store takes the changes of one store of the contract, of one project or of none */
-  listen(store: string, projectId: string, apply: (event: Event) => void, reread: () => Promise<void>): void {
+  /* a store takes the changes of one store of the contract, of one project or of none; a store that tells the one part that shows it itself says so, and the page as a whole is not told of its changes */
+  listen(store: string, projectId: string, apply: (event: Event) => void, reread: () => Promise<void>, ownPart = false): void {
     this.stores.set(store + '/' + projectId, apply);
     this.resyncs.add(reread);
+    if (ownPart) this.quiet.add(store);
   }
   /* told once after changes this page did not cause: another window, another user, or a connection that was away */
   onForeign(listener: () => void): () => void { this.foreign.add(listener); return () => { this.foreign.delete(listener); }; }
@@ -57,7 +59,7 @@ export class Link {
     const apply = this.stores.get(event.store + '/' + event.projectId);
     if (!apply) return;
     apply(event);
-    if (!this.own.has(event.cause)) this.tell();
+    if (!this.own.has(event.cause) && !this.quiet.has(event.store)) this.tell();
   }
   private count(by: number): void {
     this.pending += by;

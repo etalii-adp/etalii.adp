@@ -1,7 +1,7 @@
 /* The storage of the pages. Everything a page shows that is data comes from here, and everything it changes goes through here: a page asks a store, and the store asks the backend the visit uses. A page never reaches a backend, the messages of the contract, or the browser's own storage.
 
   connect()            picks the backend and gives the stores every page can use: catalogue, identity, projects
-  storage.open(id)     opens a project and gives its stores: solution, levels, content, git, status, workbench, history
+  storage.open(id)     opens a project and gives its stores: solution, levels, content, git, status, workbench, history, agent
   visit, personal      what this browser keeps by itself, in local.ts */
 import { methodName, type Backend, type BackendState } from './backend';
 import { backendFor, BACKENDS, DEFAULT_BACKEND } from './backends';
@@ -9,6 +9,7 @@ import { Git } from './gen/adp/storage/v1/git_pb';
 import { History } from './gen/adp/storage/v1/history_pb';
 import { Link } from './link';
 import { visit } from './local';
+import { AgentStore } from './stores/agent';
 import { CatalogueStore } from './stores/catalogue';
 import { ContentStore } from './stores/content';
 import { GitStore } from './stores/git';
@@ -38,6 +39,7 @@ export class ProjectStorage {
   readonly status: StatusStore;
   readonly workbench: WorkbenchStore;
   readonly history: HistoryStore;
+  readonly agent: AgentStore;
   private again: Promise<void> | null = null;
 
   constructor(private readonly link: Link, readonly info: ProjectInfo, catalogue: CatalogueStore) {
@@ -49,12 +51,13 @@ export class ProjectStorage {
     this.content = new ContentStore(link, id, this.solution, catalogue);
     this.workbench = new WorkbenchStore(link, id);
     this.history = new HistoryStore(link, id);
+    this.agent = new AgentStore(link, id, this.solution);
   }
 
   /* reads everything of the project: the hierarchy first, because the others say things about its items */
   async load(): Promise<void> {
     await this.solution.load();
-    await Promise.all([this.levels.load(), this.git.load(), this.status.load(), this.content.load(), this.workbench.load(), this.history.load()]);
+    await Promise.all([this.levels.load(), this.git.load(), this.status.load(), this.content.load(), this.workbench.load(), this.history.load(), this.agent.load()]);
   }
 
   /* what a refusal offers to do instead, by the name of its call; null where the page has nothing for it */
@@ -71,7 +74,7 @@ export class ProjectStorage {
     this.again ??= Promise.resolve().then(async () => {
       try {
         await this.solution.load();
-        await Promise.all([this.levels.load(), this.git.load(), this.status.load(), this.content.load(), this.history.load()]);
+        await Promise.all([this.levels.load(), this.git.load(), this.status.load(), this.content.load(), this.history.load(), this.agent.load()]);
       } catch { /* the storage is away: it is read again when it is back */ } finally { this.again = null; this.link.tell(); }
     });
   }

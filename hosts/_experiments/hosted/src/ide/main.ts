@@ -3,6 +3,7 @@ import { addIcons } from '../common/icons';
 import { go, pageReady } from '../common/nav';
 import { startStored } from '../common/away';
 import { startPage } from '../common/page';
+import { agentFollowsSelection, mountAgent, renderAgent } from './agent';
 import { ownTheBrowser } from './browser';
 import { renderCommit } from './commit';
 import { layout, mountDocks } from './docks';
@@ -29,8 +30,9 @@ async function start(): Promise<void> {
   mountDocumentArea();
   mountExplorer();
   mountGit();
+  mountAgent();
   mountTitlebar();
-  paints({ explorer: renderExplorer, editor: renderEditor, properties: renderProps, status: renderStatus, title: renderTitle, problems: renderProblems, commit: renderCommit, git: renderGit }, keep);
+  paints({ explorer: renderExplorer, editor: renderEditor, properties: renderProps, status: renderStatus, title: renderTitle, problems: renderProblems, commit: renderCommit, git: renderGit, agent: renderAgent }, () => { keep(); agentFollowsSelection(); });
 
   addEventListener('resize', () => S.cvFit?.(true));
   /* the window's state is kept at once when the page is left */
@@ -49,6 +51,7 @@ async function start(): Promise<void> {
   renderProblems();
   renderCommit();
   renderGit();
+  renderAgent();
   layout();
   renderExplorer();
   renderProps();

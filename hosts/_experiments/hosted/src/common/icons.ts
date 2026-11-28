@@ -50,6 +50,7 @@ canvas:'<path d="M2 2h5v5H2zM9 9h5v5H9zM9 2h5v3H9zM2 10h5v4H2z"/>',edit:'<path d
 target:c(8,8,5.5)+c(8,8,1.2),collapse:'<path d="M4 6l4-3.500L12 6M4 10l4 3.500 4-3.500"/>',
 motion:'<path d="M1.500 5h4M1.500 8h2.500M1.500 11h4"/><rect x="8" y="4.500" width="6" height="7" rx="1.300"/>',
 menu:'<path d="M2 4h12M2 8h12M2 12h12"/>',filter:'<path d="M2 3h12l-4.500 5.500V13l-3-1.500V8.500z"/>',tagi:'<path d="M2 2h6l6 6-6 6-6-6zM5 5h.01"/>',
+clock:c(8,8,6.2)+'<path d="M8 4.500V8l2.500 1.500"/>',
 user:c(8,5.5,2.8)+'<path d="M2.500 14c.5-3 2.500-4.500 5.500-4.500s5 1.500 5.500 4.500"/>',lock:'<path d="M4 7h8v6.500H4zM5.500 7V5a2.500 2.500 0 015 0v2"/>'
 };
 

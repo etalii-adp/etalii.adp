@@ -144,8 +144,8 @@ export function tellHistory(world: World, state: ProjectState, call: Call): void
   world.server.emit('History', state.id, state.historyRevision, call, HistorySnapshotSchema, historyOf(state));
 }
 
-/* the project as it is now, without the window's own state: what a step puts back */
-export const picture = (state: ProjectState): Uint8Array => toBinary(KeptProjectSchema, create(KeptProjectSchema, { ...state.kept, workbench: undefined }));
+/* the project as it is now, without the window's own state and the conversations with the agent: what a step puts back */
+export const picture = (state: ProjectState): Uint8Array => toBinary(KeptProjectSchema, create(KeptProjectSchema, { ...state.kept, workbench: undefined, agent: undefined }));
 
 /* carries out a command that can be taken back: the project as it was is kept with a few words on what the command did */
 export function step<T>(world: World, state: ProjectState, call: Call, label: string, run: () => T): T {

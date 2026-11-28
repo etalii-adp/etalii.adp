@@ -6,7 +6,7 @@ import { defaultLayout, keep, S } from './state';
 import type { DockId, PanelId } from './types';
 
 /* the tool windows: title and icon */
-export const PAN: Record<PanelId, [title: string, icon: string]> = { explorer: ['Explorer', 'folder'], commit: ['Commit', 'commit'], properties: ['Properties', 'props'], problems: ['Problems', 'warning'], git: ['Git', 'branch'] };
+export const PAN: Record<PanelId, [title: string, icon: string]> = { explorer: ['Explorer', 'folder'], commit: ['Commit', 'commit'], properties: ['Properties', 'props'], problems: ['Problems', 'warning'], agent: ['Agent', 'bot'], git: ['Git', 'branch'] };
 export const panelIds = Object.keys(PAN) as PanelId[];
 const docks: readonly DockId[] = ['left', 'right', 'bottom'];
 

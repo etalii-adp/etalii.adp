@@ -9,7 +9,7 @@ const KEEP_MS = 300;
 
 export class WorkbenchStore {
   /* the state as it was read; a window takes it once, and hands in its own from then on */
-  state: WindowState = { selectedId: '', documentId: '', tabIds: [], expandedIds: [], documentModes: {}, views: {}, ownViews: [], docks: {}, active: {}, hiddenSeverities: [], git: { branch: '', user: '', days: 0 }, runTargetId: '' };
+  state: WindowState = { selectedId: '', documentId: '', tabIds: [], expandedIds: [], documentModes: {}, views: {}, ownViews: [], docks: {}, active: {}, hiddenSeverities: [], git: { branch: '', user: '', days: 0 }, runTargetId: '', agentConversationId: '' };
   private kept = '';
   private timer: ReturnType<typeof setTimeout> | undefined;
   private next: (() => WindowState) | null = null;
@@ -21,7 +21,7 @@ export class WorkbenchStore {
     this.state = {
       selectedId: w.selectedId, documentId: w.documentId, tabIds: [...w.tabIds], expandedIds: [...w.expandedIds], documentModes: { ...w.documentModes },
       views: Object.fromEntries(Object.entries(w.views).map(([id, v]) => [id, { x: v.x, y: v.y, k: v.k }])), ownViews: [...w.ownViews], docks: { ...w.docks }, active: { ...w.active },
-      hiddenSeverities: [...w.hiddenSeverities], git: { branch: w.git?.branch ?? '', user: w.git?.user ?? '', days: w.git?.days ?? 0 }, runTargetId: w.runTargetId, commitMessage: w.commitMessage,
+      hiddenSeverities: [...w.hiddenSeverities], git: { branch: w.git?.branch ?? '', user: w.git?.user ?? '', days: w.git?.days ?? 0 }, runTargetId: w.runTargetId, commitMessage: w.commitMessage, agentConversationId: w.agentConversationId,
     };
     this.kept = JSON.stringify(this.state);
   }

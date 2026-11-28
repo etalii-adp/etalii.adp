@@ -2,6 +2,7 @@
 import type { DescMessage, DescMethodUnary, MessageInitShape, MessageShape } from '@bufbuild/protobuf';
 import type { CallOptions } from '../backend';
 import { InPage } from './in-page';
+import { adoptAgent } from './server/agent';
 import type { World } from './server/core';
 import { putBack } from './server/history';
 import { makeWorld } from './server';
@@ -34,6 +35,8 @@ class Browser extends InPage {
     super('browser', world);
     for (const [id, stamp] of stamps) this.stamps.set(id, stamp);
     world.server.applied = (ids, quiet) => { this.waiting.push(...ids.map(id => ({ id, tell: true })), ...quiet.map(id => ({ id, tell: false }))); };
+    /* what happens outside a call is kept as a call's changes are: alone, and after what another tab wrote was taken in */
+    world.server.later = run => { void this.alone(async () => { await this.catchUp(); try { run(); } finally { world.server.settle(); await this.keep(); } }); };
     if (this.channel) this.channel.onmessage = () => { void this.catchUp(); };
   }
 
@@ -79,6 +82,7 @@ class Browser extends InPage {
       /* nobody caused it here, and what could be taken back here no longer fits */
       const from = { id: '', user: '' }, next = putBack(this.world, this.world.project(id), kept.bytes, from);
       sealHistory(this.world, next, from);
+      adoptAgent(this.world, next, kept.bytes, from);
       this.world.server.changed.clear();
     }
   }

@@ -4,6 +4,7 @@ syntax = "proto3";
 
 package adp.storage.v1;
 
+import "adp/storage/v1/agent.proto";
 import "adp/storage/v1/content.proto";
 import "adp/storage/v1/git.proto";
 import "adp/storage/v1/levels.proto";
@@ -24,4 +25,6 @@ message KeptProject {
   WorkbenchSnapshot workbench = 8;
   // The revision the content store is at.
   uint32 content_revision = 9;
+  // The conversations with the agent. Like the window's state they are the user's own, and no step that is taken back changes them.
+  KeptAgent agent = 10;
 }
