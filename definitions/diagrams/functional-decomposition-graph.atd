@@ -598,7 +598,8 @@ diagram etalii/functional-decomposition-graph version "0.2.0" {
   }
 
   x-fdg: {
-    doc: "Today's wire ids, which the standalone client (client/fdgIds.ts) and backend share, mapped from this specification's names, as x-ghg does for the hype cycle. A tool is keyed by its id. An action is keyed by its entry's operation, else its kind; a key \"<Type>/<kind>\" overrides that for the entries offered on <Type> or its subtypes, and a <name> in an id is replaced by the entry's argument of that name, mapped through types. A property is keyed by its form item's id, else its attribute. An element's wire id is the id written in the document, with no prefix."
+    doc: "Today's wire ids, which the standalone client (client/fdgIds.ts) and backend share, mapped from this specification's names, as x-ghg does for the hype cycle. A tool is keyed by its id. An action is keyed by its entry's operation, else its kind; a key \"<Type>/<kind>\" overrides that for the entries offered on <Type> or its subtypes, and a <name> in an id is replaced by the entry's argument of that name, mapped through types. A property is keyed by its form item's id, else its attribute. An element's wire id is the id written in the document, with no prefix. The module gives an element's place as its centre and reads the place a move gives as its top left, which `moves` says (ATD §2.3)."
+    moves: { from: centre }
     tools: {
       uiElement: { id: "fdg.toolbox.ui-element", drop: "fdg.add.ui-element" }
       action: { id: "fdg.toolbox.action", drop: "fdg.add.action" }
