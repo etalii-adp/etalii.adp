@@ -1,0 +1,17 @@
+# The contract of the storage boundary: what a page's stores ask of a backend, as protobuf messages (package adp.storage.v1).
+version: v2
+modules:
+  - path: .
+lint:
+  use:
+    - STANDARD
+  except:
+    # one connection carries every call in an envelope of our own, so the services are not gRPC services: they are named as their store,
+    # and the small requests (ProjectRef) and answers (Done) are shared between calls
+    - SERVICE_SUFFIX
+    - RPC_REQUEST_STANDARD_NAME
+    - RPC_RESPONSE_STANDARD_NAME
+    - RPC_REQUEST_RESPONSE_UNIQUE
+breaking:
+  use:
+    - WIRE_JSON

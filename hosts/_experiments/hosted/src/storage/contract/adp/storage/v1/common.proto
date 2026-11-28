@@ -1,0 +1,34 @@
+// What every store's messages share.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+// A command that was understood and not carried out. The message is for the user; the code is for the page.
+message Refusal {
+  // A short word a page can tell refusals apart by, such as "taken", "read-only", "conflict", "behind", "unavailable".
+  string code = 1;
+  string message = 2;
+  // A command that may help, offered with the message: its label, and the method to call with the same project.
+  string action_label = 3;
+  string action_method = 4;
+}
+
+// A backend that failed while it worked on a call.
+message Fault {
+  string message = 1;
+}
+
+// The answer to a command that has nothing to give back. The message, when there is one, is for the user.
+message Done {
+  string message = 1;
+}
+
+// Names the project a call is about.
+message ProjectRef {
+  string project_id = 1;
+}
+
+message Point {
+  double x = 1;
+  double y = 2;
+}

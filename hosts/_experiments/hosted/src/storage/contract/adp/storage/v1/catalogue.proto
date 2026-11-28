@@ -1,0 +1,71 @@
+// The catalogue: what the product knows before any project is open. Kinds of item, the words for the tools, the icons.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+service Catalogue {
+  rpc Read(ReadCatalogueRequest) returns (CatalogueSnapshot);
+  rpc ReadIcons(ReadIconsRequest) returns (IconsSnapshot);
+}
+
+message ReadCatalogueRequest {}
+
+message ReadIconsRequest {}
+
+// One kind of item a solution holds.
+message Kind {
+  string name = 1;
+  string label = 2;
+  string icon = 3;
+  string colour = 4;
+  // How an item of this kind is stored: one file with this suffix, the files of a folder, or inside its parent's file.
+  string stored_suffix = 5;
+  repeated string stored_files = 6;
+  bool stored_inside = 7;
+  // The tool the document area opens it in; empty for a container.
+  string tool = 8;
+  // The kinds an item of this kind takes, where the kind decides it.
+  repeated string takes = 9;
+}
+
+message OptionList {
+  string name = 1;
+  repeated string options = 2;
+}
+
+message CatalogueSnapshot {
+  // Changes when the catalogue does, so a page can keep a copy.
+  string version = 1;
+  // The product's version, as its pages show it.
+  string product = 2;
+  repeated Kind kinds = 3;
+  // What each tool is called: Diagram, Designer or Editor.
+  map<string, string> words = 4;
+  // The lists a tool offers a choice from, by name: "attribute-types", "field-types".
+  repeated OptionList options = 5;
+  // What a level takes when it does not say.
+  repeated string default_accepts = 6;
+}
+
+message Icon {
+  string name = 1;
+  string label = 2;
+  // The words a search finds it by.
+  string keywords = 3;
+}
+
+message IconGroup {
+  string name = 1;
+  // True for a domain, false for a general category.
+  bool domain = 2;
+  repeated Icon icons = 3;
+}
+
+message IconsSnapshot {
+  string version = 1;
+  // The drawing of each icon by its name, as the content of a 16 by 16 SVG.
+  map<string, string> drawings = 2;
+  repeated IconGroup groups = 3;
+  // How many different icons the groups hold.
+  uint32 count = 4;
+}

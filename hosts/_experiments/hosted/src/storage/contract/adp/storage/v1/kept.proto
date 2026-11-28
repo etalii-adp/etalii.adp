@@ -1,0 +1,28 @@
+// What a backend that keeps its state by itself (in a browser, in a file) writes down: everything of one project.
+// No page reads this; it is here so that kept state has a schema as well.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+import "adp/storage/v1/content.proto";
+import "adp/storage/v1/git.proto";
+import "adp/storage/v1/history.proto";
+import "adp/storage/v1/levels.proto";
+import "adp/storage/v1/solution.proto";
+import "adp/storage/v1/status.proto";
+import "adp/storage/v1/workbench.proto";
+
+message KeptProject {
+  // The version of the data it started from; kept state of another version is left behind.
+  string seed = 1;
+  SolutionSnapshot solution = 2;
+  LevelsSnapshot levels = 3;
+  // The documents that were written; the others are still as they started.
+  repeated Document documents = 4;
+  GitSnapshot git = 5;
+  StatusSnapshot status = 6;
+  HistorySnapshot history = 7;
+  WorkbenchSnapshot workbench = 8;
+  // The revision the content store is at.
+  uint32 content_revision = 9;
+}

@@ -1,0 +1,57 @@
+// Content: what an item holds, as the text of its stored form, and the text of the other files of a level.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+import "adp/storage/v1/common.proto";
+
+service Content {
+  rpc Read(ReadContentRequest) returns (Document);
+  rpc ReadFile(ReadFileRequest) returns (FileText);
+  rpc Write(WriteContentRequest) returns (Done);
+}
+
+message ReadContentRequest {
+  string project_id = 1;
+  string item_id = 2;
+}
+
+message Document {
+  string item_id = 1;
+  // Goes up with every write of this document.
+  uint32 revision = 2;
+  // The stored form as text. What it reads as depends on the item's kind.
+  string text = 3;
+}
+
+message ReadFileRequest {
+  string project_id = 1;
+  // The item whose folder holds the file, and the file's path in it.
+  string owner_id = 2;
+  string path = 3;
+}
+
+message FileText {
+  string text = 1;
+  // What the file is for, in a few words; empty when the backend has nothing to say.
+  string holds = 2;
+  // A name for how to mark its text: "settings" for a project or language file.
+  string syntax = 3;
+}
+
+message WriteContentRequest {
+  string project_id = 1;
+  string item_id = 2;
+  // The revision the writer read. A write on an older revision is refused with code "conflict".
+  uint32 base_revision = 3;
+  string text = 4;
+}
+
+message ContentChanges {
+  // Documents that were written, each as a whole.
+  repeated Document written = 1;
+  // Items whose document may read differently now, because something it is made from changed.
+  repeated string stale = 2;
+  // True when every document may read differently.
+  bool all_stale = 3;
+}

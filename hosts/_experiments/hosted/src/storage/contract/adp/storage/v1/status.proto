@@ -1,0 +1,73 @@
+// Status: what validation found, how the environments are, and what was started.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+import "adp/storage/v1/common.proto";
+
+service Status {
+  rpc Read(ProjectRef) returns (StatusSnapshot);
+  rpc Validate(ProjectRef) returns (Done);
+  rpc Run(RunRequest) returns (Done);
+}
+
+enum Severity {
+  SEVERITY_UNSPECIFIED = 0;
+  SEVERITY_ERROR = 1;
+  SEVERITY_WARNING = 2;
+  SEVERITY_INFO = 3;
+}
+
+enum RunState {
+  RUN_STATE_UNSPECIFIED = 0;
+  RUN_STATE_QUEUED = 1;
+  RUN_STATE_RUNNING = 2;
+  RUN_STATE_DONE = 3;
+  RUN_STATE_FAILED = 4;
+}
+
+message Problem {
+  Severity severity = 1;
+  string message = 2;
+  string item_id = 3;
+}
+
+message Environment {
+  string name = 1;
+  bool healthy = 2;
+  // What the status bar says of it.
+  string note = 3;
+}
+
+// Something that was started: a release, a pipeline, a test suite.
+message Run {
+  string id = 1;
+  string item_id = 2;
+  string label = 3;
+  string environment = 4;
+  RunState state = 5;
+}
+
+message StatusSnapshot {
+  uint32 revision = 1;
+  repeated Problem problems = 2;
+  repeated Environment environments = 3;
+  // Newest first.
+  repeated Run runs = 4;
+  // What the run button starts until another is chosen.
+  string default_run_id = 5;
+}
+
+enum RunScope {
+  RUN_SCOPE_UNSPECIFIED = 0;
+  // The item itself.
+  RUN_SCOPE_ITEM = 1;
+  // Every test suite of the project.
+  RUN_SCOPE_TEST_SUITES = 2;
+}
+
+message RunRequest {
+  string project_id = 1;
+  string item_id = 2;
+  RunScope scope = 3;
+}
