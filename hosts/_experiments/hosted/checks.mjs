@@ -1,8 +1,10 @@
-/* What the build refuses before it builds: a page that reaches past the storage boundary, and a name of the example data anywhere but in the example backend. */
-import { build } from 'esbuild';
+/* What the build refuses before it builds: a page that reaches past the storage boundary, and a name of the example data anywhere but in the YAML files of the example backend. */
 import { readdir, readFile } from 'node:fs/promises';
+import { exampleData } from './example.mjs';
 
 const src = 'src', storage = 'src/storage/', example = 'src/storage/backends/example/';
+/* what the build writes: the code of the contract, and the example data as its YAML files have it */
+const written = [storage + 'gen/', example + 'gen/'];
 
 async function files(dir) {
   const found = [];
@@ -22,13 +24,12 @@ const KEPT = /\b(localStorage|sessionStorage|indexedDB|WebSocket|BroadcastChanne
 /* The modules of the storage a page may import: the stores, what is kept in this browser, and the making of ids. */
 const OPEN = new Set(['storage', 'storage/index', 'storage/local', 'storage/ids']);
 
-/* the names the example data gives its projects and its items, read from the example backend itself */
+/* the names the example data gives its projects, its people and its items, read from its YAML files */
 async function exampleNames() {
-  const bundle = await build({ stdin: { contents: `export { solution } from './solution'; export { projects } from './projects'; export { WHO } from './commits';`, resolveDir: example, loader: 'ts' }, bundle: true, write: false, format: 'esm', logLevel: 'silent' });
-  const made = await import('data:text/javascript;base64,' + Buffer.from(bundle.outputFiles[0].text).toString('base64'));
-  const names = new Set([...made.projects.map(p => p.name), ...made.WHO]);
+  const { workspace, git, solution } = await exampleData();
+  const names = new Set([...workspace.projects.map(p => p.name), ...git.people]);
   const walk = x => { names.add(x.name); x.children?.forEach(walk); };
-  walk(made.solution);
+  walk(solution.root);
   /* a name of one common word says nothing about where it came from */
   return [...names].filter(n => /\s/.test(n));
 }
@@ -42,7 +43,7 @@ export function findingsIn(file, source, names) {
     for (const m of text.matchAll(KEPT)) found.push(`${file}:${lineOf(text, m.index)}: ${m[0].replace('(', '')} is used outside ${storage}`);
     for (const m of text.matchAll(/from\s+'([^']*\/)?(storage(?:\/[\w./-]+)?)'/g)) if (!OPEN.has(m[2])) found.push(`${file}:${lineOf(text, m.index)}: a page imports ${m[2]}; pages read through storage/index`);
   }
-  if (names.length && !file.startsWith(example) && !file.startsWith(storage + 'gen/')) for (const m of text.matchAll(pattern(names))) found.push(`${file}:${lineOf(text, m.index)}: "${m[0]}" is a name of the example data, outside ${example}`);
+  if (names.length && !written.some(dir => file.startsWith(dir))) for (const m of text.matchAll(pattern(names))) found.push(`${file}:${lineOf(text, m.index)}: "${m[0]}" is a name of the example data, outside the YAML files of ${example}`);
   return found;
 }
 

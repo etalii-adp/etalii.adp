@@ -1,0 +1,6 @@
+# The window as it opens the first time: what is selected, the open tabs, and the levels that are expanded.
+
+selected: Atlas Platform
+document: Atlas Platform
+tabs: [ Atlas Platform, Meter readings to Bronze, Asset model, Home ]
+expanded: [ Atlas Platform, Ingestion, Sources, Pipelines, Ontology, Asset model, Components ]

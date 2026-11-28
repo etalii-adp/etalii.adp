@@ -1,0 +1,572 @@
+# The files beside the items: texts has the text of a file by its name on disk, and holds says what a file or folder is for.
+# sql and otherwise are what a file starts as that has no text here: {{file}} is its name, and {{name}}, {{id}} and {{kind}} are of the item it belongs to.
+
+holds:
+  .adp: Shared settings and canvas layout
+  .user.adp: Your personal overrides
+  Atlas.ConsoleClient.csproj: "The C# project: what it builds, for which .NET, and the packages it uses"
+  appsettings.json: The settings the console client starts with
+  packages.lock.json: The exact version of every package, so that every build restores the same ones
+  bin: What the build writes
+  Debug: What a Debug build writes
+  net10.0: What the build writes for .NET 10
+  atlas.dll: The console client as built
+  atlas.pdb: The debug symbols of the console client
+  obj: What the build keeps between runs
+  project.assets.json: What the last restore of the packages worked out
+  pyproject.toml: "The Python project: its name, the Python it needs, and its dependencies"
+  uv.lock: The exact version of every package, so that every computer installs the same ones
+  .python-version: The Python version that tools pick for this folder
+  __init__.py: Makes the folder a Python package
+  conftest.py: What the tests share
+  .env: Settings for running the collector on this computer
+  .venv: The virtual environment of the project, with its installed packages
+  pyvenv.cfg: How the virtual environment was made
+  .pytest_cache: What pytest keeps between runs
+  CACHEDIR.TAG: Marks the folder as a cache, so that backups skip it
+sql: |-
+  -- Stored form of {{name}}. Edit it through its diagram in Logical Structure view.
+  select meter_id, read_at, value_kwh
+  from bronze.meter_readings
+  where quality = 'ok'
+otherwise: |-
+  # {{file}}
+  # Stored form of {{name}}. Edit it through its tool in Logical Structure view.
+  item: {{id}}
+  name: "{{name}}"
+  kind: {{kind}}
+texts:
+  Program.cs: |-
+    // The Atlas console client: the outages, a customer's usage and the load forecast of the Atlas Platform, from a terminal.
+    using Atlas.ConsoleClient.Client;
+    using Atlas.ConsoleClient.Commands;
+    using Microsoft.Extensions.Configuration;
+
+    var settings = new ConfigurationBuilder()
+        .SetBasePath(AppContext.BaseDirectory)
+        .AddJsonFile("appsettings.json")
+        .AddEnvironmentVariables("ATLAS_")
+        .Build();
+
+    using var client = new AtlasClient(new Uri(settings["BaseUrl"]!), settings["Token"]);
+    ICommand[] commands = [new OutagesCommand(client), new UsageCommand(client), new ForecastCommand(client)];
+
+    var command = commands.FirstOrDefault(c => c.Name == args.FirstOrDefault());
+    if (command is null)
+    {
+        Console.WriteLine("Usage: atlas COMMAND [options]");
+        foreach (var c in commands) Console.WriteLine($"  {c.Name,-10} {c.Help}");
+        return 1;
+    }
+
+    return await command.RunAsync(args[1..], CancellationToken.None);
+  ICommand.cs: |-
+    namespace Atlas.ConsoleClient.Commands;
+
+    // One command of the console client, such as atlas outages.
+    public interface ICommand
+    {
+        string Name { get; }
+        string Help { get; }
+
+        // Runs the command and returns the exit code of the process.
+        Task<int> RunAsync(string[] args, CancellationToken cancellationToken);
+    }
+  OutagesCommand.cs: |-
+    using Atlas.ConsoleClient.Client;
+
+    namespace Atlas.ConsoleClient.Commands;
+
+    // atlas outages [--region NAME]: the outages that are open now, the largest first.
+    public sealed class OutagesCommand(AtlasClient client) : ICommand
+    {
+        public string Name => "outages";
+        public string Help => "Lists the open outages, the largest first";
+
+        public async Task<int> RunAsync(string[] args, CancellationToken cancellationToken)
+        {
+            var region = args is ["--region", var name] ? name : null;
+            var outages = await client.GetOutagesAsync(region, cancellationToken);
+
+            Console.WriteLine("Feeder      Postcode    Homes  Reported          Cause");
+            foreach (var o in outages.OrderByDescending(o => o.HomesAffected))
+            {
+                Console.WriteLine($"{o.Feeder,-12}{o.Postcode,-10}{o.HomesAffected,7}  {o.ReportedAt:yyyy-MM-dd HH:mm}  {o.Cause}");
+            }
+
+            return 0;
+        }
+    }
+  UsageCommand.cs: |-
+    using Atlas.ConsoleClient.Client;
+
+    namespace Atlas.ConsoleClient.Commands;
+
+    // atlas usage CUSTOMER [--month yyyy-MM]: what a customer used in a month, day by day.
+    public sealed class UsageCommand(AtlasClient client) : ICommand
+    {
+        public string Name => "usage";
+        public string Help => "Shows what a customer used in a month";
+
+        public async Task<int> RunAsync(string[] args, CancellationToken cancellationToken)
+        {
+            if (args.Length == 0)
+            {
+                Console.Error.WriteLine("usage: a customer number is required");
+                return 2;
+            }
+
+            var month = args is [_, "--month", var value]
+                ? DateOnly.ParseExact(value + "-01", "yyyy-MM-dd")
+                : DateOnly.FromDateTime(DateTime.Today);
+            var usage = await client.GetUsageAsync(args[0], month, cancellationToken);
+
+            foreach (var day in usage.Days)
+            {
+                var bar = new string('#', (int)(day.Kwh / usage.PeakKwh * 40));
+                Console.WriteLine($"{day.Date:ddd dd}  {day.Kwh,7:F1} kWh  {bar}");
+            }
+
+            Console.WriteLine($"Total {usage.TotalKwh:F1} kWh on the {usage.Tariff} tariff");
+            return 0;
+        }
+    }
+  ForecastCommand.cs: |-
+    using Atlas.ConsoleClient.Client;
+
+    namespace Atlas.ConsoleClient.Commands;
+
+    // atlas forecast [--hours N]: the load the Load forecast model expects for the hours ahead.
+    public sealed class ForecastCommand(AtlasClient client) : ICommand
+    {
+        public string Name => "forecast";
+        public string Help => "Shows the load forecast for the hours ahead";
+
+        public async Task<int> RunAsync(string[] args, CancellationToken cancellationToken)
+        {
+            var hours = args is ["--hours", var value] ? int.Parse(value) : 24;
+            var forecast = await client.GetForecastAsync(hours, cancellationToken);
+
+            foreach (var point in forecast)
+            {
+                Console.WriteLine($"{point.At:ddd HH:mm}  {point.LoadMw,8:F1} MW  +/- {point.MarginMw:F1}");
+            }
+
+            return 0;
+        }
+    }
+  AtlasClient.cs: |-
+    using System.Net.Http.Headers;
+    using System.Net.Http.Json;
+
+    namespace Atlas.ConsoleClient.Client;
+
+    // Talks to the API of the Atlas Platform. What it returns follows the API schemas of the solution.
+    public sealed class AtlasClient : IDisposable
+    {
+        private readonly HttpClient _http;
+
+        public AtlasClient(Uri baseUrl, string? token)
+        {
+            _http = new HttpClient { BaseAddress = baseUrl };
+            if (token is not null) _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+
+        public async Task<IReadOnlyList<OutageReport>> GetOutagesAsync(string? region, CancellationToken cancellationToken)
+        {
+            var url = region is null ? "outages" : "outages?region=" + Uri.EscapeDataString(region);
+            return await _http.GetFromJsonAsync<List<OutageReport>>(url, cancellationToken) ?? [];
+        }
+
+        public async Task<UsageSummary> GetUsageAsync(string customerNumber, DateOnly month, CancellationToken cancellationToken)
+        {
+            var url = $"customers/{Uri.EscapeDataString(customerNumber)}/usage?month={month:yyyy-MM}";
+            var usage = await _http.GetFromJsonAsync<UsageSummary>(url, cancellationToken);
+            return usage ?? throw new InvalidOperationException($"There is no usage for customer {customerNumber}");
+        }
+
+        public async Task<IReadOnlyList<ForecastPoint>> GetForecastAsync(int hours, CancellationToken cancellationToken)
+        {
+            return await _http.GetFromJsonAsync<List<ForecastPoint>>($"forecast/load?hours={hours}", cancellationToken) ?? [];
+        }
+
+        public void Dispose() => _http.Dispose();
+    }
+  OutageReport.cs: |-
+    namespace Atlas.ConsoleClient.Client;
+
+    // An outage as the API reports it. Its fields are those of the API schema Outage report.
+    public sealed record OutageReport(string Feeder, string Postcode, int HomesAffected, DateTimeOffset ReportedAt, string Cause);
+  UsageSummary.cs: |-
+    namespace Atlas.ConsoleClient.Client;
+
+    // What a customer used in a month. Its fields are those of the API schema Usage summary.
+    public sealed record UsageSummary(string CustomerNumber, string Tariff, decimal TotalKwh, decimal PeakKwh, IReadOnlyList<DailyUsage> Days);
+
+    public sealed record DailyUsage(DateOnly Date, decimal Kwh);
+  ForecastPoint.cs: |-
+    namespace Atlas.ConsoleClient.Client;
+
+    // One hour of the load forecast, with the margin the model gives it.
+    public sealed record ForecastPoint(DateTimeOffset At, decimal LoadMw, decimal MarginMw);
+  Atlas.ConsoleClient.csproj: |-
+    <Project Sdk="Microsoft.NET.Sdk">
+
+      <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <AssemblyName>atlas</AssemblyName>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+      </PropertyGroup>
+
+      <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0" />
+      </ItemGroup>
+
+      <ItemGroup>
+        <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+      </ItemGroup>
+
+    </Project>
+  appsettings.json: |-
+    {
+      "BaseUrl": "https://staging.atlas.example.com/api/",
+      "Token": null
+    }
+  packages.lock.json: |-
+    {
+      "version": 1,
+      "dependencies": {
+        "net10.0": {
+          "Microsoft.Extensions.Configuration.EnvironmentVariables": {
+            "type": "Direct",
+            "requested": "[10.0.0, )",
+            "resolved": "10.0.0",
+            "dependencies": {
+              "Microsoft.Extensions.Configuration": "10.0.0",
+              "Microsoft.Extensions.Configuration.Abstractions": "10.0.0"
+            }
+          },
+          "Microsoft.Extensions.Configuration.Json": {
+            "type": "Direct",
+            "requested": "[10.0.0, )",
+            "resolved": "10.0.0",
+            "dependencies": {
+              "Microsoft.Extensions.Configuration": "10.0.0",
+              "Microsoft.Extensions.Configuration.Abstractions": "10.0.0",
+              "Microsoft.Extensions.Configuration.FileExtensions": "10.0.0",
+              "Microsoft.Extensions.FileProviders.Abstractions": "10.0.0"
+            }
+          },
+          "Microsoft.Extensions.Configuration": {
+            "type": "Transitive",
+            "resolved": "10.0.0",
+            "dependencies": {
+              "Microsoft.Extensions.Configuration.Abstractions": "10.0.0",
+              "Microsoft.Extensions.Primitives": "10.0.0"
+            }
+          }
+        }
+      }
+    }
+  project.assets.json: |-
+    {
+      "version": 3,
+      "targets": {
+        "net10.0": {
+          "Microsoft.Extensions.Configuration.EnvironmentVariables/10.0.0": { "type": "package" },
+          "Microsoft.Extensions.Configuration.Json/10.0.0": { "type": "package" }
+        }
+      },
+      "project": {
+        "version": "1.0.0",
+        "restore": { "projectName": "atlas", "projectStyle": "PackageReference" },
+        "frameworks": { "net10.0": { "targetAlias": "net10.0" } }
+      }
+    }
+  __main__.py: |-
+    """Collects the readings of the last interval and drops them where the ingestion picks them up."""
+    import logging
+    import sys
+    from datetime import UTC, datetime, timedelta
+
+    from reading_collector.head_end import HeadEndClient
+    from reading_collector.landing_zone import LandingZone
+    from reading_collector.settings import Settings
+    from reading_collector.validation import split_valid
+
+    log = logging.getLogger("reading_collector")
+
+
+    def main() -> int:
+        settings = Settings()
+        logging.basicConfig(level=settings.log_level)
+        until = datetime.now(UTC).replace(minute=0, second=0, microsecond=0)
+        since = until - timedelta(hours=settings.interval_hours)
+
+        with HeadEndClient(settings.head_end_url, settings.head_end_token) as head_end:
+            readings = list(head_end.readings(since, until))
+
+        valid, rejected = split_valid(readings)
+        zone = LandingZone(settings.landing_path)
+        written = zone.write(valid, until)
+        if rejected:
+            zone.write_rejected(rejected, until)
+
+        log.info("%d readings in %s, %d rejected", len(valid), written.name, len(rejected))
+        return 0 if valid or not readings else 1
+
+
+    if __name__ == "__main__":
+        sys.exit(main())
+  settings.py: |-
+    from pathlib import Path
+
+    from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+    class Settings(BaseSettings):
+        """Read from the environment, and from .env on a developer's computer. Every name starts with COLLECTOR_."""
+
+        model_config = SettingsConfigDict(env_prefix="COLLECTOR_", env_file=".env")
+
+        head_end_url: str
+        head_end_token: str
+        landing_path: Path = Path("/mnt/landing/smart-meter-readings")
+        interval_hours: int = 1
+        log_level: str = "INFO"
+  head_end.py: |-
+    """The head-end system: where the smart meters deliver what they measured."""
+    from collections.abc import Iterator
+    from datetime import datetime
+    from typing import Self
+
+    import httpx
+    from pydantic import BaseModel
+
+
+    class Reading(BaseModel):
+        meter_id: str
+        read_at: datetime
+        value: float
+        unit: str = "kWh"
+        quality: str = "ok"
+
+
+    class HeadEndClient:
+        def __init__(self, url: str, token: str) -> None:
+            self._http = httpx.Client(base_url=url, headers={"Authorization": f"Bearer {token}"}, timeout=30)
+
+        def __enter__(self) -> Self:
+            return self
+
+        def __exit__(self, *exc: object) -> None:
+            self._http.close()
+
+        def readings(self, since: datetime, until: datetime) -> Iterator[Reading]:
+            """Every reading between since and until, page by page."""
+            page: str | None = "readings"
+            params: dict[str, str] | None = {"from": since.isoformat(), "to": until.isoformat()}
+            while page:
+                response = self._http.get(page, params=params)
+                response.raise_for_status()
+                body = response.json()
+                yield from (Reading.model_validate(item) for item in body["items"])
+                page, params = body.get("next"), None
+  validation.py: |-
+    """Keeps out what the Meter reading schema refuses anyway, so that one bad meter does not hold up a whole file."""
+    import re
+    from collections.abc import Iterable
+
+    from reading_collector.head_end import Reading
+
+    METER_ID = re.compile(r"^M[0-9]{8}$")
+    UNITS = {"kWh", "kW", "V"}
+
+
+    def problem_of(reading: Reading) -> str | None:
+        """Why a reading is refused, or None when it is fine."""
+        if not METER_ID.match(reading.meter_id):
+            return "meter id is not M and eight digits"
+        if reading.value < 0:
+            return "value is below zero"
+        if reading.unit not in UNITS:
+            return f"unit {reading.unit} is not known"
+        return None
+
+
+    def split_valid(readings: Iterable[Reading]) -> tuple[list[Reading], list[tuple[Reading, str]]]:
+        valid: list[Reading] = []
+        rejected: list[tuple[Reading, str]] = []
+        for reading in readings:
+            problem = problem_of(reading)
+            if problem is None:
+                valid.append(reading)
+            else:
+                rejected.append((reading, problem))
+        return valid, rejected
+  landing_zone.py: |-
+    """The landing zone: the folder the Smart meter readings source watches."""
+    import csv
+    from datetime import datetime
+    from pathlib import Path
+
+    from reading_collector.head_end import Reading
+
+
+    class LandingZone:
+        def __init__(self, path: Path) -> None:
+            self._path = path
+
+        def write(self, readings: list[Reading], until: datetime) -> Path:
+            """One file per interval, written under another name first, so that the source never picks up half a file."""
+            target = self._path / f"readings-{until:%Y%m%dT%H%M}.csv"
+            partial = target.with_suffix(".part")
+            with partial.open("w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerow(["meter_id", "read_at", "value", "unit", "quality"])
+                for r in readings:
+                    writer.writerow([r.meter_id, r.read_at.isoformat(), r.value, r.unit, r.quality])
+            return partial.rename(target)
+
+        def write_rejected(self, rejected: list[tuple[Reading, str]], until: datetime) -> Path:
+            target = self._path / "rejected" / f"readings-{until:%Y%m%dT%H%M}.csv"
+            target.parent.mkdir(exist_ok=True)
+            with target.open("w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerow(["meter_id", "read_at", "value", "problem"])
+                writer.writerows([r.meter_id, r.read_at.isoformat(), r.value, problem] for r, problem in rejected)
+            return target
+  __init__.py: '"""Collects smart meter readings from the head-end system for the ingestion of the Atlas Platform."""'
+  conftest.py: |-
+    from datetime import UTC, datetime
+
+    import pytest
+
+    from reading_collector.head_end import Reading
+
+
+    @pytest.fixture
+    def reading() -> Reading:
+        return Reading(meter_id="M00412877", read_at=datetime(2026, 3, 1, 12, tzinfo=UTC), value=1.25)
+  test_validation.py: |-
+    from reading_collector.validation import problem_of, split_valid
+
+
+    def test_a_good_reading_has_no_problem(reading):
+        assert problem_of(reading) is None
+
+
+    def test_a_value_below_zero_is_refused(reading):
+        assert problem_of(reading.model_copy(update={"value": -1})) == "value is below zero"
+
+
+    def test_an_unknown_meter_id_is_refused(reading):
+        assert problem_of(reading.model_copy(update={"meter_id": "X1"})) == "meter id is not M and eight digits"
+
+
+    def test_the_refused_ones_are_split_off(reading):
+        bad = reading.model_copy(update={"unit": "MWh"})
+        valid, rejected = split_valid([reading, bad])
+        assert valid == [reading]
+        assert rejected == [(bad, "unit MWh is not known")]
+  test_landing_zone.py: |-
+    from datetime import UTC, datetime
+
+    from reading_collector.landing_zone import LandingZone
+
+
+    def test_one_file_per_interval(tmp_path, reading):
+        written = LandingZone(tmp_path).write([reading], datetime(2026, 3, 1, 13, tzinfo=UTC))
+        assert written.name == "readings-20260301T1300.csv"
+        assert written.read_text().splitlines()[1] == "M00412877,2026-03-01T12:00:00+00:00,1.25,kWh,ok"
+
+
+    def test_no_partial_file_is_left(tmp_path, reading):
+        LandingZone(tmp_path).write([reading], datetime(2026, 3, 1, 13, tzinfo=UTC))
+        assert not list(tmp_path.glob("*.part"))
+  pyproject.toml: |-
+    [project]
+    name = "reading-collector"
+    version = "0.4.0"
+    description = "Collects smart meter readings from the head-end system for the ingestion of the Atlas Platform"
+    requires-python = ">=3.13"
+    dependencies = [
+        "httpx>=0.28",
+        "pydantic>=2.10",
+        "pydantic-settings>=2.7",
+    ]
+
+    [project.scripts]
+    reading-collector = "reading_collector.__main__:main"
+
+    [dependency-groups]
+    dev = [
+        "pytest>=8.3",
+        "ruff>=0.9",
+    ]
+
+    [build-system]
+    requires = ["hatchling"]
+    build-backend = "hatchling.build"
+
+    [tool.ruff]
+    line-length = 120
+
+    [tool.pytest.ini_options]
+    testpaths = ["tests"]
+  uv.lock: |-
+    version = 1
+    revision = 2
+    requires-python = ">=3.13"
+
+    [[package]]
+    name = "httpx"
+    version = "0.28.1"
+    source = { registry = "https://pypi.org/simple" }
+    dependencies = [
+        { name = "anyio" },
+        { name = "certifi" },
+        { name = "httpcore" },
+        { name = "idna" },
+    ]
+
+    [[package]]
+    name = "pydantic"
+    version = "2.10.6"
+    source = { registry = "https://pypi.org/simple" }
+    dependencies = [
+        { name = "annotated-types" },
+        { name = "pydantic-core" },
+        { name = "typing-extensions" },
+    ]
+
+    [[package]]
+    name = "reading-collector"
+    version = "0.4.0"
+    source = { editable = "." }
+    dependencies = [
+        { name = "httpx" },
+        { name = "pydantic" },
+        { name = "pydantic-settings" },
+    ]
+  .python-version: "3.13"
+  .env: |-
+    # Settings for running the collector on this computer. Not committed.
+    COLLECTOR_HEAD_END_URL=https://head-end.staging.atlas.example.com/api/v2/
+    COLLECTOR_HEAD_END_TOKEN=
+    COLLECTOR_LANDING_PATH=./landing
+    COLLECTOR_LOG_LEVEL=DEBUG
+  pyvenv.cfg: |-
+    home = /usr/local/bin
+    implementation = CPython
+    version_info = 3.13.2
+    include-system-site-packages = false
+    prompt = reading-collector
+  CACHEDIR.TAG: |-
+    Signature: 8a477f597d28d172789f06886806bc55
+    # This file is a cache directory tag created by pytest.

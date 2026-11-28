@@ -10,7 +10,7 @@ npm run check
 npm start
 ```
 
-`npm run check` writes the code of the storage contract, checks the types and builds the pages; `npm start` serves `dist/` at `http://localhost:8080/`. The pages are modules, which a browser loads from a server and not straight from disk. `npm test` runs the tests (see [Tests](#tests)).
+`npm run check` writes the code of the storage contract, reads the example data from its YAML files, checks the types and builds the pages; `npm start` serves `dist/` at `http://localhost:8080/`. The pages are modules, which a browser loads from a server and not straight from disk. `npm test` runs the tests (see [Tests](#tests)).
 
 ## The pages
 
@@ -86,7 +86,7 @@ Everything a page shows that is data comes from `src/storage/`, and everything a
 | `backend.ts` | What a store asks of a backend: `call`, `watch`, its state, and the two ways a call fails (`Refused` with words for the user, `Unreachable`) |
 | `backends/` | The backends, and what they share |
 | `backends/server/` | One object that answers every call of the contract from state in memory, with the history that Undo takes back. Every backend that lives in the page is built on it |
-| `backends/example/` | The example data, as the seed such a backend starts from. Every example name and number is in this folder and nowhere else |
+| `backends/example/` | The example data, as the seed such a backend starts from. Every example name, number and text is in the YAML files of this folder and nowhere else (see [The example data](#the-example-data)) |
 | `backends/catalogue/` | The kinds of item, the names of the tools, the lists the tools offer a choice from, the icon library, and what the New Project wizard asks: the sizes of a solution, the questions and the recipes |
 | `backends/wire/` | The wire: a call as an envelope of bytes over one connection, with the client a page uses and the service at the other end |
 
@@ -103,13 +103,33 @@ A backend is chosen by the address of a page, and the choice holds for the visit
 
 A hosted service is reached with Protocol Buffers messages over one WebSocket, in an envelope of this contract's own (hello, request, response, cancel, event, ping, pong). A command carries an id; when its answer is lost it is sent again under the same id and is carried out once. What changes is told to every page as events, and the events a command caused arrive before its answer. A page that was cut off reads again what it missed when the connection is back.
 
-`checks.mjs` holds the boundary, and the build runs it first and builds nothing when it finds something: a page that uses what a browser keeps or a way to a network itself (`localStorage`, `indexedDB`, `fetch`, `WebSocket` and the like), a page that imports past the three modules above, and a name of the example data anywhere but in the example backend.
+`checks.mjs` holds the boundary, and the build runs it first and builds nothing when it finds something: a page that uses what a browser keeps or a way to a network itself (`localStorage`, `indexedDB`, `fetch`, `WebSocket` and the like), a page that imports past the three modules above, and a name of the example data anywhere but in the YAML files of the example backend, its own TypeScript included.
+
+### The example data
+
+The example data is written in YAML, one file per subject, in `src/storage/backends/example/`. Each file starts with a comment that says what is in it.
+
+| File | Holds |
+| --- | --- |
+| `workspace.yaml` | The workspace and its user, the projects on this computer and which of them opens, and what a linked repository brings |
+| `solution.yaml` | The hierarchy of the project that opens, from its root down, in the fields an item has in the contract |
+| `git.yaml`, `status.yaml`, `workbench.yaml`, `agent.yaml` | What those stores start with: the log, the branches and what is not committed; what validation found; the window as it first opens; the conversations that are over |
+| `flows.yaml`, `ontology.yaml`, `schemas.yaml`, `pages.yaml`, `dashboards.yaml`, `forms.yaml`, `checks.yaml`, `documents.yaml`, `code.yaml` | What the items hold, per tool, in the shape that tool reads (`storage/documents.ts`) |
+| `files.yaml` | The text of the files beside the items, such as the sources of the two applications, and what each file is for |
+
+Three rules make the files something to write by hand:
+
+- An item is named by the name it has in `solution.yaml`, never by an id. Its id is made from its place in the hierarchy, so it is the same on every load.
+- What an item holds is given by its name (`items`), for every other item of a kind (`kinds`), or for the rest (`otherwise`). A single value can be a choice as well: one for some items by name, another for the rest. It goes by the name the item started with, so renaming an item does not change what it holds.
+- A text can have parts between `{{` and `}}` that are filled in when it is read, such as `{{name}}` for the item's name and `{{slug}}` for its name on disk. The comment at the top of a file says which.
+
+`example.mjs`, which `npm run generate` runs, reads the files into one module (`backends/example/gen/data.ts`, not committed), and the type check holds that module against the shapes in `backends/example/shape.ts`: a field that is missing, misspelt or of the wrong type in a YAML file fails the type check, which names the field and the shape it is held against. `backends/example/index.ts` turns the data into the messages of the contract and has no example name of its own. The unit tests check what types cannot: that every name a file uses is the name of exactly one item.
 
 ## Tests
 
 `npm test` runs both kinds; the pages have to be built first (`npm run check`).
 
-- `npm run test:unit` (`test/unit/`, Node's own test runner): the backend in the page asked directly, the stores as a page uses them, the wire with messages lost and connections cut, every message and call of the contract as bytes and as JSON, the checks of the build, the conversations with the agent, and the New Project wizard: that its sizes, questions and recipes fit each other and the catalogue, and the project that is made of the answers.
+- `npm run test:unit` (`test/unit/`, Node's own test runner): the backend in the page asked directly, the stores as a page uses them, the wire with messages lost and connections cut, every message and call of the contract as bytes and as JSON, the checks of the build, the example data as its YAML files have it, the conversations with the agent, and the New Project wizard: that its sizes, questions and recipes fit each other and the catalogue, and the project that is made of the answers.
 - `npm run test:e2e` (`test/e2e/`, Playwright with Chromium): a walk of 189 steps through the login page, the projects and every part of the IDE, which has to work and has to show the same thing, step by step, with the storage in memory, in the browser, across the wire inside the page, and at a service behind a real WebSocket. Beside it: a reload and a second tab with the storage in the browser, where what one tab keeps of its own leaves the other's Undo alone, every kind of item opened with an empty storage, what the pages say with a storage that is slow, takes no changes, is away, or goes away and comes back, and that a document that arrives late leaves a name that is being typed alone; the Agent tool window with conversations that are over, questions and a reload; and the New Project wizard for every kind of solution, where the hierarchy the wizard shows has to be the one the IDE opens with.
 
 `node test/e2e/record.mjs dist trace.json [backend]` writes what a walk saw, and `node test/e2e/diff.mjs a.json b.json` compares two of them.

@@ -1,0 +1,50 @@
+# The entity types and relations of each ontology model. An entity type with definedIn is a reference to one of another model.
+
+models:
+  Asset model:
+    entities:
+      - { name: Substation, x: 0, y: 0, attrs: [ "name: text", "voltageLevel: kV", "location: geo" ] }
+      - { name: Feeder, x: 250, y: 0, attrs: [ "code: text", "ratedCurrent: A" ] }
+      - { name: Transformer, x: 500, y: 0, attrs: [ "rating: kVA", "phases: 1 | 3" ] }
+      - name: Meter
+        x: 250
+        y: 180
+        attrs: [ "serialNumber: text", "installedOn: date", "intervalMinutes: int" ]
+      - { name: ServicePoint, x: 500, y: 180, attrs: [ "address: text", "connectionType: enum" ] }
+      - name: Customer
+        x: 750
+        y: 180
+        attrs: [ "customerNumber: text" ]
+        definedIn: Customer model
+    relations:
+      - { from: Substation, to: Feeder, label: feeds }
+      - { from: Feeder, to: Transformer, label: supplies }
+      - { from: Transformer, to: ServicePoint, label: serves }
+      - { from: ServicePoint, to: Meter, label: measuredBy }
+      - { from: Customer, to: ServicePoint, label: holds }
+  Customer model:
+    entities:
+      - { name: Customer, x: 0, y: 0, attrs: [ "customerNumber: text", "name: text", "segment: enum" ] }
+      - { name: Contract, x: 250, y: 0, attrs: [ "startDate: date", "tariff: TariffClass" ] }
+      - { name: Account, x: 500, y: 0, attrs: [ "balance: EUR" ] }
+      - { name: ServicePoint, x: 250, y: 170, attrs: [ "address: text" ], definedIn: Asset model }
+    relations:
+      - { from: Customer, to: Contract, label: signs }
+      - { from: Contract, to: Account, label: billedTo }
+      - { from: Contract, to: ServicePoint, label: covers }
+  Grid topology:
+    entities:
+      - { name: Region, x: 0, y: 0, attrs: [ "name: text" ] }
+      - { name: Substation, x: 250, y: 0, attrs: [ "name: text" ], definedIn: Asset model }
+      - { name: Switch, x: 500, y: 0, attrs: [ "state: open | closed" ] }
+      - { name: Feeder, x: 250, y: 170, attrs: [ "code: text" ], definedIn: Asset model }
+    relations:
+      - { from: Region, to: Substation, label: contains }
+      - { from: Substation, to: Feeder, label: feeds }
+      - { from: Switch, to: Feeder, label: isolates }
+  Roles and permissions:
+    entities:
+      - { name: User, x: 0, y: 0, attrs: [ "email: text" ] }
+      - { name: Role, x: 250, y: 0, attrs: [ "name: text" ] }
+      - { name: Permission, x: 500, y: 0, attrs: [ "action: enum", "scope: text" ] }
+    relations: [ { from: User, to: Role, label: has }, { from: Role, to: Permission, label: grants } ]

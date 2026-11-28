@@ -1,0 +1,62 @@
+# The queries, notebooks, vocabularies and prompts, as the code editor reads them.
+# items has what an item holds by the name it has in solution.yaml, kinds what every other item of a kind holds. {{name}} and {{slug}} are the item's name, as it is and as it is on disk.
+
+items:
+  Peak load by feeder: |-
+    -- Peak load per feeder over the last 7 days
+    select f.code as feeder,
+           max(r.load_kw) as peak_kw,
+           count(*) as readings
+    from silver.meter_readings r
+    join ontology.feeder f on f.id = r.feeder_id
+    where r.read_at >= now() - interval '7 days'
+    group by f.code
+    order by peak_kw desc
+    limit 20
+  Meters without readings: |-
+    -- Meters that reported nothing in the last 24 hours
+    select m.serial_number, sp.address
+    from ontology.meter m
+    join ontology.service_point sp on sp.id = m.service_point_id
+    left join silver.meter_readings r
+      on r.meter_id = m.id and r.read_at >= now() - interval '24 hours'
+    where r.meter_id is null
+    order by sp.address
+kinds:
+  vocabulary: |-
+    # {{name}}, a SKOS vocabulary used by the ontology
+    @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+    @prefix atlas: <https://atlas.example.com/vocab/> .
+
+    atlas:{{slug}} a skos:ConceptScheme ;
+      skos:prefLabel "{{name}}" .
+
+    atlas:residential a skos:Concept ;
+      skos:inScheme atlas:{{slug}} ;
+      skos:prefLabel "Residential" .
+
+    atlas:commercial a skos:Concept ;
+      skos:inScheme atlas:{{slug}} ;
+      skos:prefLabel "Commercial" .
+  prompt: |-
+    # {{name}}
+
+    You write for customers of an energy company.
+
+    Given the outage record below, write two sentences:
+    1. What happened and where, in plain words.
+    2. When power is expected back, only if the record has an estimate.
+
+    Never guess a cause. Never promise a time the record does not contain.
+  notebook: |-
+    # {{name}}
+    import pandas as pd
+
+    actual = pd.read_sql("select * from silver.system_load", atlas)
+    forecast = pd.read_sql("select * from gold.load_forecast", atlas)
+
+    error = (forecast.load_mw - actual.load_mw).abs() / actual.load_mw
+    error.groupby(actual.read_at.dt.hour).mean().plot()   # error per hour of day
+otherwise: |-
+  -- {{name}}
+  select 1

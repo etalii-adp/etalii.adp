@@ -22,12 +22,13 @@ test('a page imports the stores, what is kept in this browser and the making of 
   assert.equal(find('src/storage/stores/git.ts', `import { a } from '../gen/adp/storage/v1/git_pb';`).length, 0);
 });
 
-test('a name of the example data is found outside the example backend, as a whole name only', () => {
+test('a name of the example data is found outside its YAML files, as a whole name only', () => {
   const names = ['Atlas Platform', 'Card grid'];
   assert.equal(find('src/ide/part.ts', 'const a = "Atlas Platform";', names).length, 1);
   assert.equal(find('src/ide/index.html', '<title>Atlas Platform</title>', names).length, 1);
   assert.equal(find('src/ide/part.ts', 'const a = "Atlas Platforms"; const b = "Card grid-like";', names).length, 0);
-  assert.equal(find('src/storage/backends/example/solution.ts', 'const a = "Atlas Platform";', names).length, 0);
+  assert.equal(find('src/storage/backends/example/index.ts', 'const a = "Atlas Platform";', names).length, 1, 'the code of the example backend names none of it either');
+  assert.equal(find('src/storage/backends/example/gen/data.ts', 'const a = "Atlas Platform";', names).length, 0, 'what the build writes from the YAML files');
 });
 
 test('the pages as they are pass', async () => {

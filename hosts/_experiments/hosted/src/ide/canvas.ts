@@ -75,13 +75,16 @@ export function renderCanvas(d: HTMLElement, L: Item): void {
   };
   d.innerHTML = `<div class="cv" tabindex="0" aria-label="Canvas of ${esc(L.name)}"><div class="plane"><svg>${ARROW}<g id="cv-e"></g></svg>${children.map(card).join('')}</div>${children.length ? '' : `<div class="hint" style="position:absolute;inset:0;display:grid;place-items:center">${esc(L.name)} is empty. Right-click it in the Explorer and choose New.</div>`}</div>
    <div class="cv-tl"><button class="ib" id="cv-up" title="Up one level" ${L.parent ? '' : 'disabled'}>${ico('up')}</button><span>${esc(L.name)}</span></div>
-   <div class="cv-bl" id="cv-note"></div>
+   <div class="cv-bl" id="cv-note" hidden></div>
    <div class="cv-br"><button class="ib${S.anim ? ' on' : ''}" id="cv-an" title="Animate moving between levels: a short zoom when going deeper or higher, a short slide between neighbours" aria-pressed="${S.anim}">${ico('motion')}</button><button class="ib" id="cv-out" title="Zoom out">${ico('minus')}</button><span class="zl" id="cv-z"></span><button class="ib" id="cv-in" title="Zoom in">${ico('plus')}</button><button class="tbtn" style="height:24px" id="cv-fit">Fit</button></div>`;
   const cv = $('.cv', d), plane = $('.plane', d), cards = $$('.card', d), kept = S.view[L.id];
   let V: View = kept ?? { x: 0, y: 0, k: 1 };
 
   const note = (): void => {
-    $('#cv-note').innerHTML = L.own ? `Your own layout, saved in .user.adp. <button id="cv-reset">Use shared layout</button>` : `Layout shared through .adp. Drag a card to make it your own. Double-click to go deeper.`;
+    /* nothing is said of a layout that is the shared one: the note is there only with the way back to it */
+    const el = $('#cv-note');
+    el.hidden = !L.own;
+    el.innerHTML = L.own ? `Your own layout, saved in .user.adp. <button id="cv-reset">Use shared layout</button>` : '';
     const reset = $maybe('#cv-reset');
     if (reset) reset.onclick = () => { project.levels.resetLayout(L).then(() => { delete S.view[L.id]; repaint('editor'); }, refused); };
   };

@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "generate": "buf lint src/storage/contract && buf generate",
+    "generate": "buf lint src/storage/contract && buf generate && node example.mjs",
     "typecheck": "tsc --noEmit && tsc --noEmit -p test",
     "build": "node build.mjs",
     "check": "npm run generate && npm run typecheck && npm run build",
@@ -21,6 +21,7 @@
     "esbuild": "0.28.2",
     "playwright": "1.63.0",
     "typescript": "7.0.2",
-    "ws": "8.23.1"
+    "ws": "8.23.1",
+    "yaml": "2.9.1"
   }
 }
