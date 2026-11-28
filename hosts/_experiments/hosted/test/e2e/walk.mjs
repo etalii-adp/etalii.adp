@@ -131,7 +131,10 @@ export async function walk(page, base, { backend } = {}) {
   await step('applications: back to logical', () => context('Applications', 'View As', 'Logical Structure'));
 
   /* the canvas */
+  /* a canvas says something of its layout only while it is a person's own, where the way back to the shared one is */
+  const silent = async () => { if (await page.locator('#cv-note').isVisible()) throw new Error('the canvas has a note about its layout'); };
   await step('canvas: the root', () => page.locator('#crumbs button').first().click());
+  await step('canvas: nothing is said of the shared layout', () => silent());
   await step('canvas: a card', async () => { const b = await page.locator('#doc .card').nth(2).boundingBox(); await page.mouse.click(b.x + 20, b.y + 12); });
   await step('canvas: zoom', async () => { await page.locator('#cv-in').click(); await page.locator('#cv-in').click(); await page.locator('#cv-out').click(); });
   await step('canvas: fit', () => page.locator('#cv-fit').click());
@@ -139,6 +142,7 @@ export async function walk(page, base, { backend } = {}) {
   await step('canvas: into a card', async () => { const b = await page.locator('#doc .card').first().boundingBox(); await page.mouse.click(b.x + 20, b.y + 12); await page.mouse.click(b.x + 20, b.y + 12); });
   await step('canvas: up', () => page.locator('#cv-up').click());
   await step('canvas: shared layout', () => page.locator('#cv-reset').click());
+  await step('canvas: nothing is said of the shared layout again', () => silent());
   await step('canvas: as contents', () => page.locator('#dm [data-dm="editor"]').click());
   await step('contents: an item', () => page.locator('#doc tr.clk').nth(3).click());
   await step('canvas: of a model', async () => { await open('Asset model'); await page.locator('#dm [data-dm="canvas"]').click(); });
