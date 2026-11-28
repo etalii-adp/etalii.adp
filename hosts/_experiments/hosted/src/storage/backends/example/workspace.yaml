@@ -1,0 +1,75 @@
+# The workspace, its user, and the projects on this computer.
+# version changes when the example data does, so what a browser kept of an older one is left behind.
+# opens names the one project that opens; closed is what the others say. A text between {{ and }} is filled in when it is read.
+
+version: atlas-2
+workspace: atlas.example.com
+user: { name: Sam Rivera, email: sam.rivera@example.com, initials: SR }
+password: 42!
+answerMs: 900
+providers: [ GitHub, GitLab, Bitbucket, Azure DevOps ]
+opens: Atlas Platform
+closed: Only {{name}} is available on this computer.
+projects:
+  - name: Atlas Platform
+    initials: AP
+    colour: blue
+    path: ~/git/atlas-platform
+    branch: develop
+    about: Platform · {{areas}} areas, {{items}} items · {{links}} linked repositories
+    opened: 2 minutes ago
+    asset: false
+  - name: Field Service App
+    initials: FS
+    colour: teal
+    path: ~/git/field-service-app
+    branch: main
+    about: Application · 14 items · 2 linked repositories
+    opened: Yesterday
+    asset: false
+  - name: Tariff Calculator
+    initials: TC
+    colour: orange
+    path: ~/git/tariff-calculator
+    branch: features/time-of-use
+    about: Application · 6 items
+    opened: 3 days ago
+    asset: false
+  - name: Design system
+    initials: DS
+    colour: purple
+    path: ~/git/shared/design-system
+    branch: main
+    about: Asset · linked into 3 projects
+    opened: Last week
+    asset: true
+  - name: Identity and access
+    initials: IA
+    colour: red
+    path: ~/git/shared/identity-access
+    branch: release/2.x
+    about: Asset · linked into 2 projects
+    opened: Last week
+    asset: true
+  - name: Audit logging
+    initials: AL
+    colour: green
+    path: ~/git/shared/audit-logging
+    branch: main
+    about: Asset · linked into 2 projects
+    opened: 12 Nov
+    asset: true
+suggestedLink:
+  repository: git@git.example.com:shared/notification-service.git
+  name: Notification service
+  refs: [ v1.4.0, v1.3.2, main ]
+  under: Components
+linkedRepository:
+  icon: chat
+  refs: [ v1.4.0, v1.3.2, main ]
+  items:
+    - { name: Email template, kind: component }
+    - { name: Delivery pipeline, kind: pipeline }
+    - { name: Delivery monitor, kind: dashboard }
+sinceFetch: 4 minutes ago
+environment: Staging

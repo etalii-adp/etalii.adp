@@ -1,0 +1,176 @@
+# What git knows of the project: the branch, the log, where the branches and tags are, and what is not committed yet.
+# An item is named by the name it has in solution.yaml.
+
+branch: develop
+upstream: origin/develop
+ahead: 1
+behind: 3
+fetched: Fetched 4 min ago
+suggestedMessage: Add tariff classes and the outage map page
+people: [ Sam Rivera, Priya Nair, Jonas Weber, Mei Tanaka ]
+refs:
+  - { name: develop, kind: local, at: a91f3c2 }
+  - { name: origin/develop, kind: remote, at: 7be20d4 }
+  - { name: origin/features/outage-map, kind: remote, at: d3371f9 }
+  - { name: features/load-forecast, kind: local, at: 40f6a3d }
+  - { name: v0.8.0, kind: tag, at: 2f8c9d6 }
+commits:
+  - hash: a91f3c2
+    lane: 0
+    parents: [ 5c0e8aa ]
+    message: Add dedupe step to the meter readings pipeline
+    author: Sam Rivera
+    when: Today 10:42
+    days: 0
+    touched:
+      - { item: Meter readings to Bronze, state: modified }
+      - { item: Pipelines, state: modified }
+      - { item: Data quality rules, state: modified }
+  - hash: 7be20d4
+    lane: 1
+    parents: [ 5c0e8aa, d3371f9 ]
+    message: "Merge pull request #214 from features/outage-map"
+    author: Priya Nair
+    when: Today 09:58
+    days: 0
+    touched: [ { item: Meter readings to Bronze, state: modified } ]
+  - hash: 5c0e8aa
+    lane: 0
+    parents: [ 19ac5b0 ]
+    message: Pin Identity and access to release/2.x for the access review
+    author: Jonas Weber
+    when: Yesterday 17:20
+    days: 1
+    touched:
+      - { item: Meter readings to Bronze, state: modified }
+      - { item: Pipelines, state: modified }
+      - { item: Data quality rules, state: modified }
+  - hash: d3371f9
+    lane: 2
+    parents: [ e84b112 ]
+    message: Bind outage table to the Grid topology ontology
+    author: Priya Nair
+    when: Yesterday 16:05
+    days: 1
+    touched:
+      - { item: Meter readings to Bronze, state: modified }
+      - { item: Pipelines, state: modified }
+      - { item: Data quality rules, state: modified }
+  - hash: 19ac5b0
+    lane: 0
+    parents: [ c2d9e07 ]
+    message: Add ontology conformance procedure
+    author: Mei Tanaka
+    when: Yesterday 11:31
+    days: 1
+    touched:
+      - { item: Meter readings to Bronze, state: modified }
+      - { item: Pipelines, state: modified }
+      - { item: Data quality rules, state: modified }
+  - hash: e84b112
+    lane: 2
+    parents: [ c2d9e07 ]
+    message: Add Outage map page with the Map component
+    author: Priya Nair
+    when: 24 Nov
+    days: 3
+    touched:
+      - { item: Meter readings to Bronze, state: modified }
+      - { item: Pipelines, state: modified }
+      - { item: Data quality rules, state: modified }
+  - hash: c2d9e07
+    lane: 0
+    parents: [ 9d1b7e5, 40f6a3d ]
+    message: "Merge pull request #207 from features/load-forecast"
+    author: Jonas Weber
+    when: 24 Nov
+    days: 3
+    touched: [ { item: Meter readings to Bronze, state: modified } ]
+  - hash: 40f6a3d
+    lane: 1
+    parents: [ b7730c8 ]
+    message: Tune load forecast model and add the 2025 backtest
+    author: Mei Tanaka
+    when: 23 Nov
+    days: 4
+    touched:
+      - { item: Meter readings to Bronze, state: modified }
+      - { item: Pipelines, state: modified }
+      - { item: Data quality rules, state: modified }
+  - hash: 9d1b7e5
+    lane: 0
+    parents: [ b7730c8 ]
+    message: Switch Design system to v3.2.0
+    author: Sam Rivera
+    when: 22 Nov
+    days: 5
+    touched:
+      - { item: Meter readings to Bronze, state: modified }
+      - { item: Pipelines, state: modified }
+      - { item: Data quality rules, state: modified }
+  - hash: b7730c8
+    lane: 0
+    parents: [ 6a4e2f1 ]
+    message: Add weather enrichment pipeline
+    author: Jonas Weber
+    when: 20 Nov
+    days: 7
+    touched:
+      - { item: Meter readings to Bronze, state: modified }
+      - { item: Pipelines, state: modified }
+      - { item: Data quality rules, state: modified }
+  - hash: 6a4e2f1
+    lane: 0
+    parents: [ 2f8c9d6 ]
+    message: Model the asset hierarchy in the ontology
+    author: Mei Tanaka
+    when: 18 Nov
+    days: 9
+    touched:
+      - { item: Meter readings to Bronze, state: modified }
+      - { item: Pipelines, state: modified }
+      - { item: Data quality rules, state: modified }
+  - hash: 2f8c9d6
+    lane: 0
+    parents: [ f05a1b3 ]
+    message: Release 0.8.0
+    author: Jonas Weber
+    when: 14 Nov
+    days: 13
+    touched:
+      - { item: Meter readings to Bronze, state: modified }
+      - { item: Pipelines, state: modified }
+      - { item: Data quality rules, state: modified }
+  - hash: f05a1b3
+    lane: 0
+    parents: []
+    message: Add staging and production release pipelines
+    author: Sam Rivera
+    when: 12 Nov
+    days: 15
+    touched:
+      - { item: Meter readings to Bronze, state: modified }
+      - { item: Pipelines, state: modified }
+      - { item: Data quality rules, state: modified }
+changes:
+  - item: Meter readings to Bronze
+    files: [ { path: pipeline.did, state: modified }, { path: transform.sql, state: modified } ]
+  - item: Smart meter readings
+    files: [ { path: smart-meter-readings.source.yaml, state: modified } ]
+  - { item: Asset model, files: [ { path: model.did, state: modified } ] }
+  - { item: Tariff classes, files: [ { path: tariff-classes.skos.ttl, state: added } ] }
+  - item: Outage map
+    files:
+      - { path: page.ded, state: added }
+      - { path: page.html, state: added }
+      - { path: page.css, state: added }
+  - item: Ontology conformance
+    files: [ { path: ontology-conformance.procedure.ded, state: added } ]
+  - { item: Pipelines, files: [ { path: .adp, state: modified } ] }
+items:
+  - { item: Smart meter readings, state: modified, lastAuthor: Jonas Weber, lastDays: 6 }
+  - { item: Meter readings to Bronze, state: modified, lastAuthor: Jonas Weber, lastDays: 6 }
+  - { item: Asset model, state: modified, lastAuthor: Sam Rivera, lastDays: 8 }
+  - { item: Tariff classes, state: added, lastAuthor: Sam Rivera, lastDays: 5 }
+  - { item: Outage map, state: added, lastAuthor: Sam Rivera, lastDays: 6 }
+  - { item: Ontology conformance, state: added, lastAuthor: Priya Nair, lastDays: 9 }

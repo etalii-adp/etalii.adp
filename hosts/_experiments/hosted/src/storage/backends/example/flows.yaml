@@ -1,0 +1,56 @@
+# The steps of the data pipelines and the release pipelines, as the flow diagram reads them: n is a step's name, t its type, x and y its place, f a flag; an edge goes from one step to another by their place in the list.
+# items has what an item holds by the name it has in solution.yaml, kinds what every other item of a kind holds.
+
+items:
+  Meter readings to Bronze:
+    nodes:
+      - { n: SFTP drop, t: Source, x: 0, y: 0 }
+      - { n: Kafka · meter.readings, t: Source, x: 0, y: 1 }
+      - { n: Validate schema, t: Validate, x: 1, y: 0.5 }
+      - { n: Deduplicate, t: Transform, x: 2, y: 0.5, f: new }
+      - { n: Map to ontology, t: Map, x: 3, y: 0.5, f: err }
+      - { n: Bronze · meter_readings, t: Sink, x: 4, y: 0 }
+      - { n: Quality gate, t: Validate, x: 4, y: 1 }
+      - { n: Silver · meter_readings, t: Sink, x: 5, y: 1 }
+    edges: [ [ 0, 2 ], [ 1, 2 ], [ 2, 3 ], [ 3, 4 ], [ 4, 5 ], [ 4, 6 ], [ 6, 7 ] ]
+  Telemetry stream:
+    nodes:
+      - { n: Kafka · scada.events, t: Source, x: 0, y: 0 }
+      - { n: Parse frames, t: Transform, x: 1, y: 0 }
+      - { n: Window 1 min, t: Transform, x: 2, y: 0 }
+      - { n: Map to ontology, t: Map, x: 3, y: 0 }
+      - { n: Bronze · telemetry, t: Sink, x: 4, y: 0 }
+    edges: [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ], [ 3, 4 ] ]
+  Deploy to staging:
+    nodes:
+      - { n: Fetch artefacts, t: Stage, x: 0, y: 0 }
+      - { n: Provision, t: Deploy, x: 1, y: 0 }
+      - { n: Deploy, t: Deploy, x: 2, y: 0 }
+      - { n: Smoke test, t: Test, x: 3, y: 0 }
+      - { n: Notify team, t: Stage, x: 4, y: 0 }
+    edges: [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ], [ 3, 4 ] ]
+  Deploy to production:
+    nodes:
+      - { n: Fetch artefacts, t: Stage, x: 0, y: 0 }
+      - { n: Approval gate, t: Gate, x: 1, y: 0, f: err }
+      - { n: Deploy blue/green, t: Deploy, x: 2, y: 0 }
+      - { n: Smoke test, t: Test, x: 3, y: 0 }
+      - { n: Shift traffic, t: Deploy, x: 4, y: 0 }
+    edges: [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ], [ 3, 4 ] ]
+kinds:
+  pipeline:
+    nodes:
+      - { n: Read source, t: Source, x: 0, y: 0 }
+      - { n: Validate schema, t: Validate, x: 1, y: 0 }
+      - { n: Transform, t: Transform, x: 2, y: 0 }
+      - { n: Map to ontology, t: Map, x: 3, y: 0 }
+      - { n: Write Bronze, t: Sink, x: 4, y: 0 }
+    edges: [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ], [ 3, 4 ] ]
+  release:
+    nodes:
+      - { n: Checkout, t: Stage, x: 0, y: 0 }
+      - { n: Build, t: Stage, x: 1, y: 0 }
+      - { n: Validate definitions, t: Test, x: 2, y: 0 }
+      - { n: Run test suites, t: Test, x: 3, y: 0 }
+      - { n: Publish artefacts, t: Deploy, x: 4, y: 0 }
+    edges: [ [ 0, 1 ], [ 1, 2 ], [ 2, 3 ], [ 3, 4 ] ]

@@ -1,0 +1,86 @@
+# The settings each form-based designer shows, per kind of item: a section has a title and fields, and a field is its label, the control it gets, and its value.
+# A value is the same for every item, or one for some items by name and another for the rest. A ref names an item. {{name}} and {{slug}} are the item's name, as it is and as it is on disk.
+
+kinds:
+  source:
+    - title: Connection
+      fields:
+        - - Type
+          - sel
+          - { items: { SCADA telemetry: Kafka stream, Weather feed: REST API }, otherwise: SFTP batch }
+        - - Endpoint
+          - mono
+          - items: { SCADA telemetry: kafka://broker.atlas.example:9092/scada.events }
+            otherwise: sftp://drop.atlas.example/{{slug}}
+        - [ Schedule, text, Every 15 minutes ]
+        - [ Credentials, secret, "vault://atlas/ingestion/{{slug}}" ]
+    - title: Data
+      fields:
+        - [ Format, sel, CSV ]
+        - [ Schema, ref, Meter reading ]
+        - [ Feeds pipeline, ref, Meter readings to Bronze ]
+        - [ Owner, text, Grid data team ]
+  model:
+    - title: Model
+      fields:
+        - [ Base model, sel, Gradient boosted trees ]
+        - [ Target, text, "System load, next 48 hours" ]
+        - [ Features from, ref, Asset model ]
+        - [ Training data, ref, Meter readings to Bronze ]
+    - title: Quality
+      fields:
+        - [ Evaluation set, ref, Forecast backtest 2025 ]
+        - [ Accept when MAPE below, num, "3.5" ]
+        - [ Retrain, sel, Weekly ]
+    - title: Serving
+      fields:
+        - [ Environment, ref, Staging ]
+        - [ Explain predictions, tog, true ]
+        - [ Log inputs for audit, tog, true ]
+  agent:
+    - title: Agent
+      fields:
+        - [ Model, sel, Large reasoning model ]
+        - - Instructions
+          - area
+          - >-
+            Triage incoming outage reports. Match each report to a feeder using the Grid topology, merge duplicates, and propose a priority. Never
+            promise a restore time.
+        - [ Tools, chips, [ Search ontology, Query Silver, Create work order, Notify crew lead ] ]
+    - title: Guardrails
+      fields:
+        - [ Needs approval for, chips, [ Create work order ] ]
+        - [ Evaluation set, ref, Triage golden set ]
+        - [ Hand over to a person, tog, true ]
+  environment:
+    - title: Environment
+      fields:
+        - [ Region, sel, West Europe ]
+        - [ Tier, sel, { items: { Production: High availability }, otherwise: Standard } ]
+        - [ Replicas, num, { items: { Production: "6" }, otherwise: "2" } ]
+        - [ Address, mono, "https://{{slug}}.atlas.example.com" ]
+    - title: Release
+      fields:
+        - - Deployed by
+          - ref
+          - { items: { Production: Deploy to production }, otherwise: Deploy to staging }
+        - [ Approval needed, tog, { items: { Production: true }, otherwise: false } ]
+        - [ Secrets vault, secret, "vault://atlas/{{slug}}" ]
+  theme:
+    - title: Colours
+      fields: [ [ Brand, mono, "#0F6E5B" ], [ Surface, mono, "#FFFFFF" ], [ Text, mono, "#1B2430" ] ]
+    - title: Type
+      fields:
+        - [ Heading font, sel, Source Sans 3 ]
+        - [ Body font, sel, Source Sans 3 ]
+        - [ Base size, num, "16" ]
+    - { title: Shape, fields: [ [ Corner radius, num, "6" ], [ Density, sel, Comfortable ] ] }
+  component:
+    - title: Component
+      fields:
+        - [ Name, text, "{{name}}" ]
+        - [ Slots, chips, [ Title, Body, Actions ] ]
+        - [ Accepts data binding, tog, { items: { Header: false }, otherwise: true } ]
+    - title: Variants
+      fields: [ [ Sizes, chips, [ Compact, Regular, Wide ] ], [ Themes, chips, [ Light, Dark ] ] ]
+otherwise: [ { title: General, fields: [ [ Name, text, "{{name}}" ], [ Owner, text, Platform team ] ] } ]

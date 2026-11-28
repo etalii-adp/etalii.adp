@@ -1,0 +1,23 @@
+# What validation found, the environments, and what Run starts by default.
+
+problems:
+  - severity: error
+    message: Step "Map to ontology" writes Meter.tariffClass, which Asset model does not define
+    item: Meter readings to Bronze
+  - severity: error
+    message: Approval gate has no approver group
+    item: Deploy to production
+  - severity: warning
+    message: Pinned to branch release/2.x. A tag gives repeatable releases
+    item: Identity and access
+  - { severity: warning, message: Component "Map" has no data binding, item: Outage map }
+  - { severity: warning, message: 2 rules have no owner, item: Data quality rules }
+  - severity: info
+    message: Evaluation set is 43 days older than the model
+    item: Load forecast
+  - { severity: info, message: "v1.9.0 is available, pinned to v1.8.2", item: Audit logging }
+  - severity: info
+    message: Not used by any page, pipeline or model yet
+    item: Tariff classes
+environments: [ { name: Staging, healthy: true, note: Staging healthy } ]
+defaultRun: Deploy to staging

@@ -1,0 +1,314 @@
+# The hierarchy of the project that opens, from its root down, in the fields an item has in the storage contract.
+# key is what the ids of the items are made from, with their names from the root down, so an item has the same id on every load.
+# An item with children is a level. flows and layout name its children; view says how the level shows where that is not the default.
+
+key: atlas
+path: atlas-platform
+root:
+  name: Atlas Platform
+  kind: solution
+  accepts: [ group ]
+  flows:
+    - { from: Schemas, to: Ingestion }
+    - { from: Ingestion, to: Ontology }
+    - { from: Ontology, to: AI }
+    - { from: Ontology, to: Data analysis }
+    - { from: AI, to: Data analysis }
+    - { from: Data analysis, to: Portal }
+    - { from: Data analysis, to: Applications }
+    - { from: Components, to: Portal }
+    - { from: Quality, to: Delivery }
+  layout:
+    - { item: Ingestion, x: 0, y: 95 }
+    - { item: Schemas, x: 0, y: -75 }
+    - { item: Ontology, x: 255, y: 20 }
+    - { item: AI, x: 510, y: -75 }
+    - { item: Data analysis, x: 510, y: 110 }
+    - { item: Portal, x: 765, y: 110 }
+    - { item: Applications, x: 510, y: 300 }
+    - { item: Components, x: 765, y: 300 }
+    - { item: Delivery, x: 255, y: 275 }
+    - { item: Quality, x: 0, y: 275 }
+    - { item: Documentation, x: 765, y: -75 }
+  children:
+    - name: Ingestion
+      kind: area
+      icon: inbox
+      accepts: [ group, pipeline, source ]
+      flows: [ { from: Sources, to: Pipelines } ]
+      children:
+        - name: Sources
+          kind: group
+          accepts: [ source, group ]
+          view: files
+          children:
+            - { name: Smart meter readings, kind: source }
+            - { name: SCADA telemetry, kind: source }
+            - { name: Weather feed, kind: source }
+            - { name: CRM export, kind: source }
+        - name: Pipelines
+          kind: group
+          accepts: [ pipeline, group ]
+          children:
+            - { name: Meter readings to Bronze, kind: pipeline }
+            - { name: Telemetry stream, kind: pipeline }
+            - { name: Weather enrichment, kind: pipeline }
+            - { name: Customer sync, kind: pipeline }
+    - name: Schemas
+      kind: area
+      icon: braces
+      accepts: [ group, schema ]
+      flows: [ { from: Source schemas, to: Table schemas }, { from: Table schemas, to: API schemas } ]
+      children:
+        - name: Source schemas
+          kind: group
+          accepts: [ schema, group ]
+          children:
+            - { name: Meter reading, kind: schema }
+            - { name: Telemetry event, kind: schema }
+            - { name: Weather observation, kind: schema }
+            - { name: Customer record, kind: schema }
+        - name: Table schemas
+          kind: group
+          accepts: [ schema, group ]
+          children:
+            - { name: Bronze meter readings, kind: schema }
+            - { name: Silver meter readings, kind: schema }
+            - { name: Silver telemetry, kind: schema }
+        - name: API schemas
+          kind: group
+          accepts: [ schema, group ]
+          children: [ { name: Outage report, kind: schema }, { name: Usage summary, kind: schema } ]
+    - name: Ontology
+      kind: area
+      icon: graph
+      accepts: [ ontology, group ]
+      children:
+        - { name: Asset model, kind: ontology }
+        - { name: Customer model, kind: ontology }
+        - { name: Grid topology, kind: ontology }
+        - name: Vocabularies
+          kind: group
+          accepts: [ vocabulary, group ]
+          children:
+            - { name: Asset types, kind: vocabulary }
+            - { name: Outage causes, kind: vocabulary }
+            - { name: Tariff classes, kind: vocabulary }
+    - name: AI
+      kind: area
+      icon: sparkle
+      accepts: [ group ]
+      flows:
+        - { from: Prompts, to: Agents }
+        - { from: Models, to: Agents }
+        - { from: Evaluation sets, to: Models }
+      children:
+        - name: Models
+          kind: group
+          accepts: [ model, group ]
+          children: [ { name: Load forecast, kind: model }, { name: Anomaly detection, kind: model } ]
+        - name: Agents
+          kind: group
+          accepts: [ agent, group ]
+          children: [ { name: Outage triage agent, kind: agent }, { name: Data steward assistant, kind: agent } ]
+        - name: Prompts
+          kind: group
+          accepts: [ prompt, group ]
+          children: [ { name: Summarize outage, kind: prompt }, { name: Explain bill, kind: prompt } ]
+        - name: Evaluation sets
+          kind: group
+          accepts: [ evalset, group ]
+          children:
+            - { name: Forecast backtest 2025, kind: evalset }
+            - { name: Triage golden set, kind: evalset }
+    - name: Data analysis
+      kind: area
+      icon: chart
+      accepts: [ group ]
+      children:
+        - name: Views
+          kind: group
+          accepts: [ dashboard, group ]
+          children:
+            - { name: Load forecast overview, kind: dashboard }
+            - { name: Outage heatmap, kind: dashboard }
+            - { name: Data quality monitor, kind: dashboard }
+        - name: Queries
+          kind: group
+          accepts: [ code, group ]
+          children: [ { name: Peak load by feeder, kind: code }, { name: Meters without readings, kind: code } ]
+        - name: Notebooks
+          kind: group
+          accepts: [ notebook, group ]
+          children: [ { name: Forecast error analysis, kind: notebook } ]
+    - name: Portal
+      kind: area
+      icon: globe
+      accepts: [ group, theme ]
+      children:
+        - name: Pages
+          kind: group
+          accepts: [ page, group ]
+          children:
+            - { name: Home, kind: page }
+            - { name: Outage map, kind: page }
+            - { name: My usage, kind: page }
+            - { name: Report an outage, kind: page }
+            - { name: Admin console, kind: page }
+        - { name: Portal theme, kind: theme }
+    - name: Applications
+      kind: area
+      icon: monitor
+      accepts: [ csapp, pyproject, group ]
+      children:
+        - name: Console client
+          kind: csapp
+          file: Atlas.ConsoleClient
+          accepts: [ csharp, group ]
+          files: [ Atlas.ConsoleClient.csproj, appsettings.json, packages.lock.json ]
+          ignoredFiles: [ bin/Debug/net10.0/atlas.dll, bin/Debug/net10.0/atlas.pdb, obj/project.assets.json ]
+          flows: [ { from: Program, to: Commands }, { from: Commands, to: Client } ]
+          children:
+            - { name: Program, kind: csharp, file: Program.cs }
+            - name: Commands
+              kind: group
+              file: Commands
+              accepts: [ csharp, group ]
+              children:
+                - { name: Command, kind: csharp, file: ICommand.cs }
+                - { name: Outages command, kind: csharp, file: OutagesCommand.cs }
+                - { name: Usage command, kind: csharp, file: UsageCommand.cs }
+                - { name: Forecast command, kind: csharp, file: ForecastCommand.cs }
+            - name: Client
+              kind: group
+              file: Client
+              accepts: [ csharp, group ]
+              children:
+                - { name: Atlas client, kind: csharp, file: AtlasClient.cs }
+                - { name: Outage report record, kind: csharp, file: OutageReport.cs }
+                - { name: Usage summary record, kind: csharp, file: UsageSummary.cs }
+                - { name: Forecast point record, kind: csharp, file: ForecastPoint.cs }
+        - name: Reading collector
+          kind: pyproject
+          accepts: [ python, group ]
+          files: [ pyproject.toml, uv.lock, .python-version ]
+          ignoredFiles: [ .env, .venv/pyvenv.cfg, .pytest_cache/CACHEDIR.TAG ]
+          flows: [ { from: Tests, to: Collector } ]
+          children:
+            - name: Collector
+              kind: group
+              file: reading_collector
+              accepts: [ python, group ]
+              files: [ __init__.py ]
+              children:
+                - { name: Entry point, kind: python, file: __main__.py }
+                - { name: Settings, kind: python, file: settings.py }
+                - { name: Head-end client, kind: python, file: head_end.py }
+                - { name: Reading validation, kind: python, file: validation.py }
+                - { name: Landing zone, kind: python, file: landing_zone.py }
+            - name: Tests
+              kind: group
+              file: tests
+              accepts: [ python, group ]
+              files: [ conftest.py ]
+              children:
+                - { name: Validation tests, kind: python, file: test_validation.py }
+                - { name: Landing zone tests, kind: python, file: test_landing_zone.py }
+    - name: Components
+      kind: area
+      icon: puzzle
+      accepts: [ group, component ]
+      children:
+        - name: Design system
+          kind: group
+          icon: puzzle
+          link:
+            repository: git@git.example.com:shared/design-system.git
+            ref: v3.2.0
+            refs: [ v3.2.0, v3.1.4, main, next ]
+          children:
+            - { name: Header, kind: component }
+            - { name: Card grid, kind: component }
+            - { name: Map, kind: component }
+            - { name: Chart, kind: component }
+            - { name: Form, kind: component }
+            - { name: Theme tokens, kind: theme }
+        - name: Identity and access
+          kind: group
+          icon: lock
+          link:
+            repository: git@git.example.com:shared/identity-access.git
+            ref: release/2.x
+            refs: [ v2.4.1, v2.4.0, release/2.x, main ]
+          children:
+            - { name: Sign-in page, kind: page }
+            - { name: Roles and permissions, kind: ontology }
+            - { name: Access review, kind: procedure }
+        - name: Audit logging
+          kind: group
+          icon: clipboard
+          link:
+            repository: git@git.example.com:shared/audit-logging.git
+            ref: v1.8.2
+            refs: [ v1.9.0, v1.8.2, main ]
+          children:
+            - { name: Audit event, kind: schema }
+            - { name: Audit trail pipeline, kind: pipeline }
+            - { name: Audit viewer, kind: dashboard }
+    - name: Delivery
+      kind: area
+      icon: rocket
+      accepts: [ group ]
+      flows: [ { from: Release pipelines, to: Environments } ]
+      children:
+        - name: Release pipelines
+          kind: group
+          accepts: [ release, group ]
+          children:
+            - { name: Build and verify, kind: release }
+            - { name: Deploy to staging, kind: release }
+            - { name: Deploy to production, kind: release }
+        - name: Environments
+          kind: group
+          accepts: [ environment, group ]
+          children:
+            - { name: Development, kind: environment }
+            - { name: Staging, kind: environment }
+            - { name: Production, kind: environment }
+    - name: Quality
+      kind: area
+      icon: shield
+      accepts: [ group ]
+      children:
+        - name: Test suites
+          kind: group
+          accepts: [ testsuite, group ]
+          children:
+            - { name: Pipeline regression, kind: testsuite }
+            - { name: Portal end-to-end, kind: testsuite }
+            - { name: Agent behaviour, kind: testsuite }
+        - name: Validation procedures
+          kind: group
+          accepts: [ procedure, group ]
+          children:
+            - { name: Data quality rules, kind: procedure }
+            - { name: Ontology conformance, kind: procedure }
+            - { name: Load test, kind: procedure }
+            - { name: Release readiness, kind: procedure }
+    - name: Documentation
+      kind: area
+      icon: book
+      accepts: [ doc, group ]
+      children:
+        - { name: Architecture overview, kind: doc }
+        - { name: Onboarding guide, kind: doc }
+        - name: Runbooks
+          kind: group
+          accepts: [ doc, group ]
+          children: [ { name: Pipeline failure, kind: doc }, { name: Portal outage, kind: doc } ]
+        - name: Decisions
+          kind: group
+          accepts: [ doc, group ]
+          children:
+            - { name: 001 Ontology first, kind: doc }
+            - { name: 002 Linked repositories for reuse, kind: doc }
