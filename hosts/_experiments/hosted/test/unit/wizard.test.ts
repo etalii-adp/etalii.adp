@@ -4,13 +4,13 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { fromBinary } from '@bufbuild/protobuf';
 import { Refused, Storage, type Item, type ProjectStorage, type RecipeElementInfo, type TextDocument } from '../../src/storage';
-import { AREAS, QUESTIONS, RECIPES, SIZES } from '../../src/storage/backends/catalogue/wizard';
-import { empty } from '../../src/storage/backends/empty';
-import { example } from '../../src/storage/backends/example';
-import { InPage } from '../../src/storage/backends/in-page';
-import { makeWorld } from '../../src/storage/backends/server';
-import type { World } from '../../src/storage/backends/server/core';
-import { loopback } from '../../src/storage/backends/wire';
+import { AREAS, QUESTIONS, RECIPES, SIZES } from '../../src/storage/backends/common/catalogue/wizard';
+import { empty } from '../../src/storage/backends/empty/seed';
+import { example } from '../../src/storage/backends/_example';
+import { InPage } from '../../src/storage/backends/common/in-page';
+import { makeWorld } from '../../src/storage/backends/common/server';
+import type { World } from '../../src/storage/backends/common/server/core';
+import { loopback } from '../../src/storage/backends/loopback';
 import { KeptProjectSchema } from '../../src/storage/gen/adp/storage/v1/kept_pb';
 
 /* a page on a world, with the wizard read; told counts what the page as a whole was told, listed what the list of projects was */

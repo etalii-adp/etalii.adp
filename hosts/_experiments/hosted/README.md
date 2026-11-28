@@ -34,7 +34,7 @@ The pages follow one another as they would in use: the start page leads to the l
 - The context menu adds, renames and deletes items, with what is offered depending on the item.
 - The Agent tool window, in the right dock beside the Properties, holds a conversation about the project: a question, about the selected item unless that is switched off, and an answer that says what it read and names the items it is about, each of which opens with a click. The conversations that are over are listed by day, searched, opened again, renamed and deleted. The answers are composed by the storage from what it knows of the project (the hierarchy, validation, git and the runs); no model runs behind them.
 - The IDE owns the keyboard and the mouse (`ide/browser.ts`): the browser's keyboard shortcuts, the back and forward buttons of a mouse and the browser's context menu do nothing on the IDE page, so each can be given a task of the IDE's own, on Windows and on a Mac. A text field keeps the clipboard, select all, undo, redo and moving by word. A browser keeps a few shortcuts to itself (a new tab or window, closing one, switching tabs, quitting); Chromium hands those over as well in full screen, which View, Full Screen and F11 enter.
-- Icons per domain (`storage/backends/catalogue/icon-domains.ts`): besides the general categories, the icon picker offers the icons of 57 domains, from Academic and Agriculture to Water and wastewater and Weather, 555 icons in all, each drawn in the 16px stroke style of the icon set. The picker searches all of them, a domain's name included, and a list beside the search box shows one category or domain alone. A domain also offers the icons of other categories that belong to it, so an icon can be found under more than one name.
+- Icons per domain (`storage/backends/common/catalogue/icon-domains.ts`): besides the general categories, the icon picker offers the icons of 57 domains, from Academic and Agriculture to Water and wastewater and Weather, 555 icons in all, each drawn in the 16px stroke style of the icon set. The picker searches all of them, a domain's name included, and a list beside the search box shows one category or domain alone. A domain also offers the icons of other categories that belong to it, so an icon can be found under more than one name.
 
 ## The New Project wizard
 
@@ -42,7 +42,7 @@ New Project, on the projects page, opens a wizard of five steps. It asks what is
 
 The answers bring recipes: sets of elements that belong together, such as a service with an API, a web client, a database, a release pipeline. The fourth step lists the recipes that fit, all of them kept until one is put aside, beside the hierarchy they make: every recipe puts its elements in an area (Services, Web, Data, Platform, Delivery and so on), and a group two recipes share is made once. The last step asks for the name, the location and the branch.
 
-The project that is made is a repository with one commit. It opens in the IDE with that hierarchy and with a brief of what the wizard was told as its first document; nothing else in it is written yet, and it is composed further in the Explorer as any project. The sizes, questions and recipes are in the catalogue of the storage (`storage/backends/catalogue/wizard.ts`), and the project is made by the storage, so the wizard works with every backend. The IDE page has no part in it.
+The project that is made is a repository with one commit. It opens in the IDE with that hierarchy and with a brief of what the wizard was told as its first document; nothing else in it is written yet, and it is composed further in the Explorer as any project. The sizes, questions and recipes are in the catalogue of the storage (`storage/backends/common/catalogue/wizard.ts`), and the project is made by the storage, so the wizard works with every backend. The IDE page has no part in it.
 
 ## Where things are
 
@@ -84,11 +84,13 @@ Everything a page shows that is data comes from `src/storage/`, and everything a
 | `stores/` | The eleven stores: catalogue, identity, projects, solution, levels, content, git, status, history, workbench, agent. A store holds one object per thing for as long as it exists and brings it up to date when the backend tells of a change, so a page keeps the objects it has |
 | `link.ts` | What the stores share: one way to a backend, which changes this page caused itself, and when the page is waiting |
 | `backend.ts` | What a store asks of a backend: `call`, `watch`, its state, and the two ways a call fails (`Refused` with words for the user, `Unreachable`) |
-| `backends/` | The backends, and what they share |
-| `backends/server/` | One object that answers every call of the contract from state in memory, with the history that Undo takes back. Every backend that lives in the page is built on it |
-| `backends/example/` | The example data, as the seed such a backend starts from. Every example name, number and text is in the YAML files of this folder and nowhere else (see [The example data](#the-example-data)) |
-| `backends/catalogue/` | The kinds of item, the names of the tools, the lists the tools offer a choice from, the icon library, and what the New Project wizard asks: the sizes of a solution, the questions and the recipes |
-| `backends/wire/` | The wire: a call as an envelope of bytes over one connection, with the client a page uses and the service at the other end |
+| `backends/` | The backends, one folder each, with `common/` for what more than one of them uses and `_example/` for the example data. `index.ts` picks the backend a visit asked for |
+| `backends/memory/`, `backends/browser/`, `backends/empty/`, `backends/slow/`, `backends/loopback/`, `backends/hosted/` | One backend each, by the name a visit asks for it with (see the table below). Beside its `index.ts` a folder holds what only that backend needs: the seed with nothing in it (`empty/seed.ts`), the pair of ends inside the page (`loopback/pair.ts`), the WebSocket (`hosted/web-socket.ts`) |
+| `backends/common/server/` | One object that answers every call of the contract from state in memory, with the history that Undo takes back. Every backend that lives in the page is built on it |
+| `backends/common/in-page.ts`, `backends/common/carried.ts` | The backend around such an object in this page, and what a visit carries from page to page when nothing is kept: the projects the wizard made |
+| `backends/common/catalogue/` | The kinds of item, the names of the tools, the lists the tools offer a choice from, the icon library, and what the New Project wizard asks: the sizes of a solution, the questions and the recipes |
+| `backends/common/wire/` | The wire: a call as an envelope of bytes over one connection, with the client a page uses and the service at the other end |
+| `backends/_example/` | The example data, as the seed a backend starts from. Every example name, number and text is in the YAML files of this folder and nowhere else (see [The example data](#the-example-data)) |
 
 A backend is chosen by the address of a page, and the choice holds for the visit, from page to page:
 
@@ -103,11 +105,11 @@ A backend is chosen by the address of a page, and the choice holds for the visit
 
 A hosted service is reached with Protocol Buffers messages over one WebSocket, in an envelope of this contract's own (hello, request, response, cancel, event, ping, pong). A command carries an id; when its answer is lost it is sent again under the same id and is carried out once. What changes is told to every page as events, and the events a command caused arrive before its answer. A page that was cut off reads again what it missed when the connection is back.
 
-`checks.mjs` holds the boundary, and the build runs it first and builds nothing when it finds something: a page that uses what a browser keeps or a way to a network itself (`localStorage`, `indexedDB`, `fetch`, `WebSocket` and the like), a page that imports past the three modules above, and a name of the example data anywhere but in the YAML files of the example backend, its own TypeScript included.
+`checks.mjs` holds the boundary, and the build runs it first and builds nothing when it finds something: a page that uses what a browser keeps or a way to a network itself (`localStorage`, `indexedDB`, `fetch`, `WebSocket` and the like), a page that imports past the three modules above, and a name of the example data anywhere but in its YAML files, the TypeScript beside them included.
 
 ### The example data
 
-The example data is written in YAML, one file per subject, in `src/storage/backends/example/`. Each file starts with a comment that says what is in it.
+The example data is written in YAML, one file per subject, in `src/storage/backends/_example/`. Each file starts with a comment that says what is in it.
 
 | File | Holds |
 | --- | --- |
@@ -123,7 +125,7 @@ Three rules make the files something to write by hand:
 - What an item holds is given by its name (`items`), for every other item of a kind (`kinds`), or for the rest (`otherwise`). A single value can be a choice as well: one for some items by name, another for the rest. It goes by the name the item started with, so renaming an item does not change what it holds.
 - A text can have parts between `{{` and `}}` that are filled in when it is read, such as `{{name}}` for the item's name and `{{slug}}` for its name on disk. The comment at the top of a file says which.
 
-`example.mjs`, which `npm run generate` runs, reads the files into one module (`backends/example/gen/data.ts`, not committed), and the type check holds that module against the shapes in `backends/example/shape.ts`: a field that is missing, misspelt or of the wrong type in a YAML file fails the type check, which names the field and the shape it is held against. `backends/example/index.ts` turns the data into the messages of the contract and has no example name of its own. The unit tests check what types cannot: that every name a file uses is the name of exactly one item.
+`example.mjs`, which `npm run generate` runs, reads the files into one module (`backends/_example/gen/data.ts`, not committed), and the type check holds that module against the shapes in `backends/_example/shape.ts`: a field that is missing, misspelt or of the wrong type in a YAML file fails the type check, which names the field and the shape it is held against. `backends/_example/index.ts` turns the data into the messages of the contract and has no example name of its own. The unit tests check what types cannot: that every name a file uses is the name of exactly one item.
 
 ## Tests
 

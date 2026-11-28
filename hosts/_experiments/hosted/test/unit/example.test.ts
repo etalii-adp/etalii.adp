@@ -1,11 +1,11 @@
 /* The example data as its YAML files have it: every name a file uses finds one item, and the project they describe opens with every item's document readable. */
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { example } from '../../src/storage/backends/example';
-import { data } from '../../src/storage/backends/example/gen/data';
-import type { Choice, ItemData } from '../../src/storage/backends/example/shape';
-import { makeWorld } from '../../src/storage/backends/server';
-import { kindOf } from '../../src/storage/backends/server/project';
+import { example } from '../../src/storage/backends/_example';
+import { data } from '../../src/storage/backends/_example/gen/data';
+import type { Choice, ItemData } from '../../src/storage/backends/_example/shape';
+import { makeWorld } from '../../src/storage/backends/common/server';
+import { kindOf } from '../../src/storage/backends/common/server/project';
 
 /* how often each name is an item's: the hierarchy, and the entity types of the models in it */
 const named = new Map<string, number>();
