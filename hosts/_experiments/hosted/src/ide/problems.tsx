@@ -1,6 +1,6 @@
 /* What the Problems tool window looks like: a button per severity that shows or hides its problems, and the problems. */
 import type { VNode } from 'preact';
-import { ico } from '../common/icons.template';
+import { ico } from '../common/icons.tsx';
 import { crumbsOf } from './model';
 import type { Problem, Severity, SeverityFilter } from './types';
 

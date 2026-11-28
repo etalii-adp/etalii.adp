@@ -2,7 +2,7 @@
 import type { ComponentChild, VNode } from 'preact';
 import { useState } from 'preact/hooks';
 import { hit } from './dom';
-import { ico } from './icons.template';
+import { ico } from './icons.tsx';
 import type { MenuEntry, MenuItem } from './popups';
 
 /* one line of a menu; a line with a submenu shows it while it is open */

@@ -1,6 +1,6 @@
 /* What the New Project wizard looks like: its frame, the list of its steps, and what each step asks. What a click or a key does is handed to it by wizard.ts. */
 import type { ComponentChild, VNode } from 'preact';
-import { ico } from '../common/icons.template';
+import { ico } from '../common/icons.tsx';
 import type { RecipeAreaInfo, RecipeInfo, SolutionSizeInfo, WizardQuestionInfo } from '../storage';
 
 /* one line of the hierarchy a project would start with */

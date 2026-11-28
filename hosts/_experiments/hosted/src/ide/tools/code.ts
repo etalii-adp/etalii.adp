@@ -5,7 +5,7 @@ import { K } from '../kinds';
 import { binary, disk, fileOf, ownerOf, suffixOf } from '../model';
 import { project } from '../storage';
 import type { Item } from '../types';
-import { Code } from './code.template';
+import { Code } from './code.tsx';
 import type { Tool } from './shared';
 
 /* what a text is highlighted as: a query, C#, Python, or a file of settings such as a project file; without one, strings, numbers, keys and comments are marked as the .adp files need them */

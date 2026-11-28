@@ -1,6 +1,6 @@
 /* What the scripts draw in the title bar and the status bar: the menus, what the widgets say, and the status of the selected item, of validation, of git and of the storage. The widgets themselves are part of the page. */
 import type { VNode } from 'preact';
-import { ico } from '../common/icons.template';
+import { ico } from '../common/icons.tsx';
 
 /* the menus of the title bar; open gets the name of the one that was clicked, and its button */
 export const Menus = ({ names, open }: { names: readonly string[]; open: (name: string, button: HTMLElement) => void }): VNode =>

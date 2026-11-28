@@ -1,6 +1,6 @@
 /* What a tool window and the stripes beside the docks look like. */
 import type { VNode } from 'preact';
-import { ico } from '../common/icons.template';
+import { ico } from '../common/icons.tsx';
 
 /* a tool window: its header with what it adds itself (data-pa), and where it draws its content; more gets the button that asks where the tool window goes */
 export const Panel = ({ id, title, hide, more }: { id: string; title: string; hide: () => void; more: (button: HTMLElement) => void }): VNode =>

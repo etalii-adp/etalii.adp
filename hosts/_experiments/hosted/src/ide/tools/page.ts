@@ -4,7 +4,7 @@ import { draw } from '../../common/dom';
 import { inspect } from '../open';
 import { project } from '../storage';
 import type { Item, PageDocument } from '../types';
-import { Page } from './page.template';
+import { Page } from './page.tsx';
 import { waiting, type Tool } from './shared';
 
 /* the width the page is looked at in, once one was chosen, and the section that was clicked, by its place; a page that is drawn afresh starts without either */

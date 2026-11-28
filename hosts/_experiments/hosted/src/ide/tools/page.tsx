@@ -1,9 +1,9 @@
 /* What the designer of portal pages looks like: the components it offers, and the page as it will look, section by section. */
 import type { VNode } from 'preact';
 import { esc } from '../../common/dom';
-import { ico } from '../../common/icons.template';
+import { ico } from '../../common/icons.tsx';
 import type { DeepReadonly, Item, PageDocument } from '../types';
-import { ToolBar } from './shared.template';
+import { ToolBar } from './shared.tsx';
 
 type Section = DeepReadonly<PageDocument['sections'][number]>;
 /* the widths the page can be looked at in */

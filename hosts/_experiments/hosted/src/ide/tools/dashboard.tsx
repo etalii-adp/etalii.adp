@@ -1,7 +1,7 @@
 /* What the designer of analysis views looks like: three figures, a line chart over a day, and a bar chart. */
 import type { VNode } from 'preact';
 import type { DashboardDocument, DeepReadonly, Item } from '../types';
-import { ToolBar } from './shared.template';
+import { ToolBar } from './shared.tsx';
 
 export const Dashboard = ({ item, doc: D }: { item: Item; doc: DeepReadonly<DashboardDocument> | null }): VNode => {
   if (!D) return <div class="tool"><ToolBar item={item} /><div class="hint">This view shows nothing yet. Add a figure or a chart to start.</div></div>;

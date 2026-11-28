@@ -3,7 +3,7 @@ import { h } from 'preact';
 import { draw } from '../../common/dom';
 import { byId } from '../model';
 import { openDoc } from '../open';
-import { Contents } from './contents.template';
+import { Contents } from './contents.tsx';
 import type { Tool } from './shared';
 
 /* an item's child items, or what a folder of the File System view holds */

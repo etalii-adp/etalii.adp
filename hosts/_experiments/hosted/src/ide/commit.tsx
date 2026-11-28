@@ -1,6 +1,6 @@
 /* What the Commit tool window looks like: the changed files grouped by item, each with a tick for whether it goes into the commit, and the message with its buttons. */
 import type { VNode } from 'preact';
-import { ico } from '../common/icons.template';
+import { ico } from '../common/icons.tsx';
 import type { Change } from '../storage';
 import { K } from './kinds';
 import { crumbsOf } from './model';

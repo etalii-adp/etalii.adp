@@ -7,7 +7,7 @@ import { repaint } from '../repaint';
 import { project, storage } from '../storage';
 import type { DeepReadonly, Item, SchemaDocument, SchemaField } from '../types';
 import { hl } from './code';
-import { Schema } from './schema.template';
+import { Schema } from './schema.tsx';
 import { edit, waiting, type Tool } from './shared';
 
 const jsonType: Record<string, string> = { int: 'integer', decimal: 'number', date: 'string', datetime: 'string', enum: 'string' };

@@ -1,7 +1,7 @@
 /* What the editor of documentation looks like: Markdown, shown as rich text. */
 import type { VNode } from 'preact';
 import type { Item } from '../types';
-import { ToolBar } from './shared.template';
+import { ToolBar } from './shared.tsx';
 
 /* html is the document as the rich text the storage keeps; a document nothing was written of yet shows its name and where to start */
 export const TextEditor = ({ item, html }: { item: Item; html: string | undefined }): VNode =>

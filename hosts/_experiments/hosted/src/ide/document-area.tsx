@@ -1,6 +1,6 @@
 /* What the document area draws around the open item: the tabs, the switch between tool and canvas, and the breadcrumbs. */
 import type { VNode } from 'preact';
-import { ico } from '../common/icons.template';
+import { ico } from '../common/icons.tsx';
 import { K } from './kinds';
 import type { DocMode, Item } from './types';
 

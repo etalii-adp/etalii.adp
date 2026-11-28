@@ -2,7 +2,7 @@
 import { h } from 'preact';
 import { $, $maybe, draw } from '../common/dom';
 import { leaveCanvas, markCanvas, play, renderCanvas, tween } from './canvas';
-import { Crumbs, Modes, Tabs } from './document-area.template';
+import { Crumbs, Modes, Tabs } from './document-area.tsx';
 import { K, WORD } from './kinds';
 import { byId, crumbsOf, isBox, ROOT } from './model';
 import { dmode, levelOf, openDoc } from './open';

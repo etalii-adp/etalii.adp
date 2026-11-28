@@ -1,7 +1,7 @@
 /* The Commit tool window. */
 import { h } from 'preact';
 import { $, draw } from '../common/dom';
-import { Commit } from './commit.template';
+import { Commit } from './commit.tsx';
 import { body } from './docks';
 import { byId } from './model';
 import { openDoc } from './open';

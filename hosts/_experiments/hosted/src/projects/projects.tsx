@@ -1,6 +1,6 @@
 /* What the project overview draws: who is signed in, and the rows of the list. */
 import type { VNode } from 'preact';
-import { ico } from '../common/icons.template';
+import { ico } from '../common/icons.tsx';
 import type { ProjectInfo, UserInfo } from '../storage';
 
 export const SignedIn = ({ user }: { user: UserInfo }): VNode =>

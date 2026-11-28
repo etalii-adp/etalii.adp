@@ -3,7 +3,7 @@ import { h } from 'preact';
 import { draw } from '../common/dom';
 import { menuAt } from '../common/popups';
 import { body } from './docks';
-import { Git, type Graph, type RefRow } from './git.template';
+import { Git, type Graph, type RefRow } from './git.tsx';
 import { byId, linkedRepos } from './model';
 import { openDoc } from './open';
 import { keep, S } from './state';

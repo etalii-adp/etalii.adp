@@ -1,4 +1,4 @@
-/* The icon set, 16px strokes. The shapes of an icon are kept as the text an SVG has, which is how the icon library of the storage delivers its icons too; icons.template.tsx draws an icon from that text. */
+/* The icon set, 16px strokes. The shapes of an icon are kept as the text an SVG has, which is how the icon library of the storage delivers its icons too; icons.tsx draws an icon from that text. */
 export const c=(x:number,y:number,r:number):string=>`<circle cx="${x}" cy="${y}" r="${r}"/>`;
 
 /* a page that needs more icons adds them with addIcons */

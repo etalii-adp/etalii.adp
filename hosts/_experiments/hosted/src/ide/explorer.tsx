@@ -1,7 +1,7 @@
 /* What the Explorer looks like: its search field and the rows of the tree, what it adds to the header of its tool window, the icon picker and the dialog that links a repository. */
 import type { VNode } from 'preact';
 import { hit } from '../common/dom';
-import { ico } from '../common/icons.template';
+import { ico } from '../common/icons.tsx';
 import type { IconChoice, IconGroup } from '../storage';
 import { K } from './kinds';
 import { asFile, disk, multi } from './model';

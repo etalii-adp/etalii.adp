@@ -1,7 +1,7 @@
 /* What the Agent tool window looks like: a conversation with the field to ask in, or the list of the conversations there are, and what it adds to the header of its tool window. */
 import type { VNode } from 'preact';
 import { hit } from '../common/dom';
-import { ico } from '../common/icons.template';
+import { ico } from '../common/icons.tsx';
 import type { AgentMessage, ConversationInfo } from '../storage';
 import { K } from './kinds';
 import type { Item } from './types';

@@ -6,7 +6,7 @@ import { startStored } from '../common/away';
 import { startPage } from '../common/page';
 import { reason } from '../common/reason';
 import { connect } from '../storage';
-import { Providers } from './login.template';
+import { Providers } from './login.tsx';
 
 const field = (selector: string): HTMLInputElement => $<HTMLInputElement>(selector);
 

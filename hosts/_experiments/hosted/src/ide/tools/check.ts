@@ -3,7 +3,7 @@ import { h } from 'preact';
 import { draw } from '../../common/dom';
 import { act, project } from '../storage';
 import type { CheckDocument } from '../types';
-import { Check } from './check.template';
+import { Check } from './check.tsx';
 import { waiting, type Tool } from './shared';
 
 export const rCheck: Tool = (d, x) => {

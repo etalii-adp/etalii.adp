@@ -1,6 +1,6 @@
 /* What the tools of the document area share in how they look: the bar at the top of a tool, and the arrowhead of a diagram. */
 import type { ComponentChildren, VNode } from 'preact';
-import { ico } from '../../common/icons.template';
+import { ico } from '../../common/icons.tsx';
 import { K, WORD } from '../kinds';
 import { linkOf, ro } from '../model';
 import type { Item } from '../types';

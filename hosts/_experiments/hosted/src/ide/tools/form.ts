@@ -5,7 +5,7 @@ import { byId, ro } from '../model';
 import { openDoc } from '../open';
 import { project } from '../storage';
 import type { DeepReadonly, FormDocument } from '../types';
-import { Form } from './form.template';
+import { Form } from './form.tsx';
 import { waiting, type Tool } from './shared';
 
 export const rForm: Tool = (d, x) => {

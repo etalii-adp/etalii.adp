@@ -4,7 +4,7 @@ import { draw } from '../../common/dom';
 import { repaint } from '../repaint';
 import { act, project } from '../storage';
 import type { Item } from '../types';
-import { Waiting } from './shared.template';
+import { Waiting } from './shared.tsx';
 
 /* A tool draws an item into the document area. It draws it under the item's id as its key: another item starts from nothing, and the same item drawn again keeps what is still there, with the focus and where it was scrolled to. */
 export type Tool = (d: HTMLElement, x: Item) => void;

@@ -6,7 +6,7 @@ import { openDoc, pick } from '../open';
 import { repaint } from '../repaint';
 import { storage } from '../storage';
 import type { Item, OntologyDocument } from '../types';
-import { Entity } from './entity.template';
+import { Entity } from './entity.tsx';
 import { markEntity } from './ontology';
 import { edit, type Tool } from './shared';
 

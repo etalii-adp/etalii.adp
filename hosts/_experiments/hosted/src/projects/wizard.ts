@@ -5,7 +5,7 @@ import { addIcons } from '../common/icons';
 import { go } from '../common/nav';
 import { reason } from '../common/reason';
 import { visit, type RecipeElementInfo, type RecipeInfo, type Storage } from '../storage';
-import { many, Naming, NoRecipes, Questions, Recipes, Sizes, Wizard, type Level } from './wizard.template';
+import { many, Naming, NoRecipes, Questions, Recipes, Sizes, Wizard, type Level } from './wizard.tsx';
 
 const STEPS = [
   { id: 'size', label: 'Solution', title: 'What are you building?', about: 'From one application to a whole solution on a platform. It decides what the next steps ask.' },

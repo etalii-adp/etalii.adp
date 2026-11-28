@@ -3,7 +3,7 @@ import { h } from 'preact';
 import { draw } from '../../common/dom';
 import { project } from '../storage';
 import type { TextDocument } from '../types';
-import { TextEditor } from './document.template';
+import { TextEditor } from './document.tsx';
 import { waiting, type Tool } from './shared';
 
 export const rDoc: Tool = (d, x) => {

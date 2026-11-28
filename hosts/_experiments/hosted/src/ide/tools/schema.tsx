@@ -1,9 +1,9 @@
 /* What the designer of a data schema looks like: its settings, the items that use it, and its fields, or the JSON Schema it stands for. */
 import type { VNode } from 'preact';
-import { ico } from '../../common/icons.template';
+import { ico } from '../../common/icons.tsx';
 import { K } from '../kinds';
 import type { DeepReadonly, Item, SchemaField, SchemaSettings } from '../types';
-import { ToolBar } from './shared.template';
+import { ToolBar } from './shared.tsx';
 
 /* the texts of a field, by their column: its name, its type, its constraint and what it maps to */
 export type TextColumn = 0 | 1 | 3 | 4;

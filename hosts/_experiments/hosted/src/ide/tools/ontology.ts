@@ -5,7 +5,7 @@ import { byId } from '../model';
 import { openDoc, pick } from '../open';
 import { S } from '../state';
 import type { Item, Point } from '../types';
-import { heightOf, Ontology } from './ontology.template';
+import { heightOf, Ontology } from './ontology.tsx';
 import type { Tool } from './shared';
 
 /* Where each entity type of a model stands: where its model says, and one that has no place yet gets one under the others. */

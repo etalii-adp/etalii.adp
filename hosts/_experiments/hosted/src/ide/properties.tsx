@@ -1,6 +1,6 @@
 /* What the Properties tool window looks like: a head that says what the sheet is of, and groups of rows, each a label with a text or a control. */
 import type { VNode } from 'preact';
-import { ico } from '../common/icons.template';
+import { ico } from '../common/icons.tsx';
 import { K } from './kinds';
 import { modeOf, showAll } from './model';
 import type { Item, PropControl, PropGroup, PropSheet, ViewMode } from './types';

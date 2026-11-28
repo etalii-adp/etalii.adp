@@ -3,7 +3,7 @@ import { h } from 'preact';
 import { $, $$, $maybe, clamp, draw, hit } from '../common/dom';
 import { menu } from '../common/popups';
 import { personal } from '../storage';
-import { Canvas, type CanvasActions } from './canvas.template';
+import { Canvas, type CanvasActions } from './canvas.tsx';
 import { ctx } from './explorer';
 import { byId, crumbsOf, inside } from './model';
 import { openDoc, pick } from './open';

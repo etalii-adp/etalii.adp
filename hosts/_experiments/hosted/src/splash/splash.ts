@@ -5,7 +5,7 @@ import { pageReady } from '../common/nav';
 import { startPage } from '../common/page';
 import { makeCloud, type Rgb } from './cloud';
 import { shapeDiagram, shapeHierarchy, shapeKnowledge, shapeText, type Stroke } from './shapes';
-import { Ways } from './splash.template';
+import { Ways } from './splash.tsx';
 
 startPage();
 

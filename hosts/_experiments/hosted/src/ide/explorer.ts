@@ -4,7 +4,7 @@ import { $, $$, $maybe, clamp, draw, raise, redraw } from '../common/dom';
 import { reason } from '../common/reason';
 import { closePop, copy, dialog, menu, place, toast, type MenuEntry } from '../common/popups';
 import { body, pel, show } from './docks';
-import { Explorer, ExplorerButtons, IconPicker, LinkRepository, type ExplorerActions, type Naming, type TreeLine } from './explorer.template';
+import { Explorer, ExplorerButtons, IconPicker, LinkRepository, type ExplorerActions, type Naming, type TreeLine } from './explorer.tsx';
 import { acceptsOf, inSentence, K } from './kinds';
 import { byId, fileOf, inside, isBox, kids, modeOf, ownerOf, path, ro, ROOT, showAll } from './model';
 import { levelOf, openDoc, pick, reveal } from './open';

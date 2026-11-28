@@ -2,7 +2,7 @@
 import { h } from 'preact';
 import { $, draw } from '../common/dom';
 import { dialog, menu } from '../common/popups';
-import { Agent, AgentButtons, RenameConversation, type About, type AgentActions, type Listing, type Talk } from './agent.template';
+import { Agent, AgentButtons, RenameConversation, type About, type AgentActions, type Listing, type Talk } from './agent.tsx';
 import { body, pel } from './docks';
 import { alive, ownerOf, ROOT } from './model';
 import { openDoc } from './open';

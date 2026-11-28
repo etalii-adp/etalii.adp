@@ -3,7 +3,7 @@ import { h } from 'preact';
 import { draw } from '../common/dom';
 import { body } from './docks';
 import { openDoc } from './open';
-import { Problems } from './problems.template';
+import { Problems } from './problems.tsx';
 import { keep, S } from './state';
 import { project } from './storage';
 

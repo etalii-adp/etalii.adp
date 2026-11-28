@@ -2,7 +2,7 @@
 import { h } from 'preact';
 import { $, $$, clamp, draw, el } from '../common/dom';
 import { menu } from '../common/popups';
-import { Panel, Stripe, type StripeButton } from './docks.template';
+import { Panel, Stripe, type StripeButton } from './docks.tsx';
 import { defaultLayout, keep, S } from './state';
 import type { DockId, PanelId } from './types';
 

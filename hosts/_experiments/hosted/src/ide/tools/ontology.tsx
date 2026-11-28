@@ -1,8 +1,8 @@
 /* What the diagram of an ontology model looks like: a toolbox, and the entity types with the relations between them. */
 import type { VNode } from 'preact';
-import { ico } from '../../common/icons.template';
+import { ico } from '../../common/icons.tsx';
 import type { Item, Point, Relation } from '../types';
-import { Arrow, ToolBar } from './shared.template';
+import { Arrow, ToolBar } from './shared.tsx';
 
 const W = 170, M = 24;
 /* how high the box of an entity type is: its name, and a line for each attribute */

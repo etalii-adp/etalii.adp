@@ -56,7 +56,7 @@ The sources are under `src/`, and `dist/` is what `npm run build` makes of them;
 | `splash/` | `shapes.ts` (the four pictures), `cloud.ts` (the point cloud), `splash.ts`, `splash.css` |
 | `login/` | `login.ts`, `login.css` |
 | `projects/` | `projects.ts`, `projects.css`, and the New Project wizard in `wizard.ts`, `wizard.css` |
-| `*.template.tsx` | Beside a module, what that module draws: see [Templates](#templates) |
+| `*.tsx` | Beside the module of the same name, what that module draws: see [Templates](#templates) |
 | `ide/css/` | One style sheet per part: shell, explorer, document, tools, canvas, panels, git, agent |
 | `ide/` | One module per part: `storage.ts` (the stores the page reads, and the one way it carries out a command), `types.ts`, `kinds.ts`, `model.ts`, `state.ts`, `repaint.ts`, `docks.ts`, `open.ts`, `explorer.ts`, `document-area.ts`, `canvas.ts`, `properties.ts`, `agent.ts`, `problems.ts`, `commit.ts`, `git.ts`, `titlebar.ts`, `severity.ts`, `browser.ts`, and `main.ts`, which starts the page |
 | `ide/tools/` | One module per tool shown in the document area: flow, ontology, entity, schema, page, dashboard, form, check, document, code, contents, and what they share in `shared.ts` |
@@ -66,7 +66,7 @@ Beside `src/` are `build.mjs` (the build), `checks.mjs` (what the build refuses)
 
 ## Templates
 
-What a script draws is in a template file beside it: `explorer.ts` has `explorer.template.tsx`, `tools/flow.ts` has `tools/flow.template.tsx`, and so on for every module that draws. A template file is written in JSX and holds components of [Preact](https://preactjs.com/), which is the one library the pages are built with (about 6 kB compressed, in the chunk every page shares). The two kinds of file have each their own task:
+What a script draws is in a template file beside it, with the same name: `explorer.ts` has `explorer.tsx`, `tools/flow.ts` has `tools/flow.tsx`, and so on for every module that draws. A module is imported by its name alone (`./explorer`), which TypeScript and the build both read as the `.ts` file; a template is imported with its extension (`./explorer.tsx`). A template file is written in JSX and holds components of [Preact](https://preactjs.com/), which is the one library the pages are built with (about 6 kB compressed, in the chunk every page shares). The two kinds of file have each their own task:
 
 - **A template says what something looks like and which callback an event goes to.** A component gets what it shows and what it can ask for as its properties: `<Flow item doc picked run pick />`. It holds no state and changes none: the build refuses a template that imports the state of the page, the storage, the repaint or the opening of items (`checks.mjs`). What it needs to know of an item it is handed, or reads from the item itself through `model.ts` and `kinds.ts`.
 - **The module holds the state and the behaviour, and no markup.** The build refuses a script that sets the HTML of an element itself. It works out what the component shows, hands it the callbacks, and draws it with `draw(element, h(Component, properties))` from `common/dom.ts`. Drawn again, Preact changes only what differs on the page, so an element keeps its focus and where it was scrolled to. A field somebody is typing in keeps what was typed and the place in it as well, whatever the page has for it by now: `draw` sees to that, so a change that arrives from elsewhere does not take a name half typed or put another text under the one who types.

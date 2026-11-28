@@ -49,7 +49,7 @@ export function findingsIn(file, source, names) {
     for (const m of text.matchAll(/from\s+'([^']*\/)?(storage(?:\/[\w./-]+)?)'/g)) if (!OPEN.has(m[2])) found.push(`${file}:${lineOf(text, m.index)}: a page imports ${m[2]}; pages read through storage/index`);
   }
   if (file.endsWith('.ts') && !file.startsWith(storage)) for (const m of text.matchAll(DRAWN)) found.push(`${file}:${lineOf(text, m.index)}: a script sets ${m[1]}; what it draws belongs in its template file`);
-  if (file.endsWith('.template.tsx')) for (const m of text.matchAll(HELD)) found.push(`${file}:${lineOf(text, m.index)}: a template imports ${m[1]}; it is handed what it shows and what it can ask for`);
+  if (file.endsWith('.tsx')) for (const m of text.matchAll(HELD)) found.push(`${file}:${lineOf(text, m.index)}: a template imports ${m[1]}; it is handed what it shows and what it can ask for`);
   if (names.length && !written.some(dir => file.startsWith(dir))) for (const m of text.matchAll(pattern(names))) found.push(`${file}:${lineOf(text, m.index)}: "${m[0]}" is a name of the example data, outside the YAML files of ${example}`);
   return found;
 }

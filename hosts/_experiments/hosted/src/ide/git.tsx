@@ -1,6 +1,6 @@
 /* What the Git tool window looks like: the branches, the log with its filters and its graph, and the commit that is selected. */
 import type { VNode } from 'preact';
-import { ico } from '../common/icons.template';
+import { ico } from '../common/icons.tsx';
 import type { Commit } from '../storage';
 import { K } from './kinds';
 import type { Item } from './types';

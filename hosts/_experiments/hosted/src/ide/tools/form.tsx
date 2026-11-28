@@ -1,10 +1,10 @@
 /* What the designer of form-based settings looks like: sections, and in each a line per setting with the control its type gets. */
 import type { VNode } from 'preact';
-import { ico } from '../../common/icons.template';
+import { ico } from '../../common/icons.tsx';
 import { K } from '../kinds';
 import { slug } from '../model';
 import type { DeepReadonly, FormDocument, FormField, Item } from '../types';
-import { ToolBar } from './shared.template';
+import { ToolBar } from './shared.tsx';
 
 /* The control of one setting. id is what the control is called on the page; item gives the item a reference names, and open opens it. */
 const Control = ({ field: f, id, locked, item, open }: { field: DeepReadonly<FormField>; id: string; locked: boolean; item: (id: string) => Item | undefined; open: (item: Item) => void }): VNode => {

@@ -4,7 +4,7 @@ import { draw } from '../../common/dom';
 import { inspect } from '../open';
 import { act, project } from '../storage';
 import type { FlowDocument, Item, StepType } from '../types';
-import { Flow } from './flow.template';
+import { Flow } from './flow.tsx';
 import { waiting, type Tool } from './shared';
 
 /* the step that was clicked, by its place; a diagram that is drawn afresh starts with none */

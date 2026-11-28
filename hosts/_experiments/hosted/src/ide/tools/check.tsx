@@ -1,8 +1,8 @@
 /* What the designer of test suites, evaluation sets and validation procedures looks like. */
 import type { VNode } from 'preact';
-import { ico } from '../../common/icons.template';
+import { ico } from '../../common/icons.tsx';
 import type { CheckDocument, DeepReadonly, Item } from '../types';
-import { ToolBar } from './shared.template';
+import { ToolBar } from './shared.tsx';
 
 /* column is what a row is called for this kind of item; run starts every row */
 export const Check = ({ item, doc, column, run }: { item: Item; doc: DeepReadonly<CheckDocument> | null; column: string; run: () => void }): VNode => {

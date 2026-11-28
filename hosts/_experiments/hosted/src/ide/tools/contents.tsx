@@ -1,6 +1,6 @@
 /* What the contents list of a container looks like. */
 import type { VNode } from 'preact';
-import { ico } from '../../common/icons.template';
+import { ico } from '../../common/icons.tsx';
 import { K } from '../kinds';
 import type { Item } from '../types';
 

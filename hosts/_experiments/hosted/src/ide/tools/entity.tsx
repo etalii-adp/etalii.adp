@@ -1,8 +1,8 @@
 /* What the designer of one entity type looks like: its attributes, each with a name, a data type and whether it is required, and the relations it takes part in. */
 import type { VNode } from 'preact';
-import { ico } from '../../common/icons.template';
+import { ico } from '../../common/icons.tsx';
 import type { Item, Relation } from '../types';
-import { ToolBar } from './shared.template';
+import { ToolBar } from './shared.tsx';
 
 /* an attribute as the designer shows it */
 export interface Attribute { name: string; type: string; required: boolean }

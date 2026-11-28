@@ -5,7 +5,7 @@ import { body } from './docks';
 import { iconPick, setMode } from './explorer';
 import { K } from './kinds';
 import { emb, fileOf, filesOf, linkOf, multi, ownerOf, path, ro } from './model';
-import { Properties } from './properties.template';
+import { Properties } from './properties.tsx';
 import { repaint, repaintAll } from './repaint';
 import { S } from './state';
 import { act, project, refused } from './storage';

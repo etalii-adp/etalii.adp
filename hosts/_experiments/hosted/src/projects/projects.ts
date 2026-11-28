@@ -7,7 +7,7 @@ import { startPage } from '../common/page';
 import { reason } from '../common/reason';
 import { toast } from '../common/popups';
 import { connect, visit } from '../storage';
-import { ProjectRows, SignedIn } from './projects.template';
+import { ProjectRows, SignedIn } from './projects.tsx';
 import { openWizard } from './wizard';
 
 async function start(): Promise<void> {

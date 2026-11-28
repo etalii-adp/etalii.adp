@@ -1,9 +1,9 @@
 /* What a canvas looks like: a card per child item on a plane, the arrows between them, and the controls in its corners. */
 import type { VNode } from 'preact';
-import { ico } from '../common/icons.template';
+import { ico } from '../common/icons.tsx';
 import { K } from './kinds';
 import { sev } from './severity';
-import { Arrow } from './tools/shared.template';
+import { Arrow } from './tools/shared.tsx';
 import type { Item, Point, ToolName, View } from './types';
 
 /* the small picture on the card of an item, by its tool */

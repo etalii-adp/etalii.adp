@@ -1,6 +1,6 @@
 /* What a page shows when the storage does not answer while the page starts: there is nothing to draw the page from, so it says so and offers to try again. */
 import { h } from 'preact';
-import { Away } from './away.template';
+import { Away } from './away.tsx';
 import { raise } from './dom';
 import { pageReady } from './nav';
 import { reason } from './reason';

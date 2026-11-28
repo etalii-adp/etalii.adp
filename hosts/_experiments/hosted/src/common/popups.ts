@@ -1,7 +1,7 @@
 /* Menus with submenus, toasts and dialogs. */
 import { h, type ComponentChild } from 'preact';
 import { $$, $maybe, clamp, drop, hit, raise } from './dom';
-import { Dialog, Menu, Toast } from './popups.template';
+import { Dialog, Menu, Toast } from './popups.tsx';
 
 /* One line of a menu: its label, and optionally a shortcut (k), an icon (i), a check mark (chk), a submenu (sub) and what choosing it does (on). d disables it; when d is a text, the text says why. */
 export interface MenuItem {

@@ -1,10 +1,10 @@
 /* What the diagram of a data pipeline or a release pipeline looks like: a toolbox, and the steps with the lines between them. */
 import type { VNode } from 'preact';
-import { ico } from '../../common/icons.template';
+import { ico } from '../../common/icons.tsx';
 import { K } from '../kinds';
 import type { DeepReadonly, FlowDocument, Item, StepType } from '../types';
 import { curve } from './shared';
-import { Arrow, ToolBar } from './shared.template';
+import { Arrow, ToolBar } from './shared.tsx';
 
 /* the colour of each type of step */
 const TC: Record<StepType, string> = { Source: 'teal', Validate: 'yellow', Transform: 'blue', Map: 'purple', Sink: 'green', Stage: 'blue', Gate: 'orange', Deploy: 'red', Test: 'green' };

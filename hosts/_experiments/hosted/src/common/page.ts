@@ -1,7 +1,7 @@
 /* What every page does when it starts: the ADP mark, the links and buttons that go to another page, and the popups. */
 import { h } from 'preact';
 import { $$, draw, el, hit } from './dom';
-import { Mark, MarkAsPageIcon } from './icons.template';
+import { Mark, MarkAsPageIcon } from './icons.tsx';
 import { go, wireNav } from './nav';
 import type { PageName } from './pages';
 import { toast, wirePopups } from './popups';

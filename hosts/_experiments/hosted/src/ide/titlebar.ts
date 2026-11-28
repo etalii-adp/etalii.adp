@@ -1,7 +1,7 @@
 /* The title bar (menus, project and branch widgets, update and push, run, settings) and the status bar. */
 import { h } from 'preact';
 import { $, draw } from '../common/dom';
-import { ico } from '../common/icons.template';
+import { ico } from '../common/icons.tsx';
 import { go } from '../common/nav';
 import { menu, menuAt, type MenuEntry } from '../common/popups';
 import { setTheme, setVar } from '../common/prefs';
@@ -13,7 +13,7 @@ import { K } from './kinds';
 import { binary, crumbsOf, linkedRepos, modeOf, ofKind, path, ro, ROOT } from './model';
 import { flip, levelOf, openDoc, pick } from './open';
 import { repaint, repaintEverything } from './repaint';
-import { Avatar, BranchLabel, CommitCount, Menus, ProjectLabel, RunLabel, Status } from './titlebar.template';
+import { Avatar, BranchLabel, CommitCount, Menus, ProjectLabel, RunLabel, Status } from './titlebar.tsx';
 import type { Item } from './types';
 import { keep, settle, S } from './state';
 import { act, project, refused, storage } from './storage';
