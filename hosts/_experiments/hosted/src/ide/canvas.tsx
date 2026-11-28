@@ -41,8 +41,8 @@ const Card = ({ item: k, place, at, selected }: { item: Item; place: number; at:
   </div>;
 };
 
-/* the frame of a picture of what the document area showed, which lies over it while the page zooms into an item: it is as large as the document area and takes no part in the page */
-export const Picture = (): VNode => <div class="doc zoom-from" aria-hidden="true"></div>;
+/* the frame of a picture of what the document area showed, which lies over it while the page zooms into an item or out of one: it is as large as the document area and takes no part in the page. One that shrinks covers only as much as the picture does. */
+export const Picture = ({ shrinks }: { shrinks: boolean }): VNode => <div class={'doc zoom-from' + (shrinks ? ' zoom-out' : '')} aria-hidden="true"></div>;
 
 /* what the canvas asks for: what the pointer, the wheel and the keys do on the plane get the event, for where it happened and with what; the buttons say what they are for */
 export interface CanvasActions {

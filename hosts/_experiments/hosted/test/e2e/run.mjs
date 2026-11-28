@@ -640,58 +640,103 @@ await test('canvas: the plane moves with the pointer and zooms around it, and Fi
 
 /* what the document area shows: the item at the end of the breadcrumbs, and whether as a canvas or in its tool */
 const showing = page => page.evaluate(() => `${document.querySelector('#crumbs .cur').textContent.trim()} as ${document.querySelector('#dm .on').dataset.dm}`);
-/* a back (3) or forward (4) button of the mouse, pressed and let go over the middle of an element; true when the browser's own answer to it was taken away */
-const sideButton = (page, button, over = '#doc') => page.evaluate(([button, over]) => {
-  const r = document.querySelector(over).getBoundingClientRect(), x = r.x + r.width / 2, y = r.y + r.height / 2, at = document.elementFromPoint(x, y);
-  return ['mousedown', 'mouseup'].map(type => at.dispatchEvent(new MouseEvent(type, { button, bubbles: true, cancelable: true, clientX: x, clientY: y }))).every(went => !went);
-}, [button, over]);
+/* A back (3) or forward (4) button of the mouse, pressed and let go over the middle of an element. It goes through the browser's own input, as a mouse does, so the page gets the events a browser gives for it and no others. True when the page got some, and the browser's own answer to each was taken away. */
+const wires = new WeakMap();
+async function sideButton(page, button, over = '#doc') {
+  if (!wires.has(page)) wires.set(page, await page.context().newCDPSession(page));
+  const wire = wires.get(page), box = await page.locator(over).boundingBox(), at = { x: box.x + box.width / 2, y: box.y + box.height / 2 }, name = button === 3 ? 'back' : 'forward';
+  await page.evaluate(() => {
+    window.sideEvents = [];
+    if (window.sideWatched) return;
+    window.sideWatched = true;
+    for (const type of ['pointerdown', 'mousedown', 'pointerup', 'mouseup', 'auxclick']) addEventListener(type, e => { if (e.button > 2) window.sideEvents.push(e.defaultPrevented); });
+  });
+  await wire.send('Input.dispatchMouseEvent', { type: 'mouseMoved', ...at });
+  await wire.send('Input.dispatchMouseEvent', { type: 'mousePressed', ...at, button: name, buttons: button === 3 ? 8 : 16, clickCount: 1 });
+  await wire.send('Input.dispatchMouseEvent', { type: 'mouseReleased', ...at, button: name, buttons: 0, clickCount: 1 });
+  const answers = await page.evaluate(() => window.sideEvents);
+  return answers.length > 0 && answers.every(Boolean);
+}
 
-await test('canvas: going into an item zooms in until its card is all there is to see, to a canvas and to a tool alike', async (_context, errors) => {
-  /* a person who did not ask for less motion */
+const still = 'translate(0px,0px) scale(1)';
+/* where a box is under a move and a zoom from the corner of the element they are played on */
+const under = (transform, box, corner) => { const [tx, ty, k] = /^translate\((.+)px,(.+)px\) scale\((.+)\)$/.exec(transform).slice(1).map(Number); return { x: corner.x + tx + k * (box.x - corner.x), y: corner.y + ty + k * (box.y - corner.y), width: k * box.width, height: k * box.height }; };
+const middle = b => [b.x + b.width / 2, b.y + b.height / 2];
+const covers = (a, b) => a.x <= b.x + 1 && a.y <= b.y + 1 && a.x + a.width >= b.x + b.width - 1 && a.y + a.height >= b.y + b.height - 1;
+/* as wide or as high as another box */
+const fills = (a, b) => Math.abs(a.width - b.width) < 1.5 || Math.abs(a.height - b.height) < 1.5;
+const cardOf = (page, name) => page.locator(`#doc .card:has(.ch b:text-is("${name}"))`);
+/* a page of a person who did not ask for less motion, at the canvas of the root; every animation the page plays is noted in window.played with what it is played on, and plays as it would */
+async function withMotion(errors, run) {
   const moving = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   try {
-    /* every animation the page plays is noted with what it is played on, and plays as it would */
     await moving.addInitScript(() => {
       window.played = [];
       const animate = Element.prototype.animate;
       Element.prototype.animate = function (frames, timing) {
         const r = this.getBoundingClientRect();
-        window.played.push({ picture: this.classList.contains('zoom-from'), copy: !!this.parentElement?.classList.contains('zoom-from'), frames, box: { x: r.x, y: r.y, width: r.width, height: r.height } });
+        window.played.push({ picture: this.classList.contains('zoom-from'), copy: !!this.parentElement?.classList.contains('zoom-from'), shrinks: !!this.closest('.zoom-out'), frames, box: { x: r.x, y: r.y, width: r.width, height: r.height } });
         return animate.call(this, frames, timing);
       };
     });
     const page = await newPage(moving, errors);
     await rootCanvas(page);
-    const area = await page.locator('#doc').boundingBox(), still = 'translate(0px,0px) scale(1)';
-    /* where a box is under a move and a zoom from the corner of the element they are played on */
-    const under = (transform, box, corner) => { const [tx, ty, k] = /^translate\((.+)px,(.+)px\) scale\((.+)\)$/.exec(transform).slice(1).map(Number); return { x: corner.x + tx + k * (box.x - corner.x), y: corner.y + ty + k * (box.y - corner.y), width: k * box.width, height: k * box.height }; };
-    const middle = b => [b.x + b.width / 2, b.y + b.height / 2];
-    const covers = (a, b) => a.x <= b.x + 1 && a.y <= b.y + 1 && a.x + a.width >= b.x + b.width - 1 && a.y + a.height >= b.y + b.height - 1;
-    const into = async (name, shows) => {
-      const card = await page.locator(`#doc .card:has(.ch b:text-is("${name}"))`).boundingBox();
-      await page.evaluate(() => { window.played.length = 0; });
-      await page.mouse.click(card.x + 20, card.y + 12); await page.mouse.click(card.x + 20, card.y + 12);
-      await page.waitForFunction(() => window.played.length >= 3);
-      const played = await page.evaluate(() => window.played), copy = played.find(p => p.copy), shown = played.find(p => !p.copy && !p.picture);
-      assert(played.length === 3 && copy && shown && played.some(p => p.picture), `going into ${name} plays something else than a picture and what shows now`);
-      /* the picture of what showed starts as it was, and ends with the card over all of the document area, and no larger than that takes */
-      const grown = under(copy.frames[1].transform, card, copy.box);
-      assert(copy.frames[0].transform === still && near([copy.box.x, copy.box.y], [area.x, area.y]), `the picture of what showed does not start where it was: ${copy.frames[0].transform}`);
-      assert(covers(grown, area) && near(middle(grown), middle(area)) && (Math.abs(grown.width - area.width) < 1.5 || Math.abs(grown.height - area.height) < 1.5), `the card of ${name} does not end as all there is to see: ${JSON.stringify(grown)} in ${JSON.stringify(area)}`);
-      /* what shows now starts inside the card, as high or as wide as the card is and around its middle, and ends where it belongs */
-      const small = under(shown.frames[0].transform, area, shown.box);
-      assert(shown.frames[1].transform === still && near(middle(small), middle(card)) && covers(card, small) && (Math.abs(small.width - card.width) < 1.5 || Math.abs(small.height - card.height) < 1.5), `what ${name} shows does not grow out of its card: ${JSON.stringify(small)} for ${JSON.stringify(card)}`);
-      /* the picture is gone when it is over, and nothing stays zoomed */
-      await page.locator('.zoom-from').waitFor({ state: 'detached' });
-      assert(await showing(page) === shows, `after going into ${name} the document area shows ${await showing(page)}`);
-      assert(await page.locator('#doc > :first-child').evaluate(e => getComputedStyle(e).transform) === 'none', 'what shows now stays zoomed');
-    };
-    await into('Ingestion', 'Ingestion as canvas');
-    await into('Pipelines', 'Pipelines as canvas');
-    await into('Customer sync', 'Customer sync as editor');
-    assert(await page.locator('#doc .tool').count() === 1 && await page.locator('#doc .cv').count() === 0, 'a pipeline does not show in its tool');
+    await run(page, await page.locator('#doc').boundingBox());
   } finally { await moving.close(); }
-});
+}
+/* what a step played, once it is over: the picture of what showed is gone, and nothing stays zoomed */
+async function playedBy(page, step, shows) {
+  await page.evaluate(() => { window.played.length = 0; });
+  await step();
+  await page.waitForFunction(() => window.played.length >= 3);
+  const played = await page.evaluate(() => window.played);
+  await page.locator('.zoom-from').waitFor({ state: 'detached' });
+  await page.waitForFunction(() => !document.querySelector('#doc > :first-child').getAnimations().length);
+  assert(await showing(page) === shows, `the document area shows ${await showing(page)}, not ${shows}`);
+  assert(await page.locator('#doc > :first-child').evaluate(e => getComputedStyle(e).transform) === 'none', 'what shows now stays zoomed');
+  const copy = played.find(p => p.copy), shown = played.find(p => !p.copy && !p.picture), frame = played.find(p => p.picture);
+  assert(played.length === 3 && copy && shown && frame, `on the way to ${shows} something else plays than a picture and what shows now`);
+  return { copy, shown, frame };
+}
+
+await test('canvas: going into an item zooms in until its card is all there is to see, to a canvas and to a tool alike', (_context, errors) => withMotion(errors, async (page, area) => {
+  const into = async (name, shows) => {
+    const card = await cardOf(page, name).boundingBox();
+    const { copy, shown, frame } = await playedBy(page, async () => { await page.mouse.click(card.x + 20, card.y + 12); await page.mouse.click(card.x + 20, card.y + 12); }, shows);
+    /* the picture of what showed starts as it was, and ends with the card over all of the document area, and no larger than that takes */
+    const grown = under(copy.frames[1].transform, card, copy.box);
+    assert(!frame.shrinks && frame.frames[0].opacity === 1 && frame.frames.at(-1).opacity === 0, 'the picture of what showed does not cover the document area until it fades');
+    assert(copy.frames[0].transform === still && near([copy.box.x, copy.box.y], [area.x, area.y]), `the picture of what showed does not start where it was: ${copy.frames[0].transform}`);
+    assert(covers(grown, area) && near(middle(grown), middle(area)) && fills(grown, area), `the card of ${name} does not end as all there is to see: ${JSON.stringify(grown)} in ${JSON.stringify(area)}`);
+    /* what shows now starts inside the card, as high or as wide as the card is and around its middle, and ends where it belongs */
+    const small = under(shown.frames[0].transform, area, shown.box);
+    assert(shown.frames[1].transform === still && near(middle(small), middle(card)) && covers(card, small) && fills(small, card), `what ${name} shows does not grow out of its card: ${JSON.stringify(small)} for ${JSON.stringify(card)}`);
+  };
+  await into('Ingestion', 'Ingestion as canvas');
+  await into('Pipelines', 'Pipelines as canvas');
+  await into('Customer sync', 'Customer sync as editor');
+  assert(await page.locator('#doc .tool').count() === 1 && await page.locator('#doc .cv').count() === 0, 'a pipeline does not show in its tool');
+}));
+
+await test('canvas: going higher zooms out of the card of what showed, from a tool and from a canvas alike', (_context, errors) => withMotion(errors, async (page, area) => {
+  const into = async name => { const card = await cardOf(page, name).boundingBox(); await page.mouse.click(card.x + 20, card.y + 12); await page.mouse.click(card.x + 20, card.y + 12); await cardOf(page, name).waitFor({ state: 'detached' }); await page.locator('.zoom-from').waitFor({ state: 'detached' }); };
+  await into('Ingestion'); await into('Pipelines'); await into('Customer sync');
+  /* out of name, by a step that shows the level above it */
+  const outOf = async (name, step, shows) => {
+    const { copy, shown, frame } = await playedBy(page, step, shows), card = await cardOf(page, name).boundingBox();
+    /* the level above starts with the card of what showed over all of the document area, and no larger than that takes, and ends where it belongs */
+    const large = under(shown.frames[0].transform, card, shown.box);
+    assert(shown.frames[1].transform === still && covers(large, area) && near(middle(large), middle(area)) && fills(large, area), `the card of ${name} does not start as all there is to see: ${JSON.stringify(large)} in ${JSON.stringify(area)}`);
+    /* over it the picture of what showed starts as it was and ends inside the card, as high or as wide as the card is and around its middle; it covers no more than itself, and is gone before the end */
+    const small = under(copy.frames[1].transform, area, copy.box);
+    assert(copy.frames[0].transform === still && near([copy.box.x, copy.box.y], [area.x, area.y]), `the picture of what showed does not start where it was: ${copy.frames[0].transform}`);
+    assert(near(middle(small), middle(card)) && covers(card, small) && fills(small, card), `what showed does not shrink into the card of ${name}: ${JSON.stringify(small)} for ${JSON.stringify(card)}`);
+    assert(frame.shrinks && frame.frames[0].opacity === 1 && frame.frames.at(-1).opacity === 0, 'the picture of what showed does not fade over the level above');
+  };
+  await outOf('Customer sync', () => page.locator('#crumbs button', { hasText: 'Pipelines' }).click(), 'Pipelines as canvas');
+  await outOf('Pipelines', () => page.locator('#cv-up').click(), 'Ingestion as canvas');
+  await outOf('Ingestion', async () => { await page.locator('#doc .cv').focus(); await page.keyboard.press('Backspace'); }, 'Atlas Platform as canvas');
+}));
 
 await test('canvas: the back and forward buttons of the mouse lead through what the document area showed', async (context, errors) => {
   const page = await newPage(context, errors);
@@ -715,6 +760,33 @@ await test('canvas: the back and forward buttons of the mouse lead through what 
   assert(await showing(page) === 'Sources as canvas', `forward after going elsewhere shows ${await showing(page)}`);
   await sideButton(page, 3); await sideButton(page, 3);
   assert(await showing(page) === 'Atlas Platform as canvas', `two steps back from Sources show ${await showing(page)}`);
+});
+
+await test('git: the graph keeps its lines when the log is kept to a branch, from a commit that shows to each of its parents', async (context, errors) => {
+  const page = await newPage(context, errors);
+  await page.goto(site.url + 'ide/index.html'); await ready(page);
+  if (await page.locator('[data-panel="git"]').isHidden()) await page.locator('[data-tw="git"]').click();
+  /* the graph as it shows: the dots by their row, and for each line the rows of the dots it starts and ends at */
+  const graph = () => page.locator('#g-rows svg').evaluate(svg => {
+    const dots = [...svg.querySelectorAll('circle')].map(c => `${c.getAttribute('cx')} ${c.getAttribute('cy')}`);
+    const ends = [...svg.querySelectorAll('path')].map(p => { const n = p.getAttribute('d').match(/-?[\d.]+/g); return [dots.indexOf(`${n[0]} ${n[1]}`), dots.indexOf(`${n.at(-2)} ${n.at(-1)}`)]; });
+    return { rows: svg.parentElement.querySelectorAll('.g-row').length, dots: dots.length, lanes: new Set(dots.map(d => d.split(' ')[0])).size, ends };
+  });
+  const whole = await graph();
+  assert(whole.rows === 13 && whole.dots === 13 && whole.ends.length === 14 && whole.lanes === 3, `the whole log shows ${JSON.stringify(whole)}`);
+  /* a branch in the list: the commits it has behind it, each with a line to every parent, which all show */
+  await page.locator('#g-br [data-b="features/load-forecast"]').click();
+  const one = await graph();
+  assert(one.rows === 5 && one.dots === 5 && one.lanes === 2, `the log of features/load-forecast shows ${JSON.stringify(one)}`);
+  assert(one.ends.map(e => e.join('>')).join(' ') === '0>1 1>2 2>3 3>4', `the lines of features/load-forecast go ${JSON.stringify(one.ends)}`);
+  /* a branch from the filter, with a merge behind it: a line starts and ends at a dot, below the one it starts at */
+  await page.locator('#g-fb').click(); await menuItem(page, 'develop').click();
+  const merged = await graph();
+  assert(merged.rows === 10 && merged.ends.length === 10 && merged.ends.every(([from, to]) => from >= 0 && to > from), `the lines of develop go ${JSON.stringify(merged)}`);
+  /* kept to a user as well, a commit shows without its parents: dots in one lane, and no lines */
+  await page.locator('#g-fu').click(); await menuItem(page, 'Me').click();
+  const mine = await graph();
+  assert(mine.dots > 0 && mine.dots < 10 && mine.lanes === 1 && !mine.ends.length, `the log of one user on develop shows ${JSON.stringify(mine)}`);
 });
 
 /* what the field with the focus is, what it holds and where the caret is in it */
