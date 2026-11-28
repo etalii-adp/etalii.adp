@@ -5,7 +5,7 @@ import { body } from './docks';
 import { iconPick, setMode } from './explorer';
 import { K } from './kinds';
 import { emb, fileOf, filesOf, linkOf, modeOf, multi, ownerOf, path, ro, showAll } from './model';
-import { repaintAll } from './repaint';
+import { repaint, repaintAll } from './repaint';
 import { S } from './state';
 import { act, project, refused } from './storage';
 import type { Falsy, Item, PropControl, PropGroup, PropRow, PropSheet, ViewMode } from './types';
@@ -28,8 +28,23 @@ function nodeProps(x: Item): PropSheet {
   return { icon: x.icon || K[x.kind].icon, col: K[x.kind].colour, title: x.name, sub: K[x.kind].label, g: [general, entity, storage, linked, git, problems] };
 }
 
+/* true while something that arrived waits to be shown until nobody is in a field of the Properties */
+let waiting = false;
+
+/* The Properties are drawn again for something that arrived, not for something done in them. A field somebody is in is not taken away under them: a field that is removed commits what was typed in it so far and loses the focus. They are drawn when the focus leaves them, or with the next thing done in them. */
+export function showArrivedInProps(): void {
+  if (body('properties').contains(document.activeElement)) waiting = true; else repaint('properties');
+}
+
+export function mountProps(): void {
+  const b = body('properties');
+  /* the window losing the focus leaves the field as it is: nobody left it */
+  b.addEventListener('focusout', e => { if (waiting && !b.contains(e.relatedTarget as Node | null) && !b.contains(document.activeElement)) repaint('properties'); });
+}
+
 export function renderProps(): void {
   const x = S.sel, P = S.insp || nodeProps(x), b = body('properties');
+  waiting = false;
   /* a control in place of a text, for the rows that can be changed */
   const control = (v: PropControl): string => {
     if ('name' in v) return `<span><input class="in" id="p-name" value="${esc(x.name)}" aria-label="Name"${v.lock ? ' disabled' : ''}></span>`;

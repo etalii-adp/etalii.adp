@@ -12,7 +12,7 @@ import { mountExplorer, renderExplorer } from './explorer';
 import { mountGit, renderGit } from './git';
 import { bindModel, ROOT } from './model';
 import { renderProblems } from './problems';
-import { renderProps } from './properties';
+import { mountProps, renderProps, showArrivedInProps } from './properties';
 import { paints, repaint, repaintEverything } from './repaint';
 import { bindState, keep, settle, S } from './state';
 import { openStorage, project, storage } from './storage';
@@ -30,6 +30,7 @@ async function start(): Promise<void> {
   mountDocumentArea();
   mountExplorer();
   mountGit();
+  mountProps();
   mountAgent();
   mountTitlebar();
   paints({ explorer: renderExplorer, editor: renderEditor, properties: renderProps, status: renderStatus, title: renderTitle, problems: renderProblems, commit: renderCommit, git: renderGit, agent: renderAgent }, () => { keep(); agentFollowsSelection(); });
@@ -40,7 +41,7 @@ async function start(): Promise<void> {
   /* what somebody else changed shows as it is now */
   storage.onForeign(() => { settle(); repaintEverything(); });
   /* a document or a file a part asked for is there: the parts that show it are drawn again */
-  project.content.onArrive(() => repaint('editor', 'properties'));
+  project.content.onArrive(() => { repaint('editor'); showArrivedInProps(); });
 
   /* a narrow window starts with fewer tool windows open */
   if (innerWidth < 1000) S.act.right = null;

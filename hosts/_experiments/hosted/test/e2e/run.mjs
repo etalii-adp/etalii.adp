@@ -159,6 +159,36 @@ await test('slow storage: the page says that it waits, and shows the answer when
   await page.locator('#status', { hasText: 'Waiting for the storage…' }).waitFor({ state: 'detached' });
 });
 
+await test('slow storage: a document that arrives leaves a name that is being typed in the Properties alone', async (context, errors) => {
+  const page = await newPage(context, errors);
+  page.setDefaultTimeout(15000);
+  await page.goto(site.url + 'ide/index.html?backend=slow:900'); await ready(page);
+  await expand(page, 'Ingestion'); await expand(page, 'Pipelines');
+  const field = () => page.evaluate(() => ({ there: window.field.isConnected, focused: document.activeElement === window.field, value: window.field.value }));
+  /* what the tool shows changes when the item's document is there */
+  const arrives = async () => { const was = await page.evaluate(() => { window.field = document.querySelector('#p-name'); return document.querySelector('#doc').innerHTML; }); await page.waitForFunction(html => document.querySelector('#doc').innerHTML !== html, was); };
+
+  /* the document is asked for when the item opens, and the name is typed before it is there */
+  await row(page, 'Customer sync').click();
+  await page.fill('#p-name', 'Customer feed');
+  await arrives();
+  const typing = await field();
+  assert(typing.there && typing.focused && typing.value === 'Customer feed', `the field was taken away while it was typed in: ${JSON.stringify(typing)}`);
+  assert(await row(page, 'Customer feed').count() === 0 && await row(page, 'Customer sync').count() === 1, 'the name was taken before it was entered');
+  await page.keyboard.press('Tab');
+  await row(page, 'Customer feed').waitFor();
+
+  /* a field somebody is in without typing stays as well, and the Properties are drawn when it is left */
+  await row(page, 'Meter readings to Bronze').click();
+  await page.locator('#p-name').focus();
+  await arrives();
+  const resting = await field();
+  assert(resting.there && resting.focused, `the field was taken away while somebody was in it: ${JSON.stringify(resting)}`);
+  await page.evaluate(() => document.activeElement.blur());
+  assert(!(await field()).there, 'what arrived is not shown in the Properties when the field is left');
+  assert(await row(page, 'Meter readings to Bronze').count() === 1, 'leaving the field changed the name');
+});
+
 await test('storage that is away: every page says so and offers to try again', async (context, errors) => {
   const page = await newPage(context, errors);
   for (const at of ['login', 'projects', 'ide']) {
