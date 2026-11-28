@@ -34,6 +34,20 @@ test('a name of the example data is found outside its YAML files, as a whole nam
   assert.equal(find('src/storage/backends/_example/gen/data.ts', 'const a = "Atlas Platform";', names).length, 0, 'what the build writes from the YAML files');
 });
 
+test('a script draws through its template, and a template holds no state', () => {
+  for (const use of ['d.innerHTML = text;', 'd.outerHTML = text;', "d.insertAdjacentHTML('beforeend', text);"]) {
+    assert.equal(find('src/ide/part.ts', use).length, 1, use);
+    assert.equal(find('src/storage/backends/browser/index.ts', use).length, 0, use + ' inside the storage');
+  }
+  assert.equal(find('src/ide/part.tsx', 'const a = <div dangerouslySetInnerHTML={{ __html: lines }} />;').length, 0, 'a template hands an element what is kept as HTML');
+  for (const held of ['./state', './storage', '../repaint', './open']) {
+    assert.equal(find('src/ide/part.tsx', `import { a } from '${held}';`).length, 1, held);
+    assert.equal(find('src/ide/part.tsx', `import type { A } from '${held}';`).length, 0, 'a type of ' + held);
+    assert.equal(find('src/ide/part.ts', `import { a } from '${held}';`).length, 0, held + ' in a script');
+  }
+  for (const read of ['./model', './kinds', '../common/dom', './part.tsx']) assert.equal(find('src/ide/part.tsx', `import { a } from '${read}';`).length, 0, read);
+});
+
 test('the pages as they are pass', async () => {
   assert.deepEqual(await checkBoundary(), []);
 });

@@ -1,10 +1,16 @@
 /* What every page does when it starts: the ADP mark, the links and buttons that go to another page, and the popups. */
-import { hit } from './dom';
-import { mountMark } from './icons';
+import { h } from 'preact';
+import { $$, draw, el, hit } from './dom';
+import { Mark, MarkAsPageIcon } from './icons.tsx';
 import { go, wireNav } from './nav';
 import type { PageName } from './pages';
 import { toast, wirePopups } from './popups';
 
+/* every .logo-slot on the page gets the mark at its data-size, and the browser tab gets it too */
+function mountMark(): void {
+  $$('.logo-slot').forEach(slot => { draw(slot, h(Mark, { size: slot.dataset.size ?? '24' })); });
+  document.head.append(el(h(MarkAsPageIcon, null)));
+}
 
 export function startPage(): void {
   mountMark();

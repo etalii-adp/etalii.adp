@@ -1,7 +1,8 @@
 /* The document area: tabs, breadcrumbs, and the open item in its tool or as a canvas. */
-import { $, $maybe, esc, hit } from '../common/dom';
-import { ico } from '../common/icons';
-import { play, renderCanvas, tween } from './canvas';
+import { h } from 'preact';
+import { $, $maybe, draw } from '../common/dom';
+import { leaveCanvas, markCanvas, play, renderCanvas, tween } from './canvas';
+import { Crumbs, Modes, Tabs } from './document-area.tsx';
 import { K, WORD } from './kinds';
 import { byId, crumbsOf, isBox, ROOT } from './model';
 import { dmode, levelOf, openDoc } from './open';
@@ -19,55 +20,60 @@ import { rOnto } from './tools/ontology';
 import { rPage } from './tools/page';
 import { rSchema } from './tools/schema';
 import type { Tool } from './tools/shared';
+import { step, visited } from './trail';
 import type { DocMode, Item, ToolName } from './types';
 
 const tools: Record<ToolName, Tool> = { flow: rFlow, onto: rOnto, entity: rEntity, schema: rSchema, page: rPage, dash: rDash, form: rForm, check: rCheck, doc: rDoc, code: rCode };
 
-const tabIcon = (x: Item): string => x.pseudo ? (x.entries ? 'folder' : 'file') : x.icon || K[x.kind].icon;
-const tabColour = (x: Item): string => 'c-' + (x.pseudo ? 'muted' : K[x.kind].colour);
+/* a tab or a breadcrumb opens the item it stands for, as it is now */
+const show = (x: Item): void => { const now = byId(x.id); if (now) openDoc(now); };
+/* closes a tab; when it was the open one, the tab before it opens */
+function close(tab: Item): void {
+  const x = byId(tab.id);
+  if (!x) return;
+  const i = S.tabs.indexOf(x);
+  S.tabs.splice(i, 1);
+  if (S.doc === x) openDoc(S.tabs[Math.max(0, i - 1)] || ROOT); else renderEditor();
+}
+/* switches the open item between its tool and the canvas */
+function choose(mode: DocMode): void {
+  if (S.doc.pseudo) return;
+  S.dm[S.doc.id] = mode;
+  S.insp = null;
+  repaint('editor', 'properties');
+}
+
+/* The back and forward buttons of a mouse step along the trail while the pointer is over the document area, a canvas or a tool alike: back shows what showed before, forward what was stepped back from. The browser's own answer to those buttons is taken away for the whole page (browser.ts). */
+export function mountDocumentArea(): void {
+  $('#doc').addEventListener('mouseup', e => {
+    if (e.button !== 3 && e.button !== 4) return;
+    const to = step(e.button === 3 ? -1 : 1);
+    if (to) openDoc(to.item, to.item.pseudo ? undefined : to.mode);
+  });
+}
 
 export function renderEditor(): void {
   const x = S.doc, m = dmode(x), kindTool = K[x.kind].tool, word = x.entries ? 'Contents' : x.pseudo ? 'Editor' : isBox(x) ? 'Contents' : kindTool ? WORD[kindTool] : '';
-  $('#tabs').innerHTML = S.tabs.map(t => `<button class="tab${t === x ? ' on' : ''}" data-id="${t.id}">${ico(tabIcon(t), tabColour(t))}<span class="${t.vcs ? 'nm v' + t.vcs : ''}">${esc(t.name)}</span><span class="x" title="Close">${ico('x')}</span></button>`).join('');
-  $('#dm').innerHTML = `<button data-dm="editor" class="${m === 'editor' ? 'on' : ''}" title="Alt+C switches between the two">${ico(isBox(x) || x.entries ? 'list' : 'edit')}${word}</button><button data-dm="canvas" class="${m === 'canvas' ? 'on' : ''}" title="Alt+C switches between the two">${ico('canvas')}Canvas</button>`;
+  visited(x, m);
+  draw($('#tabs'), h(Tabs, { tabs: S.tabs, open: x, show, close }));
+  draw($('#dm'), h(Modes, { mode: m, word, list: isBox(x) || !!x.entries, choose }));
   $maybe('#tabs .on')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   const cr = crumbsOf(m === 'canvas' ? levelOf(x) : x);
-  $('#crumbs').innerHTML = cr.map((p, i) => `${i ? ico('chev') : ''}<button data-id="${p.id}" class="${i === cr.length - 1 ? 'cur' : ''}">${ico(tabIcon(p), tabColour(p))}${esc(p.name)}</button>`).join('');
-  /* a model with child items shows that level in its own diagram, so it takes part in the level tweens just as a canvas does */
-  const d = $('#doc'), L = m === 'canvas' ? levelOf(x) : null, V = L || (x.children && !x.pseudo && !isBox(x) ? x : null), tw = V && S.cvL && S.cvL !== V && S.anim ? tween(S.cvL, V, d) : null;
-  d.innerHTML = '';
-  d.onclick = d.onchange = d.ondblclick = null;
+  draw($('#crumbs'), h(Crumbs, { path: cr, show }));
+  /* a model with child items shows that level in its own diagram, so it takes part in the level tweens just as a canvas does; an item that shows in its tool is zoomed into from the level it is in */
+  const d = $('#doc'), L = m === 'canvas' ? levelOf(x) : null, V = L || (x.children && !x.pseudo && !isBox(x) ? x : null), tw = S.cvL && S.cvL !== (V ?? x) && S.anim ? tween(S.cvL, V ?? x, d, !!V) : null;
   S.cvFit = null;
   S.cvL = V;
+  leaveCanvas();
+  /* each draws the item as a piece of the page of its own: another item, or the same one in another way, starts from nothing */
   if (L) renderCanvas(d, L);
   else if (x.entries) rContents(d, x);
   else if (x.pseudo) rCode(d, x);
   else if (isBox(x)) rContents(d, x);
   else if (kindTool) tools[kindTool](d, x);
+  else draw(d, null);
   if (tw) play(tw, d);
 }
 
-/* wires the tabs, the breadcrumbs and the switch between tool and canvas */
-export function mountDocumentArea(): void {
-  $('#dm').onclick = e => {
-    const b = hit(e, 'button');
-    if (!b || S.doc.pseudo) return;
-    S.dm[S.doc.id] = b.dataset.dm as DocMode;
-    S.insp = null;
-    repaint('editor', 'properties');
-  };
-  $('#tabs').onclick = e => {
-    const t = hit(e, '.tab');
-    if (!t) return;
-    const x = byId(t.dataset.id!);
-    if (!x) return;
-    if (hit(e, '.x')) {
-      const i = S.tabs.indexOf(x);
-      S.tabs.splice(i, 1);
-      if (S.doc === x) openDoc(S.tabs[Math.max(0, i - 1)] || ROOT); else renderEditor();
-      return;
-    }
-    openDoc(x);
-  };
-  $('#crumbs').onclick = e => { const x = byId(hit(e, 'button')?.dataset.id ?? ''); if (x) openDoc(x); };
-}
+/* marks the selected item in what the document area shows, without drawing the open item again */
+export function markSelected(): void { markCanvas(); }

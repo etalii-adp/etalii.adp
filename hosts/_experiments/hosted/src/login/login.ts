@@ -1,11 +1,12 @@
 /* The login page. An email with the password signs in. Single sign-on and a git provider are asked as well; the identity store says what each of them answers. */
-import { $, $$, esc, hit } from '../common/dom';
-import { ico } from '../common/icons';
+import { h } from 'preact';
+import { $, $$, draw, hit } from '../common/dom';
 import { go, pageReady } from '../common/nav';
 import { startStored } from '../common/away';
 import { startPage } from '../common/page';
 import { reason } from '../common/reason';
 import { connect } from '../storage';
+import { Providers } from './login.tsx';
 
 const field = (selector: string): HTMLInputElement => $<HTMLInputElement>(selector);
 
@@ -66,12 +67,7 @@ async function start(): Promise<void> {
 
   /* a git provider confirms who you are */
   const providers = $('#git-providers');
-  providers.innerHTML = identity.providers.map(name => `<button class="btn" type="button" data-provider="${esc(name)}">${ico('branch', 'c-muted')}${esc(name)}</button>`).join('');
-  providers.addEventListener('click', e => {
-    const name = hit(e, '[data-provider]')?.dataset.provider;
-    if (!name) return;
-    ask($('#git-msg'), `Waiting for ${name} to confirm who you are…`, identity.providerSignIn(workspace(), name), $$<HTMLButtonElement>('button', providers));
-  });
+  draw(providers, h(Providers, { names: identity.providers, choose: name => ask($('#git-msg'), `Waiting for ${name} to confirm who you are…`, identity.providerSignIn(workspace(), name), $$<HTMLButtonElement>('button', providers)) }));
 
   document.addEventListener('click', e => { const to = hit(e, '[data-step]'); if (to) show(to.dataset.step!); });
   pageReady();

@@ -566,6 +566,231 @@ await test('wizard: a slow storage shows that the project is being made, and one
   assert(await closed.locator('.pj-row').count() === before, 'a project that was refused is listed');
 });
 
+/* where the cards of a canvas are on the page, by the name on them, and the arrows between them as they are drawn */
+const cardsAt = page => page.locator('#doc .card').evaluateAll(list => Object.fromEntries(list.map(c => { const r = c.getBoundingClientRect(); return [c.querySelector('.ch b').textContent, [r.x, r.y]]; })));
+const arrowsOf = page => page.locator('#cv-e path').evaluateAll(list => list.map(p => p.getAttribute('d')).join(' '));
+const near = (a, b, by = 1.5) => Math.abs(a[0] - b[0]) <= by && Math.abs(a[1] - b[1]) <= by;
+/* every card is where it was, moved by so much; but names the one that is not asked about */
+const allAt = (was, now, dx = 0, dy = 0, but = '') => Object.keys(was).every(name => name === but || near(now[name], [was[name][0] + dx, was[name][1] + dy]));
+const rootCanvas = async page => { await page.goto(site.url + 'ide/index.html'); await ready(page); await page.locator('#crumbs button').first().click(); await page.locator('#doc .card').first().waitFor(); };
+const selectedRow = page => page.locator('#tree .row.sel .nm').innerText();
+
+await test('canvas: a card follows the pointer with its arrows while it is dragged, stays where it is let go, and goes back with the shared layout', async (context, errors) => {
+  const page = await newPage(context, errors);
+  await rootCanvas(page);
+  const was = await cardsAt(page), drawn = await arrowsOf(page), selected = await selectedRow(page), [x, y] = was.Ontology;
+  /* the cards are shown smaller than they are, so a card that keeps up with the pointer shows that the zoom is reckoned with */
+  assert(await page.locator('#cv-z').innerText() !== '100%' && drawn.length > 0, 'the canvas of the project fits at its full size, or has no arrows');
+  await page.mouse.move(x + 30, y + 12); await page.mouse.down();
+  /* a pointer that hardly moved is a click that trembles */
+  await page.mouse.move(x + 32, y + 13);
+  assert(allAt(was, await cardsAt(page)), 'a card moved with a pointer that hardly moved');
+  await page.mouse.move(x + 90, y + 60, { steps: 4 });
+  const held = await cardsAt(page);
+  assert(near(held.Ontology, [x + 60, y + 48]), `the card is not under the pointer while it is dragged: ${held.Ontology} for ${[x + 60, y + 48]}`);
+  assert(allAt(was, held, 0, 0, 'Ontology'), 'another card moved with the one that is dragged');
+  const following = await arrowsOf(page);
+  assert(following !== drawn, 'the arrows do not follow a card while it is dragged');
+  assert(!(await page.locator('#cv-note').isVisible()), 'the layout is called a person\'s own before the card is let go');
+  await page.mouse.move(x + 150, y + 20, { steps: 3 });
+  assert(await arrowsOf(page) !== following, 'the arrows stopped following the card');
+  await page.mouse.up();
+  /* the layout is a person's own from here, and the way back to the shared one is there */
+  await page.locator('#cv-reset').waitFor();
+  const left = await cardsAt(page);
+  assert(near(left.Ontology, [x + 120, y + 8]) && allAt(was, left, 0, 0, 'Ontology'), `the card is not where it was let go: ${left.Ontology} for ${[x + 120, y + 8]}`);
+  assert(await selectedRow(page) === selected && await page.locator('#doc .card.on').count() === 0, 'dragging a card selected it');
+  /* another card that is clicked is selected, and the page that is drawn for that leaves the cards where they are */
+  await page.mouse.click(left.Schemas[0] + 20, left.Schemas[1] + 12);
+  await page.locator('#doc .card.on .ch b:text-is("Schemas")').waitFor();
+  assert(await selectedRow(page) === 'Schemas' && await page.locator('#p-name').inputValue() === 'Schemas', 'the card that was clicked is not the selected item in the Explorer and the Properties');
+  assert(allAt(left, await cardsAt(page)), 'selecting a card moved a card');
+  await page.locator('#cv-reset').click();
+  await page.locator('#cv-note').waitFor({ state: 'hidden' });
+  assert(allAt(was, await cardsAt(page)) && await arrowsOf(page) === drawn, 'the shared layout does not put the cards and the arrows back');
+});
+
+await test('canvas: the plane moves with the pointer and zooms around it, and Fit shows every card again', async (context, errors) => {
+  const page = await newPage(context, errors);
+  await rootCanvas(page);
+  const was = await cardsAt(page), zoomed = await page.locator('#cv-z').innerText(), cv = await page.locator('#doc .cv').boundingBox(), px = cv.x + 8, py = cv.y + cv.height / 2;
+  await page.mouse.move(px, py); await page.mouse.down(); await page.mouse.move(px + 40, py + 25, { steps: 3 });
+  assert(await page.locator('#doc .cv.pan').count() === 1, 'the plane does not show that it is being moved');
+  assert(allAt(was, await cardsAt(page), 40, 25), 'the cards do not move with the plane');
+  await page.mouse.up();
+  const moved = await cardsAt(page);
+  assert(await page.locator('#doc .cv.pan').count() === 0 && allAt(was, moved, 40, 25) && await page.locator('#cv-z').innerText() === zoomed, 'letting the plane go moved or zoomed it');
+  assert(await page.locator('#doc .card.on').count() === 0, 'moving the plane selected a card');
+  /* the wheel zooms around the pointer: the corner of the card under it stays under it, and the other cards move away from it */
+  const [ox, oy] = moved.Ontology;
+  await page.mouse.move(ox, oy); await page.mouse.wheel(0, -240);
+  await page.waitForFunction(z => document.querySelector('#cv-z').textContent !== z, zoomed);
+  const closer = await cardsAt(page);
+  assert(parseInt(await page.locator('#cv-z').innerText()) > parseInt(zoomed), 'the wheel does not zoom in');
+  assert(near(closer.Ontology, [ox, oy], 2.5), `the wheel does not zoom around the pointer: ${closer.Ontology} for ${[ox, oy]}`);
+  assert(Math.abs(closer.Portal[0] - ox) > Math.abs(moved.Portal[0] - ox) + 5, 'the cards are no further apart after zooming in');
+  /* a button zooms as well, and Fit shows every card as at first */
+  const wheeled = parseInt(await page.locator('#cv-z').innerText());
+  await page.locator('#cv-out').click();
+  assert(parseInt(await page.locator('#cv-z').innerText()) < wheeled, 'the button does not zoom out');
+  await page.locator('#cv-fit').click();
+  await page.waitForFunction(z => document.querySelector('#cv-z').textContent === z, zoomed);
+  assert(allAt(was, await cardsAt(page)), 'Fit does not show the cards where they were at first');
+});
+
+/* what the document area shows: the item at the end of the breadcrumbs, and whether as a canvas or in its tool */
+const showing = page => page.evaluate(() => `${document.querySelector('#crumbs .cur').textContent.trim()} as ${document.querySelector('#dm .on').dataset.dm}`);
+/* a back (3) or forward (4) button of the mouse, pressed and let go over the middle of an element; true when the browser's own answer to it was taken away */
+const sideButton = (page, button, over = '#doc') => page.evaluate(([button, over]) => {
+  const r = document.querySelector(over).getBoundingClientRect(), x = r.x + r.width / 2, y = r.y + r.height / 2, at = document.elementFromPoint(x, y);
+  return ['mousedown', 'mouseup'].map(type => at.dispatchEvent(new MouseEvent(type, { button, bubbles: true, cancelable: true, clientX: x, clientY: y }))).every(went => !went);
+}, [button, over]);
+
+await test('canvas: going into an item zooms in until its card is all there is to see, to a canvas and to a tool alike', async (_context, errors) => {
+  /* a person who did not ask for less motion */
+  const moving = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  try {
+    /* every animation the page plays is noted with what it is played on, and plays as it would */
+    await moving.addInitScript(() => {
+      window.played = [];
+      const animate = Element.prototype.animate;
+      Element.prototype.animate = function (frames, timing) {
+        const r = this.getBoundingClientRect();
+        window.played.push({ picture: this.classList.contains('zoom-from'), copy: !!this.parentElement?.classList.contains('zoom-from'), frames, box: { x: r.x, y: r.y, width: r.width, height: r.height } });
+        return animate.call(this, frames, timing);
+      };
+    });
+    const page = await newPage(moving, errors);
+    await rootCanvas(page);
+    const area = await page.locator('#doc').boundingBox(), still = 'translate(0px,0px) scale(1)';
+    /* where a box is under a move and a zoom from the corner of the element they are played on */
+    const under = (transform, box, corner) => { const [tx, ty, k] = /^translate\((.+)px,(.+)px\) scale\((.+)\)$/.exec(transform).slice(1).map(Number); return { x: corner.x + tx + k * (box.x - corner.x), y: corner.y + ty + k * (box.y - corner.y), width: k * box.width, height: k * box.height }; };
+    const middle = b => [b.x + b.width / 2, b.y + b.height / 2];
+    const covers = (a, b) => a.x <= b.x + 1 && a.y <= b.y + 1 && a.x + a.width >= b.x + b.width - 1 && a.y + a.height >= b.y + b.height - 1;
+    const into = async (name, shows) => {
+      const card = await page.locator(`#doc .card:has(.ch b:text-is("${name}"))`).boundingBox();
+      await page.evaluate(() => { window.played.length = 0; });
+      await page.mouse.click(card.x + 20, card.y + 12); await page.mouse.click(card.x + 20, card.y + 12);
+      await page.waitForFunction(() => window.played.length >= 3);
+      const played = await page.evaluate(() => window.played), copy = played.find(p => p.copy), shown = played.find(p => !p.copy && !p.picture);
+      assert(played.length === 3 && copy && shown && played.some(p => p.picture), `going into ${name} plays something else than a picture and what shows now`);
+      /* the picture of what showed starts as it was, and ends with the card over all of the document area, and no larger than that takes */
+      const grown = under(copy.frames[1].transform, card, copy.box);
+      assert(copy.frames[0].transform === still && near([copy.box.x, copy.box.y], [area.x, area.y]), `the picture of what showed does not start where it was: ${copy.frames[0].transform}`);
+      assert(covers(grown, area) && near(middle(grown), middle(area)) && (Math.abs(grown.width - area.width) < 1.5 || Math.abs(grown.height - area.height) < 1.5), `the card of ${name} does not end as all there is to see: ${JSON.stringify(grown)} in ${JSON.stringify(area)}`);
+      /* what shows now starts inside the card, as high or as wide as the card is and around its middle, and ends where it belongs */
+      const small = under(shown.frames[0].transform, area, shown.box);
+      assert(shown.frames[1].transform === still && near(middle(small), middle(card)) && covers(card, small) && (Math.abs(small.width - card.width) < 1.5 || Math.abs(small.height - card.height) < 1.5), `what ${name} shows does not grow out of its card: ${JSON.stringify(small)} for ${JSON.stringify(card)}`);
+      /* the picture is gone when it is over, and nothing stays zoomed */
+      await page.locator('.zoom-from').waitFor({ state: 'detached' });
+      assert(await showing(page) === shows, `after going into ${name} the document area shows ${await showing(page)}`);
+      assert(await page.locator('#doc > :first-child').evaluate(e => getComputedStyle(e).transform) === 'none', 'what shows now stays zoomed');
+    };
+    await into('Ingestion', 'Ingestion as canvas');
+    await into('Pipelines', 'Pipelines as canvas');
+    await into('Customer sync', 'Customer sync as editor');
+    assert(await page.locator('#doc .tool').count() === 1 && await page.locator('#doc .cv').count() === 0, 'a pipeline does not show in its tool');
+  } finally { await moving.close(); }
+});
+
+await test('canvas: the back and forward buttons of the mouse lead through what the document area showed', async (context, errors) => {
+  const page = await newPage(context, errors);
+  await rootCanvas(page);
+  const into = async name => { const [x, y] = (await cardsAt(page))[name]; await page.mouse.click(x + 20, y + 12); await page.mouse.click(x + 20, y + 12); };
+  await into('Ingestion'); await into('Pipelines'); await into('Customer sync');
+  assert(await showing(page) === 'Customer sync as editor', `the way in ends at ${await showing(page)}`);
+  /* back shows what showed before, a tool or a canvas, and forward what was stepped back from */
+  const steps = [[3, 'Pipelines as canvas'], [3, 'Ingestion as canvas'], [4, 'Pipelines as canvas'], [4, 'Customer sync as editor'], [4, 'Customer sync as editor'], [3, 'Pipelines as canvas'], [3, 'Ingestion as canvas']];
+  for (const [button, shows] of steps) {
+    assert(await sideButton(page, button), 'the browser is left to answer a side button of the mouse itself');
+    assert(await showing(page) === shows, `${button === 3 ? 'back' : 'forward'} shows ${await showing(page)}, not ${shows}`);
+  }
+  assert(await selectedRow(page) === 'Ingestion' && await page.locator('#doc .card').count() === 2, 'a step back does not show the canvas with its cards and select its item');
+  /* over another part of the page the buttons lead nowhere */
+  await sideButton(page, 4, '#tree');
+  assert(await showing(page) === 'Ingestion as canvas', 'a side button over the Explorer changed what the document area shows');
+  /* going somewhere else forgets what was stepped back from */
+  await into('Sources');
+  await sideButton(page, 4);
+  assert(await showing(page) === 'Sources as canvas', `forward after going elsewhere shows ${await showing(page)}`);
+  await sideButton(page, 3); await sideButton(page, 3);
+  assert(await showing(page) === 'Atlas Platform as canvas', `two steps back from Sources show ${await showing(page)}`);
+});
+
+/* what the field with the focus is, what it holds and where the caret is in it */
+const typingIn = page => page.evaluate(() => { const a = document.activeElement; return `${a.id || a.localName} "${a.value}" at ${a.selectionStart}`; });
+
+await test('typing: a field somebody is typing in keeps what was typed and the place in it while another tab changes the project', async (context, errors) => {
+  const one = await newPage(context, errors), two = await newPage(context, errors);
+  for (const page of [one, two]) { await page.goto(site.url + 'ide/index.html?backend=browser'); await ready(page); await expand(page, 'Ingestion'); await expand(page, 'Pipelines'); await expand(page, 'Ontology'); await expand(page, 'Asset model'); }
+  /* the other tab gives an item another name, and this one shows it */
+  const names = ['Weather enrichment', 'Weather join', 'Weather merge', 'Weather mix', 'Weather blend'];
+  const elsewhere = async () => { const from = names.shift(); await two.bringToFront(); await rename(two, from, names[0]); await one.bringToFront(); await row(one, names[0]).waitFor({ state: 'attached' }); };
+
+  /* a search of the Explorer */
+  await one.bringToFront();
+  await one.locator('#ex-q').click(); await one.keyboard.type('weather');
+  await elsewhere();
+  assert(await typingIn(one) === 'ex-q "weather" at 7', `the search of the Explorer: ${await typingIn(one)}`);
+  await one.keyboard.type(' j');
+  assert(await typingIn(one) === 'ex-q "weather j" at 9' && await row(one, 'Weather join').count() === 1 && await row(one, 'Customer sync').count() === 0, 'the search does not go on where it was');
+  await one.locator('#ex-q').fill('');
+
+  /* a name in the Explorer: it is not taken half typed, and not replaced by the name the item has */
+  await row(one, 'Customer sync').click(); await one.keyboard.press('F2'); await typed(one, 'Customer fe');
+  await elsewhere();
+  assert(await typingIn(one) === 'rn "Customer fe" at 11', `the name in the Explorer: ${await typingIn(one)}`);
+  assert(await row(two, 'Customer sync').count() === 1, 'a name was taken while it was typed');
+  await one.keyboard.type('ed'); await one.keyboard.press('Enter');
+  await row(one, 'Customer feed').waitFor(); await row(two, 'Customer feed').waitFor();
+
+  /* a commit message, with the caret inside it */
+  await one.locator('[data-tw="commit"]').first().click();
+  await one.locator('#cm-msg').fill('Take the feed'); await one.keyboard.press('ArrowLeft'); await one.keyboard.press('ArrowLeft');
+  await elsewhere();
+  await one.locator('.cm-g span:text-is("Weather mix")').waitFor();
+  assert(await typingIn(one) === 'cm-msg "Take the feed" at 11', `the commit message: ${await typingIn(one)}`);
+  await one.keyboard.type('X');
+  assert(await typingIn(one) === 'cm-msg "Take the feXed" at 12', `the commit message, typed on: ${await typingIn(one)}`);
+  /* leaving a file out draws the list again, and the message is still there */
+  await one.locator('.cm-f input').nth(1).click();
+  assert(await one.locator('#cm-msg').inputValue() === 'Take the feXed' && !(await one.locator('.cm-f input').nth(1).isChecked()), 'the message is gone with the file that was left out');
+  await one.locator('[data-tw="explorer"]').first().click();
+
+  /* the name of an attribute in the designer of an entity type */
+  await row(one, 'Meter').click();
+  const attribute = one.locator('#doc input[data-f="n"]').first(), was = await attribute.inputValue();
+  await attribute.click(); await one.keyboard.press('End'); await one.keyboard.type('Of');
+  await elsewhere();
+  assert(await one.evaluate(() => document.activeElement.dataset.f) === 'n' && await attribute.inputValue() === was + 'Of', `the name of an attribute: "${await attribute.inputValue()}"`);
+  await one.keyboard.type('It'); await one.keyboard.press('Tab');
+  await row(two, 'Meter').click();
+  await two.locator(`#doc input[data-f="n"] >> nth=0`).waitFor();
+  await two.waitForFunction(name => document.querySelector('#doc input[data-f="n"]').value === name, was + 'OfIt');
+  /* a field that was left shows what the page has for it when that changes */
+  await two.locator('#doc input[data-f="n"]').first().fill('meterNumber'); await two.keyboard.press('Tab');
+  await one.waitForFunction(() => document.querySelector('#doc input[data-f="n"]').value === 'meterNumber');
+});
+
+await test('typing: the next question stays in its field while the agent answers the one before', async (context, errors) => {
+  const page = await newPage(context, errors);
+  page.setDefaultTimeout(15000);
+  await page.goto(site.url + 'ide/index.html?backend=slow:600'); await ready(page);
+  await page.locator('[data-tw="agent"]').click();
+  await page.locator('.ag-ask textarea').fill('Who changed what lately?');
+  await page.keyboard.press('Enter');
+  await page.locator('.ag-dots').waitFor();
+  await page.keyboard.type('And what is wrong');
+  assert(await page.locator('#ag-send').isDisabled(), 'a second question can be sent while the first is on its way');
+  await answered(page, 1);
+  assert(await typingIn(page) === 'textarea "And what is wrong" at 17', `the question that was typed meanwhile: ${await typingIn(page)}`);
+  assert(await page.locator('#ag-send').isEnabled(), 'the question that was typed meanwhile cannot be sent');
+  await page.keyboard.type('?'); await page.keyboard.press('Enter');
+  await page.locator('.ag-msg.mine .ag-text', { hasText: 'And what is wrong?' }).waitFor();
+  await answered(page, 2);
+  assert(await page.locator('.ag-msg.mine').count() === 2 && await page.locator('.ag-ask textarea').inputValue() === '', 'the second question shows twice, or is still in its field');
+});
+
 await browser.close();
 await site.close();
 console.log(`${ran - failed} of ${ran} passed`);

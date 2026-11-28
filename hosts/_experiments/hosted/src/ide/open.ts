@@ -1,5 +1,4 @@
 /* Selecting and opening: which item is selected, which one the document area shows, and whether it shows as its tool or as a canvas. */
-import { $$ } from '../common/dom';
 import { show } from './docks';
 import { isBox } from './model';
 import { repaint, repaintAll } from './repaint';
@@ -27,8 +26,7 @@ export function pick(x: Item): void {
   S.sel = x;
   S.insp = null;
   reveal(x);
-  repaint('explorer', 'properties', 'status');
-  $$('.card').forEach(k => k.classList.toggle('on', k.dataset.id === x.id));
+  repaint('explorer', 'properties', 'status', 'marks');
 }
 
 /* shows a part of the open tool in the Properties, and brings the Properties up when there is room */

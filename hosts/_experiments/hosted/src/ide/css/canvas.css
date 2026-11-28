@@ -17,3 +17,4 @@
 .cv-tl{left:10px;top:10px}.cv-br{right:10px;bottom:10px}.cv-bl{left:10px;bottom:10px;padding:4px 9px;max-width:calc(100% - 180px)}
 .cv-bl[hidden]{display:none}.cv-bl button{color:var(--link)}.cv-tl span{padding:0 8px 0 4px;color:var(--fg)}
 .zl{min-width:40px;text-align:center;font-variant-numeric:tabular-nums}
+.zoom-from{position:fixed;z-index:2;flex:none;pointer-events:none;background:var(--editor)}
