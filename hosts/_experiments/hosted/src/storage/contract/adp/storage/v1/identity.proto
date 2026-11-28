@@ -1,0 +1,54 @@
+// Identity: the workspace, who is signed in, and the ways to sign in.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+import "adp/storage/v1/common.proto";
+
+service Identity {
+  rpc Read(ReadIdentityRequest) returns (IdentitySnapshot);
+  rpc SignIn(SignInRequest) returns (SignedIn);
+  rpc SingleSignOn(SingleSignOnRequest) returns (SignedIn);
+  rpc ProviderSignIn(ProviderSignInRequest) returns (SignedIn);
+  rpc SignOut(SignOutRequest) returns (Done);
+}
+
+message ReadIdentityRequest {}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string initials = 4;
+}
+
+message IdentitySnapshot {
+  // The workspace this backend serves, and the user it knows at this computer.
+  string workspace = 1;
+  User user = 2;
+  bool signed_in = 3;
+  // The git providers a user can sign in with.
+  repeated string providers = 4;
+}
+
+message SignInRequest {
+  string workspace = 1;
+  string email = 2;
+  string password = 3;
+  bool keep = 4;
+}
+
+message SingleSignOnRequest {
+  string workspace = 1;
+}
+
+message ProviderSignInRequest {
+  string workspace = 1;
+  string provider = 2;
+}
+
+message SignOutRequest {}
+
+message SignedIn {
+  User user = 1;
+}

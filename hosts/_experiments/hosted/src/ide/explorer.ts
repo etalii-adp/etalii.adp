@@ -1,22 +1,22 @@
 /* The Explorer: the tree, its two views, rename, add, delete, the icon picker and the context menu. A level's view is set from its context menu (View As) or in the Properties. */
 import { $, $$, $maybe, clamp, el, esc, hit } from '../common/dom';
 import { ico } from '../common/icons';
+import { reason } from '../common/reason';
 import { closePop, copy, dialog, menu, place, toast, type MenuEntry } from '../common/popups';
-import { n } from './data/solution';
 import { body, pel, show } from './docks';
-import { BY_DOMAIN, GENERAL, ICON_COUNT, ICONSET } from './icon-library';
-import { inSentence, K, TAKES } from './kinds';
-import { adopt, asFile, BY, disk, inside, isBox, kids, modeOf, multi, newShortGuid, path, ro, ROOT, showAll } from './model';
+import { acceptsOf, inSentence, K } from './kinds';
+import { asFile, byId, disk, fileOf, inside, isBox, kids, modeOf, multi, ownerOf, path, ro, ROOT, showAll } from './model';
 import { levelOf, openDoc, pick, reveal } from './open';
-import { repaintAll } from './repaint';
+import { repaint, repaintAll } from './repaint';
 import { sev } from './severity';
-import { S } from './state';
+import { settle, S } from './state';
+import { act, project, refused, storage } from './storage';
 import type { Item, KindName, ViewMode } from './types';
 
 const match = (x: Item): boolean => x.name.toLowerCase().includes(S.q) || kids(x).some(match);
 const expanded = (x: Item): boolean => S.open.has(x.id);
 const expand = (x: Item, on = !expanded(x)): void => { if (on) S.open.add(x.id); else S.open.delete(x.id); };
-const itemOf = (row: HTMLElement): Item => BY[row.dataset.id!];
+const itemOf = (row: HTMLElement): Item => byId(row.dataset.id!) ?? ROOT;
 const tree = (): HTMLElement => $('#tree');
 
 function rowHTML(x: Item, d: number, has: boolean, open: boolean): string {
@@ -39,80 +39,68 @@ export function renderExplorer(): void {
   const r = $maybe<HTMLInputElement>('#rn');
   if (r) {
     r.focus(); r.select();
-    r.onkeydown = e => { e.stopPropagation(); if (e.key === 'Enter') endRename(true); if (e.key === 'Escape') endRename(false); };
-    r.onblur = () => { if (S.edit) endRename(true, true); };
+    r.onkeydown = e => { e.stopPropagation(); if (e.key === 'Enter') void endRename(true); if (e.key === 'Escape') void endRename(false); };
+    r.onblur = () => { if (S.edit) void endRename(true, true); };
     r.oninput = () => { r.classList.remove('bad'); $maybe('.rnerr')?.remove(); };
   }
 }
 
 /* sets how a level and everything under it is shown; a level that shows as its parent does keeps no setting of its own */
-export function setMode(t: Item, m: ViewMode): void {
-  if (t.parent && modeOf(t.parent) === m) delete t.mode; else t.mode = m;
-  if (!t.parent && m === 'logical') delete t.mode;
+export async function setMode(t: Item, m: ViewMode): Promise<void> {
+  if (!await act(project.levels.setView(t, m))) return;
   S.open.add(t.id);
   repaintAll();
-  toast(`${t.name} now shows as ${m === 'files' ? 'File System' : 'Logical Structure'}. Saved in its .user.adp`);
 }
 
-/* why a name cannot be given to an item, or null when it can */
-export function nameError(x: Item, v: string): string | null {
-  if (!v) return 'A name is required.';
-  if (/[\\/:*?"<>|]/.test(v)) return 'A name cannot contain \\ / : * ? " < > |';
-  if (x.parent?.children?.some(s => s !== x && s.name.toLowerCase() === v.toLowerCase())) return `"${v}" already exists in ${x.parent.name}.`;
-  return null;
-}
 export function rename(x: Item): void { S.edit = x; reveal(x); renderExplorer(); }
-function endRename(apply: boolean, blur = false): void {
+/* true while a new name is on its way to the storage */
+let renaming = false;
+/* ends the renaming in the tree: the storage takes the name, or says why it cannot be given, and that shows under the row */
+async function endRename(apply: boolean, blur = false): Promise<void> {
   const x = S.edit, r = $maybe<HTMLInputElement>('#rn');
-  if (!x || !r) return;
-  const v = r.value.trim();
+  if (!x || !r || renaming) return;
   if (apply) {
-    const err = nameError(x, v);
-    if (err) {
-      if (blur) { S.edit = null; renderExplorer(); return; }
+    renaming = true;
+    try { await project.solution.rename(x, r.value.trim()); } catch (e) {
+      const why = reason(e);
+      if (blur || !r.isConnected) { S.edit = null; renderExplorer(); return; }
       const row = r.closest<HTMLElement>('.row')!;
       r.classList.add('bad');
       $maybe('.rnerr')?.remove();
-      row.after(el(`<div class="rnerr" style="--d:${row.style.getPropertyValue('--d')}">${esc(err)}</div>`));
+      row.after(el(`<div class="rnerr" style="--d:${row.style.getPropertyValue('--d')}">${esc(why)}</div>`));
       return;
-    }
-    if (v !== x.name) { x.name = v; if (!x.vcs) x.vcs = 'M'; }
+    } finally { renaming = false; }
   }
   S.edit = null;
   repaintAll();
   tree().focus();
 }
 
-function add(p: Item, kind: KindName): void {
-  const siblings = p.children ?? (p.children = []), base = 'New ' + inSentence(kind);
-  let nm = base, i = 2;
-  while (siblings.some(s => s.name === nm)) nm = base + ' ' + i++;
-  const x: Item = { name: nm, kind, parent: p, vcs: 'A', fresh: true, id: newShortGuid() };
-  if (kind === 'group') { x.children = []; x.accepts = p.accepts; }
-  if (TAKES[kind]) { x.children = []; x.accepts = TAKES[kind]; }
-  if (kind === 'ontology') x.rels = [];
-  if (kind === 'entity') x.attrs = [];
-  BY[x.id] = x;
-  siblings.push(x);
+async function add(p: Item, kind: KindName): Promise<void> {
+  const made = await act(project.solution.add(p, kind));
+  if (!made) return;
   S.open.add(p.id);
-  openDoc(x);
-  rename(x);
+  openDoc(made.item);
+  rename(made.item);
 }
-function del(x: Item): void {
+async function del(x: Item): Promise<void> {
   const p = x.parent;
-  if (!p?.children) return;
-  const siblings = p.children, i = siblings.indexOf(x);
-  siblings.splice(i, 1);
+  if (!p) return;
+  let done;
+  try { done = await project.solution.remove(x); } catch (e) { refused(e); return; }
+  const undo = done.undo;
   S.tabs = S.tabs.filter(t => !inside(t, x));
   if (inside(S.doc, x) || inside(S.sel, x)) openDoc(p); else repaintAll();
-  toast(`Deleted ${x.name}${x.children ? ' and its ' + x.children.length + ' items' : ''}`, 'Undo', () => { siblings.splice(i, 0, x); openDoc(x); });
+  /* Undo takes the delete back while it is the last change, and opens the item again */
+  toast(done.message, 'Undo', () => { project.history.undo(undo).then(() => { settle(); openDoc(x); }, refused); });
 }
 
 /* the icon picker, at a point: every icon of the library by category, with search and a choice of one category or domain */
 export function iconPick(x: Item, ax: number, ay: number): void {
   closePop();
+  const { general: GENERAL, byDomain: BY_DOMAIN, all: ICONSET, count: ICON_COUNT } = storage.catalogue.icons;
   const cur = x.icon || K[x.kind].icon, all = ICONSET.flatMap(group => group[1]), nameOf = (i: string) => (all.find(o => o.nm === i) || { label: i }).label;
-  const options = (groups: typeof ICONSET) => groups.map(([cat]) => `<option>${esc(cat)}</option>`).join('');
+  const options = (groups: typeof ICONSET): string => groups.map(([cat]) => `<option>${esc(cat)}</option>`).join('');
   const m = el(`<div class="menu ipick"><div class="mhead">Icon for ${esc(x.name)}</div><div class="ip-top"><input class="in" id="ip-q" placeholder="Search ${ICON_COUNT} icons" aria-label="Search icons" autocomplete="off"><select class="in" id="ip-cat" aria-label="Category or domain"><option value="">All categories</option><optgroup label="General">${options(GENERAL)}</optgroup><optgroup label="Domains">${options(BY_DOMAIN)}</optgroup></select></div><div class="ip-list" id="ip-list"></div><div class="ip-foot" id="ip-name"></div><div class="msep"></div><button class="mi" data-ic=""><span class="lead"></span>Use the default for ${esc(inSentence(x.kind))}</button></div>`);
   const list = $('#ip-list', m), foot = $('#ip-name', m), q = $<HTMLInputElement>('#ip-q', m), only = $<HTMLSelectElement>('#ip-cat', m), rest = () => { foot.textContent = 'Current: ' + nameOf(cur); };
   const draw = () => {
@@ -124,11 +112,10 @@ export function iconPick(x: Item, ax: number, ay: number): void {
     list.scrollTop = 0;
     rest();
   };
+  /* no name gives the item the icon of its kind again */
   const choose = (i: string | undefined) => {
-    if (i) x.icon = i; else delete x.icon;
     closePop();
-    repaintAll();
-    toast('Icon saved in ' + path(x.children ? x : x.parent!) + '/.adp');
+    void act(project.solution.setIcon(x, i ?? '')).then(done => { if (done) repaintAll(); });
   };
   q.oninput = draw;
   only.onchange = draw;
@@ -143,37 +130,36 @@ export function iconPick(x: Item, ax: number, ay: number): void {
 
 /* links a repository from outside the project into a level; its items continue the hierarchy there */
 export function linkRepo(p: Item): void {
-  dialog('Link Repository into ' + p.name, `<label for="lr-u">Repository</label><input class="in mono" id="lr-u" value="git@git.example.com:shared/notification-service.git"><label for="lr-n">Show as</label><input class="in" id="lr-n" value="Notification service"><label for="lr-r">Branch or tag</label><select class="in" id="lr-r"><option>v1.4.0</option><option>v1.3.2</option><option>main</option></select>`, 'Link', v => {
+  const offer = project.solution.suggestedLink;
+  dialog('Link Repository into ' + p.name, `<label for="lr-u">Repository</label><input class="in mono" id="lr-u" value="${esc(offer.repo)}"><label for="lr-n">Show as</label><input class="in" id="lr-n" value="${esc(offer.name)}"><label for="lr-r">Branch or tag</label><select class="in" id="lr-r">${offer.refs.map(r => `<option>${esc(r)}</option>`).join('')}</select>`, 'Link', v => {
     const value = (id: string) => $<HTMLInputElement | HTMLSelectElement>(id, v).value;
-    const draft = n(value('#lr-n').trim() || 'Linked repository', 'group', [n('Email template', 'component'), n('Delivery pipeline', 'pipeline'), n('Delivery monitor', 'dashboard')], { icon: 'chat', vcs: 'A', link: { repo: value('#lr-u'), ref: value('#lr-r'), refs: ['v1.4.0', 'v1.3.2', 'main'] } });
-    const x = adopt(draft, p, '', newShortGuid);
-    (p.children ?? (p.children = [])).push(x);
-    S.open.add(p.id); S.open.add(x.id);
-    openDoc(x);
-    toast(`${x.name} is linked. Its items continue the hierarchy here.`);
+    void act(project.solution.linkRepository(p, value('#lr-u'), value('#lr-n').trim(), value('#lr-r'))).then(made => {
+      if (!made) return;
+      S.open.add(p.id); S.open.add(made.item.id);
+      openDoc(made.item);
+    });
   });
 }
 
 const changed = (x: Item): boolean => !!x.vcs || (x.children || []).some(changed);
-const rollback = (x: Item): void => { delete x.vcs; (x.children || []).forEach(rollback); };
 
 /* the context menu of an item: what it offers depends on the item */
 export function ctx(x: Item): MenuEntry[] {
-  if (x.pseudo) return [{ l: 'Open', k: 'Enter', on: () => openDoc(x) }, '-', { l: 'Git', i: 'branch', sub: [{ l: 'Show History', on: () => show('git') }, { l: x.ignored ? 'Remove from .gitignore' : 'Add to .gitignore', d: x.name === '.adp' ? '.adp files are always committed' : null, on: () => { x.ignored = !x.ignored; renderExplorer(); } }] }, { l: 'Copy Path', on: () => copy(path(x)) }];
+  if (x.pseudo) return [{ l: 'Open', k: 'Enter', on: () => openDoc(x) }, '-', { l: 'Git', i: 'branch', sub: [{ l: 'Show History', on: () => show('git') }, { l: x.ignored ? 'Remove from .gitignore' : 'Add to .gitignore', d: x.name === '.adp' ? '.adp files are always committed' : null, on: () => { project.git.setIgnored(ownerOf(x), fileOf(x), !x.ignored).then(() => repaint('explorer', 'properties'), refused); } }] }, { l: 'Copy Path', on: () => copy(path(x)) }];
   const box = !!x.children, pure = isBox(x), R = ro(x), why = R ? `Read-only, from ${R.name} @ ${R.link!.ref}` : null, m = box ? modeOf(x) : null, link = x.link;
   return [
-    box && { l: 'New', i: 'plus', d: why, sub: (x.accepts || ['group', 'doc'] as KindName[]).map(k => ({ l: K[k].label, i: K[k].icon, on: () => add(x, k) })) },
+    box && { l: 'New', i: 'plus', d: why, sub: acceptsOf(x).map(k => ({ l: K[k].label, i: K[k].icon, on: () => void add(x, k) })) },
     { l: 'Open', k: 'Enter', i: pure ? 'canvas' : 'edit', on: () => openDoc(x) },
     { l: pure ? 'Open as Contents List' : 'Show in Canvas', k: 'Alt+C', i: pure ? 'list' : 'canvas', on: () => openDoc(x, pure ? 'editor' : 'canvas') }, '-',
     { l: 'Rename…', k: 'F2', d: why, on: () => rename(x) },
     { l: 'Change Icon…', d: why, on: () => { const r = $maybe(`.row[data-id="${x.id}"]`)?.getBoundingClientRect(); iconPick(x, r ? r.left + 40 : 200, r ? r.bottom : 200); } },
-    { l: 'Delete', k: 'Del', d: x === ROOT ? 'The project root stays' : why, on: () => del(x) }, '-',
-    box && { l: 'View As', i: 'eye', sub: [{ l: 'Logical Structure', chk: m === 'logical', on: () => setMode(x, 'logical') }, { l: 'File System', chk: m === 'files', on: () => setMode(x, 'files') }, '-', { l: 'Show All Files', chk: m === 'files' && showAll(x), d: m !== 'files' ? 'File System view only' : null, on: () => { x.showAll = !showAll(x); repaintAll(); } }] },
-    link && { l: 'Switch Branch or Tag', i: 'branch', sub: link.refs.map(r => ({ l: r, chk: r === link.ref, on: () => { link.ref = r; repaintAll(); toast(`${x.name} now follows ${r}`); } })) },
-    link && { l: 'Update from Remote', i: 'fetch', on: () => toast(`${x.name} is up to date with ${link.ref}`) },
-    link && { l: 'Unlink Repository', on: () => del(x) },
+    { l: 'Delete', k: 'Del', d: x === ROOT ? 'The project root stays' : why, on: () => void del(x) }, '-',
+    box && { l: 'View As', i: 'eye', sub: [{ l: 'Logical Structure', chk: m === 'logical', on: () => void setMode(x, 'logical') }, { l: 'File System', chk: m === 'files', on: () => void setMode(x, 'files') }, '-', { l: 'Show All Files', chk: m === 'files' && showAll(x), d: m !== 'files' ? 'File System view only' : null, on: () => { project.levels.setShowAll(x, !showAll(x)).then(repaintAll, refused); } }] },
+    link && { l: 'Switch Branch or Tag', i: 'branch', sub: link.refs.map(r => ({ l: r, chk: r === link.ref, on: () => { void act(project.solution.setRef(x, r)).then(done => { if (done) repaintAll(); }); } })) },
+    link && { l: 'Update from Remote', i: 'fetch', on: () => void act(project.solution.updateLink(x)) },
+    link && { l: 'Unlink Repository', on: () => void del(x) },
     pure && !link && { l: 'Link Repository…', i: 'link', d: why, on: () => linkRepo(x) }, '-',
-    { l: 'Git', i: 'branch', sub: [{ l: 'Commit…', k: 'Ctrl+K', d: changed(x) ? null : 'No local changes', on: () => show('commit') }, { l: 'Show History', on: () => show('git') }, { l: 'Compare with Branch…', on: () => toast('Comparing ' + x.name + ' with origin/develop') }, { l: 'Rollback…', d: changed(x) ? null : 'No local changes', on: () => { rollback(x); repaintAll(); toast('Rolled back local changes in ' + x.name); } }] },
+    { l: 'Git', i: 'branch', sub: [{ l: 'Commit…', k: 'Ctrl+K', d: changed(x) ? null : 'No local changes', on: () => show('commit') }, { l: 'Show History', on: () => show('git') }, { l: 'Compare with Branch…', on: () => toast('Comparing ' + x.name + ' with ' + project.git.upstream) }, { l: 'Rollback…', d: changed(x) ? null : 'No local changes', on: () => { void act(project.git.rollback(x)).then(done => { if (done) repaintAll(); }); } }] },
     box && { l: `Find in ${x.name}…`, k: 'Ctrl+Shift+F', i: 'search', on: () => { show('explorer'); const q = $<HTMLInputElement>('#ex-q'); q.placeholder = 'Search in ' + x.name; q.focus(); } },
     { l: 'Copy', sub: [{ l: 'Name', on: () => copy(x.name) }, { l: 'Path on Disk', on: () => copy(path(x)) }, { l: 'ID', on: () => copy(x.id) }] }, '-',
     { l: 'Properties', k: 'Alt+Enter', i: 'props', on: () => { pick(x); show('properties'); } }];
@@ -182,7 +168,7 @@ export function ctx(x: Item): MenuEntry[] {
 /* the menu File > New Item offers: what the level of the selection takes */
 export function newItemMenu(): MenuEntry[] {
   const t = levelOf(S.sel);
-  return (t.accepts || ['group', 'doc'] as KindName[]).map(k => ({ l: K[k].label, i: K[k].icon, on: () => add(t, k) }));
+  return acceptsOf(t).map(k => ({ l: K[k].label, i: K[k].icon, on: () => void add(t, k) }));
 }
 
 /* draws the Explorer's frame into its tool window and wires the tree */
@@ -219,7 +205,7 @@ export function mountExplorer(): void {
     else if (e.key === 'ArrowRight' && kids(x).length) { expand(x, true); renderExplorer(); }
     else if (e.key === 'ArrowLeft') { if (expanded(x) && kids(x).length) { expand(x, false); renderExplorer(); } else if (x.parent) openDoc(x.parent); }
     else if (e.key === 'F2' && !x.pseudo && !ro(x)) { e.preventDefault(); rename(x); }
-    else if (e.key === 'Delete' && !x.pseudo && !ro(x) && x !== ROOT) del(x);
+    else if (e.key === 'Delete' && !x.pseudo && !ro(x) && x !== ROOT) void del(x);
     else if (e.key === 'ContextMenu' || (e.shiftKey && e.key === 'F10')) { e.preventDefault(); const r = rows[i].getBoundingClientRect(); menu(ctx(x), r.left + 60, r.bottom); }
   });
 }

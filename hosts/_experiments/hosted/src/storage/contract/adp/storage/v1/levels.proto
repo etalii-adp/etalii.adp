@@ -1,0 +1,68 @@
+// Levels: the settings of each level of the hierarchy. What is shared is kept in the level's .adp file,
+// and what is one user's own in its .user.adp file.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+import "adp/storage/v1/common.proto";
+
+service Levels {
+  rpc Read(ProjectRef) returns (LevelsSnapshot);
+  rpc SetView(SetViewRequest) returns (Done);
+  rpc SetShowAll(SetShowAllRequest) returns (Done);
+  rpc SetLayout(SetLayoutRequest) returns (Done);
+  rpc ResetLayout(ResetLayoutRequest) returns (Done);
+}
+
+enum ViewMode {
+  // As the level above shows.
+  VIEW_MODE_UNSPECIFIED = 0;
+  VIEW_MODE_LOGICAL = 1;
+  VIEW_MODE_FILES = 2;
+}
+
+// Where the card of a child item is on its level's canvas.
+message Place {
+  string item_id = 1;
+  double x = 2;
+  double y = 3;
+}
+
+message Level {
+  string item_id = 1;
+  // The user's own: how the level is shown, and whether the files git ignores show too.
+  ViewMode view = 2;
+  optional bool show_all = 3;
+  // The layout of the canvas everyone gets, and the user's own in place of it.
+  repeated Place layout = 4;
+  repeated Place own_layout = 5;
+}
+
+message LevelsSnapshot {
+  uint32 revision = 1;
+  // Only the levels that have a setting.
+  repeated Level levels = 2;
+}
+
+message SetViewRequest {
+  string project_id = 1;
+  string item_id = 2;
+  ViewMode view = 3;
+}
+
+message SetShowAllRequest {
+  string project_id = 1;
+  string item_id = 2;
+  bool show_all = 3;
+}
+
+message SetLayoutRequest {
+  string project_id = 1;
+  string item_id = 2;
+  repeated Place places = 3;
+}
+
+message ResetLayoutRequest {
+  string project_id = 1;
+  string item_id = 2;
+}

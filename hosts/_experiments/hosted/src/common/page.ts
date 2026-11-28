@@ -5,8 +5,6 @@ import { go, wireNav } from './nav';
 import type { PageName } from './pages';
 import { toast, wirePopups } from './popups';
 
-/* what a project other than Atlas Platform answers */
-export const only = (): void => toast('Only Atlas Platform is available on this computer.');
 
 export function startPage(): void {
   mountMark();

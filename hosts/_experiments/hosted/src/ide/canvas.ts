@@ -4,11 +4,13 @@ import { ico } from '../common/icons';
 import { menu } from '../common/popups';
 import { ctx } from './explorer';
 import { K } from './kinds';
-import { BY, crumbsOf, inside } from './model';
+import { personal } from '../storage';
+import { byId, crumbsOf, inside } from './model';
 import { openDoc, pick } from './open';
 import { repaint } from './repaint';
 import { sev } from './severity';
-import { S } from './state';
+import { keep, S } from './state';
+import { project, refused } from './storage';
 import { ARROW, curve, curveL } from './tools/shared';
 import type { Item, Point, ToolName, View } from './types';
 
@@ -25,7 +27,7 @@ export function tween(from: Item, to: Item, d: HTMLElement): Tween {
   const a = pa[i], b = pb[i], A = pa[i - 1];
   if (!a) { const r = cardOf(b.id, d)?.getBoundingClientRect(), o = d.getBoundingClientRect(); return { k: 'in', ox: r ? r.left + r.width / 2 - o.left : o.width / 2, oy: r ? r.top + r.height / 2 - o.top : o.height / 2 }; }
   if (!b) return { k: 'out', id: a.id };
-  const levels = A.children || [], P = A.pos && A.pos.length === levels.length ? A.pos : defaultLayout(A), va = P[levels.indexOf(a)], vb = P[levels.indexOf(b)], dx = vb.x - va.x, dy = vb.y - va.y, len = Math.hypot(dx, dy) || 1;
+  const levels = A.children || [], P = layoutOf(A), va = P[levels.indexOf(a)], vb = P[levels.indexOf(b)], dx = vb.x - va.x, dy = vb.y - va.y, len = Math.hypot(dx, dy) || 1;
   const dd = pb.length - pa.length;
   return { k: 'move', dx: dx / len, dy: dy / len, s: dd < 0 ? 1.6 : dd > 0 ? .55 : a !== from ? .8 : 1 };
 }
@@ -58,13 +60,15 @@ const THUMB: Partial<Record<ToolName, string>> & { doc: string } = {
 /* where the cards of a level are before anyone moved them: the shared layout, the places of a model's entity types, or a grid */
 function defaultLayout(L: Item): Point[] {
   const children = L.children || [], cols = children.length > 6 ? 4 : 3, placed = children.every(q => q.ex !== undefined), deep = children.some(q => q.children);
-  return children.map((k, i) => L.layout0?.[i] ? { x: L.layout0[i][0], y: L.layout0[i][1] } : k.ex !== undefined && placed ? { x: k.ex * 1.12, y: k.ey ?? 0 } : { x: i % cols * 270, y: Math.floor(i / cols) * (deep ? 215 : 150) });
+  return children.map((k, i) => L.shared?.get(k.id) ?? (k.ex !== undefined && placed ? { x: k.ex * 1.12, y: k.ey ?? 0 } : { x: i % cols * 270, y: Math.floor(i / cols) * (deep ? 215 : 150) }));
 }
+/* where the cards of a level are: where a person put them, and for the rest where they are by themselves */
+const layoutOf = (L: Item): Point[] => { const places = defaultLayout(L); return (L.children || []).map((k, i) => L.own?.get(k.id) ?? places[i]); };
 
 export function renderCanvas(d: HTMLElement, L: Item): void {
   const children = L.children || [];
-  if (!L.pos || L.pos.length !== children.length) L.pos = defaultLayout(L);
-  const pos = L.pos;
+  /* a copy: a card that is dragged moves here, and its place is kept when it is let go */
+  const pos = layoutOf(L).map(p => ({ ...p }));
   const card = (k: Item, i: number): string => {
     const sv = sev(k), t = K[k.kind];
     return `<div class="card${S.sel === k ? ' on' : ''}" data-id="${k.id}" data-i="${i}" style="left:${pos[i].x}px;top:${pos[i].y}px"><div class="ch">${ico(k.icon || t.icon, 'c-' + t.colour)}<b class="${k.vcs ? 'nm v' + k.vcs : ''}">${esc(k.name)}</b>${sv ? `<span class="dot ${sv}"></span>` : ''}</div><div class="ck">${t.label}${k.children ? ' · ' + k.children.length + ' items' : ''}${k.link ? `<span class="ref">${ico('link')}${esc(k.link.ref)}</span>` : ''}</div>${k.children ? `<ul>${k.children.slice(0, 5).map(q => `<li>${ico(q.icon || K[q.kind].icon, 'c-' + K[q.kind].colour)}${esc(q.name)}</li>`).join('')}${k.children.length > 5 ? `<li class="more">and ${k.children.length - 5} more</li>` : ''}${k.children.length ? '' : '<li class="more">Empty</li>'}</ul>` : k.attrs ? `<ul>${k.attrs.slice(0, 4).map(a => `<li class="mono">${esc(a)}</li>`).join('')}${k.attrs.length > 4 ? `<li class="more">and ${k.attrs.length - 4} more</li>` : ''}${k.attrs.length ? '' : '<li class="more">No attributes yet</li>'}</ul>` : `<div class="th"><svg viewBox="0 0 192 42" preserveAspectRatio="xMinYMid meet">${(t.tool && THUMB[t.tool]) || THUMB.doc}</svg></div>`}</div>`;
@@ -77,13 +81,13 @@ export function renderCanvas(d: HTMLElement, L: Item): void {
   let V: View = kept ?? { x: 0, y: 0, k: 1 };
 
   const note = (): void => {
-    $('#cv-note').innerHTML = S.moved.has(L.id) ? `Your own layout, saved in .user.adp. <button id="cv-reset">Use shared layout</button>` : `Layout shared through .adp. Drag a card to make it your own. Double-click to go deeper.`;
+    $('#cv-note').innerHTML = L.own ? `Your own layout, saved in .user.adp. <button id="cv-reset">Use shared layout</button>` : `Layout shared through .adp. Drag a card to make it your own. Double-click to go deeper.`;
     const reset = $maybe('#cv-reset');
-    if (reset) reset.onclick = () => { S.moved.delete(L.id); delete L.pos; delete S.view[L.id]; repaint('editor'); };
+    if (reset) reset.onclick = () => { project.levels.resetLayout(L).then(() => { delete S.view[L.id]; repaint('editor'); }, refused); };
   };
   /* the arrows: the relations of a model between its entity types, or the flows of a level between its children */
   const edges = (): void => {
-    const pairs: [number, number][] = L.rels ? L.rels.filter(r => children.includes(r[0]) && children.includes(r[1])).map(r => [children.indexOf(r[0]), children.indexOf(r[1])]) : L.flows || [];
+    const pairs = (L.rels ?? L.flows ?? []).filter(r => children.includes(r[0]) && children.includes(r[1])).map((r): [number, number] => [children.indexOf(r[0]), children.indexOf(r[1])]);
     $<SVGGElement>('#cv-e', d).innerHTML = pairs.filter(([a, b]) => cards[a] && cards[b]).map(([a, b]) => {
       const A = cards[a], B = cards[b], pa = pos[a], pb = pos[b];
       if (Math.abs(pa.x - pb.x) < 140) { const dn = pb.y > pa.y, x1 = pa.x + A.offsetWidth / 2, y1 = pa.y + (dn ? A.offsetHeight : 0), x2 = pb.x + B.offsetWidth / 2, y2 = pb.y + (dn ? -3 : B.offsetHeight + 3), dy = (y2 - y1) / 2; return `<path marker-end="url(#ar)" d="M${x1} ${y1}C${x1} ${y1 + dy} ${x2} ${y2 - dy} ${x2} ${y2}"/>`; }
@@ -96,6 +100,7 @@ export function renderCanvas(d: HTMLElement, L: Item): void {
     cv.style.backgroundPosition = `${V.x}px ${V.y}px`;
     $('#cv-z').textContent = Math.round(V.k * 100) + '%';
     S.view[L.id] = V;
+    keep();
   };
   const fit = (): void => {
     if (!cards.length) { V = { x: 0, y: 0, k: 1 }; return apply(); }
@@ -116,7 +121,7 @@ export function renderCanvas(d: HTMLElement, L: Item): void {
     S.anim = !S.anim;
     anim.classList.toggle('on', S.anim);
     anim.setAttribute('aria-pressed', String(S.anim));
-    try { localStorage.setItem('adp-ide-anim', S.anim ? '1' : '0'); } catch { /* storage is off: the choice lasts as long as the page */ }
+    personal.set({ anim: S.anim });
   };
   $('#cv-in').onclick = () => zoom(1.2);
   $('#cv-out').onclick = () => zoom(1 / 1.2);
@@ -139,9 +144,10 @@ export function renderCanvas(d: HTMLElement, L: Item): void {
       cv.removeEventListener('pointermove', mv);
       cv.classList.remove('pan');
       if (!cd) return;
-      if (moved) { S.moved.add(L.id); note(); return; }
+      if (moved) { project.levels.setLayout(L, new Map(children.map((k, j) => [k.id, pos[j]]))).then(note, refused); return; }
       /* a second click on the same card within a moment goes into it */
-      const k = BY[cd.dataset.id!], now = Date.now();
+      const k = byId(cd.dataset.id!), now = Date.now();
+      if (!k) return;
       if (S.lastC === k.id && now - S.lastT < 450) { S.lastC = null; openDoc(k, k.children ? 'canvas' : 'editor'); }
       else { S.lastC = k.id; S.lastT = now; pick(k); }
     };
@@ -151,7 +157,7 @@ export function renderCanvas(d: HTMLElement, L: Item): void {
   cv.addEventListener('contextmenu', e => {
     const cd = hit(e, '.card');
     e.preventDefault();
-    const k = cd ? BY[cd.dataset.id!] : L;
+    const k = (cd && byId(cd.dataset.id!)) || L;
     if (cd) pick(k);
     menu(ctx(k), e.clientX, e.clientY);
   });

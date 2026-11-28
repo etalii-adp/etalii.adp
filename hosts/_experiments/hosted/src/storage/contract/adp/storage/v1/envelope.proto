@@ -1,0 +1,79 @@
+// The envelope every message between a page and a hosted service travels in, over one WebSocket in binary frames.
+// A call is a Request and the Response with the same id; what changed in a store arrives as an Event, in order,
+// and the events a command caused arrive before its Response.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+import "adp/storage/v1/common.proto";
+
+message Envelope {
+  oneof kind {
+    Hello hello = 1;
+    Request request = 2;
+    Response response = 3;
+    Cancel cancel = 4;
+    Event event = 5;
+    Ping ping = 6;
+    Pong pong = 7;
+  }
+}
+
+// The first message each side sends.
+message Hello {
+  // The version of this envelope; a side that does not know the other's version closes the connection.
+  uint32 protocol = 1;
+  // What is speaking, for the logs: a page's name and build, or the service's.
+  string peer = 2;
+}
+
+message Request {
+  // Made by the caller and unique per call. A command sent again with the same id is carried out once.
+  string id = 1;
+  // The call, as "adp.storage.v1.Solution/Rename".
+  string method = 2;
+  // The call's request message, encoded.
+  bytes message = 3;
+  // How long the caller waits, in milliseconds; 0 for the default.
+  uint32 limit_ms = 4;
+}
+
+message Response {
+  string id = 1;
+  // True when more responses with this id follow, for a call that answers in parts.
+  bool more = 2;
+  oneof outcome {
+    // The call's response message, encoded.
+    bytes result = 3;
+    Refusal refusal = 4;
+    Fault fault = 5;
+  }
+}
+
+// The caller no longer waits for the Response with this id.
+message Cancel {
+  string id = 1;
+}
+
+// What changed in one store of one project.
+message Event {
+  // The store, by the name of its service: "Solution", "Git".
+  string store = 1;
+  string project_id = 2;
+  // The store's revision after the change. A store that sees a gap reads its snapshot again.
+  uint32 revision = 3;
+  // The id of the command that caused it, so the caller knows its own changes.
+  string cause = 4;
+  // The user who made the change.
+  string user = 5;
+  // The store's changes message, encoded: SolutionChanges for "Solution", and so on.
+  bytes changes = 6;
+}
+
+message Ping {
+  uint32 nonce = 1;
+}
+
+message Pong {
+  uint32 nonce = 1;
+}

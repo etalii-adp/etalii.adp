@@ -1,0 +1,36 @@
+// History: the commands that changed a project, newest last, and taking them back.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+import "adp/storage/v1/common.proto";
+
+service History {
+  rpc Read(ProjectRef) returns (HistorySnapshot);
+  rpc Undo(UndoRequest) returns (Done);
+  rpc Redo(ProjectRef) returns (Done);
+}
+
+message HistoryEntry {
+  // The id of the command.
+  string id = 1;
+  // What it did, in a few words.
+  string label = 2;
+  string user = 3;
+  // Taken back, and not done again since.
+  bool undone = 4;
+}
+
+message HistorySnapshot {
+  uint32 revision = 1;
+  repeated HistoryEntry entries = 2;
+  // What Undo and Redo would do next; empty when there is nothing.
+  string undo_label = 3;
+  string redo_label = 4;
+}
+
+message UndoRequest {
+  string project_id = 1;
+  // The command to take back; it has to be the last one that was not taken back. Empty for the last one.
+  string entry_id = 2;
+}

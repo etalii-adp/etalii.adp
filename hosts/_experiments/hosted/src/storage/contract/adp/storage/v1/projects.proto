@@ -1,0 +1,43 @@
+// Projects: the projects and assets a user can open.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+service Projects {
+  rpc Read(ReadProjectsRequest) returns (ProjectsSnapshot);
+  rpc Open(OpenProjectRequest) returns (ProjectOpened);
+}
+
+message ReadProjectsRequest {}
+
+message Project {
+  string id = 1;
+  string name = 2;
+  // Two letters and a colour, for its badge.
+  string initials = 3;
+  string colour = 4;
+  string path = 5;
+  string branch = 6;
+  string about = 7;
+  // When it was last opened, as a text.
+  string opened = 8;
+  // A repository that is linked into other projects.
+  bool asset = 9;
+  // How many errors validation found in it.
+  uint32 errors = 10;
+}
+
+message ProjectsSnapshot {
+  uint32 revision = 1;
+  repeated Project projects = 2;
+  // The project a page opens when none was chosen.
+  string last_opened_id = 3;
+}
+
+message OpenProjectRequest {
+  string project_id = 1;
+}
+
+message ProjectOpened {
+  Project project = 1;
+}

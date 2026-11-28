@@ -1,0 +1,130 @@
+// Git: the branches, the log, what is not committed yet, and the commands that change them.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+import "adp/storage/v1/common.proto";
+
+service Git {
+  rpc Read(ProjectRef) returns (GitSnapshot);
+  rpc Commit(CommitRequest) returns (Done);
+  rpc Push(ProjectRef) returns (Done);
+  rpc Pull(ProjectRef) returns (Done);
+  rpc Fetch(ProjectRef) returns (Done);
+  rpc Rollback(RollbackRequest) returns (Done);
+  rpc SetIgnored(SetIgnoredRequest) returns (Done);
+}
+
+enum ChangeState {
+  CHANGE_STATE_UNSPECIFIED = 0;
+  CHANGE_STATE_MODIFIED = 1;
+  CHANGE_STATE_ADDED = 2;
+}
+
+enum RefKind {
+  REF_KIND_UNSPECIFIED = 0;
+  REF_KIND_LOCAL = 1;
+  REF_KIND_REMOTE = 2;
+  REF_KIND_TAG = 3;
+}
+
+// An item a commit changed.
+message Touched {
+  string item_id = 1;
+  ChangeState state = 2;
+}
+
+message GitCommit {
+  // Its hash as git abbreviates it.
+  string hash = 1;
+  // The lane it is drawn in.
+  uint32 lane = 2;
+  // The hashes of its parents.
+  repeated string parents = 3;
+  string message = 4;
+  string author = 5;
+  // When, as a text, and how many days ago.
+  string when = 6;
+  uint32 days = 7;
+  repeated Touched touched = 8;
+}
+
+message GitRef {
+  // Its full name, such as "origin/develop", and the name it shows by under its heading.
+  string name = 1;
+  string label = 2;
+  RefKind kind = 3;
+  // The commit it points at.
+  string hash = 4;
+}
+
+message ChangedFile {
+  string path = 1;
+  ChangeState state = 2;
+}
+
+// The files of one item that are not committed.
+message ChangeGroup {
+  string item_id = 1;
+  repeated ChangedFile files = 2;
+}
+
+// What git says of one item.
+message ItemGit {
+  string item_id = 1;
+  ChangeState state = 2;
+  string last_author = 3;
+  uint32 last_days = 4;
+}
+
+// A file whose place in .gitignore was changed by hand.
+message IgnoredFile {
+  string owner_id = 1;
+  string path = 2;
+  bool ignored = 3;
+}
+
+message GitSnapshot {
+  uint32 revision = 1;
+  // The branch that is checked out and the branch it follows.
+  string branch = 2;
+  string upstream = 3;
+  uint32 ahead = 4;
+  uint32 behind = 5;
+  // When the remotes were last fetched, as a text.
+  string fetched = 6;
+  repeated GitRef refs = 7;
+  // The log, newest first.
+  repeated GitCommit commits = 8;
+  // The people who commit to this project; the first is the user.
+  repeated string people = 9;
+  repeated ChangeGroup changes = 10;
+  repeated ItemGit items = 11;
+  repeated IgnoredFile ignored = 12;
+  // A commit message to start from.
+  string suggested_message = 13;
+}
+
+message FileRef {
+  string item_id = 1;
+  string path = 2;
+}
+
+message CommitRequest {
+  string project_id = 1;
+  string message = 2;
+  repeated FileRef files = 3;
+  bool push = 4;
+}
+
+message RollbackRequest {
+  string project_id = 1;
+  string item_id = 2;
+}
+
+message SetIgnoredRequest {
+  string project_id = 1;
+  string owner_id = 2;
+  string path = 3;
+  bool ignored = 4;
+}

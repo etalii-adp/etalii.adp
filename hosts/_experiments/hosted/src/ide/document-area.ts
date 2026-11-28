@@ -3,7 +3,7 @@ import { $, $maybe, esc, hit } from '../common/dom';
 import { ico } from '../common/icons';
 import { play, renderCanvas, tween } from './canvas';
 import { K, WORD } from './kinds';
-import { BY, crumbsOf, isBox, ROOT } from './model';
+import { byId, crumbsOf, isBox, ROOT } from './model';
 import { dmode, levelOf, openDoc } from './open';
 import { repaint } from './repaint';
 import { S } from './state';
@@ -59,7 +59,8 @@ export function mountDocumentArea(): void {
   $('#tabs').onclick = e => {
     const t = hit(e, '.tab');
     if (!t) return;
-    const x = BY[t.dataset.id!];
+    const x = byId(t.dataset.id!);
+    if (!x) return;
     if (hit(e, '.x')) {
       const i = S.tabs.indexOf(x);
       S.tabs.splice(i, 1);
@@ -68,5 +69,5 @@ export function mountDocumentArea(): void {
     }
     openDoc(x);
   };
-  $('#crumbs').onclick = e => { const b = hit(e, 'button'); if (b) openDoc(BY[b.dataset.id!]); };
+  $('#crumbs').onclick = e => { const x = byId(hit(e, 'button')?.dataset.id ?? ''); if (x) openDoc(x); };
 }

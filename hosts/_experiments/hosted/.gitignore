@@ -1,2 +1,6 @@
 node_modules/
 dist/
+# written by the build from src/storage/contract
+src/storage/gen/
+# what the tests write
+test/out/

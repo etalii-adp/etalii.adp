@@ -1,0 +1,53 @@
+// Workbench: what one user's window on a project looks like, so it comes back as it was left.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+import "adp/storage/v1/common.proto";
+
+service Workbench {
+  rpc Read(ProjectRef) returns (WorkbenchSnapshot);
+  rpc Write(WriteWorkbenchRequest) returns (Done);
+}
+
+// Pan and zoom of a canvas.
+message CanvasView {
+  double x = 1;
+  double y = 2;
+  double k = 3;
+}
+
+message GitFilter {
+  string branch = 1;
+  string user = 2;
+  uint32 days = 3;
+}
+
+message WorkbenchSnapshot {
+  // The selected item, the item the document area shows, and the open tabs.
+  string selected_id = 1;
+  string document_id = 2;
+  repeated string tab_ids = 3;
+  // The items that are expanded in the Explorer.
+  repeated string expanded_ids = 4;
+  // "editor" or "canvas" per item, where it differs from what its kind gives.
+  map<string, string> document_modes = 5;
+  // Pan and zoom per canvas level, and the levels whose view was set by hand.
+  map<string, CanvasView> views = 6;
+  repeated string own_views = 7;
+  // Where each tool window is docked, and which one each dock shows; a dock that shows none has an empty text.
+  map<string, string> docks = 8;
+  map<string, string> active = 9;
+  // The severities the Problems leave out.
+  repeated string hidden_severities = 10;
+  GitFilter git = 11;
+  // The item the run button starts.
+  string run_target_id = 12;
+  // The commit message being written; unset before anything was typed.
+  optional string commit_message = 13;
+}
+
+message WriteWorkbenchRequest {
+  string project_id = 1;
+  WorkbenchSnapshot workbench = 2;
+}

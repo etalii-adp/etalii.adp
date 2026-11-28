@@ -1,15 +1,16 @@
 # Hosted: a mockup of an ADP solution IDE
 
-An experiment, not a host. It is a clickable mockup of a hosted ADP in which a whole solution, from a small application to a platform, is designed and developed as one hierarchy. Nothing here is specified yet, nothing is connected to a server, and every name and number is example data ("Atlas Platform", a platform for an energy utility).
+An experiment, not a host. It is a clickable mockup of a hosted ADP in which a whole solution, from a small application to a platform, is designed and developed as one hierarchy. Nothing here is specified yet, and no service runs behind it: the pages ask a storage for everything they show, and the storage they use by default is one that lives in the page and starts from example data ("Atlas Platform", a platform for an energy utility).
 
 The pages are written in TypeScript and built into `dist/`. With Node.js 22 or newer:
 
 ```
 npm install
-npm run build
+npm run check
+npm start
 ```
 
-Then open `dist/index.html` in a browser. No server is needed: a built page opens straight from disk. `npm run typecheck` checks the types without building, and `npm run check` does both.
+`npm run check` writes the code of the storage contract, checks the types and builds the pages; `npm start` serves `dist/` at `http://localhost:8080/`. The pages are modules, which a browser loads from a server and not straight from disk. `npm test` runs the tests (see [Tests](#tests)).
 
 ## The pages
 
@@ -17,7 +18,7 @@ Then open `dist/index.html` in a browser. No server is needed: a built page open
 |---|---|---|
 | Start | `src/index.html`, `src/splash/` | The splash screen, with the way in to the login page and a link to the About page of the ADP site |
 | Login | `src/login/` | Signing in to a workspace. An email with the password `42!` signs in. Single sign-on and a git provider can be tried as well: each asks, and answers that the workspace has not set it up, so neither leads further |
-| Projects | `src/projects/` | The projects and assets (repositories that are linked into other projects) on this computer. Only Atlas Platform opens |
+| Projects | `src/projects/` | The projects and assets (repositories that are linked into other projects) on this computer. With the example data only Atlas Platform opens |
 | IDE | `src/ide/` | The solution IDE: Explorer, document area with tools and a canvas, Properties, Problems, Commit and Git |
 
 The pages follow one another as they would in use: the start page leads to the login page, signing in leads to the projects, and opening Atlas Platform leads to the IDE. Signing out, the ADP mark on the login page, and the project and account menus of the IDE lead back.
@@ -32,7 +33,7 @@ The pages follow one another as they would in use: the start page leads to the l
 - The document area opens an item in its tool (a diagram, a designer or an editor) and switches to Canvas, an infinite plane with a card per child item that can be walked level by level, in step with the Explorer.
 - The context menu adds, renames and deletes items, with what is offered depending on the item.
 - The IDE owns the keyboard and the mouse (`ide/browser.ts`): the browser's keyboard shortcuts, the back and forward buttons of a mouse and the browser's context menu do nothing on the IDE page, so each can be given a task of the IDE's own, on Windows and on a Mac. A text field keeps the clipboard, select all, undo, redo and moving by word. A browser keeps a few shortcuts to itself (a new tab or window, closing one, switching tabs, quitting); Chromium hands those over as well in full screen, which View, Full Screen and F11 enter.
-- Icons per domain (`ide/icon-domains.ts`): besides the general categories, the icon picker offers the icons of 57 domains, from Academic and Agriculture to Water and wastewater and Weather, 555 icons in all, each drawn in the 16px stroke style of the icon set. The picker searches all of them, a domain's name included, and a list beside the search box shows one category or domain alone. A domain also offers the icons of other categories that belong to it, so an icon can be found under more than one name.
+- Icons per domain (`storage/backends/catalogue/icon-domains.ts`): besides the general categories, the icon picker offers the icons of 57 domains, from Academic and Agriculture to Water and wastewater and Weather, 555 icons in all, each drawn in the 16px stroke style of the icon set. The picker searches all of them, a domain's name included, and a list beside the search box shows one category or domain alone. A domain also offers the icons of other categories that belong to it, so an icon can be found under more than one name.
 
 ## Where things are
 
@@ -42,22 +43,20 @@ The sources are under `src/`, and `dist/` is what `npm run build` makes of them;
 |---|---|
 | `common/css/` | `tokens.css` (colours, fonts and sizes, dark and light), `base.css` (page frame, buttons, inputs, icons), `popups.css` (menus, toasts, dialogs), `transitions.css` (moving between the pages) |
 | `common/img/` | `adp-icon.svg`, the ADP mark: a copy, byte for byte, of the icon of the ADP site (`src/assets/brand/adp-icon.svg` in etalii.adp.site, commit `6266fbf`). It is not redrawn; a newer icon arrives as a newer copy |
-| `common/` | `boot.ts` (theme and direction, before the first paint), `pages.ts` (the pages and which one this is), `prefs.ts` (the theme, font size and density that were chosen), `dom.ts`, `icons.ts` (the icon set, and the ADP mark placed on a page), `popups.ts`, `nav.ts` (going to another page), `page.ts` (what every page does when it starts) |
+| `common/` | `boot.ts` (theme and direction, before the first paint), `pages.ts` (the pages and which one this is), `prefs.ts` (the theme, font size and density that were chosen), `dom.ts`, `icons.ts` (the icon set, and the ADP mark placed on a page), `popups.ts`, `nav.ts` (going to another page), `page.ts` (what every page does when it starts), `reason.ts` (why the storage did not do something, in words), `away.ts` (what a page shows when the storage does not answer as it starts) |
 | `splash/` | `shapes.ts` (the four pictures), `cloud.ts` (the point cloud), `splash.ts`, `splash.css` |
 | `login/` | `login.ts`, `login.css` |
-| `projects/` | `projects.ts`, `projects.css`, and the example projects in `data/` |
+| `projects/` | `projects.ts`, `projects.css` |
 | `ide/css/` | One style sheet per part: shell, explorer, document, tools, canvas, panels, git |
-| `ide/` | One module per part: `types.ts`, `kinds.ts`, `model.ts`, `state.ts`, `repaint.ts`, `docks.ts`, `open.ts`, `explorer.ts`, `document-area.ts`, `canvas.ts`, `properties.ts`, `problems.ts`, `commit.ts`, `git.ts`, `titlebar.ts`, `severity.ts`, `icon-library.ts`, `icon-domains.ts`, `browser.ts`, and `main.ts`, which starts the page |
+| `ide/` | One module per part: `storage.ts` (the stores the page reads, and the one way it carries out a command), `types.ts`, `kinds.ts`, `model.ts`, `state.ts`, `repaint.ts`, `docks.ts`, `open.ts`, `explorer.ts`, `document-area.ts`, `canvas.ts`, `properties.ts`, `problems.ts`, `commit.ts`, `git.ts`, `titlebar.ts`, `severity.ts`, `browser.ts`, and `main.ts`, which starts the page |
 | `ide/tools/` | One module per tool shown in the document area: flow, ontology, entity, schema, page, dashboard, form, check, document, code, contents, and what they share in `shared.ts` |
-| `ide/data/` | The example data, one file per subject: the solution, problems, flows, ontology, schemas, pages, dashboards, forms, checks, documents, code, applications, changes, commits |
+| `storage/` | Everything that is data, behind one boundary: see [The storage](#the-storage) |
 
-Beside `src/` are `build.mjs` (the build), `tsconfig.json` (how the types are checked) and `package.json` with its lock file (the two tools the build needs: TypeScript and esbuild).
+Beside `src/` are `build.mjs` (the build), `checks.mjs` (what the build refuses), `buf.gen.yaml` (how the code of the contract is written), `tsconfig.json` (how the types are checked), `test/` and `package.json` with its lock file.
 
 ## How the scripts fit together
 
-Every file is a TypeScript module that imports what it uses and exports what others use, so nothing is shared by being declared first. `build.mjs` has esbuild bundle one script per page (`splash/splash.js`, `login/login.js`, `projects/projects.js`, `ide/main.js`) and `common/boot.js`, which every page runs in its head before the first paint. It copies every other file under `src/` to `dist/` as it is. TypeScript only checks the types (`strict`, with unused names refused); esbuild writes the scripts.
-
-Data is kept apart from the code that draws it: a file under `data/` only holds example data and its types, and the module that shows it is the one of the same subject beside it.
+Every file is a TypeScript module that imports what it uses and exports what others use, so nothing is shared by being declared first. `build.mjs` has esbuild build the script of each page (`splash/splash.js`, `login/login.js`, `projects/projects.js`, `ide/main.js`) as a module, with what the pages have in common as chunks under `common/chunks/`: a browser loads the storage once for the login page, the projects and the IDE, and the start page, which needs none of it, loads none of it (the build fails if it would). `common/boot.js` is a script of its own that every page runs in its head before the first paint. Every other file under `src/` is copied to `dist/` as it is, except the storage, which has nothing a page loads as a file. TypeScript only checks the types (`strict`, with unused names refused); esbuild writes the scripts.
 
 Three rules keep the modules of the IDE page apart:
 
@@ -65,13 +64,54 @@ Three rules keep the modules of the IDE page apart:
 - **A part that changes the state asks for a repaint; it does not call the part that draws.** `ide/repaint.ts` knows the parts by name (`explorer`, `editor`, `properties`, `status`, `title`, `problems`, `commit`, `git`), and `ide/main.ts` says which function draws which. That is how the Explorer can change what the document area shows, and the document area what the Explorer shows, without importing each other.
 - **Only `ide/main.ts` touches the page when it is loaded.** What wires another part to the page is in a function (`mountExplorer`, `mountDocks`, `mountTitlebar` and so on) that `main.ts` calls, in an order that can be read there.
 
+## The storage
+
+Everything a page shows that is data comes from `src/storage/`, and everything a page changes goes there as a command: the hierarchy and its items, what each tool shows of an item, the views and layouts of a level, git, problems and runs, the history for Undo, the window's own state, the projects, the user, the catalogue of kinds and icons, and a person's settings. A page imports `storage/index.ts` (the stores), `storage/local.ts` (what is kept in this browser and read before the first paint) and `storage/ids.ts`, and nothing behind them.
+
+| Under `src/storage/` | Holds |
+|---|---|
+| `contract/` | The contract, in Protocol Buffers: one file per store with its calls and messages, the envelope a call travels in, and what is kept of a project. `npm run generate` lints it and writes its TypeScript to `gen/`, which is not in the repository |
+| `index.ts`, `views.ts`, `documents.ts` | What a page imports: `connect()`, the stores, the shapes a page reads (all of them read-only), and the documents of the tools |
+| `stores/` | The ten stores: catalogue, identity, projects, solution, levels, content, git, status, history, workbench. A store holds one object per thing for as long as it exists and brings it up to date when the backend tells of a change, so a page keeps the objects it has |
+| `link.ts` | What the stores share: one way to a backend, which changes this page caused itself, and when the page is waiting |
+| `backend.ts` | What a store asks of a backend: `call`, `watch`, its state, and the two ways a call fails (`Refused` with words for the user, `Unreachable`) |
+| `backends/` | The backends, and what they share |
+| `backends/server/` | One object that answers every call of the contract from state in memory, with the history that Undo takes back. Every backend that lives in the page is built on it |
+| `backends/example/` | The example data, as the seed such a backend starts from. Every example name and number is in this folder and nowhere else |
+| `backends/catalogue/` | The kinds of item, the names of the tools, the lists the tools offer a choice from, and the icon library |
+| `backends/wire/` | The wire: a call as an envelope of bytes over one connection, with the client a page uses and the service at the other end |
+
+A backend is chosen by the address of a page, and the choice holds for the visit, from page to page:
+
+| `?backend=` | Keeps the data |
+|---|---|
+| `memory` (the default) | In the page, starting from the example data on every page. Nothing is kept |
+| `browser` | In this browser (IndexedDB), from page to page and from visit to visit. Two tabs hear of each other's changes |
+| `empty` | In the page, starting from one project that holds only its root |
+| `slow`, `slow:1500`, `slow:offline`, `slow:read-only` | As `memory`, answering late, not at all, or only what is read: what the pages do while they wait and when the storage is away |
+| `loopback` | As `memory`, with every call crossing the wire as bytes, to a service that runs in the same page |
+| `hosted` with `&service=wss://…` | At a service behind a WebSocket. None is hosted; the tests run one on localhost |
+
+A hosted service is reached with Protocol Buffers messages over one WebSocket, in an envelope of this contract's own (hello, request, response, cancel, event, ping, pong). A command carries an id; when its answer is lost it is sent again under the same id and is carried out once. What changes is told to every page as events, and the events a command caused arrive before its answer. A page that was cut off reads again what it missed when the connection is back.
+
+`checks.mjs` holds the boundary, and the build runs it first and builds nothing when it finds something: a page that uses what a browser keeps or a way to a network itself (`localStorage`, `indexedDB`, `fetch`, `WebSocket` and the like), a page that imports past the three modules above, and a name of the example data anywhere but in the example backend.
+
+## Tests
+
+`npm test` runs both kinds; the pages have to be built first (`npm run check`).
+
+- `npm run test:unit` (`test/unit/`, Node's own test runner): the backend in the page asked directly, the stores as a page uses them, the wire with messages lost and connections cut, every message and call of the contract as bytes and as JSON, and the checks of the build.
+- `npm run test:e2e` (`test/e2e/`, Playwright with Chromium): a walk of 189 steps through the login page, the projects and every part of the IDE, which has to work and has to show the same thing, step by step, with the storage in memory, in the browser, across the wire inside the page, and at a service behind a real WebSocket. Beside it: a reload and a second tab with the storage in the browser, every kind of item opened with an empty storage, and what the pages say with a storage that is slow, takes no changes, is away, or goes away and comes back.
+
+`node test/e2e/record.mjs dist trace.json [backend]` writes what a walk saw, and `node test/e2e/diff.mjs a.json b.json` compares two of them.
+
 ## Moving between the pages
 
 Every page shares one background, so nothing flashes, and a page turns a few degrees as it leaves or arrives. Going on (start, login, projects, IDE) turns one way and going back turns the other.
 
 Where the browser runs a view transition between two documents, `transitions.css` asks for one and a link simply navigates. Elsewhere `nav.ts` turns the page out before it leaves, and the next page turns in once it is drawn. A page's script is marked `blocking="render"`, so a page is first painted complete. With reduced motion set, pages change without the turn.
 
-The theme, font size and density chosen in the IDE's settings are kept in the browser's local storage and applied on every page before the first paint.
+The theme, font size and density chosen in the IDE's settings are kept in the browser's local storage (`storage/local.ts`) and applied on every page before the first paint.
 
 ## The splash screen
 
@@ -82,5 +122,6 @@ The cloud turns by itself until it is turned by hand (the four buttons, a click,
 ## What it is not
 
 - Not a host: it runs no ADP tool and reads no specification or definition. The tools in the document area are drawings of what such tools could look like.
+- Not a service: the storage contract and the wire are here, and no service that implements them is hosted.
 - Not specified: there is no feature under `specs/` for it. A specification comes first if this is to become one.
 - Not self-contained offline: the fonts (Inter and JetBrains Mono) come from Google Fonts, and the pages fall back to system fonts without a connection.

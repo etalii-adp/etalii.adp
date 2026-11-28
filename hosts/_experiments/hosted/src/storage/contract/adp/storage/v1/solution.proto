@@ -1,0 +1,125 @@
+// Solution: the hierarchy of one project. Items are named by their id; a child knows its parent and a parent the order of its children.
+syntax = "proto3";
+
+package adp.storage.v1;
+
+import "adp/storage/v1/common.proto";
+
+service Solution {
+  rpc Read(ProjectRef) returns (SolutionSnapshot);
+  rpc Add(AddItemRequest) returns (ItemAdded);
+  rpc Rename(RenameItemRequest) returns (Done);
+  rpc Delete(DeleteItemRequest) returns (Done);
+  rpc SetIcon(SetIconRequest) returns (Done);
+  rpc Link(LinkRepositoryRequest) returns (ItemAdded);
+  rpc SetRef(SetRefRequest) returns (Done);
+  rpc UpdateLink(UpdateLinkRequest) returns (Done);
+}
+
+// A repository from outside the project, linked in at an item and following a branch or a tag.
+message Link {
+  string repository = 1;
+  string ref = 2;
+  repeated string refs = 3;
+  // The commit the ref stands at.
+  string resolved = 4;
+}
+
+// A flow between two children of a level, drawn as an arrow on its canvas.
+message Flow {
+  string from_id = 1;
+  string to_id = 2;
+}
+
+message Item {
+  // A ShortGuid: it stays the same when the item is renamed or moved.
+  string id = 1;
+  string name = 2;
+  string kind = 3;
+  // Empty for the root.
+  string parent_id = 4;
+  // True for an item that holds child items, also when it holds none yet.
+  bool container = 5;
+  repeated string children = 6;
+  // An icon chosen for this item, in place of the icon of its kind.
+  string icon = 7;
+  // The kinds a level takes.
+  repeated string accepts = 8;
+  Link link = 9;
+  // The name it has on disk, where that is not made from the item's name.
+  string file = 10;
+  // The files its folder holds beside its items, and the ones git ignores.
+  repeated string files = 11;
+  repeated string ignored_files = 12;
+  // Made and not given any content yet.
+  bool fresh = 13;
+  repeated Flow flows = 14;
+}
+
+message SolutionSnapshot {
+  uint32 revision = 1;
+  string root_id = 2;
+  repeated Item items = 3;
+  // The folder the project is in.
+  string path = 4;
+  // A repository to offer when one is linked in, and the name to show it by.
+  Link suggested_link = 5;
+  string suggested_link_name = 6;
+  // The level File > Link Repository links into.
+  string suggested_link_parent_id = 7;
+}
+
+message SolutionChanges {
+  // Items that are new or changed, each as a whole.
+  repeated Item upserted = 1;
+  // The ids of items that are gone, with everything under them.
+  repeated string removed = 2;
+}
+
+message AddItemRequest {
+  string project_id = 1;
+  string parent_id = 2;
+  string kind = 3;
+}
+
+message ItemAdded {
+  string item_id = 1;
+  string message = 2;
+}
+
+message RenameItemRequest {
+  string project_id = 1;
+  string item_id = 2;
+  string name = 3;
+}
+
+message DeleteItemRequest {
+  string project_id = 1;
+  string item_id = 2;
+}
+
+message SetIconRequest {
+  string project_id = 1;
+  string item_id = 2;
+  // Empty takes the icon of the item's kind again.
+  string icon = 3;
+}
+
+message LinkRepositoryRequest {
+  string project_id = 1;
+  string parent_id = 2;
+  string repository = 3;
+  string name = 4;
+  string ref = 5;
+}
+
+message SetRefRequest {
+  string project_id = 1;
+  string item_id = 2;
+  string ref = 3;
+}
+
+message UpdateLinkRequest {
+  string project_id = 1;
+  string item_id = 2;
+}

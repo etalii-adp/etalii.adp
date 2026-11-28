@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="../common/css/transitions.css">
 <link rel="stylesheet" href="login.css">
 <!-- the page's script, bundled from TypeScript by npm run build; the page is painted once the script has drawn it -->
-<script defer blocking="render" src="login.js"></script>
+<script type="module" blocking="render" src="login.js"></script>
 <noscript><style>html body{opacity:1}</style></noscript>
 </head>
 <body>
@@ -25,8 +25,8 @@
           <a class="lg-home" data-nav href="../index.html" title="Back to the start page" aria-label="Back to the start page"><span class="logo-slot" data-size="40"></span></a>
         </header>
         <form class="lg-step" id="loginForm" novalidate>
-          <label for="lg-ws">Workspace</label><input class="in" id="lg-ws" value="atlas.example.com" autocomplete="off">
-          <label for="lg-email">Email</label><input class="in" id="lg-email" type="email" value="sam.rivera@example.com" autocomplete="off">
+          <label for="lg-ws">Workspace</label><input class="in" id="lg-ws" value="" autocomplete="off">
+          <label for="lg-email">Email</label><input class="in" id="lg-email" type="email" value="" autocomplete="off">
           <label for="lg-pw">Password</label><input class="in" id="lg-pw" type="password" placeholder="Password" autocomplete="off" aria-describedby="lg-err">
           <p class="lg-msg" id="lg-err" role="alert" hidden></p>
           <label class="ckl" for="lg-keep"><input type="checkbox" id="lg-keep" checked> Keep me signed in on this computer</label>

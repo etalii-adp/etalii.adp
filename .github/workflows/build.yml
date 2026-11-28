@@ -9,7 +9,7 @@
 # generates; the descriptions job checks every tool description with the desktop host's `atd` (spec 035, FR-100).
 # The file-names job refuses a tracked path that Windows cannot check out.
 # The hosted-experiment job checks the types of the hosted experiment (hosts/_experiments/hosted) and builds its pages, as
-# the deploy workflow of etalii.adp.site does before it publishes them.
+# the deploy workflow of etalii.adp.site does before it publishes them, and then runs its unit tests and its browser tests.
 name: Build
 
 on:
@@ -167,3 +167,7 @@ jobs:
         run: npm run check
       - name: Check every page and its script are there
         run: for f in index.html login/index.html projects/index.html ide/index.html common/boot.js splash/splash.js login/login.js projects/projects.js ide/main.js; do test -s "dist/$f" || { echo "dist/$f is missing"; exit 1; }; done
+      - name: Install the browser the tests drive
+        run: npx playwright install --with-deps chromium
+      - name: Run the unit tests and walk the pages on every backend
+        run: npm test

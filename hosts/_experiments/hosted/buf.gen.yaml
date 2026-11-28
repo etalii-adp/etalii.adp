@@ -1,0 +1,9 @@
+# Writes the TypeScript of the storage contract into src/storage/gen (not in the repository: the build makes it).
+version: v2
+inputs:
+  - directory: src/storage/contract
+plugins:
+  - local: protoc-gen-es
+    out: src/storage/gen
+    opt:
+      - target=ts
