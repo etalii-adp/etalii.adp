@@ -23,11 +23,11 @@ Expect: no conflict, no terminal collision, no construct outside the notation or
 In etalii.adp.ide.desktop, against the etalii.adp checkout beside it:
 
 ```text
-cargo run -p adp-atd-cli -- --spec-dir ../etalii.adp/specifications/atd check ../etalii.adp/specifications/atd
+cargo run -p adp-atd-cli -- --spec-dir ../etalii.adp/specifications/atd check ../etalii.adp/specifications/atd/*.atd
 cargo run -p adp-atd-cli -- --spec-dir ../etalii.adp/specifications/atd check --corpus ../etalii.adp/specifications/atd/refused
 ```
 
-Expect: exit 0 for both; the second reports every refused file with exactly its expected findings, among them a designer declaring a relation (ATD3001, at the relation), a syntax error with what was found and what was expected (ATD1xxx), an unknown attribute with its closest names (ATD2001), a binding reading an undeclared attribute reported once at the binding (ATD6xxx), an unknown version naming both versions (ATD0001), a cycle of imports reported once (ATD2003), a script with a clock call refused at check time (ATD7xxx), and a binding grammar that is not LALR(1) (ATD8xxx).
+Expect: exit 0 for both (the first names the examples themselves, since `check` on the folder would descend into `refused/`); the second reports every refused file with exactly its expected findings, among them a designer declaring a relation (ATD3001, at the relation), a syntax error with what was found and what was expected (ATD1xxx), an unknown attribute with its closest names (ATD2001), a binding reading an undeclared attribute reported once at the binding (ATD6xxx), an unknown version naming both versions (ATD0001), a cycle of imports reported once (ATD2003), a script with a clock call refused at check time (ATD7xxx), and a binding grammar that is not LALR(1) (ATD8xxx).
 
 Then, in etalii.adp, `python .github/scripts/validate-examples.py` validates every printed tree (`atd tree`) against `atd.schema.json`, every trace and every conformance fixture.
 
@@ -50,19 +50,19 @@ In a fresh VS Code window with only the plug-in: *ADP: New Tool Description*, ch
 
 ## 6. Every tool type in scope is described and traced (story 2, FR-020 to FR-023, SC-002, SC-003)
 
-In etalii.adp: `python .github/scripts/validate-examples.py` passes, which includes the trace checks; `atd check definitions` reports no finding; `git diff <base> -- '*.dis' '*.des' '*.fbl'` over the feature's pull requests is empty (SC-002). Expect 36 descriptions (29 diagram, 2 designer, 5 editor types) and 36 traces, each covering every item of its companion's gap sections.
+In etalii.adp: `python .github/scripts/validate-examples.py` passes, which includes the trace checks; `atd check` on every `.atd` outside `specifications/atd/refused/` reports no finding; `git diff <base> -- '*.dis' '*.des' '*.fbl'` over the feature's own pull requests shows only what the feature changed on purpose (SC-002 as read on 2026-11-28: one example binding added, `w3c-turtle-grammar.fbl`, and two changed for FBL 0.21's `registration.newline`, `ansible-structure.fbl` and `helm-chart.fbl`; later specifications changed such files for their own reasons). Expect 39 descriptions on 2026-11-28 (31 diagram, 3 designer, 5 editor types) and 39 traces, each covering every item of its companion's gap sections.
 
 ## 7. Validation in the desktop host and in VS Code (story 4, story 5 scenario 4, FR-040 to FR-044, FR-063, SC-004)
 
-- `cargo run -p adp-atd-cli -- validate ../etalii.adp/definitions/diagrams/mindmap.atd`, then for every description. Expect: every case passes, every write byte-identical.
-- Seed a difference (change a binding rule's attribute name in a copy of the description) and validate: exactly one difference, at that rule.
+- `cargo run -p adp-atd-cli -- validate ../etalii.adp/definitions/diagrams/mindmap.atd`, then for every description. Expect: every case passes or differs only in what the description's test in the desktop host lists by name and reason (`crates/adp-atd-validate/tests/` and `crates/adp-shell/tests/`), and every write that is not listed is byte-identical. Those tests are the gate, by Peter's choice of 2026-11-28: `cargo test --workspace` fails on a difference that is not listed. The `atd` command has the host's own capabilities only, so a description whose reader a module contributes (Helm, SPARQL, Ansible, Azure Pipelines, the .NET dependency graph) is validated by its test on the shell's host, not by `atd validate`.
+- Seed a difference (change the key a binding rule reads an attribute from, in a copy of the description) and validate: the cases that use that rule fail, and their differences name the rule (the reading's at the rule itself; tried on 2026-11-28 with the hype cycle graph's `name`, 3 of 4 cases failed). There is one difference for every step and part the seed reaches, not one in all, since each step's bytes, findings and drawing are compared.
 - In the desktop host, open the mind map's description in the validation view with a case; edit and save the description: the result refreshes without a restart; save a broken version: its findings show and the last result stays (FR-044). Make a script loop exceed its budget: the gesture is refused with a finding naming the function, the working copy unchanged.
 - Open a person's `.mm` file in the desktop host while the description exists: it opens with today's tool, and its file is not written by validation (scenario 4).
 - In VS Code, *ADP: Validate Tool Description* on the same description: the same differences (none, then the seeded one).
 
 ## 8. The grammar family reads and writes Turtle (story 7, FR-080 to FR-082, SC-010)
 
-`cargo run -p adp-atd-cli -- validate ../etalii.adp/definitions/diagrams/w3c-rdf.atd`. Expect: every Turtle case passes with no persistence plugin: unmapped text kept byte for byte, each edit a minimal splice with an exact undo, a body that does not parse read in part with a finding at its line.
+`cargo run -p adp-atd-cli -- validate ../etalii.adp/definitions/diagrams/w3c-rdf.atd`. Expect: every Turtle case passes with no persistence plugin, apart from the differences `crates/adp-atd-validate/tests/w3c.rs` lists (20 of 22 cases pass outright on 2026-11-28): unmapped text kept byte for byte, each edit a minimal splice with an exact undo, a body that does not parse read in part with a finding at its line.
 
 ## 9. Debug a seeded defect (story 6, FR-070 to FR-072, SC-008)
 
