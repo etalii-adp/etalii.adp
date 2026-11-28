@@ -7,7 +7,7 @@ import { agentFollowsSelection, mountAgent, renderAgent } from './agent';
 import { ownTheBrowser } from './browser';
 import { renderCommit } from './commit';
 import { layout, mountDocks } from './docks';
-import { markSelected, renderEditor } from './document-area';
+import { markSelected, mountDocumentArea, renderEditor } from './document-area';
 import { mountExplorer, renderExplorer } from './explorer';
 import { renderGit } from './git';
 import { bindModel, ROOT } from './model';
@@ -28,6 +28,7 @@ async function start(): Promise<void> {
   bindState();
   mountDocks();
   mountExplorer();
+  mountDocumentArea();
   mountProps();
   mountAgent();
   mountTitlebar();

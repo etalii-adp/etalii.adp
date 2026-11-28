@@ -20,6 +20,7 @@ import { rOnto } from './tools/ontology';
 import { rPage } from './tools/page';
 import { rSchema } from './tools/schema';
 import type { Tool } from './tools/shared';
+import { step, visited } from './trail';
 import type { DocMode, Item, ToolName } from './types';
 
 const tools: Record<ToolName, Tool> = { flow: rFlow, onto: rOnto, entity: rEntity, schema: rSchema, page: rPage, dash: rDash, form: rForm, check: rCheck, doc: rDoc, code: rCode };
@@ -42,15 +43,25 @@ function choose(mode: DocMode): void {
   repaint('editor', 'properties');
 }
 
+/* The back and forward buttons of a mouse step along the trail while the pointer is over the document area, a canvas or a tool alike: back shows what showed before, forward what was stepped back from. The browser's own answer to those buttons is taken away for the whole page (browser.ts). */
+export function mountDocumentArea(): void {
+  $('#doc').addEventListener('mouseup', e => {
+    if (e.button !== 3 && e.button !== 4) return;
+    const to = step(e.button === 3 ? -1 : 1);
+    if (to) openDoc(to.item, to.item.pseudo ? undefined : to.mode);
+  });
+}
+
 export function renderEditor(): void {
   const x = S.doc, m = dmode(x), kindTool = K[x.kind].tool, word = x.entries ? 'Contents' : x.pseudo ? 'Editor' : isBox(x) ? 'Contents' : kindTool ? WORD[kindTool] : '';
+  visited(x, m);
   draw($('#tabs'), h(Tabs, { tabs: S.tabs, open: x, show, close }));
   draw($('#dm'), h(Modes, { mode: m, word, list: isBox(x) || !!x.entries, choose }));
   $maybe('#tabs .on')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   const cr = crumbsOf(m === 'canvas' ? levelOf(x) : x);
   draw($('#crumbs'), h(Crumbs, { path: cr, show }));
-  /* a model with child items shows that level in its own diagram, so it takes part in the level tweens just as a canvas does */
-  const d = $('#doc'), L = m === 'canvas' ? levelOf(x) : null, V = L || (x.children && !x.pseudo && !isBox(x) ? x : null), tw = V && S.cvL && S.cvL !== V && S.anim ? tween(S.cvL, V, d) : null;
+  /* a model with child items shows that level in its own diagram, so it takes part in the level tweens just as a canvas does; an item that shows in its tool is zoomed into from the level it is in */
+  const d = $('#doc'), L = m === 'canvas' ? levelOf(x) : null, V = L || (x.children && !x.pseudo && !isBox(x) ? x : null), tw = S.cvL && S.cvL !== (V ?? x) && S.anim ? tween(S.cvL, V ?? x, d, !!V) : null;
   S.cvFit = null;
   S.cvL = V;
   leaveCanvas();

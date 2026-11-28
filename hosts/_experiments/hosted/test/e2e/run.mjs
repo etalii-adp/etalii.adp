@@ -638,6 +638,85 @@ await test('canvas: the plane moves with the pointer and zooms around it, and Fi
   assert(allAt(was, await cardsAt(page)), 'Fit does not show the cards where they were at first');
 });
 
+/* what the document area shows: the item at the end of the breadcrumbs, and whether as a canvas or in its tool */
+const showing = page => page.evaluate(() => `${document.querySelector('#crumbs .cur').textContent.trim()} as ${document.querySelector('#dm .on').dataset.dm}`);
+/* a back (3) or forward (4) button of the mouse, pressed and let go over the middle of an element; true when the browser's own answer to it was taken away */
+const sideButton = (page, button, over = '#doc') => page.evaluate(([button, over]) => {
+  const r = document.querySelector(over).getBoundingClientRect(), x = r.x + r.width / 2, y = r.y + r.height / 2, at = document.elementFromPoint(x, y);
+  return ['mousedown', 'mouseup'].map(type => at.dispatchEvent(new MouseEvent(type, { button, bubbles: true, cancelable: true, clientX: x, clientY: y }))).every(went => !went);
+}, [button, over]);
+
+await test('canvas: going into an item zooms in until its card is all there is to see, to a canvas and to a tool alike', async (_context, errors) => {
+  /* a person who did not ask for less motion */
+  const moving = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  try {
+    /* every animation the page plays is noted with what it is played on, and plays as it would */
+    await moving.addInitScript(() => {
+      window.played = [];
+      const animate = Element.prototype.animate;
+      Element.prototype.animate = function (frames, timing) {
+        const r = this.getBoundingClientRect();
+        window.played.push({ picture: this.classList.contains('zoom-from'), copy: !!this.parentElement?.classList.contains('zoom-from'), frames, box: { x: r.x, y: r.y, width: r.width, height: r.height } });
+        return animate.call(this, frames, timing);
+      };
+    });
+    const page = await newPage(moving, errors);
+    await rootCanvas(page);
+    const area = await page.locator('#doc').boundingBox(), still = 'translate(0px,0px) scale(1)';
+    /* where a box is under a move and a zoom from the corner of the element they are played on */
+    const under = (transform, box, corner) => { const [tx, ty, k] = /^translate\((.+)px,(.+)px\) scale\((.+)\)$/.exec(transform).slice(1).map(Number); return { x: corner.x + tx + k * (box.x - corner.x), y: corner.y + ty + k * (box.y - corner.y), width: k * box.width, height: k * box.height }; };
+    const middle = b => [b.x + b.width / 2, b.y + b.height / 2];
+    const covers = (a, b) => a.x <= b.x + 1 && a.y <= b.y + 1 && a.x + a.width >= b.x + b.width - 1 && a.y + a.height >= b.y + b.height - 1;
+    const into = async (name, shows) => {
+      const card = await page.locator(`#doc .card:has(.ch b:text-is("${name}"))`).boundingBox();
+      await page.evaluate(() => { window.played.length = 0; });
+      await page.mouse.click(card.x + 20, card.y + 12); await page.mouse.click(card.x + 20, card.y + 12);
+      await page.waitForFunction(() => window.played.length >= 3);
+      const played = await page.evaluate(() => window.played), copy = played.find(p => p.copy), shown = played.find(p => !p.copy && !p.picture);
+      assert(played.length === 3 && copy && shown && played.some(p => p.picture), `going into ${name} plays something else than a picture and what shows now`);
+      /* the picture of what showed starts as it was, and ends with the card over all of the document area, and no larger than that takes */
+      const grown = under(copy.frames[1].transform, card, copy.box);
+      assert(copy.frames[0].transform === still && near([copy.box.x, copy.box.y], [area.x, area.y]), `the picture of what showed does not start where it was: ${copy.frames[0].transform}`);
+      assert(covers(grown, area) && near(middle(grown), middle(area)) && (Math.abs(grown.width - area.width) < 1.5 || Math.abs(grown.height - area.height) < 1.5), `the card of ${name} does not end as all there is to see: ${JSON.stringify(grown)} in ${JSON.stringify(area)}`);
+      /* what shows now starts inside the card, as high or as wide as the card is and around its middle, and ends where it belongs */
+      const small = under(shown.frames[0].transform, area, shown.box);
+      assert(shown.frames[1].transform === still && near(middle(small), middle(card)) && covers(card, small) && (Math.abs(small.width - card.width) < 1.5 || Math.abs(small.height - card.height) < 1.5), `what ${name} shows does not grow out of its card: ${JSON.stringify(small)} for ${JSON.stringify(card)}`);
+      /* the picture is gone when it is over, and nothing stays zoomed */
+      await page.locator('.zoom-from').waitFor({ state: 'detached' });
+      assert(await showing(page) === shows, `after going into ${name} the document area shows ${await showing(page)}`);
+      assert(await page.locator('#doc > :first-child').evaluate(e => getComputedStyle(e).transform) === 'none', 'what shows now stays zoomed');
+    };
+    await into('Ingestion', 'Ingestion as canvas');
+    await into('Pipelines', 'Pipelines as canvas');
+    await into('Customer sync', 'Customer sync as editor');
+    assert(await page.locator('#doc .tool').count() === 1 && await page.locator('#doc .cv').count() === 0, 'a pipeline does not show in its tool');
+  } finally { await moving.close(); }
+});
+
+await test('canvas: the back and forward buttons of the mouse lead through what the document area showed', async (context, errors) => {
+  const page = await newPage(context, errors);
+  await rootCanvas(page);
+  const into = async name => { const [x, y] = (await cardsAt(page))[name]; await page.mouse.click(x + 20, y + 12); await page.mouse.click(x + 20, y + 12); };
+  await into('Ingestion'); await into('Pipelines'); await into('Customer sync');
+  assert(await showing(page) === 'Customer sync as editor', `the way in ends at ${await showing(page)}`);
+  /* back shows what showed before, a tool or a canvas, and forward what was stepped back from */
+  const steps = [[3, 'Pipelines as canvas'], [3, 'Ingestion as canvas'], [4, 'Pipelines as canvas'], [4, 'Customer sync as editor'], [4, 'Customer sync as editor'], [3, 'Pipelines as canvas'], [3, 'Ingestion as canvas']];
+  for (const [button, shows] of steps) {
+    assert(await sideButton(page, button), 'the browser is left to answer a side button of the mouse itself');
+    assert(await showing(page) === shows, `${button === 3 ? 'back' : 'forward'} shows ${await showing(page)}, not ${shows}`);
+  }
+  assert(await selectedRow(page) === 'Ingestion' && await page.locator('#doc .card').count() === 2, 'a step back does not show the canvas with its cards and select its item');
+  /* over another part of the page the buttons lead nowhere */
+  await sideButton(page, 4, '#tree');
+  assert(await showing(page) === 'Ingestion as canvas', 'a side button over the Explorer changed what the document area shows');
+  /* going somewhere else forgets what was stepped back from */
+  await into('Sources');
+  await sideButton(page, 4);
+  assert(await showing(page) === 'Sources as canvas', `forward after going elsewhere shows ${await showing(page)}`);
+  await sideButton(page, 3); await sideButton(page, 3);
+  assert(await showing(page) === 'Atlas Platform as canvas', `two steps back from Sources show ${await showing(page)}`);
+});
+
 /* what the field with the focus is, what it holds and where the caret is in it */
 const typingIn = page => page.evaluate(() => { const a = document.activeElement; return `${a.id || a.localName} "${a.value}" at ${a.selectionStart}`; });
 
